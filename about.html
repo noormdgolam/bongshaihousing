@@ -151,6 +151,7 @@
 
       <!-- Desktop CTA -->
       <div class="nav-cta">
+        
         <a href="tel:+8801781636613" class="nav-phone" aria-label="Call Bongshai Housing">
           📞 01781-636613
         </a>
@@ -208,6 +209,7 @@
       <a href="career.html" class="mobile-nav-link">💼 Career</a>
       <a href="contact.html" class="mobile-nav-link">📞 Contact</a>
     </div>
+          
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
       <a href="tel:+8801781636613" class="btn btn-secondary" style="justify-content:center;">📞 01781-636613</a>
       <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-quote-btn">Get a Free Quote</a>
@@ -450,5 +452,7 @@
     const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.12 });
     revealEls.forEach(el => observer.observe(el));
   </script>
-</body>
+
+  </body>
+
 </html>

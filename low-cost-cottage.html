@@ -149,6 +149,7 @@
 
       <!-- Desktop CTA -->
       <div class="nav-cta">
+        
         <a href="tel:+8801781636613" class="nav-phone" aria-label="Call Bongshai Housing">
           📞 01781-636613
         </a>
@@ -206,6 +207,7 @@
       <a href="career.html" class="mobile-nav-link">💼 Career</a>
       <a href="contact.html" class="mobile-nav-link">📞 Contact</a>
     </div>
+          
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
       <a href="tel:+8801781636613" class="btn btn-secondary" style="justify-content:center;">📞 01781-636613</a>
       <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-quote-btn">Get a Free Quote</a>
@@ -232,13 +234,13 @@
     <!-- OVERVIEW -->
     <section class="section" aria-labelledby="cottage-overview-title">
       <div class="container">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-16);align-items:center" class="about-grid">
-          <div style="display:flex; flex-direction:column; gap:20px;" class="reveal-left">
-            <img src="images/user-cottage-1-clean.png" alt="Bongshai Housing Low Cost Cottage" loading="lazy" style="width:100%; border-radius:12px; box-shadow:var(--shadow-xl)" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-16);align-items:start" class="about-grid">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;" class="reveal-left">
+            <img src="images/user-cottage-1-clean.png" alt="Bongshai Housing Low Cost Cottage" loading="lazy" style="grid-column: span 2; width:100%; border-radius:12px; box-shadow:var(--shadow-xl)" />
             <img src="images/user-cottage-2-clean.png" alt="Bongshai Housing Low Cost Cottage Side View" loading="lazy" style="width:100%; border-radius:12px; box-shadow:var(--shadow-xl)" />
-            <img src="images/user-cottage-3-clean.png" alt="Bongshai Housing Low Cost Cottage Front View Clean" loading="lazy" style="width:100%; border-radius:12px; box-shadow:var(--shadow-xl)" />
+            <img src="images/user-cottage-3-clean.png" alt="Bongshai Housing Low Cost Cottage Front View Clean" loading="lazy" style="width:100%; height:100%; object-fit:cover; border-radius:12px; box-shadow:var(--shadow-xl)" />
           </div>
-          <div class="reveal-right">
+          <div class="reveal-right" style="position: sticky; top: 100px;">
             <div class="section-label">Most Popular Package</div>
             <h2 id="cottage-overview-title">Affordable Quality Housing for Every Family</h2>
             <p style="margin-bottom:var(--space-4)">Low-cost prefab houses are a <strong>durable and cost-effective alternative</strong> to traditional construction, with options ranging from simple tiny homes to expandable family residences.</p>
@@ -542,5 +544,7 @@
     const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.12 });
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
   </script>
-</body>
+
+  </body>
+
 </html>
