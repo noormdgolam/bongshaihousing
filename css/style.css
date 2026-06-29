@@ -10,12 +10,12 @@
    ============================================================ */
 :root {
   /* Brand Colors */
-  --primary:        #1f2937; /* Dark Charcoal */    /* Deep Navy Blue */
-  --primary-dark:   #111827; /* Almost Black */
-  --primary-light:  #374151; /* Slate */
-  --accent:         #eab308; /* Vibrant Yellow */    /* Premium Gold */
-  --accent-light:   #fde047; /* Bright Yellow */
-  --accent-dark:    #ca8a04; /* Deep Yellow */
+  --primary:        #d97706; /* Amber */    /* Deep Navy Blue */
+  --primary-dark:   #b45309;
+  --primary-light:  #f59e0b;
+  --accent:         #1e293b; /* Slate Dark */    /* Premium Gold */
+  --accent-light:   #334155;
+  --accent-dark:    #0f172a;
 
   /* Neutral Palette */
   --white:          #fffcfa; /* Warm White */
@@ -77,8 +77,8 @@
   --shadow-md:    0 4px 16px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
   --shadow-lg:    0 10px 40px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06);
   --shadow-xl:    0 20px 60px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
-  --shadow-gold:  0 8px 32px rgba(234, 179, 8,0.25);
-  --shadow-navy:  0 8px 32px rgba(31, 41, 55,0.20);
+  --shadow-gold:  0 8px 32px rgba(30, 41, 59,0.25);
+  --shadow-navy:  0 8px 32px rgba(26,60,94,0.20);
 
   /* Transitions */
   --transition-fast:   all 0.15s ease;
@@ -240,7 +240,7 @@ p { color: var(--grey-600); line-height: 1.75; }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(234, 179, 8,0.35);
+  box-shadow: 0 12px 40px rgba(30, 41, 59,0.35);
 }
 
 .btn-secondary {
@@ -368,7 +368,7 @@ p { color: var(--grey-600); line-height: 1.75; }
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(26, 60, 94, 0.08);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.08);
   transition: var(--transition-base);
 }
 
