@@ -207,7 +207,7 @@
 </div>
 <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
 <a class="btn btn-secondary" href="tel:+8801781636613" style="justify-content:center;">📞 01781-636613</a>
-<a class="btn btn-primary" href="contact.html" id="mobile-quote-btn" style="justify-content:center;">Get a Free Quote</a>
+<button onclick="openQuoteModal108()" class="btn btn-primary" id="mobile-quote-btn" style="justify-content: center; width: 100%; cursor: pointer; border: none; font-weight: 700;">Get a Free Quote</button>
 </div>
 </div>
 <main>
@@ -268,7 +268,7 @@
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: var(--space-4); line-height: 1.1;">Model LCV-108</h2>
 <p style="color: var(--grey-600); font-size: 0.95rem; margin-bottom: var(--space-6); line-height: 1.6;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
 <div style="display: flex; flex-direction: column; gap: 12px;">
-<a class="btn btn-primary btn-lg" href="contact.html" style="width: 100%; justify-content: center;">Get a Free Quote</a>
+<a href="contact.html?model=LCV-108" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
 <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20LCV-108." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
 </div>
 </div>
@@ -397,152 +397,7 @@
     }
   </script>
 
-  <!-- QUOTE MODAL -->
-  <div id="quoteModal-108" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
-    <div style="background: white; padding: 30px; border-radius: 16px; width: 100%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;">
-      <button onclick="document.getElementById('quoteModal-108').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--grey-500);">&times;</button>
-      
-      <h3 style="font-family: var(--font-heading); color: var(--primary-dark); margin-bottom: 20px; font-size: 1.5rem;">Request Official Quote</h3>
-      
-      <form id="quoteForm-108" onsubmit="submitQuoteForm108(event)" style="display: flex; flex-direction: column; gap: 15px;">
-        <div>
-          <label style="display: block; font-weight: 600; color: var(--grey-700); margin-bottom: 5px;">Full Name *</label>
-          <input type="text" id="qName-108" required style="width: 100%; padding: 10px; border: 1px solid var(--grey-300); border-radius: 8px; outline: none; font-family: inherit;">
-        </div>
-        
-        <div>
-          <label style="display: block; font-weight: 600; color: var(--grey-700); margin-bottom: 5px;">Phone Number *</label>
-          <input type="tel" id="qPhone-108" required style="width: 100%; padding: 10px; border: 1px solid var(--grey-300); border-radius: 8px; outline: none; font-family: inherit;">
-        </div>
-
-        <div style="display: flex; gap: 15px;">
-          <div style="flex: 1;">
-            <label style="display: block; font-weight: 600; color: var(--grey-700); margin-bottom: 5px;">District *</label>
-            <select id="qDistrict-108" onchange="loadUpazilas108(this.value)" required style="width: 100%; padding: 10px; border: 1px solid var(--grey-300); border-radius: 8px; outline: none; font-family: inherit; background: white; cursor: pointer;">
-              <option value="">Select District</option>
-            </select>
-          </div>
-          <div style="flex: 1;">
-            <label style="display: block; font-weight: 600; color: var(--grey-700); margin-bottom: 5px;">Police Station *</label>
-            <select id="qUpazila-108" required style="width: 100%; padding: 10px; border: 1px solid var(--grey-300); border-radius: 8px; outline: none; font-family: inherit; background: white; cursor: pointer;">
-              <option value="">Select Station</option>
-            </select>
-          </div>
-        </div>
-        
-        <div>
-          <label style="display: block; font-weight: 600; color: var(--grey-700); margin-bottom: 5px;">Additional Notes (Optional)</label>
-          <textarea id="qNotes-108" rows="3" style="width: 100%; padding: 10px; border: 1px solid var(--grey-300); border-radius: 8px; outline: none; font-family: inherit; resize: vertical;"></textarea>
-        </div>
-        
-        <button type="submit" id="qSubmitBtn-108" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem; cursor: pointer; margin-top: 10px;">
-          Generate PDF & Send to WhatsApp
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    let districtsLoaded108 = false;
-
-    function openQuoteModal108() {
-        document.getElementById('quoteModal-108').style.display = 'flex';
-        if (!districtsLoaded108) {
-            fetch('https://bdapis.com/api/v1.2/districts')
-            .then(response => response.json())
-            .then(data => {
-                if (data.data) {
-                    const distSelect = document.getElementById('qDistrict-108');
-                    // Sort alphabetically
-                    data.data.sort((a,b) => a.district.localeCompare(b.district));
-                    data.data.forEach(d => {
-                        let opt = document.createElement('option');
-                        opt.value = d.district;
-                        opt.innerHTML = d.district;
-                        distSelect.appendChild(opt);
-                    });
-                    districtsLoaded108 = true;
-                }
-            })
-            .catch(err => console.error('Failed to load districts:', err));
-        }
-    }
-
-    function loadUpazilas108(district) {
-        const upSelect = document.getElementById('qUpazila-108');
-        upSelect.innerHTML = '<option value="">Loading...</option>';
-        if (!district) {
-            upSelect.innerHTML = '<option value="">Select Station</option>';
-            return;
-        }
-        
-        fetch('https://bdapis.com/api/v1.2/district/' + district.toLowerCase())
-        .then(response => response.json())
-        .then(data => {
-            upSelect.innerHTML = '<option value="">Select Station</option>';
-            if (data.data && data.data[0] && data.data[0].upazilas) {
-                const upazilas = data.data[0].upazilas;
-                upazilas.forEach(u => {
-                    let opt = document.createElement('option');
-                    opt.value = u.upazila;
-                    opt.innerHTML = u.upazila;
-                    upSelect.appendChild(opt);
-                });
-            }
-        })
-        .catch(err => {
-            console.error('Failed to load upazilas:', err);
-            upSelect.innerHTML = '<option value="">Select Station</option>';
-        });
-    }
-
-    function submitQuoteForm108(e) {
-        e.preventDefault();
-        
-        const btn = document.getElementById('qSubmitBtn-108');
-        btn.innerText = 'Generating PDF... Please wait';
-        btn.disabled = true;
-        btn.style.opacity = '0.7';
-
-        const payload = {
-            name: document.getElementById('qName-108').value,
-            phone: document.getElementById('qPhone-108').value,
-            district: document.getElementById('qDistrict-108').value,
-            upazila: document.getElementById('qUpazila-108').value,
-            message: document.getElementById('qNotes-108').value,
-            model: 'LCV-108',
-            floor_area: document.getElementById('floorAreaSelect-108').value
-        };
-
-        fetch('generate_quote.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        .then(response => response.json())
-        .then(data => {
-            btn.innerText = 'Generate PDF & Send to WhatsApp';
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            
-            if (data.success) {
-                const waMessage = `Hello Bongshai Housing! I would like to request a quote.
-Here are my inquiry details:
-${data.pdf_url}`;
-                window.location.href = 'https://wa.me/8801781636613?text=' + encodeURIComponent(waMessage);
-            } else {
-                alert('Error generating quote: ' + (data.error || 'Unknown error'));
-            }
-        })
-        .catch(err => {
-            console.error('Submission error:', err);
-            alert('An error occurred. Please try again.');
-            btn.innerText = 'Generate PDF & Send to WhatsApp';
-            btn.disabled = false;
-            btn.style.opacity = '1';
-        });
-    }
-  </script>
+  
 </div><!-- End of page-sidebar-content -->
 
 <!-- /page-sidebar-content -->
