@@ -342,6 +342,10 @@
                   <input type="text" id="fname" name="name" class="form-control" placeholder="Your full name" required autocomplete="name" />
                 </div>
                 <div class="form-group">
+                  <label class="form-label" for="email">Email Address *</label>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required autocomplete="email" />
+                </div>
+                <div class="form-group">
                   <label class="form-label" for="phone">Phone / WhatsApp *</label>
                   <input type="tel" id="phone" name="phone" class="form-control" placeholder="01XXXXXXXXX" required autocomplete="tel" />
                 </div>
@@ -411,7 +415,7 @@
               </div>
 
               <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" id="contact-submit-btn">
-                Generate Quote & Send to WhatsApp
+                Send Quote Request
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
               </button>
             </form>
@@ -575,7 +579,7 @@
       const data = Object.fromEntries(formData.entries());
 
       try {
-        const response = await fetch('generate_quote.php', {
+        const response = await fetch('send_email.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
@@ -583,18 +587,27 @@
 
         const result = await response.json();
 
-        if (response.ok && result.success) {
-          const waMessage = `Hello Bongshai Housing! I would like to request an official quote.
-Here are my inquiry details:
-${result.pdf_url}`;
-          window.location.href = 'https://wa.me/8801781636613?text=' + encodeURIComponent(waMessage);
+        if (response.ok && result.status === 'success') {
+          const formSuccess = document.createElement('div');
+          formSuccess.style.marginTop = 'var(--space-4)';
+          formSuccess.style.padding = 'var(--space-4)';
+          formSuccess.style.background = 'rgba(5,150,105,0.1)';
+          formSuccess.style.border = '1px solid var(--success)';
+          formSuccess.style.borderRadius = 'var(--radius-xl)';
+          formSuccess.style.color = 'var(--success)';
+          formSuccess.style.fontWeight = '600';
+          formSuccess.style.textAlign = 'center';
+          formSuccess.innerHTML = '✅ Thank you! Your request has been sent to our team.';
+          
+          this.appendChild(formSuccess);
+          this.reset();
         } else {
-          throw new Error(result.error || 'Error generating quote');
+          throw new Error(result.message || 'Error sending message');
         }
       } catch (error) {
         console.error('Error:', error);
         alert('❌ ' + (error.message || 'An error occurred. Please try again later.'));
-        btn.innerHTML = 'Generate Quote & Send to WhatsApp <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+        btn.innerHTML = 'Send Quote Request <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
         btn.disabled = false;
       }
     });
