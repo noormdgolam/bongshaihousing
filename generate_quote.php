@@ -33,7 +33,8 @@ $district = htmlspecialchars($data['district'] ?? 'N/A');
 $upazila = htmlspecialchars($data['upazila'] ?? 'N/A');
 $message = htmlspecialchars($data['message'] ?? 'No additional notes.');
 $model = htmlspecialchars($data['model'] ?? 'Unknown Model');
-$floor_area = htmlspecialchars($data['floor_area'] ?? 'Unknown Sq.Ft');
+$floor_area = htmlspecialchars($data['floor_area'] ?? 'N/A');
+$bedrooms = htmlspecialchars($data['bedrooms'] ?? 'N/A');
 
 // Create PDF
 $pdf = new FPDF();
@@ -66,7 +67,12 @@ $pdf->Cell(0, 8, $model, 0, 1);
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(50, 8, 'Floor Area:', 0, 0);
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 8, $floor_area . ' Sq.Ft', 0, 1);
+$pdf->Cell(0, 8, $floor_area . ($floor_area === 'N/A' ? '' : ' Sq.Ft'), 0, 1);
+
+$pdf->SetFont('Arial', '', 12);
+$pdf->Cell(50, 8, 'Bedrooms:', 0, 0);
+$pdf->SetFont('Arial', 'B', 12);
+$pdf->Cell(0, 8, $bedrooms . ($bedrooms === 'N/A' ? '' : ' Bedrooms'), 0, 1);
 $pdf->Ln(10);
 
 // Customer Details Section
