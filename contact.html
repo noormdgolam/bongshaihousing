@@ -535,10 +535,10 @@
         .then(res => res.json())
         .then(data => {
           sel.innerHTML = '<option value="">Select Station</option>';
-          if(data.data && data.data[0] && data.data[0].upazilas) {
-             data.data[0].upazilas.forEach(u => {
+          if(data.data && data.data[0] && data.data[0].upazillas) {
+             data.data[0].upazillas.forEach(u => {
                let opt = document.createElement('option');
-               opt.value = u.upazila; opt.innerHTML = u.upazila;
+               opt.value = u; opt.innerHTML = u;
                sel.appendChild(opt);
              });
           }
