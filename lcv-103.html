@@ -254,6 +254,7 @@
 </div>
 </div>
 </aside>
+
 <div class="page-sidebar-content">
 <!-- 1. Hero Product Showcase (Horizontal Split) -->
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
@@ -276,28 +277,33 @@
 <div class="reveal-up" style="display: flex; flex-wrap: wrap; gap: var(--space-4); background: var(--off-white); padding: var(--space-6); border-radius: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); margin-bottom: var(--space-8); justify-content: space-around; border: 1px solid var(--grey-200);">
 <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">📐</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Floor Area</div><select style="font-weight: 700; color: var(--primary-dark); font-size: 0.95rem; background: var(--off-white); border: 1px solid var(--grey-200); border-radius: 6px; padding: 2px 4px; cursor: pointer; outline: none; margin-top: 4px;">
-  <option>440 Sq.Ft</option>
-  <option>550 Sq.Ft</option>
-  <option>750 Sq.Ft</option>
-  <option>950 Sq.Ft</option>
-  <option>1200 Sq.Ft</option>
-</select></div>
+<div>
+<div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Floor Area</div>
+<select id="floorAreaSelect-103" onchange="updateSpecs103(this.value)" style="font-weight: 700; color: var(--primary-dark); font-size: 0.95rem; background: var(--off-white); border: 1px solid var(--grey-200); border-radius: 6px; padding: 2px 4px; cursor: pointer; outline: none; margin-top: 4px;">
+<option value="440">440 Sq.Ft</option>
+<option value="550">550 Sq.Ft</option>
+<option value="750">750 Sq.Ft</option>
+<option value="950">950 Sq.Ft</option>
+<option value="1200">1200 Sq.Ft</option>
+<option value="1500">1500 Sq.Ft</option>
+<option value="1800">1800 Sq.Ft</option>
+</select>
+</div>
 </div>
 <div style="width: 1px; background: var(--grey-300);"></div>
 <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">🛏️</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bedrooms</div><div style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">2 Rooms</div></div>
+<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bedrooms</div><div id="spec-bed-103" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">2 Rooms</div></div>
 </div>
 <div style="width: 1px; background: var(--grey-300);"></div>
 <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">🚿</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bathroom</div><div style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">1 Room</div></div>
+<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bathroom</div><div id="spec-bath-103" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">1 Room</div></div>
 </div>
 <div style="width: 1px; background: var(--grey-300);"></div>
 <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">🍳</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Kitchen</div><div style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">Included</div></div>
+<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Kitchen</div><div id="spec-kitchen-103" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">Included</div></div>
 </div>
 </div>
 <!-- 3. Floor Plan & Layout Details (Horizontal Split) -->
@@ -310,12 +316,11 @@
 </div>
 <div class="reveal-right" style="flex: 1 1 300px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
 <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 20px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Space Allocation</h3>
-<div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.95rem;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Master Bedroom</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">10 ft × 11 ft</span></div>
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedroom 02</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">10 ft × 9 ft</span></div>
+<div id="space-allocation-103" style="display: flex; flex-direction: column; gap: 16px; font-size: 0.95rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">2 Rooms</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">1 Room</span></div>
 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathroom</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
 <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Front Veranda</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
 </div>
 </div>
@@ -359,7 +364,40 @@
 </div>
 </div>
 </div>
+<script>
+    const floorData103 = {
+      "440": { bed: "2 Rooms", bath: "1 Room", dining: "Included", drawing: "N/A" },
+      "550": { bed: "2 Rooms", bath: "1 Room", dining: "Included", drawing: "N/A" },
+      "750": { bed: "2 Rooms", bath: "2 Rooms", dining: "1 Space", drawing: "1 Room" },
+      "950": { bed: "2 Rooms", bath: "2 Rooms", dining: "1 Space", drawing: "1 Room" },
+      "1200": { bed: "3 Rooms", bath: "3 Rooms", dining: "1 Space", drawing: "1 Room" },
+      "1500": { bed: "4 Rooms", bath: "4 Rooms", dining: "1 Space", drawing: "1 Room" },
+      "1800": { bed: "5 Rooms", bath: "5 Rooms", dining: "1 Space", drawing: "1 Room" }
+    };
+
+    function updateSpecs103(sqft) {
+      const data = floorData103[sqft];
+      if(!data) return;
+
+      // Update Quick Specs
+      document.getElementById("spec-bed-103").innerText = data.bed;
+      document.getElementById("spec-bath-103").innerText = data.bath;
+
+      // Update Space Allocation List
+      let drawingHtml = data.drawing !== "N/A" ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
+
+      document.getElementById("space-allocation-103").innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">${data.dining}</span></div>
+        ${drawingHtml}
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Front Veranda</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
+      `;
+    }
+  </script>
 </div>
+
 <!-- /page-sidebar-content -->
 </div><!-- /page-with-sidebar -->
 </div><!-- /container -->
