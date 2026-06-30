@@ -776,7 +776,7 @@ p { color: var(--grey-600); line-height: 1.75; }
    ============================================================ */
 .features-strip {
   background: var(--white);
-  padding: var(--space-8) 0;
+  padding: var(--space-6) 0;
   border-bottom: 1px solid var(--grey-100);
 }
 
@@ -797,7 +797,8 @@ p { color: var(--grey-600); line-height: 1.75; }
   width: 48px;
   height: 48px;
   border-radius: var(--radius-lg);
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(234, 179, 8, 0.15);
+  color: var(--accent-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -808,14 +809,14 @@ p { color: var(--grey-600); line-height: 1.75; }
 .feature-strip-title {
   font-size: var(--fs-sm);
   font-weight: 700;
-  color: var(--white);
+  color: var(--primary-dark);
   display: block;
   font-family: var(--font-body);
 }
 
 .feature-strip-text {
   font-size: var(--fs-xs);
-  color: rgba(255,255,255,0.6);
+  color: var(--grey-600);
   display: block;
 }
 
@@ -2289,7 +2290,11 @@ textarea.form-control {
   .hero-stats { grid-template-columns: 1fr 1fr; display: grid; }
 
   /* Features strip */
-  .features-strip { padding: var(--space-6) 0; }
+  .features-strip {
+  background: var(--white);
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--grey-100);
+}
   .feature-strip-icon { width: 40px; height: 40px; font-size: 1.1rem; }
 
   /* Section */
