@@ -1,0 +1,11 @@
+# Enable RewriteEngine
+RewriteEngine On
+
+# If the request is NOT for maintenance.html
+RewriteCond %{REQUEST_URI} !/maintenance\.html$ [NC]
+
+# And the request is NOT for images, css, js, or fonts (so the maintenance page still looks good)
+RewriteCond %{REQUEST_URI} !\.(jpe?g?|png|gif|css|js|woff|woff2|ttf|svg|ico)$ [NC]
+
+# Redirect everything else to maintenance.html (using 302 Temporary Redirect)
+RewriteRule .* /maintenance.html [R=302,L]
