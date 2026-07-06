@@ -14,7 +14,7 @@ others = []
 
 for file_path in html_files:
     basename = os.path.basename(file_path)
-    url = f"https://bongshaihousing.com/{basename}"
+    url = f"https://ai.bongshai.com/{basename}"
     
     if basename == "index.html":
         homepage.append(url)

@@ -8,7 +8,7 @@ Disallow: /wp-login.php
 Disallow: /*.php$
 
 # Sitemap
-Sitemap: https://bongshaihousing.com/sitemap.xml
+Sitemap: https://ai.bongshai.com/sitemap.xml
 
 # Crawl delay (optional, be gentle)
 Crawl-delay: 1
