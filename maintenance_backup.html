@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Maintenance | Bongshai Housing</title>
+    <meta name="description" content="Bongshai Housing is currently undergoing scheduled maintenance. We'll be back shortly.">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow: hidden;
+        }
+        
+        .maintenance-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/hero-bg.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .maintenance-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+        }
+
+        .maintenance-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .maintenance-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            background: rgba(234, 179, 8, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            color: var(--accent);
+            font-size: 2.5rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--text-gray-light);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-gray-light);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .contact-item:hover {
+            color: var(--accent);
+        }
+
+        .contact-item i {
+            color: var(--accent);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .maintenance-card {
+                padding: 2rem;
+            }
+            h1 { font-size: 2rem; }
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+    "name": "Bongshai Housing Ltd.",
+    "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+    "url": "https://bongshaihousing.com",
+    "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+    "telephone": ["+8801781636613"],
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.8728",
+      "longitude": "90.3984"
+    }
+  }
+  </script>
+
+</head>
+<body>
+
+    <div class="maintenance-bg"></div>
+
+    <div class="maintenance-content">
+        <div class="logo-container">
+            <h2 class="logo-text">Bongshai<span>Housing</span></h2>
+        </div>
+
+        <div class="maintenance-card">
+            <div class="icon-container">
+                <i class="fa-solid fa-person-digging"></i>
+            </div>
+            <h1>Under Maintenance</h1>
+            <p>We are currently updating our website to provide you with a better experience. We'll be back online shortly. Thank you for your patience!</p>
+            
+            <div class="contact-info">
+                <a href="mailto:sales@bongshai.com" class="contact-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    sales@bongshai.com
+                </a>
+                <div class="contact-item">
+                    <i class="fa-solid fa-phone"></i>
+                    +880 1781-636613
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
