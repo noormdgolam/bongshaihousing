@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ LOCAL SEO – Dhaka / Bangladesh ═══ -->
+  <meta name="geo.region" content="BD-C" />
+  <meta name="geo.placename" content="Uttara, Dhaka, Bangladesh" />
+  <meta name="geo.position" content="23.8728;90.3984" />
+  <meta name="ICBM" content="23.8728, 90.3984" />
+
   <title>Terms &amp; Conditions | Bongshai Housing</title>
   <meta name="description" content="Terms &amp; Conditions of Bongshai Housing, Bangladesh's leading pre-engineered steel building company and steel structure manufacturer." />
   <meta name="keywords" content="terms and conditions bongshai housing, pre-engineered steel building Bangladesh, steel structure manufacturer in Bangladesh" />
@@ -36,6 +43,34 @@
       margin-bottom: var(--space-2);
     }
   </style>
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+    "name": "Bongshai Housing Ltd.",
+    "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+    "url": "https://bongshaihousing.com",
+    "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+    "telephone": ["+8801781636613"],
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.8728",
+      "longitude": "90.3984"
+    }
+  }
+  </script>
+
 </head>
 <body>
 
@@ -124,6 +159,11 @@
               <div class="dropdown-icon" style="font-size:1.2rem;">🛡️</div>
               <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Security Kiosks</strong></div>
             </a>
+          <div style="padding:var(--space-3) var(--space-3) 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;border-top:1px solid var(--grey-100);">Interactive Tools</div>
+            <a href="solutions.html" class="dropdown-item" role="menuitem" style="padding:var(--space-2) var(--space-3);">
+              <div class="dropdown-icon" style="font-size:1.2rem;">🧮</div>
+              <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Calculator</strong></div>
+            </a>
           </div>
         </li>
         <li class="nav-item" role="none">
@@ -153,7 +193,7 @@
       <!-- Desktop CTA -->
       <div class="nav-cta">
         
-        <a href="tel:+8801781636613" class="nav-phone" aria-label="Call Bongshai Housing">
+        <a href="tel:+8801781636613" itemprop="telephone" class="nav-phone" aria-label="Call Bongshai Housing">
           📞 01781-636613
         </a>
         <a href="contact.html" class="btn btn-primary btn-sm" id="nav-get-quote-btn">Get Quote</a>
@@ -197,6 +237,8 @@
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Site Solutions</div>
           <a href="site-offices.html" class="mobile-sub-link">🏢 Site Offices</a>
           <a href="security-kiosks.html" class="mobile-sub-link">🛡️ Security Kiosks</a>
+        <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Interactive Tools</div>
+          <a href="solutions.html" class="mobile-sub-link">🧮 Calculator</a>
         </div>
       </div>
       <div>
@@ -213,7 +255,7 @@
     </div>
           
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
-      <a href="tel:+8801781636613" class="btn btn-secondary" style="justify-content:center;">📞 01781-636613</a>
+      <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-secondary" style="justify-content:center;">📞 01781-636613</a>
       <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-quote-btn">Get a Free Quote</a>
     </div>
   </div>
@@ -279,8 +321,8 @@
           <address style="font-style:normal; margin-left:var(--space-4); color:var(--grey-600)">
             <strong>Bongshai Housing Ltd.</strong><br>
             House #18, Road #18, Sector #10, Uttara C/A, Dhaka – 1230<br>
-            Phone: <a href="tel:+8801781636613" style="color:var(--accent)">01781-636613</a><br>
-            Email: <a href="mailto:sales@bongshai.com" style="color:var(--accent)">sales@bongshai.com</a>
+            Phone: <a href="tel:+8801781636613" itemprop="telephone" style="color:var(--accent)">01781-636613</a><br>
+            Email: <a href="mailto:sales@bongshai.com" itemprop="email" style="color:var(--accent)">sales@bongshai.com</a>
           </address>
         </div>
       </div>
@@ -307,8 +349,8 @@
           <div class="footer-social" aria-label="Social media links">
             <a href="https://wa.me/8801781636613" class="social-btn" aria-label="WhatsApp" rel="noopener noreferrer">💬</a>
             <a href="https://www.facebook.com/bongshaihousing" class="social-btn" aria-label="Facebook" rel="noopener noreferrer">📘</a>
-            <a href="mailto:sales@bongshai.com" class="social-btn" aria-label="Email">✉️</a>
-            <a href="tel:+8801781636613" class="social-btn" aria-label="Phone">📞</a>
+            <a href="mailto:sales@bongshai.com" itemprop="email" class="social-btn" aria-label="Email">✉️</a>
+            <a href="tel:+8801781636613" itemprop="telephone" class="social-btn" aria-label="Phone">📞</a>
           </div>
         </div>
 
@@ -338,18 +380,19 @@
 
         <div>
           <h3 class="footer-col-title">Contact Info</h3>
-          <address class="footer-contact-items" style="font-style:normal">
+          <address class="footer-contact-items" style="font-style:normal" itemscope itemtype="http://schema.org/LocalBusiness">
+<span itemprop="name" style="display:none;">Bongshai Housing Ltd.</span>
             <div class="footer-contact-item">
               <span class="footer-contact-icon" aria-hidden="true">📍</span>
               <span>House #18, Road #18, Sector #10, Uttara C/A, Dhaka – 1230</span>
             </div>
             <div class="footer-contact-item">
               <span class="footer-contact-icon" aria-hidden="true">📞</span>
-              <span><a href="tel:+8801781636613" style="color:inherit">01781-636613</a><br/><a href="tel:+8801714104940" style="color:inherit">01714-104940</a></span>
+              <span><a href="tel:+8801781636613" itemprop="telephone" style="color:inherit">01781-636613</a><br/><a href="tel:+8801714104940" style="color:inherit">01714-104940</a></span>
             </div>
             <div class="footer-contact-item">
               <span class="footer-contact-icon" aria-hidden="true">✉️</span>
-              <span><a href="mailto:sales@bongshai.com" style="color:inherit">sales@bongshai.com</a></span>
+              <span><a href="mailto:sales@bongshai.com" itemprop="email" style="color:inherit">sales@bongshai.com</a></span>
             </div>
             <div class="footer-contact-item">
               <span class="footer-contact-icon" aria-hidden="true">⏰</span>

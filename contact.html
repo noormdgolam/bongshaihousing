@@ -140,6 +140,11 @@
               <div class="dropdown-icon" style="font-size:1.2rem;">🛡️</div>
               <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Security Kiosks</strong></div>
             </a>
+          <div style="padding:var(--space-3) var(--space-3) 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;border-top:1px solid var(--grey-100);">Interactive Tools</div>
+            <a href="solutions.html" class="dropdown-item" role="menuitem" style="padding:var(--space-2) var(--space-3);">
+              <div class="dropdown-icon" style="font-size:1.2rem;">🧮</div>
+              <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Calculator</strong></div>
+            </a>
           </div>
         </li>
         <li class="nav-item" role="none">
@@ -169,7 +174,7 @@
       <!-- Desktop CTA -->
       <div class="nav-cta">
         
-        <a href="tel:+8801781636613" class="nav-phone" aria-label="Call Bongshai Housing">
+        <a href="tel:+8801781636613" itemprop="telephone" class="nav-phone" aria-label="Call Bongshai Housing">
           📞 01781-636613
         </a>
         <a href="contact.html" class="btn btn-primary btn-sm" id="nav-get-quote-btn">Get Quote</a>
@@ -213,6 +218,8 @@
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Site Solutions</div>
           <a href="site-offices.html" class="mobile-sub-link">🏢 Site Offices</a>
           <a href="security-kiosks.html" class="mobile-sub-link">🛡️ Security Kiosks</a>
+        <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Interactive Tools</div>
+          <a href="solutions.html" class="mobile-sub-link">🧮 Calculator</a>
         </div>
       </div>
       <div>
@@ -229,7 +236,7 @@
     </div>
           
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
-      <a href="tel:+8801781636613" class="btn btn-secondary" style="justify-content:center;">📞 01781-636613</a>
+      <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-secondary" style="justify-content:center;">📞 01781-636613</a>
       <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-quote-btn">Get a Free Quote</a>
     </div>
   </div>
@@ -273,7 +280,7 @@
                 <div>
                   <span class="contact-detail-label">Phone</span>
                   <span class="contact-detail-value">
-                    <a href="tel:+8801781636613" style="color:var(--primary);font-weight:500">01781-636613</a><br>
+                    <a href="tel:+8801781636613" itemprop="telephone" style="color:var(--primary);font-weight:500">01781-636613</a><br>
                     <a href="tel:+8801714104940" style="color:var(--primary);font-weight:500">01714-104940</a>
                   </span>
                 </div>
@@ -292,7 +299,7 @@
                 <div>
                   <span class="contact-detail-label">Email</span>
                   <span class="contact-detail-value">
-                    <a href="mailto:sales@bongshai.com" style="color:var(--primary);font-weight:500">sales@bongshai.com</a>
+                    <a href="mailto:sales@bongshai.com" itemprop="email" style="color:var(--primary);font-weight:500">sales@bongshai.com</a>
                   </span>
                 </div>
               </div>
@@ -325,7 +332,7 @@
               <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more%20about%20your%20housing%20packages." class="btn btn-primary" id="contact-wa-btn" target="_blank" rel="noopener noreferrer">
                 💬 WhatsApp Us
               </a>
-              <a href="tel:+8801781636613" class="btn btn-secondary" id="contact-call-btn">📞 Call Now</a>
+              <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-secondary" id="contact-call-btn">📞 Call Now</a>
             </div>
           </div>
 
@@ -354,15 +361,13 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="district">District *</label>
-                  <select id="district" name="district" class="form-control" required onchange="loadUpazilas(this.value)">
+                  <select id="district" name="district" class="form-control" required>
                     <option value="">Select District</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="upazila">Police Station *</label>
-                  <select id="upazila" name="upazila" class="form-control" required>
-                    <option value="">Select Station</option>
-                  </select>
+                  <label class="form-label" for="upazila">Police Station / Thana *</label>
+                  <input type="text" id="upazila" name="upazila" class="form-control" placeholder="e.g., Uttara, Gulshan" required />
                 </div>
               </div>
 
@@ -371,17 +376,41 @@
                   <label class="form-label" for="model">Model of Interest</label>
                   <select id="model" name="model" class="form-control">
                     <option value="General Inquiry">General Inquiry</option>
-                    <option value="LCV-101">Model LCV-101</option>
-                    <option value="LCV-102">Model LCV-102</option>
-                    <option value="LCV-103">Model LCV-103</option>
-                    <option value="LCV-104">Model LCV-104</option>
-                    <option value="LCV-105">Model LCV-105</option>
-                    <option value="LCV-106">Model LCV-106</option>
-                    <option value="LCV-107">Model LCV-107</option>
-                    <option value="LCV-108">Model LCV-108</option>
-                    <option value="LCV-109">Model LCV-109</option>
-                    <option value="Luxury Villa">Luxury Villa</option>
-                    <option value="Custom Project">Custom Project</option>
+                    <optgroup label="Duplex Villa Models">
+                      <option value="DV-101">Model DV-101</option>
+                      <option value="DV-102">Model DV-102</option>
+                      <option value="DV-103">Model DV-103</option>
+                      <option value="DV-104">Model DV-104</option>
+                      <option value="DV-105">Model DV-105</option>
+                      <option value="DV-106">Model DV-106</option>
+                      <option value="DV-107">Model DV-107</option>
+                      <option value="DV-108">Model DV-108</option>
+                      <option value="DV-109">Model DV-109</option>
+                      <option value="DV-110">Model DV-110</option>
+                      <option value="DV-111">Model DV-111</option>
+                      <option value="DV-112">Model DV-112</option>
+                      <option value="DV-113">Model DV-113</option>
+                    </optgroup>
+                    <optgroup label="Low-Cost Villa Models">
+                      <option value="LCV-101">Model LCV-101</option>
+                      <option value="LCV-102">Model LCV-102</option>
+                      <option value="LCV-103">Model LCV-103</option>
+                      <option value="LCV-104">Model LCV-104</option>
+                      <option value="LCV-105">Model LCV-105</option>
+                      <option value="LCV-106">Model LCV-106</option>
+                      <option value="LCV-107">Model LCV-107</option>
+                      <option value="LCV-108">Model LCV-108</option>
+                      <option value="LCV-109">Model LCV-109</option>
+                    </optgroup>
+                    <optgroup label="Other">
+                      <option value="Luxury Villa">Luxury Villa</option>
+                      <option value="Container House">Container House</option>
+                      <option value="Industrial Shed">Industrial Shed</option>
+                      <option value="Worker Accommodation">Worker Accommodation</option>
+                      <option value="Site Office">Site Office</option>
+                      <option value="Security Kiosk">Security Kiosk</option>
+                      <option value="Custom Project">Custom Project</option>
+                    </optgroup>
                   </select>
                 </div>
                 <div class="form-group">
@@ -463,8 +492,8 @@
           <div class="footer-social">
             <a href="https://wa.me/8801781636613" class="social-btn" aria-label="WhatsApp">💬</a>
             <a href="https://www.facebook.com/bongshaihousing" class="social-btn" aria-label="Facebook">📘</a>
-            <a href="mailto:sales@bongshai.com" class="social-btn" aria-label="Email">✉️</a>
-            <a href="tel:+8801781636613" class="social-btn" aria-label="Phone">📞</a>
+            <a href="mailto:sales@bongshai.com" itemprop="email" class="social-btn" aria-label="Email">✉️</a>
+            <a href="tel:+8801781636613" itemprop="telephone" class="social-btn" aria-label="Phone">📞</a>
           </div>
         </div>
         <div>
@@ -488,10 +517,11 @@
         </div>
         <div>
           <h3 class="footer-col-title">Contact Info</h3>
-          <address class="footer-contact-items" style="font-style:normal">
-            <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">📍</span><span>House #18, Road #18, Sector #10, Uttara, Dhaka – 1230</span></div>
-            <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">📞</span><span><a href="tel:+8801781636613" style="color:inherit">01781-636613</a></span></div>
-            <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">✉️</span><span><a href="mailto:sales@bongshai.com" style="color:inherit">sales@bongshai.com</a></span></div>
+          <address class="footer-contact-items" style="font-style:normal" itemscope itemtype="http://schema.org/LocalBusiness">
+<span itemprop="name" style="display:none;">Bongshai Housing Ltd.</span>
+            <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">📍</span><span><span itemprop="address">House #18, Road #18, Sector #10, Uttara, Dhaka – 1230</span></span></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">📞</span><span><a href="tel:+8801781636613" itemprop="telephone" style="color:inherit">01781-636613</a></span></div>
+            <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">✉️</span><span><a href="mailto:sales@bongshai.com" itemprop="email" style="color:inherit">sales@bongshai.com</a></span></div>
             <div class="footer-contact-item"><span class="footer-contact-icon" aria-hidden="true">⏰</span><span>Sat – Thu: 9:00 AM – 7:00 PM</span></div>
           </address>
         </div>
@@ -541,23 +571,7 @@
         }
       });
 
-    function loadUpazilas(dist) {
-      const sel = document.getElementById('upazila');
-      sel.innerHTML = '<option value="">Loading...</option>';
-      if(!dist) { sel.innerHTML = '<option value="">Select Station</option>'; return; }
-      fetch('https://bdapis.com/api/v1.2/district/' + dist.toLowerCase())
-        .then(res => res.json())
-        .then(data => {
-          sel.innerHTML = '<option value="">Select Station</option>';
-          if(data.data && data.data[0] && data.data[0].upazillas) {
-             data.data[0].upazillas.forEach(u => {
-               let opt = document.createElement('option');
-               opt.value = u; opt.innerHTML = u;
-               sel.appendChild(opt);
-             });
-          }
-        });
-    }
+    
 
     // Pre-fill model if provided in URL
     const params = new URLSearchParams(window.location.search);
