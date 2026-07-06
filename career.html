@@ -342,7 +342,7 @@
             <h2 class="form-title" style="margin-bottom:var(--space-2)">Submit Your Application</h2>
             <p class="form-subtitle" style="color:var(--grey-600);margin-bottom:var(--space-6)">Fill in the form below and attach your CV. Our HR team will review your application and contact you within 3–5 business days.</p>
 
-            <form id="careerForm" novalidate aria-label="Job application form">
+            <form id="careerForm" novalidate aria-label="Job application form" enctype="multipart/form-data">
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="c-fname">First Name *</label>
@@ -389,6 +389,10 @@
               <div class="form-group">
                 <label class="form-label" for="c-cover">Cover Letter / Why Join Us?</label>
                 <textarea id="c-cover" name="cover" class="form-control" placeholder="Tell us about your experience, skills, and why you want to join Bongshai Housing…" rows="4"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="c-cv">Upload CV (PDF Only) *</label>
+                <input type="file" id="c-cv" name="cv" class="form-control" accept="application/pdf" required style="padding: 10px;" />
               </div>
               <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" id="career-submit-btn">
                 Submit Application
@@ -448,15 +452,57 @@
 
     document.getElementById('careerForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
+      if (!this.checkValidity()) {
+        this.reportValidity();
+        return;
+      }
+      
       const btn = document.getElementById('career-submit-btn');
+      const originalText = btn.innerHTML;
       btn.textContent = 'Submitting…';
       btn.disabled = true;
-      setTimeout(() => {
-        document.getElementById('careerSuccess').style.display = 'block';
-        this.reset();
-        btn.innerHTML = 'Submit Application <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+      
+      const formData = new FormData(this);
+      
+      fetch('apply_career.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw err; });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const successDiv = document.getElementById('careerSuccess');
+        successDiv.style.display = 'block';
+        if(data.status === 'success') {
+            successDiv.textContent = '✅ Application submitted successfully! Our HR team will contact you within 3–5 business days.';
+            successDiv.style.color = 'var(--success)';
+            successDiv.style.borderColor = 'var(--success)';
+            successDiv.style.backgroundColor = 'rgba(5,150,105,0.1)';
+            this.reset();
+        } else {
+            successDiv.textContent = '❌ Error: ' + (data.message || 'Submission failed.');
+            successDiv.style.color = '#ef4444';
+            successDiv.style.borderColor = '#ef4444';
+            successDiv.style.backgroundColor = 'rgba(239,68,68,0.1)';
+        }
+      })
+      .catch(err => {
+        const successDiv = document.getElementById('careerSuccess');
+        successDiv.style.display = 'block';
+        successDiv.textContent = '❌ Error: ' + (err.message || 'A network error occurred. Please try again.');
+        successDiv.style.color = '#ef4444';
+        successDiv.style.borderColor = '#ef4444';
+        successDiv.style.backgroundColor = 'rgba(239,68,68,0.1)';
+      })
+      .finally(() => {
+        btn.innerHTML = originalText;
         btn.disabled = false;
-      }, 1200);
+      });
     });
   </script>
 
