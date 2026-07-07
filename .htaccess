@@ -12,4 +12,12 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 # 3. Redirect index.html to the root directory
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
+
+# 4. Redirect specific old or broken URLs to homepage
+RewriteRule ^u8-2/?$ https://bongshaihousing.com/ [R=301,L]
+
+# 5. Catch-all: Redirect all other 404s (non-existent files/directories) to homepage
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ https://bongshaihousing.com/ [R=301,L]
 </IfModule>
