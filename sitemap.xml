@@ -468,4 +468,35 @@
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
+  <!-- NEW REGIONAL SEO PAGES -->
+  <url>
+    <loc>https://bongshaihousing.com/steel-building-dhaka.html</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bongshaihousing.com/steel-building-chotrogram.html</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bongshaihousing.com/steel-building-gazipur.html</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bongshaihousing.com/prefab-housing-cumilla.html</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bongshaihousing.com/prefab-cottage-bogra-rangpur.html</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

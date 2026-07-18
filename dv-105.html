@@ -42,7 +42,7 @@
     "offers": {"@type": "AggregateOffer", "priceCurrency": "BDT", "lowPrice": "500000", "highPrice": "50000000", "offerCount": "1", "availability": "https://schema.org/InStock", "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}}, "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "89"}
   }
   </script>
-  <meta name="description" content="বাংলাদেশের প্রথম প্রি-ইঞ্জিনিয়ার্ড স্টিল ডিউপ্লেক্স ভিলা বাংলাদেশের নগরের আশেপাশে।" />
+  <meta name="description" content="বাংলাদেশের প্রথম প্রি-ইঞ্জিনিয়ার্ড স্টিল ডিউপ্লেক্স..." />
 </head>
 <body>
 <!-- ======================================================
@@ -294,7 +294,7 @@
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
 <div class="reveal-left" style="flex: 1 1 400px; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex;">
-<img alt="Model DV-105 Exterior View" loading="lazy" src="images/products/dv-105.png" style="width: 100%; object-fit: cover; display: block;"/>
+<img alt="Model DV-105 Exterior View" loading="lazy" src="images/products/dv-105.png" style="width: 100%; object-fit: cover; display: block;"/ title="Model DV-105 Exterior View" width="1024" height="1024">
 </div>
 <!-- Right: Details -->
 <div class="reveal-right" style="flex: 1 1 300px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
@@ -308,33 +308,38 @@
 </div>
 </div>
 <!-- 2. Horizontal Quick-Specs Bar -->
-<div class="reveal-up" style="display: flex; flex-wrap: wrap; gap: var(--space-4); background: var(--off-white); padding: var(--space-6); border-radius: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); margin-bottom: var(--space-8); justify-content: space-around; border: 1px solid var(--grey-200);">
-<div style="display: flex; align-items: center; gap: 12px;">
-<span style="font-size: 1.5rem;">📐</span>
-<div>
-<div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Floor Area</div>
-<select id="floorAreaSelect-101" onchange="updateSpecs101(this.value)" style="font-weight: 700; color: var(--primary-dark); font-size: 0.95rem; background: var(--off-white); border: 1px solid var(--grey-200); border-radius: 6px; padding: 2px 4px; cursor: pointer; outline: none; margin-top: 4px;">
-<option value="650x2">650x2 Sq.Ft</option>
-<option value="750x2">750x2 Sq.Ft</option>
-<option value="950x2">950x2 Sq.Ft</option>
-<option value="1200x2">1200x2 Sq.Ft</option>
-</select>
+<div class="reveal-up" style="display: flex; flex-direction: column; gap: var(--space-5); background: var(--off-white); padding: var(--space-6); border-radius: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); margin-bottom: var(--space-8); border: 1px solid var(--grey-200);">
+  
+  <!-- Row 1: Floor Area Selector -->
+  <div style="display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid var(--grey-200); padding-bottom: var(--space-4);">
+    <span style="font-size: 1.5rem; margin-top: 4px;">📐</span>
+    <div style="flex: 1;">
+      <div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">Select Floor Area</div>
+      <div class="area-selector" id="area-selector-101">
+<button type="button" class="area-btn active" onclick="selectArea('101', '650x2', this)">650x2 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('101', '750x2', this)">750x2 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('101', '950x2', this)">950x2 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('101', '1200x2', this)">1200x2 Sq.Ft</button>
 </div>
-</div>
-<div style="width: 1px; background: var(--grey-300);"></div>
-<div style="display: flex; align-items: center; gap: 12px;">
+    </div>
+  </div>
+  
+  <!-- Row 2: Secondary Specs -->
+  <div style="display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-around;">
+    <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">🛏️</span>
 <div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bedrooms</div><div id="spec-bed-101" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">4 Rooms</div></div>
 </div>
-<div style="width: 1px; background: var(--grey-300);"></div>
-<div style="display: flex; align-items: center; gap: 12px;">
+    <div style="width: 1px; background: var(--grey-200);"></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">🚿</span>
 <div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bathroom</div><div id="spec-bath-101" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">2 Rooms</div></div>
 </div>
-<div style="width: 1px; background: var(--grey-300);"></div>
-<div style="display: flex; align-items: center; gap: 12px;">
+    <div style="width: 1px; background: var(--grey-200);"></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
 <span style="font-size: 1.5rem;">🍳</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Kitchen</div><div id="spec-kitchen-101" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">Included</div></div>
+<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Kitchen</div><div id="spec-kitchen-105" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">2 Kitchens</div></div>
+  </div>
 </div>
 </div>
 <!-- 4. Materials & Finishes (Table) -->
@@ -412,9 +417,9 @@
 <script>
     const floorData101 = {
       "650x2": { bed: "4 Rooms", bath: "2 Rooms", dining: "Included", drawing: "N/A" },
-      "750x2": { bed: "4 Rooms", bath: "4 Rooms", dining: "1 Space", drawing: "1 Room" },
-      "950x2": { bed: "6 Rooms", bath: "4 Rooms", dining: "1 Space", drawing: "1 Room" },
-      "1200x2": { bed: "8 Rooms", bath: "6 Rooms", dining: "1 Space", drawing: "1 Room" }
+      "750x2": { bed: "4 Rooms", bath: "4 Rooms", dining: "2 Spaces", drawing: "2 Rooms" },
+      "950x2": { bed: "6 Rooms", bath: "4 Rooms", dining: "2 Spaces", drawing: "2 Rooms" },
+      "1200x2": { bed: "8 Rooms", bath: "6 Rooms", dining: "2 Spaces", drawing: "2 Rooms" }
     };
 
     function updateSpecs101(sqft) {
@@ -433,7 +438,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">${data.dining}</span></div>
         ${drawingHtml}
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">2 Kitchens</span></div>
         <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Front Veranda</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
       `;
     }
@@ -539,5 +544,50 @@
     const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.12 });
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
   </script>
+<style>
+.area-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.area-btn {
+  background: var(--white);
+  border: 1px solid var(--grey-300);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--grey-700);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.area-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--off-white);
+}
+.area-btn.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+</style>
+<script>
+function selectArea(id, sqft, btn) {
+  const container = btn.parentElement;
+  const buttons = container.querySelectorAll('.area-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  const funcName = 'updateSpecs' + id.replace('-', '');
+  if (typeof window[funcName] === 'function') {
+      window[funcName](sqft);
+  } else if (typeof window['updateSpecs' + id] === 'function') {
+      window['updateSpecs' + id](sqft);
+  }
+}
+</script>
 </body>
 </html>
