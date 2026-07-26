@@ -1,0 +1,20 @@
+{
+    "not_in_sitemap": [
+        "404.html",
+        "lcv-109-test.html"
+    ],
+    "broken_internal_links": [],
+    "missing_local_seo_schema": [
+        "maintenance.html",
+        "maintenance_backup.html"
+    ],
+    "missing_geo_tags": [
+        "maintenance_backup.html"
+    ],
+    "has_noindex": [
+        "404.html",
+        "lcv-109-test.html",
+        "maintenance.html",
+        "maintenance_backup.html"
+    ]
+}
