@@ -1,38 +1,36 @@
 import os
 import re
 
+# 1. Cleanup old legacy files for these categories
+files_to_delete = []
+for i in range(1, 14):
+    files_to_delete.append(f"dv-10{i}.html" if i < 10 else f"dv-{i}.html")
+for i in range(1, 13):
+    files_to_delete.append(f"bh-dv-1{i:02d}.html")
+    files_to_delete.append(f"bh-tb-1{i:02d}.html")
+
+for f in files_to_delete:
+    if os.path.exists(f):
+        os.remove(f)
+        print(f"Deleted old legacy file {f}")
+
+
 categories = [
     {
-        "index_name": "luxury-cottage-house.html",
-        "title": "Luxury Cottage House",
-        "prefix_upper": "BH-LCH",
-        "prefix_lower": "bh-lch",
-        "desc": "A premium luxury cottage house blending natural charm with modern elegance.",
-        "start_num": 400
+        "index_name": "two-story-building.html",
+        "title": "Two Story Building",
+        "prefix_upper": "BH-TSB",
+        "prefix_lower": "bh-tsb",
+        "desc": "A premium two story building designed for modern living and maximum space.",
+        "start_num": 100
     },
     {
-        "index_name": "container-house.html",
-        "title": "Container House",
-        "prefix_upper": "BH-CH",
-        "prefix_lower": "bh-ch",
-        "desc": "A robust and flexible container house providing cost-effective and swift accommodation.",
-        "start_num": 500
-    },
-    {
-        "index_name": "steel-house.html",
-        "title": "Steel House",
-        "prefix_upper": "BH-SH",
-        "prefix_lower": "bh-sh",
-        "desc": "A durable steel house engineered for quick assembly and structural resilience.",
-        "start_num": 600
-    },
-    {
-        "index_name": "tiny-house.html",
-        "title": "Tiny House",
-        "prefix_upper": "BH-TH",
-        "prefix_lower": "bh-th",
-        "desc": "An efficiently designed tiny house maximizing comfort and functionality in a compact space.",
-        "start_num": 700
+        "index_name": "duplex-villa.html",
+        "title": "Duplex Villa",
+        "prefix_upper": "BH-DV",
+        "prefix_lower": "bh-dv",
+        "desc": "An elegant duplex villa offering luxurious two-floor living with a stunning view.",
+        "start_num": 200
     }
 ]
 
