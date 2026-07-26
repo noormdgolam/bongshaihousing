@@ -36,8 +36,8 @@
   --error:          #dc2626;
 
   /* Typography */
-  --font-body:      'Inter', sans-serif;
-  --font-heading:   'Playfair Display', serif;
+  --font-body:      'Times New Roman', Times, serif;
+  --font-heading:   'Times New Roman', Times, serif;
 
   --fs-xs:    0.75rem;    /* 12px */
   --fs-sm:    0.875rem;   /* 14px */
@@ -1302,7 +1302,7 @@ p { color: var(--grey-600); line-height: 1.75; }
   font-size: 3rem;
   color: var(--accent-light);
   line-height: 1;
-  font-family: Georgia, serif;
+  font-family: 'Times New Roman', Times, serif;
   margin-bottom: var(--space-4);
 }
 
