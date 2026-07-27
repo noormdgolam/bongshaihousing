@@ -363,24 +363,38 @@
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="model">Model of Interest</label>
-                  <select id="model" name="model" class="form-control">
-                    <option value="General Inquiry">General Inquiry</option>
-                    <optgroup label="Duplex Villa Models">
-                      <option value="DV-101">Model DV-101</option>
-                      <option value="DV-102">Model DV-102</option>
-                      <option value="DV-103">Model DV-103</option>
-                      <option value="DV-104">Model DV-104</option>
-                      <option value="DV-105">Model DV-105</option>
-                      <option value="DV-106">Model DV-106</option>
-                      <option value="DV-107">Model DV-107</option>
-                      <option value="DV-108">Model DV-108</option>
-                      <option value="DV-109">Model DV-109</option>
-                      <option value="DV-110">Model DV-110</option>
-                      <option value="DV-111">Model DV-111</option>
-                      <option value="DV-112">Model DV-112</option>
-                      <option value="DV-113">Model DV-113</option>
+                  <select id="model" name="model" class="form-control" onchange="updateAreaOptions(this.value)">
+                    <option value="General Inquiry">General Inquiry / Custom Project</option>
+                    
+                    <optgroup label="🏢 Two Story Building (BH-TSB)">
+                      <option value="BH-TSB-101">Model No-BH-TSB-101</option>
+                      <option value="BH-TSB-102">Model No-BH-TSB-102</option>
+                      <option value="BH-TSB-103">Model No-BH-TSB-103</option>
+                      <option value="BH-TSB-104">Model No-BH-TSB-104</option>
+                      <option value="BH-TSB-105">Model No-BH-TSB-105</option>
+                      <option value="BH-TSB-106">Model No-BH-TSB-106</option>
+                      <option value="BH-TSB-107">Model No-BH-TSB-107</option>
+                      <option value="BH-TSB-108">Model No-BH-TSB-108</option>
+                      <option value="BH-TSB-109">Model No-BH-TSB-109</option>
+                      <option value="BH-TSB-110">Model No-BH-TSB-110</option>
+                      <option value="BH-TSB-111">Model No-BH-TSB-111</option>
+                      <option value="BH-TSB-112">Model No-BH-TSB-112</option>
                     </optgroup>
-                    <optgroup label="Low-Cost Villa Models">
+
+                    <optgroup label="🏘️ Duplex Villa (BH-DV)">
+                      <option value="BH-DV-201">Model No-BH-DV-201</option>
+                      <option value="BH-DV-202">Model No-BH-DV-202</option>
+                      <option value="BH-DV-203">Model No-BH-DV-203</option>
+                      <option value="BH-DV-204">Model No-BH-DV-204</option>
+                      <option value="BH-DV-205">Model No-BH-DV-205</option>
+                      <option value="BH-DV-206">Model No-BH-DV-206</option>
+                      <option value="BH-DV-207">Model No-BH-DV-207</option>
+                      <option value="BH-DV-208">Model No-BH-DV-208</option>
+                      <option value="BH-DV-209">Model No-BH-DV-209</option>
+                      <option value="BH-DV-210">Model No-BH-DV-210</option>
+                      <option value="BH-DV-211">Model No-BH-DV-211</option>
+                      <option value="BH-DV-212">Model No-BH-DV-212</option>
+                      <option value="BH-DV-213">Model No-BH-DV-213</option>
                       <option value="LCV-101">Model LCV-101</option>
                       <option value="LCV-102">Model LCV-102</option>
                       <option value="LCV-103">Model LCV-103</option>
@@ -391,14 +405,168 @@
                       <option value="LCV-108">Model LCV-108</option>
                       <option value="LCV-109">Model LCV-109</option>
                     </optgroup>
-                    <optgroup label="Other">
-                      <option value="Luxury Villa">Luxury Villa</option>
-                      <option value="Container House">Container House</option>
-                      <option value="Industrial Shed">Industrial Shed</option>
-                      <option value="Worker Accommodation">Worker Accommodation</option>
-                      <option value="Site Office">Site Office</option>
-                      <option value="Security Kiosk">Security Kiosk</option>
-                      <option value="Custom Project">Custom Project</option>
+
+                    <optgroup label="🏠 Single Story Building (BH-SB)">
+                      <option value="BH-SB-301">Model No-BH-SB-301</option>
+                      <option value="BH-SB-302">Model No-BH-SB-302</option>
+                      <option value="BH-SB-303">Model No-BH-SB-303</option>
+                      <option value="BH-SB-304">Model No-BH-SB-304</option>
+                      <option value="BH-SB-305">Model No-BH-SB-305</option>
+                      <option value="BH-SB-306">Model No-BH-SB-306</option>
+                      <option value="BH-SB-307">Model No-BH-SB-307</option>
+                      <option value="BH-SB-308">Model No-BH-SB-308</option>
+                      <option value="BH-SB-309">Model No-BH-SB-309</option>
+                      <option value="BH-SB-310">Model No-BH-SB-310</option>
+                      <option value="BH-SB-311">Model No-BH-SB-311</option>
+                      <option value="BH-SB-312">Model No-BH-SB-312</option>
+                    </optgroup>
+
+                    <optgroup label="🏡 Cottage House (BH-CH)">
+                      <option value="BH-CH-401">Model No-BH-CH-401</option>
+                      <option value="BH-CH-402">Model No-BH-CH-402</option>
+                      <option value="BH-CH-403">Model No-BH-CH-403</option>
+                      <option value="BH-CH-404">Model No-BH-CH-404</option>
+                      <option value="BH-CH-405">Model No-BH-CH-405</option>
+                      <option value="BH-CH-406">Model No-BH-CH-406</option>
+                      <option value="BH-CH-407">Model No-BH-CH-407</option>
+                      <option value="BH-CH-408">Model No-BH-CH-408</option>
+                      <option value="BH-CH-409">Model No-BH-CH-409</option>
+                      <option value="BH-CH-410">Model No-BH-CH-410</option>
+                      <option value="BH-CH-411">Model No-BH-CH-411</option>
+                      <option value="BH-CH-412">Model No-BH-CH-412</option>
+                      <option value="BH-CH-501">Model No-BH-CH-501</option>
+                      <option value="BH-CH-502">Model No-BH-CH-502</option>
+                      <option value="BH-CH-503">Model No-BH-CH-503</option>
+                      <option value="BH-CH-504">Model No-BH-CH-504</option>
+                      <option value="BH-CH-505">Model No-BH-CH-505</option>
+                      <option value="BH-CH-506">Model No-BH-CH-506</option>
+                      <option value="BH-CH-507">Model No-BH-CH-507</option>
+                      <option value="BH-CH-508">Model No-BH-CH-508</option>
+                      <option value="BH-CH-509">Model No-BH-CH-509</option>
+                      <option value="BH-CH-510">Model No-BH-CH-510</option>
+                      <option value="BH-CH-511">Model No-BH-CH-511</option>
+                      <option value="BH-CH-512">Model No-BH-CH-512</option>
+                    </optgroup>
+
+                    <optgroup label="🏗️ Steel House (BH-SH)">
+                      <option value="BH-SH-601">Model No-BH-SH-601</option>
+                      <option value="BH-SH-602">Model No-BH-SH-602</option>
+                      <option value="BH-SH-603">Model No-BH-SH-603</option>
+                      <option value="BH-SH-604">Model No-BH-SH-604</option>
+                      <option value="BH-SH-605">Model No-BH-SH-605</option>
+                      <option value="BH-SH-606">Model No-BH-SH-606</option>
+                      <option value="BH-SH-607">Model No-BH-SH-607</option>
+                      <option value="BH-SH-608">Model No-BH-SH-608</option>
+                      <option value="BH-SH-609">Model No-BH-SH-609</option>
+                      <option value="BH-SH-610">Model No-BH-SH-610</option>
+                      <option value="BH-SH-611">Model No-BH-SH-611</option>
+                      <option value="BH-SH-612">Model No-BH-SH-612</option>
+                    </optgroup>
+
+                    <optgroup label="🏠 Tiny House (BH-TH)">
+                      <option value="BH-TH-701">Model No-BH-TH-701</option>
+                      <option value="BH-TH-702">Model No-BH-TH-702</option>
+                      <option value="BH-TH-703">Model No-BH-TH-703</option>
+                      <option value="BH-TH-704">Model No-BH-TH-704</option>
+                      <option value="BH-TH-705">Model No-BH-TH-705</option>
+                      <option value="BH-TH-706">Model No-BH-TH-706</option>
+                      <option value="BH-TH-707">Model No-BH-TH-707</option>
+                      <option value="BH-TH-708">Model No-BH-TH-708</option>
+                      <option value="BH-TH-709">Model No-BH-TH-709</option>
+                      <option value="BH-TH-710">Model No-BH-TH-710</option>
+                      <option value="BH-TH-711">Model No-BH-TH-711</option>
+                      <option value="BH-TH-712">Model No-BH-TH-712</option>
+                    </optgroup>
+
+                    <optgroup label="🌲 Wooden House (BH-WH)">
+                      <option value="BH-WH-801">Model No-BH-WH-801</option>
+                      <option value="BH-WH-802">Model No-BH-WH-802</option>
+                      <option value="BH-WH-803">Model No-BH-WH-803</option>
+                      <option value="BH-WH-804">Model No-BH-WH-804</option>
+                      <option value="BH-WH-805">Model No-BH-WH-805</option>
+                      <option value="BH-WH-806">Model No-BH-WH-806</option>
+                      <option value="BH-WH-807">Model No-BH-WH-807</option>
+                      <option value="BH-WH-808">Model No-BH-WH-808</option>
+                      <option value="BH-WH-809">Model No-BH-WH-809</option>
+                      <option value="BH-WH-810">Model No-BH-WH-810</option>
+                      <option value="BH-WH-811">Model No-BH-WH-811</option>
+                      <option value="BH-WH-812">Model No-BH-WH-812</option>
+                      <option value="BH-WH-813">Model No-BH-WH-813</option>
+                    </optgroup>
+
+                    <optgroup label="🏢 Concrete Building (BH-CB)">
+                      <option value="BH-CB-901">Model No-BH-CB-901</option>
+                      <option value="BH-CB-902">Model No-BH-CB-902</option>
+                      <option value="BH-CB-903">Model No-BH-CB-903</option>
+                      <option value="BH-CB-904">Model No-BH-CB-904</option>
+                      <option value="BH-CB-905">Model No-BH-CB-905</option>
+                      <option value="BH-CB-906">Model No-BH-CB-906</option>
+                      <option value="BH-CB-907">Model No-BH-CB-907</option>
+                      <option value="BH-CB-908">Model No-BH-CB-908</option>
+                      <option value="BH-CB-909">Model No-BH-CB-909</option>
+                      <option value="BH-CB-910">Model No-BH-CB-910</option>
+                      <option value="BH-CB-911">Model No-BH-CB-911</option>
+                      <option value="BH-CB-912">Model No-BH-CB-912</option>
+                    </optgroup>
+
+                    <optgroup label="🏭 Industrial Sheds (BH-IS)">
+                      <option value="BH-IS-1001">Model No-BH-IS-1001</option>
+                      <option value="BH-IS-1002">Model No-BH-IS-1002</option>
+                      <option value="BH-IS-1003">Model No-BH-IS-1003</option>
+                      <option value="BH-IS-1004">Model No-BH-IS-1004</option>
+                      <option value="BH-IS-1005">Model No-BH-IS-1005</option>
+                      <option value="BH-IS-1006">Model No-BH-IS-1006</option>
+                      <option value="BH-IS-1007">Model No-BH-IS-1007</option>
+                      <option value="BH-IS-1008">Model No-BH-IS-1008</option>
+                      <option value="BH-IS-1009">Model No-BH-IS-1009</option>
+                      <option value="BH-IS-1010">Model No-BH-IS-1010</option>
+                      <option value="BH-IS-1011">Model No-BH-IS-1011</option>
+                      <option value="BH-IS-1012">Model No-BH-IS-1012</option>
+                    </optgroup>
+
+                    <optgroup label="🛌 Worker Accommodation (BH-WA)">
+                      <option value="BH-WA-1101">Model No-BH-WA-1101</option>
+                      <option value="BH-WA-1102">Model No-BH-WA-1102</option>
+                      <option value="BH-WA-1103">Model No-BH-WA-1103</option>
+                      <option value="BH-WA-1104">Model No-BH-WA-1104</option>
+                      <option value="BH-WA-1105">Model No-BH-WA-1105</option>
+                      <option value="BH-WA-1106">Model No-BH-WA-1106</option>
+                      <option value="BH-WA-1107">Model No-BH-WA-1107</option>
+                      <option value="BH-WA-1108">Model No-BH-WA-1108</option>
+                      <option value="BH-WA-1109">Model No-BH-WA-1109</option>
+                      <option value="BH-WA-1110">Model No-BH-WA-1110</option>
+                      <option value="BH-WA-1111">Model No-BH-WA-1111</option>
+                      <option value="BH-WA-1112">Model No-BH-WA-1112</option>
+                    </optgroup>
+
+                    <optgroup label="🏢 Site Offices (BH-SO)">
+                      <option value="BH-SO-1201">Model No-BH-SO-1201</option>
+                      <option value="BH-SO-1202">Model No-BH-SO-1202</option>
+                      <option value="BH-SO-1203">Model No-BH-SO-1203</option>
+                      <option value="BH-SO-1204">Model No-BH-SO-1204</option>
+                      <option value="BH-SO-1205">Model No-BH-SO-1205</option>
+                      <option value="BH-SO-1206">Model No-BH-SO-1206</option>
+                      <option value="BH-SO-1207">Model No-BH-SO-1207</option>
+                      <option value="BH-SO-1208">Model No-BH-SO-1208</option>
+                      <option value="BH-SO-1209">Model No-BH-SO-1209</option>
+                      <option value="BH-SO-1210">Model No-BH-SO-1210</option>
+                      <option value="BH-SO-1211">Model No-BH-SO-1211</option>
+                      <option value="BH-SO-1212">Model No-BH-SO-1212</option>
+                    </optgroup>
+
+                    <optgroup label="🛡️ Security Kiosks (BH-SK)">
+                      <option value="BH-SK-1301">Model No-BH-SK-1301</option>
+                      <option value="BH-SK-1302">Model No-BH-SK-1302</option>
+                      <option value="BH-SK-1303">Model No-BH-SK-1303</option>
+                      <option value="BH-SK-1304">Model No-BH-SK-1304</option>
+                      <option value="BH-SK-1305">Model No-BH-SK-1305</option>
+                      <option value="BH-SK-1306">Model No-BH-SK-1306</option>
+                      <option value="BH-SK-1307">Model No-BH-SK-1307</option>
+                      <option value="BH-SK-1308">Model No-BH-SK-1308</option>
+                      <option value="BH-SK-1309">Model No-BH-SK-1309</option>
+                      <option value="BH-SK-1310">Model No-BH-SK-1310</option>
+                      <option value="BH-SK-1311">Model No-BH-SK-1311</option>
+                      <option value="BH-SK-1312">Model No-BH-SK-1312</option>
                     </optgroup>
                   </select>
                 </div>
@@ -576,7 +744,7 @@
         const modelSelect = document.getElementById('model');
         const options = Array.from(modelSelect.options);
         const match = options.find(o => o.value === params.get('model'));
-        if(match) match.selected = true;
+        if(match) { match.selected = true; updateAreaOptions(match.value); }
     }
 
     document.getElementById('contactForm').addEventListener('submit', async function(e) {
