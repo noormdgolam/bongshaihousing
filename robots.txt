@@ -1,14 +1,7 @@
 User-agent: *
 Allow: /
-
-# Disallow admin or sensitive paths
 Disallow: /admin/
-Disallow: /wp-admin/
-Disallow: /wp-login.php
-Disallow: /*.php$
+Disallow: /private/
+Disallow: /temp/
 
-# Sitemap
 Sitemap: https://bongshaihousing.com/sitemap.xml
-
-# Crawl delay (optional, be gentle)
-Crawl-delay: 1
