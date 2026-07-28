@@ -34,7 +34,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('images/hero-bg.png');
+            background-image: url('images/hero-bg.webp');
             background-size: cover;
             background-position: center;
             z-index: 1;
@@ -209,6 +209,8 @@
 <link rel="alternate" hreflang="en-BD" href="https://bongshaihousing.com/maintenance_backup.html" />
 <link rel="alternate" hreflang="bn-BD" href="https://bongshaihousing.com/maintenance_backup.html?lang=bn" />
 <link rel="alternate" hreflang="x-default" href="https://bongshaihousing.com/maintenance_backup.html" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
@@ -240,6 +242,21 @@
     </div>
 
 
-    <script src="css/bangla-translation.js?v=1785248600"></script>
+    <script src="css/bangla-translation.js?v=1785255466"></script>
+  <script src="js/lightbox.js" defer></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+  <script src="js/3d-tilt.js" defer></script>
 </body>
 </html>

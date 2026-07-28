@@ -1,0 +1,8 @@
+*.py
+*.txt
+*.json
+!manifest.json
+.agents/
+__pycache__/
+venv/
+.DS_Store

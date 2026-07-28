@@ -55,6 +55,8 @@
 <link rel="alternate" hreflang="en-BD" href="https://bongshaihousing.com/project-cumilla.html" />
 <link rel="alternate" hreflang="bn-BD" href="https://bongshaihousing.com/project-cumilla.html?lang=bn" />
 <link rel="alternate" hreflang="x-default" href="https://bongshaihousing.com/project-cumilla.html" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
@@ -238,7 +240,7 @@
 <main>
     <section class="page-hero" aria-labelledby="page-title">
       <div class="container page-hero-content">
-        <h1 class="page-hero-title" id="page-title">Cumilla</h1>
+        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Cumilla</h1>
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <a href="index.html">Home</a>
           <span aria-hidden="true">/</span>
@@ -253,7 +255,7 @@
       <div class="container">
         <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start;">
             <div style="flex: 1 1 500px; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100);">
-                <img src="images/projects/completed/cumilla_1784362514071.png" alt="Completed interior space of prefab steel building in Cumilla" title="Prefab building interior in Cumilla" style="width: 100%; height: auto; display: block;">
+                <img src="images/projects/completed/cumilla_1784362514071.webp" alt="Completed interior space of prefab steel building in Cumilla" title="Prefab building interior in Cumilla" style="width: 100%; height: auto; display: block;" loading="lazy" width="1000" height="750">
             </div>
             <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
                 <span class="property-type" style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">Completed Project</span>
@@ -360,7 +362,22 @@
   </script>
 
   
-    <script src="css/bangla-translation.js?v=1785248600"></script>
+    <script src="css/bangla-translation.js?v=1785255466"></script>
+  <script src="js/lightbox.js" defer></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+  <script src="js/3d-tilt.js" defer></script>
 </body>
 
 </html>

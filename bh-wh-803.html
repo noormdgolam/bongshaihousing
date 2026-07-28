@@ -47,6 +47,8 @@
 <link rel="alternate" hreflang="en-BD" href="https://bongshaihousing.com/bh-wh-803.html" />
 <link rel="alternate" hreflang="bn-BD" href="https://bongshaihousing.com/bh-wh-803.html?lang=bn" />
 <link rel="alternate" hreflang="x-default" href="https://bongshaihousing.com/bh-wh-803.html" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <!-- ======================================================
@@ -220,7 +222,7 @@
 <section class="page-hero" style="min-height: 30vh; padding: 100px 0 50px;">
 <div class="container page-hero-content" style="text-align: center;">
 <span class="page-hero-label">Premium Prefab Housing</span>
-<h1 class="page-hero-title">Model No-BH-WH-803</h1>
+<h1 class="page-hero-title" data-aos="fade-up">Model No-BH-WH-803</h1>
 <p class="page-hero-text" style="max-width: 800px; margin: 0 auto 24px;">Durable, affordable, and beautifully designed prefab homes. The smart housing choice for Bangladesh.</p>
 <nav class="breadcrumb" style="justify-content: center;">
 <a href="index.html">Home</a> <span aria-hidden="true">/</span> <a href="duplex-villa.html">Products</a> <span aria-hidden="true">/</span> <span aria-current="page">Model No-BH-WH-803</span>
@@ -230,18 +232,18 @@
 <div class="container" style="margin-top: 40px; margin-bottom: 80px;">
 <div class="page-with-sidebar">
 <!-- ===== CATEGORY SIDEBAR ===== -->
-<aside aria-label="Product categories" class="cat-sidebar">
+<aside aria-label="Product categories" class="cat-sidebar" data-tilt>
 <!-- Mobile toggle -->
-<button aria-controls="catSidebarBody" aria-expanded="false" class="cat-sidebar-toggle" id="catSidebarToggle">
+<button aria-controls="catSidebarBody" aria-expanded="false" class="cat-sidebar-toggle" data-tilt id="catSidebarToggle">
 <span>All Products</span>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </button>
 <!-- Desktop header -->
-<div class="cat-sidebar-header">
+<div class="cat-sidebar-header" data-tilt>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="3" y="14"></rect><rect height="7" width="7" x="14" y="14"></rect></svg>
             All Products
           </div>
-<div class="cat-sidebar-body" id="catSidebarBody">
+<div class="cat-sidebar-body" data-tilt id="catSidebarBody">
 <div class="cat-group-label">Residential Prefab</div>
           <a class="cat-item" href="two-story-building.html">Two story building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
           <a class="cat-item" href="duplex-villa.html">Duplex villa<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
@@ -258,7 +260,7 @@
 <div class="cat-group-label">Site Solutions</div>
 <a class="cat-item" href="site-offices.html">Site Offices<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
 <a class="cat-item" href="security-kiosks.html">Security Kiosks<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
-<div class="cat-sidebar-cta">
+<div class="cat-sidebar-cta" data-tilt>
 <a href="contact.html">📞 Get a Free Quote</a>
 </div>
 </div>
@@ -269,7 +271,7 @@
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
 <div class="reveal-left" style="flex: 1 1 400px; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex;">
-<img alt="Model No-BH-WH-803 Exterior View" loading="lazy" src="images/products/Model No-BH-WH-803.jpg" style="width: 100%; object-fit: cover; display: block;"/ title="Model No-BH-WH-803 Exterior View" width="1024" height="1024">
+<img alt="Model No-BH-WH-803 Exterior View" loading="lazy" src="images/products/Model No-BH-WH-803.webp" style="width: 100%; object-fit: cover; display: block;"/ title="Model No-BH-WH-803 Exterior View" width="1024" height="1024">
 </div>
 <!-- Right: Details -->
 <div class="reveal-right" style="flex: 1 1 300px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
@@ -429,7 +431,7 @@
       <div class="container">
         <div class="section-header reveal">
           <div class="section-label">Our Technology</div>
-          <h2 class="section-title" id="advantages-title">Advantage of Steel-RC Building</h2>
+          <h2 class="section-title" data-aos="fade-up" id="advantages-title">Advantage of Steel-RC Building</h2>
           <p class="section-subtitle">Discover the benefits of our advanced steel-reinforced concrete building technology.</p>
         </div>
 
@@ -561,6 +563,21 @@ function selectArea(id, sqft, btn) {
 }
 </script>
 
-    <script src="css/bangla-translation.js?v=1785248600"></script>
+    <script src="css/bangla-translation.js?v=1785255466"></script>
+  <script src="js/lightbox.js" defer></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+  <script src="js/3d-tilt.js" defer></script>
 </body>
 </html>

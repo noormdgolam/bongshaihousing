@@ -68,6 +68,8 @@
 <link rel="alternate" hreflang="en-BD" href="https://bongshaihousing.com/products-and-solutions.html" />
 <link rel="alternate" hreflang="bn-BD" href="https://bongshaihousing.com/products-and-solutions.html?lang=bn" />
 <link rel="alternate" hreflang="x-default" href="https://bongshaihousing.com/products-and-solutions.html" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <!-- ======================================================
@@ -240,7 +242,7 @@
 <section class="page-hero" style="background: linear-gradient(rgba(15,23,42,0.8), rgba(15,23,42,0.9)), url('images/products/industrial-hero.jpg') center/cover no-repeat; min-height: 40vh; padding: 120px 0 60px;">
 <div class="container page-hero-content" style="text-align: center;">
 <span class="page-hero-label" style="background: var(--accent); color: var(--dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; margin-bottom: 16px; display: inline-block;">Complete Catalog</span>
-<h1 class="page-hero-title" style="font-size: clamp(2.5rem, 5vw, 4rem);">Products &amp; Solutions</h1>
+<h1 class="page-hero-title" data-aos="fade-up" style="font-size: clamp(2.5rem, 5vw, 4rem);">Products &amp; Solutions</h1>
 <p class="page-hero-text" style="max-width: 800px; margin: 0 auto 24px;">Explore our comprehensive range of pre-engineered steel buildings, from luxurious residential villas to robust industrial sheds and portable site solutions.</p>
 </div>
 </section>
@@ -472,6 +474,21 @@
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
   </script>
 
-    <script src="css/bangla-translation.js?v=1785248600"></script>
+    <script src="css/bangla-translation.js?v=1785255466"></script>
+  <script src="js/lightbox.js" defer></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+  <script src="js/3d-tilt.js" defer></script>
 </body>
 </html>

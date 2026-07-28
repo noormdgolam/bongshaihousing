@@ -82,6 +82,8 @@
 <link rel="alternate" hreflang="en-BD" href="https://bongshaihousing.com/terms.html" />
 <link rel="alternate" hreflang="bn-BD" href="https://bongshaihousing.com/terms.html?lang=bn" />
 <link rel="alternate" hreflang="x-default" href="https://bongshaihousing.com/terms.html" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
@@ -265,7 +267,7 @@
     <section class="page-hero" aria-labelledby="terms-page-title">
       <div class="container page-hero-content">
         <span class="page-hero-label">Legal Information</span>
-        <h1 class="page-hero-title" id="terms-page-title">Terms &amp; Conditions</h1>
+        <h1 class="page-hero-title" data-aos="fade-up" id="terms-page-title">Terms &amp; Conditions</h1>
         <p class="page-hero-text">Effective Date: June 24, 2026. Please read these terms carefully before using our website and services.</p>
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <a href="index.html">Home</a><span>/</span><span aria-current="page">Terms &amp; Conditions</span>
@@ -475,7 +477,22 @@
   </script>
 
   
-    <script src="css/bangla-translation.js?v=1785248600"></script>
+    <script src="css/bangla-translation.js?v=1785255466"></script>
+  <script src="js/lightbox.js" defer></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+  <script src="js/3d-tilt.js" defer></script>
 </body>
 
 </html>

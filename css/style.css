@@ -3,7 +3,7 @@
    ============================================================ */
 
 /* Google Fonts */
-/* Google Fonts removed — using system Helvetica stack */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* ============================================================
    CSS Custom Properties (Design Tokens)
@@ -35,9 +35,9 @@
   --warning:        #d97706;
   --error:          #dc2626;
 
-  /* Typography — Helvetica system stack */
-  --font-body:      'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-heading:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Typography — Modern Google Font (Inter) */
+  --font-body:      'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-heading:   'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   --fs-xs:    0.75rem;    /* 12px */
   --fs-sm:    0.875rem;   /* 14px */
@@ -1640,6 +1640,9 @@ textarea.form-control {
   position: relative;
   overflow: hidden;
   text-align: center;
+  clear: both;
+  width: 100%;
+  display: block;
 }
 
 .cta-section::before {
@@ -1704,6 +1707,9 @@ textarea.form-control {
   background: var(--primary-dark);
   color: rgba(255,255,255,0.75);
   padding: var(--space-20) 0 0;
+  clear: both;
+  width: 100%;
+  display: block;
 }
 
 .footer-grid {
@@ -2982,3 +2988,15 @@ body {
   color: var(--primary);
 }
 
+
+
+/* ==========================================================================
+   Architectural Custom Cursor
+   ========================================================================== */
+body {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><line x1='12' y1='0' x2='12' y2='24' stroke='%231e293b' stroke-width='1.5' /><line x1='0' y1='12' x2='24' y2='12' stroke='%231e293b' stroke-width='1.5' /><circle cx='12' cy='12' r='4' fill='none' stroke='%23d97706' stroke-width='1.5' /></svg>") 12 12, crosshair !important;
+}
+
+a, button, input[type='submit'], input[type='button'], .cat-item, .clickable, select, label {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><line x1='12' y1='0' x2='12' y2='24' stroke='%231E40AF' stroke-width='2' /><line x1='0' y1='12' x2='24' y2='12' stroke='%231E40AF' stroke-width='2' /><circle cx='12' cy='12' r='4' fill='%23EAB308' stroke='%231E40AF' stroke-width='1.5' /></svg>") 12 12, pointer !important;
+}
