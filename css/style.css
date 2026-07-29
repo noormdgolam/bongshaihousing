@@ -3868,3 +3868,14 @@ body, a, button, input, select, label, .clickable {
   margin: 10px 0;
   font-family: 'Inter', sans-serif;
 }
+
+/* Cursor Fixes */
+.cursor-dot, .cursor-outline, [class*="cursor"] {
+    z-index: 2147483647 !important; /* Maximum possible z-index */
+    mix-blend-mode: normal !important; /* In case it was difference and blending out */
+}
+
+/* Ensure body doesn't hide cursor */
+body {
+    cursor: auto !important; /* Let default show if JS fails */
+}
