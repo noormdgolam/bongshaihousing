@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bongshai-cache-v4';
+const CACHE_NAME = 'bongshai-cache-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

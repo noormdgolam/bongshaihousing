@@ -3239,12 +3239,7 @@ body {
   padding-top: var(--banner-height);
 }
 
-/* ==========================================================================
-   Premium Magnetic Cursor
-   ========================================================================== */
-body, a, button, input, select, label, .clickable {
-  cursor: none !important;
-}
+
 
 
 
