@@ -381,7 +381,7 @@ p { color: var(--grey-600); line-height: 1.75; }
   box-shadow: var(--shadow-md);
 }
 
-.navbar-inner {
+.navbar, .navbar, .navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4165,7 +4165,7 @@ body.dark-mode img.logo {
 
 /* Mobile Header Fixes */
 @media (max-width: 1024px) {
-  .navbar-inner {
+  .navbar, .navbar, .navbar-inner {
     flex-wrap: wrap;
     height: auto !important;
     padding: 10px 15px !important;

@@ -1111,3 +1111,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+/* =========================================================
+   PWA INSTALL LOGIC
+   ========================================================= */
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  injectInstallButton();
+});
+
+function injectInstallButton() {
+  if (document.getElementById('pwaInstallBtn')) return;
+  const installBtn = document.createElement('button');
+  installBtn.id = 'pwaInstallBtn';
+  installBtn.className = 'btn btn-primary';
+  installBtn.style.cssText = 'width: 100%; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: bold; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; box-shadow: var(--shadow-md); color: white; border-radius: 8px;';
+  installBtn.innerHTML = '?? Install Bongshai App';
+  
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installBtn.style.display = 'none';
+      }
+      deferredPrompt = null;
+    }
+  });
+
+  const mobileDrawer = document.querySelector('.mobile-drawer > div');
+  if (mobileDrawer) {
+    mobileDrawer.appendChild(installBtn);
+  } else {
+    installBtn.style.position = 'fixed';
+    installBtn.style.bottom = '20px';
+    installBtn.style.right = '20px';
+    installBtn.style.width = 'auto';
+    installBtn.style.zIndex = '9999';
+    document.body.appendChild(installBtn);
+  }
+}
+
+window.addEventListener('appinstalled', (evt) => {
+  const btn = document.getElementById('pwaInstallBtn');
+  if (btn) btn.style.display = 'none';
+});
