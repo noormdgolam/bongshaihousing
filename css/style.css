@@ -4165,26 +4165,62 @@ body.dark-mode img.logo {
 
 
 
-/* Mobile Header Fixes - Super Clean Version */
+/* Mobile Header Fixes - Robust Responsive Version */
 @media (max-width: 1024px) {
-  /* Hide nav-cta entirely on mobile to keep header clean. Options moved to mobile drawer. */
-  .nav-cta {
+  .navbar-inner {
+    display: flex;
+    flex-wrap: wrap;      /* Allow elements to drop to the next line instead of overflowing */
+    gap: 8px;
+    padding: 10px 15px;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .brand {
+    flex-shrink: 1;       /* Allow brand to shrink if needed */
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Ensure the Bongshai logo text is visible but scales */
+  .brand-name {
+    display: block !important;
+    font-size: clamp(0.9rem, 4vw, 1.2rem) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .brand-tagline {
     display: none !important;
   }
   
-  /* Ensure the Bongshai logo text is visible on mobile */
-  .brand-name {
-    display: block !important;
-    font-size: 1.1rem !important;
+  /* Robust wrapper for dynamically injected icons/buttons (like EN toggle) */
+  .nav-cta {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;       /* Icons shouldn't shrink, they should wrap if needed */
   }
-  .brand-tagline {
+  
+  /* Hide non-essential text CTAs on mobile to save space */
+  .nav-phone, #nav-get-quote-btn {
     display: none !important;
   }
 }
 
 @media (max-width: 600px) {
-  .brand-name {
-    display: block !important;
-    font-size: 0.95rem !important;
+  /* On very small screens, ensure the header handles third-party widgets cleanly */
+  .navbar-inner {
+    justify-content: space-between;
+  }
+  .nav-cta {
+    gap: 8px;
+  }
+  /* Scale down icons slightly to fit */
+  .icon-btn {
+    font-size: 1rem !important;
+    margin-right: 0 !important;
+    padding: 4px;
   }
 }
