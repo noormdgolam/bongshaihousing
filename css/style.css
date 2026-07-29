@@ -3851,60 +3851,13 @@ body {
 
 
 
-/* Premium Architectural Cursor */
-.magnetic-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 8px !important;
-  height: 8px !important;
-  background-color: var(--accent) !important;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 2147483647 !important;
-  transition: width 0.3s, height 0.3s, background-color 0.3s, opacity 0.3s;
-  mix-blend-mode: normal !important;
-}
 
-.magnetic-cursor-follower {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 32px !important;
-  height: 32px !important;
-  border: 1px solid var(--accent) !important;
-  background-color: transparent !important;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 2147483646 !important;
-  opacity: 0.5 !important;
-  transition: width 0.3s, height 0.3s, opacity 0.3s;
-  mix-blend-mode: normal !important;
-}
+
+
 
 /* Hovering State - Target Lock-On */
-.magnetic-cursor.hovering {
-  /* Dot stays exactly the same so you never lose it */
-  width: 8px !important;
-  height: 8px !important;
-  background-color: var(--accent) !important;
-  opacity: 1 !important;
-  transform: translate(-50%, -50%) scale(1.5) !important; /* Slight bump in size */
-}
 
-.magnetic-cursor-follower.hovering {
-  /* Ring expands and becomes solid to show lock-on */
-  width: 48px !important;
-  height: 48px !important;
-  border: 2px solid var(--accent) !important;
-  background-color: rgba(234, 179, 8, 0.1) !important; /* Faint gold tint */
-  opacity: 1 !important;
-}
 
-.magnetic-cursor-follower.hovering {
-  width: 0px !important;
-  height: 0px !important;
-  opacity: 0 !important;
-}
+
+
+
