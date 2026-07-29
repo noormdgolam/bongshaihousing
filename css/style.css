@@ -3879,3 +3879,17 @@ body, a, button, input, select, label, .clickable {
 body {
     cursor: auto !important; /* Let default show if JS fails */
 }
+
+/* Fix for Hovering State */
+.magnetic-cursor.hovering {
+    width: 60px !important;
+    height: 60px !important;
+    background-color: transparent !important;
+    border: 2px solid #fff !important;
+    mix-blend-mode: difference !important;
+    opacity: 1 !important;
+}
+
+.magnetic-cursor-follower.hovering {
+    opacity: 0 !important; /* Hide follower when hovering */
+}
