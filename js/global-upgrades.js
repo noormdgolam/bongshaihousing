@@ -67,6 +67,29 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === searchModal) closeSearch();
     });
 
+      // Inject Mobile Search Button into Drawer
+      const mobileSearchBtn = document.createElement('button');
+      mobileSearchBtn.className = 'mobile-nav-link';
+      mobileSearchBtn.style.cssText = 'width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);font-size:var(--fs-base);font-weight:500;color:var(--grey-800); display: flex; align-items: center; gap: 10px;';
+      mobileSearchBtn.innerHTML = '🔍 Search Properties';
+      mobileSearchBtn.addEventListener('click', () => {
+          const drawer = document.getElementById('mobileDrawer');
+          const hamburger = document.getElementById('hamburgerBtn');
+          if (drawer) drawer.classList.remove('open');
+          if (hamburger) {
+              hamburger.classList.remove('open');
+              hamburger.setAttribute('aria-expanded', 'false');
+          }
+          document.body.style.overflow = '';
+          openSearch();
+      });
+      
+      const mobileDrawerInner = document.querySelector('.mobile-drawer > div');
+      if (mobileDrawerInner && mobileDrawerInner.children.length > 0) {
+          mobileDrawerInner.insertBefore(mobileSearchBtn, mobileDrawerInner.children[1]); // Insert after Home link
+      }
+
+
     // Search Filtering
     searchInput.addEventListener('input', (e) => {
       if (!searchIndex) return;
