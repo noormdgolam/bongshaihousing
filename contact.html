@@ -342,6 +342,12 @@
             <p class="form-subtitle" style="color:var(--grey-600);margin-bottom:var(--space-6)">Fill in the form and our team will get back to you within 24 hours.</p>
 
             <form id="contactForm" novalidate aria-label="Contact form">
+                <!-- Anti-spam Honeypot -->
+                <div style="display:none; visibility:hidden;" aria-hidden="true">
+                  <label for="website_url">Leave this field blank</label>
+                  <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+                </div>
+
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="fname">Full Name *</label>
@@ -879,6 +885,39 @@
   <script src="js/scroll-progress.js" defer></script>
   <script src="js/page-transition.js" defer></script>
   <script src="js/global-upgrades.js" defer></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    
+    // Time-based anti-spam
+    const formLoadTime = Date.now();
+    
+    form.addEventListener('submit', (e) => {
+        // 1. Honeypot check
+        const honeypot = document.getElementById('website_url');
+        if (honeypot && honeypot.value !== '') {
+            e.preventDefault();
+            console.warn('Spam bot detected (Honeypot filled).');
+            alert('Form submission blocked due to spam detection.');
+            return false;
+        }
+        
+        // 2. Time check (must take at least 3 seconds to fill out)
+        const submitTime = Date.now();
+        const timeDiff = submitTime - formLoadTime;
+        if (timeDiff < 3000) {
+            e.preventDefault();
+            console.warn('Spam bot detected (Form submitted too quickly).');
+            alert('Form submission blocked due to spam detection.');
+            return false;
+        }
+        
+        // If passing both checks, allow submission
+    });
+});
+</script>
 </body>
 
 </html>

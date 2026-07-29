@@ -3544,3 +3544,112 @@ body, a, button, input, select, label, .clickable {
   background: var(--primary);
   color: white;
 }
+
+/* ==========================================================================
+   Phase 3: Back to Top Progress Ring
+   ========================================================================== */
+.back-to-top-ring {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  z-index: 99999;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.back-to-top-ring.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.back-to-top-ring circle {
+  fill: transparent;
+  stroke-width: 4;
+}
+
+.back-to-top-ring .ring-bg {
+  stroke: var(--grey-200);
+}
+
+[data-theme="dark"] .back-to-top-ring .ring-bg {
+  stroke: var(--grey-800);
+}
+
+.back-to-top-ring .ring-progress {
+  stroke: var(--primary);
+  stroke-dasharray: 126; /* 2 * PI * r (r=20) = 125.6 */
+  stroke-dashoffset: 126;
+  transition: stroke-dashoffset 0.1s;
+}
+
+.back-to-top-ring:hover .ring-progress {
+  stroke: var(--secondary);
+}
+
+.back-to-top-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 20px;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.back-to-top-ring:hover .back-to-top-arrow {
+  color: var(--secondary);
+  transform: translate(-50%, -60%);
+}
+
+/* ==========================================================================
+   Phase 3: Text Scramble
+   ========================================================================== */
+.scramble-text {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Phase 3: PWA Toast
+   ========================================================================== */
+.pwa-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--dark);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+}
+
+.pwa-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.pwa-toast-icon {
+  color: #10b981;
+  font-size: 1.2rem;
+}

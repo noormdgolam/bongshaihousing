@@ -604,3 +604,223 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// ==========================================================================
+// Phase 3: Text Scramble Reveal Effect
+// ==========================================================================
+class TextScramble {
+    constructor(el) {
+        this.el = el;
+        this.chars = '!<>-_\\/[]{}â€”=+*^?#________';
+        this.update = this.update.bind(this);
+    }
+    setText(newText) {
+        const oldText = this.el.innerText;
+        const length = Math.max(oldText.length, newText.length);
+        const promise = new Promise((resolve) => this.resolve = resolve);
+        this.queue = [];
+        for (let i = 0; i < length; i++) {
+            const from = oldText[i] || '';
+            const to = newText[i] || '';
+            const start = Math.floor(Math.random() * 40);
+            const end = start + Math.floor(Math.random() * 40);
+            this.queue.push({ from, to, start, end });
+        }
+        cancelAnimationFrame(this.frameRequest);
+        this.frame = 0;
+        this.update();
+        return promise;
+    }
+    update() {
+        let output = '';
+        let complete = 0;
+        for (let i = 0, n = this.queue.length; i < n; i++) {
+            let { from, to, start, end, char } = this.queue[i];
+            if (this.frame >= end) {
+                complete++;
+                output += to;
+            } else if (this.frame >= start) {
+                if (!char || Math.random() < 0.28) {
+                    char = this.randomChar();
+                    this.queue[i].char = char;
+                }
+                output += `<span class="dud" style="color:var(--grey-400)">${char}</span>`;
+            } else {
+                output += from;
+            }
+        }
+        this.el.innerHTML = output;
+        if (complete === this.queue.length) {
+            this.resolve();
+        } else {
+            this.frameRequest = requestAnimationFrame(this.update);
+            this.frame++;
+        }
+    }
+    randomChar() {
+        return this.chars[Math.floor(Math.random() * this.chars.length)];
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Only target english headings (bangla fonts don't scramble well)
+    const headings = document.querySelectorAll('h1.page-hero-title, .hero h1');
+    headings.forEach(el => {
+        // Simple check if text contains english letters
+        if(/[A-Za-z]/.test(el.innerText)) {
+            const fx = new TextScramble(el);
+            const text = el.innerText;
+            el.innerText = ''; // clear immediately
+            setTimeout(() => {
+                fx.setText(text);
+            }, 300); // Wait for page transition
+        }
+    });
+});
+
+// ==========================================================================
+// Phase 3: Animated Number Counters
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.animate-counter');
+    
+    if(counters.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const finalValue = parseInt(target.getAttribute('data-target') || target.innerText.replace(/\D/g, ''));
+                    
+                    if(isNaN(finalValue)) return;
+                    
+                    let startValue = 0;
+                    const duration = 2000;
+                    const frameDuration = 1000 / 60;
+                    const totalFrames = Math.round(duration / frameDuration);
+                    const increment = finalValue / totalFrames;
+                    
+                    const counter = setInterval(() => {
+                        startValue += increment;
+                        if(startValue >= finalValue) {
+                            clearInterval(counter);
+                            target.innerText = finalValue;
+                        } else {
+                            target.innerText = Math.ceil(startValue);
+                        }
+                    }, frameDuration);
+                    
+                    observer.unobserve(target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        counters.forEach(counter => observer.observe(counter));
+    }
+});
+
+// ==========================================================================
+// Phase 3: Back to Top Progress Ring
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const ring = document.createElement('div');
+    ring.className = 'back-to-top-ring';
+    ring.innerHTML = `
+        <svg viewBox="0 0 44 44">
+            <circle class="ring-bg" cx="22" cy="22" r="20"></circle>
+            <circle class="ring-progress" cx="22" cy="22" r="20"></circle>
+        </svg>
+        <div class="back-to-top-arrow">â†‘</div>
+    `;
+    
+    document.body.appendChild(ring);
+    
+    const circle = ring.querySelector('.ring-progress');
+    const radius = circle.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = circumference;
+    
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        
+        if (scrollTop > 300) {
+            ring.classList.add('active');
+        } else {
+            ring.classList.remove('active');
+        }
+        
+        if(scrollHeight > 0) {
+            const scrollPercentage = scrollTop / scrollHeight;
+            const drawLength = circumference * scrollPercentage;
+            circle.style.strokeDashoffset = circumference - drawLength;
+        }
+    }, {passive: true});
+    
+    ring.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
+
+// ==========================================================================
+// Phase 3: PWA Offline Toast
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Show toast if SW is registered
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then((registration) => {
+            // Check if we already showed it this session
+            if(!sessionStorage.getItem('pwaToastShown')) {
+                setTimeout(() => {
+                    const toast = document.createElement('div');
+                    toast.className = 'pwa-toast';
+                    toast.innerHTML = `<span class="pwa-toast-icon">âœ“</span> Ready for offline use`;
+                    document.body.appendChild(toast);
+                    
+                    // Trigger animation
+                    requestAnimationFrame(() => {
+                        toast.classList.add('show');
+                    });
+                    
+                    // Hide after 4 seconds
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => toast.remove(), 500);
+                    }, 4000);
+                    
+                    sessionStorage.setItem('pwaToastShown', 'true');
+                }, 2000); // Show 2 seconds after page load
+            }
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Dynamically find stat numbers that look like "500+", "64", "10+" inside stats sections
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    const nodesToWrap = [];
+    
+    while(node = walker.nextNode()) {
+        if(node.parentElement && (node.parentElement.tagName === 'H2' || node.parentElement.tagName === 'H3' || node.parentElement.classList.contains('stat-number') || node.parentElement.classList.contains('number'))) {
+            // Check if it's purely a number (with optional +)
+            const text = node.nodeValue.trim();
+            if(/^\d+\+?$/.test(text) && parseInt(text) > 5) {
+                nodesToWrap.push(node);
+            }
+        }
+    }
+    
+    nodesToWrap.forEach(textNode => {
+        const parent = textNode.parentElement;
+        const val = parseInt(textNode.nodeValue);
+        const hasPlus = textNode.nodeValue.includes('+');
+        
+        // Wrap it
+        parent.innerHTML = parent.innerHTML.replace(textNode.nodeValue, `<span class="animate-counter" data-target="${val}">${val}</span>${hasPlus ? '+' : ''}`);
+    });
+});
