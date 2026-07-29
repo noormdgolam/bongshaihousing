@@ -3869,10 +3869,10 @@ body, a, button, input, select, label, .clickable {
   font-family: 'Inter', sans-serif;
 }
 
-/* Cursor Fixes */
+/* Cursor Fixes */\n.magnetic-cursor { background-color: #fff !important; mix-blend-mode: difference !important; }\n.magnetic-cursor-follower { border-color: #fff !important; mix-blend-mode: difference !important; }
 .cursor-dot, .cursor-outline, [class*="cursor"] {
     z-index: 2147483647 !important; /* Maximum possible z-index */
-    mix-blend-mode: normal !important; /* In case it was difference and blending out */
+     /* In case it was difference and blending out */
 }
 
 /* Ensure body doesn't hide cursor */
