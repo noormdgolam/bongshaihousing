@@ -4224,3 +4224,9 @@ body.dark-mode img.logo {
     padding: 4px;
   }
 }
+
+
+/* Remove Dark Mode Button as requested (System Auto Only) */
+#darkModeBtn, #dark-mode-toggle {
+  display: none !important;
+}
