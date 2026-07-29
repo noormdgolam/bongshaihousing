@@ -480,3 +480,127 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// ==========================================================================
+// Phase 2: Scroll Progress Bar
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'scroll-progress-container';
+    
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress-bar';
+    
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+    
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        
+        if(scrollHeight > 0) {
+            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = scrollPercentage + '%';
+        }
+    }, {passive: true});
+});
+
+// ==========================================================================
+// Phase 2: 3D Tilt Effect
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Only run on desktop
+    if(window.matchMedia("(pointer: coarse)").matches) return;
+    
+    const tiltElements = document.querySelectorAll('.property-card, .gallery-item, .service-card');
+    
+    tiltElements.forEach(el => {
+        el.classList.add('tilt-element');
+        
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left; // x position within the element.
+            const y = e.clientY - rect.top;  // y position within the element.
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Max rotation is 10 degrees
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+            
+            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    });
+});
+
+// ==========================================================================
+// Phase 2: Floating Quick-Contact Widget
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Hide the old whatsapp float if it exists to replace with this premium one
+    const oldWhatsapp = document.querySelector('.whatsapp-float');
+    if(oldWhatsapp) oldWhatsapp.style.display = 'none';
+
+    const widget = document.createElement('div');
+    widget.className = 'floating-widget';
+    
+    const mainBtn = document.createElement('div');
+    mainBtn.className = 'floating-main-btn';
+    mainBtn.innerHTML = 'ðŸ’¬'; // Chat icon
+    
+    const menu = document.createElement('div');
+    menu.className = 'floating-menu';
+    
+    const wappItem = document.createElement('a');
+    wappItem.className = 'floating-menu-item';
+    wappItem.href = 'https://wa.me/8801781636613';
+    wappItem.target = '_blank';
+    wappItem.innerHTML = 'ðŸ“²';
+    wappItem.title = 'WhatsApp';
+    
+    const phoneItem = document.createElement('a');
+    phoneItem.className = 'floating-menu-item';
+    phoneItem.href = 'tel:+8801781636613';
+    phoneItem.innerHTML = 'ðŸ“ž';
+    phoneItem.title = 'Call Us';
+    
+    const emailItem = document.createElement('a');
+    emailItem.className = 'floating-menu-item';
+    emailItem.href = 'mailto:sales@bongshai.com';
+    emailItem.innerHTML = 'âœ‰ï¸ ';
+    emailItem.title = 'Email Us';
+    
+    menu.appendChild(emailItem);
+    menu.appendChild(phoneItem);
+    menu.appendChild(wappItem);
+    
+    widget.appendChild(mainBtn);
+    widget.appendChild(menu);
+    
+    document.body.appendChild(widget);
+    
+    mainBtn.addEventListener('click', () => {
+        widget.classList.toggle('active');
+        if(widget.classList.contains('active')) {
+            mainBtn.innerHTML = '+';
+            mainBtn.classList.add('active');
+        } else {
+            mainBtn.innerHTML = 'ðŸ’¬';
+            mainBtn.classList.remove('active');
+        }
+    });
+    
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if(!widget.contains(e.target) && widget.classList.contains('active')) {
+            widget.classList.remove('active');
+            mainBtn.innerHTML = 'ðŸ’¬';
+            mainBtn.classList.remove('active');
+        }
+    });
+});
