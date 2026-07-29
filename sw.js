@@ -1,18 +1,19 @@
-const CACHE_NAME = 'bongshai-cache-v1';
-const urlsToCache = [
+const CACHE_NAME = 'bongshai-cache-v2';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/css/style.css',
+  '/js/global-upgrades.js',
+  '/js/bd-geo-data.js',
   '/js/bangla-translation.js',
-  '/js/lightbox.js'
+  '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(STATIC_ASSETS);
+    })
   );
   self.skipWaiting();
 });
@@ -29,17 +30,33 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Network-first strategy with cache fallback
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // Cache successful responses for later
-        const resClone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, resClone));
-        return response;
+  const requestURL = new URL(event.request.url);
+
+  // Cache-First for images, css, fonts, and js (stale-while-revalidate pattern)
+  if (requestURL.pathname.match(/\.(png|jpg|jpeg|webp|svg|css|js|woff2)$/)) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        const fetchPromise = fetch(event.request).then(networkResponse => {
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, networkResponse.clone());
+          });
+          return networkResponse;
+        }).catch(() => {}); // Ignore network errors in background
+        return cachedResponse || fetchPromise;
       })
-      .catch(() => {
+    );
+  } else {
+    // Network-First for HTML documents and other dynamic content
+    event.respondWith(
+      fetch(event.request).then(response => {
+        const resClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, resClone);
+        });
+        return response;
+      }).catch(() => {
         return caches.match(event.request);
       })
-  );
+    );
+  }
 });
