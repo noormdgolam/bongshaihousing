@@ -1333,6 +1333,16 @@ p { color: var(--grey-600); line-height: 1.75; }
   gap: var(--space-3);
 }
 
+
+.author-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+}
+
 .author-avatar {
   width: 44px;
   height: 44px;
@@ -3895,4 +3905,19 @@ body.dark-mode footer {
 /* Invert specific images or SVG if needed, but skip general photos */
 body.dark-mode img.logo {
     filter: brightness(0) invert(1);
+}
+
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+.nav-phone {
+  white-space: nowrap;
+}
+#nav-get-quote-btn, .nav-cta .btn {
+  white-space: nowrap;
+  min-width: max-content;
 }
