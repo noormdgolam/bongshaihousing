@@ -3246,55 +3246,17 @@ body, a, button, input, select, label, .clickable {
   cursor: none !important;
 }
 
-.magnetic-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 12px;
-  height: 12px;
-  background-color: var(--primary);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999999;
-  transition: width 0.3s, height 0.3s, background-color 0.3s, mix-blend-mode 0.3s;
-  mix-blend-mode: difference;
-}
 
-.magnetic-cursor-follower {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1.5px solid var(--accent);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999998;
-  transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
-  opacity: 0.7;
-}
+
+
 
 /* Hover States */
-.magnetic-cursor.hovering {
-  width: 60px;
-  height: 60px;
-  background-color: var(--accent);
-  mix-blend-mode: normal;
-  opacity: 0.2;
-}
 
-.magnetic-cursor-follower.hovering {
-  opacity: 0;
-  width: 80px;
-  height: 80px;
-}
+
+
 
 @media (max-width: 1024px) {
-  .magnetic-cursor, .magnetic-cursor-follower {
-    display: none !important;
-  }
+  .magnetic-cursor, 
   body, a, button, input, select, label, .clickable {
     cursor: auto !important;
   }
@@ -3869,7 +3831,7 @@ body, a, button, input, select, label, .clickable {
   font-family: 'Inter', sans-serif;
 }
 
-/* Cursor Fixes */\n.magnetic-cursor { background-color: #fff !important; mix-blend-mode: difference !important; }\n.magnetic-cursor-follower { border-color: #fff !important; mix-blend-mode: difference !important; }
+\n
 .cursor-dot, .cursor-outline, [class*="cursor"] {
     z-index: 2147483647 !important; /* Maximum possible z-index */
      /* In case it was difference and blending out */
@@ -3882,20 +3844,56 @@ body {
 
 
 
-.magnetic-cursor-follower.hovering {
-    opacity: 0 !important; /* Hide follower when hovering */
+
+
+
+
+
+
+
+/* Premium Architectural Cursor */
+.magnetic-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px !important;
+  height: 8px !important;
+  background-color: var(--accent) !important;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 2147483647 !important;
+  transition: width 0.3s, height 0.3s, background-color 0.3s, opacity 0.3s;
+  mix-blend-mode: normal !important;
 }
 
-/* Fix for Hovering State */
+.magnetic-cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px !important;
+  height: 32px !important;
+  border: 1px solid var(--accent) !important;
+  background-color: transparent !important;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 2147483646 !important;
+  opacity: 0.5 !important;
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+  mix-blend-mode: normal !important;
+}
+
+/* Hovering State */
 .magnetic-cursor.hovering {
-    width: 60px !important;
-    height: 60px !important;
-    background-color: #fff !important; /* Make it solid white */
-    border: none !important;
-    mix-blend-mode: difference !important;
-    opacity: 1 !important; /* Full opacity so difference blending works */
+  width: 48px !important;
+  height: 48px !important;
+  background-color: var(--accent) !important;
+  opacity: 0.15 !important;
 }
 
 .magnetic-cursor-follower.hovering {
-    opacity: 0 !important; /* Hide follower when hovering */
+  width: 0px !important;
+  height: 0px !important;
+  opacity: 0 !important;
 }
