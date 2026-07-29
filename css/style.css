@@ -4197,3 +4197,5 @@ body.dark-mode img.logo {
     font-size: 0.95rem !important;
   }
 }
+
+#darkModeBtn { display: none !important; }

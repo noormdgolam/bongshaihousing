@@ -2,29 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   /* =========================================================
      DARK MODE LOGIC
      ========================================================= */
-  const darkModeBtn = document.getElementById('darkModeBtn');
-  
-  // Check local storage or system preference
-  if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    if (darkModeBtn) darkModeBtn.textContent = '☀️';
-  }
-
-  if (darkModeBtn) {
-    darkModeBtn.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-        darkModeBtn.textContent = '🌙';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        darkModeBtn.textContent = '☀️';
-      }
-    });
-  }
-
   /* =========================================================
      GLOBAL SEARCH LOGIC
      ========================================================= */
@@ -230,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let shouldRebind = false;
         mutations.forEach(mut => {
             if (mut.addedNodes.length > 0) shouldRebind = true;
-        });
+
         if (shouldRebind) {
             // Very basic rebind - in a robust system you'd only bind new elements
             // For now this works for our simple SPA and dynamic galleries
@@ -1150,3 +1127,22 @@ function injectInstallButton() {
 }
 
 document.addEventListener('DOMContentLoaded', injectInstallButton);
+
+/* =========================================================
+   AUTO DARK MODE LOGIC (SYSTEM PREFERENCE)
+   ========================================================= */
+const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+function applySystemTheme(e) {
+    if (e.matches) {
+        document.body.setAttribute('data-theme', 'dark');
+    } else {
+        document.body.removeAttribute('data-theme');
+    }
+}
+
+// Apply on load
+applySystemTheme(mediaQuery);
+
+// Listen for system changes
+mediaQuery.addEventListener('change', applySystemTheme);
