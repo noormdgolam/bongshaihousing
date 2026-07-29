@@ -3908,16 +3908,18 @@ body.dark-mode img.logo {
 }
 
 
-.nav-cta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: nowrap;
-}
-.nav-phone {
-  white-space: nowrap;
-}
-#nav-get-quote-btn, .nav-cta .btn {
-  white-space: nowrap;
-  min-width: max-content;
+@media (min-width: 992px) {
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .nav-phone {
+    white-space: nowrap;
+  }
+  #nav-get-quote-btn, .nav-cta .btn {
+    white-space: nowrap;
+    min-width: max-content;
+  }
 }
