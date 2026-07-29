@@ -3880,14 +3880,20 @@ body {
     cursor: auto !important; /* Let default show if JS fails */
 }
 
+
+
+.magnetic-cursor-follower.hovering {
+    opacity: 0 !important; /* Hide follower when hovering */
+}
+
 /* Fix for Hovering State */
 .magnetic-cursor.hovering {
     width: 60px !important;
     height: 60px !important;
-    background-color: transparent !important;
-    border: 2px solid #fff !important;
+    background-color: #fff !important; /* Make it solid white */
+    border: none !important;
     mix-blend-mode: difference !important;
-    opacity: 1 !important;
+    opacity: 1 !important; /* Full opacity so difference blending works */
 }
 
 .magnetic-cursor-follower.hovering {
