@@ -448,6 +448,34 @@
 }
 </style>
 </main>
+
+<section style="padding: 80px 0; background: var(--grey-50);">
+  <div class="container reveal">
+    <div style="text-align:center; margin-bottom: 50px;">
+      <h2 style="color:var(--primary); font-size:2.5rem; margin-bottom:15px;">Interactive Cost Estimator</h2>
+      <p style="color:var(--grey-600); max-width:600px; margin:0 auto;">Drag the sliders below to instantly get an estimated budget range for your dream project.</p>
+    </div>
+    
+    <div class="estimator-card">
+      <div class="est-range-wrap">
+        <label for="estLand"><span>Land Area</span> <span id="estLandVal" style="color:var(--primary)">5 Katha</span></label>
+        <input type="range" id="estLand" class="est-range" min="2" max="20" step="0.5" value="5">
+      </div>
+      
+      <div class="est-range-wrap">
+        <label for="estFloors"><span>Number of Floors (G+)</span> <span id="estFloorsVal" style="color:var(--primary)">3 Floors</span></label>
+        <input type="range" id="estFloors" class="est-range" min="1" max="10" step="1" value="3">
+      </div>
+      
+      <div class="est-result-box">
+        <p style="margin:0; color:var(--grey-500); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; font-weight:600;">Estimated Budget Range</p>
+        <div id="estTotalPrice" class="est-price" style="transition: opacity 0.15s ease;">â§³ 0</div>
+        <p style="margin:15px 0 0; font-size:0.85rem; color:var(--grey-400);">* This is a rough baseline estimate assuming 70% land coverage and standard finishing. Final costs depend on soil test, architectural design, and material selection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer class="footer" role="contentinfo">
 <div class="container">
 <div class="footer-grid">

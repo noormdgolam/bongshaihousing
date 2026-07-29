@@ -824,3 +824,167 @@ document.addEventListener('DOMContentLoaded', () => {
         parent.innerHTML = parent.innerHTML.replace(textNode.nodeValue, `<span class="animate-counter" data-target="${val}">${val}</span>${hasPlus ? '+' : ''}`);
     });
 });
+
+// ==========================================================================
+// Phase 4: Ambient Cursor Glow (Dark Mode)
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    if(window.matchMedia("(pointer: coarse)").matches) return; // Skip mobile
+    
+    const glow = document.createElement('div');
+    glow.className = 'ambient-glow';
+    document.body.appendChild(glow);
+    
+    document.addEventListener('mousemove', (e) => {
+        glow.style.setProperty('--mouse-x', e.clientX + 'px');
+        glow.style.setProperty('--mouse-y', e.clientY + 'px');
+    });
+});
+
+// ==========================================================================
+// Phase 4: Dynamic Project Filtering
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const filterItems = document.querySelectorAll('.filter-item');
+    
+    if(filterBtns.length > 0 && filterItems.length > 0) {
+        // Assign random categories if they don't have them (for demo)
+        const categories = ['duplex', 'low-cost', 'ongoing', 'completed'];
+        filterItems.forEach(item => {
+            if(!item.getAttribute('data-category')) {
+                // Pick 1 or 2 random categories
+                const cat1 = categories[Math.floor(Math.random() * categories.length)];
+                item.setAttribute('data-category', cat1);
+            }
+        });
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filterValue = btn.getAttribute('data-filter');
+                
+                filterItems.forEach(item => {
+                    if(filterValue === 'all' || item.getAttribute('data-category').includes(filterValue)) {
+                        item.classList.remove('hide');
+                        // Hack to force reflow so transition works when removing position absolute
+                        setTimeout(() => item.style.position = 'relative', 400);
+                    } else {
+                        item.classList.add('hide');
+                        // Delay position absolute so it fades out first
+                        setTimeout(() => item.style.position = 'absolute', 400);
+                    }
+                });
+            });
+        });
+    }
+});
+
+// ==========================================================================
+// Phase 4: Before & After Image Slider
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll('.ba-slider');
+    
+    sliders.forEach(slider => {
+        const afterImg = slider.querySelector('.img-after');
+        const handle = slider.querySelector('.slider-handle');
+        const innerImg = afterImg.querySelector('img');
+        let isDragging = false;
+        
+        const move = (clientX) => {
+            const rect = slider.getBoundingClientRect();
+            let x = clientX - rect.left;
+            // Constrain
+            if (x < 0) x = 0;
+            if (x > rect.width) x = rect.width;
+            
+            const percent = (x / rect.width) * 100;
+            afterImg.style.width = percent + '%';
+            handle.style.left = percent + '%';
+            
+            // Adjust the inner image width inversely so it doesn't stretch
+            innerImg.style.width = (100 / (percent / 100)) + '%';
+        };
+        
+        // Mouse Events
+        handle.addEventListener('mousedown', () => isDragging = true);
+        document.addEventListener('mouseup', () => isDragging = false);
+        document.addEventListener('mousemove', (e) => {
+            if(isDragging) move(e.clientX);
+        });
+        
+        // Touch Events
+        handle.addEventListener('touchstart', () => isDragging = true, {passive: true});
+        document.addEventListener('touchend', () => isDragging = false);
+        document.addEventListener('touchmove', (e) => {
+            if(isDragging) {
+                move(e.touches[0].clientX);
+                if(e.cancelable) e.preventDefault(); // prevent scroll
+            }
+        }, {passive: false});
+    });
+});
+
+// ==========================================================================
+// Phase 4: Real-Time Cost Estimator
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const estCard = document.querySelector('.estimator-card');
+    if(!estCard) return;
+    
+    const landInput = document.getElementById('estLand');
+    const landVal = document.getElementById('estLandVal');
+    const floorInput = document.getElementById('estFloors');
+    const floorVal = document.getElementById('estFloorsVal');
+    const priceEl = document.getElementById('estTotalPrice');
+    
+    if(!landInput || !floorInput || !priceEl) return;
+    
+    // Base assumptions (Tk per sqft construction)
+    // 1 Katha = 720 sqft. Let's assume buildable area is 70% of land.
+    // Cost = 2500 Tk per sqft.
+    const costPerSqft = 2500;
+    
+    function calculate() {
+        const katha = parseFloat(landInput.value);
+        const floors = parseInt(floorInput.value);
+        
+        landVal.innerText = katha + (katha === 1 ? ' Katha' : ' Kathas');
+        floorVal.innerText = floors + (floors === 1 ? ' Floor' : ' Floors');
+        
+        const buildableSqft = katha * 720 * 0.7; // 70% coverage
+        const totalSqft = buildableSqft * floors;
+        let totalCost = totalSqft * costPerSqft;
+        
+        // Add foundation cost non-linearity
+        if(floors > 3) totalCost *= 1.1;
+        if(floors > 6) totalCost *= 1.2;
+        
+        // Format to BDT standard (crores/lakhs)
+        let displayPrice = '';
+        if(totalCost >= 10000000) {
+            displayPrice = (totalCost / 10000000).toFixed(2) + ' Crore';
+        } else if(totalCost >= 100000) {
+            displayPrice = (totalCost / 100000).toFixed(2) + ' Lakh';
+        } else {
+            displayPrice = totalCost.toLocaleString();
+        }
+        
+        // Animate price change
+        priceEl.style.opacity = 0;
+        setTimeout(() => {
+            priceEl.innerText = 'â§³ ' + displayPrice;
+            priceEl.style.opacity = 1;
+        }, 150);
+    }
+    
+    landInput.addEventListener('input', calculate);
+    floorInput.addEventListener('input', calculate);
+    
+    // Initial calc
+    calculate();
+});
