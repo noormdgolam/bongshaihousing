@@ -2854,6 +2854,7 @@ body {
    ============================================================ */
 @media (min-width: 992px) {
   .page-sidebar-content .properties-grid,
+  .page-sidebar-content .product-grid,
   .page-sidebar-content .stagger[style*="display:grid"] {
     grid-template-columns: 1fr !important;
   }
