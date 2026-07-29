@@ -3884,12 +3884,23 @@ body {
   mix-blend-mode: normal !important;
 }
 
-/* Hovering State */
+/* Hovering State - Target Lock-On */
 .magnetic-cursor.hovering {
+  /* Dot stays exactly the same so you never lose it */
+  width: 8px !important;
+  height: 8px !important;
+  background-color: var(--accent) !important;
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1.5) !important; /* Slight bump in size */
+}
+
+.magnetic-cursor-follower.hovering {
+  /* Ring expands and becomes solid to show lock-on */
   width: 48px !important;
   height: 48px !important;
-  background-color: var(--accent) !important;
-  opacity: 0.15 !important;
+  border: 2px solid var(--accent) !important;
+  background-color: rgba(234, 179, 8, 0.1) !important; /* Faint gold tint */
+  opacity: 1 !important;
 }
 
 .magnetic-cursor-follower.hovering {
