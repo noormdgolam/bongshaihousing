@@ -1169,3 +1169,191 @@ applySystemTheme(mediaQuery);
 
 // Listen for system changes
 mediaQuery.addEventListener('change', applySystemTheme);
+
+/* =========================================================
+   GLOBAL IMAGE LIGHTBOX — "Click to see full picture"
+   Applies to all product images, gallery images, etc.
+   ========================================================= */
+(function initImageLightbox() {
+  // Inject lightbox modal into DOM
+  const lightbox = document.createElement('div');
+  lightbox.id = 'imgLightbox';
+  lightbox.setAttribute('role', 'dialog');
+  lightbox.setAttribute('aria-label', 'Full size image viewer');
+  lightbox.innerHTML = `
+    <button id="imgLightboxClose" aria-label="Close image viewer">&times;</button>
+    <img id="imgLightboxImg" src="" alt="Full size image">
+    <p id="imgLightboxCaption"></p>
+  `;
+  document.body.appendChild(lightbox);
+
+  // Inject CSS for lightbox and caption overlay
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Lightbox Backdrop */
+    #imgLightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      cursor: zoom-out;
+      animation: lbFadeIn 0.25s ease;
+    }
+    #imgLightbox.active { display: flex; }
+
+    @keyframes lbFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    #imgLightboxImg {
+      max-width: 95vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      cursor: default;
+    }
+
+    #imgLightboxCaption {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+      margin-top: 14px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #imgLightboxClose {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      line-height: 1;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 100000;
+    }
+    #imgLightboxClose:hover { background: rgba(255,255,255,0.3); }
+
+    /* "Click to see full picture" caption overlay on image wrappers */
+    .lb-wrap {
+      position: relative;
+      cursor: zoom-in;
+      display: block;
+    }
+    .lb-wrap::after {
+      content: '🔍 Click to see full picture';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.65));
+      color: #fff;
+      font-size: 0.78rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      text-align: center;
+      padding: 18px 8px 8px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      border-radius: 0 0 12px 12px;
+    }
+    .lb-wrap:hover::after,
+    .lb-wrap:focus-within::after {
+      opacity: 1;
+    }
+    /* Always show caption on touch devices (mobile) */
+    @media (hover: none) {
+      .lb-wrap::after {
+        opacity: 1;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const lbModal  = document.getElementById('imgLightbox');
+  const lbImg    = document.getElementById('imgLightboxImg');
+  const lbCap    = document.getElementById('imgLightboxCaption');
+  const lbClose  = document.getElementById('imgLightboxClose');
+
+  function openLightbox(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lbCap.textContent = alt || '';
+    lbModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lbModal.classList.remove('active');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  // Close on backdrop / close button
+  lbModal.addEventListener('click', (e) => {
+    if (e.target === lbModal || e.target === lbClose) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Apply lightbox to all target images
+  function applyLightbox() {
+    const selectors = [
+      '.property-img-wrap img',
+      '.property-img img',
+      '.gallery-img img',
+      '.gallery-img',
+      '.project-img img',
+      '.product-hero-img img',
+      'figure img',
+      '.page-sidebar-content img',
+      '.cat-sidebar ~ div img',
+    ];
+
+    const imgs = document.querySelectorAll(selectors.join(', '));
+    imgs.forEach(img => {
+      // Skip tiny icons, logos, flags, and already wrapped
+      if (!img.src || img.width < 60 || img.closest('.lb-wrap') || img.closest('.navbar') || img.closest('.footer')) return;
+
+      const parent = img.parentElement;
+      // Wrap if not already a lb-wrap
+      if (!parent.classList.contains('lb-wrap')) {
+        parent.classList.add('lb-wrap');
+      }
+      parent.style.cursor = 'zoom-in';
+
+      parent.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLightbox(img.src, img.alt || img.title || '');
+      });
+    });
+  }
+
+  // Run after DOM settles (handles lazy-loaded images too)
+  if (document.readyState === 'complete') {
+    applyLightbox();
+  } else {
+    window.addEventListener('load', applyLightbox);
+  }
+  // Also observe dynamic content
+  const observer = new MutationObserver(() => applyLightbox());
+  observer.observe(document.body, { childList: true, subtree: true });
+})();
