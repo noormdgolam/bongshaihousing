@@ -1006,6 +1006,8 @@ p { color: var(--grey-600); line-height: 1.75; }
   color: var(--accent);
   margin-bottom: var(--space-2);
   display: block;
+  line-height: 1.5;
+  padding-bottom: 2px;
 }
 
 .property-name {
