@@ -4165,68 +4165,68 @@ body.dark-mode img.logo {
 
 
 
-/* Mobile Header Fixes - Robust Responsive Version */
+/* =============================================
+   MOBILE HEADER — Clean, Mobile-First
+   Only Logo + Hamburger on mobile.
+   All tools moved to the mobile drawer.
+   ============================================= */
+
+/* Step 1: Clean up navbar-inner on ALL mobile/tablet screens */
 @media (max-width: 1024px) {
   .navbar-inner {
     display: flex;
-    flex-wrap: wrap;      /* Allow elements to drop to the next line instead of overflowing */
-    gap: 8px;
-    padding: 10px 15px;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-  
-  .brand {
-    flex-shrink: 1;       /* Allow brand to shrink if needed */
-    min-width: 0;
-    max-width: 100%;
+    flex-direction: row;
+    justify-content: space-between; /* Logo left, Hamburger right */
+    align-items: center;
+    padding: 0 16px;
+    height: 60px;
+    overflow: hidden; /* Nothing overflows */
+    flex-wrap: nowrap;
   }
 
-  /* Ensure the Bongshai logo text is visible but scales */
+  /* The logo */
+  .navbar-brand {
+    flex: 0 1 auto; /* Shrinks if needed, never grows too much */
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .brand-name {
     display: block !important;
-    font-size: clamp(0.9rem, 4vw, 1.2rem) !important;
+    font-size: clamp(0.85rem, 4vw, 1.1rem) !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 200px;
   }
+
   .brand-tagline {
     display: none !important;
   }
-  
-  /* Robust wrapper for dynamically injected icons/buttons (like EN toggle) */
+
+  /* CRITICAL: Hide ENTIRE nav-cta block on mobile.
+     Search, dark mode toggle, phone, get-quote — ALL moved to drawer. */
   .nav-cta {
-    display: flex !important;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;       /* Icons shouldn't shrink, they should wrap if needed */
-  }
-  
-  /* Hide non-essential text CTAs on mobile to save space */
-  .nav-phone, #nav-get-quote-btn {
     display: none !important;
   }
-}
 
-@media (max-width: 600px) {
-  /* On very small screens, ensure the header handles third-party widgets cleanly */
-  .navbar-inner {
-    justify-content: space-between;
+  /* Also hide the desktop nav links */
+  .nav-menu {
+    display: none !important;
   }
-  .nav-cta {
-    gap: 8px;
-  }
-  /* Scale down icons slightly to fit */
-  .icon-btn {
-    font-size: 1rem !important;
-    margin-right: 0 !important;
-    padding: 4px;
+
+  /* Hamburger stays visible and is pushed to the right */
+  .hamburger {
+    display: flex !important;
+    flex-shrink: 0;
+    margin-left: auto;
   }
 }
 
-
-/* Remove Dark Mode Button as requested (System Auto Only) */
+/* Remove Dark Mode Button globally (system auto-detect only) */
 #darkModeBtn, #dark-mode-toggle {
   display: none !important;
 }
+
