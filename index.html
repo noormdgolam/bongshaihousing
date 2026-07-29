@@ -144,6 +144,10 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#1E40AF">
+
+  <!-- Swiper JS for 3D Carousel -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -332,7 +336,7 @@
     ====================================================== -->
     <section class="hero" id="hero" aria-labelledby="hero-title">
       <div class="hero-bg">
-        <img src="images/hero-bg.webp" alt="Modern prefab housing by Bongshai Housing Bangladesh" loading="eager" fetchpriority="high" / title="Modern prefab housing by Bongshai Housing Bangladesh" width="1024" height="1024">
+        <img loading="lazy" src="images/hero-bg.webp" alt="Modern prefab housing by Bongshai Housing Bangladesh" loading="eager" fetchpriority="high" / title="Modern prefab housing by Bongshai Housing Bangladesh" width="1024" height="1024">
       </div>
       <div class="hero-overlay"></div>
 
@@ -833,7 +837,108 @@
       </div>
     </section>
 
-  </main>
+  
+  <!-- 3D Video Testimonial Section -->
+  <section class="py-20 bg-primary text-white overflow-hidden" id="testimonials">
+    <div class="container text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4" data-i18n="testimonials_title">Client Success Stories</h2>
+      <p class="text-gray-300 max-w-2xl mx-auto" data-i18n="testimonials_subtitle">Hear directly from the families and businesses who trusted us to build their dreams.</p>
+    </div>
+
+    <!-- Swiper -->
+    <div class="swiper testimonialSwiper" style="padding: 50px 0; max-width: 1200px; margin: 0 auto;">
+      <div class="swiper-wrapper">
+        
+        <!-- Slide 1 -->
+        <div class="swiper-slide" style="width: 350px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; backdrop-filter: blur(10px);">
+          <div class="relative rounded-xl overflow-hidden mb-6 group cursor-pointer" style="height: 200px; background: #0f172a;">
+            <!-- Placeholder for video thumbnail -->
+            <img loading="lazy" src="images/gallery/1.jpeg" alt="Testimonial 1" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <i class="fas fa-play-circle text-5xl text-accent group-hover:scale-110 transition-transform shadow-lg"></i>
+            </div>
+          </div>
+          <p class="italic text-gray-300 mb-4">"Bongshai Housing delivered our duplex 2 months ahead of schedule. The quality of materials and transparency was unmatched."</p>
+          <div class="flex items-center">
+            <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-xl font-bold text-primary mr-4">RA</div>
+            <div>
+              <h4 class="font-bold">Rahim Ahmed</h4>
+              <p class="text-sm text-gray-400">Dhaka, Bangladesh</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide" style="width: 350px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; backdrop-filter: blur(10px);">
+          <div class="relative rounded-xl overflow-hidden mb-6 group cursor-pointer" style="height: 200px; background: #0f172a;">
+            <img loading="lazy" src="images/gallery/2.jpeg" alt="Testimonial 2" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <i class="fas fa-play-circle text-5xl text-accent group-hover:scale-110 transition-transform shadow-lg"></i>
+            </div>
+          </div>
+          <p class="italic text-gray-300 mb-4">"The structural integrity of their steel buildings is incredible. A highly professional team of engineers."</p>
+          <div class="flex items-center">
+            <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-xl font-bold text-primary mr-4">SK</div>
+            <div>
+              <h4 class="font-bold">Salma Khan</h4>
+              <p class="text-sm text-gray-400">Chotrogram, Bangladesh</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="swiper-slide" style="width: 350px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; backdrop-filter: blur(10px);">
+          <div class="relative rounded-xl overflow-hidden mb-6 group cursor-pointer" style="height: 200px; background: #0f172a;">
+            <img loading="lazy" src="images/gallery/3.jpeg" alt="Testimonial 3" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <i class="fas fa-play-circle text-5xl text-accent group-hover:scale-110 transition-transform shadow-lg"></i>
+            </div>
+          </div>
+          <p class="italic text-gray-300 mb-4">"From the soil test to the final paint job, they handled everything. A true turnkey solution."</p>
+          <div class="flex items-center">
+            <div class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-xl font-bold text-primary mr-4">FH</div>
+            <div>
+              <h4 class="font-bold">Faisal Hoque</h4>
+              <p class="text-sm text-gray-400">Sylhet, Bangladesh</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="swiper-pagination mt-8 relative" style="bottom: 0;"></div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof Swiper !== 'undefined') {
+        new Swiper('.testimonialSwiper', {
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          coverflowEffect: {
+            rotate: 20,
+            stretch: 0,
+            depth: 200,
+            modifier: 1,
+            slideShadows: false,
+          },
+          loop: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+          }
+        });
+      }
+    });
+  </script>
+
+</main>
 
   <!-- ======================================================
        FOOTER

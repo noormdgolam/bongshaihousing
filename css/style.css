@@ -3856,3 +3856,43 @@ body {
 
 
 
+
+
+/* Dark Mode Overrides */
+body.dark-mode {
+    background-color: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+body.dark-mode .bg-white, 
+body.dark-mode .bg-gray-50, 
+body.dark-mode .bg-gray-100 {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+body.dark-mode .text-gray-800, 
+body.dark-mode .text-gray-900, 
+body.dark-mode .text-gray-700, 
+body.dark-mode .text-gray-600 {
+    color: #f8fafc !important;
+}
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode p {
+    color: #f8fafc !important;
+}
+body.dark-mode .shadow-lg, 
+body.dark-mode .shadow-md, 
+body.dark-mode .shadow-sm {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+body.dark-mode header,
+body.dark-mode footer {
+    background-color: #0a1121 !important;
+    border-color: #1e293b !important;
+}
+/* Invert specific images or SVG if needed, but skip general photos */
+body.dark-mode img.logo {
+    filter: brightness(0) invert(1);
+}

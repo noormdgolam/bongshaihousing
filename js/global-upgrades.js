@@ -1080,3 +1080,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+// ==========================================================================
+// Dark Mode Toggle Logic
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+    
+    // Check local storage
+    const isDark = localStorage.getItem('bongshai_dark') === 'true';
+    if(isDark) {
+        body.classList.add('dark-mode');
+        if(toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-sun text-yellow-400 text-xl"></i>';
+    }
+
+    if(toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            body.classList.toggle('dark-mode');
+            const darkActive = body.classList.contains('dark-mode');
+            localStorage.setItem('bongshai_dark', darkActive);
+            
+            if(darkActive) {
+                toggleBtn.innerHTML = '<i class="fas fa-sun text-yellow-400 text-xl"></i>';
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-moon text-gray-700 text-xl"></i>';
+            }
+        });
+    }
+});
