@@ -2897,11 +2897,57 @@ body {
 }
 
 @media (max-width: 991px) {
+  /* Stack sidebar + content vertically on mobile */
+  .page-with-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .page-sidebar-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+  }
+
+  /* Reset product card to vertical layout on mobile */
+  .page-sidebar-content .property-card {
+    display: block !important;
+    width: 100% !important;
+  }
+
   .page-sidebar-content .property-card > div:first-child,
   .page-sidebar-content .property-img-wrap {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 220px !important;
     border-radius: 16px 16px 0 0 !important;
   }
+
+  .page-sidebar-content .property-card-body {
+    width: 100% !important;
+    padding: var(--space-4) !important;
+  }
+
+  .page-sidebar-content .property-card-body > .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Product grid: single column on mobile */
+  .page-sidebar-content .product-grid,
+  .page-sidebar-content .stagger {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--space-6) !important;
+    width: 100% !important;
+  }
 }
+
 
 /* ============================================================
    MEGA / FLYOUT DROPDOWN — Products & Solutions nav
