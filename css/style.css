@@ -381,7 +381,7 @@ p { color: var(--grey-600); line-height: 1.75; }
   box-shadow: var(--shadow-md);
 }
 
-.navbar, .navbar, .navbar-inner {
+.navbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -4163,31 +4163,24 @@ body.dark-mode img.logo {
   }
 }
 
-/* Mobile Header Fixes */
+
+/* Mobile Header Fixes - Clean Version */
 @media (max-width: 1024px) {
-  .navbar, .navbar, .navbar-inner {
-    flex-wrap: wrap;
-    height: auto !important;
-    padding: 10px 15px !important;
-  }
+  /* Show nav-cta but only keep the icon buttons (Search, Dark Mode) */
   .nav-cta {
     display: flex !important;
-    width: 100%;
-    justify-content: center;
     align-items: center;
-    gap: 12px;
-    order: 3;
-    padding-top: 10px;
-    margin-top: 5px;
-    border-top: 1px solid var(--grey-100);
+    gap: 15px;
+    margin-right: 15px; /* Spacing before hamburger */
   }
-  .nav-cta .nav-phone {
-    font-size: 0.9rem;
-    padding: 4px 8px;
-    background: var(--grey-50);
-    border-radius: 20px;
-    border: 1px solid var(--grey-200);
+  
+  /* Hide the text-based buttons in the header to save space */
+  .nav-cta .nav-phone, 
+  .nav-cta #nav-get-quote-btn, 
+  .nav-cta .lang-btn {
+    display: none !important;
   }
+
   /* Ensure the Bongshai logo text is visible on mobile */
   .brand-name {
     display: block !important;
@@ -4201,12 +4194,6 @@ body.dark-mode img.logo {
 @media (max-width: 600px) {
   .brand-name {
     display: block !important;
-    font-size: 1rem !important;
-  }
-  .nav-cta {
-    gap: 8px;
-  }
-  .nav-cta .nav-phone {
-    font-size: 0.85rem;
+    font-size: 0.95rem !important;
   }
 }
