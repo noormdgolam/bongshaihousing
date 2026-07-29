@@ -239,87 +239,87 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     observer.observe(document.body, { childList: true, subtree: true });
 });
-d o c u m e n t . a d d E v e n t L i s t e n e r ( ' D O M C o n t e n t L o a d e d ' ,   ( )   = >   { 
- 
-     / /   F a d e   i n   o n   l o a d 
- 
-     s e t T i m e o u t ( ( )   = >   { 
- 
-         d o c u m e n t . b o d y . c l a s s L i s t . a d d ( ' p a g e - l o a d e d ' ) ; 
- 
-     } ,   5 0 ) ; 
- 
- 
- 
-     / /   I n t e r c e p t   c l i c k s   o n   i n t e r n a l   l i n k s 
- 
-     c o n s t   l i n k s   =   d o c u m e n t . q u e r y S e l e c t o r A l l ( ' a [ h r e f ] ' ) ; 
- 
-     
- 
-     l i n k s . f o r E a c h ( l i n k   = >   { 
- 
-         l i n k . a d d E v e n t L i s t e n e r ( ' c l i c k ' ,   ( e )   = >   { 
- 
-             c o n s t   t a r g e t U r l   =   l i n k . g e t A t t r i b u t e ( ' h r e f ' ) ; 
- 
-             
- 
-             / /   D o n ' t   i n t e r c e p t   e x t e r n a l   l i n k s ,   a n c h o r s ,   o r   t a r g e t = " _ b l a n k " 
- 
-             i f   ( 
- 
-                 t a r g e t U r l . s t a r t s W i t h ( ' h t t p ' )   | | 
- 
-                 t a r g e t U r l . s t a r t s W i t h ( ' m a i l t o : ' )   | | 
- 
-                 t a r g e t U r l . s t a r t s W i t h ( ' t e l : ' )   | | 
- 
-                 t a r g e t U r l . s t a r t s W i t h ( ' # ' )   | | 
- 
-                 l i n k . g e t A t t r i b u t e ( ' t a r g e t ' )   = = =   ' _ b l a n k '   | | 
- 
-                 e . c t r l K e y   | |   
- 
-                 e . m e t a K e y 
- 
-             )   { 
- 
-                 r e t u r n ; 
- 
-             } 
- 
- 
- 
-             / /   I t ' s   a n   i n t e r n a l   l i n k ,   i n t e r c e p t   i t 
- 
-             e . p r e v e n t D e f a u l t ( ) ; 
- 
-             
- 
-             / /   T r i g g e r   f a d e   o u t 
- 
-             d o c u m e n t . b o d y . c l a s s L i s t . a d d ( ' p a g e - e x i t ' ) ; 
- 
-             d o c u m e n t . b o d y . c l a s s L i s t . r e m o v e ( ' p a g e - l o a d e d ' ) ; 
- 
-             
- 
-             / /   W a i t   f o r   t r a n s i t i o n   ( 0 . 4 s )   t h e n   n a v i g a t e 
- 
-             s e t T i m e o u t ( ( )   = >   { 
- 
-                 w i n d o w . l o c a t i o n . h r e f   =   t a r g e t U r l ; 
- 
-             } ,   4 0 0 ) ;   / /   4 0 0 m s   m a t c h e s   t h e   C S S   t r a n s i t i o n   t i m e 
- 
-         } ) ; 
- 
-     } ) ; 
- 
- } ) ; 
- 
- 
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Fade in on load
+
+  setTimeout(() => {
+
+    document.body.classList.add('page-loaded');
+
+  }, 50);
+
+
+
+  // Intercept clicks on internal links
+
+  const links = document.querySelectorAll('a[href]');
+
+  
+
+  links.forEach(link => {
+
+    link.addEventListener('click', (e) => {
+
+      const targetUrl = link.getAttribute('href');
+
+      
+
+      // Don't intercept external links, anchors, or target="_blank"
+
+      if (
+
+        targetUrl.startsWith('http') ||
+
+        targetUrl.startsWith('mailto:') ||
+
+        targetUrl.startsWith('tel:') ||
+
+        targetUrl.startsWith('#') ||
+
+        link.getAttribute('target') === '_blank' ||
+
+        e.ctrlKey || 
+
+        e.metaKey
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      // It's an internal link, intercept it
+
+      e.preventDefault();
+
+      
+
+      // Trigger fade out
+
+      document.body.classList.add('page-exit');
+
+      document.body.classList.remove('page-loaded');
+
+      
+
+      // Wait for transition (0.4s) then navigate
+
+      setTimeout(() => {
+
+        window.location.href = targetUrl;
+
+      }, 400); // 400ms matches the CSS transition time
+
+    });
+
+  });
+
+});
+
+
 // ==========================================================================
 // Advanced Parallax & Scroll Animations
 // ==========================================================================
