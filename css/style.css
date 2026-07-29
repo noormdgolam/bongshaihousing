@@ -1006,8 +1006,10 @@ p { color: var(--grey-600); line-height: 1.75; }
   color: var(--accent);
   margin-bottom: var(--space-2);
   display: block;
-  line-height: 1.5;
-  padding-bottom: 2px;
+  line-height: 1.8;
+  padding-bottom: 6px;
+  padding-top: 2px;
+  overflow: visible !important;
 }
 
 .property-name {
