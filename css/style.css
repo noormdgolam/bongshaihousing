@@ -3923,3 +3923,15 @@ body.dark-mode img.logo {
     min-width: max-content;
   }
 }
+
+/* Added for responsive product details grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
