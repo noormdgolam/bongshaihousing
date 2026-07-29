@@ -59,6 +59,10 @@
   <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#1E40AF">
 <link rel="apple-touch-icon" href="/images/logo.webp">
+
+  <!-- Pannellum 360 Viewer -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 </head>
 <body>
 
@@ -460,6 +464,33 @@
         
       </div>
     </section>
+
+  <!-- 360 Virtual Tour Section -->
+  <section style="padding: 80px 0; background: var(--grey-50);">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 style="color:var(--primary); font-size: 2.5rem; font-weight: 700; margin-bottom: 15px;">360° Virtual Tour Experience</h2>
+        <p style="color:var(--grey-600); max-width: 700px; margin: 0 auto; font-size: 1.1rem;">Step inside our premium duplex and architectural projects. Drag to look around, scroll to zoom, and click the fullscreen icon for the best immersive experience.</p>
+      </div>
+
+      <div id="panorama" style="width: 100%; height: 600px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid var(--grey-200);"></div>
+      
+      <p style="text-align:center; font-size: 0.85rem; color:var(--grey-400); margin-top: 15px;">* Demo placeholder image. Replace with a true equirectangular 360° photo.</p>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        pannellum.viewer('panorama', {
+            "type": "equirectangular",
+            "panorama": "images/gallery/5.jpeg",
+            "autoLoad": true,
+            "autoRotate": -2,
+            "compass": true
+        });
+    });
+  </script>
+
 </main>
 
   <!-- FOOTER -->
