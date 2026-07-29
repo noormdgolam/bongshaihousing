@@ -4162,3 +4162,51 @@ body.dark-mode img.logo {
     justify-content: flex-start;
   }
 }
+
+/* Mobile Header Fixes */
+@media (max-width: 1024px) {
+  .navbar-inner {
+    flex-wrap: wrap;
+    height: auto !important;
+    padding: 10px 15px !important;
+  }
+  .nav-cta {
+    display: flex !important;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    order: 3;
+    padding-top: 10px;
+    margin-top: 5px;
+    border-top: 1px solid var(--grey-100);
+  }
+  .nav-cta .nav-phone {
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    background: var(--grey-50);
+    border-radius: 20px;
+    border: 1px solid var(--grey-200);
+  }
+  /* Ensure the Bongshai logo text is visible on mobile */
+  .brand-name {
+    display: block !important;
+    font-size: 1.1rem !important;
+  }
+  .brand-tagline {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .brand-name {
+    display: block !important;
+    font-size: 1rem !important;
+  }
+  .nav-cta {
+    gap: 8px;
+  }
+  .nav-cta .nav-phone {
+    font-size: 0.85rem;
+  }
+}
