@@ -1020,3 +1020,63 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial calc
     calculate();
 });
+
+
+// ==========================================================================
+// Interactive SVG Floor Plan Logic
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const rooms = document.querySelectorAll('.room');
+    const tooltip = document.getElementById('room-tooltip');
+    const ttTitle = document.getElementById('tt-title');
+    const ttDesc = document.getElementById('tt-desc');
+    const panelTitle = document.getElementById('panel-title');
+    const panelDesc = document.getElementById('panel-desc');
+    const panelFeatures = document.getElementById('panel-features');
+
+    if (rooms.length > 0) {
+        rooms.forEach(room => {
+            room.addEventListener('mousemove', (e) => {
+                const name = room.getAttribute('data-name');
+                const details = room.getAttribute('data-details');
+                
+                // Tooltip follow mouse
+                if (tooltip) {
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = (e.pageX + 15) + 'px';
+                    tooltip.style.top = (e.pageY + 15) + 'px';
+                    ttTitle.innerHTML = name;
+                    ttDesc.innerHTML = details;
+                }
+            });
+
+            room.addEventListener('mouseleave', () => {
+                if (tooltip) tooltip.style.display = 'none';
+            });
+
+            room.addEventListener('click', () => {
+                const name = room.getAttribute('data-name');
+                const details = room.getAttribute('data-details');
+                
+                if (panelTitle && panelDesc) {
+                    panelTitle.innerHTML = name;
+                    panelDesc.innerHTML = details;
+                    
+                    // Generate list items based on split details
+                    if (panelFeatures) {
+                        panelFeatures.innerHTML = '';
+                        const parts = details.split('<br>');
+                        parts.forEach(part => {
+                            if (part.trim() !== '') {
+                                const li = document.createElement('li');
+                                li.className = 'flex items-center text-sm text-gray-700 font-medium bg-gray-50 p-2 rounded';
+                                li.innerHTML = `<i class="fas fa-cube text-accent mr-2"></i> ${part}`;
+                                panelFeatures.appendChild(li);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    }
+});
