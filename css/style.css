@@ -2,8 +2,9 @@
    BONGSHAI HOUSING — Global Design System
    ============================================================ */
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Google Fonts loaded via non-blocking <link> in HTML head */
+/* Fallback font stack if Inter unavailable */
+
 
 /* ============================================================
    CSS Custom Properties (Design Tokens)
