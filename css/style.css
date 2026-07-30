@@ -4302,3 +4302,6 @@ body.dark-mode img.logo {
   display: none !important;
 }
 
+
+/* Fix for scaling image overflow */
+.property-img-wrap, .lb-wrap { overflow: hidden !important; -webkit-mask-image: -webkit-radial-gradient(white, black); transform: translateZ(0); }
