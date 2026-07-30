@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const mainBtn = document.createElement('div');
     mainBtn.className = 'floating-main-btn';
-    mainBtn.innerHTML = 'ðŸ’¬'; // Chat icon
+    mainBtn.innerHTML = '\uD83D\uDCAC'; // Chat icon
     
     const menu = document.createElement('div');
     menu.className = 'floating-menu';
@@ -592,19 +592,19 @@ document.addEventListener('DOMContentLoaded', () => {
     wappItem.className = 'floating-menu-item';
     wappItem.href = 'https://wa.me/8801781636613';
     wappItem.target = '_blank';
-    wappItem.innerHTML = 'ðŸ“²';
+    wappItem.innerHTML = '\uD83D\uDCF2';
     wappItem.title = 'WhatsApp';
     
     const phoneItem = document.createElement('a');
     phoneItem.className = 'floating-menu-item';
     phoneItem.href = 'tel:+8801781636613';
-    phoneItem.innerHTML = 'ðŸ“ž';
+    phoneItem.innerHTML = '\uD83D\uDCDE';
     phoneItem.title = 'Call Us';
     
     const emailItem = document.createElement('a');
     emailItem.className = 'floating-menu-item';
     emailItem.href = 'mailto:sales@bongshai.com';
-    emailItem.innerHTML = 'âœ‰ï¸ ';
+    emailItem.innerHTML = '\u2709\uFE0F'; // ✉️ Email
     emailItem.title = 'Email Us';
     
     menu.appendChild(emailItem);
@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mainBtn.innerHTML = '+';
             mainBtn.classList.add('active');
         } else {
-            mainBtn.innerHTML = 'ðŸ’¬';
+            mainBtn.innerHTML = '\uD83D\uDCAC';
             mainBtn.classList.remove('active');
         }
     });
@@ -631,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         if(!widget.contains(e.target) && widget.classList.contains('active')) {
             widget.classList.remove('active');
-            mainBtn.innerHTML = 'ðŸ’¬';
+            mainBtn.innerHTML = '\uD83D\uDCAC';
             mainBtn.classList.remove('active');
         }
     });
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
 class TextScramble {
     constructor(el) {
         this.el = el;
-        this.chars = '!<>-_\\/[]{}â€”=+*^?#________';
+        this.chars = '!<>-_\\/[]{}—=+*^?#________';
         this.update = this.update.bind(this);
     }
     setText(newText) {
@@ -761,7 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <circle class="ring-bg" cx="22" cy="22" r="20"></circle>
             <circle class="ring-progress" cx="22" cy="22" r="20"></circle>
         </svg>
-        <div class="back-to-top-arrow">â†‘</div>
+        <div class="back-to-top-arrow">&#8593;</div>
     `;
     
     document.body.appendChild(ring);
