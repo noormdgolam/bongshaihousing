@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're Offline | Bongshai Housing</title>
+  <style>
+    :root {
+      --primary: #1E40AF;
+      --secondary: #d4af37;
+      --grey-100: #f1f5f9;
+      --grey-600: #475569;
+      --grey-800: #1e293b;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--grey-100);
+      color: var(--grey-800);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .offline-card {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      max-width: 500px;
+      width: 100%;
+    }
+    .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: var(--primary);
+      margin: 0 0 16px 0;
+      font-size: 24px;
+    }
+    p {
+      color: var(--grey-600);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #1e3a8a;
+    }
+    .btn-wa {
+      background: #25D366;
+      margin-top: 12px;
+    }
+    .btn-wa:hover {
+      background: #1da851;
+    }
+    .cached-pages {
+      margin-top: 32px;
+      text-align: left;
+      border-top: 1px solid var(--grey-100);
+      padding-top: 24px;
+    }
+    .cached-pages h3 {
+      font-size: 16px;
+      margin-top: 0;
+    }
+    .cached-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .cached-list li {
+      margin-bottom: 8px;
+    }
+    .cached-list a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .cached-list a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <div class="icon">📡</div>
+    <h1>You are currently offline</h1>
+    <p>It looks like you've lost your internet connection. You can still view pages you've previously visited, or contact us directly.</p>
+    
+    <a href="javascript:window.location.reload()" class="btn">🔄 Try Again</a>
+    <a href="https://wa.me/8801781636613" class="btn btn-wa" target="_blank" rel="noopener noreferrer">💬 WhatsApp Us</a>
+
+    <div class="cached-pages" id="cachedPagesContainer" style="display: none;">
+      <h3>Pages available offline:</h3>
+      <ul class="cached-list" id="cachedList"></ul>
+    </div>
+  </div>
+
+  <script>
+    // List pages that are in the cache
+    if ('caches' in window) {
+      caches.open('bongshai-cache-v5').then(cache => {
+        cache.keys().then(requests => {
+          const list = document.getElementById('cachedList');
+          const container = document.getElementById('cachedPagesContainer');
+          let hasPages = false;
+          
+          requests.forEach(req => {
+            const url = new URL(req.url);
+            if (url.pathname.endsWith('.html') && !url.pathname.includes('offline.html')) {
+              hasPages = true;
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = url.pathname;
+              // Clean up the name for display
+              let name = url.pathname.replace('/', '').replace('.html', '').replace(/-/g, ' ');
+              if (!name) name = 'Home Page';
+              // Capitalize
+              a.textContent = '📄 ' + name.replace(/\b\w/g, l => l.toUpperCase());
+              li.appendChild(a);
+              list.appendChild(li);
+            }
+          });
+          
+          if (hasPages) {
+            container.style.display = 'block';
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

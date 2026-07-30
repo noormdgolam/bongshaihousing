@@ -1,9 +1,10 @@
-const CACHE_NAME = 'bongshai-cache-v5';
+const CACHE_NAME = 'bongshai-cache-v6';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/css/style.css',
-  '/js/global-upgrades.js',
+  '/offline.html',
+  '/css/style.min.css?v=1.4',
+  '/js/global-upgrades.min.js?v=1.4',
   '/js/bd-geo-data.js',
   '/js/bangla-translation.js',
   '/manifest.json'
@@ -32,6 +33,9 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const requestURL = new URL(event.request.url);
 
+  // Ignore non-GET requests
+  if (event.request.method !== 'GET') return;
+
   // Cache-First for images, css, fonts, and js (stale-while-revalidate pattern)
   if (requestURL.pathname.match(/\.(png|jpg|jpeg|webp|svg|css|js|woff2)$/)) {
     event.respondWith(
@@ -55,7 +59,17 @@ self.addEventListener('fetch', event => {
         });
         return response;
       }).catch(() => {
-        return caches.match(event.request);
+        // Network failed, try to get from cache
+        return caches.match(event.request).then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // If it's a navigation request and not in cache, show offline page
+          if (event.request.mode === 'navigate') {
+            return caches.match('/offline.html');
+          }
+          return new Response('', { status: 404, statusText: 'Not Found' });
+        });
       })
     );
   }
