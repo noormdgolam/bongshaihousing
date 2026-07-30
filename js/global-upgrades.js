@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addHoverLinks();
     
     // Re-bind on mutation (for dynamic content like loaded galleries)
-    const observer = new MutationObserver((mutations) => {
+    const hoverObserver = new MutationObserver((mutations) => {
         let shouldRebind = false;
         mutations.forEach(mut => {
             if (mut.addedNodes.length > 0) shouldRebind = true;
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addHoverLinks();
         }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    hoverObserver.observe(document.body, { childList: true, subtree: true });
 });
 document.addEventListener('DOMContentLoaded', () => {
 
