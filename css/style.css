@@ -987,19 +987,33 @@ img {
   border-radius: var(--radius-2xl);
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--grey-100);
-  transition: var(--transition-slow);
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  /* Safari clip bug fix */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .property-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 16px 40px rgba(30, 64, 175, 0.12);
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .property-img-wrap {
   position: relative;
   overflow: hidden;
-  height: 260px;
+  width: 100%;
+  aspect-ratio: 16/9;
 }
 
 .property-img-wrap img {
@@ -4322,3 +4336,25 @@ body.dark-mode img.logo {
 
 /* Fix for scaling image overflow */
 .property-img-wrap, .lb-wrap { overflow: hidden !important; -webkit-mask-image: -webkit-radial-gradient(white, black); transform: translateZ(0); }
+
+.btn-card-link {
+  margin-top: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+.btn-card-link::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+.property-card:hover .btn-card-link {
+  color: var(--primary-dark);
+}
+.property-card:hover .btn-card-link::after {
+  transform: translateX(4px);
+}
