@@ -1363,12 +1363,14 @@ mediaQuery.addEventListener('change', applySystemTheme);
    Prevent right-click (context menu) and dragging on images
    ========================================================= */
 (function protectImages() {
-  // Prevent context menu (right click / long press)
+  // Prevent context menu (right click / long press) globally
   document.addEventListener('contextmenu', (e) => {
-    if (e.target.tagName === 'IMG' || e.target.closest('.property-img-wrap, .gallery-img, .project-img, .mega-card')) {
-      e.preventDefault();
-      return false;
+    // Allow right click only on input fields or textareas so users can paste
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      return true;
     }
+    e.preventDefault();
+    return false;
   });
 
   // Prevent drag and drop of images
