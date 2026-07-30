@@ -1357,3 +1357,25 @@ mediaQuery.addEventListener('change', applySystemTheme);
   const observer = new MutationObserver(() => applyLightbox());
   observer.observe(document.body, { childList: true, subtree: true });
 })();
+
+/* =========================================================
+   IMAGE PROTECTION
+   Prevent right-click (context menu) and dragging on images
+   ========================================================= */
+(function protectImages() {
+  // Prevent context menu (right click / long press)
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.tagName === 'IMG' || e.target.closest('.property-img-wrap, .gallery-img, .project-img, .mega-card')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Prevent drag and drop of images
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+      return false;
+    }
+  });
+})();

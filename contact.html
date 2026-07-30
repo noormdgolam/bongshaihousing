@@ -4,7 +4,7 @@
   <link rel="dns-prefetch" href="https://unpkg.com">
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="preload" href="css/style.min.css?v=1.3" as="style">
+  <link rel="preload" href="css/style.min.css?v=1.4" as="style">
   <!-- Google Fonts: Non-blocking preload for Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
   <meta name="twitter:description" content="Bangladesh's premier pre-engineered steel building company. Free quote available. Call 01781-636613." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="css/style.min.css?v=1.3" />
+  <link rel="stylesheet" href="css/style.min.css?v=1.4" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -922,7 +922,7 @@
   <script src="js/3d-tilt.js" defer></script>
   <script src="js/scroll-progress.js" defer></script>
   <script src="js/page-transition.js" defer></script>
-  <script src="js/global-upgrades.min.js?v=1.3" defer></script>
+  <script src="js/global-upgrades.min.js?v=1.4" defer></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -947,4 +947,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const timeDiff = submitTime - formLoadTime;
         if (timeDiff < 3000) {
             e.preventDefault();
-            console.warn('Spam bot detected (Fo
+            console.warn('Spam bot detected (Form submitted too quickly).');
+            alert('Form submission blocked due to spam detection.');
+            return false;
+        }
+        
+        // If passing both checks, allow submission
+    });
+});
+</script>
+</body>
+
+</html>
