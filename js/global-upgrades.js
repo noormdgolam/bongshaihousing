@@ -810,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     const toast = document.createElement('div');
                     toast.className = 'pwa-toast';
-                    toast.innerHTML = `<span class="pwa-toast-icon">âœ“</span> Ready for offline use`;
+                    toast.innerHTML = `<span class="pwa-toast-icon">\u2714</span> Ready for offline use`;
                     document.body.appendChild(toast);
                     
                     // Trigger animation
@@ -1009,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Animate price change
         priceEl.style.opacity = 0;
         setTimeout(() => {
-            priceEl.innerText = 'â§³ ' + displayPrice;
+            priceEl.innerText = '\u09F3 ' + displayPrice; // ৳ Taka
             priceEl.style.opacity = 1;
         }, 150);
     }
