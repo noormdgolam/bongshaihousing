@@ -4015,8 +4015,8 @@ body.dark-mode img.logo {
 
 /* Mega Menu Image Grid */
 .image-mega-dropdown { position: absolute;
-  width: 100%;
-  max-width: 1000px;
+  width: 850px;
+  max-width: 90vw;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
   padding: 1.5rem;
