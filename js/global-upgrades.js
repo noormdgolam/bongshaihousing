@@ -1354,8 +1354,8 @@ mediaQuery.addEventListener('change', applySystemTheme);
     window.addEventListener('load', applyLightbox);
   }
   // Also observe dynamic content
-  const observer = new MutationObserver(() => applyLightbox());
-  observer.observe(document.body, { childList: true, subtree: true });
+  const lbObserver = new MutationObserver(() => applyLightbox());
+  lbObserver.observe(document.body, { childList: true, subtree: true });
 })();
 
 /* =========================================================
