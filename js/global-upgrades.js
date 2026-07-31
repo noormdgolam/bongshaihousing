@@ -471,73 +471,109 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================================================
-// Phase 2: Floating Quick-Contact Widget
+// Phase 2: Floating FAQ Chatbot (scripted, no AI/API — canned answers +
+// human handoff via WhatsApp/Call/Email)
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Hide the old whatsapp float if it exists to replace with this premium one
     const oldWhatsapp = document.querySelector('.whatsapp-float');
     if(oldWhatsapp) oldWhatsapp.style.display = 'none';
 
+    const TOPICS = {
+        products: {
+            label: '🏢 Our Products',
+            reply: 'We build Apartment Buildings, Duplex &amp; Simplex Steel Buildings, Cottage &amp; Container Houses, Steel/Wooden/Tiny Houses, Concrete Buildings, and Industrial Steel Sheds.',
+            link: { href: 'products-and-solutions.html', text: 'Browse all products →' }
+        },
+        pricing: {
+            label: '💰 Pricing &amp; Packages',
+            reply: 'Pricing depends on floor area, floors, and finish level. Try our instant cost calculator, or contact us for a custom quote.',
+            link: { href: 'solutions.html', text: 'Open cost calculator →' }
+        },
+        areas: {
+            label: '📍 Service Areas',
+            reply: 'We serve all 64 districts across Bangladesh, with dedicated teams in Dhaka, Chattogram, and Cumilla.',
+            link: { href: 'service-areas.html', text: 'See all service areas →' }
+        },
+        certs: {
+            label: '📜 Certifications',
+            reply: 'Bongshai Housing is ISO 9001 and OHSAS 18001 / ISO 45001 certified, with in-house material testing.',
+            link: { href: 'certifications.html', text: 'View certifications →' }
+        },
+        human: {
+            label: '📞 Talk to a Human',
+            reply: 'Reach our team directly:',
+            human: true
+        }
+    };
+
     const widget = document.createElement('div');
     widget.className = 'floating-widget';
-    
+
     const mainBtn = document.createElement('div');
     mainBtn.className = 'floating-main-btn';
-    mainBtn.innerHTML = '\uD83D\uDCAC'; // Chat icon
-    
-    const menu = document.createElement('div');
-    menu.className = 'floating-menu';
-    
-    const wappItem = document.createElement('a');
-    wappItem.className = 'floating-menu-item';
-    wappItem.href = 'https://wa.me/8801781636613';
-    wappItem.target = '_blank';
-    wappItem.innerHTML = '\uD83D\uDCF2';
-    wappItem.title = 'WhatsApp';
-    
-    const phoneItem = document.createElement('a');
-    phoneItem.className = 'floating-menu-item';
-    phoneItem.href = 'tel:+8801781636613';
-    phoneItem.innerHTML = '\uD83D\uDCDE';
-    phoneItem.title = 'Call Us';
-    
-    const emailItem = document.createElement('a');
-    emailItem.className = 'floating-menu-item';
-    emailItem.href = 'mailto:sales@bongshai.com';
-    emailItem.innerHTML = '\u2709\uFE0F'; // ✉️ Email
-    emailItem.title = 'Email Us';
-    
-    menu.appendChild(emailItem);
-    menu.appendChild(phoneItem);
-    menu.appendChild(wappItem);
-    
-    widget.appendChild(mainBtn);
-    widget.appendChild(menu);
-    
-    document.body.appendChild(widget);
-    
-    mainBtn.addEventListener('click', () => {
-        widget.classList.toggle('active');
-        if(widget.classList.contains('active')) {
-            mainBtn.innerHTML = '+';
-            mainBtn.classList.add('active');
+    mainBtn.innerHTML = '💬';
+
+    const panel = document.createElement('div');
+    panel.className = 'chat-panel';
+    panel.innerHTML = '<div class="chat-panel-header"><span>Bongshai Assistant</span><button type="button" class="chat-close" aria-label="Close chat">&times;</button></div><div class="chat-panel-body"><div class="chat-msg bot">👋 Hi! I’m a scripted assistant, not a live agent — pick a topic and I’ll answer instantly.</div><div class="chat-quick-replies"></div></div>';
+
+    const body = panel.querySelector('.chat-panel-body');
+    const quickReplies = panel.querySelector('.chat-quick-replies');
+
+    const renderQuickReplies = () => {
+        quickReplies.innerHTML = '';
+        Object.entries(TOPICS).forEach(([key, t]) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'chat-quick-reply';
+            btn.innerHTML = t.label;
+            btn.addEventListener('click', () => selectTopic(key));
+            quickReplies.appendChild(btn);
+        });
+    };
+
+    const selectTopic = (key) => {
+        const t = TOPICS[key];
+        const userMsg = document.createElement('div');
+        userMsg.className = 'chat-msg user';
+        userMsg.innerHTML = t.label;
+        body.insertBefore(userMsg, quickReplies);
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'chat-msg bot';
+        if (t.human) {
+            botMsg.innerHTML = t.reply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">📲 WhatsApp</a><a href="tel:+8801781636613">📞 Call Us</a><a href="mailto:sales@bongshai.com">✉️ Email Us</a></div>';
         } else {
-            mainBtn.innerHTML = '\uD83D\uDCAC';
-            mainBtn.classList.remove('active');
+            botMsg.innerHTML = t.reply + ' <a href="' + t.link.href + '">' + t.link.text + '</a>';
         }
+        body.insertBefore(botMsg, quickReplies);
+        body.scrollTop = body.scrollHeight;
+    };
+
+    renderQuickReplies();
+    widget.appendChild(mainBtn);
+    widget.appendChild(panel);
+    document.body.appendChild(widget);
+
+    const openPanel = () => {
+        widget.classList.add('active');
+        mainBtn.innerHTML = '✕';
+    };
+    const closePanel = () => {
+        widget.classList.remove('active');
+        mainBtn.innerHTML = '💬';
+    };
+
+    mainBtn.addEventListener('click', () => {
+        widget.classList.contains('active') ? closePanel() : openPanel();
     });
-    
-    // Close when clicking outside
+    panel.querySelector('.chat-close').addEventListener('click', closePanel);
+
     document.addEventListener('click', (e) => {
-        if(!widget.contains(e.target) && widget.classList.contains('active')) {
-            widget.classList.remove('active');
-            mainBtn.innerHTML = '\uD83D\uDCAC';
-            mainBtn.classList.remove('active');
-        }
+        if (!widget.contains(e.target) && widget.classList.contains('active')) closePanel();
     });
 });
 
-// ==========================================================================
 // Phase 3: Text Scramble Reveal Effect
 // ==========================================================================
 class TextScramble {
