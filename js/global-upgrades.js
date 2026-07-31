@@ -478,12 +478,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const oldWhatsapp = document.querySelector('.whatsapp-float');
     if(oldWhatsapp) oldWhatsapp.style.display = 'none';
 
+    const CATEGORIES = {
+        apartment: { label: 'Apartment Building', hub: 'apartment-building.html', prefix: 'bh-tsb', start: 101, end: 112 },
+        duplex: { label: 'Duplex Steel Building', hub: 'duplex-steel-building.html', prefix: 'bh-dv', start: 201, end: 212 },
+        simplex: { label: 'Simplex Steel Building', hub: 'simplex-steel-building.html', prefix: 'bh-sb', start: 301, end: 312 },
+        cottage: { label: 'Cottage House', hub: 'cottage-house.html', prefix: 'bh-ch', start: 401, end: 412 },
+        container: { label: 'Container House', hub: 'container-house.html', prefix: 'bh-ch', start: 501, end: 512 },
+        steel: { label: 'Steel House', hub: 'steel-house.html', prefix: 'bh-sh', start: 601, end: 612 },
+        tiny: { label: 'Tiny House', hub: 'tiny-house.html', prefix: 'bh-th', start: 701, end: 712 },
+        wooden: { label: 'Wooden House', hub: 'wooden-house.html', prefix: 'bh-wh', start: 801, end: 812 },
+        concrete: { label: 'Concrete Building', hub: 'concrete-building.html', prefix: 'bh-cb', start: 901, end: 912 },
+        industrial: { label: 'Industrial Steel Sheds', hub: 'industrial-sheds.html', prefix: 'bh-is', start: 1001, end: 1012 },
+        worker: { label: 'Worker Accommodation', hub: 'worker-accommodation.html', prefix: 'bh-wa', start: 1101, end: 1112 }
+    };
+
     const TOPICS = {
-        products: {
-            label: '🏢 Our Products',
-            reply: 'We build Apartment Buildings, Duplex &amp; Simplex Steel Buildings, Cottage &amp; Container Houses, Steel/Wooden/Tiny Houses, Concrete Buildings, and Industrial Steel Sheds.',
-            link: { href: 'products-and-solutions.html', text: 'Browse all products →' }
-        },
+        products: { label: '🏢 Our Products' },
         pricing: {
             label: '💰 Pricing &amp; Packages',
             reply: 'Pricing depends on floor area, floors, and finish level. Try our instant cost calculator, or contact us for a custom quote.',
@@ -520,37 +530,88 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = panel.querySelector('.chat-panel-body');
     const quickReplies = panel.querySelector('.chat-quick-replies');
 
-    const renderQuickReplies = () => {
+    let view = 'root';
+
+    const addMsg = (html, cls) => {
+        const msg = document.createElement('div');
+        msg.className = 'chat-msg ' + cls;
+        msg.innerHTML = html;
+        body.insertBefore(msg, quickReplies);
+        body.scrollTop = body.scrollHeight;
+    };
+
+    const addQuickReply = (label, onClick) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chat-quick-reply';
+        btn.innerHTML = label;
+        btn.addEventListener('click', onClick);
+        quickReplies.appendChild(btn);
+    };
+
+    const render = () => {
         quickReplies.innerHTML = '';
-        Object.entries(TOPICS).forEach(([key, t]) => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'chat-quick-reply';
-            btn.innerHTML = t.label;
-            btn.addEventListener('click', () => selectTopic(key));
-            quickReplies.appendChild(btn);
-        });
+
+        if (view === 'root') {
+            Object.entries(TOPICS).forEach(([key, t]) => {
+                addQuickReply(t.label, () => selectTopic(key));
+            });
+            return;
+        }
+
+        if (view === 'categories') {
+            Object.entries(CATEGORIES).forEach(([key, c]) => {
+                addQuickReply(c.label, () => selectCategory(key));
+            });
+            addQuickReply('🔙 Main Menu', () => { view = 'root'; render(); });
+            return;
+        }
+
+        // view is a category key: list its models
+        const cat = CATEGORIES[view];
+        for (let n = cat.start; n <= cat.end; n++) {
+            const code = cat.prefix.toUpperCase() + '-' + n;
+            addQuickReply(code, () => selectModel(view, n));
+        }
+        addQuickReply('🔙 Categories', () => { view = 'categories'; render(); });
+        addQuickReply('🔙 Main Menu', () => { view = 'root'; render(); });
     };
 
     const selectTopic = (key) => {
         const t = TOPICS[key];
-        const userMsg = document.createElement('div');
-        userMsg.className = 'chat-msg user';
-        userMsg.innerHTML = t.label;
-        body.insertBefore(userMsg, quickReplies);
+        addMsg(t.label, 'user');
 
-        const botMsg = document.createElement('div');
-        botMsg.className = 'chat-msg bot';
-        if (t.human) {
-            botMsg.innerHTML = t.reply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">📲 WhatsApp</a><a href="tel:+8801781636613">📞 Call Us</a><a href="mailto:sales@bongshai.com">✉️ Email Us</a></div>';
-        } else {
-            botMsg.innerHTML = t.reply + ' <a href="' + t.link.href + '">' + t.link.text + '</a>';
+        if (key === 'products') {
+            addMsg('Sure — pick a category to see its models:', 'bot');
+            view = 'categories';
+            render();
+            return;
         }
-        body.insertBefore(botMsg, quickReplies);
-        body.scrollTop = body.scrollHeight;
+
+        if (t.human) {
+            addMsg(t.reply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">📲 WhatsApp</a><a href="tel:+8801781636613">📞 Call Us</a><a href="mailto:sales@bongshai.com">✉️ Email Us</a></div>', 'bot');
+        } else {
+            addMsg(t.reply + ' <a href="' + t.link.href + '">' + t.link.text + '</a>', 'bot');
+        }
     };
 
-    renderQuickReplies();
+    const selectCategory = (key) => {
+        const cat = CATEGORIES[key];
+        addMsg(cat.label, 'user');
+        addMsg('Here are the ' + cat.label + ' models — pick one, or <a href="' + cat.hub + '">view them all →</a>', 'bot');
+        view = key;
+        render();
+    };
+
+    const selectModel = (catKey, n) => {
+        const cat = CATEGORIES[catKey];
+        const code = cat.prefix.toUpperCase() + '-' + n;
+        const href = cat.prefix + '-' + n + '.html';
+        addMsg(code, 'user');
+        addMsg('Here’s the ' + code + ' page: <a href="' + href + '">View ' + code + ' →</a>', 'bot');
+    };
+
+    render();
     widget.appendChild(mainBtn);
     widget.appendChild(panel);
     document.body.appendChild(widget);
