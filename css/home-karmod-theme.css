@@ -305,3 +305,10 @@ body.home-karmod .pkg-thumb {
     border-radius: 6px;
   }
 }
+
+/* The features strip -> packages section gap was reading as an oversized
+   empty gray band (.section's shared padding-top is 6rem, used on 233
+   pages sitewide, so trimmed only here rather than touching that class). */
+body.home-karmod #properties {
+  padding-top: var(--space-10);
+}
