@@ -3483,28 +3483,6 @@ body {
 }
 
 /* ==========================================================================
-   Phase 2: Scroll Progress Bar
-   ========================================================================== */
-.scroll-progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: transparent;
-  z-index: 999999999; /* Above everything */
-  pointer-events: none;
-}
-
-.scroll-progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  width: 0%;
-  transition: width 0.1s ease-out;
-  box-shadow: 0 0 10px rgba(30, 64, 175, 0.5);
-}
-
-/* ==========================================================================
    Phase 2: 3D Tilt Effect Utilities
    ========================================================================== */
 .tilt-element {
