@@ -16,6 +16,11 @@ RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
 # 4. Redirect specific old or broken URLs to homepage
 RewriteRule ^u8-2/?$ https://bongshaihousing.com/ [R=301,L]
 
+# 4b. Category pages renamed — redirect old URLs to the new pages
+RewriteRule ^two-story-building\.html$ https://bongshaihousing.com/apartment-building.html [R=301,L]
+RewriteRule ^duplex-villa\.html$ https://bongshaihousing.com/duplex-steel-building.html [R=301,L]
+RewriteRule ^single-story-building\.html$ https://bongshaihousing.com/simplex-steel-building.html [R=301,L]
+
 # 5. Catch-all: Redirect all other 404s (non-existent files/directories) to homepage
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

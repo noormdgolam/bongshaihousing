@@ -1,7 +1,6 @@
 const bdGeoData = [
   {
     "district": "Comilla",
-    "districtbn": "কুমিল্লা",
     "coordinates": "23.4682747, 91.1788135",
     "upazillas": [
       "Debidwar",
@@ -25,7 +24,6 @@ const bdGeoData = [
   },
   {
     "district": "Feni",
-    "districtbn": "ফেনী",
     "coordinates": "23.023231, 91.3840844",
     "upazillas": [
       "Chhagalnaiya",
@@ -38,7 +36,6 @@ const bdGeoData = [
   },
   {
     "district": "Brahmanbaria",
-    "districtbn": "ব্রাহ্মণবাড়িয়া",
     "coordinates": "23.9570904, 91.1119286",
     "upazillas": [
       "Brahmanbaria Sadar",
@@ -54,7 +51,6 @@ const bdGeoData = [
   },
   {
     "district": "Rangamati",
-    "districtbn": "রাঙ্গামাটি",
     "coordinates": "22.65561018, 92.17541121",
     "upazillas": [
       "Rangamati Sadar",
@@ -71,7 +67,6 @@ const bdGeoData = [
   },
   {
     "district": "Noakhali",
-    "districtbn": "নোয়াখালী",
     "coordinates": "22.869563, 91.099398",
     "upazillas": [
       "Noakhali Sadar",
@@ -87,7 +82,6 @@ const bdGeoData = [
   },
   {
     "district": "Chandpur",
-    "districtbn": "চাঁদপুর",
     "coordinates": "23.2332585, 90.6712912",
     "upazillas": [
       "Haimchar",
@@ -102,7 +96,6 @@ const bdGeoData = [
   },
   {
     "district": "Lakshmipur",
-    "districtbn": "লক্ষ্মীপুর",
     "coordinates": "22.942477, 90.841184",
     "upazillas": [
       "Lakshmipur Sadar",
@@ -114,7 +107,6 @@ const bdGeoData = [
   },
   {
     "district": "Chattogram",
-    "districtbn": "চট্টগ্রাম",
     "coordinates": "22.335109, 91.834073",
     "upazillas": [
       "Rangunia",
@@ -136,7 +128,6 @@ const bdGeoData = [
   },
   {
     "district": "Coxsbazar",
-    "districtbn": "কক্সবাজার",
     "coordinates": "21.44315751, 91.97381741",
     "upazillas": [
       "Coxsbazar Sadar",
@@ -152,7 +143,6 @@ const bdGeoData = [
   },
   {
     "district": "Khagrachhari",
-    "districtbn": "খাগড়াছড়ি",
     "coordinates": "23.119285, 91.984663",
     "upazillas": [
       "Khagrachhari Sadar",
@@ -168,7 +158,6 @@ const bdGeoData = [
   },
   {
     "district": "Bandarban",
-    "districtbn": "বান্দরবান",
     "coordinates": "22.1953275, 92.2183773",
     "upazillas": [
       "Bandarban Sadar",
@@ -182,7 +171,6 @@ const bdGeoData = [
   },
   {
     "district": "Sirajganj",
-    "districtbn": "সিরাজগঞ্জ",
     "coordinates": "24.4533978, 89.7006815",
     "upazillas": [
       "Belkuchi",
@@ -198,7 +186,6 @@ const bdGeoData = [
   },
   {
     "district": "Pabna",
-    "districtbn": "পাবনা",
     "coordinates": "23.998524, 89.233645",
     "upazillas": [
       "Sujanagar",
@@ -214,7 +201,6 @@ const bdGeoData = [
   },
   {
     "district": "Bogura",
-    "districtbn": "বগুড়া",
     "coordinates": "24.8465228, 89.377755",
     "upazillas": [
       "Kahaloo",
@@ -233,7 +219,6 @@ const bdGeoData = [
   },
   {
     "district": "Rajshahi",
-    "districtbn": "রাজশাহী",
     "coordinates": "24.37230298, 88.56307623",
     "upazillas": [
       "Paba",
@@ -249,7 +234,6 @@ const bdGeoData = [
   },
   {
     "district": "Natore",
-    "districtbn": "নাটোর",
     "coordinates": "24.420556, 89.000282",
     "upazillas": [
       "Natore Sadar",
@@ -263,7 +247,6 @@ const bdGeoData = [
   },
   {
     "district": "Joypurhat",
-    "districtbn": "জয়পুরহাট",
     "coordinates": "25.09636876, 89.04004280",
     "upazillas": [
       "Akkelpur",
@@ -275,7 +258,6 @@ const bdGeoData = [
   },
   {
     "district": "Chapainawabganj",
-    "districtbn": "চাঁপাইনবাবগঞ্জ",
     "coordinates": "24.5965034, 88.2775122",
     "upazillas": [
       "Chapainawabganj Sadar",
@@ -287,7 +269,6 @@ const bdGeoData = [
   },
   {
     "district": "Naogaon",
-    "districtbn": "নওগাঁ",
     "coordinates": "24.83256191, 88.92485205",
     "upazillas": [
       "Mohadevpur",
@@ -305,7 +286,6 @@ const bdGeoData = [
   },
   {
     "district": "Jashore",
-    "districtbn": "যশোর",
     "coordinates": "23.16643, 89.2081126",
     "upazillas": [
       "Manirampur",
@@ -320,7 +300,6 @@ const bdGeoData = [
   },
   {
     "district": "Satkhira",
-    "districtbn": "সাতক্ষীরা",
     "coordinates": "22.7180905, 89.0687033",
     "upazillas": [
       "Assasuni",
@@ -334,7 +313,6 @@ const bdGeoData = [
   },
   {
     "district": "Meherpur",
-    "districtbn": "মেহেরপুর",
     "coordinates": "23.762213, 88.631821",
     "upazillas": [
       "Mujibnagar",
@@ -344,7 +322,6 @@ const bdGeoData = [
   },
   {
     "district": "Narail",
-    "districtbn": "নড়াইল",
     "coordinates": "23.172534, 89.512672",
     "upazillas": [
       "Narail Sadar",
@@ -354,7 +331,6 @@ const bdGeoData = [
   },
   {
     "district": "Chuadanga",
-    "districtbn": "চুয়াডাঙ্গা",
     "coordinates": "23.6401961, 88.841841",
     "upazillas": [
       "Chuadanga Sadar",
@@ -365,7 +341,6 @@ const bdGeoData = [
   },
   {
     "district": "Kushtia",
-    "districtbn": "কুষ্টিয়া",
     "coordinates": "23.901258, 89.120482",
     "upazillas": [
       "Kushtia Sadar",
@@ -378,7 +353,6 @@ const bdGeoData = [
   },
   {
     "district": "Magura",
-    "districtbn": "মাগুরা",
     "coordinates": "23.487337, 89.419956",
     "upazillas": [
       "Shalikha",
@@ -389,7 +363,6 @@ const bdGeoData = [
   },
   {
     "district": "Khulna",
-    "districtbn": "খুলনা",
     "coordinates": "22.815774, 89.568679",
     "upazillas": [
       "Paikgasa",
@@ -405,7 +378,6 @@ const bdGeoData = [
   },
   {
     "district": "Bagerhat",
-    "districtbn": "বাগেরহাট",
     "coordinates": "22.651568, 89.785938",
     "upazillas": [
       "Fakirhat",
@@ -421,7 +393,6 @@ const bdGeoData = [
   },
   {
     "district": "Jhenaidah",
-    "districtbn": "ঝিনাইদহ",
     "coordinates": "23.5448176, 89.1539213",
     "upazillas": [
       "Jhenaidah Sadar",
@@ -434,7 +405,6 @@ const bdGeoData = [
   },
   {
     "district": "Jhalakathi",
-    "districtbn": "ঝালকাঠি",
     "coordinates": "22.6422689, 90.2003932",
     "upazillas": [
       "Jhalakathi Sadar",
@@ -445,7 +415,6 @@ const bdGeoData = [
   },
   {
     "district": "Patuakhali",
-    "districtbn": "পটুয়াখালী",
     "coordinates": "22.3596316, 90.3298712",
     "upazillas": [
       "Bauphal",
@@ -460,7 +429,6 @@ const bdGeoData = [
   },
   {
     "district": "Pirojpur",
-    "districtbn": "পিরোজপুর",
     "coordinates": "22.5781398, 89.9983909",
     "upazillas": [
       "Pirojpur Sadar",
@@ -474,7 +442,6 @@ const bdGeoData = [
   },
   {
     "district": "Barisal",
-    "districtbn": "বরিশাল",
     "coordinates": "22.7004179, 90.3731568",
     "upazillas": [
       "Barisal Sadar",
@@ -491,7 +458,6 @@ const bdGeoData = [
   },
   {
     "district": "Bhola",
-    "districtbn": "ভোলা",
     "coordinates": "22.685923, 90.648179",
     "upazillas": [
       "Bhola Sadar",
@@ -505,7 +471,6 @@ const bdGeoData = [
   },
   {
     "district": "Barguna",
-    "districtbn": "বরগুনা",
     "coordinates": "22.159182, 90.125581",
     "upazillas": [
       "Amtali",
@@ -518,7 +483,6 @@ const bdGeoData = [
   },
   {
     "district": "Sylhet",
-    "districtbn": "সিলেট",
     "coordinates": "24.8897956, 91.8697894",
     "upazillas": [
       "Balaganj",
@@ -538,7 +502,6 @@ const bdGeoData = [
   },
   {
     "district": "Moulvibazar",
-    "districtbn": "মৌলভীবাজার",
     "coordinates": "24.482934, 91.777417",
     "upazillas": [
       "Barlekha",
@@ -552,7 +515,6 @@ const bdGeoData = [
   },
   {
     "district": "Habiganj",
-    "districtbn": "হবিগঞ্জ",
     "coordinates": "24.374945, 91.41553",
     "upazillas": [
       "Nabiganj",
@@ -567,7 +529,6 @@ const bdGeoData = [
   },
   {
     "district": "Sunamganj",
-    "districtbn": "সুনামগঞ্জ",
     "coordinates": "25.0658042, 91.3950115",
     "upazillas": [
       "Sunamganj Sadar",
@@ -586,7 +547,6 @@ const bdGeoData = [
   },
   {
     "district": "Narsingdi",
-    "districtbn": "নরসিংদী",
     "coordinates": "23.932233, 90.71541",
     "upazillas": [
       "Belabo",
@@ -599,7 +559,6 @@ const bdGeoData = [
   },
   {
     "district": "Gazipur",
-    "districtbn": "গাজীপুর",
     "coordinates": "24.0022858, 90.4264283",
     "upazillas": [
       "Kaliganj",
@@ -611,7 +570,6 @@ const bdGeoData = [
   },
   {
     "district": "Shariatpur",
-    "districtbn": "শরীয়তপুর",
     "coordinates": "23.2060195, 90.3477725",
     "upazillas": [
       "Shariatpur Sadar",
@@ -624,7 +582,6 @@ const bdGeoData = [
   },
   {
     "district": "Narayanganj",
-    "districtbn": "নারায়ণগঞ্জ",
     "coordinates": "23.63366, 90.496482",
     "upazillas": [
       "Araihazar",
@@ -636,7 +593,6 @@ const bdGeoData = [
   },
   {
     "district": "Tangail",
-    "districtbn": "টাঙ্গাইল",
     "coordinates": "24.264145, 89.918029",
     "upazillas": [
       "Basail",
@@ -655,7 +611,6 @@ const bdGeoData = [
   },
   {
     "district": "Kishoreganj",
-    "districtbn": "কিশোরগঞ্জ",
     "coordinates": "24.444937, 90.776575",
     "upazillas": [
       "Itna",
@@ -675,7 +630,6 @@ const bdGeoData = [
   },
   {
     "district": "Manikganj",
-    "districtbn": "মানিকগঞ্জ",
     "coordinates": "23.8602262, 90.0018293",
     "upazillas": [
       "Harirampur",
@@ -689,7 +643,6 @@ const bdGeoData = [
   },
   {
     "district": "Dhaka",
-    "districtbn": "ঢাকা",
     "coordinates": "23.7115253, 90.4111451",
     "upazillas": [
       "Savar",
@@ -701,7 +654,6 @@ const bdGeoData = [
   },
   {
     "district": "Munshiganj",
-    "districtbn": "মুন্সিগঞ্জ",
     "coordinates": "23.5435742, 90.5354327",
     "upazillas": [
       "Munshiganj Sadar",
@@ -714,7 +666,6 @@ const bdGeoData = [
   },
   {
     "district": "Rajbari",
-    "districtbn": "রাজবাড়ী",
     "coordinates": "23.7574305, 89.6444665",
     "upazillas": [
       "Rajbari Sadar",
@@ -726,7 +677,6 @@ const bdGeoData = [
   },
   {
     "district": "Madaripur",
-    "districtbn": "মাদারীপুর",
     "coordinates": "23.164102, 90.1896805",
     "upazillas": [
       "Madaripur Sadar",
@@ -738,7 +688,6 @@ const bdGeoData = [
   },
   {
     "district": "Gopalganj",
-    "districtbn": "গোপালগঞ্জ",
     "coordinates": "23.0050857, 89.8266059",
     "upazillas": [
       "Gopalganj Sadar",
@@ -750,7 +699,6 @@ const bdGeoData = [
   },
   {
     "district": "Faridpur",
-    "districtbn": "ফরিদপুর",
     "coordinates": "23.6070822, 89.8429406",
     "upazillas": [
       "Faridpur Sadar",
@@ -766,7 +714,6 @@ const bdGeoData = [
   },
   {
     "district": "Panchagarh",
-    "districtbn": "পঞ্চগড়",
     "coordinates": "26.3411, 88.5541606",
     "upazillas": [
       "Panchagarh Sadar",
@@ -778,7 +725,6 @@ const bdGeoData = [
   },
   {
     "district": "Dinajpur",
-    "districtbn": "দিনাজপুর",
     "coordinates": "25.6217061, 88.6354504",
     "upazillas": [
       "Nawabganj",
@@ -798,7 +744,6 @@ const bdGeoData = [
   },
   {
     "district": "Lalmonirhat",
-    "districtbn": "লালমনিরহাট",
     "coordinates": "25.9165451, 89.4532409",
     "upazillas": [
       "Lalmonirhat Sadar",
@@ -810,7 +755,6 @@ const bdGeoData = [
   },
   {
     "district": "Nilphamari",
-    "districtbn": "নীলফামারী",
     "coordinates": "25.931794, 88.856006",
     "upazillas": [
       "Syedpur",
@@ -823,7 +767,6 @@ const bdGeoData = [
   },
   {
     "district": "Gaibandha",
-    "districtbn": "গাইবান্ধা",
     "coordinates": "25.328751, 89.528088",
     "upazillas": [
       "Sadullapur",
@@ -837,7 +780,6 @@ const bdGeoData = [
   },
   {
     "district": "Thakurgaon",
-    "districtbn": "ঠাকুরগাঁও",
     "coordinates": "26.0336945, 88.4616834",
     "upazillas": [
       "Thakurgaon Sadar",
@@ -849,7 +791,6 @@ const bdGeoData = [
   },
   {
     "district": "Rangpur",
-    "districtbn": "রংপুর",
     "coordinates": "25.7558096, 89.244462",
     "upazillas": [
       "Rangpur Sadar",
@@ -864,7 +805,6 @@ const bdGeoData = [
   },
   {
     "district": "Kurigram",
-    "districtbn": "কুড়িগ্রাম",
     "coordinates": "25.805445, 89.636174",
     "upazillas": [
       "Kurigram Sadar",
@@ -880,7 +820,6 @@ const bdGeoData = [
   },
   {
     "district": "Sherpur",
-    "districtbn": "শেরপুর",
     "coordinates": "25.0204933, 90.0152966",
     "upazillas": [
       "Sherpur Sadar",
@@ -892,7 +831,6 @@ const bdGeoData = [
   },
   {
     "district": "Mymensingh",
-    "districtbn": "ময়মনসিংহ",
     "coordinates": "24.7465670, 90.4072093",
     "upazillas": [
       "Fulbaria",
@@ -912,7 +850,6 @@ const bdGeoData = [
   },
   {
     "district": "Jamalpur",
-    "districtbn": "জামালপুর",
     "coordinates": "24.937533, 89.937775",
     "upazillas": [
       "Jamalpur Sadar",
@@ -926,7 +863,6 @@ const bdGeoData = [
   },
   {
     "district": "Netrokona",
-    "districtbn": "নেত্রকোণা",
     "coordinates": "24.870955, 90.727887",
     "upazillas": [
       "Barhatta",

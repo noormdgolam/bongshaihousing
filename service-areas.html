@@ -32,7 +32,7 @@
 <meta content="23.8728, 90.3984" name="ICBM"/>
 <meta content="Cottage House Bangladesh – Bongshai Housing" name="DC.title"/>
 <meta content="Steel Building Company Bangladesh, Composite Steel Building, Steel Construction" name="DC.subject"/>
-<link rel="canonical" href="https://bongshaihousing.com/cottage-house.html" />
+<link rel="canonical" href="https://bongshaihousing.com/service-areas.html" />
 <meta content="product" property="og:type"/>
 <meta content="Cottage House | Pre-Engineered Steel Building Bangladesh" property="og:title"/>
 <meta content="Single-story steel composite buildings in Bangladesh by leading steel structure manufacturer. 2 models available. Free quote: 01781-636613." property="og:description"/>
@@ -74,12 +74,10 @@
   }
   </script>
 
-  <meta name="description" content="বাংলাদেশের জন্য আধুনিক প্রিফ্যাব স্টিল বিল্ডিং যেখানে..." />
 
 <link rel="alternate" hreflang="en-BD" href="https://bongshaihousing.com/products-and-solutions.html" />
-<link rel="alternate" hreflang="bn-BD" href="https://bongshaihousing.com/products-and-solutions.html?lang=bn" />
 <link rel="alternate" hreflang="x-default" href="https://bongshaihousing.com/products-and-solutions.html" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="css/aos.css" rel="stylesheet">
   <link rel="manifest" href="/manifest.json">
   <script src="js/bd-geo-data.js"></script>
 <meta name="theme-color" content="#1E40AF">
@@ -131,22 +129,22 @@
 </a>
 <div class="dropdown image-mega-dropdown" role="menu">
   <div class="mega-image-grid">
-    <a href="two-story-building.html" class="mega-card">
-      <img src="images/products/Model No-BH-TB-101.webp" alt="Two Story Building" loading="lazy">
+    <a href="apartment-building.html" class="mega-card">
+      <img src="images/products/Model No-BH-TB-101.webp" alt="Apartment Building" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Two Story Building</span>
+        <span class="mega-card-title">Apartment Building</span>
       </div>
     </a>
-    <a href="duplex-villa.html" class="mega-card">
-      <img src="images/products/dv-101.webp" alt="Duplex Villa" loading="lazy">
+    <a href="duplex-steel-building.html" class="mega-card">
+      <img src="images/products/dv-101.webp" alt="Duplex Steel Building" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Duplex Villa</span>
+        <span class="mega-card-title">Duplex Steel Building</span>
       </div>
     </a>
-    <a href="single-story-building.html" class="mega-card">
-      <img src="images/products/bh-sb-301.webp" alt="Single Story Building" loading="lazy">
+    <a href="simplex-steel-building.html" class="mega-card">
+      <img src="images/products/bh-sb-301.webp" alt="Simplex Steel Building" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Single Story Building</span>
+        <span class="mega-card-title">Simplex Steel Building</span>
       </div>
     </a>
     <a href="cottage-house.html" class="mega-card">
@@ -255,8 +253,8 @@
 </button>
 <div class="mobile-sub-links">
 <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
-<a class="mobile-sub-link" href="two-story-building.html">🏢 Two story building</a>
-<a class="mobile-sub-link" href="duplex-villa.html">🏘️ Duplex villa</a>
+<a class="mobile-sub-link" href="apartment-building.html">🏢 Apartment building</a>
+<a class="mobile-sub-link" href="duplex-steel-building.html">🏘️ Duplex steel building</a>
 <a class="mobile-sub-link" href="cottage-house.html">🏠 Cottage House</a>
 <a class="mobile-sub-link" href="cottage-house.html">🏡 Cottage House</a>
 <a class="mobile-sub-link" href="container-house.html">📦 Container house</a>
@@ -331,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             card.innerHTML = `
                 <h3 style="margin-bottom: 5px; color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
-                    ${d.district} <span style="font-size: 0.9rem; color: var(--grey-500); font-weight: normal;">${d.districtbn || ''}</span>
+                    ${d.district}
                 </h3>
                 <p style="font-size: 0.85rem; color: var(--grey-400); margin: 0;">📍 ${d.coordinates || 'Bangladesh'}</p>
                 ${upazilasHtml}
@@ -352,8 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const term = e.target.value.toLowerCase();
         if(typeof bdGeoData !== 'undefined') {
             const filtered = bdGeoData.filter(d => {
-                return d.district.toLowerCase().includes(term) || 
-                       (d.districtbn && d.districtbn.includes(term)) ||
+                return d.district.toLowerCase().includes(term) ||
                        (d.upazillas && d.upazillas.some(u => u.toLowerCase().includes(term)));
             });
             renderDistricts(filtered);
@@ -465,9 +462,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
   </script>
 
-    <script src="css/bangla-translation.js?v=202607291253"></script>
   <script src="js/lightbox.js" defer></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="js/aos.js"></script>
 <script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
 <script>
   if ('serviceWorker' in navigator) {
