@@ -143,6 +143,89 @@ body.home-karmod .category-slider .swiper-button-prev::after {
   }
 }
 
+/* Features strip, relocated into the slider's dark stats area (sits above
+   the pagination dots instead of as its own white section below the hero). */
+body.home-karmod .category-slider .features-strip {
+  background: transparent;
+  border-bottom: none;
+  padding: var(--space-5) 0 0;
+}
+
+body.home-karmod .category-slider .features-strip-grid {
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+}
+
+body.home-karmod .category-slider .feature-strip-item {
+  color: #fff;
+}
+
+body.home-karmod .category-slider .feature-strip-icon {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--accent-light);
+}
+
+body.home-karmod .category-slider .feature-strip-title {
+  color: #fff;
+}
+
+body.home-karmod .category-slider .feature-strip-text {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 900px) {
+  body.home-karmod .category-slider .features-strip-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile: 5 full items would either overflow or crush down to illegible
+   text, so collapse to icon + short title only, in a swipeable row. */
+@media (max-width: 640px) {
+  body.home-karmod .category-slider .features-strip {
+    padding-top: var(--space-3);
+  }
+
+  body.home-karmod .category-slider .features-strip-grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    gap: var(--space-3);
+    padding-bottom: var(--space-1);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  body.home-karmod .category-slider .features-strip-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.home-karmod .category-slider .feature-strip-item {
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2);
+    width: 78px;
+  }
+
+  body.home-karmod .category-slider .feature-strip-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  body.home-karmod .category-slider .feature-strip-title {
+    font-size: 10px;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  body.home-karmod .category-slider .feature-strip-text {
+    display: none;
+  }
+}
+
 /* ===== Packages section: category tabs + image/link-list panels ===== */
 body.home-karmod .pkg-tabs {
   display: flex;
