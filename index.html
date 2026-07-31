@@ -6,11 +6,12 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="preload" href="css/style.min.css?v=2.1" as="style">
-  <!-- Google Fonts: Non-blocking preload for Inter -->
+  <link rel="preload" href="css/home-karmod-theme.css?v=1.0" as="style">
+  <!-- Google Fonts: Non-blocking preload for Inter + Titillium Web (homepage theme) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700;800&display=swap"></noscript>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <!-- ═══ PRIMARY SEO – Target: Steel Building Company Bangladesh ═══ -->
@@ -37,7 +38,6 @@
 <meta content="630" property="og:image:height"/>
 <meta content="Bongshai Housing" property="og:site_name"/>
 <meta content="en_BD" property="og:locale"/>
-<meta content="bn_BD" property="og:locale:alternate"/>
 <!-- Twitter Card -->
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="@bongshaihousing" name="twitter:site"/>
@@ -66,6 +66,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <!-- Styles -->
 <link href="css/style.min.css?v=2.1" rel="stylesheet"/>
+<link href="css/home-karmod-theme.css?v=1.0" rel="stylesheet"/>
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
   {
@@ -139,16 +140,15 @@
   }
   </script>
 <link href="https://bongshaihousing.com/" hreflang="en-BD" rel="alternate"/>
-<link href="https://bongshaihousing.com/?lang=bn" hreflang="bn-BD" rel="alternate"/>
 <link href="https://bongshaihousing.com/" hreflang="x-default" rel="alternate"/>
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+<link href="css/aos.css" rel="stylesheet"/>
 <link href="/manifest.json" rel="manifest"/>
 <meta content="#1E40AF" name="theme-color"/>
-<!-- Swiper JS for 3D Carousel -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<!-- Swiper JS for homepage category slider -->
+<link href="css/swiper-bundle.min.css" rel="stylesheet"/>
+<script defer src="js/swiper-bundle.min.js"></script>
 </head>
-<body>
+<body class="home-karmod">
 <!-- ======================================================
        NAVIGATION
   ====================================================== -->
@@ -197,22 +197,22 @@
 </a>
 <div class="dropdown image-mega-dropdown" role="menu">
   <div class="mega-image-grid">
-    <a href="two-story-building.html" class="mega-card">
-      <img src="images/products/Model No-BH-TB-101.webp" alt="Two Story Building" loading="lazy">
+    <a href="apartment-building.html" class="mega-card">
+      <img src="images/products/Model No-BH-TB-101.webp" alt="Apartment Building" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Two Story Building</span>
+        <span class="mega-card-title">Apartment Building</span>
       </div>
     </a>
-    <a href="duplex-villa.html" class="mega-card">
-      <img src="images/products/dv-101.webp" alt="Duplex Villa" loading="lazy">
+    <a href="duplex-steel-building.html" class="mega-card">
+      <img src="images/products/dv-101.webp" alt="Duplex Steel Building" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Duplex Villa</span>
+        <span class="mega-card-title">Duplex Steel Building</span>
       </div>
     </a>
-    <a href="single-story-building.html" class="mega-card">
-      <img src="images/products/bh-sb-301.webp" alt="Single Story Building" loading="lazy">
+    <a href="simplex-steel-building.html" class="mega-card">
+      <img src="images/products/bh-sb-301.webp" alt="Simplex Steel Building" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Single Story Building</span>
+        <span class="mega-card-title">Simplex Steel Building</span>
       </div>
     </a>
     <a href="cottage-house.html" class="mega-card">
@@ -321,9 +321,9 @@
 </button>
 <div class="mobile-sub-links">
 <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
-<a class="mobile-sub-link" href="two-story-building.html">🏢 Two story building</a>
-<a class="mobile-sub-link" href="duplex-villa.html">🏘️ Duplex villa</a>
-<a class="mobile-sub-link" href="single-story-building.html">🏠 Single story building</a>
+<a class="mobile-sub-link" href="apartment-building.html">🏢 Apartment building</a>
+<a class="mobile-sub-link" href="duplex-steel-building.html">🏘️ Duplex steel building</a>
+<a class="mobile-sub-link" href="simplex-steel-building.html">🏠 Simplex steel building</a>
 <a class="mobile-sub-link" href="cottage-house.html">🏡 Cottage House</a>
 <a class="mobile-sub-link" href="container-house.html">📦 Container house</a>
 <a class="mobile-sub-link" href="steel-house.html">🏗️ Steel house</a>
@@ -350,32 +350,167 @@
 </div>
 <main>
 <!-- ======================================================
-         HERO SECTION
+         CATEGORY SLIDER
     ====================================================== -->
-<section aria-labelledby="hero-title" class="hero" id="hero">
+<section aria-label="Featured housing categories" class="hero category-slider" id="category-slider">
+<div class="swiper category-swiper">
+<div class="swiper-wrapper">
+<div class="swiper-slide">
 <div class="hero-bg">
-<img alt="Modern prefab housing by Bongshai Housing Bangladesh" fetchpriority="high" height="1024" loading="eager" src="images/hero-bg.webp" title="Modern prefab housing by Bongshai Housing Bangladesh" width="1024"/>
+<img alt="World-class prefab construction by Bongshai Housing Bangladesh" data-slider-category="all" fetchpriority="high" height="1024" loading="eager" src="images/hero-bg.webp" title="World-class prefab construction by Bongshai Housing" width="1024"/>
 </div>
 <div class="hero-overlay"></div>
 <div class="hero-content container">
-<div class="hero-badge reveal" data-aos="fade-up">
+<div class="hero-badge">
 <span class="dot"></span>
           Low cost, High quality is our mission
         </div>
-<h1 class="hero-title" data-aos="fade-up" id="hero-title" style="font-size: clamp(1.75rem, 3.5vw, 3rem); line-height: 1.15; letter-spacing: -0.02em;">
-          Premier <span class="highlight">Prefab Building</span><br/>
-          Technology in Bangladesh
+<h1 class="hero-title" id="hero-title">
+          World-Class <span class="highlight">Prefab Construction</span>
         </h1>
 <p class="hero-subtitle">
-          From affordable prefab cottages to luxurious villas — we deliver world-class construction with EPC commitment, international quality, and unmatched value.
+          EPC turnkey steel building solutions engineered for durability, speed, and value across Bangladesh.
         </p>
 <div class="hero-actions">
-<a class="btn btn-primary btn-lg" href="duplex-villa.html" id="hero-explore-btn">
+<a class="btn btn-primary btn-lg" href="duplex-steel-building.html">
             Explore Properties
             <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 </a>
-<a class="btn btn-outline btn-lg" href="contact.html" id="hero-contact-btn">Contact Us Today</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
 </div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Spacious two-story prefab home by Bongshai Housing" data-slider-category="tb" height="1024" loading="lazy" src="images/products/ai-two-story-awesome.webp" title="Apartment Building" width="1024"/>
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Residential Package
+        </div>
+<h2 class="hero-title">
+          Spacious <span class="highlight">Apartment</span> Living
+        </h2>
+<p class="hero-subtitle">
+          Durable dual-level homes designed for growing families, built with premium steel-frame construction.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="apartment-building.html">
+            Explore Apartment Homes
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Premium duplex steel building by Bongshai Housing" data-slider-category="dv" height="1024" loading="lazy" src="images/products/ai-duplex-awesome.webp" title="Duplex Steel Building" width="1024"/>
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Luxury Villa
+        </div>
+<h2 class="hero-title">
+          Premium <span class="highlight">Duplex Steel Buildings</span>
+        </h2>
+<p class="hero-subtitle">
+          Elegant multi-family living with smart design and premium finishes for discerning homeowners.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="duplex-steel-building.html">
+            Explore Duplex Steel Buildings
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Charming prefab cottage house by Bongshai Housing" data-slider-category="cottage" height="1024" loading="lazy" src="images/products/cottage-house-hero.webp" title="Cottage House" width="1024"/>
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Affordable Living
+        </div>
+<h2 class="hero-title">
+          Charming <span class="highlight">Prefab Cottages</span>
+        </h2>
+<p class="hero-subtitle">
+          Cost-effective, cozy cottage homes built fast without compromising on comfort or quality.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="cottage-house.html">
+            Explore Cottage Homes
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Modern container house by Bongshai Housing" data-slider-category="container" height="1024" loading="lazy" src="images/products/container-house-1.webp" title="Container House" width="1024"/>
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Modern Modular
+        </div>
+<h2 class="hero-title">
+          Modern <span class="highlight">Container Homes</span>
+        </h2>
+<p class="hero-subtitle">
+          Sleek, sustainable container living with fast turnkey delivery for modern lifestyles.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="container-house.html">
+            Explore Container Homes
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Heavy-duty industrial steel shed by Bongshai Housing" data-slider-category="is" height="1024" loading="lazy" src="images/products/industrial_shed_1_1782293275650.webp" title="Industrial Steel Sheds" width="1024"/>
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Commercial &amp; Industrial
+        </div>
+<h2 class="hero-title">
+          Heavy-Duty <span class="highlight">Industrial Sheds</span>
+        </h2>
+<p class="hero-subtitle">
+          Wide-span pre-engineered steel sheds built for factories, warehouses, and heavy-duty storage.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="industrial-sheds.html">
+            Explore Industrial Sheds
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+</div>
+<div class="swiper-pagination"></div>
+<div class="swiper-button-prev"></div>
+<div class="swiper-button-next"></div>
+</div>
+<div class="container slider-stats-wrap">
 <div aria-label="Company statistics" class="hero-stats">
 <div class="stat-item">
 <span class="stat-number">500<span class="stat-plus">+</span></span>
@@ -457,70 +592,69 @@
 <h2 class="section-title" data-aos="fade-up" id="properties-title">Premium Housing Packages</h2>
 <p class="section-subtitle">Choose from our expertly designed housing solutions — crafted for every budget, lifestyle, and ambition.</p>
 </div>
-<div class="properties-grid stagger">
-<!-- Two Story Building -->
-<article aria-labelledby="two-story-title" class="property-card reveal" data-aos="fade-up" data-tilt="" style="--i:0">
-<div class="property-img-wrap">
-<img alt="Two Story Building by Bongshai Housing" height="1024" loading="lazy" src="images/products/Model No-BH-TB-101.webp" title="Two Story Building by Bongshai Housing" width="1024"/>
-<div class="property-badge-top">
-<span class="badge badge-navy">Dual-Level</span>
+<div class="pkg-tabs-wrap" data-aos="fade-up">
+<div class="pkg-tabs" role="tablist">
+<button type="button" class="pkg-tab active" data-panel="residential" role="tab" aria-selected="true">
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 22L24 10L40 22V38C40 39.1 39.1 40 38 40H10C8.9 40 8 39.1 8 38V22Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><rect x="20" y="28" width="8" height="12" stroke="currentColor" stroke-width="2.5"/></svg>
+<span>Residential</span>
+</button>
+<button type="button" class="pkg-tab" data-panel="commercial" role="tab" aria-selected="false">
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 40V24L16 30V24L26 30V24L36 30V16H42V40H6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 16V10H42V16" stroke="currentColor" stroke-width="2.5"/></svg>
+<span>Commercial &amp; Industrial</span>
+</button>
+<button type="button" class="pkg-tab" data-panel="site-solutions" role="tab" aria-selected="false">
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 18L24 8L40 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="12" y="18" width="24" height="20" stroke="currentColor" stroke-width="2.5"/><rect x="20" y="26" width="8" height="12" stroke="currentColor" stroke-width="2"/></svg>
+<span>Site Solutions</span>
+</button>
+</div>
+<div class="pkg-panels">
+<div class="pkg-panel active" data-panel="residential" role="tabpanel">
+<div class="pkg-panel-image">
+<img alt="Residential prefab housing by Bongshai Housing" data-default-img="images/products/Model No-BH-TB-101.webp" height="1024" loading="lazy" src="images/products/Model No-BH-TB-101.webp" title="Residential prefab housing" width="1024"/>
+</div>
+<div class="pkg-panel-links">
+<ul>
+<li><a data-img="images/products/Model No-BH-TB-101.webp" href="apartment-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TB-101.webp" width="80"/><span>Apartment Building</span></a></li>
+<li><a data-img="images/products/dv-101.webp" href="duplex-steel-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/dv-101.webp" width="80"/><span>Duplex Steel Building</span></a></li>
+<li><a data-img="images/products/bh-sb-301.webp" href="simplex-steel-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-sb-301.webp" width="80"/><span>Simplex Steel Building</span></a></li>
+<li><a data-img="images/products/Model No-BH-CH-401.webp" href="cottage-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-CH-401.webp" width="80"/><span>Cottage House</span></a></li>
+<li><a data-img="images/products/bh-ch-501.webp" href="container-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-ch-501.webp" width="80"/><span>Container House</span></a></li>
+</ul>
+<ul>
+<li><a data-img="images/products/Model No-BH-SH-601.webp" href="steel-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-SH-601.webp" width="80"/><span>Steel House</span></a></li>
+<li><a data-img="images/products/Model No-BH-TH-701.webp" href="tiny-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TH-701.webp" width="80"/><span>Tiny House</span></a></li>
+<li><a data-img="images/products/Model No-BH-WH-801.webp" href="wooden-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WH-801.webp" width="80"/><span>Wooden House</span></a></li>
+<li><a data-img="images/products/bh-cb-901.webp" href="concrete-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-cb-901.webp" width="80"/><span>Concrete Building</span></a></li>
+</ul>
 </div>
 </div>
-<div class="property-card-body" data-aos="fade-up" data-tilt="">
-<span class="property-type">🏢 Residential Build</span>
-<h3 class="property-name" id="two-story-title">Two Story Building</h3>
-<p class="property-desc">Spacious dual-level homes.</p>
-<div aria-label="Property specifications" class="property-specs">
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🛏️</span> 4 Bedrooms</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🚿</span> 3 Bathrooms</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🍳</span> Kitchen</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🌿</span> Balcony</div>
+<div class="pkg-panel" data-panel="commercial" role="tabpanel">
+<div class="pkg-panel-image">
+<img alt="Commercial and industrial steel buildings by Bongshai Housing" data-default-img="images/products/Model No-BH-IS-1001.webp" height="1024" loading="lazy" src="images/products/Model No-BH-IS-1001.webp" title="Commercial and industrial steel buildings" width="1024"/>
 </div>
-<a class="btn btn-primary" href="two-story-building.html" style="width:100%;justify-content:center;">View Package Details</a>
-</div>
-</article>
-<!-- Duplex Villa -->
-<article aria-labelledby="duplex-title" class="property-card reveal" data-aos="fade-up" data-tilt="" style="--i:1">
-<div class="property-img-wrap">
-<img alt="Duplex Villa by Bongshai Housing" height="1024" loading="lazy" src="images/products/dv-101.webp" title="Duplex Villa by Bongshai Housing" width="1024"/>
-<div class="property-badge-top">
-<span class="badge badge-gold">Premium Living</span>
+<div class="pkg-panel-links">
+<ul>
+<li><a data-img="images/products/Model No-BH-IS-1001.webp" href="industrial-sheds.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-IS-1001.webp" width="80"/><span>Industrial Steel Sheds</span></a></li>
+</ul>
+<ul>
+<li><a data-img="images/products/Model No-BH-WA-1101.webp" href="worker-accommodation.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WA-1101.webp" width="80"/><span>Worker Accommodation</span></a></li>
+</ul>
 </div>
 </div>
-<div class="property-card-body" data-aos="fade-up" data-tilt="">
-<span class="property-type">🏘️ Luxury Villa</span>
-<h3 class="property-name" id="duplex-title">Duplex Villa</h3>
-<p class="property-desc">Premium multi-family living.</p>
-<div aria-label="Property specifications" class="property-specs">
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🛏️</span> 6 Bedrooms</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🚿</span> 4 Bathrooms</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🏠</span> Smart Design</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🌿</span> Open Balcony</div>
+<div class="pkg-panel" data-panel="site-solutions" role="tabpanel">
+<div class="pkg-panel-image">
+<img alt="Site solutions and security structures by Bongshai Housing" data-default-img="images/products/Model No-BH-SO-1201.webp" height="1024" loading="lazy" src="images/products/Model No-BH-SO-1201.webp" title="Site solutions and security structures" width="1024"/>
 </div>
-<a class="btn btn-primary" href="duplex-villa.html" style="width:100%;justify-content:center;">View Package Details</a>
-</div>
-</article>
-<!-- Single Story Building -->
-<article aria-labelledby="single-story-title" class="property-card reveal" data-aos="fade-up" data-tilt="" style="--i:2">
-<div class="property-img-wrap">
-<img alt="Single Story Building by Bongshai Housing" height="1024" loading="lazy" src="images/products/bh-sb-301.webp" title="Single Story Building by Bongshai Housing" width="1024"/>
-<div class="property-badge-top">
-<span class="badge badge-green">Standard</span>
+<div class="pkg-panel-links">
+<ul>
+<li><a data-img="images/products/Model No-BH-SO-1201.webp" href="site-offices.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-SO-1201.webp" width="80"/><span>Site Offices</span></a></li>
+</ul>
+<ul>
+<li><a data-img="images/products/Model No-BH-SK-1301.webp" href="security-kiosks.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-SK-1301.webp" width="80"/><span>Security Kiosks</span></a></li>
+</ul>
 </div>
 </div>
-<div class="property-card-body" data-aos="fade-up" data-tilt="">
-<span class="property-type">🏠 Essential Housing</span>
-<h3 class="property-name" id="single-story-title">Single Story Building</h3>
-<p class="property-desc">Durable and cost-effective single story building ideal for commercial or residential needs.</p>
-<div aria-label="Property specifications" class="property-specs">
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🛏️</span> 2–3 Bedrooms</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🚿</span> 2 Bathrooms</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🍳</span> Kitchen</div>
-<div class="spec-item"><span aria-hidden="true" class="spec-icon">🌿</span> Veranda</div>
 </div>
-<a class="btn btn-primary" href="single-story-building.html" style="width:100%;justify-content:center;">View Package Details</a>
-</div>
-</article>
 </div>
 </div>
 </section>
@@ -758,31 +892,94 @@
 </div>
 </div>
 </section>
-<!-- 3D Video Testimonial Section -->
-
 <script>
+    // Packages section: category tab switching + per-item image preview on hover
     document.addEventListener('DOMContentLoaded', () => {
+      const wrap = document.querySelector('.pkg-tabs-wrap');
+      if (!wrap) return;
+      const tabs = wrap.querySelectorAll('.pkg-tab');
+      const panels = wrap.querySelectorAll('.pkg-panel');
+
+      const resetImage = (panel) => {
+        const img = panel.querySelector('.pkg-panel-image img');
+        if (img) img.src = img.getAttribute('data-default-img');
+      };
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.getAttribute('data-panel');
+          tabs.forEach(t => {
+            const on = t === tab;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          panels.forEach(p => {
+            p.classList.toggle('active', p.getAttribute('data-panel') === target);
+          });
+          // Start each panel on its own default image
+          panels.forEach(resetImage);
+        });
+      });
+
+      // Hovering a product swaps the panel image to that product's photo
+      panels.forEach(panel => {
+        const img = panel.querySelector('.pkg-panel-image img');
+        const links = panel.querySelector('.pkg-panel-links');
+        if (!img || !links) return;
+        links.querySelectorAll('a[data-img]').forEach(link => {
+          link.addEventListener('mouseenter', () => {
+            img.src = link.getAttribute('data-img');
+          });
+          link.addEventListener('focus', () => {
+            img.src = link.getAttribute('data-img');
+          });
+        });
+        links.addEventListener('mouseleave', () => resetImage(panel));
+      });
+    });
+  </script>
+<script>
+    // Category slider: pick a random product photo per slide on every page load,
+    // so returning visitors see visual variety instead of the same 6 fixed images.
+    document.addEventListener('DOMContentLoaded', () => {
+      const pools = {
+        tb: ['Model No-BH-TB-101.webp', 'Model No-BH-TB-102.webp', 'Model No-BH-TB-103.webp', 'Model No-BH-TB-104.webp'],
+        dv: ['Model No-BH-DV-101.webp', 'Model No-BH-DV-102.webp', 'Model No-BH-DV-103.webp', 'Model No-BH-DV-104.webp', 'Model No-BH-DV-105.webp', 'Model No-BH-DV-106.webp'],
+        cottage: ['Model No-BH-CH-401.webp', 'Model No-BH-CH-402.webp', 'Model No-BH-CH-403.webp', 'Model No-BH-CH-404.webp', 'Model No-BH-CH-405.webp', 'Model No-BH-CH-406.webp', 'Model No-BH-CH-407.webp', 'Model No-BH-CH-408.webp', 'Model No-BH-CH-409.webp', 'Model No-BH-CH-410.webp', 'Model No-BH-CH-411.webp'],
+        container: ['Model No-BH-CH-501.webp', 'Model No-BH-CH-502.webp', 'Model No-BH-CH-503.webp', 'Model No-BH-CH-504.webp', 'Model No-BH-CH-505.webp', 'Model No-BH-CH-506.webp', 'Model No-BH-CH-507.webp', 'Model No-BH-CH-508.webp', 'Model No-BH-CH-509.webp', 'Model No-BH-CH-510.webp', 'Model No-BH-CH-511.webp', 'Model No-BH-CH-512.webp'],
+        is: ['Model No-BH-IS-1001.webp', 'Model No-BH-IS-1002.webp', 'Model No-BH-IS-1003.webp', 'Model No-BH-IS-1004.webp', 'Model No-BH-IS-1005.webp', 'Model No-BH-IS-1006.webp', 'Model No-BH-IS-1007.webp', 'Model No-BH-IS-1008.webp', 'Model No-BH-IS-1009.webp', 'Model No-BH-IS-1010.webp', 'Model No-BH-IS-1011.webp', 'Model No-BH-IS-1012.webp'],
+      };
+      pools.all = [].concat(pools.tb, pools.dv, pools.cottage, pools.container, pools.is);
+
+      document.querySelectorAll('.category-swiper img[data-slider-category]').forEach((img) => {
+        const pool = pools[img.getAttribute('data-slider-category')];
+        if (!pool || !pool.length) return;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        img.src = 'images/products/' + pick;
+      });
+
       if (typeof Swiper !== 'undefined') {
-        new Swiper('.testimonialSwiper', {
-          effect: 'coverflow',
-          grabCursor: true,
-          centeredSlides: true,
-          slidesPerView: 'auto',
-          coverflowEffect: {
-            rotate: 20,
-            stretch: 0,
-            depth: 200,
-            modifier: 1,
-            slideShadows: false,
-          },
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        new Swiper('.category-swiper', {
+          effect: 'fade',
+          fadeEffect: { crossFade: true },
           loop: true,
+          autoplay: reduceMotion ? false : {
+            delay: 6000,
+            disableOnInteraction: false,
+          },
           pagination: {
-            el: '.swiper-pagination',
+            el: '.category-swiper .swiper-pagination',
             clickable: true
           },
-          autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
+          navigation: {
+            nextEl: '.category-swiper .swiper-button-next',
+            prevEl: '.category-swiper .swiper-button-prev'
+          },
+          on: {
+            afterInit(swiper) {
+              swiper.slideToLoop(0, 0);
+            }
           }
         });
       }
@@ -978,8 +1175,13 @@
     if (statsSection) statsObserver.observe(statsSection);
   </script>
 <script defer="" src="js/lightbox.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ once: true, duration: 800, offset: 50 });</script>
+<script defer src="js/aos.js"></script>
+<script>
+  // aos.js is deferred, so init after DOM ready (deferred scripts run before this fires)
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 800, offset: 50 });
+  });
+</script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
