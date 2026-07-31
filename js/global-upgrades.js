@@ -119,30 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-  /* =========================================================
-     LANGUAGE TOGGLE LOGIC
-     ========================================================= */
-  const langToggleBtn = document.getElementById('langToggleBtn');
-  if (langToggleBtn) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const isBn = urlParams.get('lang') === 'bn';
-    
-    // Set initial text
-    langToggleBtn.textContent = isBn ? 'EN' : 'BN';
-    
-    langToggleBtn.addEventListener('click', () => {
-      if (isBn) {
-        urlParams.delete('lang');
-      } else {
-        urlParams.set('lang', 'bn');
-      }
-      
-      // Navigate without triggering the SPA fade-out for a faster language swap,
-      // or let it trigger naturally. Let's just set location.
-      window.location.search = urlParams.toString();
-    });
-  }
-
 /* =========================================================
    PWA SERVICE WORKER REGISTRATION
    ========================================================= */
@@ -155,24 +131,6 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
-
-
-// Maintenance Banner Injection
-document.addEventListener('DOMContentLoaded', () => {
-    const banner = document.createElement('div');
-    banner.id = 'maintenance-banner';
-    banner.innerHTML = '<span>🚧 <strong>Maintenance in progress:</strong> Our server upgrade is ongoing. We apologize for the temporary inconvenience.</span><span class="banner-sep">|</span><span><strong>রক্ষণাবেক্ষণ চলছে:</strong> আমাদের সার্ভার আপগ্রেড চলছে। সাময়িক অসুবিধার জন্য আমরা দুঃখিত।</span>';
-    document.body.insertBefore(banner, document.body.firstChild);
-    
-    // Adjust layout for fixed banner
-    const adjustLayout = () => {
-        const h = banner.offsetHeight;
-        document.documentElement.style.setProperty('--banner-height', h + 'px');
-    };
-    // Observe DOM changes or do it after a small timeout to ensure fonts are loaded
-    setTimeout(adjustLayout, 100);
-    window.addEventListener('resize', adjustLayout);
-});
 
 
 
@@ -323,46 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================================================
 // Advanced Parallax & Scroll Animations
 // ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Image Parallax (Hero, About, Project covers)
-    const parallaxImages = document.querySelectorAll('.hero-bg img, .about-img-wrap img, .service-card img, .property-card img');
-    
-    // Wrap them if not already wrapped
-    parallaxImages.forEach(img => {
-        img.classList.add('parallax-img');
-        if(!img.parentElement.classList.contains('hero-bg') && !img.parentElement.classList.contains('about-img-wrap')) {
-            img.parentElement.classList.add('parallax-container');
-        }
-    });
-
-    const runParallax = () => {
-        const scrolled = window.pageYOffset;
-        parallaxImages.forEach(img => {
-            const rect = img.parentElement.getBoundingClientRect();
-            // Only animate if in viewport
-            if(rect.top < window.innerHeight && rect.bottom > 0) {
-                // Calculate parallax speed based on position
-                const yPos = -(rect.top * 0.15); 
-                img.style.transform = `translateY(${yPos}px) scale(1.15)`;
-            }
-        });
-    };
-
-    // Use requestAnimationFrame for smooth scrolling
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                runParallax();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, {passive: true});
-    
-    // Initial call
-    runParallax();
-});
+// Image parallax/zoom removed: images now render at their natural scale with no
+// scroll-driven transform. Click-to-zoom (the lightbox) is unaffected.
 
 // ==========================================================================
 // Interactive Hero Particles (Engineering Network Theme)
@@ -697,14 +617,24 @@ class TextScramble {
 document.addEventListener('DOMContentLoaded', () => {
     // Only target english headings (bangla fonts don't scramble well)
     const headings = document.querySelectorAll('h1.page-hero-title, .hero h1');
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     headings.forEach(el => {
         // Simple check if text contains english letters
-        if(/[A-Za-z]/.test(el.innerText)) {
+        if(!reduceMotion && /[A-Za-z]/.test(el.innerText)) {
             const fx = new TextScramble(el);
             const text = el.innerText;
             el.innerText = ''; // clear immediately
+            const restore = () => { el.innerText = text; };
+            // Safety net: never let the title stay blank longer than this, no matter
+            // what happens to the animation (stalled rAF, backgrounded tab, error, etc.)
+            const safetyTimer = setTimeout(restore, 1800);
             setTimeout(() => {
-                fx.setText(text);
+                if (document.hidden) {
+                    clearTimeout(safetyTimer);
+                    restore();
+                    return;
+                }
+                fx.setText(text).then(() => clearTimeout(safetyTimer)).catch(restore);
             }, 300); // Wait for page transition
         }
     });

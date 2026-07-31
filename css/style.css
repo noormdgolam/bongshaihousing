@@ -3364,17 +3364,6 @@ body {
 /* ==========================================================================
    Advanced Parallax & Scroll Animations
    ========================================================================== */
-.parallax-container {
-  overflow: hidden;
-  position: relative;
-}
-
-.parallax-img {
-  will-change: transform;
-  transform: scale(1.1); /* To prevent white edges during parallax */
-  transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
 .reveal-text span {
   display: inline-block;
   opacity: 0;
