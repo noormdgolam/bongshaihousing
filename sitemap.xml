@@ -811,6 +811,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://bongshaihousing.com/faq.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://bongshaihousing.com/concrete-building.html</loc>
     <lastmod>2026-07-28</lastmod>
     <changefreq>weekly</changefreq>
