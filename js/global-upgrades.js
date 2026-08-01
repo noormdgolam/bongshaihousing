@@ -471,50 +471,111 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================================================
-// Phase 2: Floating FAQ Chatbot (scripted, no AI/API — canned answers +
-// human handoff via WhatsApp/Call/Email)
+// Phase 2: Floating FAQ Chatbot (scripted, no AI/API — keyword-matched
+// free-text replies + button menu + human handoff via WhatsApp/Call/Email)
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     const oldWhatsapp = document.querySelector('.whatsapp-float');
     if(oldWhatsapp) oldWhatsapp.style.display = 'none';
 
     const CATEGORIES = {
-        apartment: { label: 'Apartment Building', hub: 'apartment-building.html', prefix: 'bh-tsb', start: 101, end: 112 },
-        duplex: { label: 'Duplex Steel Building', hub: 'duplex-steel-building.html', prefix: 'bh-dv', start: 201, end: 212 },
-        simplex: { label: 'Simplex Steel Building', hub: 'simplex-steel-building.html', prefix: 'bh-sb', start: 301, end: 312 },
-        cottage: { label: 'Cottage House', hub: 'cottage-house.html', prefix: 'bh-ch', start: 401, end: 412 },
-        container: { label: 'Container House', hub: 'container-house.html', prefix: 'bh-ch', start: 501, end: 512 },
-        steel: { label: 'Steel House', hub: 'steel-house.html', prefix: 'bh-sh', start: 601, end: 612 },
-        tiny: { label: 'Tiny House', hub: 'tiny-house.html', prefix: 'bh-th', start: 701, end: 712 },
-        wooden: { label: 'Wooden House', hub: 'wooden-house.html', prefix: 'bh-wh', start: 801, end: 812 },
-        concrete: { label: 'Concrete Building', hub: 'concrete-building.html', prefix: 'bh-cb', start: 901, end: 912 },
-        industrial: { label: 'Industrial Steel Sheds', hub: 'industrial-sheds.html', prefix: 'bh-is', start: 1001, end: 1012 },
-        worker: { label: 'Worker Accommodation', hub: 'worker-accommodation.html', prefix: 'bh-wa', start: 1101, end: 1112 }
+        apartment: { label: 'Apartment Building', labelBn: 'অ্যাপার্টমেন্ট বিল্ডিং', hub: 'apartment-building.html', prefix: 'bh-tsb', start: 101, end: 112, kw: ['apartment', 'flat', 'flats', 'অ্যাপার্টমেন্ট', 'ফ্ল্যাট'] },
+        duplex: { label: 'Duplex Steel Building', labelBn: 'ডুপ্লেক্স স্টিল বিল্ডিং', hub: 'duplex-steel-building.html', prefix: 'bh-dv', start: 201, end: 212, kw: ['duplex', 'ডুপ্লেক্স'] },
+        simplex: { label: 'Simplex Steel Building', labelBn: 'সিমপ্লেক্স স্টিল বিল্ডিং', hub: 'simplex-steel-building.html', prefix: 'bh-sb', start: 301, end: 312, kw: ['simplex', 'সিমপ্লেক্স'] },
+        cottage: { label: 'Cottage House', labelBn: 'কটেজ হাউস', hub: 'cottage-house.html', prefix: 'bh-ch', start: 401, end: 412, kw: ['cottage', 'কটেজ'] },
+        container: { label: 'Container House', labelBn: 'কনটেইনার হাউস', hub: 'container-house.html', prefix: 'bh-ch', start: 501, end: 512, kw: ['container', 'কনটেইনার'] },
+        steel: { label: 'Steel House', labelBn: 'স্টিল হাউস', hub: 'steel-house.html', prefix: 'bh-sh', start: 601, end: 612, kw: ['steel house', 'steel home', 'স্টিল হাউস'] },
+        tiny: { label: 'Tiny House', labelBn: 'টাইনি হাউস', hub: 'tiny-house.html', prefix: 'bh-th', start: 701, end: 712, kw: ['tiny house', 'tiny home', 'টাইনি হাউস', 'ছোট বাড়ি'] },
+        wooden: { label: 'Wooden House', labelBn: 'কাঠের বাড়ি', hub: 'wooden-house.html', prefix: 'bh-wh', start: 801, end: 812, kw: ['wooden house', 'wood house', 'কাঠের বাড়ি'] },
+        concrete: { label: 'Concrete Building', labelBn: 'কংক্রিট বিল্ডিং', hub: 'concrete-building.html', prefix: 'bh-cb', start: 901, end: 912, kw: ['concrete', 'কংক্রিট'] },
+        industrial: { label: 'Industrial Steel Sheds', labelBn: 'ইন্ডাস্ট্রিয়াল স্টিল শেড', hub: 'industrial-sheds.html', prefix: 'bh-is', start: 1001, end: 1012, kw: ['industrial', 'shed', 'factory', 'warehouse', 'ইন্ডাস্ট্রিয়াল', 'শেড', 'কারখানা'] },
+        worker: { label: 'Worker Accommodation', labelBn: 'শ্রমিক আবাসন', hub: 'worker-accommodation.html', prefix: 'bh-wa', start: 1101, end: 1112, kw: ['worker accommodation', 'labor camp', 'labour camp', 'dormitory', 'শ্রমিক আবাসন', 'শ্রমিক'] }
     };
 
-    const TOPICS = {
-        products: { label: '🏢 Our Products' },
-        pricing: {
-            label: '💰 Pricing &amp; Packages',
-            reply: 'Pricing depends on floor area, floors, and finish level. Try our instant cost calculator, or contact us for a custom quote.',
-            link: { href: 'solutions.html', text: 'Open cost calculator →' }
+    const STR = {
+        en: {
+            headerTitle: 'Bongshai Assistant',
+            langToggleTitle: 'বাংলায় দেখুন',
+            welcome: '👋 Hi! I’m a scripted assistant, not a live agent — pick a topic below, or type your question and I’ll do my best to answer.',
+            inputPlaceholder: 'Type your question…',
+            send: 'Send',
+            backCategories: '🔙 Categories',
+            backMain: '🔙 Main Menu',
+            productsLabel: '🏢 Our Products',
+            pricingLabel: '💰 Pricing &amp; Packages',
+            areasLabel: '📍 Service Areas',
+            visitLabel: '🗓️ Book a Site Visit',
+            processLabel: '📋 How It Works',
+            certsLabel: '📜 Certifications',
+            humanLabel: '📞 Talk to a Human',
+            productsIntro: 'Sure — pick a category to see its models:',
+            pricingReply: 'Pricing depends on floor area, floors, and finish level. Try our instant cost calculator, or contact us for a custom quote.',
+            pricingLinkText: 'Open cost calculator →',
+            areasReply: 'We serve all 64 districts across Bangladesh, with dedicated teams in Dhaka, Chattogram, and Cumilla.',
+            areasLinkText: 'See all service areas →',
+            visitReply: 'Happy to set that up — share your preferred date, time, and location with our team and we’ll confirm it:',
+            processReply: 'Every project follows 4 steps — Consultation, Design &amp; Planning, Construction, and Handover — with payment released in stages as work progresses.',
+            processLinkText: 'See the full process →',
+            certsReply: 'Bongshai Housing is ISO 9001 and OHSAS 18001 / ISO 45001 certified, with in-house material testing.',
+            certsLinkText: 'View certifications →',
+            humanReply: 'Reach our team directly:',
+            whatsappLabel: '📲 WhatsApp',
+            callLabel: '📞 Call Us',
+            emailLabel: '✉️ Email Us',
+            greeting: 'Hello! 👋 How can I help — products, pricing, service areas, or booking a site visit?',
+            thanks: 'You’re welcome! Anything else I can help with?',
+            fallback: 'I’m not totally sure I understood that — here’s what I can help with, or tap “Talk to a Human” for a real answer:',
+            categoryIntro: (label, hub) => 'Here are the ' + label + ' models — pick one, or <a href="' + hub + '">view them all →</a>',
+            modelReply: (code, href) => 'Here’s the ' + code + ' page: <a href="' + href + '">View ' + code + ' →</a>'
         },
-        areas: {
-            label: '📍 Service Areas',
-            reply: 'We serve all 64 districts across Bangladesh, with dedicated teams in Dhaka, Chattogram, and Cumilla.',
-            link: { href: 'service-areas.html', text: 'See all service areas →' }
-        },
-        certs: {
-            label: '📜 Certifications',
-            reply: 'Bongshai Housing is ISO 9001 and OHSAS 18001 / ISO 45001 certified, with in-house material testing.',
-            link: { href: 'certifications.html', text: 'View certifications →' }
-        },
-        human: {
-            label: '📞 Talk to a Human',
-            reply: 'Reach our team directly:',
-            human: true
+        bn: {
+            headerTitle: 'বংশাই সহকারী',
+            langToggleTitle: 'View in English',
+            welcome: '👋 হাই! আমি একটি স্ক্রিপ্টেড সহকারী, সরাসরি এজেন্ট নই — নিচে থেকে একটি বিষয় বেছে নিন, অথবা আপনার প্রশ্ন টাইপ করুন।',
+            inputPlaceholder: 'আপনার প্রশ্ন লিখুন…',
+            send: 'পাঠান',
+            backCategories: '🔙 ক্যাটাগরি',
+            backMain: '🔙 প্রধান মেনু',
+            productsLabel: '🏢 আমাদের পণ্য',
+            pricingLabel: '💰 মূল্য ও প্যাকেজ',
+            areasLabel: '📍 সেবা এলাকা',
+            visitLabel: '🗓️ সাইট ভিজিট বুক করুন',
+            processLabel: '📋 কার্যপ্রণালী',
+            certsLabel: '📜 সার্টিফিকেশন',
+            humanLabel: '📞 মানুষের সাথে কথা বলুন',
+            productsIntro: 'নিশ্চয়ই — একটি ক্যাটাগরি বেছে নিন এর মডেলগুলো দেখতে:',
+            pricingReply: 'মূল্য নির্ভর করে জায়গার আয়তন, ফ্লোর সংখ্যা এবং ফিনিশিংয়ের মানের উপর। তাৎক্ষণিক খরচ ক্যালকুলেটর ব্যবহার করুন, অথবা কাস্টম কোটেশনের জন্য যোগাযোগ করুন।',
+            pricingLinkText: 'খরচ ক্যালকুলেটর খুলুন →',
+            areasReply: 'আমরা বাংলাদেশের ৬৪টি জেলায় সেবা প্রদান করি, ঢাকা, চট্টগ্রাম এবং কুমিল্লায় বিশেষায়িত টিম রয়েছে।',
+            areasLinkText: 'সব সেবা এলাকা দেখুন →',
+            visitReply: 'নিশ্চয়ই — আপনার পছন্দের তারিখ, সময় ও স্থান জানান, আমরা তা নিশ্চিত করব:',
+            processReply: 'প্রতিটি প্রকল্প ৪টি ধাপে সম্পন্ন হয় — পরামর্শ, ডিজাইন ও পরিকল্পনা, নির্মাণ এবং হস্তান্তর — এবং কাজের অগ্রগতি অনুযায়ী ধাপে ধাপে পেমেন্ট নেওয়া হয়।',
+            processLinkText: 'সম্পূর্ণ প্রক্রিয়া দেখুন →',
+            certsReply: 'বংশাই হাউজিং আইএসও ৯০০১ এবং OHSAS ১৮০০১ / আইএসও ৪৫০০১ সনদপ্রাপ্ত, এবং নিজস্ব উপকরণ পরীক্ষার ব্যবস্থা রয়েছে।',
+            certsLinkText: 'সার্টিফিকেশন দেখুন →',
+            humanReply: 'সরাসরি আমাদের টিমের সাথে যোগাযোগ করুন:',
+            whatsappLabel: '📲 হোয়াটসঅ্যাপ',
+            callLabel: '📞 কল করুন',
+            emailLabel: '✉️ ইমেইল করুন',
+            greeting: 'হ্যালো! 👋 আমি কীভাবে সাহায্য করতে পারি — পণ্য, মূল্য, সেবা এলাকা, নাকি ভিজিট বুকিং?',
+            thanks: 'স্বাগতম! আর কিছু জানতে চান?',
+            fallback: 'দুঃখিত, ঠিক বুঝতে পারিনি — নিচে কিছু বিষয় দেখুন, অথবা সরাসরি মানুষের সাথে কথা বলতে ট্যাপ করুন:',
+            categoryIntro: (label, hub) => 'এই ' + label + ' মডেলগুলো দেখুন — একটি বেছে নিন, অথবা <a href="' + hub + '">সবগুলো দেখুন →</a>',
+            modelReply: (code, href) => code + ' পৃষ্ঠাটি এখানে: <a href="' + href + '">' + code + ' দেখুন →</a>'
         }
     };
+
+    const INTENTS = [
+        { key: 'greeting', re: /\b(hi|hello|hey|salam|assalamu|আসসালামু|হ্যালো|হাই)\b/i },
+        { key: 'thanks', re: /\b(thanks|thank you|dhonnobad|ধন্যবাদ)\b/i },
+        { key: 'pricing', re: /price|cost|budget|taka|৳|package|দাম|মূল্য|বাজেট|কত টাকা/i },
+        { key: 'areas', re: /\b(area|areas|location|district|dhaka|chittagong|chattogram|cumilla)\b|কোথায়|এলাকা|জেলা/i },
+        { key: 'visit', re: /\bvisit\b|appointment|book a|meet up|দেখা করতে|ভিজিট|অ্যাপয়েন্টমেন্ট/i },
+        { key: 'process', re: /process|payment plan|installment|instalment|handover|how it works|registration|রেজিস্ট্রেশন|প্রক্রিয়া|পেমেন্ট|কিস্তি|হস্তান্তর/i },
+        { key: 'certs', re: /certificat|\biso\b|legit|trust|genuine|আসল|বিশ্বাস|সনদ/i },
+        { key: 'human', re: /\bhuman\b|\bagent\b|talk to (someone|a person)|call me|manush|মানুষ|কথা বলতে/i },
+        { key: 'products', re: /product|model|building|house|package|পণ্য|মডেল|বাড়ি/i }
+    ];
 
     const widget = document.createElement('div');
     widget.className = 'floating-widget';
@@ -525,12 +586,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const panel = document.createElement('div');
     panel.className = 'chat-panel';
-    panel.innerHTML = '<div class="chat-panel-header"><span>Bongshai Assistant</span><button type="button" class="chat-close" aria-label="Close chat">&times;</button></div><div class="chat-panel-body"><div class="chat-msg bot">👋 Hi! I’m a scripted assistant, not a live agent — pick a topic and I’ll answer instantly.</div><div class="chat-quick-replies"></div></div>';
+    panel.innerHTML = '<div class="chat-panel-header"><span class="chat-header-title"></span><div class="chat-header-actions"><button type="button" class="chat-lang-toggle">EN/বাং</button><button type="button" class="chat-close" aria-label="Close chat">&times;</button></div></div><div class="chat-panel-body"><div class="chat-quick-replies"></div></div><form class="chat-input-row"><input type="text" class="chat-input" autocomplete="off"><button type="submit" class="chat-send"></button></form>';
 
     const body = panel.querySelector('.chat-panel-body');
     const quickReplies = panel.querySelector('.chat-quick-replies');
+    const headerTitle = panel.querySelector('.chat-header-title');
+    const langBtn = panel.querySelector('.chat-lang-toggle');
+    const form = panel.querySelector('.chat-input-row');
+    const input = panel.querySelector('.chat-input');
+    const sendBtn = panel.querySelector('.chat-send');
 
     let view = 'root';
+    let lang = 'en';
+    let welcomed = false;
+
+    const t = () => STR[lang];
 
     const addMsg = (html, cls) => {
         const msg = document.createElement('div');
@@ -538,6 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
         msg.innerHTML = html;
         body.insertBefore(msg, quickReplies);
         body.scrollTop = body.scrollHeight;
+        return msg;
     };
 
     const addQuickReply = (label, onClick) => {
@@ -549,58 +620,103 @@ document.addEventListener('DOMContentLoaded', () => {
         quickReplies.appendChild(btn);
     };
 
+    const showTyping = (then) => {
+        const typing = document.createElement('div');
+        typing.className = 'chat-msg bot chat-typing';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        body.insertBefore(typing, quickReplies);
+        body.scrollTop = body.scrollHeight;
+        setTimeout(() => {
+            typing.remove();
+            then();
+        }, 500);
+    };
+
+    const applyStrings = () => {
+        headerTitle.textContent = t().headerTitle;
+        langBtn.title = t().langToggleTitle;
+        input.placeholder = t().inputPlaceholder;
+        sendBtn.textContent = t().send;
+    };
+
     const render = () => {
         quickReplies.innerHTML = '';
 
         if (view === 'root') {
-            Object.entries(TOPICS).forEach(([key, t]) => {
-                addQuickReply(t.label, () => selectTopic(key));
-            });
+            addQuickReply(t().productsLabel, () => selectTopic('products'));
+            addQuickReply(t().pricingLabel, () => selectTopic('pricing'));
+            addQuickReply(t().areasLabel, () => selectTopic('areas'));
+            addQuickReply(t().visitLabel, () => selectTopic('visit'));
+            addQuickReply(t().processLabel, () => selectTopic('process'));
+            addQuickReply(t().certsLabel, () => selectTopic('certs'));
+            addQuickReply(t().humanLabel, () => selectTopic('human'));
             return;
         }
 
         if (view === 'categories') {
             Object.entries(CATEGORIES).forEach(([key, c]) => {
-                addQuickReply(c.label, () => selectCategory(key));
+                addQuickReply(lang === 'bn' ? c.labelBn : c.label, () => selectCategory(key));
             });
-            addQuickReply('🔙 Main Menu', () => { view = 'root'; render(); });
+            addQuickReply(t().backMain, () => { view = 'root'; render(); });
             return;
         }
 
-        // view is a category key: list its models
         const cat = CATEGORIES[view];
         for (let n = cat.start; n <= cat.end; n++) {
             const code = cat.prefix.toUpperCase() + '-' + n;
             addQuickReply(code, () => selectModel(view, n));
         }
-        addQuickReply('🔙 Categories', () => { view = 'categories'; render(); });
-        addQuickReply('🔙 Main Menu', () => { view = 'root'; render(); });
+        addQuickReply(t().backCategories, () => { view = 'categories'; render(); });
+        addQuickReply(t().backMain, () => { view = 'root'; render(); });
+    };
+
+    const replyForTopic = (key) => {
+        if (key === 'human') {
+            return t().humanReply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">' + t().whatsappLabel + '</a><a href="tel:+8801781636613">' + t().callLabel + '</a><a href="mailto:sales@bongshai.com">' + t().emailLabel + '</a></div>';
+        }
+        if (key === 'visit') {
+            return t().visitReply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">' + t().whatsappLabel + '</a><a href="tel:+8801781636613">' + t().callLabel + '</a><a href="contact.html">' + (lang === 'bn' ? 'যোগাযোগ ফর্ম →' : 'Contact form →') + '</a></div>';
+        }
+        if (key === 'process') {
+            return t().processReply + ' <a href="index.html#process">' + t().processLinkText + '</a>';
+        }
+        if (key === 'pricing') {
+            return t().pricingReply + ' <a href="solutions.html">' + t().pricingLinkText + '</a>';
+        }
+        if (key === 'areas') {
+            return t().areasReply + ' <a href="service-areas.html">' + t().areasLinkText + '</a>';
+        }
+        if (key === 'certs') {
+            return t().certsReply + ' <a href="certifications.html">' + t().certsLinkText + '</a>';
+        }
+        return null;
     };
 
     const selectTopic = (key) => {
-        const t = TOPICS[key];
-        addMsg(t.label, 'user');
+        const labelKey = key + 'Label';
+        addMsg(t()[labelKey], 'user');
 
         if (key === 'products') {
-            addMsg('Sure — pick a category to see its models:', 'bot');
-            view = 'categories';
-            render();
+            showTyping(() => {
+                addMsg(t().productsIntro, 'bot');
+                view = 'categories';
+                render();
+            });
             return;
         }
 
-        if (t.human) {
-            addMsg(t.reply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">📲 WhatsApp</a><a href="tel:+8801781636613">📞 Call Us</a><a href="mailto:sales@bongshai.com">✉️ Email Us</a></div>', 'bot');
-        } else {
-            addMsg(t.reply + ' <a href="' + t.link.href + '">' + t.link.text + '</a>', 'bot');
-        }
+        showTyping(() => addMsg(replyForTopic(key), 'bot'));
     };
 
     const selectCategory = (key) => {
         const cat = CATEGORIES[key];
-        addMsg(cat.label, 'user');
-        addMsg('Here are the ' + cat.label + ' models — pick one, or <a href="' + cat.hub + '">view them all →</a>', 'bot');
-        view = key;
-        render();
+        const label = lang === 'bn' ? cat.labelBn : cat.label;
+        addMsg(label, 'user');
+        showTyping(() => {
+            addMsg(t().categoryIntro(label, cat.hub), 'bot');
+            view = key;
+            render();
+        });
     };
 
     const selectModel = (catKey, n) => {
@@ -608,9 +724,95 @@ document.addEventListener('DOMContentLoaded', () => {
         const code = cat.prefix.toUpperCase() + '-' + n;
         const href = cat.prefix + '-' + n + '.html';
         addMsg(code, 'user');
-        addMsg('Here’s the ' + code + ' page: <a href="' + href + '">View ' + code + ' →</a>', 'bot');
+        showTyping(() => addMsg(t().modelReply(code, href), 'bot'));
     };
 
+    const findModelByNumber = (n) => {
+        for (const key in CATEGORIES) {
+            const cat = CATEGORIES[key];
+            if (n >= cat.start && n <= cat.end) return key;
+        }
+        return null;
+    };
+
+    const findCategoryByKeyword = (text) => {
+        for (const key in CATEGORIES) {
+            const cat = CATEGORIES[key];
+            if (cat.kw.some((k) => text.indexOf(k) !== -1)) return key;
+        }
+        return null;
+    };
+
+    const handleFreeText = (raw) => {
+        const text = raw.trim();
+        if (!text) return;
+        addMsg(text.replace(/</g, '&lt;'), 'user');
+        input.value = '';
+
+        const lower = text.toLowerCase();
+
+        // 1) A model number anywhere in the text (e.g. "BH-CB-901", "cb 901", "901")
+        const numMatch = lower.match(/\d{3,4}/);
+        if (numMatch) {
+            const n = parseInt(numMatch[0], 10);
+            const catKey = findModelByNumber(n);
+            if (catKey) {
+                const cat = CATEGORIES[catKey];
+                const code = cat.prefix.toUpperCase() + '-' + n;
+                const href = cat.prefix + '-' + n + '.html';
+                showTyping(() => addMsg(t().modelReply(code, href), 'bot'));
+                return;
+            }
+        }
+
+        // 2) A category name/keyword (e.g. "duplex", "industrial shed")
+        const catKey = findCategoryByKeyword(lower);
+        if (catKey) {
+            showTyping(() => {
+                const cat = CATEGORIES[catKey];
+                const label = lang === 'bn' ? cat.labelBn : cat.label;
+                addMsg(t().categoryIntro(label, cat.hub), 'bot');
+                view = catKey;
+                render();
+            });
+            return;
+        }
+
+        // 3) Everything else: match against the keyword intents in order
+        for (let i = 0; i < INTENTS.length; i++) {
+            if (INTENTS[i].re.test(lower)) {
+                const key = INTENTS[i].key;
+                if (key === 'greeting') { showTyping(() => addMsg(t().greeting, 'bot')); return; }
+                if (key === 'thanks') { showTyping(() => addMsg(t().thanks, 'bot')); return; }
+                if (key === 'products') {
+                    showTyping(() => { addMsg(t().productsIntro, 'bot'); view = 'categories'; render(); });
+                    return;
+                }
+                showTyping(() => addMsg(replyForTopic(key), 'bot'));
+                return;
+            }
+        }
+
+        // 4) Fallback
+        showTyping(() => { addMsg(t().fallback, 'bot'); view = 'root'; render(); });
+    };
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleFreeText(input.value);
+    });
+
+    langBtn.addEventListener('click', () => {
+        lang = lang === 'en' ? 'bn' : 'en';
+        applyStrings();
+        render();
+    });
+
+    applyStrings();
+    if (!welcomed) {
+        addMsg(t().welcome, 'bot');
+        welcomed = true;
+    }
     render();
     widget.appendChild(mainBtn);
     widget.appendChild(panel);
