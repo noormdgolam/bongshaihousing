@@ -21,11 +21,12 @@ RewriteRule ^two-story-building\.html$ https://bongshaihousing.com/apartment-bui
 RewriteRule ^duplex-villa\.html$ https://bongshaihousing.com/duplex-steel-building.html [R=301,L]
 RewriteRule ^single-story-building\.html$ https://bongshaihousing.com/simplex-steel-building.html [R=301,L]
 
-# 5. Catch-all: Redirect all other 404s (non-existent files/directories) to homepage
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ https://bongshaihousing.com/ [R=301,L]
 </IfModule>
+
+# Broken/missing URLs get a real 404 response with the actual 404 page,
+# instead of a 301 to the homepage (which Google flags as a soft-404 and
+# which hides real errors from visitors).
+ErrorDocument 404 /404.html
 
 # Security headers
 <IfModule mod_headers.c>
