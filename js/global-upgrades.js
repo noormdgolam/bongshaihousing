@@ -1604,3 +1604,25 @@ mediaQuery.addEventListener('change', applySystemTheme);
     }
   });
 })();
+
+/* =========================================================
+   MOST VIEWED CAROUSEL
+   Prev/next arrow scrolling for the .mv-track card strip on
+   product detail pages
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.mv-carousel-wrap').forEach((wrap) => {
+        const track = wrap.querySelector('.mv-track');
+        const prev = wrap.querySelector('.mv-prev');
+        const next = wrap.querySelector('.mv-next');
+        if (!track || !prev || !next) return;
+
+        const scrollAmount = () => {
+            const card = track.querySelector('.mv-card');
+            return (card ? card.offsetWidth : 250) + 20;
+        };
+
+        prev.addEventListener('click', () => track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }));
+        next.addEventListener('click', () => track.scrollBy({ left: scrollAmount(), behavior: 'smooth' }));
+    });
+});

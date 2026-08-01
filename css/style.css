@@ -3773,6 +3773,145 @@ body {
 }
 
 /* ==========================================================================
+   Most Viewed carousel (product detail pages)
+   ========================================================================== */
+.mv-carousel-wrap {
+  position: relative;
+}
+
+.mv-track {
+  display: flex;
+  gap: var(--space-5);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 4px 12px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.mv-track::-webkit-scrollbar {
+  display: none;
+}
+
+.mv-card {
+  flex: 0 0 250px;
+  scroll-snap-align: start;
+  background: var(--white, #fff);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--grey-100);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .mv-card {
+  background: var(--grey-800);
+  border-color: var(--grey-700);
+}
+
+.mv-card-img {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--grey-100);
+}
+
+.mv-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mv-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--primary-dark, var(--primary));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.mv-card-body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.mv-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary-dark, var(--primary));
+  margin: 0;
+  line-height: 1.3;
+}
+
+.mv-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.mv-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: filter 0.2s;
+}
+
+.mv-btn:hover {
+  filter: brightness(1.08);
+}
+
+.mv-btn-price {
+  background: var(--accent);
+  color: #fff;
+}
+
+.mv-btn-detail {
+  background: var(--primary-dark, var(--primary));
+  color: #fff;
+}
+
+.mv-nav {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--white, #fff);
+  border: 1px solid var(--grey-200);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;
+  color: var(--primary-dark, var(--primary));
+}
+
+.mv-prev { left: -14px; }
+.mv-next { right: -14px; }
+
+@media (max-width: 640px) {
+  .mv-nav { display: none; }
+  .mv-card { flex-basis: 200px; }
+}
+
+/* ==========================================================================
    Phase 3: Back to Top Progress Ring
    ========================================================================== */
 .back-to-top-ring {
