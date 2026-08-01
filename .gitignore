@@ -9,6 +9,7 @@ venv/
 # Build artifacts (keep *.json but ignore non-manifest)
 *.txt
 *.json
+!llms.txt
 !manifest.json
 !package.json
 !package-lock.json

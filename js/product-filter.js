@@ -31,6 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentSearch = '';
 
   function filterCards() {
+    const parentContainer = document.querySelector('.filter-bar')?.parentElement || document.querySelector('main > div.container');
+    if (parentContainer) {
+      // Lock container height to current height during filtering to prevent vertical page jump
+      const currentHeight = parentContainer.offsetHeight;
+      parentContainer.style.minHeight = currentHeight + 'px';
+      parentContainer.style.transition = 'min-height 0.35s cubic-bezier(0.165, 0.84, 0.44, 1)';
+    }
+
     let visibleCount = 0;
     
     // Track which sections have visible cards
@@ -47,17 +55,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (matchesFilter && matchesSearch) {
         card.style.display = card.dataset.display || 'flex';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
         visibleCount++;
         const parentSec = card.closest('.reveal-up');
         if (parentSec) sectionVisibility.set(parentSec, true);
       } else {
         card.style.display = 'none';
+        card.style.opacity = '0';
       }
     });
 
     // Hide sections that have no visible cards
-    sections.forEach((isVisible, sec) => {
-      // Don't hide the interactive tools section if we are filtering, unless search is used
+    sections.forEach(sec => {
+      const isVisible = sectionVisibility.get(sec);
       const isTools = sec.querySelector('h2')?.textContent.toLowerCase().includes('tools');
       
       if (!isVisible) {
@@ -77,6 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
       noMsg.style.display = 'block';
     } else {
       noMsg.style.display = 'none';
+    }
+
+    // Release min-height smooth lock after transition completes
+    if (parentContainer) {
+      setTimeout(() => {
+        parentContainer.style.minHeight = '';
+      }, 350);
     }
   }
 

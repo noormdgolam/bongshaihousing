@@ -4870,3 +4870,50 @@ body.dark-mode img.logo {
   color: var(--primary);
 }
 
+/* ==========================================================================
+   Mobile Layout Shift & Floating UI Movement Fixes
+   ========================================================================== */
+.floating-widget {
+  pointer-events: none !important;
+}
+
+.chat-panel {
+  display: none !important;
+  pointer-events: auto !important;
+}
+
+.floating-widget.active .chat-panel {
+  display: flex !important;
+}
+
+.floating-main-btn, .whatsapp-float, .back-to-top-ring {
+  pointer-events: auto !important;
+}
+
+.filter-btn {
+  box-sizing: border-box !important;
+  border-width: 2px !important;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+@media (max-width: 768px) {
+  .back-to-top-ring {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 16px !important;
+    width: 42px !important;
+    height: 42px !important;
+    z-index: 99 !important;
+  }
+
+  .whatsapp-float, .floating-widget {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 16px !important;
+    z-index: 99 !important;
+  }
+  
+  .filter-bar {
+    padding: 14px !important;
+    gap: 10px !important;
+  }
+}
+
