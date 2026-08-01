@@ -1232,7 +1232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Animate price change
         priceEl.style.opacity = 0;
         setTimeout(() => {
-            priceEl.innerText = '\u09F3 ' + displayPrice; // ৳ Taka
+            priceEl.innerText = '\u09F3 ' + displayPrice + ' (\u09F3' + costPerSqft + '/sqft)';
             priceEl.style.opacity = 1;
         }, 150);
     }

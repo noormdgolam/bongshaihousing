@@ -579,6 +579,7 @@
                       <option value="BH-WA-1112">Model No-BH-WA-1112</option>
                     </optgroup>
                   </select>
+                  <div id="model-rate-note" style="font-size:0.8rem;color:var(--grey-500);margin-top:6px;"></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="floor_area">Floor Area (Optional)</label>
@@ -659,6 +660,35 @@
         opt.textContent = optVal;
         areaSelect.appendChild(opt);
       });
+
+      updateRateNote(modelValue);
+    }
+
+    // Per-sqft construction rates (Tk), matching the rates shown on each model's product page
+    function rateForModel(modelValue) {
+      if (modelValue === 'General Inquiry') return null;
+      if (modelValue.startsWith('LCV')) return 1950;
+      const m = modelValue.match(/BH-([A-Z]+)-(\d+)/);
+      if (!m) return null;
+      const prefix = m[1], num = parseInt(m[2], 10);
+      if (prefix === 'CB') return 2750;
+      if (prefix === 'CH') return (num >= 500) ? 3000 : 2200; // 5xx = Container House, 4xx = Cottage House
+      if (prefix === 'SB') return 2500;
+      if (prefix === 'SH') return 2500;
+      if (prefix === 'TH') return 1500;
+      if (prefix === 'WH') return 1500;
+      if (prefix === 'DV') return 2500;
+      if (prefix === 'TSB') return 2500;
+      if (prefix === 'IS') return 950;
+      if (prefix === 'WA') return 900;
+      return null;
+    }
+
+    function updateRateNote(modelValue) {
+      const note = document.getElementById('model-rate-note');
+      if (!note) return;
+      const rate = rateForModel(modelValue);
+      note.textContent = rate ? ('Construction rate for this model: ৳' + rate.toLocaleString() + '/sqft') : '';
     }
 
     document.addEventListener('DOMContentLoaded', () => {

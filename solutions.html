@@ -507,9 +507,13 @@
             <span class="receipt-label">Area</span>
             <span class="receipt-value" id="c1-val-area">0 Sq.Ft</span>
           </div>
-          <div class="receipt-row" style="border-bottom: none;">
+          <div class="receipt-row">
             <span class="receipt-label">Finishing</span>
             <span class="receipt-value" id="c1-val-finish">Standard</span>
+          </div>
+          <div class="receipt-row" style="border-bottom: none;">
+            <span class="receipt-label">Rate</span>
+            <span class="receipt-value" id="c1-val-rate">৳0/sqft</span>
           </div>
         </div>
         
@@ -620,22 +624,22 @@
   // Added "footprint" to calculate if it fits on land.
   // ==========================================
   const BONGSHAI_MODELS = [
-    { category: "Duplex Steel Building (Premium)", name: "Duplex Steel Building (650x2 Sq.Ft) - 4 Beds", baseRate: 3500, defaultArea: 1300, footprint: 650 },
-    { category: "Duplex Steel Building (Premium)", name: "Duplex Steel Building (950x2 Sq.Ft) - 6 Beds", baseRate: 3500, defaultArea: 1900, footprint: 950 },
-    { category: "Duplex Steel Building (Premium)", name: "Duplex Steel Building (1200x2 Sq.Ft) - 8 Beds", baseRate: 3500, defaultArea: 2400, footprint: 1200 },
-    { category: "Steel House (Premium)", name: "Steel House (Small) - 800 Sq.Ft", baseRate: 3200, defaultArea: 800, footprint: 800 },
-    { category: "Steel House (Premium)", name: "Steel House (Large) - 1500 Sq.Ft", baseRate: 3200, defaultArea: 1500, footprint: 1500 },
-    { category: "Wooden House (Cottage)", name: "Wooden Cabin (500 Sq.Ft)", baseRate: 3000, defaultArea: 500, footprint: 500 },
-    { category: "Wooden House (Cottage)", name: "Wooden Retreat (1200 Sq.Ft)", baseRate: 3000, defaultArea: 1200, footprint: 1200 },
-    { category: "Tiny House (Minimalist)", name: "Tiny House Studio (300 Sq.Ft)", baseRate: 2800, defaultArea: 300, footprint: 300 },
-    { category: "Tiny House (Minimalist)", name: "Tiny House Extended (600 Sq.Ft)", baseRate: 2800, defaultArea: 600, footprint: 600 },
-    { category: "Low-Cost Villa (Standard)", name: "Single Story (650 Sq.Ft)", baseRate: 2500, defaultArea: 650, footprint: 650 },
-    { category: "Low-Cost Villa (Standard)", name: "Concrete Building RC (1200 Sq.Ft)", baseRate: 2600, defaultArea: 1200, footprint: 1200 },
-    { category: "Container House", name: "20ft Container Home (160 Sq.Ft)", baseRate: 2200, defaultArea: 160, footprint: 160 },
-    { category: "Container House", name: "40ft Container Home (320 Sq.Ft)", baseRate: 2200, defaultArea: 320, footprint: 320 },
-    { category: "Commercial & Industrial", name: "Industrial Steel Shed (2000 Sq.Ft)", baseRate: 1500, defaultArea: 2000, footprint: 2000 },
-    { category: "Commercial & Industrial", name: "Industrial Steel Shed (5000 Sq.Ft)", baseRate: 1400, defaultArea: 5000, footprint: 5000 },
-    { category: "Commercial & Industrial", name: "Worker Accommodation (1500 Sq.Ft)", baseRate: 1800, defaultArea: 1500, footprint: 1500 },
+    { category: "Duplex Steel Building (Premium)", name: "Duplex Steel Building (650x2 Sq.Ft) - 4 Beds", baseRate: 2500, defaultArea: 1300, footprint: 650 },
+    { category: "Duplex Steel Building (Premium)", name: "Duplex Steel Building (950x2 Sq.Ft) - 6 Beds", baseRate: 2500, defaultArea: 1900, footprint: 950 },
+    { category: "Duplex Steel Building (Premium)", name: "Duplex Steel Building (1200x2 Sq.Ft) - 8 Beds", baseRate: 2500, defaultArea: 2400, footprint: 1200 },
+    { category: "Steel House (Premium)", name: "Steel House (Small) - 800 Sq.Ft", baseRate: 2500, defaultArea: 800, footprint: 800 },
+    { category: "Steel House (Premium)", name: "Steel House (Large) - 1500 Sq.Ft", baseRate: 2500, defaultArea: 1500, footprint: 1500 },
+    { category: "Wooden House (Cottage)", name: "Wooden Cabin (500 Sq.Ft)", baseRate: 1500, defaultArea: 500, footprint: 500 },
+    { category: "Wooden House (Cottage)", name: "Wooden Retreat (1200 Sq.Ft)", baseRate: 1500, defaultArea: 1200, footprint: 1200 },
+    { category: "Tiny House (Minimalist)", name: "Tiny House Studio (300 Sq.Ft)", baseRate: 1500, defaultArea: 300, footprint: 300 },
+    { category: "Tiny House (Minimalist)", name: "Tiny House Extended (600 Sq.Ft)", baseRate: 1500, defaultArea: 600, footprint: 600 },
+    { category: "Low-Cost Villa (Standard)", name: "Single Story (650 Sq.Ft)", baseRate: 1950, defaultArea: 650, footprint: 650 },
+    { category: "Low-Cost Villa (Standard)", name: "Concrete Building RC (1200 Sq.Ft)", baseRate: 2750, defaultArea: 1200, footprint: 1200 },
+    { category: "Container House", name: "20ft Container Home (160 Sq.Ft)", baseRate: 3000, defaultArea: 160, footprint: 160 },
+    { category: "Container House", name: "40ft Container Home (320 Sq.Ft)", baseRate: 3000, defaultArea: 320, footprint: 320 },
+    { category: "Commercial & Industrial", name: "Industrial Steel Shed (2000 Sq.Ft)", baseRate: 950, defaultArea: 2000, footprint: 2000 },
+    { category: "Commercial & Industrial", name: "Industrial Steel Shed (5000 Sq.Ft)", baseRate: 950, defaultArea: 5000, footprint: 5000 },
+    { category: "Commercial & Industrial", name: "Worker Accommodation (1500 Sq.Ft)", baseRate: 900, defaultArea: 1500, footprint: 1500 },
     { category: "Site Solutions", name: "Site Office Module (400 Sq.Ft)", baseRate: 2000, defaultArea: 400, footprint: 400 },
     { category: "Site Solutions", name: "Security Kiosk (36 Sq.Ft)", baseRate: 2500, defaultArea: 36, footprint: 36 }
   ];
@@ -720,6 +724,7 @@
         document.getElementById('calc1-result').innerText = 'BDT 0';
         document.getElementById('c1-val-model').innerText = '-';
         document.getElementById('c1-val-area').innerText = '0 Sq.Ft';
+        document.getElementById('c1-val-rate').innerText = '৳0/sqft';
         pushCostToEMI(0);
         return;
     }
@@ -770,11 +775,13 @@
     const finishName = finishSelect.options[finishSelect.selectedIndex].getAttribute('data-name');
     
     const totalCost = baseRate * sqft * finishMultiplier;
-    
-    document.getElementById('calc1-result').innerText = 'BDT ' + formatBDT(totalCost);
+    const effectiveRate = baseRate * finishMultiplier;
+
+    document.getElementById('calc1-result').innerText = 'BDT ' + formatBDT(totalCost) + ' (৳' + formatBDT(effectiveRate) + '/sqft)';
     document.getElementById('c1-val-model').innerText = modelName;
     document.getElementById('c1-val-area').innerText = sqft + ' Sq.Ft';
     document.getElementById('c1-val-finish').innerText = finishName;
+    document.getElementById('c1-val-rate').innerText = '৳' + formatBDT(effectiveRate) + '/sqft';
     
     // Push cost to EMI automatically!
     pushCostToEMI(totalCost);
