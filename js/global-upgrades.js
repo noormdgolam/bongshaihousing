@@ -105,7 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ).slice(0, 10); // Limit to top 10
 
       if (results.length === 0) {
-        searchResults.innerHTML = '<div class="no-results">No results found for "'+query+'"</div>';
+        const safeQuery = query.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        searchResults.innerHTML = '<div class="no-results">No results found for "'+safeQuery+'"</div>';
         return;
       }
 
@@ -746,7 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleFreeText = (raw) => {
         const text = raw.trim();
         if (!text) return;
-        addMsg(text.replace(/</g, '&lt;'), 'user');
+        addMsg(text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'), 'user');
         input.value = '';
 
         const lower = text.toLowerCase();
