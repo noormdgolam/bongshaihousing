@@ -343,9 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const linkHtml = page ? `<a href="${page}" style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-decoration: none;">View details →</a>` : '';
 
             card.innerHTML = `
-                <h3 style="margin-bottom: 5px; color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
+                <h2 style="margin-bottom: 5px; font-size: 1.1rem; color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
                     ${d.district}
-                </h3>
+                </h2>
                 <p style="font-size: 0.85rem; color: var(--grey-400); margin: 0;">📍 ${d.coordinates || 'Bangladesh'}</p>
                 ${upazilasHtml}
                 ${linkHtml ? `<div style="margin-top: 12px;">${linkHtml}</div>` : ''}
