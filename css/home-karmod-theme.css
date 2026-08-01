@@ -143,6 +143,22 @@ body.home-karmod .category-slider .swiper-button-prev::after {
   }
 }
 
+/* On mobile the slide's own content (badge/title/subtitle/buttons) is
+   vertically centered by .hero, completely independent of the stats +
+   features-strip + pagination block pinned to the bottom. With a two-line
+   title/subtitle and the taller stats block (now carrying the features
+   strip too), the two can collide. Pin content to the top instead so the
+   two regions never compete for the same vertical space. */
+@media (max-width: 640px) {
+  body.home-karmod .category-slider {
+    align-items: flex-start;
+  }
+  body.home-karmod .category-slider .hero-content {
+    padding-top: calc(var(--nav-height) + 20px);
+    padding-bottom: 0;
+  }
+}
+
 /* Features strip, relocated into the slider's dark stats area (sits above
    the pagination dots instead of as its own white section below the hero). */
 body.home-karmod .category-slider .features-strip {
