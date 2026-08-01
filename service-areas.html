@@ -298,6 +298,27 @@ document.addEventListener('DOMContentLoaded', function() {
             grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--grey-500);">No locations found.</p>';
             return;
         }
+        const districtPages = {
+            "Dhaka": "steel-building-dhaka.html",
+            "Chattogram": "steel-building-chotrogram.html",
+            "Gazipur": "steel-building-gazipur.html",
+            "Comilla": "prefab-housing-cumilla.html",
+            "Bogura": "prefab-cottage-bogra-rangpur.html",
+            "Rangpur": "prefab-cottage-bogra-rangpur.html",
+            "Faridpur": "steel-building-faridpur.html",
+            "Sylhet": "steel-building-sylhet.html",
+            "Khulna": "steel-building-khulna.html",
+            "Rajshahi": "steel-building-rajshahi.html",
+            "Barisal": "steel-building-barisal.html",
+            "Mymensingh": "steel-building-mymensingh.html",
+            "Narayanganj": "steel-building-narayanganj.html",
+            "Coxsbazar": "steel-building-coxsbazar.html",
+            "Jashore": "steel-building-jashore.html",
+            "Narsingdi": "steel-building-narsingdi.html",
+            "Tangail": "steel-building-tangail.html",
+            "Manikganj": "steel-building-manikganj.html"
+        };
+
         data.forEach(d => {
             const card = document.createElement('div');
             card.style.background = '#fff';
@@ -305,20 +326,24 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.padding = '20px';
             card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
             card.style.border = '1px solid var(--grey-100)';
-            
+
             let upazilasHtml = '';
             if(d.upazillas && d.upazillas.length > 0) {
-                upazilasHtml = '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 6px;">' + 
+                upazilasHtml = '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 6px;">' +
                     d.upazillas.map(u => `<span style="background: var(--grey-50); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; color: var(--grey-600); border: 1px solid var(--grey-200);">${u}</span>`).join('') +
                     '</div>';
             }
-            
+
+            const page = districtPages[d.district];
+            const linkHtml = page ? `<a href="${page}" style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-decoration: none;">View details →</a>` : '';
+
             card.innerHTML = `
                 <h3 style="margin-bottom: 5px; color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
                     ${d.district}
                 </h3>
                 <p style="font-size: 0.85rem; color: var(--grey-400); margin: 0;">📍 ${d.coordinates || 'Bangladesh'}</p>
                 ${upazilasHtml}
+                ${linkHtml ? `<div style="margin-top: 12px;">${linkHtml}</div>` : ''}
             `;
             grid.appendChild(card);
         });
