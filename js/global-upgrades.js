@@ -1654,7 +1654,6 @@ document.addEventListener('DOMContentLoaded', () => {
             moved = false;
             startX = e.clientX;
             startScroll = track.scrollLeft;
-            track.classList.add('dragging');
             if (track.setPointerCapture) track.setPointerCapture(e.pointerId);
             stop();
         });
@@ -1662,7 +1661,13 @@ document.addEventListener('DOMContentLoaded', () => {
         track.addEventListener('pointermove', (e) => {
             if (!dragging) return;
             const dx = e.clientX - startX;
-            if (Math.abs(dx) > 4) moved = true;
+            if (Math.abs(dx) > 4) {
+                // Only now treat this as an actual drag (not a plain click) -
+                // adding the class earlier would set pointer-events:none on the
+                // cards before the click even fires, swallowing every click.
+                if (!moved) track.classList.add('dragging');
+                moved = true;
+            }
             track.scrollLeft = startScroll - dx;
         });
 

@@ -300,6 +300,7 @@
 <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: var(--space-4); line-height: 1.1;">Model No-BH-CH-403</h2>
 <p style="color: var(--grey-600); font-size: 0.95rem; margin-bottom: var(--space-6); line-height: 1.6;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
+<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);"><span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Price</span><span id="spec-price-403" style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">৳8.8 - 13.2 Lakh</span></div>
 <div style="display: flex; flex-direction: column; gap: 12px;">
 <a href="contact.html?model=BH-CH-403" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
 <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20BH-CH-403." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
@@ -425,6 +426,15 @@
 
       document.getElementById("spec-bed-403").innerText = data.bed;
       document.getElementById("spec-bath-403").innerText = data.bath;
+        const priceEl403 = document.getElementById("spec-price-403");
+        if (priceEl403) {
+          const rate403 = 2200;
+          let lo403, hi403;
+          if (sqft.includes("-")) { [lo403, hi403] = sqft.split("-").map(Number); } else { lo403 = hi403 = Number(sqft); }
+          const loP403 = (lo403 * rate403 / 100000).toFixed(1).replace(/\.0$/, "");
+          const hiP403 = (hi403 * rate403 / 100000).toFixed(1).replace(/\.0$/, "");
+          priceEl403.innerText = (lo403 === hi403) ? ("৳" + loP403 + " Lakh") : ("৳" + loP403 + " - " + hiP403 + " Lakh");
+        }
 
       document.getElementById("space-allocation-403").innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
@@ -772,7 +782,7 @@ function selectArea(id, sqft, btn) {
   <script src="js/3d-tilt.js" defer></script>
   <script src="js/scroll-progress.js" defer></script>
   <script src="js/page-transition.js" defer></script>
-  <script src="js/global-upgrades.min.js?v=2.9" defer></script>
+  <script src="js/global-upgrades.min.js?v=3.0" defer></script>
 </body>
 </html>
 
