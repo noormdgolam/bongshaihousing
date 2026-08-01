@@ -1632,17 +1632,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        let timer = setInterval(advance, 5000);
+        let timer = setInterval(advance, 3000);
         const stop = () => clearInterval(timer);
-        const restart = () => { stop(); timer = setInterval(advance, 5000); };
+        const restart = () => { stop(); timer = setInterval(advance, 3000); };
 
         prev.addEventListener('click', () => { track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }); restart(); });
         next.addEventListener('click', () => { advance(); restart(); });
 
         wrap.addEventListener('mouseenter', stop);
         wrap.addEventListener('mouseleave', restart);
-        wrap.addEventListener('touchstart', stop, { passive: true });
-        wrap.addEventListener('touchend', restart, { passive: true });
         document.addEventListener('visibilitychange', () => { document.hidden ? stop() : restart(); });
+
+        // Drag/swipe-to-scroll (mouse + touch, via Pointer Events)
+        let dragging = false;
+        let moved = false;
+        let startX = 0;
+        let startScroll = 0;
+
+        track.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            moved = false;
+            startX = e.clientX;
+            startScroll = track.scrollLeft;
+            track.classList.add('dragging');
+            if (track.setPointerCapture) track.setPointerCapture(e.pointerId);
+            stop();
+        });
+
+        track.addEventListener('pointermove', (e) => {
+            if (!dragging) return;
+            const dx = e.clientX - startX;
+            if (Math.abs(dx) > 4) moved = true;
+            track.scrollLeft = startScroll - dx;
+        });
+
+        const endDrag = () => {
+            if (!dragging) return;
+            dragging = false;
+            track.classList.remove('dragging');
+            restart();
+        };
+        track.addEventListener('pointerup', endDrag);
+        track.addEventListener('pointercancel', endDrag);
+        track.addEventListener('pointerleave', endDrag);
+
+        // Suppress the card-link click that would otherwise fire right after a drag
+        track.addEventListener('click', (e) => {
+            if (moved) { e.preventDefault(); e.stopPropagation(); }
+        }, true);
     });
 });

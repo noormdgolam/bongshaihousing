@@ -3794,6 +3794,19 @@ body {
   padding: 4px 4px 12px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.mv-track.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  user-select: none;
+}
+
+.mv-track.dragging .mv-card {
+  pointer-events: none;
 }
 
 .mv-track::-webkit-scrollbar {
