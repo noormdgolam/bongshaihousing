@@ -1622,7 +1622,27 @@ document.addEventListener('DOMContentLoaded', () => {
             return (card ? card.offsetWidth : 250) + 20;
         };
 
-        prev.addEventListener('click', () => track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }));
-        next.addEventListener('click', () => track.scrollBy({ left: scrollAmount(), behavior: 'smooth' }));
+        const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 5;
+
+        const advance = () => {
+            if (atEnd()) {
+                track.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+            }
+        };
+
+        let timer = setInterval(advance, 5000);
+        const stop = () => clearInterval(timer);
+        const restart = () => { stop(); timer = setInterval(advance, 5000); };
+
+        prev.addEventListener('click', () => { track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }); restart(); });
+        next.addEventListener('click', () => { advance(); restart(); });
+
+        wrap.addEventListener('mouseenter', stop);
+        wrap.addEventListener('mouseleave', restart);
+        wrap.addEventListener('touchstart', stop, { passive: true });
+        wrap.addEventListener('touchend', restart, { passive: true });
+        document.addEventListener('visibilitychange', () => { document.hidden ? stop() : restart(); });
     });
 });
