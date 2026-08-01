@@ -1090,6 +1090,34 @@ img {
   color: var(--accent);
 }
 
+.property-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.04));
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: var(--radius-lg);
+}
+
+.property-price-label {
+  font-size: var(--fs-xs);
+  color: var(--grey-600);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.property-price-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+  font-family: var(--font-heading);
+  white-space: nowrap;
+}
+
 /* ============================================================
    Stats Section
    ============================================================ */
