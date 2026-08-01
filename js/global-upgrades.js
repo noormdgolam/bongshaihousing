@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const panel = document.createElement('div');
     panel.className = 'chat-panel';
-    panel.innerHTML = '<div class="chat-panel-header"><span class="chat-header-title"></span><div class="chat-header-actions"><button type="button" class="chat-lang-toggle">EN/বাং</button><button type="button" class="chat-close" aria-label="Close chat">&times;</button></div></div><div class="chat-panel-body"><div class="chat-quick-replies"></div></div><form class="chat-input-row"><input type="text" class="chat-input" autocomplete="off"><button type="submit" class="chat-send"></button></form>';
+    panel.innerHTML = '<div class="chat-panel-header"><span class="chat-header-title"></span><div class="chat-header-actions"><button type="button" class="chat-lang-toggle">EN/বাং</button><button type="button" class="chat-close" aria-label="Close chat">&times;</button></div></div><div class="chat-panel-body"><div class="chat-quick-replies"></div></div><form class="chat-input-row"><div class="chat-input-wrap"><input type="text" class="chat-input" autocomplete="off"><button type="submit" class="chat-send">➤</button></div></form>';
 
     const body = panel.querySelector('.chat-panel-body');
     const quickReplies = panel.querySelector('.chat-quick-replies');
@@ -636,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headerTitle.textContent = t().headerTitle;
         langBtn.title = t().langToggleTitle;
         input.placeholder = t().inputPlaceholder;
-        sendBtn.textContent = t().send;
+        sendBtn.setAttribute('aria-label', t().send);
     };
 
     const render = () => {

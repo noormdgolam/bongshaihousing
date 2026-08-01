@@ -3692,9 +3692,6 @@ body {
 }
 
 .chat-input-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   padding: 10px 12px;
   border-top: 1px solid var(--grey-100, #e2e8f0);
   flex-shrink: 0;
@@ -3704,12 +3701,35 @@ body {
   border-top-color: var(--grey-700, #334155);
 }
 
+.chat-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--grey-100, #f1f5f9);
+  border: 1px solid transparent;
+  border-radius: 24px;
+  padding: 4px 4px 4px 16px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.chat-input-wrap:focus-within {
+  border-color: var(--primary);
+  background: var(--white, #fff);
+}
+
+[data-theme="dark"] .chat-input-wrap {
+  background: var(--grey-700, #334155);
+}
+
+[data-theme="dark"] .chat-input-wrap:focus-within {
+  background: var(--grey-800, #1e293b);
+}
+
 .chat-input {
   flex: 1 1 auto;
   min-width: 0;
-  border: 1px solid var(--grey-200, #e2e8f0);
-  border-radius: 20px;
-  padding: 8px 14px;
+  border: none;
+  padding: 9px 0;
   font-size: 13px;
   font-family: inherit;
   color: inherit;
@@ -3718,28 +3738,38 @@ body {
 
 .chat-input:focus {
   outline: none;
-  border-color: var(--primary);
 }
 
-[data-theme="dark"] .chat-input {
-  border-color: var(--grey-700, #334155);
+.chat-input::placeholder {
+  color: var(--grey-400, #94a3b8);
 }
 
 .chat-send {
   flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: 50%;
+  font-size: 15px;
+  line-height: 1;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s;
 }
 
 .chat-send:hover {
   background: var(--secondary);
+  transform: scale(1.06);
+}
+
+.chat-send:disabled {
+  background: var(--grey-300, #cbd5e1);
+  cursor: default;
+  transform: none;
 }
 
 /* ==========================================================================
