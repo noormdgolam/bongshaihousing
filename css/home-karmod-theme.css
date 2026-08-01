@@ -90,6 +90,11 @@ body.home-karmod .category-slider .slider-stats-wrap {
   z-index: 2;
   width: 100%;
   padding-top: var(--space-10);
+  /* Nothing in here (stats, feature icons) is clickable, but on short
+     viewports it can visually overlap the slide's own CTA buttons - as an
+     absolutely-positioned, higher-stacked block it would otherwise swallow
+     taps meant for those buttons underneath. Let clicks pass through. */
+  pointer-events: none;
 }
 
 /* Slide images are now random, so the slide's own overlay (which fades to
@@ -156,6 +161,22 @@ body.home-karmod .category-slider .swiper-button-prev::after {
   body.home-karmod .category-slider .hero-content {
     padding-top: calc(var(--nav-height) + 20px);
     padding-bottom: 0;
+  }
+
+  /* Trim the gaps between badge/title/subtitle/buttons so the content
+     block stays clear of the stats+features area pinned to the bottom,
+     on shorter phones where the two would otherwise visually collide. */
+  body.home-karmod .category-slider .hero-badge {
+    margin-bottom: var(--space-3);
+  }
+  body.home-karmod .category-slider .hero-title {
+    margin-bottom: var(--space-3);
+  }
+  body.home-karmod .category-slider .hero-subtitle {
+    margin-bottom: var(--space-4);
+  }
+  body.home-karmod .category-slider .hero-actions {
+    margin-bottom: 0;
   }
 }
 
