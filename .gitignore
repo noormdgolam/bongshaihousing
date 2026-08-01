@@ -12,6 +12,7 @@ venv/
 !manifest.json
 !package.json
 !package-lock.json
+!search-index.json
 
 # OS / Editor
 .DS_Store
