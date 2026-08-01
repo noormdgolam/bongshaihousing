@@ -2293,6 +2293,12 @@ textarea.form-control {
   /* Comparison table scroll */
   table { display: block; overflow-x: auto; white-space: nowrap; }
 
+  /* Building Specifications table (2-column key/value) — the nowrap+scroll
+     rule above is for wide comparison grids; here it just clipped the
+     "Materials" column off the edge of the screen. Wrap normally instead. */
+  .spec-table { display: table; white-space: normal; }
+  .spec-table td, .spec-table th { white-space: normal; word-break: break-word; }
+
   /* Hours row */
   .hours-row { flex-direction: column; gap: var(--space-1); }
 }
