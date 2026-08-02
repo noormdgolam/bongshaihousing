@@ -17,6 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST = $decoded;
     }
 
+    // Honeypot: legitimate visitors never see or fill this field (hidden via
+    // CSS + aria-hidden in contact.html), so a non-empty value means a bot.
+    // Return success without sending mail so bots don't learn to look elsewhere.
+    if (!empty($_POST['website_url'])) {
+        http_response_code(200);
+        echo json_encode(["status" => "success", "message" => "Message sent successfully."]);
+        exit;
+    }
+
     $name = isset($_POST['name']) ? preg_replace('/[\r\n]+/', ' ', strip_tags(trim($_POST['name']))) : '';
     $email = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : '';
     $phone = isset($_POST['phone']) ? strip_tags(trim($_POST['phone'])) : '';
