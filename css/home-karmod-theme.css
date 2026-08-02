@@ -5,9 +5,13 @@
 body.home-karmod {
   --font-body: 'Titillium Web', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-heading: 'Titillium Web', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --accent: #F57F2B;
+  /* Darkened from the original #F57F2B: that shade only hit 2.6:1 for white
+     text on the CTA buttons and 2.5:1 for text using it on light backgrounds
+     (section labels) - both fail WCAG AA's 4.5:1. #B34D0A keeps the same
+     orange hue but clears 4.5:1 in both directions with margin. */
+  --accent: #B34D0A;
   --accent-light: #FF9D5C;
-  --accent-dark: #D9631F;
+  --accent-dark: #993F00;
 }
 
 body.home-karmod .btn-primary {

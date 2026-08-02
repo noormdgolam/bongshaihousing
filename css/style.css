@@ -2000,6 +2000,14 @@ textarea.form-control {
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
+/* .brand-name defaults to var(--primary) for the light-background navbar;
+   that's #1E40AF on the footer's #1E3A8A background - 1.18:1 contrast,
+   functionally invisible. Override to white here, matching the rest of
+   the footer's light-on-dark text. */
+.footer-brand .brand-name {
+  color: var(--white);
+}
+
 .footer-brand-desc {
   font-size: var(--fs-sm);
   color: rgba(255,255,255,0.6);
@@ -2095,6 +2103,14 @@ textarea.form-control {
   flex-shrink: 0;
 }
 
+/* Phone links in the footer were only ~21px tall (text line-height alone),
+   under the 24px minimum touch target. Padding grows the tap area without
+   changing the visible text size. */
+.footer-contact-item a[href^="tel:"] {
+  display: inline-block;
+  padding: 3px 0;
+}
+
 .footer-bottom {
   padding: var(--space-6) 0;
   display: flex;
@@ -2106,7 +2122,9 @@ textarea.form-control {
 
 .footer-copy {
   font-size: var(--fs-xs);
-  color: rgba(255,255,255,0.4);
+  /* 0.4 blended against the footer's dark-blue background only reaches
+     3:1 contrast; 0.6 clears the 4.5:1 minimum. */
+  color: rgba(255,255,255,0.6);
 }
 
 .footer-legal {
@@ -2116,7 +2134,8 @@ textarea.form-control {
 
 .footer-legal a {
   font-size: var(--fs-xs);
-  color: rgba(255,255,255,0.4);
+  /* Same contrast fix as .footer-copy above. */
+  color: rgba(255,255,255,0.6);
   transition: var(--transition-fast);
 }
 

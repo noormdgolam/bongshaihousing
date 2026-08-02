@@ -219,8 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create canvas
     const canvas = document.createElement('canvas');
     canvas.id = 'hero-particles';
-    // Insert behind content but over background
-    hero.insertBefore(canvas, hero.querySelector('.hero-content'));
+    // Stacking is z-index driven (see #hero-particles in style.css), not DOM-order
+    // driven, so a plain prepend is enough - and unlike insertBefore() against a
+    // querySelector('.hero-content') result, it can't throw if that element ever
+    // ends up nested (e.g. inside a slider) instead of a direct child of .hero.
+    hero.prepend(canvas);
     
     const ctx = canvas.getContext('2d');
     let width, height;
