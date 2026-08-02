@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.persisted) {
       document.body.classList.remove('page-exit');
       document.body.classList.add('page-loaded');
+      // Also release any scroll lock left over from an overlay (search
+      // modal, mobile drawer, lightbox) that was open when the user
+      // navigated away - bfcache restores that state exactly as it was,
+      // so without this the restored page can come back unscrollable.
+      document.body.style.overflow = '';
     }
   });
 
