@@ -53,7 +53,7 @@
     "name": "Steel House Package",
     "description": "Durable and cost-effective prefab houses ranging from simple tiny homes to expandable family residences.",
     "brand": {"@type": "Brand", "name": "Bongshai Housing"},
-    "offers": {"@type": "AggregateOffer", "priceCurrency": "BDT", "lowPrice": "1235000", "highPrice": "2280000", "offerCount": "1", "availability": "https://schema.org/InStock", "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}}
+    "offers": {"@type": "AggregateOffer", "priceCurrency": "BDT", "lowPrice": "1900000", "highPrice": "3800000", "offerCount": "1", "availability": "https://schema.org/InStock", "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}}
   }
   </script>
 
@@ -337,7 +337,7 @@
 <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: var(--space-4); line-height: 1.1;">Model No-BH-IS-1012</h2>
 <p style="color: var(--grey-600); font-size: 0.95rem; margin-bottom: var(--space-6); line-height: 1.6;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
-<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);"><span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Price</span><span id="spec-price-1012" style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">৳12.3 Lakh (৳950/sqft)</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);"><span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Price</span><span id="spec-price-1012" style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">৳19 Lakh (৳950/sqft)</span></div>
 <div style="display: flex; flex-direction: column; gap: 12px;">
 <a href="contact.html?model=BH-IS-1012" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
 <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20BH-IS-1012." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
@@ -353,10 +353,10 @@
     <div style="flex: 1;">
       <div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">Select Floor Area</div>
       <div class="area-selector" id="area-selector-1012">
-<button type="button" class="area-btn active" onclick="selectArea('1012', '650x2', this)">650x2 Sq.Ft</button>
-<button type="button" class="area-btn " onclick="selectArea('1012', '750x2', this)">750x2 Sq.Ft</button>
-<button type="button" class="area-btn " onclick="selectArea('1012', '950x2', this)">950x2 Sq.Ft</button>
-<button type="button" class="area-btn " onclick="selectArea('1012', '1200x2', this)">1200x2 Sq.Ft</button>
+<button type="button" class="area-btn active" onclick="selectArea('1012', '2000', this)">2000 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1012', '3000', this)">3000 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1012', '4000', this)">4000 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1012', 'Custom', this)">Custom</button>
 </div>
     </div>
   </div>
@@ -453,13 +453,15 @@
 </div>
 <script>
     function updateSpecs1012(sqft) {
-      const parts = sqft.split("x");
-      const totalSqft = parts.length === 2 ? Number(parts[0]) * Number(parts[1]) : Number(parts[0]);
       const priceEl = document.getElementById("spec-price-1012");
-      if (priceEl) {
-        const price = (totalSqft * 950 / 100000).toFixed(1).replace(/\.0$/, "");
-        priceEl.innerText = "৳" + price + " Lakh (৳950/sqft)";
+      if (!priceEl) return;
+      if (sqft === "Custom") {
+        priceEl.innerText = "Contact for Custom Quote";
+        return;
       }
+      const totalSqft = Number(sqft);
+      const price = (totalSqft * 950 / 100000).toFixed(1).replace(/\.0$/, "");
+      priceEl.innerText = "৳" + price + " Lakh (৳950/sqft)";
     }
   </script>
 
