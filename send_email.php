@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST = $decoded;
     }
 
-    $name = isset($_POST['name']) ? strip_tags(trim($_POST['name'])) : '';
+    $name = isset($_POST['name']) ? preg_replace('/[\r\n]+/', ' ', strip_tags(trim($_POST['name']))) : '';
     $email = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : '';
     $phone = isset($_POST['phone']) ? strip_tags(trim($_POST['phone'])) : '';
     $district = isset($_POST['district']) ? strip_tags(trim($_POST['district'])) : 'N/A';

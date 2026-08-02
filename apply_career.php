@@ -10,11 +10,11 @@ require('fpdf.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $fname = isset($_POST['fname']) ? strip_tags(trim($_POST['fname'])) : '';
-    $lname = isset($_POST['lname']) ? strip_tags(trim($_POST['lname'])) : '';
+    $fname = isset($_POST['fname']) ? preg_replace('/[\r\n]+/', ' ', strip_tags(trim($_POST['fname']))) : '';
+    $lname = isset($_POST['lname']) ? preg_replace('/[\r\n]+/', ' ', strip_tags(trim($_POST['lname']))) : '';
     $email = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : '';
     $phone = isset($_POST['phone']) ? strip_tags(trim($_POST['phone'])) : '';
-    $position = isset($_POST['position']) ? strip_tags(trim($_POST['position'])) : '';
+    $position = isset($_POST['position']) ? preg_replace('/[\r\n]+/', ' ', strip_tags(trim($_POST['position']))) : '';
     $experience = isset($_POST['experience']) ? strip_tags(trim($_POST['experience'])) : '';
     $cover = isset($_POST['cover']) ? strip_tags(trim($_POST['cover'])) : 'N/A';
     

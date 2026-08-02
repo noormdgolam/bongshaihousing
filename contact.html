@@ -460,7 +460,13 @@
                       <option value="BH-DV-210">Model No-BH-DV-210</option>
                       <option value="BH-DV-211">Model No-BH-DV-211</option>
                       <option value="BH-DV-212">Model No-BH-DV-212</option>
-                      <option value="BH-DV-213">Model No-BH-DV-213</option>
+                      <option value="DV-110">Model DV-110</option>
+                      <option value="DV-111">Model DV-111</option>
+                      <option value="DV-112">Model DV-112</option>
+                      <option value="DV-113">Model DV-113</option>
+                    </optgroup>
+
+                    <optgroup label="🏡 Low-Cost Villa / Other Options (LCV)">
                       <option value="LCV-101">Model LCV-101</option>
                       <option value="LCV-102">Model LCV-102</option>
                       <option value="LCV-103">Model LCV-103</option>
@@ -557,7 +563,6 @@
                       <option value="BH-WH-810">Model No-BH-WH-810</option>
                       <option value="BH-WH-811">Model No-BH-WH-811</option>
                       <option value="BH-WH-812">Model No-BH-WH-812</option>
-                      <option value="BH-WH-813">Model No-BH-WH-813</option>
                     </optgroup>
 
                     <optgroup label="🏢 Concrete Building (BH-CB)">
@@ -643,21 +648,21 @@
             </form>
 
   <script>
+    // Floor-area tiers verified against each model's own product page
     const areaMapping = {
-      'DEFAULT': ['Select Floor Area', '350 Sq.Ft', '440 Sq.Ft', '650 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft', '1500 Sq.Ft', '2500 Sq.Ft', '5000+ Sq.Ft'],
-      'TH': ['350 Sq.Ft', '440 Sq.Ft'],
-      'WH': ['350 Sq.Ft', '440 Sq.Ft'],
-      'TSB': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
-      'DV': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
-      'LCV': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
-      'SB': ['650 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft'],
-      'CH': ['650 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft'],
-      'SH': ['650 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft'],
-      'CB': ['650 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft'],
-      'IS': ['1500 Sq.Ft', '2500 Sq.Ft', '5000 Sq.Ft', '10000 Sq.Ft'],
-      'WA': ['1000 Sq.Ft', '2000 Sq.Ft', '3000 Sq.Ft'],
-      'SO': ['300 Sq.Ft', '600 Sq.Ft', '900 Sq.Ft'],
-      'SK': ['50 Sq.Ft', '100 Sq.Ft', '150 Sq.Ft']
+      'DEFAULT': ['Select Floor Area'],
+      'TH': ['250-350 Sq.Ft'],
+      'WH': ['400-600 Sq.Ft', '750-900 Sq.Ft', '1050-1200 Sq.Ft'],
+      'TSB': ['600 Sq.Ft', '850 Sq.Ft'],
+      'DV': ['600 Sq.Ft', '850 Sq.Ft'],
+      'DVP': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
+      'LCV': ['440 Sq.Ft', '550 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft', '1500 Sq.Ft'],
+      'SB': ['400-600 Sq.Ft', '750-900 Sq.Ft', '1050-1200 Sq.Ft'],
+      'CH': ['400-600 Sq.Ft', '750-900 Sq.Ft', '1050-1200 Sq.Ft'],
+      'SH': ['400-600 Sq.Ft', '750-900 Sq.Ft', '1050-1200 Sq.Ft'],
+      'CB': ['400-600 Sq.Ft', '750-900 Sq.Ft', '1050-1200 Sq.Ft'],
+      'IS': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
+      'WA': ['400-600 Sq.Ft', '750-900 Sq.Ft', '1050-1200 Sq.Ft']
     };
 
     function updateAreaOptions(modelValue) {
@@ -668,15 +673,15 @@
       if (modelValue.includes('BH-TH')) key = 'TH';
       else if (modelValue.includes('BH-WH')) key = 'WH';
       else if (modelValue.includes('BH-TSB')) key = 'TSB';
-      else if (modelValue.includes('BH-DV') || modelValue.includes('LCV')) key = 'DV';
+      else if (/^DV-\d+$/.test(modelValue)) key = 'DVP';
+      else if (modelValue.includes('BH-DV')) key = 'DV';
+      else if (modelValue.includes('LCV')) key = 'LCV';
       else if (modelValue.includes('BH-SB')) key = 'SB';
       else if (modelValue.includes('BH-CH')) key = 'CH';
       else if (modelValue.includes('BH-SH')) key = 'SH';
       else if (modelValue.includes('BH-CB')) key = 'CB';
       else if (modelValue.includes('BH-IS')) key = 'IS';
       else if (modelValue.includes('BH-WA')) key = 'WA';
-      else if (modelValue.includes('BH-SO')) key = 'SO';
-      else if (modelValue.includes('BH-SK')) key = 'SK';
 
       const optionsList = areaMapping[key] || areaMapping['DEFAULT'];
       areaSelect.innerHTML = '';
@@ -694,6 +699,7 @@
     function rateForModel(modelValue) {
       if (modelValue === 'General Inquiry') return null;
       if (modelValue.startsWith('LCV')) return 1950;
+      if (/^DV-\d+$/.test(modelValue)) return 2500; // Duplex Premium (dv-110 to dv-113)
       const m = modelValue.match(/BH-([A-Z]+)-(\d+)/);
       if (!m) return null;
       const prefix = m[1], num = parseInt(m[2], 10);
