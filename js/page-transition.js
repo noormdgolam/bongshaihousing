@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('page-loaded');
   }, 50);
 
+  // Restore visibility when the page is served from the browser's
+  // back/forward cache (e.g. user clicks Back). bfcache restores don't
+  // fire DOMContentLoaded again, so without this the page stays stuck
+  // at opacity: 0 (the page-exit state set right before the user
+  // navigated away) until a manual refresh.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      document.body.classList.remove('page-exit');
+      document.body.classList.add('page-loaded');
+    }
+  });
+
   // Intercept clicks on internal links
   const links = document.querySelectorAll('a[href]');
   
