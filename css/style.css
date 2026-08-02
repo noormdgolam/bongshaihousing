@@ -4840,15 +4840,6 @@ body.dark-mode img.logo {
   pointer-events: none !important;
 }
 
-.chat-panel {
-  display: none !important;
-  pointer-events: auto !important;
-}
-
-.floating-widget.active .chat-panel {
-  display: flex !important;
-}
-
 .floating-main-btn, .whatsapp-float {
   pointer-events: auto !important;
 }
@@ -4865,7 +4856,19 @@ body.dark-mode img.logo {
     right: 16px !important;
     z-index: 99 !important;
   }
-  
+
+  /* Hard-hide the chat panel on mobile instead of relying on
+     opacity/visibility alone, since the fixed-position empty box was
+     still intercepting taps under it on some mobile browsers. */
+  .chat-panel {
+    display: none !important;
+    pointer-events: auto !important;
+  }
+
+  .floating-widget.active .chat-panel {
+    display: flex !important;
+  }
+
   .filter-bar {
     padding: 14px !important;
     gap: 10px !important;
