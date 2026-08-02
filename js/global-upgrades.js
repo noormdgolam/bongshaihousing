@@ -358,10 +358,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Scroll Progress Bar: lives in js/scroll-progress.js (a duplicate,
-// un-throttled copy of this used to live here — removed to stop two
-// separate scroll listeners fighting over two stacked progress bars).
-
 // Phase 2: 3D Tilt Effect — removed duplicate handler that was fighting
 // js/3d-tilt.js for the same elements (property-card also carries
 // data-tilt, so both scripts were rotating it independently on every
@@ -865,68 +861,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         counters.forEach(counter => observer.observe(counter));
     }
-});
-
-// ==========================================================================
-// Phase 3: Back to Top Progress Ring
-// ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    const ring = document.createElement('div');
-    ring.className = 'back-to-top-ring';
-    ring.innerHTML = `
-        <svg viewBox="0 0 44 44">
-            <circle class="ring-bg" cx="22" cy="22" r="20"></circle>
-            <circle class="ring-progress" cx="22" cy="22" r="20"></circle>
-        </svg>
-        <div class="back-to-top-arrow">&#8593;</div>
-    `;
-    
-    document.body.appendChild(ring);
-    
-    const circle = ring.querySelector('.ring-progress');
-    const radius = circle.r.baseVal.value;
-    const circumference = radius * 2 * Math.PI;
-    
-    circle.style.strokeDasharray = `${circumference} ${circumference}`;
-    circle.style.strokeDashoffset = circumference;
-    
-    const updateRing = () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-
-        if (scrollTop > 300) {
-            ring.classList.add('active');
-        } else {
-            ring.classList.remove('active');
-        }
-
-        if(scrollHeight > 0) {
-            const scrollPercentage = scrollTop / scrollHeight;
-            const drawLength = circumference * scrollPercentage;
-            circle.style.strokeDashoffset = circumference - drawLength;
-        }
-    };
-
-    // Batch to one update per animation frame instead of running on every
-    // raw scroll event, which fires far faster than the screen can repaint
-    // and was the main source of scroll jank on this page.
-    let ringTicking = false;
-    window.addEventListener('scroll', () => {
-        if (!ringTicking) {
-            requestAnimationFrame(() => {
-                updateRing();
-                ringTicking = false;
-            });
-            ringTicking = true;
-        }
-    }, {passive: true});
-    
-    ring.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
 });
 
 // ==========================================================================
