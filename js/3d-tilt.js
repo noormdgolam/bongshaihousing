@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     el.style.transition = 'transform 0.1s ease-out';
 
     let bounds;
-    let maxTilt = 10; // Maximum rotation in degrees
+    let maxTilt = 5; // Maximum rotation in degrees
 
     el.addEventListener('mouseenter', () => {
       bounds = el.getBoundingClientRect();

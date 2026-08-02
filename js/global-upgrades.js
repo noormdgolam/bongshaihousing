@@ -438,38 +438,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // un-throttled copy of this used to live here — removed to stop two
 // separate scroll listeners fighting over two stacked progress bars).
 
-// ==========================================================================
-// Phase 2: 3D Tilt Effect
-// ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    // Only run on desktop
-    if(window.matchMedia("(pointer: coarse)").matches) return;
-    
-    const tiltElements = document.querySelectorAll('.property-card, .gallery-item, .service-card');
-    
-    tiltElements.forEach(el => {
-        el.classList.add('tilt-element');
-        
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left; // x position within the element.
-            const y = e.clientY - rect.top;  // y position within the element.
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            // Max rotation is 10 degrees
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
-            
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        });
-        
-        el.addEventListener('mouseleave', () => {
-            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        });
-    });
-});
+// Phase 2: 3D Tilt Effect — removed duplicate handler that was fighting
+// js/3d-tilt.js for the same elements (property-card also carries
+// data-tilt, so both scripts were rotating it independently on every
+// mousemove). js/3d-tilt.js is the single tilt implementation now.
 
 // ==========================================================================
 // Phase 2: Floating FAQ Chatbot (scripted, no AI/API — keyword-matched
