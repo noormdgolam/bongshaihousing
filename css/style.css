@@ -3352,23 +3352,6 @@ a, button, input[type='submit'], input[type='button'], .cat-item, .clickable, se
 }
 
 /* ============================================================
-   PREMIUM CUSTOM SCROLLBAR
-   ============================================================ */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--grey-100);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-light);
-}
-
-/* ============================================================
    SCROLL PROGRESS INDICATOR
    ============================================================ */
 #scroll-progress-container {
@@ -3699,32 +3682,6 @@ body {
 
 .gallery-item img, .project-card img {
   cursor: zoom-in !important;
-}
-
-/* ==========================================================================
-   Phase 2: Custom Scrollbar
-   ========================================================================== */
-::-webkit-scrollbar {
-  width: 12px;
-  background: var(--grey-100);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar {
-  background: var(--dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--primary);
-  border-radius: 6px;
-  border: 3px solid var(--grey-100);
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
-  border: 3px solid var(--dark);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--primary-light);
 }
 
 /* ==========================================================================
