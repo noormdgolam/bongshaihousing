@@ -936,11 +936,17 @@
     <p style="color: var(--grey-500); font-size: 0.95rem; margin-bottom: 24px;">Enter your details below to receive your personalized PDF quote directly to your email.</p>
     
     <form id="consultationForm" onsubmit="submitConsultation(event)">
+      <!-- Anti-spam Honeypot -->
+      <div style="display:none; visibility:hidden;" aria-hidden="true">
+        <label for="cust_website_url">Leave this field blank</label>
+        <input type="text" id="cust_website_url" name="website_url" tabindex="-1" autocomplete="off" />
+      </div>
+
       <input type="text" id="custName" class="modal-input" placeholder="Full Name" required>
       <input type="email" id="custEmail" class="modal-input" placeholder="Email Address" required>
       <input type="tel" id="custPhone" class="modal-input" placeholder="Phone Number" required>
       <input type="text" id="custAddress" class="modal-input" placeholder="District & Upazila" required>
-      
+
       <button type="submit" id="submitQuoteBtn" class="btn-card-link">Send My PDF Quote</button>
     </form>
     <div id="quoteMessage" style="margin-top: 16px; font-size: 0.95rem; text-align: center; font-weight: 600; display: none;"></div>
@@ -970,7 +976,8 @@
     const email = document.getElementById('custEmail').value;
     const phone = document.getElementById('custPhone').value;
     const address = document.getElementById('custAddress').value;
-    
+    const website_url = document.getElementById('cust_website_url').value;
+
     // Gather Calc Data
     const model = document.getElementById('c1-val-model').innerText;
     const area = document.getElementById('c1-val-area').innerText;
@@ -995,7 +1002,7 @@
     btn.disabled = true;
     
     const payload = {
-        name, email, phone, address,
+        name, email, phone, address, website_url,
         model, area, finish, total_cost, down_payment, loan_amount, emi, tenure, rate
     };
 
