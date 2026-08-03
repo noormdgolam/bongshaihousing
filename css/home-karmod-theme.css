@@ -370,6 +370,12 @@ body.home-karmod .pkg-panel-links a {
 body.home-karmod .pkg-panel-links a:hover {
   color: var(--accent);
   background: var(--off-white);
+  /* The color change alone got much subtler once --accent was darkened for
+     contrast (#F57F2B -> #B34D0A elsewhere this session), so the hover
+     could look like it had stopped working. A visible slide + left accent
+     bar keeps the feedback obvious regardless of the muted color. */
+  padding-left: calc(var(--space-6) + 6px);
+  border-left: 3px solid var(--accent);
 }
 
 /* Tablet: stack image above links, keep links two-up */
