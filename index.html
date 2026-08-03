@@ -979,7 +979,15 @@
         const img = panel.querySelector('.pkg-panel-image img');
         const links = panel.querySelector('.pkg-panel-links');
         if (!img || !links) return;
-        links.querySelectorAll('a[data-img]').forEach(link => {
+        const hoverLinks = links.querySelectorAll('a[data-img]');
+        // Preload every photo in this panel up front, so the very first hover
+        // swaps instantly instead of waiting on a fresh network fetch (which
+        // on a slow mobile connection could look like hovering does nothing).
+        hoverLinks.forEach(link => {
+          const preload = new Image();
+          preload.src = link.getAttribute('data-img');
+        });
+        hoverLinks.forEach(link => {
           link.addEventListener('mouseenter', () => {
             img.src = link.getAttribute('data-img');
           });
