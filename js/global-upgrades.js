@@ -1221,14 +1221,19 @@ document.addEventListener('DOMContentLoaded', injectInstallButton);
 
 /* =========================================================
    AUTO DARK MODE LOGIC (SYSTEM PREFERENCE)
+   An inline blocking script in <head> already applies data-theme="dark"
+   to <html> before first paint (avoids a flash of light-mode content
+   while this deferred script loads). This just keeps it in sync if the
+   user flips their OS theme while the page is already open, and targets
+   the same element (documentElement, not body) that script uses.
    ========================================================= */
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 function applySystemTheme(e) {
     if (e.matches) {
-        document.body.setAttribute('data-theme', 'dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
     } else {
-        document.body.removeAttribute('data-theme');
+        document.documentElement.removeAttribute('data-theme');
     }
 }
 

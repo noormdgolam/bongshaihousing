@@ -1235,8 +1235,8 @@ img {
 }
 
 [data-theme="dark"] .faq-item {
-  background: var(--grey-800);
-  border-color: var(--grey-700);
+  background: var(--grey-50);
+  border-color: var(--grey-100);
 }
 
 .faq-item summary {
@@ -1249,10 +1249,6 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-}
-
-[data-theme="dark"] .faq-item summary {
-  color: var(--grey-100);
 }
 
 .faq-item summary::-webkit-details-marker { display: none; }
@@ -1354,11 +1350,11 @@ img {
 
 [data-theme="dark"] .compare-table-wrap,
 [data-theme="dark"] .compare-card {
-  background: var(--grey-800);
-  border-color: var(--grey-700);
+  background: var(--grey-50);
+  border-color: var(--grey-100);
 }
 [data-theme="dark"] .compare-table tbody tr:nth-child(even) td {
-  background: var(--dark);
+  background: var(--off-white);
 }
 [data-theme="dark"] .compare-table tbody tr:hover td {
   background: var(--grey-700);
@@ -3399,16 +3395,21 @@ body.page-exit {
   --grey-200: #475569;
   --grey-300: #64748b;
   --grey-400: #94a3b8;
-  --grey-500: #cbd5e1;
-  --grey-600: #e2e8f0;
+  --grey-500: #94a3b8;
+  --grey-600: #cbd5e1;
   --grey-700: #f1f5f9;
-  --grey-800: #f8fafc;
+  --grey-800: #f1f5f9;
   --grey-900: #ffffff;
+  /* Body text color - must resolve to a light value. This was previously
+     var(--white), which is correct in light mode (white bg -> #fff isn't
+     used for text) but self-referentially resolves to #0f172a *inside this
+     same dark-mode scope*, since --white is redefined above - i.e. body
+     text rendered near-black on a near-black background. */
   --dark: #ffffff;
-  --primary: #3b82f6; /* Lighter blue for dark mode contrast */
-  --primary-light: #60a5fa;
-  --primary-dark: #1d4ed8;
-  box-shadow: none !important;
+  --primary: #60a5fa;
+  --primary-light: #93c5fd;
+  --primary-dark: #3b82f6;
+  box-shadow: none;
 }
 
 [data-theme="dark"] .property-card,
@@ -3508,24 +3509,6 @@ body.page-exit {
 }
 
 
-/* === BONGSHAI HOUSING — Dark Mode Theme Variables === */
-[data-theme="dark"] {
-  --white: #0f172a !important;
-  --off-white: #1e293b !important;
-  --grey-50: #1e293b !important;
-  --grey-100: #334155 !important;
-  --grey-200: #475569 !important;
-  --grey-300: #64748b !important;
-  --grey-400: #94a3b8 !important;
-  --grey-500: #94a3b8 !important;
-  --grey-600: #cbd5e1 !important;
-  --grey-800: #f1f5f9 !important;
-  --grey-900: #ffffff !important;
-  --dark: var(--white) !important;
-  --primary: #60a5fa !important;
-  --primary-dark: #3b82f6 !important;
-  --primary-light: #93c5fd !important;
-}
 
 body, .navbar, .footer, .property-card, .service-card, .process-step, .glass-panel, .card, section, div {
   transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
@@ -3745,7 +3728,7 @@ body {
 }
 
 [data-theme="dark"] .chat-panel {
-  background: var(--grey-800);
+  background: var(--grey-50);
 }
 
 .floating-widget.active .chat-panel {
@@ -3822,7 +3805,7 @@ body {
 }
 
 [data-theme="dark"] .chat-msg.bot {
-  background: var(--grey-700, #334155);
+  background: var(--grey-100, #334155);
   color: white;
 }
 
@@ -3901,7 +3884,7 @@ body {
 }
 
 [data-theme="dark"] .chat-input-row {
-  border-top-color: var(--grey-700, #334155);
+  border-top-color: var(--grey-100, #334155);
 }
 
 .chat-input-wrap {
@@ -3921,11 +3904,11 @@ body {
 }
 
 [data-theme="dark"] .chat-input-wrap {
-  background: var(--grey-700, #334155);
+  background: var(--grey-100, #334155);
 }
 
 [data-theme="dark"] .chat-input-wrap:focus-within {
-  background: var(--grey-800, #1e293b);
+  background: var(--grey-50, #1e293b);
 }
 
 .chat-input {
@@ -4023,8 +4006,8 @@ body {
 }
 
 [data-theme="dark"] .mv-card {
-  background: var(--grey-800);
-  border-color: var(--grey-700);
+  background: var(--grey-50);
+  border-color: var(--grey-100);
 }
 
 .mv-card-img {
@@ -4335,7 +4318,7 @@ body {
   color: var(--grey-800);
 }
 
-[data-theme="dark"] .est-range-wrap label { color: var(--grey-100); }
+[data-theme="dark"] .est-range-wrap label { color: var(--grey-900); }
 
 .est-range {
   width: 100%;
@@ -4389,7 +4372,7 @@ body {
   margin-top: 40px;
 }
 
-[data-theme="dark"] .est-result-box { background: var(--grey-800); }
+[data-theme="dark"] .est-result-box { background: var(--grey-50); }
 
 .est-price {
   font-size: 3rem;
@@ -4675,7 +4658,7 @@ body.dark-mode img.logo {
 }
 
 [data-theme="dark"] .ftue-body h2 {
-  color: var(--white);
+  color: var(--dark);
 }
 
 [data-theme="dark"] .ftue-body p {
@@ -4684,7 +4667,7 @@ body.dark-mode img.logo {
 
 [data-theme="dark"] .ftue-close-btn {
   background: rgba(0, 0, 0, 0.5);
-  color: var(--white);
+  color: var(--dark);
 }
 
 [data-theme="dark"] .ftue-close-btn:hover {
