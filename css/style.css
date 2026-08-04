@@ -4928,3 +4928,34 @@ body.dark-mode img.logo {
  } 
   
  
+/* ==========================================================================
+   Mobile UX Enhancements
+   ========================================================================== */
+@media (max-width: 640px) {
+  /* 1. Hero Buttons */
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem; /* Better touch target */
+  }
+
+  /* 2. Improve Tap Targets */
+  .hamburger {
+    padding: 12px;
+  }
+  .mobile-drawer {
+    padding: var(--space-4);
+  }
+  .mobile-nav-link,
+  .mobile-drawer button.mobile-nav-link {
+    padding: var(--space-5) 0; /* Increase tap area */
+  }
+  .mobile-sub-link {
+    padding: var(--space-4) 0;
+  }
+}
