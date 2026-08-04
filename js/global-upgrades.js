@@ -1182,42 +1182,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* =========================================================
-   PWA INSTALL LOGIC (ALWAYS INJECTED)
+   PWA INSTALL BANNER
+   Shown only when the browser actually confirms the site is
+   installable (beforeinstallprompt) - never asserted blindly, since
+   plenty of browsers/OSes don't support installation at all.
    ========================================================= */
+const PWA_DISMISS_KEY = 'bongshai_pwa_install_dismissed';
 let deferredPrompt = null;
+
+function showInstallBanner() {
+  if (document.getElementById('pwaInstallBanner')) return;
+  if (localStorage.getItem(PWA_DISMISS_KEY) === 'true') return;
+
+  // Don't stack this on top of the first-time-visitor welcome modal (only
+  // present on the homepage, only on someone's very first visit - exactly
+  // when beforeinstallprompt is also likely to fire). Wait for it to close.
+  const ftueModal = document.getElementById('ftue-modal');
+  if (ftueModal && ftueModal.classList.contains('active')) {
+    const observer = new MutationObserver(() => {
+      if (!ftueModal.classList.contains('active')) {
+        observer.disconnect();
+        showInstallBanner();
+      }
+    });
+    observer.observe(ftueModal, { attributes: true, attributeFilter: ['class'] });
+    return;
+  }
+
+  const banner = document.createElement('div');
+  banner.id = 'pwaInstallBanner';
+  banner.className = 'pwa-install-banner';
+  banner.setAttribute('role', 'dialog');
+  banner.setAttribute('aria-label', 'Install Bongshai Housing app');
+  banner.innerHTML = `
+    <img class="pwa-install-icon" src="/images/logo-icon-192.webp" alt="" width="44" height="44">
+    <p class="pwa-install-text">Install the <strong>Bongshai Housing</strong> app for quick access from your home screen &mdash; no app store needed.</p>
+    <div class="pwa-install-actions">
+      <button type="button" class="btn btn-primary pwa-install-btn">Install</button>
+      <button type="button" class="pwa-install-close" aria-label="Dismiss">&times;</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+  requestAnimationFrame(() => banner.classList.add('show'));
+
+  const dismiss = () => {
+    banner.classList.remove('show');
+    localStorage.setItem(PWA_DISMISS_KEY, 'true');
+    setTimeout(() => banner.remove(), 400);
+  };
+
+  banner.querySelector('.pwa-install-btn').addEventListener('click', async () => {
+    if (!deferredPrompt) { dismiss(); return; }
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    banner.classList.remove('show');
+    setTimeout(() => banner.remove(), 400);
+  });
+
+  banner.querySelector('.pwa-install-close').addEventListener('click', dismiss);
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+  showInstallBanner();
 });
 
-function injectInstallButton() {
-  if (document.getElementById('pwaInstallBtn')) return;
-  const installBtn = document.createElement('button');
-  installBtn.id = 'pwaInstallBtn';
-  installBtn.className = 'btn btn-primary';
-  installBtn.style.cssText = 'width: 100%; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: bold; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border: none; box-shadow: var(--shadow-md); color: white; border-radius: 8px; cursor: pointer;';
-  installBtn.innerHTML = '📱 Install Bongshai App';
-  
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        installBtn.style.display = 'none';
-      }
-      deferredPrompt = null;
-    } else {
-      alert("To install the Bongshai App, tap 'Add to Home Screen' in your browser menu.");
-    }
-  });
-
-  const mobileDrawer = document.querySelector('.mobile-drawer > div');
-  if (mobileDrawer) {
-    mobileDrawer.appendChild(installBtn);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', injectInstallButton);
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('pwaInstallBanner');
+  if (banner) banner.remove();
+  localStorage.setItem(PWA_DISMISS_KEY, 'true');
+});
 
 /* =========================================================
    AUTO DARK MODE LOGIC (SYSTEM PREFERENCE)
