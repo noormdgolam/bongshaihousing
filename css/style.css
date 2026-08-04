@@ -1039,7 +1039,13 @@ img {
   position: relative;
   overflow: hidden;
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 4/3;
+}
+
+@media (max-width: 768px) {
+  .property-img-wrap {
+    aspect-ratio: 1/1;
+  }
 }
 
 .property-img-wrap img {
