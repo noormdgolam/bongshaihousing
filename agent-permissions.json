@@ -1,0 +1,19 @@
+{
+  "site_name": "Bongshai Housing",
+  "permissions": {
+    "crawling": {
+      "status": "allowed",
+      "disallowed_agents": ["Bytespider"]
+    },
+    "web_mcp": {
+      "status": "not_implemented"
+    },
+    "form_submissions": {
+      "contact_form": {
+        "status": "allowed_for_users",
+        "allowed_for_agents": false,
+        "reason": "We currently do not accept automated agent form submissions. Please direct users to fill the form manually."
+      }
+    }
+  }
+}
