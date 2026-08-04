@@ -1195,7 +1195,7 @@ function injectInstallButton() {
   const installBtn = document.createElement('button');
   installBtn.id = 'pwaInstallBtn';
   installBtn.className = 'btn btn-primary';
-  installBtn.style.cssText = 'width: 100%; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: bold; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; box-shadow: var(--shadow-md); color: white; border-radius: 8px; cursor: pointer;';
+  installBtn.style.cssText = 'width: 100%; margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: bold; padding: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border: none; box-shadow: var(--shadow-md); color: white; border-radius: 8px; cursor: pointer;';
   installBtn.innerHTML = '📱 Install Bongshai App';
   
   installBtn.addEventListener('click', async () => {
