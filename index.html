@@ -917,7 +917,12 @@
 
       const resetImage = (panel) => {
         const img = panel.querySelector('.pkg-panel-image img');
-        if (img) img.src = img.getAttribute('data-default-img');
+        if (img) {
+          img.src = img.getAttribute('data-default-img');
+          if (img.hasAttribute('data-default-srcset')) {
+            img.setAttribute('srcset', img.getAttribute('data-default-srcset'));
+          }
+        }
       };
 
       tabs.forEach(tab => {
@@ -949,11 +954,18 @@
           const preload = new Image();
           preload.src = link.getAttribute('data-img');
         });
+        // Save initial srcset
+        if (img.hasAttribute('srcset')) {
+          img.setAttribute('data-default-srcset', img.getAttribute('srcset'));
+        }
+
         hoverLinks.forEach(link => {
           link.addEventListener('mouseenter', () => {
+            img.removeAttribute('srcset');
             img.src = link.getAttribute('data-img');
           });
           link.addEventListener('focus', () => {
+            img.removeAttribute('srcset');
             img.src = link.getAttribute('data-img');
           });
         });
