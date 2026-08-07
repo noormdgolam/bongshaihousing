@@ -1430,6 +1430,7 @@ mediaQuery.addEventListener('change', applySystemTheme);
       '.property-img img',
       '.gallery-img img',
       '.gallery-img',
+      '.gallery-masonry-item img',
       '.project-img img',
       '.product-hero-img img',
       'figure img',

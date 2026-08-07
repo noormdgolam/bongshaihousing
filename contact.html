@@ -721,7 +721,7 @@
       const note = document.getElementById('model-rate-note');
       if (!note) return;
       const rate = rateForModel(modelValue);
-      note.textContent = rate ? ('Construction rate for this model: ৳' + rate.toLocaleString() + '/sqft') : '';
+      note.textContent = '';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
