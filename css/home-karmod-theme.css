@@ -84,6 +84,16 @@ body.home-karmod .category-slider .swiper-slide {
   height: 100%;
 }
 
+/* .hero's own align-items:center never reaches .hero-content, since the
+   swiper stack above is position:absolute and so sits outside .hero's flex
+   layout entirely. Without this, .hero-content just flows from the top of
+   the (100svh-tall) slide, leaving a large empty gap below it on any slide
+   whose text is shorter than the viewport. */
+body.home-karmod .category-slider .swiper-slide {
+  display: flex;
+  align-items: center;
+}
+
 /* Company stats sit above whichever slide is active, so they stay put as the
    slider rotates (they describe the company, not the individual slide). */
 body.home-karmod .category-slider .slider-stats-wrap {

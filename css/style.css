@@ -727,6 +727,21 @@ img {
   width: 100%;
 }
 
+/* .hero-content also carries the generic .container class for its max-width
+   + horizontal gutters. .container's own padding shorthand (0 var(--space-N))
+   is defined later in this file inside several breakpoints, and since both
+   selectors tie on specificity, source order decided the winner - meaning
+   between roughly 769px and 1024px wide (where .container's 1024px rule
+   applies but no narrower .hero-content override exists yet to reclaim it),
+   .container's padding:0 silently zeroed out .hero-content's top clearance,
+   rendering the badge/title partly or fully underneath the fixed navbar.
+   The compound selector below outranks a plain .container rule by
+   specificity alone, so it wins regardless of source order or future edits
+   to either file. */
+.hero-content.container {
+  padding: calc(var(--nav-height) + 60px) 0 80px;
+}
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -2441,7 +2456,7 @@ textarea.form-control {
 
   /* Hero */
   .hero { min-height: 100svh; }
-  .hero-content { padding: calc(var(--nav-height) + 48px) 0 60px; }
+  .hero-content.container { padding: calc(var(--nav-height) + 48px) 0 60px; }
   .hero-subtitle { font-size: var(--fs-base); max-width: 100%; }
   .hero-stats { gap: var(--space-5); }
   .stat-number { font-size: var(--fs-3xl); }
@@ -2631,7 +2646,7 @@ textarea.form-control {
   .section-sm { padding: var(--space-10) 0; }
 
   /* Hero */
-  .hero-content { padding: calc(var(--nav-height) + 32px) 0 48px; }
+  .hero-content.container { padding: calc(var(--nav-height) + 32px) 0 48px; }
   .hero-subtitle { font-size: var(--fs-sm); }
   .hero-stats { grid-template-columns: 1fr 1fr; display: grid; }
 
@@ -2720,7 +2735,7 @@ textarea.form-control {
   .brand-tagline { display: none; }
 
   /* Hero */
-  .hero-content { padding: calc(var(--nav-height) + 24px) 0 36px; }
+  .hero-content.container { padding: calc(var(--nav-height) + 24px) 0 36px; }
   .hero-badge   { display: none; }
   .hero-stats   { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
   .stat-number  { font-size: var(--fs-xl); }

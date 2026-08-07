@@ -1,9 +1,9 @@
-const CACHE_NAME = 'bongshai-cache-v19';
+const CACHE_NAME = 'bongshai-cache-v20';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
-  '/css/style.min.css?v=4.1',
+  '/css/style.min.css?v=4.2',
   '/js/global-upgrades.min.js?v=3.9',
   '/js/bd-geo-data.js',
   '/manifest.json'
