@@ -54,7 +54,7 @@
     "name": "Steel House Package",
     "description": "Durable and cost-effective prefab houses ranging from simple tiny homes to expandable family residences.",
     "brand": {"@type": "Brand", "name": "Bongshai Housing"},
-    "offers": {"@type": "AggregateOffer", "priceCurrency": "BDT", "lowPrice": "3250000", "highPrice": "6000000", "offerCount": "1", "availability": "https://schema.org/InStock", "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}}
+    "offers": {"@type": "AggregateOffer", "priceCurrency": "BDT", "priceValidationUntil": "2030-12-31", "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}}
   }
   </script>
 
@@ -338,7 +338,7 @@
 <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: var(--space-4); line-height: 1.1;">Model No-BH-SH-608</h2>
 <p style="color: var(--grey-600); font-size: 0.95rem; margin-bottom: var(--space-6); line-height: 1.6;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
-<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);"><span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Price</span><span id="spec-price-608" style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">৳32.5 Lakh (৳2500/sqft)</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);"><span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Pricing</span><span id="spec-price-608" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">Contact for Quote</span></div>
 <div style="display: flex; flex-direction: column; gap: 12px;">
 <a href="contact.html?model=BH-SH-608" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
 <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20BH-SH-608." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
@@ -466,13 +466,7 @@
 
       document.getElementById("spec-bed-608").innerText = data.bed;
       document.getElementById("spec-bath-608").innerText = data.bath;
-        const priceEl608 = document.getElementById("spec-price-608");
-        if (priceEl608) {
-          const parts608 = sqft.split("x");
-          const totalSqft608 = parts608.length === 2 ? Number(parts608[0]) * Number(parts608[1]) : Number(sqft);
-          const price608 = (totalSqft608 * 2500 / 100000).toFixed(1).replace(/\.0$/, "");
-          priceEl608.innerText = "৳" + price608 + " Lakh (৳2500/sqft)";
-        }
+        const priceEl608 = document.getElementById("spec-price-608"); if (priceEl608) { priceEl608.innerText = "Contact for Quote"; }
 
       let drawingHtml608 = data.drawing !== "N/A" ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
 
@@ -543,7 +537,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-TSB-101 &mdash; Apartment Building</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-TSB-101" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-TSB-101" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-tsb-101.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -556,7 +550,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-DV-201 &mdash; Duplex Steel Building</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-DV-201" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-DV-201" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-dv-201.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -569,7 +563,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-SB-301 &mdash; Simplex Steel Building</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-SB-301" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-SB-301" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-sb-301.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -582,7 +576,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-CH-401 &mdash; Cottage House</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-CH-401" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-CH-401" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-ch-401.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -595,7 +589,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-CH-501 &mdash; Container House</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-CH-501" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-CH-501" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-ch-501.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -608,7 +602,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-SH-601 &mdash; Steel House</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-SH-601" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-SH-601" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-sh-601.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -621,7 +615,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-TH-701 &mdash; Tiny House</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-TH-701" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-TH-701" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-th-701.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>
@@ -634,7 +628,7 @@
 <div class="mv-card-body">
 <h3 class="mv-card-title">BH-CB-901 &mdash; Concrete Building</h3>
 <div class="mv-card-actions">
-<a href="contact.html?model=BH-CB-901" class="mv-btn mv-btn-price">Get Price</a>
+<a href="contact.html?model=BH-CB-901" class="mv-btn mv-btn-price">Get Quote</a>
 <a href="bh-cb-901.html" class="mv-btn mv-btn-detail">Detail</a>
 </div>
 </div>

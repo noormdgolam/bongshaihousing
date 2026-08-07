@@ -44,7 +44,7 @@ Commercial
 
 Interactive Tools
 
-🧮 Calculator
+📋 Get Quote
 
 🏗️ Our Projects
 
@@ -56,7 +56,7 @@ Interactive Tools
 
 Get a Free Quote
 
-Interactive Calculator
+Get Custom Quote
 
 ## Calculator
 
@@ -144,7 +144,7 @@ Get Free Quote
 
 STEP 3 (OPTIONAL)
 
-## EMI Calculator
+## quote request
 
 Plan your finances with local bank rates.
 

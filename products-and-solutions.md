@@ -142,11 +142,11 @@ Safe, scalable staff housing.
 
 Plan your project and estimate costs instantly.
 
-## Cost Calculator
+## Get Custom Quote
 
 Get an instant estimate for your steel building project.
 
-## Interactive Cost Estimator
+## Get Custom Quote
 
 Drag the sliders below to instantly get an estimated budget range for your dream project.
 

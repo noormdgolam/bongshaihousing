@@ -42,7 +42,7 @@ Commercial
 
 Interactive Tools
 
-🧮 Calculator
+📋 Get Quote
 
 🏗️ Our Projects
 
@@ -116,19 +116,19 @@ Worker Accommodation is our safe, scalable staff-housing line, built for factori
 
 How much does a prefab steel building cost in Bangladesh?
 
-Construction rates vary by category: roughly Tk900-950/sqft for Industrial Sheds and Worker Accommodation, Tk1,500/sqft for Wooden and Tiny Houses, Tk2,200/sqft for Cottage Houses, Tk2,500-2,750/sqft for Apartment, Duplex, Simplex, Steel House, and Concrete Building lines, and Tk3,000/sqft for Container Houses. Use our free cost calculator for an instant estimate based on your land size and floor count.
+Construction rates vary by category: roughly Tk900-950/sqft for Industrial Sheds and Worker Accommodation, Tk1,500/sqft for Wooden and Tiny Houses, Tk2,200/sqft for Cottage Houses, Tk2,500-2,750/sqft for Apartment, Duplex, Simplex, Steel House, and Concrete Building lines, and Tk3,000/sqft for Container Houses. Use our free Get Custom Quote for an instant estimate based on your land size and floor count.
 
 What factors affect the final price of a steel building?
 
 Price depends primarily on floor area, number of floors, product category, and finish level (standard vs. luxury finishing). Site conditions and access can also affect the final quote.
 
-Is there a free online cost calculator?
+Is there a free online Get Custom Quote?
 
-Yes - our interactive calculator lets you check land-fit against local setback rules, estimate construction cost by model, and calculate EMI for bank financing, all in one place.
+Yes - our Get Custom Quote lets you check land-fit against local setback rules, estimate construction cost by model, and calculate EMI for bank financing, all in one place.
 
 Can I get bank financing / EMI for my project?
 
-Our EMI calculator can estimate monthly installments based on Bangladesh's typical home-loan rates (around 9-11%). Standard bank eligibility generally requires a minimum monthly income of BDT 30,000 and 1-2 years of work or business history; Bongshai Housing can assist with the property documentation your bank will require.
+Our quote request can estimate monthly installments based on Bangladesh's typical home-loan rates (around 9-11%). Standard bank eligibility generally requires a minimum monthly income of BDT 30,000 and 1-2 years of work or business history; Bongshai Housing can assist with the property documentation your bank will require.
 
 ## Construction Process
 
