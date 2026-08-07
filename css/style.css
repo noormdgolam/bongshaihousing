@@ -650,7 +650,18 @@ img {
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* .open only ever toggled `transform` (for the slide-in animation), never
+   `display` - so the drawer stayed display:none, transform or not, and
+   clicking the hamburger silently did nothing. A separate rule further
+   down forces display:block back on within a max-width:768px media query,
+   which masked this for narrow phones, but left a real gap between that
+   and the hamburger's own max-width:1024px breakpoint (a resized desktop
+   window, tablet landscape, small laptop) where the hamburger was clickable
+   but the drawer it's supposed to open never appeared. Setting display
+   here directly, with no media-query dependency, fixes it at every width
+   the hamburger itself can show. */
 .mobile-drawer.open {
+  display: block;
   transform: translateX(0);
 }
 
