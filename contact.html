@@ -339,6 +339,16 @@
       </div>
     </section>
 
+    <!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+    <section class="section" style="padding: 2rem 0; background: var(--off-white);">
+      <div class="container">
+        <p><strong>Bongshai Housing provides dedicated support and consultation for all your prefab and steel building needs across Bangladesh. Contact us today for a free quote, structural assessment, or general inquiries.</strong></p>
+        <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+          By <strong>Bongshai Housing Client Service Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+        </div>
+      </div>
+    </section>
+
     <!-- CONTACT SECTION -->
     <section class="section" aria-labelledby="contact-section-title">
       <div class="container">
@@ -347,7 +357,7 @@
           <!-- Contact Info -->
           <div class="contact-info reveal-left">
             <div class="section-label">Contact Details</div>
-            <h2 class="contact-info-title" id="contact-section-title">We're Here to Help</h2>
+            <h2 class="contact-info-title" id="contact-section-title">How can we help you?</h2>
             <p style="margin-bottom:var(--space-8);color:var(--grey-600)">Have a question about our housing packages or want to discuss your project? Reach us through any of the channels below.</p>
 
             <div class="contact-detail-items">
@@ -399,7 +409,7 @@
 
             <!-- Office Hours -->
             <div class="contact-hours" aria-label="Office hours">
-              <h3 class="contact-hours-title">🕘 Office Hours</h3>
+              <h3 class="contact-hours-title">🕘 What are our Office Hours?</h3>
               <div class="hours-row">
                 <span class="hours-day">Saturday – Thursday</span>
                 <span class="hours-time">9:00 AM – 7:00 PM</span>
@@ -422,48 +432,48 @@
           <!-- Contact Form -->
           <div class="contact-form-wrap reveal-right">
             <div class="section-label">Send a Message</div>
-            <h2 class="form-title" style="margin-bottom:var(--space-2)">Request a Free Quote</h2>
+            <h2 class="form-title" style="margin-bottom:var(--space-2)">How can you Request a Free Quote?</h2>
             <p class="form-subtitle" style="color:var(--grey-600);margin-bottom:var(--space-6)">Fill in the form and our team will get back to you within 24 hours.</p>
 
-            <form id="contactForm" novalidate aria-label="Contact form">
+            <form id="contactForm" novalidate aria-label="Contact form" data-mcp-action="submit_contact">
                 <!-- Anti-spam Honeypot -->
                 <div style="display:none; visibility:hidden;" aria-hidden="true">
                   <label for="website_url">Leave this field blank</label>
-                  <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+                  <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" data-mcp-param="website_url" />
                 </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="fname">Full Name *</label>
-                  <input type="text" id="fname" name="name" class="form-control" placeholder="Your full name" required autocomplete="name" />
+                  <input type="text" id="fname" name="name" class="form-control" placeholder="Your full name" required autocomplete="name" data-mcp-param="name" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="email">Email Address *</label>
-                  <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required autocomplete="email" />
+                  <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required autocomplete="email" data-mcp-param="email" />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="phone">Phone / WhatsApp *</label>
-                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="01XXXXXXXXX" required autocomplete="tel" />
+                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="01XXXXXXXXX" required autocomplete="tel" data-mcp-param="phone" />
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="district">District *</label>
-                  <select id="district" name="district" class="form-control" required>
+                  <select id="district" name="district" class="form-control" required data-mcp-param="district">
                     <option value="">Select District</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="upazila">Police Station / Thana *</label>
-                  <input type="text" id="upazila" name="upazila" class="form-control" placeholder="e.g., Uttara, Gulshan" required />
+                  <input type="text" id="upazila" name="upazila" class="form-control" placeholder="e.g., Uttara, Gulshan" required data-mcp-param="upazila" />
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="model">Model of Interest</label>
-                  <select id="model" name="model" class="form-control" onchange="updateAreaOptions(this.value)">
+                  <select id="model" name="model" class="form-control" onchange="updateAreaOptions(this.value)" data-mcp-param="model">
                     <option value="General Inquiry">General Inquiry / Custom Project</option>
                     
                     <optgroup label="🏢 Apartment Building (BH-TSB)">
@@ -648,7 +658,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="floor_area">Floor Area (Optional)</label>
-                  <select id="floor_area" name="floor_area" class="form-control">
+                  <select id="floor_area" name="floor_area" class="form-control" data-mcp-param="floor_area">
                     <option value="N/A">Not Applicable</option>
                     <option value="440">440 Sq.Ft</option>
                     <option value="550">550 Sq.Ft</option>
@@ -660,7 +670,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="bedrooms">Bedrooms (Optional)</label>
-                  <select id="bedrooms" name="bedrooms" class="form-control">
+                  <select id="bedrooms" name="bedrooms" class="form-control" data-mcp-param="bedrooms">
                     <option value="N/A">Not Applicable</option>
                     <option value="2">2 Bedrooms</option>
                     <option value="3">3 Bedrooms</option>
@@ -672,7 +682,7 @@
 
               <div class="form-group">
                 <label class="form-label" for="message">Message / Requirements (Optional)</label>
-                <textarea id="message" name="message" class="form-control" placeholder="Tell us about your land size, location, special requests…" rows="4"></textarea>
+                <textarea id="message" name="message" class="form-control" placeholder="Tell us about your land size, location, special requests…" rows="4" data-mcp-param="message"></textarea>
               </div>
 
               <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" id="contact-submit-btn">
@@ -779,7 +789,7 @@
       <div class="container">
         <div class="section-header reveal" style="margin-bottom:var(--space-8)">
           <div class="section-label">Find Us</div>
-          <h2 class="section-title" data-aos="fade-up" id="map-title">Our Location in Uttara, Dhaka</h2>
+          <h2 class="section-title" data-aos="fade-up" id="map-title">Where is Our Location in Uttara, Dhaka?</h2>
           <p class="section-subtitle">Visit us at our office in Uttara Commercial Area, Dhaka-1230</p>
         </div>
         <div style="border-radius:var(--radius-2xl);overflow:hidden;box-shadow:var(--shadow-lg);height:420px" class="reveal">

@@ -322,9 +322,11 @@
     </section>
 
     <div class="container" style="padding-top: var(--space-12); padding-bottom: var(--space-12);">
-
-
-
+      <!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+      <p><strong>Bongshai Housing provides tailored engineering estimates and architectural consultation in Bangladesh. Get accurate quotes and premium material specifications for your custom steel building or prefab home project.</strong></p>
+      <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem; margin-bottom: 2rem;">
+        By <strong>Bongshai Housing Engineering Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+      </div>
     </div>
 
 <!-- CONSULTATION MODAL -->
@@ -358,20 +360,20 @@
 <div class="modal-overlay" id="consultationModal">
   <div class="modal-card">
     <button class="modal-close" onclick="closeConsultationModal()">&times;</button>
-    <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--grey-800); margin-bottom: 8px;">Final Consultation</h3>
+    <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--grey-800); margin-bottom: 8px;">What happens in the Final Consultation?</h3>
     <p style="color: var(--grey-500); font-size: 0.95rem; margin-bottom: 24px;">Enter your details below to receive your personalized PDF quote directly to your email.</p>
     
-    <form id="consultationForm" onsubmit="submitConsultation(event)">
+    <form id="consultationForm" onsubmit="submitConsultation(event)" data-mcp-action="submit_consultation">
       <!-- Anti-spam Honeypot -->
       <div style="display:none; visibility:hidden;" aria-hidden="true">
         <label for="cust_website_url">Leave this field blank</label>
-        <input type="text" id="cust_website_url" name="website_url" tabindex="-1" autocomplete="off" />
+        <input type="text" id="cust_website_url" name="website_url" tabindex="-1" autocomplete="off" data-mcp-param="website_url" />
       </div>
 
-      <input type="text" id="custName" class="modal-input" placeholder="Full Name" required>
-      <input type="email" id="custEmail" class="modal-input" placeholder="Email Address" required>
-      <input type="tel" id="custPhone" class="modal-input" placeholder="Phone Number" required>
-      <input type="text" id="custAddress" class="modal-input" placeholder="District & Upazila" required>
+      <input type="text" id="custName" class="modal-input" placeholder="Full Name" required data-mcp-param="full_name">
+      <input type="email" id="custEmail" class="modal-input" placeholder="Email Address" required data-mcp-param="email">
+      <input type="tel" id="custPhone" class="modal-input" placeholder="Phone Number" required data-mcp-param="phone">
+      <input type="text" id="custAddress" class="modal-input" placeholder="District & Upazila" required data-mcp-param="address">
 
       <button type="submit" id="submitQuoteBtn" class="btn-card-link">Send My PDF Quote</button>
     </form>
