@@ -44,6 +44,43 @@ RewriteRule ^bh-tb-105\.html$ https://bongshaihousing.com/bh-tsb-105.html [R=301
 RewriteRule ^bh-dv-105\.html$ https://bongshaihousing.com/bh-dv-205.html [R=301,L]
 RewriteRule ^bh-dv-106\.html$ https://bongshaihousing.com/bh-dv-206.html [R=301,L]
 
+# 4d. GSC "Page with redirect" — slug-style URLs missing rules (2026-08-08)
+RewriteRule ^single-story-building/?$ https://bongshaihousing.com/simplex-steel-building.html [R=301,L]
+RewriteRule ^career-apply-now/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^login/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^logout/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^user/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^low-cost-cottage/?$ https://bongshaihousing.com/cottage-house.html [R=301,L]
+RewriteRule ^apartments/?$ https://bongshaihousing.com/apartment-building.html [R=301,L]
+RewriteRule ^terms-and-conditions/?$ https://bongshaihousing.com/terms.html [R=301,L]
+RewriteRule ^gallery/?$ https://bongshaihousing.com/gallery.html [R=301,L]
+RewriteRule ^bn/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^en/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^agents/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^bh-m-01/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^about-us/?$ https://bongshaihousing.com/about.html [R=301,L]
+RewriteRule ^contact-us/?$ https://bongshaihousing.com/contact.html [R=301,L]
+RewriteRule ^luxury-villa/?$ https://bongshaihousing.com/luxury-villa.html [R=301,L]
+
+# 4e. GSC "Crawled - currently not indexed" — old WordPress slugs (2026-08-08)
+RewriteRule ^architect/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^deputy-general-managerdgm/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^project-manager/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^foreman-civil-construction/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^project/?$ https://bongshaihousing.com/projects.html [R=301,L]
+RewriteRule ^model-no-bh-tb-07/?$ https://bongshaihousing.com/bh-tsb-107.html [R=301,L]
+RewriteRule ^2-bedroom-luxury-building/?$ https://bongshaihousing.com/apartment-building.html [R=301,L]
+RewriteRule ^home-1/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^model-no-lc-01/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^luxury-single-villa-2/?$ https://bongshaihousing.com/luxury-villa.html [R=301,L]
+RewriteRule ^about-us-2/?$ https://bongshaihousing.com/about.html [R=301,L]
+
+# 4f. GSC "Alternate canonical" — missing pages (2026-08-08)
+RewriteRule ^portable-toilets-and-showers\.html$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^security-huts\.html$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^modular-kiosks\.html$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^site-offices\.html$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+
 </IfModule>
 
 # Broken/missing URLs get a real 404 response with the actual 404 page,
