@@ -21,6 +21,29 @@ RewriteRule ^two-story-building\.html$ https://bongshaihousing.com/apartment-bui
 RewriteRule ^duplex-villa\.html$ https://bongshaihousing.com/duplex-steel-building.html [R=301,L]
 RewriteRule ^single-story-building\.html$ https://bongshaihousing.com/simplex-steel-building.html [R=301,L]
 
+# 4c. Google Search Console 404 Fixes (2026-08-08)
+# WordPress leftovers
+RewriteRule ^wp-(content|includes|login\.php|admin)(.*)$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^createpackages/(.*)$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^properties/(.*)$ https://bongshaihousing.com/ [R=301,L]
+
+# Old URLs & Categories
+RewriteRule ^container-house/?$ https://bongshaihousing.com/container-house.html [R=301,L]
+RewriteRule ^low-cost-villa/?$ https://bongshaihousing.com/luxury-villa.html [R=301,L]
+RewriteRule ^career/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^two-story-building/?$ https://bongshaihousing.com/apartment-building.html [R=301,L]
+RewriteRule ^our-mission-vission/?$ https://bongshaihousing.com/about.html [R=301,L]
+RewriteRule ^contact-bn\.html$ https://bongshaihousing.com/contact.html [R=301,L]
+RewriteRule ^model-no-bh-lv-02/?$ https://bongshaihousing.com/luxury-villa.html [R=301,L]
+
+# Typos in model names from external links
+RewriteRule ^bh-tb-101\.html$ https://bongshaihousing.com/bh-tsb-101.html [R=301,L]
+RewriteRule ^bh-tb-102\.html$ https://bongshaihousing.com/bh-tsb-102.html [R=301,L]
+RewriteRule ^bh-tb-104\.html$ https://bongshaihousing.com/bh-tsb-104.html [R=301,L]
+RewriteRule ^bh-tb-105\.html$ https://bongshaihousing.com/bh-tsb-105.html [R=301,L]
+RewriteRule ^bh-dv-105\.html$ https://bongshaihousing.com/bh-dv-205.html [R=301,L]
+RewriteRule ^bh-dv-106\.html$ https://bongshaihousing.com/bh-dv-206.html [R=301,L]
+
 </IfModule>
 
 # Broken/missing URLs get a real 404 response with the actual 404 page,
