@@ -511,10 +511,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let siteSearchIndex = null;
     fetch('/search-index.json').then((r) => r.json()).then((d) => { siteSearchIndex = d; }).catch(() => {});
 
+    // Short/common words (are, you, the, how...) match almost every page and
+    // drown out the real signal, so only words longer than 3 chars count.
+    const SEARCH_STOPWORDS = new Set(['what', 'when', 'where', 'which', 'does', 'have', 'this', 'that', 'with', 'your', 'about', 'from', 'into', 'will']);
     const searchSite = (query) => {
         if (!siteSearchIndex) return [];
         const q = query.toLowerCase();
-        const words = q.split(/\s+/).filter((w) => w.length > 2);
+        const words = q.split(/\s+/).filter((w) => w.length > 3 && !SEARCH_STOPWORDS.has(w));
         if (!words.length) return [];
         const scored = siteSearchIndex.map((item) => {
             const hay = (item.title + ' ' + item.desc).toLowerCase();
@@ -522,7 +525,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (hay.includes(q)) score += 10;
             words.forEach((w) => { if (hay.includes(w)) score += 1; });
             return { item, score };
-        }).filter((x) => x.score > 0);
+        // Require the full phrase or at least two distinct word hits (or every
+        // word, if the query only has one) — a single coincidental word match
+        // is more likely noise than a real answer.
+        }).filter((x) => x.score >= 10 || x.score >= Math.min(2, words.length));
         scored.sort((a, b) => b.score - a.score);
         return scored.slice(0, 3).map((x) => x.item);
     };
