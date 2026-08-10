@@ -421,9 +421,12 @@
     <div style="flex: 1;">
       <div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">Select Floor Area</div>
       <div class="area-selector" id="area-selector-1109">
-<button type="button" class="area-btn active" onclick="selectArea('1109', '400-600', this)">400-600 Sq.Ft</button>
-<button type="button" class="area-btn " onclick="selectArea('1109', '750-900', this)">750-900 Sq.Ft</button>
-<button type="button" class="area-btn " onclick="selectArea('1109', '1050-1200', this)">1050-1200 Sq.Ft</button>
+<button type="button" class="area-btn active" onclick="selectArea('1109', '400', this)">400 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1109', '600', this)">600 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1109', '750', this)">750 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1109', '900', this)">900 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1109', '1050', this)">1050 Sq.Ft</button>
+<button type="button" class="area-btn " onclick="selectArea('1109', '1200', this)">1200 Sq.Ft</button>
 </div>
     </div>
   </div>
@@ -446,6 +449,27 @@
   </div>
 </div>
 </div>
+
+<!-- 3. Room Sizes Table -->
+<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
+  <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Overview (Area Details)</h3>
+  <div style="overflow-x: auto;">
+    <table class="spec-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem; text-align: center;">
+      <thead>
+        <tr style="background: rgba(212, 175, 55, 0.15); color: #c82333;">
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300); text-align: left;">Section</th>
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Area (sq.ft)</th>
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Length (ft)</th>
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Width (ft)</th>
+        </tr>
+      </thead>
+      <tbody id="room-sizes-table-body-1109" style="color: var(--grey-800);">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <!-- 4. Materials & Finishes (Table) -->
 <div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
 <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Building Specifications</h3>
@@ -520,9 +544,12 @@
 </div>
 <script>
     const floorData1109 = {
-      "400-600": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" },
-      "750-900": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" },
-      "1050-1200": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" }
+      "400": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":400,"length":"-","width":"-"},{"section":"Master bed","area":120,"length":12,"width":10},{"section":"Child bed","area":100,"length":10,"width":10},{"section":"Living/Dining","area":70,"length":10,"width":7},{"section":"Kitchen","area":40,"length":8,"width":5},{"section":"Bath room","area":30,"length":6,"width":5},{"section":"Wall & Stairs area","area":40,"length":"-","width":"-"}] },
+      "600": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":600,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed","area":120,"length":12,"width":10},{"section":"Living room","area":100,"length":10,"width":10},{"section":"Kitchen","area":60,"length":10,"width":6},{"section":"Bath room","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":32,"length":8,"width":4},{"section":"Wall & Stairs area","area":80,"length":"-","width":"-"}] },
+      "750": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":750,"length":"-","width":"-"},{"section":"Master bed","area":156,"length":13,"width":12},{"section":"Child bed 1","area":120,"length":12,"width":10},{"section":"Child bed 2","area":120,"length":12,"width":10},{"section":"Living room","area":100,"length":10,"width":10},{"section":"Kitchen","area":60,"length":10,"width":6},{"section":"Bath room 1","area":40,"length":8,"width":5},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":40,"length":10,"width":4},{"section":"Wall & Stairs area","area":74,"length":"-","width":"-"}] },
+      "900": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":900,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":120,"length":12,"width":10},{"section":"Living room","area":150,"length":15,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":50,"length":10,"width":5},{"section":"Wall & Stairs area","area":100,"length":"-","width":"-"}] },
+      "1050": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":1050,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":130,"length":13,"width":10},{"section":"Child bed 3","area":120,"length":12,"width":10},{"section":"Living room","area":150,"length":15,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":70,"length":"-","width":"-"}] },
+      "1200": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":1200,"length":"-","width":"-"},{"section":"Master bed","area":180,"length":15,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":144,"length":12,"width":12},{"section":"Child bed 3","area":130,"length":13,"width":10},{"section":"Living room","area":200,"length":20,"width":10},{"section":"Kitchen","area":90,"length":10,"width":9},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":124,"length":"-","width":"-"}] }
     };
 
     function updateSpecs1109(sqft) {
@@ -533,6 +560,22 @@
       document.getElementById("spec-bath-1109").innerText = data.bath;
         const priceEl1109 = document.getElementById("spec-price-1109"); if (priceEl1109) { priceEl1109.innerText = "Contact for Quote"; }
 
+      const tbody = document.getElementById("room-sizes-table-body-1109");
+      if (tbody && data.rooms) {
+        let html = "";
+        data.rooms.forEach((room, index) => {
+          const bg = index % 2 === 0 ? "background: #fdf5d3;" : "background: #faeab1;";
+          html += `<tr style="border-bottom: 1px solid #d4c593; ${bg}">
+            <td style="padding: 12px 16px; font-weight: 500; border: 1px solid #d4c593; text-align: left; color: #333;">${room.section}</td>
+            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.area || ''}</td>
+            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.length || ''}</td>
+            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.width || ''}</td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+      }
+
+
       document.getElementById("space-allocation-1109").innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
@@ -541,6 +584,7 @@
       `;
     }
   </script>
+  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs1109 === "function") { updateSpecs1109("400"); } });</script>
 
   
 </div><!-- End of page-sidebar-content -->

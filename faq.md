@@ -90,7 +90,7 @@ Our residential range includes Apartment Buildings , Duplex Steel Buildings , Si
 
 What floor plans and room configurations are available?
 
-Most residential models offer three tiers: 400-600 Sq.Ft (2 bedrooms, 1 bathroom, 1 living room), 750-900 Sq.Ft (3 bedrooms, 2 bathrooms), and 1050-1200 Sq.Ft (4 bedrooms, 3 bathrooms). Tiny Houses run 250-350 Sq.Ft (1 bedroom, 1 bathroom). Duplex Steel Buildings and Apartment Buildings offer 600 Sq.Ft per floor (3 bedrooms, 2 bathrooms) or 850 Sq.Ft per floor (5 bedrooms, 4 bathrooms), across two floors. Steel House is also a two-floor design, offered at 650, 750, 950, or 1200 Sq.Ft per floor (4 to 8 bedrooms).
+Most residential models offer three tiers: 400 and 600 Sq.Ft (2 bedrooms, 1 bathroom, 1 living room), 750 and 900 Sq.Ft (3 bedrooms, 2 bathrooms), and 1050 and 1200 Sq.Ft (4 bedrooms, 3 bathrooms). Tiny Houses run 250-350 Sq.Ft (1 bedroom, 1 bathroom). Duplex Steel Buildings and Apartment Buildings offer 600 Sq.Ft per floor (3 bedrooms, 2 bathrooms) or 850 Sq.Ft per floor (5 bedrooms, 4 bathrooms), across two floors. Steel House is also a two-floor design, offered at 650, 750, 950, or 1200 Sq.Ft per floor (4 to 8 bedrooms).
 
 What's the difference between a Duplex Steel Building and an Apartment Building?
 

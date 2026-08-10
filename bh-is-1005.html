@@ -447,6 +447,27 @@
   </div>
 </div>
 </div>
+
+<!-- 3. Room Sizes Table -->
+<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
+  <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Overview (Area Details)</h3>
+  <div style="overflow-x: auto;">
+    <table class="spec-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem; text-align: center;">
+      <thead>
+        <tr style="background: rgba(212, 175, 55, 0.15); color: #c82333;">
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300); text-align: left;">Section</th>
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Area (sq.ft)</th>
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Length (ft)</th>
+          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Width (ft)</th>
+        </tr>
+      </thead>
+      <tbody id="room-sizes-table-body-1005" style="color: var(--grey-800);">
+        <!-- Populated by JS -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <!-- 4. Materials & Finishes (Table) -->
 <div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
 <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Building Specifications</h3>
@@ -520,18 +541,39 @@
 </div>
 </div>
 <script>
+    const floorData1005 = {
+      "2000": { rooms: [{"section":"Total Shed Area","area":2000,"length":50,"width":40},{"section":"Main Warehouse Floor","area":1400,"length":40,"width":35},{"section":"Office / Admin Area","area":180,"length":15,"width":12},{"section":"Loading Bay / Dock","area":150,"length":15,"width":10},{"section":"Restroom & Utility","area":80,"length":10,"width":8},{"section":"Wall & Circulation","area":190,"length":"-","width":"-"}] },
+      "3000": { rooms: [{"section":"Total Shed Area","area":3000,"length":60,"width":50},{"section":"Main Warehouse Floor","area":2160,"length":48,"width":45},{"section":"Office / Admin Area","area":252,"length":18,"width":14},{"section":"Loading Bay / Dock","area":216,"length":18,"width":12},{"section":"Restroom & Utility","area":108,"length":12,"width":9},{"section":"Wall & Circulation","area":264,"length":"-","width":"-"}] },
+      "4000": { rooms: [{"section":"Total Shed Area","area":4000,"length":80,"width":50},{"section":"Main Warehouse Floor","area":2976,"length":62,"width":48},{"section":"Office / Admin Area","area":300,"length":20,"width":15},{"section":"Loading Bay / Dock","area":280,"length":20,"width":14},{"section":"Restroom & Utility","area":140,"length":14,"width":10},{"section":"Wall & Circulation","area":304,"length":"-","width":"-"}] }
+    };
+
     function updateSpecs1005(sqft) {
       const priceEl = document.getElementById("spec-price-1005");
-      if (!priceEl) return;
-      if (sqft === "Custom") {
-        priceEl.innerText = "Contact for Custom Quote";
-        return;
+      if (priceEl) {
+        priceEl.innerText = sqft === "Custom" ? "Contact for Custom Quote" : "Contact for Quote";
       }
-      const totalSqft = Number(sqft);
-      const price = (totalSqft * 950 / 100000).toFixed(1).replace(/\.0$/, "");
-      priceEl.innerText = "Contact for Quote";
+
+      const tbody = document.getElementById("room-sizes-table-body-1005");
+      if (!tbody) return;
+      const data = floorData1005[sqft];
+      if (data && data.rooms) {
+        let html = "";
+        data.rooms.forEach((room, index) => {
+          const bg = index % 2 === 0 ? "background: #fdf5d3;" : "background: #faeab1;";
+          html += `<tr style="border-bottom: 1px solid #d4c593; ${bg}">
+            <td style="padding: 12px 16px; font-weight: 500; border: 1px solid #d4c593; text-align: left; color: #333;">${room.section}</td>
+            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.area || ''}</td>
+            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.length || ''}</td>
+            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.width || ''}</td>
+          </tr>`;
+        });
+        tbody.innerHTML = html;
+      } else {
+        tbody.innerHTML = '<tr><td colspan="4" style="padding: 16px; text-align: center; color: var(--grey-500);">Custom size — contact us for a detailed area breakdown.</td></tr>';
+      }
     }
   </script>
+  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs1005 === "function") { updateSpecs1005("2000"); } });</script>
 
   
 </div><!-- End of page-sidebar-content -->
