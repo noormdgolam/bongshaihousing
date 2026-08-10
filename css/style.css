@@ -45,6 +45,7 @@ html, body {
   /* Neutral Palette - Greys */
   --white:          #ffffff; /* Pure White */
   --off-white:      #f8fafc; /* Very Light Grey */
+  --total-row-bg:   #fffcfc; /* Room-table "Total" row highlight */
   --grey-50:        #f1f5f9; /* Light Slate Grey */
   --grey-100:       #e2e8f0; /* Grey */
   --grey-200:       #cbd5e1; /* Medium Grey */
@@ -3422,6 +3423,7 @@ body.page-exit {
 [data-theme="dark"] {
   --white: #0f172a;
   --off-white: #1e293b;
+  --total-row-bg: #243244;
   --grey-50: #1e293b;
   --grey-100: #334155;
   --grey-200: #475569;
