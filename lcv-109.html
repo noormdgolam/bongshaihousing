@@ -519,43 +519,76 @@
     </table>
   </div>
 </div>
-<!-- 4. Materials & Finishes (3-Column Grid) -->
-<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
-<h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Premium Material Specifications</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-6);">
-<!-- Group 1 -->
-<div onmouseout="this.style.transform='none';this.style.boxShadow='none'" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow-md)'" style="background: var(--off-white); border-radius: 12px; padding: var(--space-5); border: 1px solid var(--grey-200); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-<div style="background: var(--white); color: var(--primary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: var(--shadow-sm);">🏗️</div>
-<h4 style="margin: 0; font-size: 1.1rem; color: var(--grey-900); font-family: var(--font-heading);">Structure &amp; Foundation</h4>
-</div>
-<div style="font-size: 0.95rem; color: var(--grey-700); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
-<div><strong style="color: var(--primary-dark);">Footing &amp; Tie Beam:</strong><br/>Pre-cast RCC Foundation</div>
-<div><strong style="color: var(--primary-dark);">Main Structure:</strong><br/>Premium Prefab Steel Frame</div>
-</div>
-</div>
-<!-- Group 2 -->
-<div onmouseout="this.style.transform='none';this.style.boxShadow='none'" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow-md)'" style="background: var(--off-white); border-radius: 12px; padding: var(--space-5); border: 1px solid var(--grey-200); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-<div style="background: var(--white); color: var(--primary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: var(--shadow-sm);">🧱</div>
-<h4 style="margin: 0; font-size: 1.1rem; color: var(--grey-900); font-family: var(--font-heading);">Exterior &amp; Roof</h4>
-</div>
-<div style="font-size: 0.95rem; color: var(--grey-700); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
-<div><strong style="color: var(--primary-dark);">Walls:</strong><br/>2.5" Pre-cast RCC (Outer)<br/>2" Pre-cast RCC (Inner)</div>
-<div><strong style="color: var(--primary-dark);">Roofing:</strong><br/>0.42mm Color Sheet with 5mm PE foam insulation</div>
-</div>
-</div>
-<!-- Group 3 -->
-<div onmouseout="this.style.transform='none';this.style.boxShadow='none'" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow-md)'" style="background: var(--off-white); border-radius: 12px; padding: var(--space-5); border: 1px solid var(--grey-200); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-<div style="background: var(--white); color: var(--primary); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: var(--shadow-sm);">✨</div>
-<h4 style="margin: 0; font-size: 1.1rem; color: var(--grey-900); font-family: var(--font-heading);">Fittings &amp; Finishes</h4>
-</div>
-<div style="font-size: 0.95rem; color: var(--grey-700); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
-<div><strong style="color: var(--primary-dark);">Doors &amp; Windows:</strong><br/>Steel Flash / PVC Doors<br/>Glass with MS frame &amp; Grill</div>
-<div><strong style="color: var(--primary-dark);">Paint &amp; Sanitary:</strong><br/>Emulsion &amp; Weather Coat<br/>Star band commode, 500L Tank</div>
-</div>
-</div>
+<!-- 4. Materials & Finishes (Table) -->
+<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
+<h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Building Specifications</h3>
+<div style="overflow-x: auto;">
+  <table class="modern-table">
+    <thead>
+        <tr>
+        <th>Item</th>
+        <th>Materials</th>
+      </tr>
+    </thead>
+    <tbody style="color: var(--grey-800);">
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">FOOTING</td>
+        <td style="padding: 12px 16px;">Precast RC footing &amp; Tie beam with 2200 psi concrete.</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">LIGHT STEEL STRUCTURE</td>
+        <td style="padding: 12px 16px;">Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">GROUND FLOOR</td>
+        <td style="padding: 12px 16px;">3’’ thickness cement concrete.</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">OUTER WALL</td>
+        <td style="padding: 12px 16px;">2.5’’ thickness RC precast concrete panel</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">INNER WALL</td>
+        <td style="padding: 12px 16px;">2’’ thickness RC precast concrete panel</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">MIDDLE &amp; ROOF FLOOR</td>
+        <td style="padding: 12px 16px;">3’’ thickness RC precast concrete panel</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">DOOR</td>
+        <td style="padding: 12px 16px;">7’x3.5’ steel frame with wooden shutter</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">TOILET &amp; KITCHEN DOOR</td>
+        <td style="padding: 12px 16px;">7’x2.5’ PVC frame with PVC shutter</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">WINDOW</td>
+        <td style="padding: 12px 16px;">5’x4.5’ Thai frame, Glass shutter with Grill</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">FLOOR FINISHING</td>
+        <td style="padding: 12px 16px;">16''x16'' Tiles</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">PAINT</td>
+        <td style="padding: 12px 16px;">Weather coat and plastic paint</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">ROOF TOP</td>
+        <td style="padding: 12px 16px;">1’’ cement mortar finishing</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--grey-100);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">BATHROOM FITTING</td>
+        <td style="padding: 12px 16px;">Metal fittings</td>
+      </tr>
+      <tr style="background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); border-bottom-left-radius: 8px;">ELECTRIC WIRING</td>
+        <td style="padding: 12px 16px; border-bottom-right-radius: 8px;">3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 </div>
 <script>
@@ -580,12 +613,11 @@
       if (tbody && data.rooms) {
         let html = "";
         data.rooms.forEach((room, index) => {
-          const bg = index % 2 === 0 ? "background: #fdf5d3;" : "background: #faeab1;";
-          html += `<tr style="border-bottom: 1px solid #d4c593; ${bg}">
-            <td style="padding: 12px 16px; font-weight: 500; border: 1px solid #d4c593; text-align: left; color: #333;">${room.section}</td>
-            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.area || ''}</td>
-            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.length || ''}</td>
-            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.width || ''}</td>
+          html += `<tr>
+            <td>${room.section}</td>
+            <td>${room.area || ''}</td>
+            <td>${room.length || ''}</td>
+            <td>${room.width || ''}</td>
           </tr>`;
         });
         tbody.innerHTML = html;
