@@ -2593,6 +2593,27 @@ textarea.form-control {
     padding-bottom: 8px !important;
     color: var(--grey-700);
   }
+  /* Room table only (4 cols: Section/Area/Length/Width) — Materials only has
+     2 cells, so nth-child(3)/(4) never match it (nth-child(2) would, which
+     is why Area is left unlabeled here rather than risk mislabeling the
+     Materials description column). Section stays the row title, Area keeps
+     its own line, and Length+Width sit together on one "14' × 12'" line
+     instead of two. Empty divider/total rows show nothing extra. */
+  .modern-table td:nth-child(3):not(:empty),
+  .modern-table td:nth-child(4):not(:empty) {
+    display: inline-block !important;
+    width: auto !important;
+    padding: 0 !important;
+  }
+  .modern-table td:nth-child(3):not(:empty)::before {
+    content: "Size: "; font-weight: 600; color: var(--grey-500);
+  }
+  .modern-table td:nth-child(3):not(:empty)::after {
+    content: "' × ";
+  }
+  .modern-table td:nth-child(4):not(:empty)::after {
+    content: "'";
+  }
 
   /* Hours row */
   .hours-row { flex-direction: column; gap: var(--space-1); }
