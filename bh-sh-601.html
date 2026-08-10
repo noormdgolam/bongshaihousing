@@ -472,10 +472,8 @@
     }
   </style>
   <div class="modern-area-selector" id="area-selector-601">
-<button type="button" class="modern-area-btn active" onclick="selectArea('601', '650x2', this)">650x2 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('601', '750x2', this)">750x2 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('601', '950x2', this)">950x2 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('601', '1200x2', this)">1200x2 Sq.Ft</button>
+<button type="button" class="modern-area-btn active" onclick="selectArea('601', '600', this)">600 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('601', '850', this)">850 Sq.Ft</button>
 </div>
     </div>
   </div>
@@ -593,10 +591,42 @@
 </div>
 <script>
     const floorData601 = {
-      "650x2": { bed: "4 Rooms", bath: "2 Rooms", dining: "Included", drawing: "N/A", rooms: [{"section":"Ground Floor Area","area":650,"length":"-","width":"-"},{"section":"Drawing / Living Room","area":224,"length":16,"width":14},{"section":"Dining Space","area":120,"length":12,"width":10},{"section":"Kitchen","area":99,"length":11,"width":9},{"section":"Bath room (Guest)","area":35,"length":7,"width":5},{"section":"Verandah / Porch","area":60,"length":12,"width":5},{"section":"Ground Floor Wall & Stairs","area":112,"length":"-","width":"-"},{"section":"1st Floor Area","area":650,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Bed 2","area":132,"length":12,"width":11},{"section":"Bed 3","area":110,"length":11,"width":10},{"section":"Bed 4","area":90,"length":10,"width":9},{"section":"Bath room","area":35,"length":7,"width":5},{"section":"1st Floor Wall & Stairs","area":115,"length":"-","width":"-"},{"section":"Total Built-up Area (2 Floors)","area":1300,"length":"-","width":"-"}] },
-      "750x2": { bed: "4 Rooms", bath: "4 Rooms", dining: "2 Spaces", drawing: "2 Rooms", rooms: [{"section":"Ground Floor Area","area":750,"length":"-","width":"-"},{"section":"Drawing Room","area":143,"length":13,"width":11},{"section":"Dining Space","area":90,"length":10,"width":9},{"section":"Master bed","area":120,"length":12,"width":10},{"section":"Bed 2","area":90,"length":10,"width":9},{"section":"Kitchen","area":72,"length":9,"width":8},{"section":"Bath room 1","area":30,"length":6,"width":5},{"section":"Bath room 2","area":30,"length":6,"width":5},{"section":"Verandah","area":36,"length":9,"width":4},{"section":"Ground Floor Wall & Stairs","area":139,"length":"-","width":"-"},{"section":"1st Floor Area","area":750,"length":"-","width":"-"},{"section":"Drawing Room","area":143,"length":13,"width":11},{"section":"Dining Space","area":90,"length":10,"width":9},{"section":"Master bed","area":120,"length":12,"width":10},{"section":"Bed 2","area":90,"length":10,"width":9},{"section":"Kitchen","area":72,"length":9,"width":8},{"section":"Bath room 1","area":30,"length":6,"width":5},{"section":"Bath room 2","area":30,"length":6,"width":5},{"section":"Verandah","area":36,"length":9,"width":4},{"section":"1st Floor Wall & Stairs","area":139,"length":"-","width":"-"},{"section":"Total Built-up Area (2 Floors)","area":1500,"length":"-","width":"-"}] },
-      "950x2": { bed: "6 Rooms", bath: "4 Rooms", dining: "2 Spaces", drawing: "2 Rooms", rooms: [{"section":"Ground Floor Area","area":950,"length":"-","width":"-"},{"section":"Drawing Room","area":154,"length":14,"width":11},{"section":"Dining Space","area":110,"length":11,"width":10},{"section":"Master bed","area":143,"length":13,"width":11},{"section":"Bed 2","area":110,"length":11,"width":10},{"section":"Bed 3","area":90,"length":10,"width":9},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":35,"length":7,"width":5},{"section":"Bath room 2","area":30,"length":6,"width":5},{"section":"Verandah","area":36,"length":9,"width":4},{"section":"Ground Floor Wall & Stairs","area":162,"length":"-","width":"-"},{"section":"1st Floor Area","area":950,"length":"-","width":"-"},{"section":"Drawing Room","area":154,"length":14,"width":11},{"section":"Dining Space","area":110,"length":11,"width":10},{"section":"Master bed","area":143,"length":13,"width":11},{"section":"Bed 2","area":110,"length":11,"width":10},{"section":"Bed 3","area":90,"length":10,"width":9},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":35,"length":7,"width":5},{"section":"Bath room 2","area":30,"length":6,"width":5},{"section":"Verandah","area":36,"length":9,"width":4},{"section":"1st Floor Wall & Stairs","area":162,"length":"-","width":"-"},{"section":"Total Built-up Area (2 Floors)","area":1900,"length":"-","width":"-"}] },
-      "1200x2": { bed: "8 Rooms", bath: "6 Rooms", dining: "2 Spaces", drawing: "2 Rooms", rooms: [{"section":"Ground Floor Area","area":1200,"length":"-","width":"-"},{"section":"Drawing Room","area":154,"length":14,"width":11},{"section":"Dining Space","area":120,"length":12,"width":10},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Bed 2","area":120,"length":12,"width":10},{"section":"Bed 3","area":110,"length":11,"width":10},{"section":"Bed 4","area":99,"length":11,"width":9},{"section":"Kitchen","area":99,"length":11,"width":9},{"section":"Bath room 1","area":35,"length":7,"width":5},{"section":"Bath room 2","area":30,"length":6,"width":5},{"section":"Bath room 3","area":30,"length":6,"width":5},{"section":"Verandah","area":40,"length":10,"width":4},{"section":"Ground Floor Wall & Stairs","area":195,"length":"-","width":"-"},{"section":"1st Floor Area","area":1200,"length":"-","width":"-"},{"section":"Drawing Room","area":154,"length":14,"width":11},{"section":"Dining Space","area":120,"length":12,"width":10},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Bed 2","area":120,"length":12,"width":10},{"section":"Bed 3","area":110,"length":11,"width":10},{"section":"Bed 4","area":99,"length":11,"width":9},{"section":"Kitchen","area":99,"length":11,"width":9},{"section":"Bath room 1","area":35,"length":7,"width":5},{"section":"Bath room 2","area":30,"length":6,"width":5},{"section":"Bath room 3","area":30,"length":6,"width":5},{"section":"Verandah","area":40,"length":10,"width":4},{"section":"1st Floor Wall & Stairs","area":195,"length":"-","width":"-"},{"section":"Total Built-up Area (2 Floors)","area":2400,"length":"-","width":"-"}] }
+      "600": { 
+        bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: "N/A",
+        rooms: [
+          { section: "Total Floor Area", area: 1200, length: 40, width: 30 },
+          { section: "Master bed", area: 168, length: 14, width: 12 },
+          { section: "Child bed 1", area: 130, length: 13, width: 10 },
+          { section: "Child bed 2", area: 130, length: 13, width: 10 },
+          { section: "Living room", area: 180, length: 15, width: 12 },
+          { section: "Drawing room", area: 130, length: 13, width: 10 },
+          { section: "Kitchen", area: 80, length: 10, width: 8 },
+          { section: "Bath room 1", area: 40, length: 8, width: 5 },
+          { section: "Bath room 2", area: 40, length: 8, width: 5 },
+          { section: "Porch / Balcony", area: 52, length: 13, width: 4 },
+          { section: "Wall & Stairs area", area: 250, length: "-", width: "-" }
+        ]
+      },
+      "850": { 
+        bed: "5 Bedrooms", bath: "4 Bathrooms", living: "N/A", drawing: "1 Drawing Room", dining: "1 Dining Space",
+        rooms: [
+          { section: "Total Floor Area", area: 1700, length: 50, width: 34 },
+          { section: "Master bed", area: 180, length: 15, width: 12 },
+          { section: "Child bed 1", area: 144, length: 12, width: 12 },
+          { section: "Child bed 2", area: 144, length: 12, width: 12 },
+          { section: "Child bed 3", area: 144, length: 12, width: 12 },
+          { section: "Child bed 4", area: 144, length: 12, width: 12 },
+          { section: "Drawing room", area: 180, length: 15, width: 12 },
+          { section: "Dining space", area: 144, length: 12, width: 12 },
+          { section: "Kitchen", area: 90, length: 10, width: 9 },
+          { section: "Bath room 1", area: 48, length: 8, width: 6 },
+          { section: "Bath room 2", area: 40, length: 8, width: 5 },
+          { section: "Bath room 3", area: 40, length: 8, width: 5 },
+          { section: "Bath room 4", area: 40, length: 8, width: 5 },
+          { section: "Porch / Balcony", area: 60, length: 15, width: 4 },
+          { section: "Wall & Stairs area", area: 302, length: "-", width: "-" }
+        ]
+      }
     };
 
     function updateSpecs601(sqft) {
@@ -605,8 +635,9 @@
 
       document.getElementById("spec-bed-601").innerText = data.bed;
       document.getElementById("spec-bath-601").innerText = data.bath;
-        const priceEl601 = document.getElementById("spec-price-601"); if (priceEl601) { priceEl601.innerText = "Contact for Quote"; }
-
+      const priceEl = document.getElementById("spec-price-601"); 
+      if (priceEl) { priceEl.innerText = "Contact for Quote"; }
+      
       const tbody = document.getElementById("room-sizes-table-body-601");
       if (tbody && data.rooms) {
         let html = "";
@@ -621,20 +652,26 @@
         tbody.innerHTML = html;
       }
 
+      // Also update space-allocation if it exists in SH
+      const spaceAlloc = document.getElementById("space-allocation-601");
+      if (spaceAlloc) {
+        let drawingHtml = (data.drawing && data.drawing !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
+        let diningHtml = (data.dining && data.dining !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">${data.dining}</span></div>` : "";
+        let livingHtml = (data.living && data.living !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>` : "";
 
-      let drawingHtml601 = data.drawing !== "N/A" ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
-
-      document.getElementById("space-allocation-601").innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">${data.dining}</span></div>
-        ${drawingHtml601}
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">1 Kitchen</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Front Veranda</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
-      `;
+        spaceAlloc.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
+          ${livingHtml}
+          ${diningHtml}
+          ${drawingHtml}
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">1 Kitchen</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Front Veranda</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
+        `;
+      }
     }
   </script>
-  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs601 === "function") { updateSpecs601("650x2"); } });</script>
+  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs601 === "function") { updateSpecs601("600"); } });</script>
 
   
 </div><!-- End of page-sidebar-content -->
