@@ -948,7 +948,7 @@
 <script>
 function selectArea(id, sqft, btn) {
   const container = btn.parentElement;
-  const buttons = container.querySelectorAll('.area-btn');
+  const buttons = container.querySelectorAll('.area-btn, .modern-area-btn');
   buttons.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   
