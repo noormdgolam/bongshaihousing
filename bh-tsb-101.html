@@ -435,7 +435,7 @@
     
     .modern-table {
       width: 100%; border-collapse: separate; border-spacing: 0;
-      font-size: 0.95rem; text-align: left; border-radius: 12px; overflow: hidden;
+      font-size: 0.95rem; text-align: left; border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--grey-100);
     }
     .modern-table thead tr {
@@ -444,10 +444,10 @@
     .modern-table th {
       padding: 16px; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;
       border-bottom: 2px solid var(--grey-200); text-align: left;
-    }
+     overflow-wrap: break-word;}
     .modern-table td {
       padding: 16px; border-bottom: 1px solid var(--grey-100); color: var(--grey-600); font-weight: 500;
-    }
+     overflow-wrap: break-word; word-break: break-word;}
     .modern-table tbody tr:last-child td {
       border-bottom: none;
     }
