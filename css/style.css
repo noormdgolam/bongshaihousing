@@ -2566,24 +2566,30 @@ textarea.form-control {
 
   /* Building Specifications table (2-column key/value) — the nowrap+scroll
      rule above is for wide comparison grids; here it just clipped the
-     "Materials" column off the edge of the screen. Wrap normally instead. */
-  .spec-table thead { display: none; }
-  .spec-table, .spec-table tbody, .spec-table tr, .spec-table td {
+     "Materials" column off the edge of the screen. Wrap normally instead.
+     .modern-table replaced .spec-table sitewide as the room/materials table
+     class, but this exception never got updated to match — every table
+     using it inherited the raw nowrap rule above uncontested, which is why
+     the Materials column overflowed 600px+ past the viewport. */
+  .spec-table thead, .modern-table thead { display: none; }
+  .spec-table, .spec-table tbody, .spec-table tr, .spec-table td,
+  .modern-table, .modern-table tbody, .modern-table tr, .modern-table td {
     display: block;
     width: 100% !important;
   }
-  .spec-table tr {
+  .spec-table tr, .modern-table tr {
     border-bottom: 1px solid var(--grey-100);
     padding: var(--space-2) 0;
   }
-  .spec-table td {
+  .spec-table td, .modern-table td {
     padding: 2px 16px !important;
     white-space: normal;
   }
-  .spec-table td:first-child {
+  .spec-table td:first-child, .modern-table td:first-child {
     padding-top: 8px !important;
+    font-weight: 700;
   }
-  .spec-table td:last-child {
+  .spec-table td:last-child, .modern-table td:last-child {
     padding-bottom: 8px !important;
     color: var(--grey-700);
   }
