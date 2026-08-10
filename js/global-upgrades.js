@@ -124,6 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
    PWA SERVICE WORKER REGISTRATION
    ========================================================= */
 if ('serviceWorker' in navigator) {
+  let swRefreshed = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (swRefreshed) return;
+    swRefreshed = true;
+    location.reload();
+  });
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').then(registration => {
       console.log('ServiceWorker registration successful with scope: ', registration.scope);

@@ -472,8 +472,8 @@
     }
   </style>
   <div class="modern-area-selector" id="area-selector-208">
-<button type="button" class="modern-area-btn active" onclick="selectArea('208', '600', this)">600 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('208', '850', this)">850 Sq.Ft</button>
+<button type="button" class="modern-area-btn active" onclick="selectArea('208', '600', this)">600*2 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('208', '850', this)">850*2 Sq.Ft</button>
 </div>
     </div>
   </div>
@@ -591,8 +591,58 @@
 </div>
 <script>
     const floorData208 = {
-      "600": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: null, rooms: [{"section":"Total Floor Area","area":1200,"length":40,"width":30},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":130,"length":13,"width":10},{"section":"Child bed 2","area":130,"length":13,"width":10},{"section":"Living room","area":180,"length":15,"width":12},{"section":"Drawing room","area":130,"length":13,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":40,"length":8,"width":5},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":52,"length":13,"width":4},{"section":"Wall & Stairs area","area":250,"length":"-","width":"-"}] },
-      "850": { bed: "5 Bedrooms", bath: "4 Bathrooms", living: null, drawing: "1 Drawing Room", dining: "1 Dining Space", rooms: [{"section":"Total Floor Area","area":1700,"length":50,"width":34},{"section":"Master bed","area":180,"length":15,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":144,"length":12,"width":12},{"section":"Child bed 3","area":144,"length":12,"width":12},{"section":"Child bed 4","area":144,"length":12,"width":12},{"section":"Drawing room","area":180,"length":15,"width":12},{"section":"Dining space","area":144,"length":12,"width":12},{"section":"Kitchen","area":90,"length":10,"width":9},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Bath room 4","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":302,"length":"-","width":"-"}] }
+      "600": { 
+        bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: "N/A", kitchen: "1 Kitchen",
+        rooms: [
+          { section: "<b>Ground Floor</b>", area: "", length: "", width: "" },
+          { section: "Floor area", area: 600, length: 30, width: 20 },
+          { section: "Living room", area: 180, length: 15, width: 12 },
+          { section: "Child bed 1", area: 130, length: 13, width: 10 },
+          { section: "Kitchen", area: 80, length: 10, width: 8 },
+          { section: "Bath 1", area: 40, length: 8, width: 5 },
+          { section: "Varanda & Porch", area: 26, length: 13, width: 2 },
+          { section: "Wall & Stairs", area: 144, length: "-", width: "-" },
+          { section: "<span style='color:red;'>Total (Ground Floor)</span>", area: "<span style='color:red;'>600</span>", length: "", width: "" },
+          { section: "<b>First floor</b>", area: "", length: "", width: "" },
+          { section: "Floor area", area: 600, length: 30, width: 20 },
+          { section: "Master bed", area: 168, length: 14, width: 12 },
+          { section: "Drawing room", area: 130, length: 13, width: 10 },
+          { section: "Child bed 2", area: 130, length: 13, width: 10 },
+          { section: "Bath 2", area: 40, length: 8, width: 5 },
+          { section: "Varanda", area: 26, length: 13, width: 2 },
+          { section: "Wall & Stairs", area: 106, length: "-", width: "-" },
+          { section: "<span style='color:red;'>Total (First floor)</span>", area: "<span style='color:red;'>600</span>", length: "", width: "" },
+          { section: "<b>Total Building Area</b>", area: "<b>1200</b>", length: "", width: "" }
+        ]
+      },
+      "850": { 
+        bed: "5 Bedrooms", bath: "4 Bathrooms", living: "N/A", drawing: "1 Drawing Room", dining: "1 Dining Space", kitchen: "1 Kitchen",
+        rooms: [
+          { section: "<b>Ground Floor</b>", area: "", length: "", width: "" },
+          { section: "Floor area", area: 850, length: 50, width: 34 },
+          { section: "Master bed", area: 180, length: 15, width: 12 },
+          { section: "Child bed 1", area: 144, length: 12, width: 12 },
+          { section: "Dining space", area: 144, length: 12, width: 12 },
+          { section: "Kitchen", area: 90, length: 10, width: 9 },
+          { section: "Bath 1", area: 48, length: 8, width: 6 },
+          { section: "Bath 2", area: 40, length: 8, width: 5 },
+          { section: "Porch / Balcony", area: 30, length: 15, width: 2 },
+          { section: "Wall & Stairs", area: 174, length: "-", width: "-" },
+          { section: "<span style='color:red;'>Total (Ground Floor)</span>", area: "<span style='color:red;'>850</span>", length: "", width: "" },
+          { section: "<b>First floor</b>", area: "", length: "", width: "" },
+          { section: "Floor area", area: 850, length: 50, width: 34 },
+          { section: "Drawing room", area: 180, length: 15, width: 12 },
+          { section: "Child bed 2", area: 144, length: 12, width: 12 },
+          { section: "Child bed 3", area: 144, length: 12, width: 12 },
+          { section: "Child bed 4", area: 144, length: 12, width: 12 },
+          { section: "Bath 3", area: 40, length: 8, width: 5 },
+          { section: "Bath 4", area: 40, length: 8, width: 5 },
+          { section: "Porch / Balcony", area: 30, length: 15, width: 2 },
+          { section: "Wall & Stairs", area: 128, length: "-", width: "-" },
+          { section: "<span style='color:red;'>Total (First floor)</span>", area: "<span style='color:red;'>850</span>", length: "", width: "" },
+          { section: "<b>Total Building Area</b>", area: "<b>1700</b>", length: "", width: "" }
+        ]
+      }
     };
 
     function updateSpecs208(sqft) {
@@ -601,13 +651,18 @@
 
       document.getElementById("spec-bed-208").innerText = data.bed;
       document.getElementById("spec-bath-208").innerText = data.bath;
-        const priceEl208 = document.getElementById("spec-price-208"); if (priceEl208) { priceEl208.innerText = "Contact for Quote"; }
-
+      const priceEl = document.getElementById("spec-price-208"); 
+      if (priceEl) { priceEl.innerText = "Contact for Quote"; }
+      
       const tbody = document.getElementById("room-sizes-table-body-208");
       if (tbody && data.rooms) {
         let html = "";
         data.rooms.forEach((room, index) => {
-          html += `<tr>
+          // special styling for floor headers and totals
+          let isHeader = room.section.includes("<b>");
+          let isTotal = room.area.toString().includes("color:red");
+          let trStyle = isTotal ? "border-bottom: 2px solid var(--grey-200); background: #fffcfc;" : (isHeader ? "background: var(--off-white);" : "");
+          html += `<tr style="${trStyle}">
             <td>${room.section}</td>
             <td>${room.area || ''}</td>
             <td>${room.length || ''}</td>
@@ -617,19 +672,22 @@
         tbody.innerHTML = html;
       }
 
+      const spaceAlloc = document.getElementById("space-allocation-208");
+      if (spaceAlloc) {
+        let drawingHtml = (data.drawing && data.drawing !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
+        let diningHtml = (data.dining && data.dining !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">${data.dining}</span></div>` : "";
+        let livingHtml = (data.living && data.living !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>` : "";
 
-      let livingHtml = data.living ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>` : "";
-      let diningHtml = data.dining ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.dining}</span></div>` : "";
-      let drawingHtml = data.drawing ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
-
-      document.getElementById("space-allocation-208").innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
-        ${livingHtml}
-        ${diningHtml}
-        ${drawingHtml}
-        <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">1 Kitchen</span></div>
-      `;
+        spaceAlloc.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
+          ${livingHtml}
+          ${diningHtml}
+          ${drawingHtml}
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">${data.kitchen || "1 Kitchen"}</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Varanda &amp; Porch</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
+        `;
+      }
     }
   </script>
   <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs208 === "function") { updateSpecs208("600"); } });</script>
@@ -974,7 +1032,7 @@ function selectArea(id, sqft, btn) {
 </script>
   <script src="js/3d-tilt.js?v=1" defer></script>
   <script src="js/page-transition.js?v=1" defer></script>
-  <script src="js/global-upgrades.min.js?v=3.12" defer></script>
+  <script src="js/global-upgrades.min.js?v=3.13" defer></script>
 </body>
 </html>
 
