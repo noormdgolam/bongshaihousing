@@ -2570,49 +2570,71 @@ textarea.form-control {
      .modern-table replaced .spec-table sitewide as the room/materials table
      class, but this exception never got updated to match — every table
      using it inherited the raw nowrap rule above uncontested, which is why
-     the Materials column overflowed 600px+ past the viewport. */
+     the Materials column overflowed 600px+ past the viewport.
+
+     Card layout, not a stacked table: each <tr> becomes a flex row so the
+     title and value chips align on a real baseline with even gaps, instead
+     of block-stacked lines with hand-tuned padding that never quite lined
+     up. td:first-child is always the title (Section / Item). What follows
+     differs by table shape, disambiguated with :last-child since both
+     tables' 2nd cell would otherwise collide:
+       - 2-column Materials row: 2nd cell IS last-child → full-width
+         paragraph under the title.
+       - 4-column Overview row: 2nd cell is NOT last-child → Area/Length/
+         Width render as small pill badges, Length+Width merged into one
+         "14' × 12'" chip instead of two. */
   .spec-table thead, .modern-table thead { display: none; }
-  .spec-table, .spec-table tbody, .spec-table tr, .spec-table td,
-  .modern-table, .modern-table tbody, .modern-table tr, .modern-table td {
+  .spec-table, .spec-table tbody,
+  .modern-table, .modern-table tbody {
     display: block;
     width: 100% !important;
   }
   .spec-table tr, .modern-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 6px;
+    padding: 12px 16px;
     border-bottom: 1px solid var(--grey-100);
-    padding: var(--space-2) 0;
   }
   .spec-table td, .modern-table td {
-    padding: 2px 16px !important;
+    display: block;
+    padding: 0 !important;
+    border: none !important;
     white-space: normal;
   }
   .spec-table td:first-child, .modern-table td:first-child {
-    padding-top: 8px !important;
+    flex: 1 1 100%;
     font-weight: 700;
+    color: var(--grey-900);
   }
-  .spec-table td:last-child, .modern-table td:last-child {
-    padding-bottom: 8px !important;
+  .spec-table td:last-child, .modern-table td:nth-child(2):last-child {
+    flex: 1 1 100%;
     color: var(--grey-700);
   }
-  /* Room table only (4 cols: Section/Area/Length/Width) — Materials only has
-     2 cells, so nth-child(3)/(4) never match it (nth-child(2) would, which
-     is why Area is left unlabeled here rather than risk mislabeling the
-     Materials description column). Section stays the row title, Area keeps
-     its own line, and Length+Width sit together on one "14' × 12'" line
-     instead of two. Empty divider/total rows show nothing extra. */
+  .modern-table td:nth-child(2):not(:last-child):not(:empty),
   .modern-table td:nth-child(3):not(:empty),
   .modern-table td:nth-child(4):not(:empty) {
-    display: inline-block !important;
-    width: auto !important;
-    padding: 0 !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    background: var(--off-white);
+    padding: 3px 10px !important;
+    border-radius: 20px;
+  }
+  .modern-table td:nth-child(2):not(:last-child):not(:empty)::before {
+    content: "Area "; font-weight: 400; color: var(--grey-500);
   }
   .modern-table td:nth-child(3):not(:empty)::before {
-    content: "Size: "; font-weight: 600; color: var(--grey-500);
+    content: "Size "; font-weight: 400; color: var(--grey-500);
   }
-  .modern-table td:nth-child(3):not(:empty)::after {
-    content: "' × ";
-  }
+  .modern-table td:nth-child(3):not(:empty)::after,
   .modern-table td:nth-child(4):not(:empty)::after {
     content: "'";
+  }
+  .modern-table td:nth-child(4):not(:empty)::before {
+    content: "× "; font-weight: 400; color: var(--grey-500);
   }
 
   /* Hours row */
