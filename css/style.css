@@ -4981,6 +4981,16 @@ body.dark-mode img.logo {
   pointer-events: auto !important;
 }
 
+/* .chat-panel inherits pointer-events:none from .floating-widget above.
+   The @media(max-width:768px) block below restores it for mobile, but
+   left every wider (desktop/tablet) viewport with a click-through panel
+   whose buttons/input silently hit the page behind them instead — which
+   the click-outside handler then reads as "clicked outside" and closes
+   the chat. Restoring it here covers all widths. */
+.chat-panel {
+  pointer-events: auto !important;
+}
+
 .filter-btn {
   box-sizing: border-box !important;
   border-width: 2px !important;

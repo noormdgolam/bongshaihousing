@@ -5,7 +5,7 @@
 <script>(function(){try{if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="preload" href="css/style.min.css?v=4.3" as="style">
+  <link rel="preload" href="css/style.min.css?v=4.4" as="style">
   <!-- Google Fonts: Non-blocking preload for Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +45,7 @@
   <meta name="twitter:image" content="https://bongshaihousing.com/images/products/bh-cb-912.webp" />
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="css/style.min.css?v=4.3" rel="stylesheet"/>
+<link href="css/style.min.css?v=4.4" rel="stylesheet"/>
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -606,7 +606,7 @@
           { section: "Bath 1", area: 40, length: 8, width: 5 },
           { section: "Varanda & Porch", area: 26, length: 13, width: 2 },
           { section: "Wall & Stairs", area: 144, length: "-", width: "-" },
-          { section: "<span style='color:red;'>Total (Ground Floor)</span>", area: "<span style='color:red;'>600</span>", length: "", width: "" },
+          { section: "<span style='font-weight:700; color:var(--primary);'>Total (Ground Floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>600</span>", length: "", width: "" },
           { section: "<b>First floor</b>", area: "", length: "", width: "" },
           { section: "Floor area", area: 600, length: 30, width: 20 },
           { section: "Master bed", area: 168, length: 14, width: 12 },
@@ -615,7 +615,7 @@
           { section: "Bath 2", area: 40, length: 8, width: 5 },
           { section: "Varanda", area: 26, length: 13, width: 2 },
           { section: "Wall & Stairs", area: 106, length: "-", width: "-" },
-          { section: "<span style='color:red;'>Total (First floor)</span>", area: "<span style='color:red;'>600</span>", length: "", width: "" },
+          { section: "<span style='font-weight:700; color:var(--primary);'>Total (First floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>600</span>", length: "", width: "" },
           { section: "<b>Total Building Area</b>", area: "<b>1200</b>", length: "", width: "" }
         ]
       },
@@ -631,7 +631,7 @@
           { section: "Bath 2", area: 40, length: 8, width: 5 },
           { section: "Varanda & porch", area: 36, length: 12, width: 3 },
           { section: "Wall & stairs area", area: 267, length: "-", width: "-" },
-          { section: "<span style='color:red;'>Total (Ground Floor)</span>", area: "<span style='color:red;'>806</span>", length: "", width: "" },
+          { section: "<span style='font-weight:700; color:var(--primary);'>Total (Ground Floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>806</span>", length: "", width: "" },
           { section: "<b>First floor</b>", area: "", length: "", width: "" },
           { section: "Floor area", area: 806, length: 31, width: 26 },
           { section: "Master bed", area: 182, length: 14, width: 13 },
@@ -643,7 +643,7 @@
           { section: "Bath 4", area: 40, length: 8, width: 5 },
           { section: "Varanda", area: 12, length: 12, width: 1 },
           { section: "Wall & stairs area", area: 80, length: "-", width: "-" },
-          { section: "<span style='color:red;'>Total (First floor)</span>", area: "<span style='color:red;'>806</span>", length: "", width: "" },
+          { section: "<span style='font-weight:700; color:var(--primary);'>Total (First floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>806</span>", length: "", width: "" },
           { section: "<b>Total Building Area</b>", area: "<b>1612</b>", length: "", width: "" }
         ]
       }
@@ -664,7 +664,7 @@
         data.rooms.forEach((room, index) => {
           // special styling for floor headers and totals
           let isHeader = room.section.includes("<b>");
-          let isTotal = room.area.toString().includes("color:red");
+          let isTotal = room.area.toString().includes("font-weight:700; color:var(--primary)");
           let trStyle = isTotal ? "border-bottom: 2px solid var(--grey-200); background: #fffcfc;" : (isHeader ? "background: var(--off-white);" : "");
           html += `<tr style="${trStyle}">
             <td>${room.section}</td>
