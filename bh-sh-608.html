@@ -473,6 +473,7 @@
   </style>
   <div class="modern-area-selector" id="area-selector-608">
 <button type="button" class="modern-area-btn active" onclick="selectArea('608', '1612', this)">806*2 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('608', '1200', this)">600*2 Sq.Ft</button>
 </div>
     </div>
   </div>
@@ -582,6 +583,30 @@
 </div>
 <script>
     const floorData608 = {
+            "1200": { 
+        bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: "N/A", kitchen: "1 Kitchen",
+        rooms: [
+          { section: "<b>Ground Floor</b>", area: "", length: "", width: "" },
+          { section: "Floor area", area: 600, length: 30, width: 20 },
+          { section: "Living room", area: 180, length: 15, width: 12 },
+          { section: "Child bed 1", area: 130, length: 13, width: 10 },
+          { section: "Kitchen", area: 80, length: 10, width: 8 },
+          { section: "Bath 1", area: 40, length: 8, width: 5 },
+          { section: "Varanda & Porch", area: 26, length: 13, width: 2 },
+          { section: "Wall & Stairs", area: 144, length: "-", width: "-" },
+          { section: "<span style='color:red;'>Total (Ground Floor)</span>", area: "<span style='color:red;'>600</span>", length: "", width: "" },
+          { section: "<b>First floor</b>", area: "", length: "", width: "" },
+          { section: "Floor area", area: 600, length: 30, width: 20 },
+          { section: "Master bed", area: 168, length: 14, width: 12 },
+          { section: "Drawing room", area: 130, length: 13, width: 10 },
+          { section: "Child bed 2", area: 130, length: 13, width: 10 },
+          { section: "Bath 2", area: 40, length: 8, width: 5 },
+          { section: "Varanda", area: 26, length: 13, width: 2 },
+          { section: "Wall & Stairs", area: 106, length: "-", width: "-" },
+          { section: "<span style='color:red;'>Total (First floor)</span>", area: "<span style='color:red;'>600</span>", length: "", width: "" },
+          { section: "<b>Total Building Area</b>", area: "<b>1200</b>", length: "", width: "" }
+        ]
+      },
       "1612": { 
         bed: "5 Bedrooms", bath: "4 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: "N/A", kitchen: "2 Kitchens",
         rooms: [
