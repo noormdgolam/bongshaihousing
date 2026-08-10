@@ -404,6 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
             processLabel: '📋 How It Works',
             certsLabel: '📜 Certifications',
             humanLabel: '📞 Talk to a Human',
+            customLabel: '✍️ Ask Your Own Question',
+            customPrompt: 'Sure — type your question in the box below and I’ll search our site for the best answer.',
+            searchIntro: 'Here’s what I found on our site:',
             productsIntro: 'Sure — pick a category to see its models:',
             pricingReply: 'Pricing depends on floor area, floors, and finish level. Try our instant cost calculator, or contact us for a custom quote.',
             pricingLinkText: 'Open cost calculator →',
@@ -439,6 +442,9 @@ document.addEventListener('DOMContentLoaded', () => {
             processLabel: '📋 কার্যপ্রণালী',
             certsLabel: '📜 সার্টিফিকেশন',
             humanLabel: '📞 মানুষের সাথে কথা বলুন',
+            customLabel: '✍️ নিজের প্রশ্ন করুন',
+            customPrompt: 'নিশ্চয়ই — নিচের বক্সে আপনার প্রশ্ন লিখুন, আমি আমাদের সাইটে সবচেয়ে ভালো উত্তর খুঁজে দেব।',
+            searchIntro: 'আমাদের সাইটে এইগুলো পেলাম:',
             productsIntro: 'নিশ্চয়ই — একটি ক্যাটাগরি বেছে নিন এর মডেলগুলো দেখতে:',
             pricingReply: 'মূল্য নির্ভর করে জায়গার আয়তন, ফ্লোর সংখ্যা এবং ফিনিশিংয়ের মানের উপর। তাৎক্ষণিক খরচ ক্যালকুলেটর ব্যবহার করুন, অথবা কাস্টম কোটেশনের জন্য যোগাযোগ করুন।',
             pricingLinkText: 'খরচ ক্যালকুলেটর খুলুন →',
@@ -499,6 +505,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let lang = 'en';
     let welcomed = false;
 
+    // Site-only search fallback: reuses the same /search-index.json the header
+    // search modal fetches, so free-text answers only ever cite real pages on
+    // this site — no external AI/API involved (matches the file header note).
+    let siteSearchIndex = null;
+    fetch('/search-index.json').then((r) => r.json()).then((d) => { siteSearchIndex = d; }).catch(() => {});
+
+    const searchSite = (query) => {
+        if (!siteSearchIndex) return [];
+        const q = query.toLowerCase();
+        const words = q.split(/\s+/).filter((w) => w.length > 2);
+        if (!words.length) return [];
+        const scored = siteSearchIndex.map((item) => {
+            const hay = (item.title + ' ' + item.desc).toLowerCase();
+            let score = 0;
+            if (hay.includes(q)) score += 10;
+            words.forEach((w) => { if (hay.includes(w)) score += 1; });
+            return { item, score };
+        }).filter((x) => x.score > 0);
+        scored.sort((a, b) => b.score - a.score);
+        return scored.slice(0, 3).map((x) => x.item);
+    };
+
     const t = () => STR[lang];
 
     const addMsg = (html, cls) => {
@@ -549,6 +577,10 @@ document.addEventListener('DOMContentLoaded', () => {
             addQuickReply(t().processLabel, () => selectTopic('process'));
             addQuickReply(t().certsLabel, () => selectTopic('certs'));
             addQuickReply(t().humanLabel, () => selectTopic('human'));
+            addQuickReply(t().customLabel, () => {
+                addMsg(t().customLabel, 'user');
+                showTyping(() => { addMsg(t().customPrompt, 'bot'); input.focus(); });
+            });
             return;
         }
 
@@ -692,7 +724,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 4) Fallback
+        // 4) Search the site's own content (title + description) for a best-effort answer
+        const hits = searchSite(text);
+        if (hits.length) {
+            showTyping(() => {
+                const list = hits.map((h) => '<div><a href="' + h.url + '">' + h.title + '</a><br><span style="font-size:12px;opacity:.8;">' + h.desc.slice(0, 90) + '…</span></div>').join('');
+                addMsg(t().searchIntro + '<div class="chat-human-links">' + list + '</div>', 'bot');
+            });
+            return;
+        }
+
+        // 5) Fallback
         showTyping(() => { addMsg(t().fallback, 'bot'); view = 'root'; render(); });
     };
 
