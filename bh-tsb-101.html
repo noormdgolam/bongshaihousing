@@ -416,17 +416,56 @@
 <div class="reveal-up" style="display: flex; flex-direction: column; gap: var(--space-5); background: var(--off-white); padding: var(--space-6); border-radius: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); margin-bottom: var(--space-8); border: 1px solid var(--grey-200);">
   
   <!-- Row 1: Floor Area Selector -->
+  <style>
+    .modern-area-selector {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .modern-area-btn {
+      background: #f8f9fa; border: 1px solid #e9ecef; color: #495057;
+      padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .modern-area-btn:hover {
+      background: #e9ecef; border-color: #dee2e6; transform: translateY(-1px);
+    }
+    .modern-area-btn.active {
+      background: var(--primary); color: white; border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(33,64,154,0.3); transform: translateY(-2px);
+    }
+    
+    .modern-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      font-size: 0.95rem; text-align: left; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #edf2f7;
+    }
+    .modern-table thead tr {
+      background: #f7fafc; color: #2d3748;
+    }
+    .modern-table th {
+      padding: 16px; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;
+      border-bottom: 2px solid #e2e8f0; text-align: left;
+    }
+    .modern-table td {
+      padding: 16px; border-bottom: 1px solid #edf2f7; color: #4a5568; font-weight: 500;
+    }
+    .modern-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .modern-table tbody tr:hover {
+      background: #fbfbfc;
+    }
+  </style>
   <div style="display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid var(--grey-200); padding-bottom: var(--space-4);">
     <span style="font-size: 1.5rem; margin-top: 4px;">📐</span>
     <div style="flex: 1;">
       <div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">Select Floor Area</div>
-      <div class="area-selector" id="area-selector-101">
-<button type="button" class="area-btn active" onclick="selectArea('101', '400', this)">400 Sq.Ft</button>
-<button type="button" class="area-btn" onclick="selectArea('101', '600', this)">600 Sq.Ft</button>
-<button type="button" class="area-btn" onclick="selectArea('101', '750', this)">750 Sq.Ft</button>
-<button type="button" class="area-btn" onclick="selectArea('101', '900', this)">900 Sq.Ft</button>
-<button type="button" class="area-btn" onclick="selectArea('101', '1050', this)">1050 Sq.Ft</button>
-<button type="button" class="area-btn" onclick="selectArea('101', '1200', this)">1200 Sq.Ft</button>
+      <div class="modern-area-selector" id="area-selector-101">
+<button type="button" class="modern-area-btn active" onclick="selectArea('101', '400', this)">400 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('101', '600', this)">600 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('101', '750', this)">750 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('101', '900', this)">900 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('101', '1050', this)">1050 Sq.Ft</button>
+<button type="button" class="modern-area-btn" onclick="selectArea('101', '1200', this)">1200 Sq.Ft</button>
 </div>
     </div>
   </div>
@@ -454,13 +493,13 @@
 <div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
   <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Overview (Area Details)</h3>
   <div style="overflow-x: auto;">
-    <table class="spec-table" style="width: 100%; border-collapse: collapse; font-size: 0.95rem; text-align: center;">
+    <table class="modern-table">
       <thead>
-        <tr style="background: rgba(212, 175, 55, 0.15); color: #c82333;">
-          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300); text-align: left;">Section</th>
-          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Area (sq.ft)</th>
-          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Length (ft)</th>
-          <th style="padding: 12px 16px; font-weight: 700; border: 1px solid var(--grey-300);">Width (ft)</th>
+        <tr>
+          <th>Section</th>
+          <th>Area (sq.ft)</th>
+          <th>Length (ft)</th>
+          <th>Width (ft)</th>
         </tr>
       </thead>
       <tbody id="room-sizes-table-body-101" style="color: var(--grey-800);">
@@ -564,12 +603,11 @@
       if (tbody && data.rooms) {
         let html = "";
         data.rooms.forEach((room, index) => {
-          const bg = index % 2 === 0 ? "background: #fdf5d3;" : "background: #faeab1;";
-          html += `<tr style="border-bottom: 1px solid #d4c593; ${bg}">
-            <td style="padding: 12px 16px; font-weight: 500; border: 1px solid #d4c593; text-align: left; color: #333;">${room.section}</td>
-            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.area || ''}</td>
-            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.length || ''}</td>
-            <td style="padding: 12px 16px; border: 1px solid #d4c593; color: #444;">${room.width || ''}</td>
+          html += `<tr>
+            <td>${room.section}</td>
+            <td>${room.area || ''}</td>
+            <td>${room.length || ''}</td>
+            <td>${room.width || ''}</td>
           </tr>`;
         });
         tbody.innerHTML = html;
