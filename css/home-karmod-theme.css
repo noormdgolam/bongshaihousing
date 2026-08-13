@@ -516,16 +516,16 @@ body.home-karmod .stats-banner-label {
 }
 
 /* ===== Completed Projects showcase (karmod.com reference: asymmetric
-   2-large + 3-small image grid with a location badge on each card) ===== */
+   2-large + 4-small image grid with a location badge on each card) ===== */
 body.home-karmod .completed-projects-grid {
   display: grid;
-  /* 6 columns is the LCM of "2 large cards fill row 1" (span 3 each) and
-     "3 small cards fill row 2" (span 2 each) - both rows tile exactly full
-     width with plain auto-flow, no row-spanning/overlap math needed. The
-     previous version spanned the 2 large cards across both rows in a 4-col
-     grid, which alone filled the entire grid and left the 3 small cards
-     with nowhere to go without leaving a gap. */
-  grid-template-columns: repeat(6, 1fr);
+  /* 12 columns is the LCM of "2 large cards fill row 1" (span 6 each) and
+     "4 small cards fill row 2" (span 3 each) - both rows tile exactly full
+     width with plain auto-flow, no row-spanning/overlap math needed. An
+     earlier version spanned the 2 large cards across both rows, which
+     alone filled the whole grid and left the small cards with nowhere to
+     go without leaving a gap. */
+  grid-template-columns: repeat(12, 1fr);
   gap: var(--space-4);
 }
 
@@ -538,12 +538,12 @@ body.home-karmod .completed-project-card {
 }
 
 body.home-karmod .completed-project-card.cp-large {
-  grid-column: span 3;
+  grid-column: span 6;
   height: 320px;
 }
 
 body.home-karmod .completed-project-card.cp-small {
-  grid-column: span 2;
+  grid-column: span 3;
   height: 220px;
 }
 
