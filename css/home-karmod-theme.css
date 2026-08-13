@@ -452,3 +452,175 @@ body.home-karmod .pkg-thumb {
 body.home-karmod #properties {
   padding-top: var(--space-10);
 }
+
+/* ===== Company stats banner (karmod.com reference: dark full-width
+   4-stat strip directly under the hero) ===== */
+body.home-karmod .stats-banner {
+  background: var(--primary-dark);
+  padding: var(--space-8) 0;
+}
+
+body.home-karmod .stats-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+body.home-karmod .stats-banner-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.home-karmod .stats-banner-item:last-child {
+  border-right: none;
+}
+
+body.home-karmod .stats-banner-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+body.home-karmod .stats-banner-num {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+body.home-karmod .stats-banner-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 900px) {
+  body.home-karmod .stats-banner-grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: var(--space-6);
+  }
+  body.home-karmod .stats-banner-item:nth-child(2) {
+    border-right: none;
+  }
+  body.home-karmod .stats-banner-item:nth-child(3),
+  body.home-karmod .stats-banner-item:nth-child(4) {
+    border-right: none;
+  }
+}
+
+/* ===== Completed Projects showcase (karmod.com reference: asymmetric
+   2-large + 3-small image grid with a location badge on each card) ===== */
+body.home-karmod .completed-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 220px);
+  gap: var(--space-4);
+}
+
+body.home-karmod .completed-project-card {
+  position: relative;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+body.home-karmod .completed-project-card.cp-large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+body.home-karmod .completed-project-card.cp-small {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+@media (min-width: 901px) {
+  body.home-karmod .completed-project-card.cp-small:nth-of-type(3),
+  body.home-karmod .completed-project-card.cp-small:nth-of-type(4) {
+    grid-column: span 1;
+  }
+  body.home-karmod .completed-project-card.cp-small:nth-of-type(5) {
+    grid-column: span 2;
+    grid-row: 2;
+  }
+}
+
+body.home-karmod .completed-project-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+body.home-karmod .completed-project-card:hover img {
+  transform: scale(1.06);
+}
+
+body.home-karmod .completed-project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.05) 45%, rgba(15, 23, 42, 0) 70%);
+}
+
+body.home-karmod .cp-badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 1;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+body.home-karmod .cp-caption {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-3);
+  z-index: 1;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  body.home-karmod .completed-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 180px);
+  }
+  body.home-karmod .completed-project-card.cp-large,
+  body.home-karmod .completed-project-card.cp-small {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  body.home-karmod .completed-project-card.cp-large:first-child {
+    grid-column: span 2;
+    grid-row: span 1;
+    height: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  body.home-karmod .completed-projects-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+  body.home-karmod .completed-project-card,
+  body.home-karmod .completed-project-card.cp-large,
+  body.home-karmod .completed-project-card.cp-large:first-child {
+    grid-column: span 1;
+    height: 220px;
+  }
+}
