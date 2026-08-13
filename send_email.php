@@ -28,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $name = isset($_POST['name']) ? preg_replace('/[\r\n]+/', ' ', strip_tags(trim($_POST['name']))) : '';
     $email = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : '';
-    $phone = isset($_POST['phone']) ? strip_tags(trim($_POST['phone'])) : '';
+    $country_code = isset($_POST['country_code']) ? strip_tags(trim($_POST['country_code'])) : '';
+    $phone_raw = isset($_POST['phone']) ? strip_tags(trim($_POST['phone'])) : '';
+    $phone = !empty($country_code) ? $country_code . ' ' . $phone_raw : $phone_raw;
     $district = isset($_POST['district']) ? strip_tags(trim($_POST['district'])) : 'N/A';
     $upazila = isset($_POST['upazila']) ? strip_tags(trim($_POST['upazila'])) : 'N/A';
     $model = isset($_POST['model']) ? strip_tags(trim($_POST['model'])) : 'N/A';
@@ -36,11 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bedrooms = isset($_POST['bedrooms']) ? strip_tags(trim($_POST['bedrooms'])) : 'N/A';
     $message = isset($_POST['message']) ? strip_tags(trim($_POST['message'])) : 'No additional notes.';
 
-    if (empty($name) || empty($email) || empty($phone)) {
+    if (empty($name) || empty($email) || empty($phone_raw)) {
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Please fill in all required fields."]);
         exit;
     }
+
+    $safe_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', $name);
+    $safe_model = preg_replace('/[^a-zA-Z0-9_-]/', '_', $model);
+    $filename = $safe_name . '_' . $safe_model . '.pdf';
 
     // Create PDF
     try {
@@ -124,9 +130,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $body .= "\r\n";
     
     $body .= "--$boundary\r\n";
-    $body .= "Content-Type: application/pdf; name=\"Inquiry_Details.pdf\"\r\n";
+    $body .= "Content-Type: application/pdf; name=\"$filename\"\r\n";
     $body .= "Content-Transfer-Encoding: base64\r\n";
-    $body .= "Content-Disposition: attachment; filename=\"Inquiry_Details.pdf\"\r\n\r\n";
+    $body .= "Content-Disposition: attachment; filename=\"$filename\"\r\n\r\n";
     $body .= chunk_split(base64_encode($pdfContent)) . "\r\n";
     $body .= "--$boundary--";
 

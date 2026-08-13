@@ -453,7 +453,19 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="phone">Phone / WhatsApp *</label>
-                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="01XXXXXXXXX" required autocomplete="tel" data-mcp-param="phone" />
+                  <div style="display:flex; gap:0.5rem;">
+                    <select name="country_code" class="form-control" style="width: auto; flex-shrink: 0;" aria-label="Country Code">
+                      <option value="+880">Bangladesh (+880)</option>
+                      <option value="+91">India (+91)</option>
+                      <option value="+1">USA/Canada (+1)</option>
+                      <option value="+44">UK (+44)</option>
+                      <option value="+971">UAE (+971)</option>
+                      <option value="+966">Saudi Arabia (+966)</option>
+                      <option value="+60">Malaysia (+60)</option>
+                      <option value="+65">Singapore (+65)</option>
+                    </select>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="1XXXXXXXXX" required autocomplete="tel" data-mcp-param="phone" style="flex-grow: 1;" />
+                  </div>
                 </div>
               </div>
 
