@@ -519,8 +519,13 @@ body.home-karmod .stats-banner-label {
    2-large + 3-small image grid with a location badge on each card) ===== */
 body.home-karmod .completed-projects-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 220px);
+  /* 6 columns is the LCM of "2 large cards fill row 1" (span 3 each) and
+     "3 small cards fill row 2" (span 2 each) - both rows tile exactly full
+     width with plain auto-flow, no row-spanning/overlap math needed. The
+     previous version spanned the 2 large cards across both rows in a 4-col
+     grid, which alone filled the entire grid and left the 3 small cards
+     with nowhere to go without leaving a gap. */
+  grid-template-columns: repeat(6, 1fr);
   gap: var(--space-4);
 }
 
@@ -533,24 +538,13 @@ body.home-karmod .completed-project-card {
 }
 
 body.home-karmod .completed-project-card.cp-large {
-  grid-column: span 2;
-  grid-row: span 2;
+  grid-column: span 3;
+  height: 320px;
 }
 
 body.home-karmod .completed-project-card.cp-small {
   grid-column: span 2;
-  grid-row: span 1;
-}
-
-@media (min-width: 901px) {
-  body.home-karmod .completed-project-card.cp-small:nth-of-type(3),
-  body.home-karmod .completed-project-card.cp-small:nth-of-type(4) {
-    grid-column: span 1;
-  }
-  body.home-karmod .completed-project-card.cp-small:nth-of-type(5) {
-    grid-column: span 2;
-    grid-row: 2;
-  }
+  height: 220px;
 }
 
 body.home-karmod .completed-project-card img {
@@ -598,28 +592,20 @@ body.home-karmod .cp-caption {
 @media (max-width: 900px) {
   body.home-karmod .completed-projects-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 180px);
   }
   body.home-karmod .completed-project-card.cp-large,
   body.home-karmod .completed-project-card.cp-small {
     grid-column: span 1;
-    grid-row: span 1;
-  }
-  body.home-karmod .completed-project-card.cp-large:first-child {
-    grid-column: span 2;
-    grid-row: span 1;
-    height: 260px;
+    height: 220px;
   }
 }
 
 @media (max-width: 640px) {
   body.home-karmod .completed-projects-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: none;
   }
-  body.home-karmod .completed-project-card,
   body.home-karmod .completed-project-card.cp-large,
-  body.home-karmod .completed-project-card.cp-large:first-child {
+  body.home-karmod .completed-project-card.cp-small {
     grid-column: span 1;
     height: 220px;
   }
