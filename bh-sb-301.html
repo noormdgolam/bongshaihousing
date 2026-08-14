@@ -413,7 +413,7 @@
 <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.1;">Model No-BH-SB-301</h2>
 <div style="margin-bottom: var(--space-4);">
   <h3 style="font-family: Arial, sans-serif; font-size: 1.2rem; color: #000; margin-bottom: 6px; font-weight: normal;">Overview (Area Details)</h3>
-  <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 0.95rem; color: #000;">
+  <table id="bh301-overview-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 0.95rem; color: #000;">
     <thead>
       <tr style="background-color: #d9e2f3;">
         <th style="border: 1px solid #000; padding: 4px 10px; text-align: center; font-weight: normal;">Section</th>
@@ -479,6 +479,16 @@
 </div>
 </div>
 <style>
+    /* A sitewide mobile rule (table { display:block; white-space:nowrap })
+       targets wide comparison tables; it also catches this bare 2-column
+       table since it carries no .modern-table/.spec-table class, shrinking
+       it to content width and leaving blank space beside it. Opt out. */
+    @media (max-width: 768px) {
+      #bh301-overview-table {
+        display: table;
+        white-space: normal;
+      }
+    }
     #bh301-main-img {
       aspect-ratio: 4/3;
     }
