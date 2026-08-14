@@ -412,15 +412,7 @@
 </div>
 </div>
 </div>
-<!-- 2. Horizontal Quick-Specs Bar -->
-<div class="reveal-up" style="display: flex; flex-direction: column; gap: var(--space-5); background: var(--off-white); padding: var(--space-6); border-radius: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); margin-bottom: var(--space-8); border: 1px solid var(--grey-200);">
-  
-  <!-- Row 1: Floor Area Selector -->
-  <div style="display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid var(--grey-200); padding-bottom: var(--space-4);">
-    <span style="font-size: 1.5rem; margin-top: 4px;">📐</span>
-    <div style="flex: 1;">
-      <div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px;">Select Floor Area</div>
-        <style>
+<style>
     .modern-area-selector {
       display: flex;
       flex-wrap: wrap;
@@ -474,35 +466,6 @@
        gets crushed unreadable, so only Section + Area show; full detail
        stays available on wider screens. */
       </style>
-  <div class="modern-area-selector" id="area-selector-301">
-<button type="button" class="modern-area-btn active" onclick="selectArea('301', '400', this)">400 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('301', '600', this)">600 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('301', '750', this)">750 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('301', '900', this)">900 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('301', '1050', this)">1050 Sq.Ft</button>
-<button type="button" class="modern-area-btn" onclick="selectArea('301', '1200', this)">1200 Sq.Ft</button>
-</div>
-    </div>
-  </div>
-  
-  <!-- Row 2: Secondary Specs -->
-  <div style="display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-around;">
-    <div style="display: flex; align-items: center; gap: 12px;">
-<span style="font-size: 1.5rem;">🛏️</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bedrooms</div><div id="spec-bed-301" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">2 Bedrooms</div></div>
-</div>
-    <div style="width: 1px; background: var(--grey-200);"></div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-<span style="font-size: 1.5rem;">🚿</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Bathroom</div><div id="spec-bath-301" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">1 Bathroom</div></div>
-</div>
-    <div style="width: 1px; background: var(--grey-200);"></div>
-    <div style="display: flex; align-items: center; gap: 12px;">
-<span style="font-size: 1.5rem;">🍳</span>
-<div><div style="font-size: 0.75rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Kitchen</div><div id="spec-kitchen-301" style="font-weight: 700; color: var(--grey-900); font-size: 1.05rem;">1 Kitchen</div></div>
-  </div>
-</div>
-</div>
 
 <!-- 3. Room Sizes Table -->
 <div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
