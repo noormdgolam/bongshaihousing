@@ -398,7 +398,7 @@
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: flex-start;">
 <!-- Left: Large Image -->
 <div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex; flex-direction: column;">
-<img id="bh301-main-img" alt="Model No-BH-SB-301 Exterior View" loading="eager" fetchpriority="high" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" style="width: 100%; aspect-ratio: 2/3; object-fit: contain; background: var(--off-white); display: block;" title="Model No-BH-SB-301 Exterior View" width="1024" height="1024">
+<img id="bh301-main-img" alt="Model No-BH-SB-301 Exterior View" loading="eager" fetchpriority="high" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" style="width: 100%; object-fit: contain; background: var(--off-white); display: block;" title="Model No-BH-SB-301 Exterior View" width="1024" height="1024">
 
 <!-- 3 clickable thumbnails: swap into main image box above -->
 <div class="bh301-thumb-row">
@@ -479,6 +479,17 @@
 </div>
 </div>
 <style>
+    #bh301-main-img {
+      aspect-ratio: 4/3;
+    }
+    @media (min-width: 900px) {
+      /* Only side-by-side desktop layout needs a taller box to match
+         the details column's height; on a single-column mobile/narrow
+         layout a tall box just adds empty letterbox space. */
+      #bh301-main-img {
+        aspect-ratio: 2/3;
+      }
+    }
     .bh301-thumb-row {
       display: flex;
       gap: 8px;
