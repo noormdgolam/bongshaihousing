@@ -397,14 +397,73 @@
 <!-- 1. Hero Product Showcase (Horizontal Split) -->
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
-<div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex;">
-<img alt="Model No-BH-SB-301 Exterior View" loading="eager" fetchpriority="high" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" style="width: 100%; object-fit: cover; display: block;"/ title="Model No-BH-SB-301 Exterior View" width="1024" height="1024">
+<div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex; flex-direction: column;">
+<img id="bh301-main-img" alt="Model No-BH-SB-301 Exterior View" loading="eager" fetchpriority="high" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;" title="Model No-BH-SB-301 Exterior View" width="1024" height="768">
+
+<!-- 3 clickable thumbnails: swap into main image box above -->
+<div class="bh301-thumb-row">
+  <button type="button" class="bh301-thumb-btn"><img class="bh301-thumb" src="images/products/bh-sb-301-img1.jpeg" alt="Model No-BH-SB-301 finished exterior" width="704" height="452" loading="lazy"></button>
+  <button type="button" class="bh301-thumb-btn"><img class="bh301-thumb" src="images/products/bh-sb-301-img2.jpeg" alt="Model No-BH-SB-301 3D floor plan layout" width="1024" height="770" loading="lazy"></button>
+  <button type="button" class="bh301-thumb-btn"><img class="bh301-thumb" src="images/products/bh-sb-301-img3.jpeg" alt="Model No-BH-SB-301 steel frame under construction" width="1024" height="768" loading="lazy"></button>
+</div>
 </div>
 <!-- Right: Details -->
 <div class="reveal-right" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
 <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: var(--space-4); line-height: 1.1;">Model No-BH-SB-301</h2>
-<p style="color: var(--grey-600); font-size: 0.95rem; margin-bottom: var(--space-6); line-height: 1.6;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
+<div style="margin-bottom: var(--space-6);">
+  <h3 style="font-family: Arial, sans-serif; font-size: 1.4rem; color: #000; margin-bottom: 8px; font-weight: normal;">Overview (Area Details)</h3>
+  <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 1.1rem; color: #000;">
+    <thead>
+      <tr style="background-color: #d9e2f3;">
+        <th style="border: 1px solid #000; padding: 6px 12px; text-align: center; font-weight: normal;">Section</th>
+        <th style="border: 1px solid #000; padding: 6px 12px; text-align: center; font-weight: normal;">Area<br>(sqft)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Master bed</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">168</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Bed room 1</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">144</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Bed room 2</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">144</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Child bedroom</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">120</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Living room</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">336</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Kitchen</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">72</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Bath 1</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">36</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Bath 2</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">36</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Varanda</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">96</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000; padding: 6px 12px;">Portch</td>
+        <td style="border: 1px solid #000; padding: 6px 12px; text-align: center;">48</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);"><span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Pricing</span><span id="spec-price-301" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">Contact for Quote</span></div>
 <div style="display: flex; flex-direction: column; gap: 12px;">
 <a href="contact.html?model=BH-SB-301" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
@@ -413,79 +472,102 @@
 </div>
 </div>
 <style>
-    .modern-area-selector {
+    .bh301-thumb-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      gap: 8px;
+      padding: 10px;
+      background: var(--off-white);
     }
-    .modern-area-btn {
-      padding: 8px 16px;
-      border-radius: 30px;
-      border: 1px solid var(--grey-300);
-      background: var(--white);
-      color: var(--grey-700);
-      font-weight: 600;
-      font-size: 0.9rem;
+    .bh301-thumb-btn {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 0;
+      background: none;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      overflow: hidden;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
-    .modern-area-btn:hover {
+    .bh301-thumb-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary-light);
+    }
+    .bh301-thumb-btn.active {
       border-color: var(--primary);
-      color: var(--primary);
     }
-    .modern-area-btn.active {
-      background: var(--primary);
-      color: var(--white);
-      border-color: var(--primary);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .modern-table {
+    .bh301-thumb {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-      text-align: left;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
     }
-    .modern-table th {
-      padding: 12px 16px;
-      font-weight: 700;
-      color: var(--grey-600);
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid var(--grey-200);
-     overflow-wrap: break-word;}
-    .modern-table td {
-      padding: 16px;
-      font-weight: 500;
-      border-bottom: 1px solid var(--grey-100);
-     overflow-wrap: break-word; word-break: break-word;}
-    .modern-table tbody tr:hover {
-      background: #fbfbfc;
+    .modern-grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
     }
-    /* Length/Width are supplementary — on narrow phones a 4-column table
-       gets crushed unreadable, so only Section + Area show; full detail
-       stays available on wider screens. */
-      </style>
+    .modern-room-card {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--grey-200);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .modern-room-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+      border-color: var(--primary-light);
+    }
+    .room-icon {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+    .room-name {
+      color: var(--grey-800);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .room-area {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .room-area span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--grey-500);
+    }
+</style>
+<script>
+(function () {
+  var row = document.querySelector('.bh301-thumb-row');
+  if (!row) return;
+  // Capture phase: must win the click before the sitewide image-lightbox
+  // listener (attached higher up on .reveal-left in bubble phase) sees it.
+  row.addEventListener('click', function (e) {
+    var btn = e.target.closest('.bh301-thumb-btn');
+    if (!btn) return;
+    e.stopPropagation();
+    e.preventDefault();
+    var thumbImg = btn.querySelector('img');
+    var main = document.getElementById('bh301-main-img');
+    main.removeAttribute('srcset');
+    main.src = thumbImg.src;
+    main.alt = thumbImg.alt;
+    row.querySelectorAll('.bh301-thumb-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }, true);
+})();
+</script>
 
-<!-- 3. Room Sizes Table -->
-<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
-  <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Overview (Area Details)</h3>
-  <div style="overflow-x: auto;">
-    <table class="modern-table">
-      <thead>
-        <tr>
-          <th>Section</th>
-          <th>Area (sq.ft)</th>
-          <th>Length (ft)</th>
-          <th>Width (ft)</th>
-        </tr>
-      </thead>
-      <tbody id="room-sizes-table-body-301" style="color: var(--grey-800);">
-        <!-- Populated by JS -->
-      </tbody>
-    </table>
-  </div>
-</div>
 
 <!-- 4. Materials & Finishes (Table) -->
 <div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
@@ -559,48 +641,7 @@
   </table>
 </div>
 </div>
-<script>
-    const floorData301 = {
-      "400": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":400,"length":"-","width":"-"},{"section":"Master bed","area":120,"length":12,"width":10},{"section":"Child bed","area":100,"length":10,"width":10},{"section":"Living/Dining","area":70,"length":10,"width":7},{"section":"Kitchen","area":40,"length":8,"width":5},{"section":"Bath room","area":30,"length":6,"width":5},{"section":"Wall & Stairs area","area":40,"length":"-","width":"-"}] },
-      "600": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":600,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed","area":120,"length":12,"width":10},{"section":"Living room","area":100,"length":10,"width":10},{"section":"Kitchen","area":60,"length":10,"width":6},{"section":"Bath room","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":32,"length":8,"width":4},{"section":"Wall & Stairs area","area":80,"length":"-","width":"-"}] },
-      "750": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":750,"length":"-","width":"-"},{"section":"Master bed","area":156,"length":13,"width":12},{"section":"Child bed 1","area":120,"length":12,"width":10},{"section":"Child bed 2","area":120,"length":12,"width":10},{"section":"Living room","area":100,"length":10,"width":10},{"section":"Kitchen","area":60,"length":10,"width":6},{"section":"Bath room 1","area":40,"length":8,"width":5},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":40,"length":10,"width":4},{"section":"Wall & Stairs area","area":74,"length":"-","width":"-"}] },
-      "900": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":900,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":120,"length":12,"width":10},{"section":"Living room","area":150,"length":15,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":50,"length":10,"width":5},{"section":"Wall & Stairs area","area":100,"length":"-","width":"-"}] },
-      "1050": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":1050,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":130,"length":13,"width":10},{"section":"Child bed 3","area":120,"length":12,"width":10},{"section":"Living room","area":150,"length":15,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":70,"length":"-","width":"-"}] },
-      "1200": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":1200,"length":"-","width":"-"},{"section":"Master bed","area":180,"length":15,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":144,"length":12,"width":12},{"section":"Child bed 3","area":130,"length":13,"width":10},{"section":"Living room","area":200,"length":20,"width":10},{"section":"Kitchen","area":90,"length":10,"width":9},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":124,"length":"-","width":"-"}] }
-    };
 
-    function updateSpecs301(sqft) {
-      const data = floorData301[sqft];
-      if(!data) return;
-
-      document.getElementById("spec-bed-301").innerText = data.bed;
-      document.getElementById("spec-bath-301").innerText = data.bath;
-        const priceEl301 = document.getElementById("spec-price-301"); if (priceEl301) { priceEl301.innerText = "Contact for Quote"; }
-
-      const tbody = document.getElementById("room-sizes-table-body-301");
-      if (tbody && data.rooms) {
-        let html = "";
-        data.rooms.forEach((room, index) => {
-          html += `<tr>
-            <td>${room.section}</td>
-            <td>${room.area || ''}</td>
-            <td>${room.length || ''}</td>
-            <td>${room.width || ''}</td>
-          </tr>`;
-        });
-        tbody.innerHTML = html;
-      }
-
-
-      document.getElementById("space-allocation-301").innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">1 Kitchen</span></div>
-      `;
-    }
-  </script>
-  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs301 === "function") { updateSpecs301("400"); } });</script>
 
   
 </div><!-- End of page-sidebar-content -->
