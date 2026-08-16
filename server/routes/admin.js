@@ -112,6 +112,50 @@ router.get('/admin/leads', async (req, res) => {
   res.render('admin/leads/list.njk', adminVars(req, { leads, status, search }));
 });
 
+router.get('/admin/leads/export/csv', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const status = req.query.status || 'all';
+    const search = (req.query.q || '').trim();
+    let query = db('leads').orderBy('created_at', 'desc');
+    if (status && status !== 'all') query = query.where({ status });
+    if (search) {
+      query = query.where((builder) => {
+        builder.where('name', 'like', `%${search}%`)
+          .orWhere('phone', 'like', `%${search}%`)
+          .orWhere('email', 'like', `%${search}%`)
+          .orWhere('district', 'like', `%${search}%`);
+      });
+    }
+    const leads = await query;
+
+    const headers = ['ID', 'Date', 'Name', 'Phone', 'Email', 'District', 'Upazila', 'Model', 'Floor Area (sqft)', 'Bedrooms', 'Status', 'Message', 'Admin Notes'];
+    const rows = leads.map(l => [
+      l.id,
+      `"${(l.created_at ? new Date(l.created_at).toISOString().replace('T', ' ').slice(0, 19) : '').replace(/"/g, '""')}"`,
+      `"${(l.name || '').replace(/"/g, '""')}"`,
+      `"${(l.phone || '').replace(/"/g, '""')}"`,
+      `"${(l.email || '').replace(/"/g, '""')}"`,
+      `"${(l.district || '').replace(/"/g, '""')}"`,
+      `"${(l.upazila || '').replace(/"/g, '""')}"`,
+      `"${(l.model || '').replace(/"/g, '""')}"`,
+      `"${(l.floor_area || '').replace(/"/g, '""')}"`,
+      `"${(l.bedrooms || '').replace(/"/g, '""')}"`,
+      `"${(l.status || '').replace(/"/g, '""')}"`,
+      `"${(l.message || '').replace(/"/g, '""')}"`,
+      `"${(l.admin_notes || '').replace(/"/g, '""')}"`
+    ].join(','));
+
+    const csvContent = [headers.join(','), ...rows].join('\r\n');
+    const filename = `bongshai-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send('\uFEFF' + csvContent);
+  } catch (e) {
+    res.status(500).send('Export error: ' + e.message);
+  }
+});
+
 router.get('/admin/leads/:id', async (req, res) => {
   if (!db) return res.status(500).send('Database unavailable');
   try {

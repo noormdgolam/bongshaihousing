@@ -26,6 +26,9 @@
       <a href="/admin/leads" class="btn">Clear</a>
       {% endif %}
     </div>
+    <div>
+      <a href="/admin/leads/export/csv{% if status and status != 'all' %}?status={{ status }}{% endif %}{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn" style="font-weight:600;">📥 Export CSV</a>
+    </div>
   </form>
 
   <!-- Leads Table -->
