@@ -1,0 +1,25 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if category.id %}Edit Category{% else %}New Category{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if category.id %}Edit {{ category.name }}{% else %}New Category{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" action="{% if category.id %}/admin/categories/{{ category.id }}{% else %}/admin/categories{% endif %}">
+  <div class="form-row"><label for="name">Name</label><input type="text" id="name" name="name" value="{{ category.name or '' }}" required></div>
+  <div class="form-row"><label for="slug">Slug</label><input type="text" id="slug" name="slug" value="{{ category.slug or '' }}" required></div>
+  <div class="form-row"><label for="landing_page_slug">Landing Page (filename)</label><input type="text" id="landing_page_slug" name="landing_page_slug" value="{{ category.landing_page_slug or '' }}"></div>
+  <div class="form-row"><label for="description">Description</label><textarea id="description" name="description">{{ category.description or '' }}</textarea></div>
+  <div class="form-row"><label for="hero_image">Hero Image (path)</label><input type="text" id="hero_image" name="hero_image" value="{{ category.hero_image or '' }}"></div>
+  <div class="form-row"><label for="sort_order">Sort Order</label><input type="number" id="sort_order" name="sort_order" value="{{ category.sort_order or 0 }}"></div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if category.id %}Save Changes{% else %}Create Category{% endif %}</button>
+    <a href="/admin/categories" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+{% if category.id %}
+<form method="post" action="/admin/categories/{{ category.id }}/delete" onsubmit="return confirm('Delete this category?');">
+  <button type="submit" class="btn btn-danger">Delete Category</button>
+</form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Career Listings{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Career Listings</h1>{% endblock %}
+{% block content %}
+<div class="toolbar"><div></div><a href="/admin/career-listings/new" class="btn btn-primary">+ New Listing</a></div>
+<table>
+  <thead><tr><th>Title</th><th>Department</th><th>Location</th><th>Open</th><th></th></tr></thead>
+  <tbody>
+    {% for l in listings %}
+    <tr>
+      <td>{{ l.title }}</td><td>{{ l.department or '—' }}</td><td>{{ l.location }}</td>
+      <td>{% if l.open %}<span class="pill pill-success">Open</span>{% else %}<span class="pill pill-muted">Closed</span>{% endif %}</td>
+      <td><a href="/admin/career-listings/{{ l.id }}/edit">Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" style="text-align:center; color:var(--grey-500);">No listings yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

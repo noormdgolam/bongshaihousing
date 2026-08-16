@@ -1,0 +1,11 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Dashboard{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Dashboard</h1>{% endblock %}
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card"><div class="num">{{ counts.products }}</div><div class="label">Products</div></div>
+  <div class="stat-card"><div class="num">{{ counts.categories }}</div><div class="label">Categories</div></div>
+  <div class="stat-card"><div class="num">{{ counts.projects }}</div><div class="label">Projects</div></div>
+  <div class="stat-card"><div class="num">{{ counts.careerListings }}</div><div class="label">Career Listings</div></div>
+</div>
+{% endblock %}

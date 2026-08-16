@@ -1,0 +1,20 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Projects{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Projects</h1>{% endblock %}
+{% block content %}
+<div class="toolbar"><div></div><a href="/admin/projects/new" class="btn btn-primary">+ New Project</a></div>
+<table>
+  <thead><tr><th>Title</th><th>Location</th><th>Status</th><th>Published</th><th></th></tr></thead>
+  <tbody>
+    {% for p in projects %}
+    <tr>
+      <td>{{ p.title }}</td><td>{{ p.location or '—' }}</td><td>{{ p.status_label }}</td>
+      <td>{% if p.published %}<span class="pill pill-success">Yes</span>{% else %}<span class="pill pill-muted">No</span>{% endif %}</td>
+      <td><a href="/admin/projects/{{ p.id }}/edit">Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" style="text-align:center; color:var(--grey-500);">No projects yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if listing.id %}Edit Listing{% else %}New Listing{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if listing.id %}Edit {{ listing.title }}{% else %}New Listing{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" action="{% if listing.id %}/admin/career-listings/{{ listing.id }}{% else %}/admin/career-listings{% endif %}">
+  <div class="form-row"><label for="title">Title</label><input type="text" id="title" name="title" value="{{ listing.title or '' }}" required></div>
+  <div class="form-row"><label for="slug">Slug (matches application-form value)</label><input type="text" id="slug" name="slug" value="{{ listing.slug or '' }}" required></div>
+  <div class="form-row"><label for="department">Department</label><input type="text" id="department" name="department" value="{{ listing.department or '' }}"></div>
+  <div class="form-row"><label for="location">Location</label><input type="text" id="location" name="location" value="{{ listing.location or 'Uttara, Dhaka' }}"></div>
+  <div class="form-row"><label for="description">Description</label><textarea id="description" name="description">{{ listing.description or '' }}</textarea></div>
+  <div class="form-row"><label for="sort_order">Sort Order</label><input type="number" id="sort_order" name="sort_order" value="{{ listing.sort_order or 0 }}"></div>
+  <div class="form-row"><label><input type="checkbox" name="open" {% if listing.open or not listing.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Open for applications</label></div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if listing.id %}Save Changes{% else %}Create Listing{% endif %}</button>
+    <a href="/admin/career-listings" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+{% if listing.id %}
+<form method="post" action="/admin/career-listings/{{ listing.id }}/delete" onsubmit="return confirm('Delete this listing?');">
+  <button type="submit" class="btn btn-danger">Delete Listing</button>
+</form>
+{% endif %}
+{% endblock %}

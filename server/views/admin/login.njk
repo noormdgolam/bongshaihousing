@@ -1,0 +1,21 @@
+{% extends "admin-layout.njk" %}
+{% block content_bare %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: var(--grey-50);">
+  <div class="card" style="width: 340px;">
+    <h1 style="font-size:1.3rem; margin-bottom: 4px;">Bongshai CMS</h1>
+    <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:0; margin-bottom: 20px;">Sign in to manage the site.</p>
+    {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+    <form method="post" action="/admin/login">
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autofocus>
+      </div>
+      <div class="form-row">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Sign in</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

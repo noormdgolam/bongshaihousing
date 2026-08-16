@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% block title %}Admin{% endblock %} — Bongshai Housing</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  :root { --primary: #1E40AF; --primary-dark: #1e3a8a; --grey-50: #f8fafc; --grey-100: #f1f5f9; --grey-200: #e2e8f0; --grey-500: #64748b; --grey-700: #334155; --grey-900: #0f172a; --danger: #dc2626; --success: #16a34a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: var(--grey-50); color: var(--grey-900); }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .admin-shell { display: flex; min-height: 100vh; }
+  .admin-sidebar { width: 220px; background: var(--grey-900); color: white; padding: 20px 0; flex-shrink: 0; }
+  .admin-sidebar .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.1rem; border-bottom: 1px solid #1e293b; margin-bottom: 12px; }
+  .admin-sidebar nav a { display: block; padding: 10px 20px; color: #cbd5e1; }
+  .admin-sidebar nav a:hover, .admin-sidebar nav a.active { background: #1e293b; color: white; text-decoration: none; }
+  .admin-main { flex: 1; min-width: 0; }
+  .admin-topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; background: white; border-bottom: 1px solid var(--grey-200); }
+  .admin-content { padding: 24px; max-width: 1100px; }
+  .btn { display: inline-block; padding: 8px 16px; border-radius: 6px; border: 1px solid var(--grey-200); background: white; color: var(--grey-900); cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: var(--grey-100); text-decoration: none; }
+  .btn-primary { background: var(--primary); border-color: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-danger { color: var(--danger); border-color: var(--danger); }
+  .btn-danger:hover { background: #fef2f2; }
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--grey-100); font-size: 0.9rem; }
+  th { background: var(--grey-50); color: var(--grey-500); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; }
+  .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .form-row { margin-bottom: 14px; }
+  .form-row label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: var(--grey-700); }
+  .form-row input[type=text], .form-row input[type=number], .form-row input[type=email], .form-row input[type=password], .form-row textarea, .form-row select {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--grey-200); border-radius: 6px; font-size: 0.9rem; font-family: inherit;
+  }
+  .form-row textarea { min-height: 90px; }
+  .form-actions { display: flex; gap: 8px; margin-top: 20px; }
+  .error-box { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.9rem; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+  .stat-card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .stat-card .num { font-size: 2rem; font-weight: 800; color: var(--primary); }
+  .stat-card .label { color: var(--grey-500); font-size: 0.85rem; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+  .pill-success { background: #dcfce7; color: var(--success); }
+  .pill-muted { background: var(--grey-100); color: var(--grey-500); }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+{% if adminName %}
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand">Bongshai CMS</div>
+    <nav>
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/products">Products</a>
+      <a href="/admin/categories">Categories</a>
+      <a href="/admin/projects">Projects</a>
+      <a href="/admin/career-listings">Career Listings</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>{% block header %}{% endblock %}</div>
+      <div>
+        {{ adminName }} ({{ adminRole }})
+        <form method="post" action="/admin/logout" style="display:inline">
+          <button type="submit" class="btn" style="margin-left:10px;">Log out</button>
+        </form>
+      </div>
+    </div>
+    <div class="admin-content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% else %}
+{% block content_bare %}{% endblock %}
+{% endif %}
+</body>
+</html>

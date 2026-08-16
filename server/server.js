@@ -6,11 +6,24 @@ const express = require('express');
 const nunjucks = require('nunjucks');
 const helmet = require('helmet');
 const compression = require('compression');
+const session = require('express-session');
+const { ConnectSessionKnexStore } = require('connect-session-knex');
 
+const db = require('./lib/db');
 const contactRouter = require('./routes/contact');
 const careerRouter = require('./routes/career');
 const counterRouter = require('./routes/counter');
 const pagesRouter = require('./routes/pages');
+const adminAuthRouter = require('./routes/admin-auth');
+const adminRouter = require('./routes/admin');
+
+// The session store (and any other async DB init) can reject before
+// anything has a chance to .catch() it - without this, a single transient
+// MySQL hiccup crashes the entire Node process (public pages included,
+// not just the admin panel that actually needs the DB).
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection (app stays up):', err);
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +39,20 @@ app.use(compression());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Admin session, backed by the same MySQL connection as everything else
+// (no separate Redis dependency to provision on shared hosting).
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'change-me-in-.env',
+  store: new ConnectSessionKnexStore({ knex: db, tableName: 'sessions', createTable: true }),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 8, // 8 hours
+  },
+}));
 
 nunjucks.configure(path.join(__dirname, 'views'), {
   autoescape: true,
@@ -72,6 +99,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/', adminAuthRouter);
+app.use('/', adminRouter);
 app.use('/', pagesRouter);
 app.use('/', contactRouter);
 app.use('/', careerRouter);

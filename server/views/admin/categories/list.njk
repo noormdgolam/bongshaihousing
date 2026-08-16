@@ -1,0 +1,16 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Categories{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Categories</h1>{% endblock %}
+{% block content %}
+<div class="toolbar"><div></div><a href="/admin/categories/new" class="btn btn-primary">+ New Category</a></div>
+<table>
+  <thead><tr><th>Name</th><th>Slug</th><th>Landing Page</th><th></th></tr></thead>
+  <tbody>
+    {% for c in categories %}
+    <tr><td>{{ c.name }}</td><td>{{ c.slug }}</td><td>{{ c.landing_page_slug or '—' }}</td><td><a href="/admin/categories/{{ c.id }}/edit">Edit</a></td></tr>
+    {% else %}
+    <tr><td colspan="4" style="text-align:center; color:var(--grey-500);">No categories yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

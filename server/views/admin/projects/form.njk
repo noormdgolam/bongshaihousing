@@ -1,0 +1,27 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if project.id %}Edit Project{% else %}New Project{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if project.id %}Edit {{ project.title }}{% else %}New Project{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" action="{% if project.id %}/admin/projects/{{ project.id }}{% else %}/admin/projects{% endif %}">
+  <div class="form-row"><label for="title">Title</label><input type="text" id="title" name="title" value="{{ project.title or '' }}" required></div>
+  <div class="form-row"><label for="slug">Slug</label><input type="text" id="slug" name="slug" value="{{ project.slug or '' }}" required></div>
+  <div class="form-row"><label for="location">Location</label><input type="text" id="location" name="location" value="{{ project.location or '' }}"></div>
+  <div class="form-row"><label for="description">Description</label><textarea id="description" name="description">{{ project.description or '' }}</textarea></div>
+  <div class="form-row"><label for="image">Image (path)</label><input type="text" id="image" name="image" value="{{ project.image or '' }}"></div>
+  <div class="form-row"><label for="status_label">Status Label</label><input type="text" id="status_label" name="status_label" value="{{ project.status_label or 'Completed Project' }}"></div>
+  <div class="form-row"><label for="sort_order">Sort Order</label><input type="number" id="sort_order" name="sort_order" value="{{ project.sort_order or 0 }}"></div>
+  <div class="form-row"><label><input type="checkbox" name="published" {% if project.published or not project.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label></div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if project.id %}Save Changes{% else %}Create Project{% endif %}</button>
+    <a href="/admin/projects" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+{% if project.id %}
+<form method="post" action="/admin/projects/{{ project.id }}/delete" onsubmit="return confirm('Delete this project?');">
+  <button type="submit" class="btn btn-danger">Delete Project</button>
+</form>
+{% endif %}
+{% endblock %}

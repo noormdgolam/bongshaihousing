@@ -1,0 +1,77 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if product.id %}Edit Product{% else %}New Product{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if product.id %}Edit {{ product.model_number }}{% else %}New Product{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" action="{% if product.id %}/admin/products/{{ product.id }}{% else %}/admin/products{% endif %}">
+  <div class="form-row">
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id" required>
+      {% for c in categories %}<option value="{{ c.id }}" {% if product.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="model_number">Model Number</label>
+    <input type="text" id="model_number" name="model_number" value="{{ product.model_number or '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="slug">Slug (URL / filename)</label>
+    <input type="text" id="slug" name="slug" value="{{ product.slug or '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" value="{{ product.title or '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="description">Description</label>
+    <textarea id="description" name="description">{{ product.description or '' }}</textarea>
+  </div>
+  <div class="form-row">
+    <label for="main_image">Main Image (path)</label>
+    <input type="text" id="main_image" name="main_image" value="{{ product.main_image or '' }}">
+  </div>
+  <div style="display:flex; gap:14px;">
+    <div class="form-row" style="flex:1;">
+      <label for="price_per_sqft">Price per sqft</label>
+      <input type="number" step="0.01" id="price_per_sqft" name="price_per_sqft" value="{{ product.price_per_sqft or '' }}">
+    </div>
+    <div class="form-row" style="flex:1;">
+      <label for="price_currency">Currency</label>
+      <input type="text" id="price_currency" name="price_currency" value="{{ product.price_currency or 'BDT' }}">
+    </div>
+  </div>
+  <div class="form-row">
+    <label><input type="checkbox" name="published" {% if product.published or not product.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if product.id %}Save Changes{% else %}Create Product{% endif %}</button>
+    <a href="/admin/products" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+
+{% if product.id %}
+<div class="card">
+  <h2 style="font-size:1rem;">Building Specifications ({{ specs.length }})</h2>
+  <table>
+    <thead><tr><th>Item</th><th>Materials</th></tr></thead>
+    <tbody>
+      {% for s in specs %}<tr><td>{{ s.spec_key }}</td><td>{{ s.spec_value }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="card">
+  <h2 style="font-size:1rem;">Floor-Area Variants ({{ variants.length }})</h2>
+  <table>
+    <thead><tr><th>Area</th><th>Bed</th><th>Bath</th><th>Kitchen</th></tr></thead>
+    <tbody>
+      {% for v in variants %}<tr><td>{{ v.area_label or v.area_sqft }} sqft</td><td>{{ v.bed or '—' }}</td><td>{{ v.bath or '—' }}</td><td>{{ v.kitchen or '—' }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+<form method="post" action="/admin/products/{{ product.id }}/delete" onsubmit="return confirm('Delete this product? This also removes its specs and variants.');">
+  <button type="submit" class="btn btn-danger">Delete Product</button>
+</form>
+{% endif %}
+{% endblock %}

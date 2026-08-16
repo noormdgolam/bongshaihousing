@@ -1,0 +1,33 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Products{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Products</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <form method="get" style="display:flex; gap:8px;">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search title..." style="padding:8px 10px; border:1px solid var(--grey-200); border-radius:6px;">
+    <select name="category" onchange="this.form.submit()" style="padding:8px 10px; border:1px solid var(--grey-200); border-radius:6px;">
+      <option value="">All categories</option>
+      {% for c in categories %}<option value="{{ c.id }}" {% if categoryId == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="btn">Filter</button>
+  </form>
+  <a href="/admin/products/new" class="btn btn-primary">+ New Product</a>
+</div>
+<table>
+  <thead><tr><th>Model</th><th>Title</th><th>Category</th><th>Price/sqft</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td>{{ p.model_number }}</td>
+      <td>{{ p.title }}</td>
+      <td>{{ p.category_name }}</td>
+      <td>{% if p.price_per_sqft %}{{ p.price_per_sqft }} {{ p.price_currency }}{% else %}—{% endif %}</td>
+      <td>{% if p.published %}<span class="pill pill-success">Published</span>{% else %}<span class="pill pill-muted">Draft</span>{% endif %}</td>
+      <td><a href="/admin/products/{{ p.id }}/edit">Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" style="text-align:center; color:var(--grey-500);">No products found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
