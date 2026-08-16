@@ -101,6 +101,28 @@
         <button class="filter-btn" data-filter="low-cost">Low-Cost</button>
       </div>
 <div class="properties-grid stagger">
+          {# ── DB-driven projects (admin-managed, appear first) ─────────────── #}
+          {% if dbProjects and dbProjects.length %}
+            {% for project in dbProjects %}
+            <article class="property-card filter-item reveal visible" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+              {% if project.image %}
+              <div class="property-img-wrap">
+                <img src="{{ project.image }}" alt="{{ project.title }}" style="width:100%; height:auto; display:block;" loading="lazy">
+              </div>
+              {% endif %}
+              <div class="property-card-body filter-item-body" data-aos="fade-up">
+                <span class="property-type">{{ project.status_label or 'Completed Project' }}</span>
+                <h2 class="property-name">{{ project.title }}</h2>
+                {% if project.location %}<p class="property-desc" style="font-size:0.85rem; color:var(--grey-500); margin-bottom:8px;">📍 {{ project.location }}</p>{% endif %}
+                {% if project.description %}<p class="property-desc">{{ project.description }}</p>{% endif %}
+                {% if project.slug %}
+                <a href="{{ project.slug }}.html" class="btn-card-link">View Details</a>
+                {% endif %}
+              </div>
+            </article>
+            {% endfor %}
+          {% endif %}
+          {# ── Static project cards (curated, SEO-rich) ─────────────────────── #}
           <article class="property-card filter-item reveal visible" data-tilt="" data-aos="fade-up" style="--i:0">
             <div class="property-img-wrap">
               <img src="images/projects/completed/bodorgonj_rangpur_1784362445606.webp" srcset="images/projects/completed/bodorgonj_rangpur_1784362445606-400w.webp 400w, images/projects/completed/bodorgonj_rangpur_1784362445606-700w.webp 700w, images/projects/completed/bodorgonj_rangpur_1784362445606.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Completed residential steel building in Bodorgonj, Rangpur" title="Steel building in Rangpur" style="width:100%; height:auto; display:block;" loading="lazy" width="1024" height="1024">
