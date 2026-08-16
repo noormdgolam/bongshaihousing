@@ -50,6 +50,7 @@ router.get('/admin', async (req, res) => {
   let projectCount = { count: 0 };
   let leadCount = { count: 0 };
   let newLeadCount = { count: 0 };
+  let serviceAreaCount = { count: 0 };
   let recentLeads = [];
 
   if (db) {
@@ -58,6 +59,11 @@ router.get('/admin', async (req, res) => {
       [categoryCount] = await db('categories').count({ count: '*' });
       [projectCount] = await db('projects').count({ count: '*' });
       
+      const hasServiceAreas = await db.schema.hasTable('service_areas');
+      if (hasServiceAreas) {
+        [serviceAreaCount] = await db('service_areas').count({ count: '*' });
+      }
+
       const hasLeads = await db.schema.hasTable('leads');
       if (hasLeads) {
         [leadCount] = await db('leads').count({ count: '*' });
@@ -76,6 +82,7 @@ router.get('/admin', async (req, res) => {
       projects: projectCount?.count || 0,
       leads: leadCount?.count || 0,
       newLeads: newLeadCount?.count || 0,
+      serviceAreas: serviceAreaCount?.count || 0,
     },
     recentLeads,
   }));
@@ -461,6 +468,129 @@ router.post('/admin/api/upload', upload.single('file'), (req, res) => {
 router.post('/admin/projects/:id/delete', async (req, res) => {
   await db('projects').where({ id: req.params.id }).del();
   res.redirect('/admin/projects');
+});
+
+// ---- Service Areas (Nationwide 64 Districts Coverage) ----
+
+const BD_DIVISIONS = [
+  'Dhaka Division',
+  'Chattogram Division',
+  'Rajshahi Division',
+  'Khulna Division',
+  'Barishal Division',
+  'Sylhet Division',
+  'Rangpur Division',
+  'Mymensingh Division',
+];
+
+router.get('/admin/service-areas', async (req, res) => {
+  let serviceAreas = [];
+  const search = (req.query.q || '').trim();
+  const divisionFilter = req.query.division || 'all';
+
+  if (db) {
+    try {
+      let query = db('service_areas').orderBy('division', 'asc').orderBy('district', 'asc');
+      if (divisionFilter && divisionFilter !== 'all') {
+        query = query.where({ division: divisionFilter });
+      }
+      if (search) {
+        query = query.where((builder) => {
+          builder.where('district', 'like', `%${search}%`)
+            .orWhere('division', 'like', `%${search}%`)
+            .orWhere('page_slug', 'like', `%${search}%`);
+        });
+      }
+      serviceAreas = await query;
+    } catch (err) {
+      console.error('Service areas list query error:', err.message);
+    }
+  }
+
+  const dedicatedCount = serviceAreas.filter(s => s.has_dedicated_page || s.page_slug).length;
+
+  res.render('admin/service-areas/list.njk', adminVars(req, {
+    serviceAreas,
+    divisions: BD_DIVISIONS,
+    search,
+    divisionFilter,
+    totalCount: serviceAreas.length,
+    dedicatedCount,
+  }));
+});
+
+router.get('/admin/service-areas/new', (req, res) => {
+  res.render('admin/service-areas/form.njk', adminVars(req, { area: {}, divisions: BD_DIVISIONS, error: null }));
+});
+
+router.post('/admin/service-areas', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { district, division, has_dedicated_page, page_slug } = req.body;
+  try {
+    if (!district || !district.trim()) throw new Error('District name is required');
+    const cleanSlug = page_slug ? page_slug.trim().replace(/^\//, '') : null;
+    const hasDedicated = has_dedicated_page === 'on' || has_dedicated_page === true || Boolean(cleanSlug);
+
+    await db('service_areas').insert({
+      district: district.trim(),
+      division: division || 'Dhaka Division',
+      has_dedicated_page: hasDedicated,
+      page_slug: cleanSlug,
+    });
+    res.redirect('/admin/service-areas');
+  } catch (e) {
+    res.render('admin/service-areas/form.njk', adminVars(req, {
+      area: req.body,
+      divisions: BD_DIVISIONS,
+      error: e.message,
+    }));
+  }
+});
+
+router.get('/admin/service-areas/:id/edit', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const area = await db('service_areas').where({ id: req.params.id }).first();
+    if (!area) return res.status(404).send('Service area not found');
+    res.render('admin/service-areas/form.njk', adminVars(req, { area, divisions: BD_DIVISIONS, error: null }));
+  } catch (e) {
+    res.status(500).send('Database error: ' + e.message);
+  }
+});
+
+router.post('/admin/service-areas/:id', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { district, division, has_dedicated_page, page_slug } = req.body;
+  try {
+    if (!district || !district.trim()) throw new Error('District name is required');
+    const cleanSlug = page_slug ? page_slug.trim().replace(/^\//, '') : null;
+    const hasDedicated = has_dedicated_page === 'on' || has_dedicated_page === true || Boolean(cleanSlug);
+
+    await db('service_areas').where({ id: req.params.id }).update({
+      district: district.trim(),
+      division: division || 'Dhaka Division',
+      has_dedicated_page: hasDedicated,
+      page_slug: cleanSlug,
+      updated_at: db.fn.now(),
+    });
+    res.redirect('/admin/service-areas');
+  } catch (e) {
+    res.render('admin/service-areas/form.njk', adminVars(req, {
+      area: { ...req.body, id: req.params.id },
+      divisions: BD_DIVISIONS,
+      error: e.message,
+    }));
+  }
+});
+
+router.post('/admin/service-areas/:id/delete', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    await db('service_areas').where({ id: req.params.id }).del();
+    res.redirect('/admin/service-areas');
+  } catch (e) {
+    res.status(400).send('Delete error: ' + e.message);
+  }
 });
 
 // ---- Visual Theme & Layout Customizer ----

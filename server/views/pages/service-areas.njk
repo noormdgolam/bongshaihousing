@@ -85,34 +85,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const grid = document.getElementById('districtsGrid');
     const searchInput = document.getElementById('districtSearch');
     
+    // DB Service Areas passed from server
+    const serverAreas = {% if dbServiceAreas and dbServiceAreas.length %}{{ dbServiceAreas | dump | safe }}{% else %}null{% endif %};
+    
+    // Build lookup map from DB
+    const dbPageMap = {};
+    if (serverAreas && Array.isArray(serverAreas)) {
+        serverAreas.forEach(function(a) {
+            if (a.has_dedicated_page && a.page_slug) {
+                dbPageMap[a.district.toLowerCase()] = a.page_slug;
+            }
+        });
+    }
+
+    const defaultDistrictPages = {
+        "dhaka": "steel-building-dhaka.html",
+        "chattogram": "steel-building-chotrogram.html",
+        "gazipur": "steel-building-gazipur.html",
+        "comilla": "prefab-housing-cumilla.html",
+        "cumilla": "prefab-housing-cumilla.html",
+        "bogura": "prefab-cottage-bogra-rangpur.html",
+        "bogra": "prefab-cottage-bogra-rangpur.html",
+        "rangpur": "prefab-cottage-bogra-rangpur.html",
+        "faridpur": "steel-building-faridpur.html",
+        "sylhet": "steel-building-sylhet.html",
+        "khulna": "steel-building-khulna.html",
+        "rajshahi": "steel-building-rajshahi.html",
+        "barisal": "steel-building-barisal.html",
+        "barishal": "steel-building-barisal.html",
+        "mymensingh": "steel-building-mymensingh.html",
+        "narayanganj": "steel-building-narayanganj.html",
+        "coxsbazar": "steel-building-coxsbazar.html",
+        "cox's bazar": "steel-building-coxsbazar.html",
+        "jashore": "steel-building-jashore.html",
+        "narsingdi": "steel-building-narsingdi.html",
+        "tangail": "steel-building-tangail.html",
+        "manikganj": "steel-building-manikganj.html"
+    };
+
+    function getDistrictPage(districtName) {
+        if (!districtName) return null;
+        const key = districtName.toLowerCase();
+        if (serverAreas && Array.isArray(serverAreas)) {
+            return dbPageMap[key] || null;
+        }
+        return defaultDistrictPages[key] || null;
+    }
+    
     function renderDistricts(data) {
         grid.innerHTML = '';
         if(data.length === 0) {
             grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--grey-500);">No locations found.</p>';
             return;
         }
-        const districtPages = {
-            "Dhaka": "steel-building-dhaka.html",
-            "Chattogram": "steel-building-chotrogram.html",
-            "Gazipur": "steel-building-gazipur.html",
-            "Comilla": "prefab-housing-cumilla.html",
-            "Bogura": "prefab-cottage-bogra-rangpur.html",
-            "Rangpur": "prefab-cottage-bogra-rangpur.html",
-            "Faridpur": "steel-building-faridpur.html",
-            "Sylhet": "steel-building-sylhet.html",
-            "Khulna": "steel-building-khulna.html",
-            "Rajshahi": "steel-building-rajshahi.html",
-            "Barisal": "steel-building-barisal.html",
-            "Mymensingh": "steel-building-mymensingh.html",
-            "Narayanganj": "steel-building-narayanganj.html",
-            "Coxsbazar": "steel-building-coxsbazar.html",
-            "Jashore": "steel-building-jashore.html",
-            "Narsingdi": "steel-building-narsingdi.html",
-            "Tangail": "steel-building-tangail.html",
-            "Manikganj": "steel-building-manikganj.html"
-        };
 
-        data.forEach(d => {
+        data.forEach(function(d) {
             const card = document.createElement('div');
             card.style.background = '#fff';
             card.style.borderRadius = '8px';
@@ -123,12 +150,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let upazilasHtml = '';
             if(d.upazillas && d.upazillas.length > 0) {
                 upazilasHtml = '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 6px;">' +
-                    d.upazillas.map(u => `<span style="background: var(--grey-50); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; color: var(--grey-600); border: 1px solid var(--grey-200);">${u}</span>`).join('') +
+                    d.upazillas.map(function(u) { return `<span style="background: var(--grey-50); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; color: var(--grey-600); border: 1px solid var(--grey-200);">${u}</span>`; }).join('') +
                     '</div>';
             }
 
-            const page = districtPages[d.district];
-            const linkHtml = page ? `<a href="${page}" style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-decoration: none;">View details →</a>` : '';
+            const page = getDistrictPage(d.district);
+            const linkHtml = page ? `<a href="/${page.replace(/^\//, '')}" style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-decoration: none;">View details →</a>` : '';
 
             card.innerHTML = `
                 <h2 style="margin-bottom: 5px; font-size: 1.1rem; color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
@@ -144,8 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial render
     if(typeof bdGeoData !== 'undefined') {
-        // sort by name
-        bdGeoData.sort((a,b) => a.district.localeCompare(b.district));
+        bdGeoData.sort(function(a, b) { return a.district.localeCompare(b.district); });
         renderDistricts(bdGeoData);
     }
     
@@ -153,9 +179,9 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', function(e) {
         const term = e.target.value.toLowerCase();
         if(typeof bdGeoData !== 'undefined') {
-            const filtered = bdGeoData.filter(d => {
+            const filtered = bdGeoData.filter(function(d) {
                 return d.district.toLowerCase().includes(term) ||
-                       (d.upazillas && d.upazillas.some(u => u.toLowerCase().includes(term)));
+                       (d.upazillas && d.upazillas.some(function(u) { return u.toLowerCase().includes(term); }));
             });
             renderDistricts(filtered);
         }

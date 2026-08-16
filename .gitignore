@@ -22,6 +22,8 @@ venv/
 !server/redirects.json
 !server/db/seeds/data/products.json
 !server/db/seeds/data/projects.json
+!server/db/seeds/data/service_areas.json
+!server/theme-settings.json
 !f446c3814965a067992e82231bb56211.txt
 
 # OS / Editor
