@@ -259,3 +259,11 @@
       </div>
     </section>
 {% endblock %}
+
+{% block content_after %}
+<div class="lightbox-overlay" id="lightbox" role="dialog" aria-label="Image lightbox" aria-modal="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">✕</button>
+    <img src="" alt="Bongshai Housing - Gallery" class="lightbox-img" id="lightboxImg" title="Bongshai Housing - Gallery" loading="lazy" width="1000" height="750">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+{% endblock %}

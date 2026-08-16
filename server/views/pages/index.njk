@@ -1,5 +1,69 @@
 {% extends "layout.njk" %}
-{% block head_extra %}
+{% block head_top %}
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="preload" href="css/style.min.css?v=4.10" as="style">
+  <link rel="preload" href="css/home-karmod-theme.min.css?v=1.9" as="style">
+  <!-- Google Fonts: Non-blocking preload for Inter + Titillium Web (homepage theme) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700;800&display=swap"></noscript>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- ═══ PRIMARY SEO – Target: Steel Building Company Bangladesh ═══ -->
+<title>{{ title }}</title>
+<meta content="{{ description }}" name="description"/>
+<meta content="{{ keywords }}" name="keywords"/>
+<meta content="Bongshai Housing Ltd." name="author"/>
+<meta content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" name="robots"/>
+<meta content="3 days" name="revisit-after"/>
+<meta content="English" name="language"/>
+<meta content="general" name="rating"/>
+<meta content="{{ category }}" name="category"/>
+<meta content="Bangladesh" name="coverage"/>
+<meta content="global" name="distribution"/>
+<meta content="Steel Building Company, Real Estate Developer, EPC Contractor" name="classification"/>
+<link href="{{ canonical }}" rel="canonical"/>
+<!-- Open Graph / Facebook -->
+<meta content="{{ ogType or 'website' }}" property="og:type"/>
+<meta content="{{ canonical }}" property="og:url"/>
+<meta content="{{ ogTitle or title }}" property="og:title"/>
+<meta content="{{ ogDescription or description }}" property="og:description"/>
+<meta content="{{ ogImage or 'https://bongshaihousing.com/images/logo-icon-512.webp' }}" property="og:image"/>
+<meta content="{{ ogImageWidth or 512 }}" property="og:image:width"/>
+<meta content="{{ ogImageHeight or 512 }}" property="og:image:height"/>
+<meta content="Bongshai Housing" property="og:site_name"/>
+<meta content="en_BD" property="og:locale"/>
+<!-- Twitter Card -->
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="@bongshaihousing" name="twitter:site"/>
+<meta content="{{ twitterTitle or ogTitle or title }}" name="twitter:title"/>
+<meta content="{{ twitterDescription or ogDescription or description }}" name="twitter:description"/>
+<meta content="{{ ogImage or 'https://bongshaihousing.com/images/logo-icon-512.webp' }}" name="twitter:image"/>
+<!-- ═══ LOCAL SEO – Dhaka / Bangladesh ═══ -->
+<meta content="BD-C" name="geo.region"/>
+<meta content="Uttara, Dhaka, Bangladesh" name="geo.placename"/>
+<meta content="23.8728;90.3984" name="geo.position"/>
+<meta content="23.8728, 90.3984" name="ICBM"/>
+<meta content="Steel Building Company Bangladesh – Bongshai Housing" name="DC.title"/>
+<meta content="Premier steel building and prefab housing company in Bangladesh. Serving Dhaka, Uttara, Chittagong and all divisions." name="DC.description"/>
+<meta content="Steel Building Company, Prefab Housing, Real Estate Bangladesh" name="DC.subject"/>
+<meta content="Bangladesh" name="DC.coverage"/>
+<meta content="en" name="DC.language"/>
+<!-- Hreflang for International SEO -->
+<link href="{{ canonical }}" hreflang="en" rel="alternate"/><link href="{{ canonical }}" hreflang="x-default" rel="alternate"/>
+<!-- Favicon -->
+<link href="images/favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="images/logo-icon-192.webp" rel="apple-touch-icon" sizes="180x180"/>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<!-- Preconnect for Performance -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<!-- Styles -->
+<link href="css/style.min.css?v=4.10" rel="stylesheet"/>
+<link href="css/home-karmod-theme.min.css?v=1.9" rel="stylesheet"/>
+<!-- Schema.org Structured Data -->
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -228,6 +292,14 @@
   ]
 }
 </script>
+<link href="{{ canonical }}" hreflang="en-BD" rel="alternate"/><link href="{{ canonical }}" hreflang="x-default" rel="alternate"/>
+<link href="css/aos.css" rel="stylesheet"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#1E40AF" name="theme-color"/>
+<!-- Swiper JS for homepage category slider -->
+<link href="css/swiper-bundle.min.css" rel="stylesheet"/>
+<script defer src="js/swiper-custom.min.js"></script>
+<!-- AEO:INJECTED -->
 {% endblock %}
 
 {% block content %}
@@ -915,7 +987,135 @@
 </section>
 {% endblock %}
 
+{% block content_after %}
+<section class="features-strip" aria-label="Key features">
+  <div class="container">
+    <div class="features-strip-grid">
+<div class="feature-strip-item">
+<div aria-hidden="true" class="feature-strip-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+<div>
+<span class="feature-strip-title">EPC Turnkey Projects</span>
+<span class="feature-strip-text">Engineering, Procurement &amp; Construction</span>
+</div>
+</div>
+<div class="feature-strip-item">
+<div aria-hidden="true" class="feature-strip-icon">🌍</div>
+<div>
+<span class="feature-strip-title">International Standards</span>
+<span class="feature-strip-text">Quality, Safety &amp; Reliability</span>
+</div>
+</div>
+<div class="feature-strip-item">
+<div aria-hidden="true" class="feature-strip-icon">⚡</div>
+<div>
+<span class="feature-strip-title">Fast Delivery</span>
+<span class="feature-strip-text">On-time project completion</span>
+</div>
+</div>
+<div class="feature-strip-item">
+<div aria-hidden="true" class="feature-strip-icon">🛡️</div>
+<div>
+<span class="feature-strip-title">Quality Assured</span>
+<span class="feature-strip-text">Certified materials &amp; skilled workforce</span>
+</div>
+</div>
+<div class="feature-strip-item">
+<div aria-hidden="true" class="feature-strip-icon">💰</div>
+<div>
+<span class="feature-strip-title">Best Value</span>
+<span class="feature-strip-text">Competitive pricing guaranteed</span>
+</div>
+  </div>
+</div></div></section>
+{% endblock %}
+
 {% block scripts_extra %}
+<div id="ftue-modal" class="ftue-modal-overlay">
+  <div class="ftue-modal-content">
+    <button class="ftue-close-btn" aria-label="Close modal">×</button>
+    <div class="ftue-image">
+      <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Welcome to Bongshai Housing" loading="lazy" width="1024" height="1024">
+    </div>
+    <div class="ftue-body">
+      <h2>Why choose Bongshai Housing?</h2>
+      <p>Experience Bangladesh's premier prefab and steel building solutions. We build dreams with international quality and unwavering commitment to excellence.</p>
+      <div class="ftue-actions">
+        <a href="products-and-solutions.html" class="btn btn-primary ftue-cta-btn">Explore Packages</a>
+      </div>
+    </div>
+  </div>
+</div>
 <script defer="" src="js/ftue.js?v=1"></script>
 <script src="js/counter.js"></script>
+<script>
+  // Close drawer on outside click
+  document.addEventListener('click', (e) => {
+    const drawer = document.getElementById('mobileDrawer');
+    const hamburger = document.getElementById('hamburgerBtn');
+    if (drawer.classList.contains('open') && !drawer.contains(e.target) && !hamburger.contains(e.target)) {
+      drawer.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // ---- Counter animation for stats ----
+  function animateCounter(el, target, duration = 1500) {
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = start;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      el.textContent = Math.floor(current);
+    }, 16);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const nums = entry.target.querySelectorAll('.stat-card-num');
+        nums.forEach(num => {
+          const text = num.textContent;
+          const match = text.match(/\d+/);
+          if (match) {
+            const target = parseInt(match[0]);
+            const suffix = text.replace(/\d+/, '');
+            const numSpan = document.createElement('span');
+            numSpan.textContent = '0';
+            num.innerHTML = '';
+            num.appendChild(numSpan);
+            const goldSpan = document.createElement('span');
+            goldSpan.className = 'gold';
+            goldSpan.textContent = suffix.includes('+') ? '+' : (suffix.includes('%') ? '%' : '');
+            num.appendChild(goldSpan);
+            animateCounter(numSpan, target);
+          }
+        });
+        statsObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsSection = document.querySelector('.stats-section');
+  if (statsSection) statsObserver.observe(statsSection);
+</script>
+{% endblock %}
+
+{% block footer_bottom_extra %}
+<div style="font-weight: 600; font-size: 0.9rem; color: var(--accent-light); background: rgba(0,0,0,0.2); padding: 0.25rem 0.75rem; border-radius: 4px; margin-bottom: 0.5rem; display: inline-block;">Total Page Views: <span id="page-view-counter" style="color: #fff; font-weight: 800; font-variant-numeric: tabular-nums;">--</span></div>
+{% endblock %}
+
+{% block aos_script %}
+<script defer src="js/aos.js"></script>
+<script>
+  // aos.js is deferred, so init after DOM ready (deferred scripts run before this fires)
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof AOS !== 'undefined') AOS.init({ once: true, duration: 800, offset: 50 });
+  });
+</script>
 {% endblock %}

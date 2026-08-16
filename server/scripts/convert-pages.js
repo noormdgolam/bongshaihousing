@@ -10,7 +10,15 @@
  *
  * Deliberately excludes: dead fragments (_header/_footer/_mobile_drawer),
  * 404.html and offline.html (stay static/Apache's job - see server.js's
- * architecture notes), and career.html (already hand-converted).
+ * architecture notes), and career.html + index.html (hand-tuned after the
+ * initial auto-extraction - index.html in particular has page-specific
+ * additions the generic extraction can't derive: body class, an extra
+ * <head> script, a features-strip section + FTUE modal living outside
+ * <main>, a stats-counter-animation script that extends rather than
+ * matches the shared footer script, and a page-view-counter nested inside
+ * the shared footer markup. Re-running the script for either would
+ * silently wipe those out - if real content on either page changes,
+ * re-apply the diff by hand rather than removing them from this list).
  *
  * Usage: node server/scripts/convert-pages.js [--dry-run] [--only=file1.html,file2.html]
  */
@@ -23,7 +31,7 @@ const REPO_ROOT = path.join(__dirname, '..', '..');
 const VIEWS_PAGES_DIR = path.join(__dirname, '..', 'views', 'pages');
 const REGISTRY_PATH = path.join(__dirname, '..', 'page-registry.json');
 
-const EXCLUDE = new Set(['_header.html', '_footer.html', '_mobile_drawer.html', '404.html', 'offline.html', 'career.html']);
+const EXCLUDE = new Set(['_header.html', '_footer.html', '_mobile_drawer.html', '404.html', 'offline.html', 'career.html', 'index.html']);
 
 function text(el) {
   return el ? el.textContent.trim() : null;
@@ -57,25 +65,48 @@ function convertOne(filename) {
   const twitterTitle = attr(doc.querySelector('meta[name="twitter:title"]'), 'content');
   const twitterDescription = attr(doc.querySelector('meta[name="twitter:description"]'), 'content');
   const whatsappHref = attr(doc.querySelector('a.whatsapp-float'), 'href');
+  const bodyClass = attr(doc.querySelector('body'), 'class');
+  // ~1/3 of pages show a "Interactive Tools > Get Quote" shortcut in the
+  // mobile nav drawer (solutions.html itself and a few utility pages
+  // omit it) - not a clean majority/minority split, so nav.njk renders it
+  // conditionally per page rather than baking in one default for everyone.
+  const showQuoteShortcut = html.includes('text-transform:uppercase;">Interactive Tools</div>');
 
   const ldJsonScripts = Array.from(doc.querySelectorAll('script[type="application/ld+json"]'));
-  const headExtra = ldJsonScripts.map((s) => s.outerHTML).join('\n');
+  // A few pages load an extra library/script in <head> beyond the standard
+  // shared set (index.html's swiper-custom.min.js for the hero slider,
+  // interactive-tools.html's chart.js/leaflet, service-areas.html's
+  // bd-geo-data.js) - not shared boilerplate, so not in layout.njk, but
+  // still needs to load in <head> (before body scripts) for these pages.
+  const HEAD_SHARED_SRC_MARKERS = ['style.min.css', 'aos.js', 'aos.css', 'bangla-translation.js'];
+  const extraHeadScripts = Array.from(doc.querySelectorAll('head script[src]')).filter((s) => {
+    const src = s.getAttribute('src') || '';
+    return !HEAD_SHARED_SRC_MARKERS.some((m) => src.includes(m));
+  });
+  const headExtra = [...ldJsonScripts, ...extraHeadScripts].map((s) => s.outerHTML).join('\n');
 
   const contentHtml = main.innerHTML.trim();
 
-  // 186 of 218 pages define page-specific <script>/<style> blocks after
-  // </main> (some between </main> and <footer>, most after the shared
-  // footer scripts, near </body>) - typically the updateSpecsXXX()/
-  // floorDataXXX room-size-switcher logic unique to each product page.
-  // main.innerHTML alone silently drops all of it. Walk every element
-  // sibling from main onward and keep anything that isn't the footer
-  // itself or one of the now-shared boilerplate scripts/links baked into
-  // footer.njk/layout.njk.
+  // Most pages have nothing but the shared footer/scripts after </main>,
+  // but two distinct exceptions exist and both silently lose content if
+  // only main.innerHTML is captured:
+  //  - 186 of 218 pages define page-specific <script>/<style> blocks after
+  //    the shared footer scripts, near </body> - typically the
+  //    updateSpecsXXX()/floorDataXXX room-size-switcher logic unique to
+  //    each product page.
+  //  - A handful of pages (index.html's features-strip section + FTUE
+  //    modal, solutions.html's area-selector style/script) place real
+  //    sibling-of-<main> *elements* - not just script/style - between
+  //    </main> and <footer>.
+  // Walk every element sibling from main onward, skip the footer itself
+  // and the now-shared boilerplate baked into footer.njk/layout.njk, and
+  // route whatever's left into "before the footer" (content_after block,
+  // renders as a sibling of <main>) vs "after the footer" (scripts_extra,
+  // renders at the end of body) depending on which side of <footer> it's on.
   const SHARED_SCRIPT_MARKERS = [
     'aos.js', '3d-tilt.js', 'page-transition.js', 'global-upgrades.min.js', 'bangla-translation.js',
   ];
   function isKnownShared(el) {
-    if (el.tagName === 'FOOTER') return true;
     if (el.tagName === 'A' && el.classList.contains('whatsapp-float')) return true;
     if (el.tagName === 'SCRIPT') {
       const src = el.getAttribute('src') || '';
@@ -88,19 +119,24 @@ function convertOne(filename) {
     return false;
   }
 
-  const trailingBlocks = [];
+  const beforeFooterBlocks = [];
+  const afterFooterBlocks = [];
   let sib = main.nextElementSibling;
+  let passedFooter = false;
   while (sib) {
-    if (!isKnownShared(sib) && (sib.tagName === 'SCRIPT' || sib.tagName === 'STYLE')) {
-      trailingBlocks.push(sib.outerHTML);
+    if (sib.tagName === 'FOOTER') {
+      passedFooter = true;
+    } else if (!isKnownShared(sib)) {
+      (passedFooter ? afterFooterBlocks : beforeFooterBlocks).push(sib.outerHTML);
     }
     sib = sib.nextElementSibling;
   }
-  const scriptsExtra = trailingBlocks.join('\n');
+  const contentAfter = beforeFooterBlocks.join('\n');
+  const scriptsExtra = afterFooterBlocks.join('\n');
 
   // Guard: literal {{ or {% in extracted content would be misinterpreted
   // as Nunjucks syntax. Flag rather than silently emit a broken template.
-  const suspicious = /\{\{|\{%/.test(contentHtml) || /\{\{|\{%/.test(headExtra) || /\{\{|\{%/.test(scriptsExtra);
+  const suspicious = [contentHtml, headExtra, contentAfter, scriptsExtra].some((s) => /\{\{|\{%/.test(s));
 
   const templateName = filename.replace(/\.html$/, '');
   const njkPath = path.join(VIEWS_PAGES_DIR, `${templateName}.njk`);
@@ -109,7 +145,7 @@ function convertOne(filename) {
 ${headExtra ? `{% block head_extra %}\n${headExtra}\n{% endblock %}\n\n` : ''}{% block content %}
 ${contentHtml}
 {% endblock %}
-${scriptsExtra ? `\n{% block scripts_extra %}\n${scriptsExtra}\n{% endblock %}\n` : ''}`;
+${contentAfter ? `\n{% block content_after %}\n${contentAfter}\n{% endblock %}\n` : ''}${scriptsExtra ? `\n{% block scripts_extra %}\n${scriptsExtra}\n{% endblock %}\n` : ''}`;
 
   return {
     filename,
@@ -133,6 +169,8 @@ ${scriptsExtra ? `\n{% block scripts_extra %}\n${scriptsExtra}\n{% endblock %}\n
       twitterTitle,
       twitterDescription,
       whatsappHref,
+      bodyClass,
+      showQuoteShortcut,
       template: `pages/${templateName}.njk`,
     },
   };

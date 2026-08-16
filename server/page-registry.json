@@ -10,7 +10,8 @@
     "ogImage": null,
     "twitterTitle": "Careers | Bongshai Housing",
     "twitterDescription": "Steel building & construction jobs at a leading pre-engineered steel building company in Bangladesh. Apply now.",
-    "template": "pages/career.njk"
+    "template": "pages/career.njk",
+    "showQuoteShortcut": true
   },
   "/about.html": {
     "urlPath": "/about.html",
@@ -28,6 +29,8 @@
     "twitterTitle": null,
     "twitterDescription": null,
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/about.njk"
   },
   "/bh-sb-302.html": {
@@ -46,6 +49,8 @@
     "twitterTitle": "BH-SB-302 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-302 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-302.njk"
   },
   "/faq.html": {
@@ -64,6 +69,8 @@
     "twitterTitle": "FAQ - Steel Building & Prefab Housing Bangladesh | Bongshai Housing",
     "twitterDescription": "Answers on prefab & steel building cost, floor plans, construction time, and materials in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20have%20a%20question.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/faq.njk"
   },
   "/steel-building-dhaka.html": {
@@ -82,6 +89,8 @@
     "twitterTitle": "Steel Building Company in Dhaka | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-dhaka.njk"
   },
   "/solutions.html": {
@@ -100,6 +109,8 @@
     "twitterTitle": "Get Custom Quote | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier pre-engineered steel building company. Free quote available. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20a%20free%20consultation.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/solutions.njk"
   },
   "/apartment-building.html": {
@@ -118,6 +129,8 @@
     "twitterTitle": "Apartment Building | Bongshai Housing",
     "twitterDescription": "Steel-frame apartment buildings in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/apartment-building.njk"
   },
   "/bh-cb-901.html": {
@@ -136,6 +149,8 @@
     "twitterTitle": "BH-CB-901 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-901 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-901.njk"
   },
   "/bh-cb-902.html": {
@@ -154,6 +169,8 @@
     "twitterTitle": "BH-CB-902 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-902 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-902.njk"
   },
   "/bh-cb-903.html": {
@@ -172,6 +189,8 @@
     "twitterTitle": "BH-CB-903 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-903 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-903.njk"
   },
   "/bh-cb-904.html": {
@@ -190,6 +209,8 @@
     "twitterTitle": "BH-CB-904 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-904 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-904.njk"
   },
   "/bh-cb-905.html": {
@@ -208,6 +229,8 @@
     "twitterTitle": "BH-CB-905 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-905 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-905.njk"
   },
   "/bh-cb-906.html": {
@@ -226,6 +249,8 @@
     "twitterTitle": "BH-CB-906 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-906 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-906.njk"
   },
   "/bh-cb-907.html": {
@@ -244,6 +269,8 @@
     "twitterTitle": "BH-CB-907 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-907 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-907.njk"
   },
   "/bh-cb-908.html": {
@@ -262,6 +289,8 @@
     "twitterTitle": "BH-CB-908 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-908 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-908.njk"
   },
   "/bh-cb-909.html": {
@@ -280,6 +309,8 @@
     "twitterTitle": "BH-CB-909 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-909 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-909.njk"
   },
   "/bh-cb-910.html": {
@@ -298,6 +329,8 @@
     "twitterTitle": "BH-CB-910 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-910 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-910.njk"
   },
   "/bh-cb-911.html": {
@@ -316,6 +349,8 @@
     "twitterTitle": "BH-CB-911 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-911 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-911.njk"
   },
   "/bh-cb-912.html": {
@@ -334,6 +369,8 @@
     "twitterTitle": "BH-CB-912 | Concrete Building | Bongshai Housing",
     "twitterDescription": "BH-CB-912 — premium Concrete Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-cb-912.njk"
   },
   "/bh-ch-401.html": {
@@ -352,6 +389,8 @@
     "twitterTitle": "BH-CH-401 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-401 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-401.njk"
   },
   "/bh-ch-402.html": {
@@ -370,6 +409,8 @@
     "twitterTitle": "BH-CH-402 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-402 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-402.njk"
   },
   "/bh-ch-403.html": {
@@ -388,6 +429,8 @@
     "twitterTitle": "BH-CH-403 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-403 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-403.njk"
   },
   "/bh-ch-404.html": {
@@ -406,6 +449,8 @@
     "twitterTitle": "BH-CH-404 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-404 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-404.njk"
   },
   "/bh-ch-405.html": {
@@ -424,6 +469,8 @@
     "twitterTitle": "BH-CH-405 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-405 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-405.njk"
   },
   "/bh-ch-406.html": {
@@ -442,6 +489,8 @@
     "twitterTitle": "BH-CH-406 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-406 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-406.njk"
   },
   "/bh-ch-407.html": {
@@ -460,6 +509,8 @@
     "twitterTitle": "BH-CH-407 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-407 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-407.njk"
   },
   "/bh-ch-408.html": {
@@ -478,6 +529,8 @@
     "twitterTitle": "BH-CH-408 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-408 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-408.njk"
   },
   "/bh-ch-409.html": {
@@ -496,6 +549,8 @@
     "twitterTitle": "BH-CH-409 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-409 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-409.njk"
   },
   "/bh-ch-410.html": {
@@ -514,6 +569,8 @@
     "twitterTitle": "BH-CH-410 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-410 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-410.njk"
   },
   "/bh-ch-411.html": {
@@ -532,6 +589,8 @@
     "twitterTitle": "BH-CH-411 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-411 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-411.njk"
   },
   "/bh-ch-412.html": {
@@ -550,6 +609,8 @@
     "twitterTitle": "BH-CH-412 | Cottage House | Bongshai Housing",
     "twitterDescription": "BH-CH-412 — premium Cottage House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-412.njk"
   },
   "/bh-ch-501.html": {
@@ -568,6 +629,8 @@
     "twitterTitle": "BH-CH-501 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-501 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-501.njk"
   },
   "/bh-ch-502.html": {
@@ -586,6 +649,8 @@
     "twitterTitle": "BH-CH-502 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-502 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-502.njk"
   },
   "/bh-ch-503.html": {
@@ -604,6 +669,8 @@
     "twitterTitle": "BH-CH-503 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-503 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-503.njk"
   },
   "/bh-ch-504.html": {
@@ -622,6 +689,8 @@
     "twitterTitle": "BH-CH-504 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-504 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-504.njk"
   },
   "/bh-ch-505.html": {
@@ -640,6 +709,8 @@
     "twitterTitle": "BH-CH-505 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-505 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-505.njk"
   },
   "/bh-ch-506.html": {
@@ -658,6 +729,8 @@
     "twitterTitle": "BH-CH-506 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-506 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-506.njk"
   },
   "/bh-ch-507.html": {
@@ -676,6 +749,8 @@
     "twitterTitle": "BH-CH-507 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-507 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-507.njk"
   },
   "/bh-ch-508.html": {
@@ -694,6 +769,8 @@
     "twitterTitle": "BH-CH-508 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-508 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-508.njk"
   },
   "/bh-ch-509.html": {
@@ -712,6 +789,8 @@
     "twitterTitle": "BH-CH-509 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-509 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-509.njk"
   },
   "/bh-ch-510.html": {
@@ -730,6 +809,8 @@
     "twitterTitle": "BH-CH-510 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-510 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-510.njk"
   },
   "/bh-ch-511.html": {
@@ -748,6 +829,8 @@
     "twitterTitle": "BH-CH-511 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-511 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-511.njk"
   },
   "/bh-ch-512.html": {
@@ -766,6 +849,8 @@
     "twitterTitle": "BH-CH-512 | Container House | Bongshai Housing",
     "twitterDescription": "BH-CH-512 — premium Container House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Cottage%20House%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-ch-512.njk"
   },
   "/bh-dv-201.html": {
@@ -784,6 +869,8 @@
     "twitterTitle": "BH-DV-201 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-201 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-201.njk"
   },
   "/bh-dv-202.html": {
@@ -802,6 +889,8 @@
     "twitterTitle": "BH-DV-202 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-202 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-202.njk"
   },
   "/bh-dv-203.html": {
@@ -820,6 +909,8 @@
     "twitterTitle": "BH-DV-203 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-203 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-203.njk"
   },
   "/bh-dv-204.html": {
@@ -838,6 +929,8 @@
     "twitterTitle": "BH-DV-204 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-204 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-204.njk"
   },
   "/bh-dv-205.html": {
@@ -856,6 +949,8 @@
     "twitterTitle": "BH-DV-205 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-205 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-205.njk"
   },
   "/bh-dv-206.html": {
@@ -874,6 +969,8 @@
     "twitterTitle": "BH-DV-206 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-206 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-206.njk"
   },
   "/bh-dv-207.html": {
@@ -892,6 +989,8 @@
     "twitterTitle": "BH-DV-207 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-207 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-207.njk"
   },
   "/bh-dv-208.html": {
@@ -910,6 +1009,8 @@
     "twitterTitle": "BH-DV-208 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-208 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-208.njk"
   },
   "/bh-dv-209.html": {
@@ -928,6 +1029,8 @@
     "twitterTitle": "BH-DV-209 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-209 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-209.njk"
   },
   "/bh-dv-210.html": {
@@ -946,6 +1049,8 @@
     "twitterTitle": "BH-DV-210 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-210 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-210.njk"
   },
   "/bh-dv-211.html": {
@@ -964,6 +1069,8 @@
     "twitterTitle": "BH-DV-211 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-211 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-211.njk"
   },
   "/bh-dv-212.html": {
@@ -982,6 +1089,8 @@
     "twitterTitle": "BH-DV-212 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-DV-212 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-dv-212.njk"
   },
   "/bh-is-1001.html": {
@@ -1000,6 +1109,8 @@
     "twitterTitle": "BH-IS-1001 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1001 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1001.njk"
   },
   "/bh-is-1002.html": {
@@ -1018,6 +1129,8 @@
     "twitterTitle": "BH-IS-1002 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1002 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1002.njk"
   },
   "/bh-is-1003.html": {
@@ -1036,6 +1149,8 @@
     "twitterTitle": "BH-IS-1003 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1003 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1003.njk"
   },
   "/bh-is-1004.html": {
@@ -1054,6 +1169,8 @@
     "twitterTitle": "BH-IS-1004 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1004 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1004.njk"
   },
   "/bh-is-1005.html": {
@@ -1072,6 +1189,8 @@
     "twitterTitle": "BH-IS-1005 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1005 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1005.njk"
   },
   "/bh-is-1006.html": {
@@ -1090,6 +1209,8 @@
     "twitterTitle": "BH-IS-1006 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1006 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1006.njk"
   },
   "/bh-is-1007.html": {
@@ -1108,6 +1229,8 @@
     "twitterTitle": "BH-IS-1007 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1007 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1007.njk"
   },
   "/bh-is-1008.html": {
@@ -1126,6 +1249,8 @@
     "twitterTitle": "BH-IS-1008 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1008 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1008.njk"
   },
   "/bh-is-1009.html": {
@@ -1144,6 +1269,8 @@
     "twitterTitle": "BH-IS-1009 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1009 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1009.njk"
   },
   "/bh-is-1010.html": {
@@ -1162,6 +1289,8 @@
     "twitterTitle": "BH-IS-1010 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1010 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1010.njk"
   },
   "/bh-is-1011.html": {
@@ -1180,6 +1309,8 @@
     "twitterTitle": "BH-IS-1011 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1011 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1011.njk"
   },
   "/bh-is-1012.html": {
@@ -1198,6 +1329,8 @@
     "twitterTitle": "BH-IS-1012 | Industrial Steel Sheds | Bongshai Housing",
     "twitterDescription": "BH-IS-1012 — premium Industrial Steel Sheds in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-is-1012.njk"
   },
   "/bh-sb-301.html": {
@@ -1216,6 +1349,8 @@
     "twitterTitle": "BH-SB-301 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-301 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-301.njk"
   },
   "/bh-sb-303.html": {
@@ -1234,6 +1369,8 @@
     "twitterTitle": "BH-SB-303 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-303 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-303.njk"
   },
   "/bh-sb-304.html": {
@@ -1252,6 +1389,8 @@
     "twitterTitle": "BH-SB-304 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-304 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-304.njk"
   },
   "/bh-sb-305.html": {
@@ -1270,6 +1409,8 @@
     "twitterTitle": "BH-SB-305 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-305 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-305.njk"
   },
   "/bh-sb-306.html": {
@@ -1288,6 +1429,8 @@
     "twitterTitle": "BH-SB-306 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-306 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-306.njk"
   },
   "/bh-sb-307.html": {
@@ -1306,6 +1449,8 @@
     "twitterTitle": "BH-SB-307 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-307 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-307.njk"
   },
   "/bh-sb-308.html": {
@@ -1324,6 +1469,8 @@
     "twitterTitle": "BH-SB-308 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-308 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-308.njk"
   },
   "/bh-sb-309.html": {
@@ -1342,6 +1489,8 @@
     "twitterTitle": "BH-SB-309 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-309 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-309.njk"
   },
   "/bh-sb-310.html": {
@@ -1360,6 +1509,8 @@
     "twitterTitle": "BH-SB-310 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-310 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-310.njk"
   },
   "/bh-sb-311.html": {
@@ -1378,6 +1529,8 @@
     "twitterTitle": "BH-SB-311 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-311 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-311.njk"
   },
   "/bh-sb-312.html": {
@@ -1396,6 +1549,8 @@
     "twitterTitle": "BH-SB-312 | Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "BH-SB-312 — premium Simplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sb-312.njk"
   },
   "/bh-sh-601.html": {
@@ -1414,6 +1569,8 @@
     "twitterTitle": "BH-SH-601 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-601 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-601.njk"
   },
   "/bh-sh-602.html": {
@@ -1432,6 +1589,8 @@
     "twitterTitle": "BH-SH-602 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-602 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-602.njk"
   },
   "/bh-sh-603.html": {
@@ -1450,6 +1609,8 @@
     "twitterTitle": "BH-SH-603 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-603 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-603.njk"
   },
   "/bh-sh-604.html": {
@@ -1468,6 +1629,8 @@
     "twitterTitle": "BH-SH-604 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-604 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-604.njk"
   },
   "/bh-sh-605.html": {
@@ -1486,6 +1649,8 @@
     "twitterTitle": "BH-SH-605 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-605 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-605.njk"
   },
   "/bh-sh-606.html": {
@@ -1504,6 +1669,8 @@
     "twitterTitle": "BH-SH-606 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-606 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-606.njk"
   },
   "/bh-sh-607.html": {
@@ -1522,6 +1689,8 @@
     "twitterTitle": "BH-SH-607 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-607 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-607.njk"
   },
   "/bh-sh-608.html": {
@@ -1540,6 +1709,8 @@
     "twitterTitle": "BH-SH-608 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-608 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-608.njk"
   },
   "/bh-sh-609.html": {
@@ -1558,6 +1729,8 @@
     "twitterTitle": "BH-SH-609 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-609 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-609.njk"
   },
   "/bh-sh-610.html": {
@@ -1576,6 +1749,8 @@
     "twitterTitle": "BH-SH-610 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-610 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-610.njk"
   },
   "/bh-sh-611.html": {
@@ -1594,6 +1769,8 @@
     "twitterTitle": "BH-SH-611 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-611 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-611.njk"
   },
   "/bh-sh-612.html": {
@@ -1612,6 +1789,8 @@
     "twitterTitle": "BH-SH-612 | Steel House | Bongshai Housing",
     "twitterDescription": "BH-SH-612 — premium Steel House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-sh-612.njk"
   },
   "/bh-th-701.html": {
@@ -1630,6 +1809,8 @@
     "twitterTitle": "BH-TH-701 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-701 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-701.njk"
   },
   "/bh-th-702.html": {
@@ -1648,6 +1829,8 @@
     "twitterTitle": "BH-TH-702 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-702 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-702.njk"
   },
   "/bh-th-703.html": {
@@ -1666,6 +1849,8 @@
     "twitterTitle": "BH-TH-703 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-703 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-703.njk"
   },
   "/bh-th-704.html": {
@@ -1684,6 +1869,8 @@
     "twitterTitle": "BH-TH-704 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-704 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-704.njk"
   },
   "/bh-th-705.html": {
@@ -1702,6 +1889,8 @@
     "twitterTitle": "BH-TH-705 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-705 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-705.njk"
   },
   "/bh-th-706.html": {
@@ -1720,6 +1909,8 @@
     "twitterTitle": "BH-TH-706 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-706 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-706.njk"
   },
   "/bh-th-707.html": {
@@ -1738,6 +1929,8 @@
     "twitterTitle": "BH-TH-707 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-707 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-707.njk"
   },
   "/bh-th-708.html": {
@@ -1756,6 +1949,8 @@
     "twitterTitle": "BH-TH-708 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-708 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-708.njk"
   },
   "/bh-th-709.html": {
@@ -1774,6 +1969,8 @@
     "twitterTitle": "BH-TH-709 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-709 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-709.njk"
   },
   "/bh-th-710.html": {
@@ -1792,6 +1989,8 @@
     "twitterTitle": "BH-TH-710 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-710 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-710.njk"
   },
   "/bh-th-711.html": {
@@ -1810,6 +2009,8 @@
     "twitterTitle": "BH-TH-711 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-711 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-711.njk"
   },
   "/bh-th-712.html": {
@@ -1828,6 +2029,8 @@
     "twitterTitle": "BH-TH-712 | Tiny House | Bongshai Housing",
     "twitterDescription": "BH-TH-712 — premium Tiny House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-th-712.njk"
   },
   "/bh-tsb-101.html": {
@@ -1846,6 +2049,8 @@
     "twitterTitle": "BH-TSB-101 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-101 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-101.njk"
   },
   "/bh-tsb-102.html": {
@@ -1864,6 +2069,8 @@
     "twitterTitle": "BH-TSB-102 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-102 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-102.njk"
   },
   "/bh-tsb-103.html": {
@@ -1882,6 +2089,8 @@
     "twitterTitle": "BH-TSB-103 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-103 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-103.njk"
   },
   "/bh-tsb-104.html": {
@@ -1900,6 +2109,8 @@
     "twitterTitle": "BH-TSB-104 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-104 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-104.njk"
   },
   "/bh-tsb-105.html": {
@@ -1918,6 +2129,8 @@
     "twitterTitle": "BH-TSB-105 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-105 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-105.njk"
   },
   "/bh-tsb-106.html": {
@@ -1936,6 +2149,8 @@
     "twitterTitle": "BH-TSB-106 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-106 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-106.njk"
   },
   "/bh-tsb-107.html": {
@@ -1954,6 +2169,8 @@
     "twitterTitle": "BH-TSB-107 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-107 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-107.njk"
   },
   "/bh-tsb-108.html": {
@@ -1972,6 +2189,8 @@
     "twitterTitle": "BH-TSB-108 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-108 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-108.njk"
   },
   "/bh-tsb-109.html": {
@@ -1990,6 +2209,8 @@
     "twitterTitle": "BH-TSB-109 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-109 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-109.njk"
   },
   "/bh-tsb-110.html": {
@@ -2008,6 +2229,8 @@
     "twitterTitle": "BH-TSB-110 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-110 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-110.njk"
   },
   "/bh-tsb-111.html": {
@@ -2026,6 +2249,8 @@
     "twitterTitle": "BH-TSB-111 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-111 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-111.njk"
   },
   "/bh-tsb-112.html": {
@@ -2044,6 +2269,8 @@
     "twitterTitle": "BH-TSB-112 | Apartment Building | Bongshai Housing",
     "twitterDescription": "BH-TSB-112 — premium Apartment Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-tsb-112.njk"
   },
   "/bh-wa-1101.html": {
@@ -2062,6 +2289,8 @@
     "twitterTitle": "BH-WA-1101 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1101 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1101.njk"
   },
   "/bh-wa-1102.html": {
@@ -2080,6 +2309,8 @@
     "twitterTitle": "BH-WA-1102 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1102 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1102.njk"
   },
   "/bh-wa-1103.html": {
@@ -2098,6 +2329,8 @@
     "twitterTitle": "BH-WA-1103 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1103 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1103.njk"
   },
   "/bh-wa-1104.html": {
@@ -2116,6 +2349,8 @@
     "twitterTitle": "BH-WA-1104 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1104 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1104.njk"
   },
   "/bh-wa-1105.html": {
@@ -2134,6 +2369,8 @@
     "twitterTitle": "BH-WA-1105 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1105 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1105.njk"
   },
   "/bh-wa-1106.html": {
@@ -2152,6 +2389,8 @@
     "twitterTitle": "BH-WA-1106 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1106 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1106.njk"
   },
   "/bh-wa-1107.html": {
@@ -2170,6 +2409,8 @@
     "twitterTitle": "BH-WA-1107 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1107 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1107.njk"
   },
   "/bh-wa-1108.html": {
@@ -2188,6 +2429,8 @@
     "twitterTitle": "BH-WA-1108 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1108 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1108.njk"
   },
   "/bh-wa-1109.html": {
@@ -2206,6 +2449,8 @@
     "twitterTitle": "BH-WA-1109 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1109 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1109.njk"
   },
   "/bh-wa-1110.html": {
@@ -2224,6 +2469,8 @@
     "twitterTitle": "BH-WA-1110 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1110 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1110.njk"
   },
   "/bh-wa-1111.html": {
@@ -2242,6 +2489,8 @@
     "twitterTitle": "BH-WA-1111 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1111 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1111.njk"
   },
   "/bh-wa-1112.html": {
@@ -2260,6 +2509,8 @@
     "twitterTitle": "BH-WA-1112 | Worker Accommodation | Bongshai Housing",
     "twitterDescription": "BH-WA-1112 — premium Worker Accommodation in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wa-1112.njk"
   },
   "/bh-wh-801.html": {
@@ -2278,6 +2529,8 @@
     "twitterTitle": "BH-WH-801 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-801 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-801.njk"
   },
   "/bh-wh-802.html": {
@@ -2296,6 +2549,8 @@
     "twitterTitle": "BH-WH-802 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-802 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-802.njk"
   },
   "/bh-wh-803.html": {
@@ -2314,6 +2569,8 @@
     "twitterTitle": "BH-WH-803 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-803 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-803.njk"
   },
   "/bh-wh-804.html": {
@@ -2332,6 +2589,8 @@
     "twitterTitle": "BH-WH-804 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-804 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-804.njk"
   },
   "/bh-wh-805.html": {
@@ -2350,6 +2609,8 @@
     "twitterTitle": "BH-WH-805 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-805 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-805.njk"
   },
   "/bh-wh-806.html": {
@@ -2368,6 +2629,8 @@
     "twitterTitle": "BH-WH-806 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-806 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-806.njk"
   },
   "/bh-wh-807.html": {
@@ -2386,6 +2649,8 @@
     "twitterTitle": "BH-WH-807 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-807 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-807.njk"
   },
   "/bh-wh-808.html": {
@@ -2404,6 +2669,8 @@
     "twitterTitle": "BH-WH-808 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-808 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-808.njk"
   },
   "/bh-wh-809.html": {
@@ -2422,6 +2689,8 @@
     "twitterTitle": "BH-WH-809 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-809 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-809.njk"
   },
   "/bh-wh-810.html": {
@@ -2440,6 +2709,8 @@
     "twitterTitle": "BH-WH-810 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-810 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-810.njk"
   },
   "/bh-wh-811.html": {
@@ -2458,6 +2729,8 @@
     "twitterTitle": "BH-WH-811 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-811 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-811.njk"
   },
   "/bh-wh-812.html": {
@@ -2476,6 +2749,8 @@
     "twitterTitle": "BH-WH-812 | Wooden House | Bongshai Housing",
     "twitterDescription": "BH-WH-812 — premium Wooden House in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/bh-wh-812.njk"
   },
   "/certifications.html": {
@@ -2494,6 +2769,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/certifications.njk"
   },
   "/concrete-building.html": {
@@ -2512,6 +2789,8 @@
     "twitterTitle": "Concrete Building | Bongshai Housing",
     "twitterDescription": "Steel-reinforced concrete buildings in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/concrete-building.njk"
   },
   "/contact.html": {
@@ -2530,6 +2809,8 @@
     "twitterTitle": "Contact Bongshai Housing | Steel Structure Manufacturer",
     "twitterDescription": "Bangladesh's premier pre-engineered steel building company. Free quote available. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20a%20free%20consultation.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/contact.njk"
   },
   "/container-house.html": {
@@ -2548,6 +2829,8 @@
     "twitterTitle": "Container House | Bongshai Housing",
     "twitterDescription": "Modern container houses in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/container-house.njk"
   },
   "/cottage-house.html": {
@@ -2566,6 +2849,8 @@
     "twitterTitle": "Cottage House | Bongshai Housing",
     "twitterDescription": "Affordable prefab cottage houses in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/cottage-house.njk"
   },
   "/duplex-steel-building.html": {
@@ -2584,6 +2869,8 @@
     "twitterTitle": "Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "Duplex steel buildings in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/duplex-steel-building.njk"
   },
   "/dv-110.html": {
@@ -2602,6 +2889,8 @@
     "twitterTitle": "DV-110 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "DV-110 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/dv-110.njk"
   },
   "/dv-111.html": {
@@ -2620,6 +2909,8 @@
     "twitterTitle": "DV-111 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "DV-111 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/dv-111.njk"
   },
   "/dv-112.html": {
@@ -2638,6 +2929,8 @@
     "twitterTitle": "DV-112 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "DV-112 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/dv-112.njk"
   },
   "/dv-113.html": {
@@ -2656,6 +2949,8 @@
     "twitterTitle": "DV-113 | Duplex Steel Building | Bongshai Housing",
     "twitterDescription": "DV-113 — premium Duplex Steel Building in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/dv-113.njk"
   },
   "/gallery.html": {
@@ -2674,6 +2969,8 @@
     "twitterTitle": "Pre-Engineered Steel Building Gallery Bangladesh | Dhaka, Bogra, Faridpur",
     "twitterDescription": "Portfolio of completed pre-engineered steel buildings and prefab houses in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/gallery.njk"
   },
   "/index.html": {
@@ -2692,7 +2989,9 @@
     "twitterTitle": "Pre-Engineered Steel Building Company Bangladesh | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
-    "template": "pages/index.njk"
+    "bodyClass": "home-karmod",
+    "template": "pages/index.njk",
+    "showQuoteShortcut": true
   },
   "/industrial-sheds.html": {
     "urlPath": "/industrial-sheds.html",
@@ -2710,6 +3009,8 @@
     "twitterTitle": "Industrial Steel Sheds | Pre-Engineered Steel Building Bangladesh",
     "twitterDescription": "Wide-span industrial steel sheds by Bongshai Housing. Pre-engineered buildings for factories, warehouses and heavy-duty storage across Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/industrial-sheds.njk"
   },
   "/interactive-tools.html": {
@@ -2728,6 +3029,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/interactive-tools.njk"
   },
   "/iso-9001-certification.html": {
@@ -2746,6 +3049,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/iso-9001-certification.njk"
   },
   "/lcv-101.html": {
@@ -2764,6 +3069,8 @@
     "twitterTitle": "LCV-101 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-101 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-101.njk"
   },
   "/lcv-102.html": {
@@ -2782,6 +3089,8 @@
     "twitterTitle": "LCV-102 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-102 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-102.njk"
   },
   "/lcv-103.html": {
@@ -2800,6 +3109,8 @@
     "twitterTitle": "LCV-103 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-103 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-103.njk"
   },
   "/lcv-104.html": {
@@ -2818,6 +3129,8 @@
     "twitterTitle": "LCV-104 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-104 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-104.njk"
   },
   "/lcv-105.html": {
@@ -2836,6 +3149,8 @@
     "twitterTitle": "LCV-105 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-105 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-105.njk"
   },
   "/lcv-106.html": {
@@ -2854,6 +3169,8 @@
     "twitterTitle": "LCV-106 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-106 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-106.njk"
   },
   "/lcv-107.html": {
@@ -2872,6 +3189,8 @@
     "twitterTitle": "LCV-107 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-107 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-107.njk"
   },
   "/lcv-108.html": {
@@ -2890,6 +3209,8 @@
     "twitterTitle": "LCV-108 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-108 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-108.njk"
   },
   "/lcv-109.html": {
@@ -2908,6 +3229,8 @@
     "twitterTitle": "LCV-109 | Low-Cost Villa | Bongshai Housing",
     "twitterDescription": "LCV-109 — premium Low-Cost Villa in Bangladesh by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/lcv-109.njk"
   },
   "/luxury-villa.html": {
@@ -2926,6 +3249,8 @@
     "twitterTitle": "Luxury Steel Prefab Villa | Bongshai Housing",
     "twitterDescription": "Premium steel prefab villas in Bangladesh. Smart technology & luxury finishes. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20the%20Luxury%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/luxury-villa.njk"
   },
   "/material-testing-certification.html": {
@@ -2944,6 +3269,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/material-testing-certification.njk"
   },
   "/multi-story-homes.html": {
@@ -2962,6 +3289,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/multi-story-homes.njk"
   },
   "/ohsas-safety-certification.html": {
@@ -2980,6 +3309,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/ohsas-safety-certification.njk"
   },
   "/other-residential.html": {
@@ -2998,6 +3329,8 @@
     "twitterTitle": "Low-Cost Steel Prefab Villa | Bongshai Housing",
     "twitterDescription": "Affordable steel prefab homes in Bangladesh. 2 bedrooms, kitchen & more. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Low-Cost%20Villa%20package.",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/other-residential.njk"
   },
   "/prefab-cottage-bogra-rangpur.html": {
@@ -3016,6 +3349,8 @@
     "twitterTitle": "Prefab Cottage & Steel Buildings in Bogra & Rangpur | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/prefab-cottage-bogra-rangpur.njk"
   },
   "/prefab-housing-cumilla.html": {
@@ -3034,6 +3369,8 @@
     "twitterTitle": "Prefab Housing & Steel Buildings in Cumilla | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/prefab-housing-cumilla.njk"
   },
   "/privacy-policy.html": {
@@ -3052,6 +3389,8 @@
     "twitterTitle": "Privacy Policy | Bongshai Housing",
     "twitterDescription": "Read Bongshai Housing's privacy policy to understand how we collect, use, and protect your personal information.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/privacy-policy.njk"
   },
   "/products-and-solutions.html": {
@@ -3070,6 +3409,8 @@
     "twitterTitle": "Products & Solutions | Bongshai Housing",
     "twitterDescription": "Explore our full catalog of pre-engineered steel buildings by Bongshai Housing. Call 01781-636613.",
     "whatsappHref": null,
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/products-and-solutions.njk"
   },
   "/project-bodorgonj-rangpur.html": {
@@ -3088,6 +3429,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-bodorgonj-rangpur.njk"
   },
   "/project-chotrogram.html": {
@@ -3106,6 +3449,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-chotrogram.njk"
   },
   "/project-cumilla.html": {
@@ -3124,6 +3469,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-cumilla.njk"
   },
   "/project-daudkandi-cumilla.html": {
@@ -3142,6 +3489,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-daudkandi-cumilla.njk"
   },
   "/project-dhaka-cantonment.html": {
@@ -3160,6 +3509,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-dhaka-cantonment.njk"
   },
   "/project-gabtoli-bogra.html": {
@@ -3178,6 +3529,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-gabtoli-bogra.njk"
   },
   "/project-igs-building.html": {
@@ -3196,6 +3549,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-igs-building.njk"
   },
   "/project-igs-dhaka-cant.html": {
@@ -3214,6 +3569,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-igs-dhaka-cant.njk"
   },
   "/project-kokomo-sunset-resort.html": {
@@ -3232,6 +3589,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-kokomo-sunset-resort.njk"
   },
   "/project-motlop.html": {
@@ -3250,6 +3609,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-motlop.njk"
   },
   "/project-probachol-sector-3.html": {
@@ -3268,6 +3629,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-probachol-sector-3.njk"
   },
   "/project-rajendropur-cant.html": {
@@ -3286,6 +3649,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-rajendropur-cant.njk"
   },
   "/project-razabari-gazipur.html": {
@@ -3304,6 +3669,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-razabari-gazipur.njk"
   },
   "/project-the-wave-resort-01.html": {
@@ -3322,6 +3689,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-the-wave-resort-01.njk"
   },
   "/project-the-wave-resort-02.html": {
@@ -3340,6 +3709,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-the-wave-resort-02.njk"
   },
   "/project-the-wave-resort-03.html": {
@@ -3358,6 +3729,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-the-wave-resort-03.njk"
   },
   "/project-the-wave-resort-04.html": {
@@ -3376,6 +3749,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-the-wave-resort-04.njk"
   },
   "/project-vanga-faridpur.html": {
@@ -3394,6 +3769,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/project-vanga-faridpur.njk"
   },
   "/projects.html": {
@@ -3412,6 +3789,8 @@
     "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
     "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/projects.njk"
   },
   "/service-areas.html": {
@@ -3430,6 +3809,8 @@
     "twitterTitle": "Service Areas - 64 Districts & Thanas | Bongshai Housing",
     "twitterDescription": "Steel building services across all 64 districts in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/service-areas.njk"
   },
   "/simplex-steel-building.html": {
@@ -3448,6 +3829,8 @@
     "twitterTitle": "Simplex Steel Building | Bongshai Housing",
     "twitterDescription": "Simplex steel buildings in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/simplex-steel-building.njk"
   },
   "/steel-building-barisal.html": {
@@ -3466,6 +3849,8 @@
     "twitterTitle": "Steel Building Company in Barisal | Bongshai Housing",
     "twitterDescription": "Flood-resistant steel buildings and prefab housing in Barisal. Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-barisal.njk"
   },
   "/steel-building-chotrogram.html": {
@@ -3484,6 +3869,8 @@
     "twitterTitle": "Steel Building Company in Chattogram | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-chotrogram.njk"
   },
   "/steel-building-coxsbazar.html": {
@@ -3502,6 +3889,8 @@
     "twitterTitle": "Steel Building Company in Cox's Bazar | Bongshai Housing",
     "twitterDescription": "Resort-grade steel construction in Cox's Bazar by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-coxsbazar.njk"
   },
   "/steel-building-faridpur.html": {
@@ -3520,6 +3909,8 @@
     "twitterTitle": "Steel Building Company in Faridpur | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Faridpur by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-faridpur.njk"
   },
   "/steel-building-gazipur.html": {
@@ -3538,6 +3929,8 @@
     "twitterTitle": "Steel Building Company in Gazipur | Bongshai Housing",
     "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-gazipur.njk"
   },
   "/steel-building-jashore.html": {
@@ -3556,6 +3949,8 @@
     "twitterTitle": "Steel Building Company in Jashore | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Jashore by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-jashore.njk"
   },
   "/steel-building-khulna.html": {
@@ -3574,6 +3969,8 @@
     "twitterTitle": "Steel Building Company in Khulna | Bongshai Housing",
     "twitterDescription": "Cyclone-resistant steel buildings and prefab housing in Khulna. Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-khulna.njk"
   },
   "/steel-building-manikganj.html": {
@@ -3592,6 +3989,8 @@
     "twitterTitle": "Steel Building Company in Manikganj | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Manikganj by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-manikganj.njk"
   },
   "/steel-building-mymensingh.html": {
@@ -3610,6 +4009,8 @@
     "twitterTitle": "Steel Building Company in Mymensingh | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Mymensingh by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-mymensingh.njk"
   },
   "/steel-building-narayanganj.html": {
@@ -3628,6 +4029,8 @@
     "twitterTitle": "Steel Building Company in Narayanganj | Bongshai Housing",
     "twitterDescription": "Industrial steel sheds and worker accommodation in Narayanganj. Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-narayanganj.njk"
   },
   "/steel-building-narsingdi.html": {
@@ -3646,6 +4049,8 @@
     "twitterTitle": "Steel Building Company in Narsingdi | Bongshai Housing",
     "twitterDescription": "Industrial steel sheds and prefab housing in Narsingdi by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-narsingdi.njk"
   },
   "/steel-building-rajshahi.html": {
@@ -3664,6 +4069,8 @@
     "twitterTitle": "Steel Building Company in Rajshahi | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Rajshahi by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-rajshahi.njk"
   },
   "/steel-building-sylhet.html": {
@@ -3682,6 +4089,8 @@
     "twitterTitle": "Steel Building Company in Sylhet | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Sylhet by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-sylhet.njk"
   },
   "/steel-building-tangail.html": {
@@ -3700,6 +4109,8 @@
     "twitterTitle": "Steel Building Company in Tangail | Bongshai Housing",
     "twitterDescription": "Steel buildings and prefab housing in Tangail by Bangladesh's premier steel structure manufacturer. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-building-tangail.njk"
   },
   "/steel-house.html": {
@@ -3718,6 +4129,8 @@
     "twitterTitle": "Steel House | Bongshai Housing",
     "twitterDescription": "All-steel homes in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/steel-house.njk"
   },
   "/steel-vs-concrete-comparison.html": {
@@ -3736,6 +4149,8 @@
     "twitterTitle": "Steel vs Concrete Building Comparison | Bongshai Housing",
     "twitterDescription": "Cost, speed, earthquake safety, and durability compared - steel-composite vs concrete construction in Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20have%20a%20question.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/steel-vs-concrete-comparison.njk"
   },
   "/team-client-service.html": {
@@ -3754,6 +4169,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/team-client-service.njk"
   },
   "/team-engineering.html": {
@@ -3772,6 +4189,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/team-engineering.njk"
   },
   "/team-marketing-sales.html": {
@@ -3790,6 +4209,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/team-marketing-sales.njk"
   },
   "/team-quality-control.html": {
@@ -3808,6 +4229,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/team-quality-control.njk"
   },
   "/team-senior-management.html": {
@@ -3826,6 +4249,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/team-senior-management.njk"
   },
   "/team-skilled-workers.html": {
@@ -3844,6 +4269,8 @@
     "twitterTitle": "About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh",
     "twitterDescription": "Bangladesh's premier steel building company & EPC developer. 20+ years experience in pre-engineered buildings & prefab housing. Uttara, Dhaka.",
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/team-skilled-workers.njk"
   },
   "/terms.html": {
@@ -3862,6 +4289,8 @@
     "twitterTitle": "Terms & Conditions | Bongshai Housing",
     "twitterDescription": null,
     "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20housing%20packages.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
     "template": "pages/terms.njk"
   },
   "/tiny-house.html": {
@@ -3880,6 +4309,8 @@
     "twitterTitle": "Tiny House | Bongshai Housing",
     "twitterDescription": "Compact prefab tiny houses in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/tiny-house.njk"
   },
   "/wooden-house.html": {
@@ -3898,6 +4329,8 @@
     "twitterTitle": "Wooden House | Bongshai Housing",
     "twitterDescription": "Steel-framed wooden houses in Bangladesh. Call 01781-636613.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/wooden-house.njk"
   },
   "/worker-accommodation.html": {
@@ -3916,6 +4349,8 @@
     "twitterTitle": "Worker Accommodation | Pre-Engineered Steel Building Bangladesh",
     "twitterDescription": "Prefabricated worker accommodation by Bongshai Housing. Safe, scalable staff housing units built to international standards across Bangladesh.",
     "whatsappHref": "https://wa.me/8801781636613",
+    "bodyClass": null,
+    "showQuoteShortcut": false,
     "template": "pages/worker-accommodation.njk"
   }
 }
