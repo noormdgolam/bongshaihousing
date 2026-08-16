@@ -29,6 +29,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const REPO_ROOT = path.join(__dirname, '..');
 
+// cPanel's Node Selector (LiteSpeed) terminates TLS and forwards to this
+// app over plain HTTP internally - without trust proxy, req.secure reads
+// false even on a genuine https:// request, and express-session silently
+// (no error, no log) refuses to set a `secure: true` cookie in that case.
+// Login "succeeding" (302 to /admin) but never actually staying logged in
+// is exactly what that looks like from the outside.
+app.set('trust proxy', 1);
+
 // Security headers + gzip. In production, Apache already does this for
 // static assets (see .htaccess) - these cover the routes Node actually
 // serves (dynamic pages once they exist, and the form/counter APIs).
