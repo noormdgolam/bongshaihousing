@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Node app secrets (see server/.env.example)
+.env
+server/.env
+
 # Python artifacts
 *.py
 __pycache__/
