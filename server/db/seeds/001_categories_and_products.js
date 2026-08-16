@@ -25,10 +25,27 @@ exports.seed = async function (knex) {
   const dataPath = path.join(__dirname, 'data', 'products.json');
   const products = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-  // Idempotent: safe to re-run after a fresh scrape without hand-truncating
-  // tables first. Child tables cascade via FK ON DELETE CASCADE.
-  await knex('categories').del();
+  // Wrapped in one transaction so a crash partway through (a real failure
+  // mode hit while building this - a bad floorData key threw mid-insert)
+  // can't leave orphaned rows behind for the next run to collide with.
+  // Tables cleared explicitly and in FK-dependency order rather than
+  // relying on ON DELETE CASCADE cascading from categories.del() - some
+  // shared-hosting MySQL configs default new tables to MyISAM, which
+  // silently ignores FK constraints (no error, no enforcement) instead of
+  // failing loudly, so cascade-on-delete can't be trusted without
+  // explicitly forcing InnoDB (see migration 20260817000005).
+  await knex.transaction(async (trx) => {
+    await trx('product_rooms').del();
+    await trx('product_variants').del();
+    await trx('product_specs').del();
+    await trx('products').del();
+    await trx('categories').del();
 
+    await seedInto(trx, products);
+  });
+};
+
+async function seedInto(knex, products) {
   const categoryNames = [...new Set(products.map((p) => p.categoryName))].sort();
   const categoryIdBySlug = {};
   for (const [i, name] of categoryNames.entries()) {
