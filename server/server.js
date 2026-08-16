@@ -15,6 +15,7 @@ const counterRouter = require('./routes/counter');
 const pagesRouter = require('./routes/pages');
 const productsRouter = require('./routes/products');
 const aiChatRouter = require('./routes/ai-chat');
+const sitemapRouter = require('./routes/sitemap');
 const adminAuthRouter = require('./routes/admin-auth');
 const adminRouter = require('./routes/admin');
 
@@ -94,7 +95,7 @@ app.use('/fonts', express.static(path.join(REPO_ROOT, 'fonts'), { maxAge: '7d' }
 app.use('/favicon.ico', express.static(path.join(REPO_ROOT, 'favicon.ico')));
 app.use('/manifest.json', express.static(path.join(REPO_ROOT, 'manifest.json')));
 app.use('/sw.js', express.static(path.join(REPO_ROOT, 'sw.js')));
-app.use('/sitemap.xml', express.static(path.join(REPO_ROOT, 'sitemap.xml')));
+app.use('/', sitemapRouter); // dynamic sitemap.xml, DB products/projects merged with the static entries
 app.use('/llms.txt', express.static(path.join(REPO_ROOT, 'llms.txt')));
 app.use('/robots.txt', express.static(path.join(REPO_ROOT, 'robots.txt')));
 
