@@ -1,6 +1,41 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
+const multer = require('multer');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
+
+const UPLOADS_DIR = path.join(__dirname, '..', '..', 'images', 'uploads');
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+
+const uploadStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+    cb(null, UPLOADS_DIR);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const baseName = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '-').slice(0, 40);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E6);
+    cb(null, `${baseName}-${uniqueSuffix}${ext}`);
+  }
+});
+
+const upload = multer({
+  storage: uploadStorage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files (JPEG, PNG, WebP, SVG, GIF, AVIF) are allowed'));
+    }
+  }
+});
 
 const router = express.Router();
 router.use('/admin', requireAdmin);
@@ -135,15 +170,16 @@ router.get('/admin/products/new', async (req, res) => {
   res.render('admin/products/form.njk', adminVars(req, { product: null, categories, error: null }));
 });
 
-router.post('/admin/products', async (req, res) => {
+router.post('/admin/products', upload.single('main_image_file'), async (req, res) => {
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, published } = req.body;
+  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (main_image || null);
   try {
     const [id] = await db('products').insert({
       category_id, model_number, slug, title, description,
       price_per_sqft: price_per_sqft || null,
       price_currency: price_currency || 'BDT',
-      main_image: main_image || null,
-      published: published === 'on',
+      main_image: finalImage,
+      published: published === 'on' || published === true || published === 'true',
     });
     res.redirect(`/admin/products/${id}/edit`);
   } catch (err) {
@@ -164,14 +200,15 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null }));
 });
 
-router.post('/admin/products/:id', async (req, res) => {
+router.post('/admin/products/:id', upload.single('main_image_file'), async (req, res) => {
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, published } = req.body;
+  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (main_image || null);
   await db('products').where({ id: req.params.id }).update({
     category_id, model_number, slug, title, description,
     price_per_sqft: price_per_sqft || null,
     price_currency: price_currency || 'BDT',
-    main_image: main_image || null,
-    published: published === 'on',
+    main_image: finalImage,
+    published: published === 'on' || published === true || published === 'true',
     updated_at: db.fn.now(),
   });
   res.redirect(`/admin/products/${req.params.id}/edit`);
@@ -276,10 +313,15 @@ router.get('/admin/categories/new', (req, res) => {
   res.render('admin/categories/form.njk', adminVars(req, { category: null, error: null }));
 });
 
-router.post('/admin/categories', async (req, res) => {
+router.post('/admin/categories', upload.single('hero_image_file'), async (req, res) => {
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
+  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (hero_image || null);
   try {
-    const [id] = await db('categories').insert({ slug, name, landing_page_slug: landing_page_slug || null, description: description || null, hero_image: hero_image || null, sort_order: sort_order || 0 });
+    const [id] = await db('categories').insert({
+      slug, name, landing_page_slug: landing_page_slug || null,
+      description: description || null, hero_image: finalImage,
+      sort_order: sort_order || 0
+    });
     res.redirect(`/admin/categories/${id}/edit`);
   } catch (err) {
     res.status(400).render('admin/categories/form.njk', adminVars(req, { category: req.body, error: err.message }));
@@ -292,11 +334,12 @@ router.get('/admin/categories/:id/edit', async (req, res) => {
   res.render('admin/categories/form.njk', adminVars(req, { category, error: null }));
 });
 
-router.post('/admin/categories/:id', async (req, res) => {
+router.post('/admin/categories/:id', upload.single('hero_image_file'), async (req, res) => {
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
+  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (hero_image || null);
   await db('categories').where({ id: req.params.id }).update({
     slug, name, landing_page_slug: landing_page_slug || null, description: description || null,
-    hero_image: hero_image || null, sort_order: sort_order || 0, updated_at: db.fn.now(),
+    hero_image: finalImage, sort_order: sort_order || 0, updated_at: db.fn.now(),
   });
   res.redirect(`/admin/categories/${req.params.id}/edit`);
 });
@@ -319,12 +362,16 @@ router.get('/admin/projects/new', (req, res) => {
   res.render('admin/projects/form.njk', adminVars(req, { project: null, error: null }));
 });
 
-router.post('/admin/projects', async (req, res) => {
+router.post('/admin/projects', upload.single('image_file'), async (req, res) => {
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
+  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (image || null);
   try {
     const [id] = await db('projects').insert({
-      slug, title, location: location || null, description: description || null, image: image || null,
-      status_label: status_label || 'Completed Project', published: published === 'on', sort_order: sort_order || 0,
+      slug, title, location: location || null, description: description || null,
+      image: finalImage,
+      status_label: status_label || 'Completed Project',
+      published: published === 'on' || published === true || published === 'true',
+      sort_order: sort_order || 0,
     });
     res.redirect(`/admin/projects/${id}/edit`);
   } catch (err) {
@@ -338,14 +385,33 @@ router.get('/admin/projects/:id/edit', async (req, res) => {
   res.render('admin/projects/form.njk', adminVars(req, { project, error: null }));
 });
 
-router.post('/admin/projects/:id', async (req, res) => {
+router.post('/admin/projects/:id', upload.single('image_file'), async (req, res) => {
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
+  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (image || null);
   await db('projects').where({ id: req.params.id }).update({
-    slug, title, location: location || null, description: description || null, image: image || null,
-    status_label: status_label || 'Completed Project', published: published === 'on', sort_order: sort_order || 0,
+    slug, title, location: location || null, description: description || null,
+    image: finalImage,
+    status_label: status_label || 'Completed Project',
+    published: published === 'on' || published === true || published === 'true',
+    sort_order: sort_order || 0,
     updated_at: db.fn.now(),
   });
   res.redirect(`/admin/projects/${req.params.id}/edit`);
+});
+
+// Generic Image Upload API (JSON Response)
+router.post('/admin/api/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, error: 'No file uploaded' });
+  }
+  const relativePath = `images/uploads/${req.file.filename}`;
+  res.json({
+    success: true,
+    url: relativePath,
+    filename: req.file.filename,
+    size: req.file.size,
+    mimetype: req.file.mimetype,
+  });
 });
 
 router.post('/admin/projects/:id/delete', async (req, res) => {

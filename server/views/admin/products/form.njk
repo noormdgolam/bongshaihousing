@@ -4,7 +4,7 @@
 {% block content %}
 {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
 <div class="card">
-<form method="post" action="{% if product.id %}/admin/products/{{ product.id }}{% else %}/admin/products{% endif %}">
+<form method="post" enctype="multipart/form-data" action="{% if product.id %}/admin/products/{{ product.id }}{% else %}/admin/products{% endif %}">
   <div class="form-row">
     <label for="category_id">Category</label>
     <select id="category_id" name="category_id" required>
@@ -28,8 +28,29 @@
     <textarea id="description" name="description">{{ product.description or '' }}</textarea>
   </div>
   <div class="form-row">
-    <label for="main_image">Main Image (path)</label>
-    <input type="text" id="main_image" name="main_image" value="{{ product.main_image or '' }}">
+    <label>Main Product Image</label>
+    <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
+      <div id="imagePreviewContainer" style="width:130px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
+        {% if product.main_image %}
+          <img id="imagePreviewImg" src="/{{ product.main_image | replace('^/', '') }}" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+          <span id="imagePreviewPlaceholder" style="display:none; font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% else %}
+          <img id="imagePreviewImg" src="" alt="Preview" style="display:none; width:100%; height:100%; object-fit:cover;">
+          <span id="imagePreviewPlaceholder" style="font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% endif %}
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:10px;">
+          <label for="main_image_file" style="font-size:0.8rem; font-weight:600; color:var(--grey-700, #334155); margin-bottom:4px; display:block;">📁 Upload Image File</label>
+          <input type="file" id="main_image_file" name="main_image_file" accept="image/*" style="font-size:0.85rem;" onchange="previewFile(this, 'imagePreviewImg', 'imagePreviewPlaceholder')">
+          <span style="font-size:0.72rem; color:var(--grey-500, #64748b); display:block; margin-top:2px;">PNG, JPG, WebP, SVG up to 10MB (saved to images/uploads/)</span>
+        </div>
+        <div>
+          <label for="main_image" style="font-size:0.75rem; color:var(--grey-500, #64748b); margin-bottom:2px; display:block;">Or Manual Path / URL (Fallback)</label>
+          <input type="text" id="main_image" name="main_image" value="{{ product.main_image or '' }}" placeholder="e.g. images/products/bh-sb-301.webp" style="font-size:0.85rem;" oninput="previewUrl(this.value, 'imagePreviewImg', 'imagePreviewPlaceholder')">
+        </div>
+      </div>
+    </div>
   </div>
   <div style="display:flex; gap:14px;">
     <div class="form-row" style="flex:1;">
@@ -144,4 +165,35 @@
   <button type="submit" class="btn btn-danger">Delete Product</button>
 </form>
 {% endif %}
+
+<script>
+function previewFile(input, imgId, placeholderId) {
+  const file = input.files && input.files[0];
+  const img = document.getElementById(imgId);
+  const placeholder = document.getElementById(placeholderId);
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      if (img) {
+        img.src = e.target.result;
+        img.style.display = 'block';
+      }
+      if (placeholder) placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+function previewUrl(val, imgId, placeholderId) {
+  const img = document.getElementById(imgId);
+  const placeholder = document.getElementById(placeholderId);
+  if (val && val.trim()) {
+    const clean = val.trim().startsWith('http') || val.trim().startsWith('/') ? val.trim() : '/' + val.trim();
+    if (img) {
+      img.src = clean;
+      img.style.display = 'block';
+    }
+    if (placeholder) placeholder.style.display = 'none';
+  }
+}
+</script>
 {% endblock %}
