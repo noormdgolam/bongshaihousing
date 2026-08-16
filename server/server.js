@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const nunjucks = require('nunjucks');
@@ -48,6 +49,28 @@ if (process.env.NODE_ENV !== 'production') {
   app.use('/js', express.static(path.join(REPO_ROOT, 'js')));
   app.use('/fonts', express.static(path.join(REPO_ROOT, 'fonts')));
 }
+
+// Old/broken URL parity with the static site's .htaccess RewriteRules
+// (Search Console fixes, renamed model numbers, dead WordPress-scanner
+// paths) - see server/scripts/generate-redirects.js, re-run whenever
+// .htaccess changes. Registered before the page routes so a redirected
+// path never falls through to a 404 first.
+const redirectsPath = path.join(__dirname, 'redirects.json');
+const redirects = fs.existsSync(redirectsPath) ? JSON.parse(fs.readFileSync(redirectsPath, 'utf8')) : { exact: {}, prefix: {} };
+const redirectPrefixes = Object.entries(redirects.prefix || {});
+app.use((req, res, next) => {
+  const exactMatch = redirects.exact[req.path];
+  if (exactMatch) {
+    return res.redirect(exactMatch.permanent ? 301 : 302, exactMatch.to);
+  }
+  const pathNoSlash = req.path.replace(/^\/+/, '');
+  const prefixMatch = redirectPrefixes.find(([prefix]) => pathNoSlash.startsWith(prefix));
+  if (prefixMatch) {
+    const [, target] = prefixMatch;
+    return res.redirect(target.permanent ? 301 : 302, target.to);
+  }
+  next();
+});
 
 app.use('/', pagesRouter);
 app.use('/', contactRouter);

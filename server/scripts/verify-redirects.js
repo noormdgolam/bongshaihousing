@@ -73,6 +73,21 @@ async function checkUrl(baseUrl, urlPath) {
   }
 }
 
+// A redirect to an absolute URL and a redirect to the equivalent relative
+// path are functionally identical (RFC 7231 explicitly allows a relative
+// Location header) - the Node app deliberately redirects relative to
+// itself rather than hardcoding the production domain, so it behaves
+// correctly on both the staging subdomain and after an eventual cutover.
+// Compare by path+search only, not by raw header text.
+function locationPath(location) {
+  if (!location) return null;
+  try {
+    return new URL(location, 'https://placeholder.invalid').pathname + new URL(location, 'https://placeholder.invalid').search;
+  } catch {
+    return location;
+  }
+}
+
 async function main() {
   const { target, baseline } = parseArgs();
 
@@ -100,7 +115,7 @@ async function main() {
     ]);
 
     const statusMatches = baselineResult.status === targetResult.status;
-    const locationMatches = (baselineResult.location || null) === (targetResult.location || null);
+    const locationMatches = locationPath(baselineResult.location) === locationPath(targetResult.location);
 
     if (!statusMatches || !locationMatches) {
       mismatches++;

@@ -1,0 +1,226 @@
+{
+  "exact": {
+    "/index.html": {
+      "to": "/",
+      "permanent": true
+    },
+    "/u8-2": {
+      "to": "/",
+      "permanent": true
+    },
+    "/two-story-building.html": {
+      "to": "/apartment-building.html",
+      "permanent": true
+    },
+    "/duplex-villa.html": {
+      "to": "/duplex-steel-building.html",
+      "permanent": true
+    },
+    "/single-story-building.html": {
+      "to": "/simplex-steel-building.html",
+      "permanent": true
+    },
+    "/container-house": {
+      "to": "/container-house.html",
+      "permanent": true
+    },
+    "/low-cost-villa": {
+      "to": "/luxury-villa.html",
+      "permanent": true
+    },
+    "/career": {
+      "to": "/career.html",
+      "permanent": true
+    },
+    "/two-story-building": {
+      "to": "/apartment-building.html",
+      "permanent": true
+    },
+    "/our-mission-vission": {
+      "to": "/about.html",
+      "permanent": true
+    },
+    "/contact-bn.html": {
+      "to": "/contact.html",
+      "permanent": true
+    },
+    "/model-no-bh-lv-02": {
+      "to": "/luxury-villa.html",
+      "permanent": true
+    },
+    "/bh-tb-101.html": {
+      "to": "/bh-tsb-101.html",
+      "permanent": true
+    },
+    "/bh-tb-102.html": {
+      "to": "/bh-tsb-102.html",
+      "permanent": true
+    },
+    "/bh-tb-104.html": {
+      "to": "/bh-tsb-104.html",
+      "permanent": true
+    },
+    "/bh-tb-105.html": {
+      "to": "/bh-tsb-105.html",
+      "permanent": true
+    },
+    "/bh-dv-105.html": {
+      "to": "/bh-dv-205.html",
+      "permanent": true
+    },
+    "/bh-dv-106.html": {
+      "to": "/bh-dv-206.html",
+      "permanent": true
+    },
+    "/single-story-building": {
+      "to": "/simplex-steel-building.html",
+      "permanent": true
+    },
+    "/career-apply-now": {
+      "to": "/career.html",
+      "permanent": true
+    },
+    "/login": {
+      "to": "/",
+      "permanent": true
+    },
+    "/logout": {
+      "to": "/",
+      "permanent": true
+    },
+    "/user": {
+      "to": "/",
+      "permanent": true
+    },
+    "/low-cost-cottage": {
+      "to": "/cottage-house.html",
+      "permanent": true
+    },
+    "/apartments": {
+      "to": "/apartment-building.html",
+      "permanent": true
+    },
+    "/terms-and-conditions": {
+      "to": "/terms.html",
+      "permanent": true
+    },
+    "/gallery": {
+      "to": "/gallery.html",
+      "permanent": true
+    },
+    "/bn": {
+      "to": "/",
+      "permanent": true
+    },
+    "/en": {
+      "to": "/",
+      "permanent": true
+    },
+    "/agents": {
+      "to": "/",
+      "permanent": true
+    },
+    "/bh-m-01": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/about-us": {
+      "to": "/about.html",
+      "permanent": true
+    },
+    "/contact-us": {
+      "to": "/contact.html",
+      "permanent": true
+    },
+    "/luxury-villa": {
+      "to": "/luxury-villa.html",
+      "permanent": true
+    },
+    "/architect": {
+      "to": "/career.html",
+      "permanent": true
+    },
+    "/deputy-general-managerdgm": {
+      "to": "/career.html",
+      "permanent": true
+    },
+    "/project-manager": {
+      "to": "/career.html",
+      "permanent": true
+    },
+    "/foreman-civil-construction": {
+      "to": "/career.html",
+      "permanent": true
+    },
+    "/project": {
+      "to": "/projects.html",
+      "permanent": true
+    },
+    "/model-no-bh-tb-07": {
+      "to": "/bh-tsb-107.html",
+      "permanent": true
+    },
+    "/2-bedroom-luxury-building": {
+      "to": "/apartment-building.html",
+      "permanent": true
+    },
+    "/home-1": {
+      "to": "/",
+      "permanent": true
+    },
+    "/model-no-lc-01": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/luxury-single-villa-2": {
+      "to": "/luxury-villa.html",
+      "permanent": true
+    },
+    "/about-us-2": {
+      "to": "/about.html",
+      "permanent": true
+    },
+    "/portable-toilets-and-showers.html": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/security-huts.html": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/modular-kiosks.html": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/site-offices.html": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    }
+  },
+  "prefix": {
+    "wp-content": {
+      "to": "/",
+      "permanent": true
+    },
+    "wp-includes": {
+      "to": "/",
+      "permanent": true
+    },
+    "wp-login.php": {
+      "to": "/",
+      "permanent": true
+    },
+    "wp-admin": {
+      "to": "/",
+      "permanent": true
+    },
+    "createpackages/": {
+      "to": "/",
+      "permanent": true
+    },
+    "properties/": {
+      "to": "/",
+      "permanent": true
+    }
+  }
+}

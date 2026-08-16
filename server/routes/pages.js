@@ -37,10 +37,10 @@ for (const [urlPath, meta] of Object.entries(registry)) {
   });
 }
 
-// index.html's real URL is the bare root, not /index.html (which
-// .htaccess redirects to / in production anyway - registered above like
-// any other page for direct testing, but isn't the canonical homepage
-// route). cPanel's Node Selector health-checks this path after
+// index.html's real URL is the bare root - the redirect middleware in
+// server.js (server/redirects.json) 301s /index.html -> / to match
+// .htaccess, so this is the only route that ever actually serves this
+// content. cPanel's Node Selector health-checks this path after
 // install/restart, so it needs to resolve to something real rather than
 // 404 as JSON, which cPanel's "check availability" step misreads as a
 // failed install even when npm install actually succeeded fine.
