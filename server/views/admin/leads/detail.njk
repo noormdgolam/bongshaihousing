@@ -7,14 +7,14 @@
   <a href="/admin/leads" class="btn">← Back to Inquiries</a>
 </div>
 
-<div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+<div class="admin-grid-2col">
   <!-- Left Column: Customer & Quote Info -->
   <div>
     <div class="card">
       <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">
         👤 Customer Information
       </h2>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:14px;">
+      <div class="admin-grid-3col" style="margin-bottom:14px;">
         <div>
           <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Full Name</span>
           <strong style="font-size:1rem;">{{ lead.name }}</strong>
@@ -49,7 +49,7 @@
       <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">
         📐 Requested Building &amp; Specs
       </h2>
-      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-bottom:16px;">
+      <div class="admin-grid-3col" style="margin-bottom:16px;">
         <div>
           <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Building Model</span>
           <strong>{{ lead.model or 'General Inquiry' }}</strong>

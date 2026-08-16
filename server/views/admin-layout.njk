@@ -45,6 +45,18 @@
   .pill-success { background: #dcfce7; color: var(--success); }
   .pill-muted { background: var(--grey-100); color: var(--grey-500); }
   .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+  .admin-grid-2col { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  .admin-grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  @media (max-width: 768px) {
+    .admin-shell { flex-direction: column; }
+    .admin-sidebar { width: 100%; padding: 12px 0; }
+    .admin-sidebar .brand { padding: 0 16px 10px; margin-bottom: 6px; font-size: 1rem; }
+    .admin-sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 10px; }
+    .admin-sidebar nav a { padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; }
+    .admin-topbar { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+    .admin-content { padding: 14px; }
+    .admin-grid-2col { grid-template-columns: 1fr !important; }
+  }
 </style>
 </head>
 <body>
