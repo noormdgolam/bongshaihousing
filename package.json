@@ -5,12 +5,17 @@
     "verify-redirects": "node server/scripts/verify-redirects.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "compression": "^1.7.4",
+    "connect-session-knex": "^5.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-session": "^1.19.0",
     "helmet": "^7.1.0",
     "jsdom": "^29.1.1",
+    "knex": "^3.3.0",
     "multer": "^2.2.0",
+    "mysql2": "^3.23.3",
     "nodemailer": "^9.0.5",
     "nunjucks": "^3.2.4",
     "pdfkit": "^0.15.0"

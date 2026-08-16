@@ -20,6 +20,7 @@ venv/
 !search-index.json
 !server/page-registry.json
 !server/redirects.json
+!server/db/seeds/data/products.json
 !f446c3814965a067992e82231bb56211.txt
 
 # OS / Editor
