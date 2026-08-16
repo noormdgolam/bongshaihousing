@@ -64,8 +64,14 @@ if (process.env.NODE_ENV !== 'production') {
 // own .htaccess ErrorDocument 404 already covers the real site experience
 // for anything not proxied to Node; this only needs to handle a request
 // that made it to Node but matched no route here.
+//
+// HTML, not JSON: cPanel's Node Selector "check availability" probe after
+// install/restart flagged a content-type mismatch (expected text/html,
+// got application/json) when this fell through to a JSON response - the
+// actual API routes (send_email.php etc.) keep JSON since that's correct
+// for those; this generic fallback just needs to not trip that check.
 app.use((req, res) => {
-  res.status(404).json({ status: 'error', message: 'Not found.' });
+  res.status(404).type('html').send('<!doctype html><title>Not Found</title>Not found.');
 });
 
 // eslint-disable-next-line no-unused-vars
