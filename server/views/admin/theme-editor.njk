@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Theme &amp; Layout Editor — Bongshai Housing</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #0F172A;
+    --sidebar-bg: #1E293B;
+    --sidebar-border: #334155;
+    --card-bg: #1E293B;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --primary-blue: #3B82F6;
+    --accent-gold: #F59E0B;
+    --success: #10B981;
+    --danger: #EF4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top Global App Header */
+  .te-topbar {
+    height: 54px;
+    background: #0B1120;
+    border-bottom: 1px solid var(--sidebar-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+  .te-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #ffffff;
+  }
+  .te-brand span { color: var(--primary-blue); }
+  .te-back-link {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.15s;
+  }
+  .te-back-link:hover { color: white; background: rgba(255,255,255,0.05); }
+
+  /* Device Switcher in Topbar */
+  .te-device-bar {
+    display: flex;
+    align-items: center;
+    background: var(--sidebar-bg);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 4px;
+  }
+  .te-device-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .te-device-btn:hover { color: white; }
+  .te-device-btn.active {
+    background: var(--primary-blue);
+    color: white;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  }
+
+  /* Page Selector */
+  .te-page-select {
+    background: var(--sidebar-bg);
+    color: white;
+    border: 1px solid var(--sidebar-border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Save & Actions */
+  .te-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--primary-blue); color: white; }
+  .btn-primary:hover { background: #2563EB; }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #059669; }
+  .btn-outline { background: transparent; border-color: var(--sidebar-border); color: var(--text-muted); }
+  .btn-outline:hover { color: white; border-color: #64748B; background: rgba(255,255,255,0.05); }
+
+  /* Main Workspace: Split View */
+  .te-workspace {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    position: relative;
+  }
+
+  /* Left Sidebar Controls */
+  .te-controls {
+    width: 380px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  /* Accordion Sections */
+  .te-section {
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+  .te-section-header {
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    background: rgba(255,255,255,0.02);
+    transition: background 0.15s;
+  }
+  .te-section-header:hover {
+    background: rgba(255,255,255,0.05);
+  }
+  .te-section-body {
+    padding: 16px 18px;
+    background: #182234;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .te-section[data-collapsed="true"] .te-section-body {
+    display: none;
+  }
+  .te-section-icon {
+    transition: transform 0.2s;
+  }
+  .te-section[data-collapsed="true"] .te-section-icon {
+    transform: rotate(-90deg);
+  }
+
+  /* Form Elements */
+  .te-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .te-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  .te-input, .te-select, .te-textarea {
+    width: 100%;
+    background: #0F172A;
+    border: 1px solid var(--sidebar-border);
+    border-radius: 6px;
+    color: white;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .te-input:focus, .te-select:focus, .te-textarea:focus {
+    border-color: var(--primary-blue);
+  }
+
+  /* Color Input Wrapper */
+  .te-color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .te-color-picker {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid var(--sidebar-border);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .te-color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+  .te-color-picker::-webkit-color-swatch { border-radius: 4px; border: none; }
+  .te-color-text {
+    flex: 1;
+    text-transform: uppercase;
+    font-family: monospace;
+  }
+
+  /* Presets Grid */
+  .te-presets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .te-preset-card {
+    background: #0F172A;
+    border: 1px solid var(--sidebar-border);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+  }
+  .te-preset-card:hover {
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+  }
+  .te-preset-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+  }
+  .te-preset-dots {
+    display: flex;
+    gap: 4px;
+  }
+  .te-preset-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+
+  /* Right Canvas Preview Area */
+  .te-canvas {
+    flex: 1;
+    background: #090D16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Responsive Iframe Frame */
+  .te-frame-wrapper {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .te-frame-wrapper.mode-desktop {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+  .te-frame-wrapper.mode-tablet {
+    width: 768px;
+    max-width: 100%;
+    height: 95%;
+  }
+  .te-frame-wrapper.mode-mobile {
+    width: 375px;
+    max-width: 100%;
+    height: 95%;
+    border-radius: 28px;
+    border: 8px solid #1E293B;
+  }
+
+  .te-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+  }
+
+  /* Save Toast */
+  .te-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #10B981;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    display: none;
+    animation: teSlideUp 0.3s ease;
+    z-index: 9999;
+  }
+  @keyframes teSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<header class="te-topbar">
+  <div class="te-brand">
+    <span>🎨</span> Bongshai <span>Theme Studio</span>
+    <a href="/admin" class="te-back-link">← CMS Dashboard</a>
+  </div>
+
+  <!-- Device Switcher -->
+  <div class="te-device-bar">
+    <button class="te-device-btn active" data-mode="desktop" title="Desktop View (100%)">
+      🖥️ Desktop
+    </button>
+    <button class="te-device-btn" data-mode="tablet" title="Tablet View (768px)">
+      📱 Tablet
+    </button>
+    <button class="te-device-btn" data-mode="mobile" title="Mobile View (375px)">
+      📲 Mobile
+    </button>
+  </div>
+
+  <!-- Page Selector -->
+  <div>
+    <select id="tePageSelector" class="te-page-select" title="Switch preview page">
+      <option value="/">🏠 Home Page (/)</option>
+      <option value="/about.html">Company Profile (/about.html)</option>
+      <option value="/contact.html">Quote &amp; Contact (/contact.html)</option>
+      <option value="/simplex-steel-building.html">Simplex Steel (/simplex-steel-building.html)</option>
+      <option value="/duplex-steel-building.html">Duplex Steel (/duplex-steel-building.html)</option>
+      <option value="/container-house.html">Container House (/container-house.html)</option>
+      <option value="/industrial-sheds.html">Industrial Sheds (/industrial-sheds.html)</option>
+      <option value="/interactive-tools.html">Interactive Tools (/interactive-tools.html)</option>
+      <option value="/projects.html">Projects (/projects.html)</option>
+      <option value="/service-areas.html">Service Areas (/service-areas.html)</option>
+    </select>
+  </div>
+
+  <!-- Actions -->
+  <div class="te-actions">
+    <button id="teResetBtn" type="button" class="btn btn-outline" title="Reset all settings to original defaults">
+      🔄 Reset
+    </button>
+    <a href="/admin/theme-editor/export" class="btn btn-outline" title="Export theme settings as JSON">
+      📤 Export JSON
+    </a>
+    <button id="teSaveBtn" type="button" class="btn btn-success">
+      💾 Save &amp; Publish Live
+    </button>
+  </div>
+</header>
+
+<!-- Main Workspace -->
+<main class="te-workspace">
+  <!-- Left Controls Panel -->
+  <aside class="te-controls">
+
+    <!-- 1. Preset Palettes -->
+    <div class="te-section" data-collapsed="false">
+      <div class="te-section-header">
+        <span>✨ 1-Click Curated Presets</span>
+        <span class="te-section-icon">▼</span>
+      </div>
+      <div class="te-section-body">
+        <div class="te-presets-grid">
+          <div class="te-preset-card" data-preset="bongshai_royal">
+            <div class="te-preset-title">Bongshai Royal</div>
+            <div class="te-preset-dots">
+              <span class="te-preset-dot" style="background:#1E40AF;"></span>
+              <span class="te-preset-dot" style="background:#EAB308;"></span>
+              <span class="te-preset-dot" style="background:#1E3A8A;"></span>
+            </div>
+          </div>
+          <div class="te-preset-card" data-preset="emerald_eco">
+            <div class="te-preset-title">Emerald Eco</div>
+            <div class="te-preset-dots">
+              <span class="te-preset-dot" style="background:#047857;"></span>
+              <span class="te-preset-dot" style="background:#F59E0B;"></span>
+              <span class="te-preset-dot" style="background:#064E3B;"></span>
+            </div>
+          </div>
+          <div class="te-preset-card" data-preset="titanium_slate">
+            <div class="te-preset-title">Titanium Slate</div>
+            <div class="te-preset-dots">
+              <span class="te-preset-dot" style="background:#1E293B;"></span>
+              <span class="te-preset-dot" style="background:#06B6D4;"></span>
+              <span class="te-preset-dot" style="background:#0F172A;"></span>
+            </div>
+          </div>
+          <div class="te-preset-card" data-preset="corporate_indigo">
+            <div class="te-preset-title">Indigo Crimson</div>
+            <div class="te-preset-dots">
+              <span class="te-preset-dot" style="background:#4338CA;"></span>
+              <span class="te-preset-dot" style="background:#F43F5E;"></span>
+              <span class="te-preset-dot" style="background:#312E81;"></span>
+            </div>
+          </div>
+          <div class="te-preset-card" data-preset="modern_steel_crimson">
+            <div class="te-preset-title">Crimson Gold</div>
+            <div class="te-preset-dots">
+              <span class="te-preset-dot" style="background:#BE123C;"></span>
+              <span class="te-preset-dot" style="background:#D97706;"></span>
+              <span class="te-preset-dot" style="background:#881337;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Brand Colors -->
+    <div class="te-section" data-collapsed="false">
+      <div class="te-section-header">
+        <span>🎨 Brand Colors</span>
+        <span class="te-section-icon">▼</span>
+      </div>
+      <div class="te-section-body">
+        <div class="te-field">
+          <label class="te-label">Primary Brand Color</label>
+          <div class="te-color-row">
+            <input type="color" id="primaryColor" class="te-color-picker" value="{{ theme.primary }}">
+            <input type="text" id="primaryColorText" class="te-input te-color-text" value="{{ theme.primary }}">
+          </div>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Primary Dark (Hover &amp; Footers)</label>
+          <div class="te-color-row">
+            <input type="color" id="primaryDarkColor" class="te-color-picker" value="{{ theme.primary_dark }}">
+            <input type="text" id="primaryDarkColorText" class="te-input te-color-text" value="{{ theme.primary_dark }}">
+          </div>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Primary Light (Gradients &amp; Accents)</label>
+          <div class="te-color-row">
+            <input type="color" id="primaryLightColor" class="te-color-picker" value="{{ theme.primary_light }}">
+            <input type="text" id="primaryLightColorText" class="te-input te-color-text" value="{{ theme.primary_light }}">
+          </div>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Accent / Highlight (Gold/Yellow)</label>
+          <div class="te-color-row">
+            <input type="color" id="accentColor" class="te-color-picker" value="{{ theme.accent }}">
+            <input type="text" id="accentColorText" class="te-input te-color-text" value="{{ theme.accent }}">
+          </div>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Accent Light</label>
+          <div class="te-color-row">
+            <input type="color" id="accentLightColor" class="te-color-picker" value="{{ theme.accent_light }}">
+            <input type="text" id="accentLightColorText" class="te-input te-color-text" value="{{ theme.accent_light }}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Typography -->
+    <div class="te-section" data-collapsed="false">
+      <div class="te-section-header">
+        <span>✍️ Typography &amp; Fonts</span>
+        <span class="te-section-icon">▼</span>
+      </div>
+      <div class="te-section-body">
+        <div class="te-field">
+          <label class="te-label">Heading Font Family</label>
+          <select id="fontHeading" class="te-select">
+            <option value="'Inter', sans-serif" {% if theme.font_heading == "'Inter', sans-serif" %}selected{% endif %}>Inter (Modern Sans)</option>
+            <option value="'Outfit', sans-serif" {% if theme.font_heading == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Geometric Premium)</option>
+            <option value="'Plus Jakarta Sans', sans-serif" {% if theme.font_heading == "'Plus Jakarta Sans', sans-serif" %}selected{% endif %}>Plus Jakarta Sans</option>
+            <option value="'Poppins', sans-serif" {% if theme.font_heading == "'Poppins', sans-serif" %}selected{% endif %}>Poppins (Rounded)</option>
+            <option value="'Roboto', sans-serif" {% if theme.font_heading == "'Roboto', sans-serif" %}selected{% endif %}>Roboto (Clean)</option>
+          </select>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Body Text Font Family</label>
+          <select id="fontBody" class="te-select">
+            <option value="'Inter', sans-serif" {% if theme.font_body == "'Inter', sans-serif" %}selected{% endif %}>Inter</option>
+            <option value="'Roboto', sans-serif" {% if theme.font_body == "'Roboto', sans-serif" %}selected{% endif %}>Roboto</option>
+            <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" {% if theme.font_body == "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" %}selected{% endif %}>System Native</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Top Announcement Banner -->
+    <div class="te-section" data-collapsed="false">
+      <div class="te-section-header">
+        <span>📢 Top Announcement Banner</span>
+        <span class="te-section-icon">▼</span>
+      </div>
+      <div class="te-section-body">
+        <div class="te-field">
+          <label class="te-label" style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="showAnnouncement" {% if theme.show_announcement %}checked{% endif %} style="width:16px; height:16px;">
+            Enable Top Promo Announcement Bar
+          </label>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Announcement Text</label>
+          <textarea id="announcementText" class="te-textarea" rows="2">{{ theme.announcement_text }}</textarea>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Banner Action Link</label>
+          <input type="text" id="announcementLink" class="te-input" value="{{ theme.announcement_link }}">
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Banner Background Color</label>
+          <div class="te-color-row">
+            <input type="color" id="announcementBg" class="te-color-picker" value="{{ theme.announcement_bg }}">
+            <input type="text" id="announcementBgText" class="te-input te-color-text" value="{{ theme.announcement_bg }}">
+          </div>
+        </div>
+
+        <div class="te-field">
+          <label class="te-label">Banner Text &amp; Accent Color</label>
+          <div class="te-color-row">
+            <input type="color" id="announcementColor" class="te-color-picker" value="{{ theme.announcement_color }}">
+            <input type="text" id="announcementColorText" class="te-input te-color-text" value="{{ theme.announcement_color }}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Layout & Corners -->
+    <div class="te-section" data-collapsed="false">
+      <div class="te-section-header">
+        <span>📐 Border Radius &amp; Corners</span>
+        <span class="te-section-icon">▼</span>
+      </div>
+      <div class="te-section-body">
+        <div class="te-field">
+          <label class="te-label">Corner Roundness</label>
+          <select id="radiusStyle" class="te-select">
+            <option value="sharp" {% if theme.radius_md == '2px' %}selected{% endif %}>Sharp / Industrial (2px)</option>
+            <option value="subtle" {% if theme.radius_md == '4px' %}selected{% endif %}>Subtle Rounded (4px)</option>
+            <option value="modern" {% if theme.radius_md == '8px' or not theme.radius_md %}selected{% endif %}>Modern Standard (8px)</option>
+            <option value="smooth" {% if theme.radius_md == '14px' %}selected{% endif %}>Smooth Curved (14px)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Custom CSS Live Injector -->
+    <div class="te-section" data-collapsed="true">
+      <div class="te-section-header">
+        <span>💻 Custom CSS Live Code</span>
+        <span class="te-section-icon">▼</span>
+      </div>
+      <div class="te-section-body">
+        <div class="te-field">
+          <label class="te-label">Inject Custom CSS (Live updates)</label>
+          <textarea id="customCss" class="te-textarea" rows="6" placeholder="/* Custom CSS overrides */&#10;.navbar { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }">{{ theme.custom_css }}</textarea>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Right Canvas: Live Iframe Preview -->
+  <section class="te-canvas">
+    <div id="teFrameWrapper" class="te-frame-wrapper mode-desktop">
+      <iframe id="tePreviewFrame" class="te-iframe" src="/" title="Live Site Preview"></iframe>
+    </div>
+  </section>
+</main>
+
+<!-- Save Toast Notification -->
+<div id="teToast" class="te-toast">✅ Theme Saved &amp; Published Live!</div>
+
+<script>
+(function() {
+  const iframe = document.getElementById('tePreviewFrame');
+  const frameWrapper = document.getElementById('teFrameWrapper');
+  const pageSelector = document.getElementById('tePageSelector');
+  const deviceButtons = document.querySelectorAll('.te-device-btn');
+  const saveBtn = document.getElementById('teSaveBtn');
+  const resetBtn = document.getElementById('teResetBtn');
+  const toast = document.getElementById('teToast');
+
+  // Input elements
+  const primaryColor = document.getElementById('primaryColor');
+  const primaryColorText = document.getElementById('primaryColorText');
+  const primaryDarkColor = document.getElementById('primaryDarkColor');
+  const primaryDarkColorText = document.getElementById('primaryDarkColorText');
+  const primaryLightColor = document.getElementById('primaryLightColor');
+  const primaryLightColorText = document.getElementById('primaryLightColorText');
+  const accentColor = document.getElementById('accentColor');
+  const accentColorText = document.getElementById('accentColorText');
+  const accentLightColor = document.getElementById('accentLightColor');
+  const accentLightColorText = document.getElementById('accentLightColorText');
+
+  const fontHeading = document.getElementById('fontHeading');
+  const fontBody = document.getElementById('fontBody');
+  const radiusStyle = document.getElementById('radiusStyle');
+
+  const showAnnouncement = document.getElementById('showAnnouncement');
+  const announcementText = document.getElementById('announcementText');
+  const announcementLink = document.getElementById('announcementLink');
+  const announcementBg = document.getElementById('announcementBg');
+  const announcementBgText = document.getElementById('announcementBgText');
+  const announcementColor = document.getElementById('announcementColor');
+  const announcementColorText = document.getElementById('announcementColorText');
+  const customCss = document.getElementById('customCss');
+
+  const presetsData = {{ presets | dump | safe }};
+
+  // Sync color inputs
+  function bindColorPair(picker, text) {
+    picker.addEventListener('input', () => {
+      text.value = picker.value.toUpperCase();
+      sendLiveUpdate();
+    });
+    text.addEventListener('input', () => {
+      if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) {
+        picker.value = text.value;
+        sendLiveUpdate();
+      }
+    });
+  }
+
+  bindColorPair(primaryColor, primaryColorText);
+  bindColorPair(primaryDarkColor, primaryDarkColorText);
+  bindColorPair(primaryLightColor, primaryLightColorText);
+  bindColorPair(accentColor, accentColorText);
+  bindColorPair(accentLightColor, accentLightColorText);
+  bindColorPair(announcementBg, announcementBgText);
+  bindColorPair(announcementColor, announcementColorText);
+
+  // Text inputs & dropdowns live sync
+  [fontHeading, fontBody, radiusStyle, showAnnouncement, announcementText, announcementLink, customCss].forEach(el => {
+    el.addEventListener('input', sendLiveUpdate);
+    el.addEventListener('change', sendLiveUpdate);
+  });
+
+  // Calculate radius tokens
+  function getRadiusTokens(style) {
+    switch (style) {
+      case 'sharp': return { sm: '0px', md: '2px', lg: '4px', xl: '6px' };
+      case 'subtle': return { sm: '2px', md: '4px', lg: '6px', xl: '8px' };
+      case 'smooth': return { sm: '6px', md: '14px', lg: '20px', xl: '24px' };
+      default: return { sm: '4px', md: '8px', lg: '12px', xl: '16px' };
+    }
+  }
+
+  // Get current active theme object
+  function getCurrentThemeData() {
+    const rad = getRadiusTokens(radiusStyle.value);
+    return {
+      primary: primaryColor.value,
+      primary_dark: primaryDarkColor.value,
+      primary_light: primaryLightColor.value,
+      accent: accentColor.value,
+      accent_light: accentLightColor.value,
+      accent_dark: '#CA8A04',
+      font_heading: fontHeading.value,
+      font_body: fontBody.value,
+      radius_sm: rad.sm,
+      radius_md: rad.md,
+      radius_lg: rad.lg,
+      radius_xl: rad.xl,
+      show_announcement: showAnnouncement.checked,
+      announcement_text: announcementText.value,
+      announcement_link: announcementLink.value,
+      announcement_bg: announcementBg.value,
+      announcement_color: announcementColor.value,
+      custom_css: customCss.value,
+    };
+  }
+
+  // 0ms Real-Time postMessage to iframe
+  function sendLiveUpdate() {
+    const theme = getCurrentThemeData();
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({
+        type: 'BH_THEME_UPDATE',
+        theme: theme
+      }, '*');
+    }
+  }
+
+  // Re-send update when iframe finishes loading a new page
+  iframe.addEventListener('load', () => {
+    sendLiveUpdate();
+  });
+
+  // Presets 1-Click Apply
+  document.querySelectorAll('.te-preset-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const presetKey = card.getAttribute('data-preset');
+      const p = presetsData[presetKey];
+      if (!p) return;
+
+      if (p.primary) { primaryColor.value = p.primary; primaryColorText.value = p.primary; }
+      if (p.primary_dark) { primaryDarkColor.value = p.primary_dark; primaryDarkColorText.value = p.primary_dark; }
+      if (p.primary_light) { primaryLightColor.value = p.primary_light; primaryLightColorText.value = p.primary_light; }
+      if (p.accent) { accentColor.value = p.accent; accentColorText.value = p.accent; }
+      if (p.accent_light) { accentLightColor.value = p.accent_light; accentLightColorText.value = p.accent_light; }
+      if (p.announcement_bg) { announcementBg.value = p.announcement_bg; announcementBgText.value = p.announcement_bg; }
+      if (p.announcement_color) { announcementColor.value = p.announcement_color; announcementColorText.value = p.announcement_color; }
+
+      sendLiveUpdate();
+    });
+  });
+
+  // Device switcher
+  deviceButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      deviceButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const mode = btn.getAttribute('data-mode');
+      frameWrapper.className = `te-frame-wrapper mode-${mode}`;
+    });
+  });
+
+  // Page selector
+  pageSelector.addEventListener('change', () => {
+    iframe.src = pageSelector.value;
+  });
+
+  // Accordion toggle
+  document.querySelectorAll('.te-section-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const section = header.parentElement;
+      const isCollapsed = section.getAttribute('data-collapsed') === 'true';
+      section.setAttribute('data-collapsed', isCollapsed ? 'false' : 'true');
+    });
+  });
+
+  // Save & Publish
+  saveBtn.addEventListener('click', async () => {
+    saveBtn.disabled = true;
+    saveBtn.textContent = '⏳ Saving...';
+
+    const theme = getCurrentThemeData();
+
+    try {
+      const res = await fetch('/admin/theme-editor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(theme)
+      });
+
+      const data = await res.json();
+      if (data && data.success) {
+        showToast('✅ Theme Saved & Published Live!');
+      } else {
+        alert('Save error: ' + (data?.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Network error while saving theme: ' + err.message);
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = '💾 Save & Publish Live';
+    }
+  });
+
+  // Reset Defaults
+  resetBtn.addEventListener('click', async () => {
+    if (!confirm('Reset all theme settings to Bongshai Housing defaults?')) return;
+    try {
+      const res = await fetch('/admin/theme-editor/reset', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' }
+      });
+      window.location.reload();
+    } catch (err) {
+      alert('Reset failed: ' + err.message);
+    }
+  });
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 3500);
+  }
+})();
+</script>
+</body>
+</html>

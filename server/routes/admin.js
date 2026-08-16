@@ -158,6 +158,9 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   const categories = await db('categories').orderBy('sort_order');
   const specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
   const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
+  for (const v of variants) {
+    v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
+  }
   res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null }));
 });
 
@@ -177,6 +180,89 @@ router.post('/admin/products/:id', async (req, res) => {
 router.post('/admin/products/:id/delete', async (req, res) => {
   await db('products').where({ id: req.params.id }).del();
   res.redirect('/admin/products');
+});
+
+// ---- Product Specs (Building Specifications key/value rows) ----
+
+router.post('/admin/products/:id/specs', async (req, res) => {
+  const { spec_key, spec_value } = req.body;
+  if (spec_key && spec_value) {
+    const [{ maxSort }] = await db('product_specs').where({ product_id: req.params.id }).max('sort_order as maxSort');
+    await db('product_specs').insert({ product_id: req.params.id, spec_key, spec_value, sort_order: (maxSort ?? -1) + 1 });
+  }
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/specs/:specId', async (req, res) => {
+  const { spec_key, spec_value } = req.body;
+  await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).update({ spec_key, spec_value });
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/specs/:specId/delete', async (req, res) => {
+  await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).del();
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+// ---- Product Variants (floor-area tiers) + their room breakdowns ----
+
+router.post('/admin/products/:id/variants', async (req, res) => {
+  const { area_sqft, area_label, bed, bath, kitchen, living, drawing, dining } = req.body;
+  const [{ maxSort }] = await db('product_variants').where({ product_id: req.params.id }).max('sort_order as maxSort');
+  await db('product_variants').insert({
+    product_id: req.params.id,
+    area_sqft: area_sqft || null,
+    area_label: area_label || area_sqft || null,
+    bed: bed || null, bath: bath || null, kitchen: kitchen || null, living: living || null,
+    drawing: drawing || null, dining: dining || null,
+    sort_order: (maxSort ?? -1) + 1,
+  });
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/variants/:variantId', async (req, res) => {
+  const { area_sqft, area_label, bed, bath, kitchen, living, drawing, dining } = req.body;
+  await db('product_variants').where({ id: req.params.variantId, product_id: req.params.id }).update({
+    area_sqft: area_sqft || null, area_label: area_label || area_sqft || null,
+    bed: bed || null, bath: bath || null, kitchen: kitchen || null, living: living || null,
+    drawing: drawing || null, dining: dining || null,
+  });
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/variants/:variantId/delete', async (req, res) => {
+  await db('product_variants').where({ id: req.params.variantId, product_id: req.params.id }).del();
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/variants/:variantId/rooms', async (req, res) => {
+  const { floor_label, section, area_sqft, length_ft, width_ft } = req.body;
+  if (section) {
+    const [{ maxSort }] = await db('product_rooms').where({ product_variant_id: req.params.variantId }).max('sort_order as maxSort');
+    await db('product_rooms').insert({
+      product_variant_id: req.params.variantId,
+      floor_label: floor_label || null, section,
+      area_sqft: area_sqft || null, length_ft: length_ft || null, width_ft: width_ft || null,
+      is_total_row: /total/i.test(section),
+      sort_order: (maxSort ?? -1) + 1,
+    });
+  }
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/variants/:variantId/rooms/:roomId', async (req, res) => {
+  const { floor_label, section, area_sqft, length_ft, width_ft } = req.body;
+  await db('product_rooms').where({ id: req.params.roomId, product_variant_id: req.params.variantId }).update({
+    floor_label: floor_label || null, section,
+    area_sqft: area_sqft || null, length_ft: length_ft || null, width_ft: width_ft || null,
+    is_total_row: /total/i.test(section || ''),
+  });
+  res.redirect(`/admin/products/${req.params.id}/edit`);
+});
+
+router.post('/admin/products/:id/variants/:variantId/rooms/:roomId/delete', async (req, res) => {
+  await db('product_rooms').where({ id: req.params.roomId, product_variant_id: req.params.variantId }).del();
+  res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
 // ---- Categories ----
@@ -265,6 +351,65 @@ router.post('/admin/projects/:id', async (req, res) => {
 router.post('/admin/projects/:id/delete', async (req, res) => {
   await db('projects').where({ id: req.params.id }).del();
   res.redirect('/admin/projects');
+});
+
+// ---- Visual Theme & Layout Customizer ----
+
+const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME } = require('../lib/theme');
+const pageRegistry = require('../page-registry.json');
+
+router.get('/admin/theme-editor', async (req, res) => {
+  const theme = await getThemeSettings();
+  const pagesList = Object.keys(pageRegistry).sort();
+  res.render('admin/theme-editor.njk', adminVars(req, {
+    theme,
+    presets: PRESETS,
+    pagesList,
+    defaultTheme: DEFAULT_THEME,
+    saved: req.query.saved === '1',
+    reset: req.query.reset === '1',
+  }));
+});
+
+router.post('/admin/theme-editor', async (req, res) => {
+  try {
+    const rawData = req.body;
+    // Format checkboxes and values
+    const newSettings = {
+      ...rawData,
+      show_announcement: rawData.show_announcement === 'on' || rawData.show_announcement === true || rawData.show_announcement === 'true',
+    };
+    await saveThemeSettings(newSettings);
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, message: 'Theme saved successfully!' });
+    }
+    res.redirect('/admin/theme-editor?saved=1');
+  } catch (err) {
+    console.error('Failed to save theme settings:', err);
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(400).json({ success: false, error: err.message });
+    }
+    res.redirect('/admin/theme-editor?error=1');
+  }
+});
+
+router.post('/admin/theme-editor/reset', async (req, res) => {
+  try {
+    await resetThemeSettings();
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, message: 'Theme reset to defaults!' });
+    }
+    res.redirect('/admin/theme-editor?reset=1');
+  } catch (err) {
+    res.status(500).send('Reset failed: ' + err.message);
+  }
+});
+
+router.get('/admin/theme-editor/export', async (req, res) => {
+  const theme = await getThemeSettings();
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', 'attachment; filename="bongshai-theme-settings.json"');
+  res.send(JSON.stringify(theme, null, 2));
 });
 
 module.exports = router;

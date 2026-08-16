@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <script>(function(){try{if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
-{% block head_top %}
+{% block head_top %}{% endblock %}
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="preload" href="css/style.min.css?v=4.10" as="style">
@@ -42,15 +42,65 @@
   {% block head_extra %}{% endblock %}
   <link rel="alternate" hreflang="en-BD" href="{{ canonical }}" />
   <link rel="alternate" hreflang="x-default" href="{{ canonical }}" />
-  <link href="css/aos.css" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#1E40AF">
+  <meta name="theme-color" content="{{ theme.primary or '#1E40AF' }}">
   <link rel="apple-touch-icon" href="images/logo-icon-192.webp">
   <link rel="icon" href="/favicon.ico" sizes="any">
-{% endblock %}
+
+  <!-- Dynamic Theme Design Tokens & Custom Properties -->
+  <style id="bh-theme-custom-vars">
+    :root {
+      {% if themeCssVars %}{{ themeCssVars | safe }}{% endif %}
+    }
+  </style>
+  <style id="bh-theme-announcement-styles">
+    .bh-top-announcement {
+      font-size: 0.82rem;
+      padding: 7px 16px;
+      text-align: center;
+      font-weight: 600;
+      position: relative;
+      z-index: 1000;
+      letter-spacing: 0.1px;
+      transition: all 0.2s ease;
+    }
+    .bh-announcement-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .bh-announcement-cta {
+      text-decoration: underline !important;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+    .bh-announcement-cta:hover {
+      opacity: 0.9;
+    }
+  </style>
+  {% if theme.custom_css %}
+  <style id="bh-theme-custom-css">
+    {{ theme.custom_css | safe }}
+  </style>
+  {% endif %}
 </head>
 <body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
 <a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- Top Announcement Bar -->
+<div id="bhTopAnnouncement" class="bh-top-announcement" style="background: {{ theme.announcement_bg or '#1E3A8A' }}; color: {{ theme.announcement_color or '#FDE047' }}; {% if not theme.show_announcement %}display:none;{% endif %}">
+  <div class="bh-announcement-inner">
+    <span id="bhAnnouncementText">{{ theme.announcement_text or '⚡ দ্রুততম সময়ে ৪৫-৬০ দিনে ভূমিকম্প সহনশীল প্রি-ইঞ্জিনিয়ার্ড স্টিল বাড়ি নির্মাণ — ফ্রি পরামর্শ নিন!' }}</span>
+    {% if theme.announcement_link %}
+    <a href="{{ theme.announcement_link }}" id="bhAnnouncementLink" class="bh-announcement-cta" style="color: {{ theme.announcement_color or '#FDE047' }};">বিস্তারিত জানুন →</a>
+    {% endif %}
+  </div>
+</div>
 
 {% include "partials/nav.njk" %}
 
@@ -203,6 +253,62 @@
 <script src="js/3d-tilt.js?v=1" defer></script>
 <script src="js/page-transition.js?v=1" defer></script>
 <script src="js/global-upgrades.min.js?v=3.13" defer></script>
+
+<!-- Live Theme Editor postMessage Listener (Shopify/Webflow Standard) -->
+<script>
+window.addEventListener('message', function(event) {
+  if (!event.data || event.data.type !== 'BH_THEME_UPDATE') return;
+  const theme = event.data.theme;
+  if (!theme) return;
+
+  // 1. Update CSS Custom Properties in 0ms real-time
+  const styleEl = document.getElementById('bh-theme-custom-vars');
+  if (styleEl) {
+    styleEl.innerHTML = `
+      :root {
+        --primary: ${theme.primary};
+        --primary-dark: ${theme.primary_dark};
+        --primary-light: ${theme.primary_light};
+        --accent: ${theme.accent};
+        --accent-light: ${theme.accent_light};
+        --accent-dark: ${theme.accent_dark};
+        --font-heading: ${theme.font_heading};
+        --font-body: ${theme.font_body};
+        --radius-sm: ${theme.radius_sm};
+        --radius-md: ${theme.radius_md};
+        --radius-lg: ${theme.radius_lg};
+        --radius-xl: ${theme.radius_xl};
+      }
+    `;
+  }
+
+  // 2. Update Top Announcement Banner in real-time
+  const banner = document.getElementById('bhTopAnnouncement');
+  const bannerText = document.getElementById('bhAnnouncementText');
+  const bannerLink = document.getElementById('bhAnnouncementLink');
+  if (banner) {
+    banner.style.display = theme.show_announcement ? 'block' : 'none';
+    banner.style.backgroundColor = theme.announcement_bg || '#1E3A8A';
+    banner.style.color = theme.announcement_color || '#FDE047';
+  }
+  if (bannerText && theme.announcement_text) {
+    bannerText.textContent = theme.announcement_text;
+  }
+  if (bannerLink) {
+    bannerLink.style.color = theme.announcement_color || '#FDE047';
+    if (theme.announcement_link) bannerLink.setAttribute('href', theme.announcement_link);
+  }
+
+  // 3. Update Custom CSS in real-time
+  let customCssEl = document.getElementById('bh-theme-custom-css');
+  if (!customCssEl) {
+    customCssEl = document.createElement('style');
+    customCssEl.id = 'bh-theme-custom-css';
+    document.head.appendChild(customCssEl);
+  }
+  customCssEl.innerHTML = theme.custom_css || '';
+});
+</script>
 {% block scripts_extra %}{% endblock %}
 </body>
 </html>

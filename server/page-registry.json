@@ -1,4 +1,24 @@
 {
+  "/index.html": {
+    "urlPath": "/",
+    "title": "Steel Building Company Bangladesh | Bongshai Housing",
+    "description": "Bongshai Housing, Bangladesh's leading pre-engineered steel building company, delivering durable, affordable prefab housing nationwide.",
+    "keywords": "Pre-Engineered Steel Building Company Bangladesh, steel building Bangladesh, prefab housing Dhaka, Bongshai Housing, EPC contractor Bangladesh, pre-engineered steel buildings",
+    "category": "Steel Building, Real Estate, Construction, Prefab Housing",
+    "canonical": "https://bongshaihousing.com/",
+    "ogType": "website",
+    "ogTitle": "Pre-Engineered Steel Building Company Bangladesh | Bongshai Housing",
+    "ogDescription": "Bangladesh's premier steel building company and steel structure manufacturer. Pre-engineered buildings, industrial steel shed construction, and prefab housing in Dhaka. EPC turnkey contractor.",
+    "ogImage": "https://bongshaihousing.com/images/logo-icon-512.webp",
+    "ogImageWidth": "1200",
+    "ogImageHeight": "630",
+    "twitterTitle": "Pre-Engineered Steel Building Company Bangladesh | Bongshai Housing",
+    "twitterDescription": "Bangladesh's premier steel building company. Pre-engineered buildings, industrial steel shed construction & prefab housing in Dhaka. Call 01781-636613.",
+    "whatsappHref": "https://wa.me/8801711200241?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20a%20quote.",
+    "bodyClass": "home-page",
+    "showQuoteShortcut": true,
+    "template": "pages/index.njk"
+  },
   "/about.html": {
     "urlPath": "/about.html",
     "title": "Bongshai Housing | Pre-Engineered Steel Buildings",

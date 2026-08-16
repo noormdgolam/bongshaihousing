@@ -70,6 +70,20 @@ nunjucks.configure(path.join(__dirname, 'views'), {
 });
 app.set('view engine', 'njk');
 
+// Global Theme Settings Middleware: injects active design tokens and CSS vars
+const { getThemeSettings, generateCssVariables } = require('./lib/theme');
+app.use(async (req, res, next) => {
+  try {
+    const theme = await getThemeSettings();
+    res.locals.theme = theme;
+    res.locals.themeCssVars = generateCssVariables(theme);
+  } catch (e) {
+    res.locals.theme = {};
+    res.locals.themeCssVars = '';
+  }
+  next();
+});
+
 // Static asset directories: /css, /js, /images, /fonts, plus root assets
 // In production on cPanel, Apache handles these directly; in Node dev/staging,
 // Express serves them cleanly so styles and media always load.
@@ -137,7 +151,9 @@ app.use((req, res) => {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).json({ status: 'error', message: 'Internal server error.' });
+  if (!res.headersSent) {
+    res.status(500).json({ status: 'error', message: 'Internal server error.' });
+  }
 });
 
 app.listen(PORT, () => {
