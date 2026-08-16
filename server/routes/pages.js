@@ -67,6 +67,26 @@ if (registry['/projects.html']) {
   });
 }
 
+// ── /service-areas.html — DB-driven nationwide service areas ──────────────
+// Pulls the active 64 districts & dedicated page mapping from the database,
+// falling back to bdGeoData in the template if DB is empty or offline.
+if (registry['/service-areas.html']) {
+  const serviceAreasMeta = registry['/service-areas.html'];
+  router.get('/service-areas.html', async (req, res) => {
+    let dbServiceAreas = [];
+    if (db) {
+      try {
+        dbServiceAreas = await db('service_areas')
+          .orderBy('division', 'asc')
+          .orderBy('district', 'asc');
+      } catch (err) {
+        console.error('service_areas DB fetch failed, rendering static fallback:', err.message);
+      }
+    }
+    res.render(serviceAreasMeta.template, renderVars(serviceAreasMeta, { dbServiceAreas }));
+  });
+}
+
 // ── Category landing pages — DB-driven hero / description override ──────────
 // Pulls hero image/description from the DB category row when present,
 // falling back to the template's static content if DB is empty or offline.

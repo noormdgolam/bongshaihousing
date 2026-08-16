@@ -24,6 +24,10 @@
     <div class="num">{{ counts.projects }}</div>
     <div class="label">Completed Projects</div>
   </div>
+  <div class="stat-card" style="border-left: 4px solid #8B5CF6;">
+    <div class="num">{{ counts.serviceAreas or 64 }}</div>
+    <div class="label">Service Areas (Districts)</div>
+  </div>
 </div>
 
 <!-- Quick Shortcuts -->
@@ -33,6 +37,7 @@
     <a href="/admin/products/new" class="btn btn-primary">➕ Add Product Model</a>
     <a href="/admin/projects/new" class="btn">➕ Add Project</a>
     <a href="/admin/categories/new" class="btn">➕ Add Category</a>
+    <a href="/admin/service-areas" class="btn">📍 Manage Service Areas</a>
     <a href="/admin/theme-editor" class="btn">🎨 Theme Studio</a>
     <a href="/admin/leads" class="btn">📥 View All Inquiries</a>
     <a href="/" target="_blank" class="btn" style="margin-left:auto;">🌐 View Live Website</a>

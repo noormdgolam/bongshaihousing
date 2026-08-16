@@ -1,0 +1,102 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Service Areas Management{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Service Areas &amp; Nationwide Districts</h1>{% endblock %}
+
+{% block content %}
+<!-- Stats Overview -->
+<div class="stat-grid" style="margin-bottom:20px;">
+  <div class="stat-card" style="border-left: 4px solid var(--primary);">
+    <div class="num">{{ totalCount }}</div>
+    <div class="label">Total Districts Covered</div>
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #10B981;">
+    <div class="num">{{ dedicatedCount }}</div>
+    <div class="label">Dedicated Landing Pages</div>
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #F59E0B;">
+    <div class="num">8</div>
+    <div class="label">Administrative Divisions</div>
+  </div>
+</div>
+
+<div class="card">
+  <!-- Search & Division Filter Toolbar -->
+  <form method="get" action="/admin/service-areas" class="toolbar">
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <input 
+        type="text" 
+        name="q" 
+        value="{{ search }}" 
+        placeholder="Search district, division, or page..." 
+        style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:240px;"
+      />
+      <select name="division" onchange="this.form.submit()" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+        <option value="all" {% if divisionFilter == 'all' or not divisionFilter %}selected{% endif %}>All Divisions</option>
+        {% for d in divisions %}
+        <option value="{{ d }}" {% if divisionFilter == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">Filter</button>
+      {% if search or (divisionFilter and divisionFilter != 'all') %}
+      <a href="/admin/service-areas" class="btn">Clear</a>
+      {% endif %}
+    </div>
+    <div style="display:flex; gap:8px;">
+      <a href="/admin/service-areas/new" class="btn btn-primary">➕ Add District</a>
+      <a href="/service-areas.html" target="_blank" class="btn" title="View Public Page">🌐 Public Directory ↗</a>
+    </div>
+  </form>
+
+  <!-- Service Areas Table -->
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>District Name</th>
+          <th>Division</th>
+          <th>Dedicated Page Status</th>
+          <th>Landing Page URL</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in serviceAreas %}
+        <tr>
+          <td>
+            <strong style="color:var(--grey-900); font-size:0.95rem;">{{ area.district }}</strong>
+          </td>
+          <td>
+            <span class="pill pill-muted" style="font-weight:600;">{{ area.division }}</span>
+          </td>
+          <td>
+            {% if area.has_dedicated_page or area.page_slug %}
+            <span class="pill pill-success" style="font-size:0.75rem;">🟢 Dedicated Page</span>
+            {% else %}
+            <span class="pill pill-muted" style="font-size:0.75rem;">⚪ Standard Coverage</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if area.page_slug %}
+            <a href="/{{ area.page_slug | replace('^/', '') }}" target="_blank" style="color:var(--primary); font-size:0.85rem; font-weight:600;">
+              /{{ area.page_slug | replace('^/', '') }} ↗
+            </a>
+            {% else %}
+            <span style="color:var(--grey-500); font-size:0.85rem;">—</span>
+            {% endif %}
+          </td>
+          <td style="white-space:nowrap;">
+            <a href="/admin/service-areas/{{ area.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" style="text-align:center; padding:30px; color:var(--grey-500);">
+            No service areas found. Click "Add District" to create one.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
