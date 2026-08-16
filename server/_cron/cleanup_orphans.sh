@@ -4,17 +4,31 @@
 # restart.txt convention starts a new worker but doesn't always reap the
 # old one, which eventually exhausts the account's process-count limit).
 # Run via cPanel Cron Jobs every 15 min: bash cleanup_orphans.sh -f
-# Without -f it only reports what it would kill (dry run).
+#
+# Flags: -f actually kill orphans (default: dry run, report only)
+#        -d force dry run even if -f is also passed
+#        -v also echo log lines to stdout (for interactive/SSH runs)
 
 APP_PATTERN="lsnode:/home/abongsha/bongshai-node-app"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_FILE="$SCRIPT_DIR/cleanup_orphans.log"
 FORCE=0
-[ "$1" = "-f" ] && FORCE=1
+VERBOSE=0
+for arg in "$@"; do
+  case "$arg" in
+    -f) FORCE=1 ;;
+    -d) FORCE=0 ;;
+    -v) VERBOSE=1 ;;
+  esac
+done
 
 log() {
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+  local line="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+  echo "$line" >> "$LOG_FILE"
+  [ "$VERBOSE" -eq 1 ] && echo "$line"
 }
+
+log "cleanup_orphans.sh invoked (pid $$, args: $*)"
 
 # oldest-first PID list for matching processes, keyed by process start time
 PIDS=$(pgrep -f "$APP_PATTERN" | while read -r pid; do
@@ -26,6 +40,7 @@ COUNT=$(echo "$PIDS" | grep -c . || true)
 
 if [ "$COUNT" -le 1 ]; then
   log "OK: $COUNT matching process(es), nothing to clean up."
+  log "Cleanup pass complete."
   exit 0
 fi
 
@@ -40,3 +55,4 @@ for pid in $OLD_PIDS; do
     log "DRY RUN: would kill orphan PID $pid"
   fi
 done
+log "Cleanup pass complete."
