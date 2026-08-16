@@ -21,3 +21,14 @@ Welcome! This file provides guidelines and context for autonomous agents interac
 ## 4. Git Operations
 - **Always Automatically Push:** After successfully applying, fixing, or completing requested code edits or tasks, automatically run `git add .`, `git commit` with a descriptive message, and `git push` to sync changes without waiting for user prompting.
 - **Exception — `server/` (the Node app):** `main` auto-deploys straight to the live, revenue-generating site via GitHub Actions FTP on every push, with no build/test gate in between. Node app work happens on its own branch (currently `node-app-phase1`) and gets deployed separately, by hand, to the `test.bongshaihousing.com` staging app via FTP + a `tmp/restart.txt` touch (see `server/scripts/generate-redirects.js`'s and `server/scripts/verify-redirects.js`'s doc comments, and the project's Node-hosting-quirks notes) — never auto-push `server/` changes to `main` until the Node app is the thing actually serving production traffic.
+
+## 5. AI Architecture & Sales Assistant Guidelines
+- **No Local LLMs on Shared Hosting:** Due to CloudLinux memory limits (~512MB RAM) on cPanel shared hosting, do not attempt to run heavy local LLMs (e.g. Ollama, PyTorch, llama.cpp) or multi-tier Python microservices.
+- **Node.js + Groq/Cloud API Stack:** Implement AI features directly inside the Express server (`server/routes/ai-chat.js` and `server/lib/ai-assistant.js`) calling fast, low-latency APIs (such as Groq LPU `llama-3.3-70b-versatile`) with dynamic product context queried from MySQL.
+- **Sales Conversion Mandate:** Every AI response must provide direct, concise answers (<45 words), give realistic price estimates in BDT per sq.ft., recommend specific building models (e.g., BH-SB, BH-CB, LCV, PEB factory sheds), and provide an actionable call-to-action (direct WhatsApp link `+8801711200241` or quote request button) to convert visitors into booked consultations.
+
+## 6. Migration Priority Order
+- **Content First:** Customer-facing content, dynamic catalog pages, pricing calculators, and lead capture tools always take precedence over back-office admin tooling.
+
+## 7. Scope Exclusions
+- **No Career / Job Application System:** The career portal, job application forms, resumes, career listings seed, and admin career routes have been permanently removed per final user decision. Do not recreate or suggest reintroducing `/career.html`, `career_listings`, or career-related endpoints.
