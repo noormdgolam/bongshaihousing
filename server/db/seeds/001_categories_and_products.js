@@ -70,10 +70,17 @@ exports.seed = async function (knex) {
 
     if (p.floorData && !p.floorData.__error) {
       let variantSort = 0;
-      for (const [areaSqft, tier] of Object.entries(p.floorData)) {
+      for (const [areaKey, tier] of Object.entries(p.floorData)) {
+        // Most tier keys are a plain sqft number; a few aren't (Tiny
+        // House's "250-350" range, dv-110..113's "650x2" floor-count
+        // shorthand) - area_sqft keeps a best-effort leading number,
+        // area_label keeps the original string so nothing's lost.
+        const cleanNumber = Number(areaKey);
+        const areaSqft = Number.isFinite(cleanNumber) ? cleanNumber : (parseInt(areaKey, 10) || null);
         const [variantId] = await knex('product_variants').insert({
           product_id: productId,
-          area_sqft: Number(areaSqft),
+          area_sqft: areaSqft,
+          area_label: areaKey,
           bed: tier.bed ? parseInt(tier.bed, 10) || null : null,
           bath: tier.bath ? parseInt(tier.bath, 10) || null : null,
           kitchen: tier.kitchen ? parseInt(tier.kitchen, 10) || null : null,
