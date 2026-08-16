@@ -1,33 +1,80 @@
 {% extends "admin-layout.njk" %}
-{% block title %}Products{% endblock %}
-{% block header %}<h1 style="font-size:1.1rem; margin:0;">Products</h1>{% endblock %}
+{% block title %}Products Management{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Product Catalog Management</h1>{% endblock %}
+
 {% block content %}
-<div class="toolbar">
-  <form method="get" style="display:flex; gap:8px;">
-    <input type="text" name="q" value="{{ search }}" placeholder="Search title..." style="padding:8px 10px; border:1px solid var(--grey-200); border-radius:6px;">
-    <select name="category" onchange="this.form.submit()" style="padding:8px 10px; border:1px solid var(--grey-200); border-radius:6px;">
-      <option value="">All categories</option>
-      {% for c in categories %}<option value="{{ c.id }}" {% if categoryId == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
-    </select>
-    <button type="submit" class="btn">Filter</button>
-  </form>
-  <a href="/admin/products/new" class="btn btn-primary">+ New Product</a>
+<div class="card">
+  <div class="toolbar">
+    <form method="get" action="/admin/products" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+      <input type="text" name="q" value="{{ search }}" placeholder="Search by model or title..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:220px;">
+      <select name="category" onchange="this.form.submit()" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+        <option value="">All Categories</option>
+        {% for c in categories %}<option value="{{ c.id }}" {% if categoryId == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">Search</button>
+      {% if search or categoryId %}
+      <a href="/admin/products" class="btn">Clear</a>
+      {% endif %}
+    </form>
+    <a href="/admin/products/new" class="btn btn-primary">➕ New Product Model</a>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Preview</th>
+          <th>Model</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Price / sqft</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td style="width:50px; padding:6px 10px;">
+            {% if p.main_image %}
+            <img src="{{ p.main_image }}" alt="{{ p.model_number }}" style="width:44px; height:32px; object-fit:cover; border-radius:4px; border:1px solid var(--grey-200);">
+            {% else %}
+            <div style="width:44px; height:32px; background:var(--grey-100); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:var(--grey-500);">🏠</div>
+            {% endif %}
+          </td>
+          <td>
+            <strong style="color:var(--primary);">{{ p.model_number }}</strong>
+          </td>
+          <td>
+            <div style="font-weight:600;">{{ p.title }}</div>
+            <div style="font-size:0.8rem; color:var(--grey-500);">/{{ p.slug }}</div>
+          </td>
+          <td>{{ p.category_name }}</td>
+          <td>
+            {% if p.price_per_sqft %}
+            <strong style="color:var(--grey-900);">{{ p.price_per_sqft }}</strong> <span style="font-size:0.8rem; color:var(--grey-500);">{{ p.price_currency }}</span>
+            {% else %}
+            <span style="color:var(--grey-500);">Quote Basis</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if p.published %}
+            <span class="pill pill-success">Published</span>
+            {% else %}
+            <span class="pill pill-muted">Draft</span>
+            {% endif %}
+          </td>
+          <td style="white-space:nowrap;">
+            <a href="/admin/products/{{ p.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+            <a href="/{{ p.slug }}" target="_blank" class="btn" style="padding:4px 8px; font-size:0.8rem;" title="View Live Page">↗</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center; padding:30px; color:var(--grey-500);">No products found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-<table>
-  <thead><tr><th>Model</th><th>Title</th><th>Category</th><th>Price/sqft</th><th>Status</th><th></th></tr></thead>
-  <tbody>
-    {% for p in products %}
-    <tr>
-      <td>{{ p.model_number }}</td>
-      <td>{{ p.title }}</td>
-      <td>{{ p.category_name }}</td>
-      <td>{% if p.price_per_sqft %}{{ p.price_per_sqft }} {{ p.price_currency }}{% else %}—{% endif %}</td>
-      <td>{% if p.published %}<span class="pill pill-success">Published</span>{% else %}<span class="pill pill-muted">Draft</span>{% endif %}</td>
-      <td><a href="/admin/products/{{ p.id }}/edit">Edit</a></td>
-    </tr>
-    {% else %}
-    <tr><td colspan="6" style="text-align:center; color:var(--grey-500);">No products found.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
 {% endblock %}
+

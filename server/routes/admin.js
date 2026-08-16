@@ -10,16 +10,107 @@ function adminVars(req, extra) {
 }
 
 router.get('/admin', async (req, res) => {
-  const [productCount] = await db('products').count({ count: '*' });
-  const [categoryCount] = await db('categories').count({ count: '*' });
-  const [projectCount] = await db('projects').count({ count: '*' });
+  let productCount = { count: 0 };
+  let categoryCount = { count: 0 };
+  let projectCount = { count: 0 };
+  let leadCount = { count: 0 };
+  let newLeadCount = { count: 0 };
+  let recentLeads = [];
+
+  if (db) {
+    try {
+      [productCount] = await db('products').count({ count: '*' });
+      [categoryCount] = await db('categories').count({ count: '*' });
+      [projectCount] = await db('projects').count({ count: '*' });
+      
+      const hasLeads = await db.schema.hasTable('leads');
+      if (hasLeads) {
+        [leadCount] = await db('leads').count({ count: '*' });
+        [newLeadCount] = await db('leads').where({ status: 'new' }).count({ count: '*' });
+        recentLeads = await db('leads').orderBy('created_at', 'desc').limit(6);
+      }
+    } catch (e) {
+      console.error('Admin dashboard query error:', e.message);
+    }
+  }
+
   res.render('admin/dashboard.njk', adminVars(req, {
     counts: {
-      products: productCount.count,
-      categories: categoryCount.count,
-      projects: projectCount.count,
+      products: productCount?.count || 0,
+      categories: categoryCount?.count || 0,
+      projects: projectCount?.count || 0,
+      leads: leadCount?.count || 0,
+      newLeads: newLeadCount?.count || 0,
     },
+    recentLeads,
   }));
+});
+
+// ---- Leads / Inquiries ----
+
+router.get('/admin/leads', async (req, res) => {
+  const status = req.query.status || 'all';
+  const search = (req.query.q || '').trim();
+  let leads = [];
+
+  if (db) {
+    try {
+      const hasLeads = await db.schema.hasTable('leads');
+      if (hasLeads) {
+        let query = db('leads').orderBy('created_at', 'desc');
+        if (status && status !== 'all') query = query.where({ status });
+        if (search) {
+          query = query.where((builder) => {
+            builder.where('name', 'like', `%${search}%`)
+              .orWhere('phone', 'like', `%${search}%`)
+              .orWhere('email', 'like', `%${search}%`)
+              .orWhere('district', 'like', `%${search}%`);
+          });
+        }
+        leads = await query;
+      }
+    } catch (e) {
+      console.error('Admin leads list error:', e.message);
+    }
+  }
+
+  res.render('admin/leads/list.njk', adminVars(req, { leads, status, search }));
+});
+
+router.get('/admin/leads/:id', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const lead = await db('leads').where({ id: req.params.id }).first();
+    if (!lead) return res.status(404).send('Lead not found');
+    res.render('admin/leads/detail.njk', adminVars(req, { lead }));
+  } catch (e) {
+    res.status(500).send('Database error: ' + e.message);
+  }
+});
+
+router.post('/admin/leads/:id', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { status, admin_notes } = req.body;
+  try {
+    await db('leads').where({ id: req.params.id }).update({
+      status: status || 'new',
+      admin_notes: admin_notes || null,
+      updated_at: db.fn.now(),
+    });
+    res.redirect(`/admin/leads/${req.params.id}`);
+  } catch (e) {
+    res.status(400).send('Update error: ' + e.message);
+  }
+});
+
+router.post('/admin/leads/:id/delete', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    await db('leads').where({ id: req.params.id }).del();
+    res.redirect('/admin/leads');
+  } catch (e) {
+    res.status(400).send('Delete error: ' + e.message);
+  }
 });
 
 // ---- Products ----

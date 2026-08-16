@@ -2,6 +2,12 @@ const express = require('express');
 const { stripTags, singleLine, sanitizeEmail, safeFilenamePart } = require('../lib/sanitize');
 const { buildQuotePdf } = require('../lib/pdf');
 const { sendMail } = require('../lib/mailer');
+let db;
+try {
+  db = require('../lib/db');
+} catch (e) {
+  db = null;
+}
 
 const router = express.Router();
 
@@ -30,6 +36,27 @@ router.post('/send_email.php', async (req, res) => {
 
   if (!name || !email || !phoneRaw) {
     return res.status(400).json({ status: 'error', message: 'Please fill in all required fields.' });
+  }
+
+  // Save to database leads table if DB is available
+  if (db) {
+    try {
+      await db('leads').insert({
+        name,
+        email,
+        phone,
+        district: district !== 'N/A' ? district : null,
+        upazila: upazila !== 'N/A' ? upazila : null,
+        model: model !== 'N/A' ? model : null,
+        floor_area: floorArea !== 'N/A' ? floorArea : null,
+        bedrooms: bedrooms !== 'N/A' ? bedrooms : null,
+        message: message !== 'No additional notes.' ? message : null,
+        status: 'new',
+        source: 'contact_form',
+      });
+    } catch (dbErr) {
+      console.error('Failed to save lead to database:', dbErr.message);
+    }
   }
 
   const filename = `${safeFilenamePart(name)}_${safeFilenamePart(model)}.pdf`;

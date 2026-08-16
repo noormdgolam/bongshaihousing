@@ -1,0 +1,111 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Lead #{{ lead.id }} — {{ lead.name }}{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Inquiry Details: {{ lead.name }}</h1>{% endblock %}
+
+{% block content %}
+<div style="margin-bottom:16px;">
+  <a href="/admin/leads" class="btn">← Back to Inquiries</a>
+</div>
+
+<div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+  <!-- Left Column: Customer & Quote Info -->
+  <div>
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">
+        👤 Customer Information
+      </h2>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:14px;">
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Full Name</span>
+          <strong style="font-size:1rem;">{{ lead.name }}</strong>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Received Date</span>
+          <span>{{ lead.created_at | string }}</span>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Phone Number</span>
+          <a href="tel:{{ lead.phone }}" style="font-weight:700;">{{ lead.phone }}</a>
+          <a href="https://wa.me/{{ lead.phone | replace('+', '') | replace('-', '') | replace(' ', '') }}?text=Hello%20{{ lead.name | urlencode }}%2C%20thank%20you%20for%20contacting%20Bongshai%20Housing." target="_blank" class="btn" style="margin-left:8px; padding:2px 8px; font-size:0.75rem; background:#10B981; color:white; border-color:#10B981;">
+            💬 Open WhatsApp
+          </a>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Email Address</span>
+          <a href="mailto:{{ lead.email }}">{{ lead.email }}</a>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Location</span>
+          <span>{{ lead.upazila or 'N/A' }}, {{ lead.district or 'N/A' }}</span>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Lead Source</span>
+          <span class="pill pill-muted">{{ lead.source or 'contact_form' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">
+        📐 Requested Building &amp; Specs
+      </h2>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-bottom:16px;">
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Building Model</span>
+          <strong>{{ lead.model or 'General Inquiry' }}</strong>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Floor Area</span>
+          <strong>{{ lead.floor_area or 'N/A' }} {% if lead.floor_area %}Sq.Ft{% endif %}</strong>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Bedrooms</span>
+          <strong>{{ lead.bedrooms or 'N/A' }}</strong>
+        </div>
+      </div>
+
+      <div>
+        <span style="font-size:0.8rem; color:var(--grey-500); display:block; margin-bottom:4px;">Customer Notes / Message</span>
+        <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:6px; padding:12px; font-size:0.9rem; white-space:pre-wrap;">{{ lead.message or 'No additional notes provided.' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Status & Internal Notes -->
+  <div>
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">
+        ⚙️ Lead Status &amp; Notes
+      </h2>
+      <form method="post" action="/admin/leads/{{ lead.id }}">
+        <div class="form-row">
+          <label for="leadStatus">Status</label>
+          <select id="leadStatus" name="status">
+            <option value="new" {% if lead.status == 'new' %}selected{% endif %}>🟢 New</option>
+            <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>🔵 Contacted</option>
+            <option value="in_negotiation" {% if lead.status == 'in_negotiation' %}selected{% endif %}>🟡 In Negotiation</option>
+            <option value="closed" {% if lead.status == 'closed' %}selected{% endif %}>⚪ Closed / Won</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="adminNotes">Internal Sales Notes</label>
+          <textarea id="adminNotes" name="admin_notes" placeholder="Add notes on follow-up, pricing offered, customer budget...">{{ lead.admin_notes }}</textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" style="width:100%;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card" style="border-top:3px solid var(--danger);">
+      <h3 style="font-size:0.9rem; font-weight:700; color:var(--danger); margin-top:0;">Delete Inquiry</h3>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-bottom:12px;">Permanently remove this lead from the database.</p>
+      <form method="post" action="/admin/leads/{{ lead.id }}/delete" onsubmit="return confirm('Are you sure you want to delete this lead?');">
+        <button type="submit" class="btn btn-danger" style="width:100%;">Delete Lead</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

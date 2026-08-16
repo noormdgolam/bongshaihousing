@@ -1,11 +1,105 @@
 {% extends "admin-layout.njk" %}
 {% block title %}Dashboard{% endblock %}
-{% block header %}<h1 style="font-size:1.1rem; margin:0;">Dashboard</h1>{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Dashboard Overview</h1>{% endblock %}
+
 {% block content %}
-<div class="stat-grid">
-  <div class="stat-card"><div class="num">{{ counts.products }}</div><div class="label">Products</div></div>
-  <div class="stat-card"><div class="num">{{ counts.categories }}</div><div class="label">Categories</div></div>
-  <div class="stat-card"><div class="num">{{ counts.projects }}</div><div class="label">Projects</div></div>
+<!-- Quick Stats Grid -->
+<div class="stat-grid" style="margin-bottom:24px;">
+  <div class="stat-card" style="border-left: 4px solid var(--primary);">
+    <div class="num">{{ counts.leads }}</div>
+    <div class="label">Total Inquiries / Leads</div>
+    {% if counts.newLeads > 0 %}
+    <span class="pill pill-success" style="margin-top:6px;">{{ counts.newLeads }} New</span>
+    {% endif %}
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #3B82F6;">
+    <div class="num">{{ counts.products }}</div>
+    <div class="label">Product Models</div>
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #10B981;">
+    <div class="num">{{ counts.categories }}</div>
+    <div class="label">Categories</div>
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #F59E0B;">
+    <div class="num">{{ counts.projects }}</div>
+    <div class="label">Completed Projects</div>
+  </div>
+</div>
+
+<!-- Quick Shortcuts -->
+<div class="card" style="margin-bottom:24px; padding:16px 20px;">
+  <div style="font-weight:700; font-size:0.95rem; margin-bottom:12px; color:var(--grey-700);">⚡ Quick Actions</div>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <a href="/admin/products/new" class="btn btn-primary">➕ Add Product Model</a>
+    <a href="/admin/projects/new" class="btn">➕ Add Project</a>
+    <a href="/admin/categories/new" class="btn">➕ Add Category</a>
+    <a href="/admin/leads" class="btn">📥 View All Inquiries</a>
+    <a href="/" target="_blank" class="btn" style="margin-left:auto;">🌐 View Live Website</a>
+  </div>
+</div>
+
+<!-- Recent Inquiries Table -->
+<div class="card">
+  <div class="toolbar" style="margin-bottom:12px;">
+    <h2 style="font-size:1.05rem; font-weight:700; margin:0;">📥 Recent Customer Quote Inquiries</h2>
+    <a href="/admin/leads" class="btn" style="font-size:0.85rem;">View All Leads →</a>
+  </div>
+
+  {% if recentLeads and recentLeads.length %}
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Phone / WhatsApp</th>
+          <th>Location</th>
+          <th>Model / Area</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lead in recentLeads %}
+        <tr>
+          <td style="color:var(--grey-500); font-size:0.8rem; white-space:nowrap;">
+            {{ lead.created_at | string | truncate(16, true, '') }}
+          </td>
+          <td>
+            <strong>{{ lead.name }}</strong>
+            <div style="font-size:0.8rem; color:var(--grey-500);">{{ lead.email }}</div>
+          </td>
+          <td>
+            <a href="tel:{{ lead.phone }}" style="font-weight:600;">{{ lead.phone }}</a>
+            <a href="https://wa.me/{{ lead.phone | replace('+', '') | replace('-', '') | replace(' ', '') }}?text=Hello%20{{ lead.name | urlencode }}%2C%20regarding%20your%20Bongshai%20Housing%20quote" target="_blank" style="margin-left:6px; color:#10B981;" title="Chat on WhatsApp">💬</a>
+          </td>
+          <td>{{ lead.upazila or '' }} {{ lead.district or 'N/A' }}</td>
+          <td>
+            <span class="pill pill-muted">{{ lead.model or 'General Inquiry' }}</span>
+            {% if lead.floor_area %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ lead.floor_area }} Sq.Ft</div>{% endif %}
+          </td>
+          <td>
+            {% if lead.status == 'new' %}
+            <span class="pill pill-success">New</span>
+            {% elif lead.status == 'contacted' %}
+            <span class="pill" style="background:#dbeafe; color:#1e40af;">Contacted</span>
+            {% else %}
+            <span class="pill pill-muted">{{ lead.status }}</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="/admin/leads/{{ lead.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">Details</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="color:var(--grey-500); margin:12px 0; font-size:0.9rem;">
+    No customer inquiries in the database yet. New quote requests from <code>contact.html</code> and the website forms will automatically appear here.
+  </p>
+  {% endif %}
 </div>
 {% endblock %}
 

@@ -1,16 +1,45 @@
 {% extends "admin-layout.njk" %}
-{% block title %}Categories{% endblock %}
-{% block header %}<h1 style="font-size:1.1rem; margin:0;">Categories</h1>{% endblock %}
+{% block title %}Categories Management{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Product Categories Management</h1>{% endblock %}
+
 {% block content %}
-<div class="toolbar"><div></div><a href="/admin/categories/new" class="btn btn-primary">+ New Category</a></div>
-<table>
-  <thead><tr><th>Name</th><th>Slug</th><th>Landing Page</th><th></th></tr></thead>
-  <tbody>
-    {% for c in categories %}
-    <tr><td>{{ c.name }}</td><td>{{ c.slug }}</td><td>{{ c.landing_page_slug or '—' }}</td><td><a href="/admin/categories/{{ c.id }}/edit">Edit</a></td></tr>
-    {% else %}
-    <tr><td colspan="4" style="text-align:center; color:var(--grey-500);">No categories yet.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="card">
+  <div class="toolbar">
+    <div></div>
+    <a href="/admin/categories/new" class="btn btn-primary">➕ New Category</a>
+  </div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Category Name</th>
+          <th>Prefix / Slug</th>
+          <th>Landing Page</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+        <tr>
+          <td><strong style="color:var(--grey-900);">{{ c.name }}</strong></td>
+          <td><span class="pill pill-muted"><code>{{ c.slug }}</code></span></td>
+          <td>
+            {% if c.landing_page_slug %}
+            <a href="/{{ c.landing_page_slug }}" target="_blank" style="color:var(--primary);">/{{ c.landing_page_slug }} ↗</a>
+            {% else %}
+            <span style="color:var(--grey-500);">—</span>
+            {% endif %}
+          </td>
+          <td style="white-space:nowrap;">
+            <a href="/admin/categories/{{ c.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" style="text-align:center; padding:30px; color:var(--grey-500);">No categories found in database.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
+
