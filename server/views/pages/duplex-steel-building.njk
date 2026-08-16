@@ -1,0 +1,360 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+    "name": "Bongshai Housing Ltd.",
+    "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+    "url": "https://bongshaihousing.com",
+    "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+    "telephone": ["+8801781636613"],
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+      "areaServed": [{"@type": "State", "name": "Bagerhat"}, {"@type": "State", "name": "Bandarban"}, {"@type": "State", "name": "Barguna"}, {"@type": "State", "name": "Barishal"}, {"@type": "State", "name": "Bhola"}, {"@type": "State", "name": "Bogura"}, {"@type": "State", "name": "Brahmanbaria"}, {"@type": "State", "name": "Chandpur"}, {"@type": "State", "name": "Chapai Nawabganj"}, {"@type": "State", "name": "Chattogram"}, {"@type": "State", "name": "Chuadanga"}, {"@type": "State", "name": "Cox's Bazar"}, {"@type": "State", "name": "Cumilla"}, {"@type": "State", "name": "Dhaka"}, {"@type": "State", "name": "Dinajpur"}, {"@type": "State", "name": "Faridpur"}, {"@type": "State", "name": "Feni"}, {"@type": "State", "name": "Gaibandha"}, {"@type": "State", "name": "Gazipur"}, {"@type": "State", "name": "Gopalganj"}, {"@type": "State", "name": "Habiganj"}, {"@type": "State", "name": "Jamalpur"}, {"@type": "State", "name": "Jashore"}, {"@type": "State", "name": "Jhalokati"}, {"@type": "State", "name": "Jhenaidah"}, {"@type": "State", "name": "Joypurhat"}, {"@type": "State", "name": "Khagrachari"}, {"@type": "State", "name": "Khulna"}, {"@type": "State", "name": "Kishoreganj"}, {"@type": "State", "name": "Kurigram"}, {"@type": "State", "name": "Kushtia"}, {"@type": "State", "name": "Lakshmipur"}, {"@type": "State", "name": "Lalmonirhat"}, {"@type": "State", "name": "Madaripur"}, {"@type": "State", "name": "Magura"}, {"@type": "State", "name": "Manikganj"}, {"@type": "State", "name": "Meherpur"}, {"@type": "State", "name": "Moulvibazar"}, {"@type": "State", "name": "Munshiganj"}, {"@type": "State", "name": "Mymensingh"}, {"@type": "State", "name": "Naogaon"}, {"@type": "State", "name": "Narail"}, {"@type": "State", "name": "Narayanganj"}, {"@type": "State", "name": "Narsingdi"}, {"@type": "State", "name": "Natore"}, {"@type": "State", "name": "Netrokona"}, {"@type": "State", "name": "Nilphamari"}, {"@type": "State", "name": "Noakhali"}, {"@type": "State", "name": "Pabna"}, {"@type": "State", "name": "Panchagarh"}, {"@type": "State", "name": "Patuakhali"}, {"@type": "State", "name": "Pirojpur"}, {"@type": "State", "name": "Rajbari"}, {"@type": "State", "name": "Rajshahi"}, {"@type": "State", "name": "Rangamati"}, {"@type": "State", "name": "Rangpur"}, {"@type": "State", "name": "Satkhira"}, {"@type": "State", "name": "Shariatpur"}, {"@type": "State", "name": "Sherpur"}, {"@type": "State", "name": "Sirajganj"}, {"@type": "State", "name": "Sunamganj"}, {"@type": "State", "name": "Sylhet"}, {"@type": "State", "name": "Tangail"}, {"@type": "State", "name": "Thakurgaon"}],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.8728",
+      "longitude": "90.3984"
+    }
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Duplex Steel Building",
+      "item": "https://bongshaihousing.com/duplex-steel-building.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Duplex Steel Building",
+  "description": "Two-floor steel-composite duplex home by Bongshai Housing. Private single-family multi-level living. Grade 50 steel, ISO certified.",
+  "image": "https://bongshaihousing.com/images/products/dv-101.webp",
+  "brand": {"@type": "Brand", "name": "Bongshai Housing Ltd.", "url": "https://bongshaihousing.com"},
+  "manufacturer": {"@type": "Organization", "name": "Bongshai Housing Ltd.", "@id": "https://bongshaihousing.com/#organization", "foundingDate": "2008"},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "BDT",
+    "price": "2500",
+    "availability": "https://schema.org/InStock",
+    "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
+  },
+  "category": "Pre-Engineered Steel Building",
+  "countryOfOrigin": {"@type": "Country", "name": "Bangladesh"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "dateModified": "2026-08-08",
+  "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".faq-answer"]},
+  "author": {
+    "@type": "Person",
+    "name": "SMA AWAL",
+    "jobTitle": "Chief Engineer",
+    "worksFor": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does a duplex steel building cost in Bangladesh?",
+      "acceptedAnswer": {"@type": "Answer", "text": "A duplex steel building by Bongshai Housing costs Tk 2,500-2,750 per sqft. Available in 600 sqft/floor (3 bed, 2 bath) or 850 sqft/floor (5 bed, 4 bath) layouts."}
+    }
+    ,
+    {
+      "@type": "Question",
+      "name": "What is the difference between a duplex and an apartment steel building?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Both are 2-floor steel-composite structures at the same price, but the Duplex is designed for private single-family living, while the Apartment line accommodates multi-family or rental-style occupation."}
+    }
+    ,
+    {
+      "@type": "Question",
+      "name": "Can I customise the floor plan of my duplex steel building?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Yes. Bongshai Housing architects adapt standard floor plan tiers to your land dimensions and family requirements at no additional design cost."}
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section aria-labelledby="ssb-page-title" class="page-hero">
+<div class="container page-hero-content">
+<span class="page-hero-label">Composite Construction</span>
+<h1 class="page-hero-title" data-aos="fade-up" id="ssb-page-title">Duplex Steel Building</h1>
+<p class="page-hero-text">Private, two-floor steel-composite family homes — combining structural durability with fast, precision-engineered construction across Bangladesh.</p>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+<a href="index.html">Home</a><span>/</span><a href="products-and-solutions.html">Products</a><span>/</span><span aria-current="page">Duplex Steel Building</span>
+</nav>
+</div>
+</section>
+
+<!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+<section class="section" style="padding: 2rem 0; background: var(--off-white);">
+  <div class="container">
+    <p><strong>Bongshai Housing specializes in the design and construction of premium duplex steel-composite homes in Bangladesh. Our prefabricated residential solutions offer unparalleled structural integrity, rapid assembly, and modern architectural aesthetics.</strong></p>
+    <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+      By <strong>Bongshai Housing Engineering Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+    </div>
+  </div>
+</section>
+
+<div class="container" style="margin-top: 40px; margin-bottom: 80px;"><div class="page-with-sidebar"><aside aria-label="Product categories" class="cat-sidebar" data-tilt="">
+<!-- Mobile toggle -->
+<button aria-controls="catSidebarBody" aria-expanded="false" class="cat-sidebar-toggle" id="catSidebarToggle">
+<span>All Products</span>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<!-- Desktop header -->
+<div class="cat-sidebar-header">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="3" y="14"></rect><rect height="7" width="7" x="14" y="14"></rect></svg>
+            All Products
+          </div>
+<div class="cat-sidebar-body" id="catSidebarBody">
+<div class="cat-group-label">Residential Prefab</div>
+          <a class="cat-item" href="apartment-building.html">Apartment building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item active" href="duplex-steel-building.html">Duplex steel building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="simplex-steel-building.html">Simplex Steel Building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="cottage-house.html">Cottage House<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="container-house.html">Container house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="steel-house.html">Steel house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="tiny-house.html">Tiny house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="wooden-house.html">Wooden House<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="concrete-building.html">Concrete building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <div class="cat-group-label">Commercial &amp; Industrial</div>
+<a class="cat-item" href="industrial-sheds.html">Industrial Steel Sheds<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<a class="cat-item" href="worker-accommodation.html">Worker Accommodation<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<div class="cat-group-label">Interactive Tools</div>
+<a class="cat-item" href="solutions.html">Get Quote<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<div class="cat-sidebar-cta">
+<a href="contact.html">📞 Get a Free Quote</a>
+</div>
+</div>
+</aside><div class="page-sidebar-content"><div style="margin-bottom: 60px;">
+
+<div class="stagger product-grid">
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-201" loading="eager" fetchpriority="high" src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-201" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-201</h2>
+<p class="property-desc">An elegant duplex steel building offering luxurious two-floor living with a stunning view.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-201.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-202" loading="lazy" src="images/products/dv-102.webp" srcset="images/products/dv-102-400w.webp 400w, images/products/dv-102-700w.webp 700w, images/products/dv-102.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-202" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-202</h2>
+<p class="property-desc">A duplex design built for families who want separate living and sleeping floors.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-202.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-203" loading="lazy" src="images/products/dv-103.webp" srcset="images/products/dv-103-400w.webp 400w, images/products/dv-103-700w.webp 700w, images/products/dv-103.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-203" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-203</h2>
+<p class="property-desc">Two-story duplex construction combining structural strength with open living spaces.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-203.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-204" loading="lazy" src="images/products/dv-104.webp" srcset="images/products/dv-104-400w.webp 400w, images/products/dv-104-700w.webp 700w, images/products/dv-104.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-204" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-204</h2>
+<p class="property-desc">A duplex steel building engineered for fast assembly and long-term durability.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-204.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-205" loading="lazy" src="images/products/dv-105.webp" srcset="images/products/dv-105-400w.webp 400w, images/products/dv-105-700w.webp 700w, images/products/dv-105.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-205" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-205</h2>
+<p class="property-desc">Spacious duplex layout ideal for joint or multi-generational families.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-205.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-206" loading="lazy" src="images/products/dv-106.webp" srcset="images/products/dv-106-400w.webp 400w, images/products/dv-106-700w.webp 700w, images/products/dv-106.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-206" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-206</h2>
+<p class="property-desc">A modern duplex design with a private upper floor and open ground-level living.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-206.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-207" loading="lazy" src="images/products/dv-107.webp" srcset="images/products/dv-107-400w.webp 400w, images/products/dv-107-700w.webp 700w, images/products/dv-107.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-207" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-207</h2>
+<p class="property-desc">Duplex living built to maximize natural light across both floors.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-207.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-208" loading="lazy" src="images/products/dv-108.webp" srcset="images/products/dv-108-400w.webp 400w, images/products/dv-108-700w.webp 700w, images/products/dv-108.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-208" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-208</h2>
+<p class="property-desc">A steel-composite duplex offering superior earthquake and wind resistance.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-208.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-209" loading="lazy" src="images/products/dv-109.webp" srcset="images/products/dv-109-400w.webp 400w, images/products/dv-109-700w.webp 700w, images/products/dv-109.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-209" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-209</h2>
+<p class="property-desc">Duplex architecture designed for privacy without sacrificing shared family space.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-209.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-210" loading="lazy" src="images/products/dv-110.webp" srcset="images/products/dv-110-400w.webp 400w, images/products/dv-110-700w.webp 700w, images/products/dv-110.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-210" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-210</h2>
+<p class="property-desc">A premium duplex build combining aesthetics with practical two-floor functionality.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-210.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-211" loading="lazy" src="images/products/dv-111.webp" srcset="images/products/dv-111-400w.webp 400w, images/products/dv-111-700w.webp 700w, images/products/dv-111.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-211" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-211</h2>
+<p class="property-desc">Duplex housing engineered for Bangladesh's urban and semi-urban expansion.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-211.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-212" loading="lazy" src="images/products/dv-112.webp" srcset="images/products/dv-112-400w.webp 400w, images/products/dv-112-700w.webp 700w, images/products/dv-112.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-212" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model No-BH-DV-212</h2>
+<p class="property-desc">A well-planned duplex layout with dedicated space for guests and family.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="bh-dv-212.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:12">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model DV-110" loading="lazy" src="images/products/dv-110.webp" srcset="images/products/dv-110-400w.webp 400w, images/products/dv-110-700w.webp 700w, images/products/dv-110.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model DV-110" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model DV-110</h2>
+<p class="property-desc">Two-floor duplex construction built for durability against monsoon conditions.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="dv-110.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:13">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model DV-111" loading="lazy" src="images/products/dv-111.webp" srcset="images/products/dv-111-400w.webp 400w, images/products/dv-111-700w.webp 700w, images/products/dv-111.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model DV-111" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model DV-111</h2>
+<p class="property-desc">A duplex home designed to grow with your family's changing needs.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="dv-111.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:14">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model DV-112" loading="lazy" src="images/products/dv-112.webp" srcset="images/products/dv-112-400w.webp 400w, images/products/dv-112-700w.webp 700w, images/products/dv-112.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model DV-112" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model DV-112</h2>
+<p class="property-desc">Elegant duplex architecture with a striking exterior and functional interior.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="dv-112.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:15">
+<div class="property-img-wrap"><img alt="Bongshai Housing Model DV-113" loading="lazy" src="images/products/dv-113.webp" srcset="images/products/dv-113-400w.webp 400w, images/products/dv-113-700w.webp 700w, images/products/dv-113.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model DV-113" width="1024" height="1024"></div>
+<div class="property-card-body" data-aos="fade-up">
+<span class="property-type">Duplex Steel Building</span>
+<h2 class="property-name">Model DV-113</h2>
+<p class="property-desc">A duplex steel building offering the space of a house with faster build time.</p>
+<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
+<a class="btn btn-primary" href="dv-113.html" style="width:100%;justify-content:center;">View Details</a>
+</div></div>
+</div>
+<!-- OVERVIEW -->
+<!-- PACKAGES -->
+<!-- COMPOSITE ELEMENTS -->
+
+    <!-- ======================================================
+         ADVANTAGES OF STEEL-RC BUILDING
+    ====================================================== -->
+    <section class="section process-bg" id="advantages" aria-labelledby="advantages-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Our Technology</div>
+          <h2 class="section-title" data-aos="fade-up" id="advantages-title">What are the Advantages of Steel-RC Building?</h2>
+          <p class="section-subtitle">Why steel-composite construction is the smart choice for a private, two-floor family home.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4); max-width: 900px; margin: 0 auto;" class="reveal">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Cost-effective and Eco-friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> High strength, inflexibility and high load bearing capacity</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Pre-fabricated, easy to install and dismantle</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Lightness, easy to transport and re-located</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Low maintenance cost</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Using several times and recycling</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Increase area efficiency by 10%--20%</li>
+          </ul>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Environment friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Weather-resistant with proper coating and maintenance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for strong seismic performance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for high wind-load resistance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Energy saving with good thermal insulation system</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> 50~60 years’ life span</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

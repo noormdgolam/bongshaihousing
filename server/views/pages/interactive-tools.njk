@@ -1,0 +1,399 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Steel Building Projects in Bangladesh",
+    "description": "Portfolio of BONGSHAI HOUSING's completed pre-engineered steel building projects across multiple regions in Bangladesh.",
+    "url": "https://bongshaihousing.com/projects.html",
+    "isPartOf": {"@type": "WebSite", "url": "https://bongshaihousing.com"},
+    "about": {
+      "@type": "GeneralContractor",
+      "name": "Bongshai Housing Ltd.", "foundingDate": "2008",
+      "areaServed": [
+        {"@type": "City", "name": "Dhaka"},
+        {"@type": "City", "name": "Chotrogram"},
+        {"@type": "City", "name": "Cumilla"},
+        {"@type": "City", "name": "Rangpur"},
+        {"@type": "City", "name": "Bogra"},
+        {"@type": "City", "name": "Gazipur"},
+        {"@type": "City", "name": "Faridpur"}
+      ]
+    }
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Interactive Tools",
+      "item": "https://bongshaihousing.com/interactive-tools.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Steel Building Calculator - Bongshai Housing Interactive Tools",
+  "description": "Free online tools: steel building cost calculator, EMI calculator, and land coverage estimator by Bongshai Housing Ltd. Get an instant quote estimate.",
+  "url": "https://bongshaihousing.com/interactive-tools.html",
+  "applicationCategory": "Construction Calculator",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BDT"}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+  <section class="bg-primary text-white py-16" style="background: linear-gradient(135deg, var(--primary), var(--primary-light));">
+    <div class="container text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Interactive Tools</h1>
+      <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">Experience our projects in a whole new dimension with advanced visualization and estimation tools.</p>
+    </div>
+  </section>
+
+  <!-- Interactive SVG Floor Plan Section -->
+  <section class="py-16 bg-white" id="floor-plan-viewer">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-primary mb-4">Interactive Floor Plan Viewer</h2>
+        <p class="text-gray-600 max-w-3xl mx-auto">Hover over the rooms in our premium duplex model to explore dimensions, materials, and design details.</p>
+      </div>
+
+      <div class="flex flex-col lg:flex-row gap-8 items-start">
+        
+        <!-- The SVG Viewer Container -->
+        <div class="w-full lg:w-2/3 bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100 relative" style="overflow: hidden;">
+          
+          <!-- Tooltip element -->
+          <div id="room-tooltip" style="position: absolute; display: none; background: rgba(10,37,64,0.95); color: white; padding: 12px 16px; border-radius: 8px; z-index: 50; pointer-events: none; transition: opacity 0.2s; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <h3 id="tt-title" style="font-weight: bold; margin: 0 0 5px 0; font-size: 1rem; color: var(--accent);">Room Name</h3>
+            <p id="tt-desc" style="margin: 0; font-size: 0.85rem; color: #cbd5e1;">Details</p>
+          </div>
+
+          <!-- Dummy Architectural SVG Floor Plan -->
+          <svg id="interactive-floorplan" viewBox="0 0 800 600" style="width: 100%; height: auto; max-height: 600px; display: block;">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="1"></path>
+              </pattern>
+              <style>
+                .room {
+                  fill: #f8fafc;
+                  stroke: #334155;
+                  stroke-width: 2;
+                  transition: all 0.3s ease;
+                  cursor: pointer;
+                }
+                .room:hover {
+                  fill: rgba(234, 179, 8, 0.2); /* Accent color tint */
+                  stroke: var(--accent);
+                  stroke-width: 3;
+                }
+                .wall { fill: #0f172a; }
+                .door { fill: #fff; stroke: #0f172a; stroke-width: 2; }
+                .window { fill: #bae6fd; stroke: #0284c7; stroke-width: 2; }
+                .room-text { fill: #64748b; font-family: sans-serif; font-weight: bold; pointer-events: none; text-anchor: middle; font-size: 14px; }
+              </style>
+            </defs>
+            
+            <rect width="100%" height="100%" fill="url(#grid)"></rect>
+            
+            <!-- Exterior Walls -->
+            <rect x="90" y="90" width="620" height="420" fill="none" stroke="#0f172a" stroke-width="6"></rect>
+
+            <!-- Rooms (Paths/Rects) -->
+            <!-- Living Room -->
+            <rect class="room" x="100" y="100" width="300" height="250" data-name="Living Room" data-details="Dimensions: 20' x 16'<br>Flooring: Italian Marble<br>Features: Large windows, false ceiling."></rect>
+            <text x="250" y="230" class="room-text">LIVING ROOM</text>
+
+            <!-- Kitchen -->
+            <rect class="room" x="410" y="100" width="290" height="150" data-name="Modern Kitchen" data-details="Dimensions: 18' x 10'<br>Flooring: Anti-slip tiles<br>Features: Modular cabinets, Island counter."></rect>
+            <text x="555" y="180" class="room-text">KITCHEN</text>
+
+            <!-- Dining Area -->
+            <rect class="room" x="410" y="260" width="290" height="90" data-name="Dining Area" data-details="Dimensions: 18' x 8'<br>Capacity: 8 persons<br>Lighting: Pendant lights."></rect>
+            <text x="555" y="310" class="room-text">DINING</text>
+
+            <!-- Master Bedroom -->
+            <rect class="room" x="100" y="360" width="250" height="140" data-name="Master Bedroom" data-details="Dimensions: 16' x 14'<br>Flooring: Hardwood<br>Features: Walk-in closet attached."></rect>
+            <text x="225" y="435" class="room-text">MASTER BEDROOM</text>
+
+            <!-- Bathroom -->
+            <rect class="room" x="360" y="360" width="100" height="140" data-name="Master Bath" data-details="Dimensions: 8' x 14'<br>Fittings: Grohe / Jaguar<br>Features: Glass shower enclosure."></rect>
+            <text x="410" y="435" class="room-text">BATH</text>
+
+            <!-- Guest Bedroom -->
+            <rect class="room" x="470" y="360" width="230" height="140" data-name="Guest Bedroom" data-details="Dimensions: 15' x 14'<br>Flooring: Premium Tiles<br>Features: Garden view."></rect>
+            <text x="585" y="435" class="room-text">GUEST BED</text>
+
+            <!-- Doors -->
+            <line x1="400" y1="200" x2="400" y2="240" class="door"></line> <!-- Living to Kitchen/Dining -->
+            <line x1="300" y1="350" x2="340" y2="350" class="door"></line> <!-- Living to Master -->
+            <line x1="470" y1="350" x2="510" y2="350" class="door"></line> <!-- Dining to Guest -->
+
+            <!-- Windows -->
+            <rect x="90" y="150" width="6" height="80" class="window"></rect>
+            <rect x="704" y="400" width="6" height="60" class="window"></rect>
+            <rect x="500" y="90" width="80" height="6" class="window"></rect>
+          </svg>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="w-full lg:w-1/3">
+          <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-accent">
+            <h3 class="text-2xl font-bold text-primary mb-4" id="panel-title">Select a Room</h3>
+            <p class="text-gray-600 mb-6" id="panel-desc">Hover over or click any room on the floor plan to view detailed specifications, materials, and architectural features.</p>
+            
+            <ul class="space-y-3" id="panel-features">
+              <li class="flex items-center text-sm text-gray-500"><i class="fas fa-check-circle text-green-500 mr-2"></i> Interactive architectural blueprints</li>
+              <li class="flex items-center text-sm text-gray-500"><i class="fas fa-check-circle text-green-500 mr-2"></i> Detailed material specifications</li>
+              <li class="flex items-center text-sm text-gray-500"><i class="fas fa-check-circle text-green-500 mr-2"></i> Spatial dimension awareness</li>
+            </ul>
+
+            <div class="mt-8">
+              <a href="contact.html" class="btn btn-primary w-full text-center">Request a Custom Plan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- Interactive Cost vs. Time Data Charts Section -->
+  <section class="py-16 bg-gray-50 border-t border-gray-200">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-primary mb-4">Construction Analytics</h2>
+        <p class="text-gray-600 max-w-3xl mx-auto">Compare the cost and time efficiency of Pre-Engineered Steel Buildings versus Traditional Concrete structures using our interactive live data charts.</p>
+      </div>
+
+      <div class="flex flex-col lg:flex-row gap-8">
+        
+        <!-- Cost Chart -->
+        <div class="w-full lg:w-1/2 bg-white rounded-xl shadow-md p-6 border border-gray-100">
+          <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Cost Comparison (BDT per Sq. Ft)</h3>
+          <canvas id="costChart" width="400" height="250"></canvas>
+        </div>
+
+        <!-- Time Chart -->
+        <div class="w-full lg:w-1/2 bg-white rounded-xl shadow-md p-6 border border-gray-100">
+          <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Construction Time (Months for 10,000 Sq. Ft)</h3>
+          <canvas id="timeChart" width="400" height="250"></canvas>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cost Chart
+      const costCtx = document.getElementById('costChart');
+      if (costCtx) {
+        new Chart(costCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Foundation', 'Superstructure', 'Finishing', 'Total'],
+            datasets: [
+              {
+                label: 'Steel Building (PEB)',
+                data: [400, 1200, 800, 2400],
+                backgroundColor: 'rgba(234, 179, 8, 0.8)', // accent
+                borderColor: '#eab308',
+                borderWidth: 1
+              },
+              {
+                label: 'Traditional Concrete',
+                data: [600, 1500, 800, 2900],
+                backgroundColor: 'rgba(10, 37, 64, 0.8)', // primary
+                borderColor: '#0a2540',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+
+      // Time Chart
+      const timeCtx = document.getElementById('timeChart');
+      if (timeCtx) {
+        new Chart(timeCtx, {
+          type: 'line',
+          data: {
+            labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'],
+            datasets: [
+              {
+                label: 'Steel Completion %',
+                data: [20, 50, 80, 100, 100, 100],
+                borderColor: '#eab308',
+                backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                fill: true,
+                tension: 0.4
+              },
+              {
+                label: 'Concrete Completion %',
+                data: [10, 25, 40, 60, 80, 100],
+                borderColor: '#0a2540',
+                backgroundColor: 'rgba(10, 37, 64, 0.1)',
+                fill: true,
+                tension: 0.4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true, max: 100 } }
+          }
+        });
+      }
+    });
+  </script>
+
+  
+  <!-- Interactive Geographic Map Section -->
+  <section class="py-16 bg-white border-t border-gray-100">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-primary mb-4">Project Locations Across Bangladesh</h2>
+        <p class="text-gray-600 max-w-3xl mx-auto">Explore our extensive portfolio of EPC and Turnkey projects mapped out across the nation.</p>
+      </div>
+      
+      <div id="project-map" style="height: 500px; width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid var(--accent); z-index: 1;"></div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof L !== 'undefined') {
+        const map = L.map('project-map').setView([23.6850, 90.3563], 7); // Center of Bangladesh
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Custom icon
+        const bongshaiIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        const projects = [
+            { name: "Premium Duplex Steel Building", lat: 23.8103, lng: 90.4125, desc: "Dhaka, BD" },
+            { name: "Steel Factory Warehouse", lat: 22.3569, lng: 91.7832, desc: "Chotrogram, BD" },
+            { name: "Commercial High-Rise", lat: 24.8949, lng: 91.8687, desc: "Sylhet, BD" }
+        ];
+
+        projects.forEach(p => {
+            L.marker([p.lat, p.lng], {icon: bongshaiIcon})
+             .addTo(map)
+             .bindPopup(`<b>${p.name}</b><br>${p.desc}`);
+        });
+      }
+    });
+  </script>
+
+  
+  <!-- Client Progress Tracker UI -->
+  <section class="py-16 bg-gray-50 border-t border-gray-200">
+    <div class="container max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-primary mb-4">Live Project Progress Tracker</h2>
+        <p class="text-gray-600">Track the real-time status of your turnkey project from soil test to handover.</p>
+      </div>
+      
+      <div class="relative border-l-4 border-accent ml-6 md:ml-0 md:pl-0 md:border-none">
+        
+        <!-- Timeline Item 1 -->
+        <div class="mb-10 md:flex md:items-center md:justify-between relative group">
+          <div class="absolute w-8 h-8 bg-accent rounded-full -left-10 md:left-1/2 md:-ml-4 flex items-center justify-center text-white border-4 border-white shadow">
+            <i class="fas fa-check text-sm text-primary"></i>
+          </div>
+          <div class="md:w-5/12 bg-white p-6 rounded-lg shadow-md border border-gray-100 mb-4 md:mb-0 transform transition-transform group-hover:-translate-y-1">
+            <span class="text-sm text-accent font-bold mb-1 block">Phase 1 (Completed)</span>
+            <h3 class="text-xl font-bold text-primary mb-2">Soil Test &amp; Engineering Design</h3>
+            <p class="text-gray-600">Geotechnical analysis completed. 3D modeling and structural blueprints approved by RAJUK.</p>
+          </div>
+          <div class="md:w-5/12 hidden md:block"></div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="mb-10 md:flex md:items-center md:justify-between flex-row-reverse relative group">
+          <div class="absolute w-8 h-8 bg-accent rounded-full -left-10 md:left-1/2 md:-ml-4 flex items-center justify-center text-white border-4 border-white shadow">
+            <i class="fas fa-check text-sm text-primary"></i>
+          </div>
+          <div class="md:w-5/12 bg-white p-6 rounded-lg shadow-md border border-gray-100 mb-4 md:mb-0 transform transition-transform group-hover:-translate-y-1">
+            <span class="text-sm text-accent font-bold mb-1 block">Phase 2 (Completed)</span>
+            <h3 class="text-xl font-bold text-primary mb-2">Foundation &amp; Piling</h3>
+            <p class="text-gray-600">Deep pile driving and concrete casting for the foundation base completed successfully.</p>
+          </div>
+          <div class="md:w-5/12 hidden md:block"></div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="mb-10 md:flex md:items-center md:justify-between relative group">
+          <div class="absolute w-8 h-8 bg-blue-500 rounded-full -left-10 md:left-1/2 md:-ml-4 flex items-center justify-center text-white border-4 border-white shadow animate-pulse">
+            <i class="fas fa-spinner fa-spin text-sm"></i>
+          </div>
+          <div class="md:w-5/12 bg-white p-6 rounded-lg shadow-lg border-2 border-blue-500 mb-4 md:mb-0 transform transition-transform group-hover:-translate-y-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs px-2 py-1 rounded-bl-lg font-bold">IN PROGRESS</div>
+            <span class="text-sm text-blue-500 font-bold mb-1 block">Phase 3 (Current)</span>
+            <h3 class="text-xl font-bold text-primary mb-2">Steel Superstructure Erection</h3>
+            <p class="text-gray-600 mb-4">Installing primary H-beams and secondary framing. Currently at 60% completion.</p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="md:w-5/12 hidden md:block"></div>
+        </div>
+
+        <!-- Timeline Item 4 -->
+        <div class="mb-10 md:flex md:items-center md:justify-between flex-row-reverse relative group">
+          <div class="absolute w-8 h-8 bg-gray-300 rounded-full -left-10 md:left-1/2 md:-ml-4 flex items-center justify-center text-white border-4 border-white shadow">
+            <i class="fas fa-lock text-sm text-gray-500"></i>
+          </div>
+          <div class="md:w-5/12 bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 mb-4 md:mb-0 opacity-70">
+            <span class="text-sm text-gray-500 font-bold mb-1 block">Phase 4 (Upcoming)</span>
+            <h3 class="text-xl font-bold text-gray-700 mb-2">Cladding &amp; Interior Finishing</h3>
+            <p class="text-gray-500">Roofing panels, wall cladding, electrical, and plumbing fixtures.</p>
+          </div>
+          <div class="md:w-5/12 hidden md:block"></div>
+        </div>
+
+        <!-- Timeline Line for Desktop -->
+        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-200 -ml-0.5 -z-10"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Future Tools Placeholder -->
+  <section class="py-12 bg-gray-50">
+    <div class="container text-center">
+      <h3 class="text-xl font-bold text-gray-400 mb-4">More interactive tools (Cost Estimator, Timeline Tracker) coming soon...</h3>
+    </div>
+  </section>
+{% endblock %}

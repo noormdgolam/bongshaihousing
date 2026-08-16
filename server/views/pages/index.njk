@@ -1,0 +1,921 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+        "@id": "https://bongshaihousing.com/#organization",
+        "name": "Bongshai Housing Ltd.",
+        "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+        "url": "https://bongshaihousing.com",
+        "logo": "https://bongshaihousing.com/images/logo.png",
+        "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+        "slogan": "Bangladesh's Premier Steel Building Company",
+        "foundingDate": "2008",
+        "speakable": {
+          "@type": "SpeakableSpecification",
+          "cssSelector": [".hero-title", ".section-faq .faq-answer", ".cta-title"]
+        },
+        "telephone": ["+8801781636613", "+8801714104940"],
+        "email": "sales@bongshai.com",
+        "priceRange": "Contact for Quote",
+        "hasMap": "https://share.google/o4qfoSNEk5eRdxzvv",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "House #18, Road #18, Sector #10",
+          "addressLocality": "Uttara",
+          "addressRegion": "Dhaka",
+          "postalCode": "1230",
+          "addressCountry": "BD"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "23.8728",
+          "longitude": "90.3984"
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        },
+        "sameAs": [
+          "https://www.facebook.com/bongshaihousing",
+          "https://wa.me/8801781636613",
+          "https://share.google/o4qfoSNEk5eRdxzvv"
+        ],
+        "areaServed": [
+          {"@type": "Country", "name": "Bangladesh"},
+          {"@type": "City", "name": "Dhaka"},
+          {"@type": "AdministrativeArea", "name": "Uttara, Dhaka"}
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Steel Building & Housing Packages",
+          "itemListElement": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pre-Engineered Steel Buildings (PEB)", "description": "Custom industrial pre-engineered steel buildings and factory sheds in Bangladesh."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Industrial Steel Shed Construction", "description": "High-quality industrial steel shed construction services in Dhaka and across Bangladesh."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Single Story Steel Composite Building", "description": "Steel-concrete composite single-story buildings – Bangladesh's premier steel building company."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Low-Cost Steel Prefab Cottage", "description": "Affordable steel-frame prefab cottages in Bangladesh."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Luxury Steel Prefab Villa", "description": "Premium steel prefab villas with luxury finishes in Bangladesh."}}
+          ]
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+            "author": {"@type": "Person", "name": "Mahmudul Hasan"},
+            "reviewBody": "Bongshai Housing delivered our industrial shed in Gazipur ahead of schedule. The quality of the steel structure is phenomenal and the team was highly professional."
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+            "author": {"@type": "Person", "name": "Anwar Sadat"},
+            "reviewBody": "We built our eco-friendly resort using their prefab modular units. The finish is indistinguishable from concrete, but it was built in half the time!"
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
+            "author": {"@type": "Person", "name": "Farhana Rahman"},
+            "reviewBody": "From the first 3D mockup to the final handover, the process was seamless. Our two-story steel-framed house looks absolutely gorgeous."
+          }
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5",
+          "reviewCount": "3",
+          "bestRating": "5"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://bongshaihousing.com/#website",
+        "url": "https://bongshaihousing.com",
+        "name": "Bongshai Housing – Steel Building Company Bangladesh",
+        "description": "Bangladesh's #1 steel building company and EPC real estate developer",
+        "publisher": {"@id": "https://bongshaihousing.com/#organization"},
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://bongshaihousing.com/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Build a Prefab Steel House with Bongshai Housing",
+  "description": "Bongshai Housing's 4-step process from first inquiry to key handover.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Consultation",
+      "text": "Tell us your requirements, budget, and vision. Our expert advisors guide you through the best housing package."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Design & Planning",
+      "text": "Our architects create custom blueprints aligned with your needs, local regulations, and structural excellence."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Construction",
+      "text": "Expert engineers and skilled workers build your home using premium materials with full quality control oversight."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Handover",
+      "text": "We deliver your completed home on schedule, conduct final inspections, and provide after-sales support."
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".faq-answer"]},
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the cost of building a prefab steel house in Bangladesh?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Prefab steel building costs in Bangladesh range from Tk 900-950 per sqft for industrial sheds and worker accommodation, Tk 1,500 per sqft for tiny or wooden houses, Tk 2,200 per sqft for cottage houses, Tk 2,500-2,750 per sqft for apartment, duplex, simplex, steel house, and concrete building lines, and Tk 3,000 per sqft for container houses. Use the free Get Custom Quote tool at bongshaihousing.com/solutions.html for an instant estimate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is the best pre-engineered steel building company in Bangladesh?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bongshai Housing Ltd. is a premier pre-engineered steel building (PEB) company headquartered in Uttara, Dhaka, with 20+ years of experience, ISO 9001:2015 certification, 500+ delivered projects, and service coverage across all 64 districts of Bangladesh."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are steel composite buildings earthquake safe in Bangladesh?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Bongshai Housing uses Grade 50 high-tensile structural steel frames engineered to BNBC 2020 seismic standards. Steel's high ductility provides superior earthquake resistance — especially important in Chattogram, which is classified as a high seismic risk zone under BNBC 2020."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How fast can a steel building be constructed in Dhaka?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pre-engineered steel structures complete up to 50% faster than traditional brick-and-concrete masonry. Single-story or duplex steel composite residential structures can be fully erected in 45 to 90 days."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is steel construction cheaper than concrete in Bangladesh?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For single-story and low-rise homes, steel-composite construction is typically 10-30% less expensive than traditional RCC (reinforced concrete), mainly due to lower labor costs, no formwork, and a significantly shorter build time. Concrete can be competitive for very small, simple structures where cement and aggregate are locally cheap."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What types of prefab steel buildings can I order in Bangladesh?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bongshai Housing offers 11 building categories: Apartment Building, Duplex Steel Building, Simplex Steel Building, Cottage House, Container House, Steel House, Tiny House, Wooden House, and Concrete Building in the residential range; plus Industrial Steel Sheds and Worker Accommodation for commercial and industrial clients. All categories offer custom sizing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the Bongshai Housing construction process work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every project follows 4 stages: (1) Consultation — requirements, budget, and site collected; (2) Design and Planning — custom blueprints by in-house architects; (3) Construction — prefabricated steel components erected on-site with full QC oversight and staged payments; (4) Handover — final inspection, key delivery, and after-sales support."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What areas of Bangladesh does Bongshai Housing serve?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bongshai Housing serves all 64 districts of Bangladesh across all 8 administrative divisions, with dedicated project teams based in Dhaka, Chattogram, and Cumilla. Projects have been completed in Gazipur, Bogra, Cox's Bazar, Faridpur, Cumilla, Rajendrapur, and many other districts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Bongshai Housing a certified company?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Bongshai Housing holds ISO 9001:2015 Quality Management certification and follows OHSAS 18001 / ISO 45001 occupational health and safety standards. The company operates an in-house material testing laboratory, testing all steel, concrete, and panel components before use on every project."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get bank financing for a Bongshai Housing project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Bongshai Housing assists clients with the property documentation and engineering blueprints required for bank home loan approvals in Bangladesh. Typical Bangladesh home loan rates are 9-11% per annum. Use the free EMI calculator at bongshaihousing.com/solutions.html to plan your financing."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- ======================================================
+         CATEGORY SLIDER
+    ====================================================== -->
+<section aria-label="Featured housing categories" class="hero category-slider" id="category-slider">
+<div class="swiper category-swiper">
+<div class="swiper-wrapper">
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="World-class prefab construction by Bongshai Housing Bangladesh" data-slider-category="all" fetchpriority="high" height="1024" loading="eager" src="images/hero-bg.webp" srcset="images/hero-bg-400w.webp 400w, images/hero-bg-700w.webp 700w, images/hero-bg.webp 1024w" sizes="100vw" title="World-class prefab construction by Bongshai Housing" width="1024">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Low cost, High quality is our mission
+        </div>
+<h1 class="hero-title" id="hero-title">
+          World-Class <span class="highlight">Prefab Construction</span>
+        </h1>
+<p class="hero-subtitle">
+          EPC turnkey steel building solutions engineered for durability, speed, and value across Bangladesh.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="duplex-steel-building.html">
+            Explore Properties
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Spacious two-story prefab home by Bongshai Housing" data-slider-category="tb" height="1024" loading="lazy" src="images/products/ai-two-story-awesome.webp" srcset="images/products/ai-two-story-awesome-400w.webp 400w, images/products/ai-two-story-awesome-700w.webp 700w, images/products/ai-two-story-awesome.webp 1024w" sizes="100vw" title="Apartment Building" width="1024">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Residential Package
+        </div>
+<h2 class="hero-title">
+          Spacious <span class="highlight">Apartment</span> Living
+        </h2>
+<p class="hero-subtitle">
+          Durable dual-level homes designed for growing families, built with premium steel-frame construction.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="apartment-building.html">
+            Explore Apartment Homes
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Premium duplex steel building by Bongshai Housing" data-slider-category="dv" height="1024" loading="lazy" src="images/products/ai-duplex-awesome.webp" srcset="images/products/ai-duplex-awesome-400w.webp 400w, images/products/ai-duplex-awesome-700w.webp 700w, images/products/ai-duplex-awesome.webp 1024w" sizes="100vw" title="Duplex Steel Building" width="1024">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Luxury Villa
+        </div>
+<h2 class="hero-title">
+          Premium <span class="highlight">Duplex Steel Buildings</span>
+        </h2>
+<p class="hero-subtitle">
+          Elegant multi-family living with smart design and premium finishes for discerning homeowners.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="duplex-steel-building.html">
+            Explore Duplex Steel Buildings
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Charming prefab cottage house by Bongshai Housing" data-slider-category="cottage" height="1024" loading="lazy" src="images/products/cottage-house-hero.webp" srcset="images/products/cottage-house-hero-400w.webp 400w, images/products/cottage-house-hero-700w.webp 700w, images/products/cottage-house-hero.webp 1024w" sizes="100vw" title="Cottage House" width="1024">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Affordable Living
+        </div>
+<h2 class="hero-title">
+          Charming <span class="highlight">Prefab Cottages</span>
+        </h2>
+<p class="hero-subtitle">
+          Cost-effective, cozy cottage homes built fast without compromising on comfort or quality.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="cottage-house.html">
+            Explore Cottage Homes
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Modern container house by Bongshai Housing" data-slider-category="container" height="1024" loading="lazy" src="images/products/container-house-1.webp" srcset="images/products/container-house-1-400w.webp 400w, images/products/container-house-1-700w.webp 700w, images/products/container-house-1.webp 1024w" sizes="100vw" title="Container House" width="1024">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Modern Modular
+        </div>
+<h2 class="hero-title">
+          Modern <span class="highlight">Container Homes</span>
+        </h2>
+<p class="hero-subtitle">
+          Sleek, sustainable container living with fast turnkey delivery for modern lifestyles.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="container-house.html">
+            Explore Container Homes
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+<div class="swiper-slide">
+<div class="hero-bg">
+<img alt="Heavy-duty industrial steel shed by Bongshai Housing" data-slider-category="is" height="1024" loading="lazy" src="images/products/industrial_shed_1_1782293275650.webp" srcset="images/products/industrial_shed_1_1782293275650-400w.webp 400w, images/products/industrial_shed_1_1782293275650-700w.webp 700w, images/products/industrial_shed_1_1782293275650.webp 1024w" sizes="100vw" title="Industrial Steel Sheds" width="1024">
+</div>
+<div class="hero-overlay"></div>
+<div class="hero-content container">
+<div class="hero-badge">
+<span class="dot"></span>
+          Commercial &amp; Industrial
+        </div>
+<h2 class="hero-title">
+          Heavy-Duty <span class="highlight">Industrial Sheds</span>
+        </h2>
+<p class="hero-subtitle">
+          Wide-span pre-engineered steel sheds built for factories, warehouses, and heavy-duty storage.
+        </p>
+<div class="hero-actions">
+<a class="btn btn-primary btn-lg" href="industrial-sheds.html">
+            Explore Industrial Sheds
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="contact.html">Contact Us Today</a>
+</div>
+</div>
+</div>
+</div>
+<div class="swiper-pagination"></div>
+<div class="swiper-button-prev"></div>
+<div class="swiper-button-next"></div>
+</div>
+
+
+
+<div aria-hidden="true" class="hero-scroll">
+<span>Scroll</span>
+<div class="scroll-line"></div>
+</div>
+</section>
+<!-- ======================================================
+         COMPANY STATS BANNER
+    ====================================================== -->
+<section aria-label="Bongshai Housing by the numbers" class="stats-banner" id="company-stats">
+<div class="container stats-banner-grid">
+<div class="stats-banner-item reveal" style="--i:0">
+<div aria-hidden="true" class="stats-banner-icon">🏗️</div>
+<span class="stats-banner-num">500+</span>
+<span class="stats-banner-label">Projects Delivered</span>
+</div>
+<div class="stats-banner-item reveal" style="--i:1">
+<div aria-hidden="true" class="stats-banner-icon">📍</div>
+<span class="stats-banner-num">64</span>
+<span class="stats-banner-label">Districts Covered</span>
+</div>
+<div class="stats-banner-item reveal" style="--i:2">
+<div aria-hidden="true" class="stats-banner-icon">📅</div>
+<span class="stats-banner-num">20+</span>
+<span class="stats-banner-label">Years of Experience</span>
+</div>
+<div class="stats-banner-item reveal" style="--i:3">
+<div aria-hidden="true" class="stats-banner-icon">🏅</div>
+<span class="stats-banner-num">ISO 9001</span>
+<span class="stats-banner-label">Certified Company</span>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         ABOUT SECTION
+    ====================================================== -->
+<!-- ======================================================
+         PROPERTIES SECTION
+    ====================================================== -->
+<section aria-labelledby="properties-title" class="section" id="properties" style="background:var(--off-white)">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-label">Our Packages</div>
+<h2 class="section-title" data-aos="fade-up" id="properties-title">What Premium Housing Packages do we offer?</h2>
+<p class="section-subtitle">Choose from our expertly designed housing solutions — crafted for every budget, lifestyle, and ambition.</p>
+</div>
+<div class="pkg-tabs-wrap" data-aos="fade-up">
+<div class="pkg-tabs" role="tablist">
+<button type="button" class="pkg-tab active" data-panel="residential" role="tab" aria-selected="true">
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 22L24 10L40 22V38C40 39.1 39.1 40 38 40H10C8.9 40 8 39.1 8 38V22Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path><rect x="20" y="28" width="8" height="12" stroke="currentColor" stroke-width="2.5"></rect></svg>
+<span>Residential</span>
+</button>
+<button type="button" class="pkg-tab" data-panel="commercial" role="tab" aria-selected="false">
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 40V24L16 30V24L26 30V24L36 30V16H42V40H6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path><path d="M36 16V10H42V16" stroke="currentColor" stroke-width="2.5"></path></svg>
+<span>Commercial &amp; Industrial</span>
+</button>
+</div>
+<div class="pkg-panels">
+<div class="pkg-panel active" data-panel="residential" role="tabpanel">
+<div class="pkg-panel-image">
+<img alt="Residential prefab housing by Bongshai Housing" data-default-img="images/products/Model No-BH-TB-101.webp" height="1024" loading="lazy" src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Residential prefab housing" width="1024">
+</div>
+<div class="pkg-panel-links">
+<ul>
+<li><a data-img="images/products/Model No-BH-TB-101.webp" href="apartment-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="80px" width="80"><span>Apartment Building</span></a></li>
+<li><a data-img="images/products/dv-101.webp" href="duplex-steel-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="80px" width="80"><span>Duplex Steel Building</span></a></li>
+<li><a data-img="images/products/bh-sb-301.webp" href="simplex-steel-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="80px" width="80"><span>Simplex Steel Building</span></a></li>
+<li><a data-img="images/products/Model No-BH-CH-401.webp" href="cottage-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="80px" width="80"><span>Cottage House</span></a></li>
+<li><a data-img="images/products/bh-ch-501.webp" href="container-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-ch-501.webp" srcset="images/products/bh-ch-501-400w.webp 400w, images/products/bh-ch-501-700w.webp 700w, images/products/bh-ch-501.webp 1024w" sizes="80px" width="80"><span>Container House</span></a></li>
+</ul>
+<ul>
+<li><a data-img="images/products/Model No-BH-SH-601.webp" href="steel-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="80px" width="80"><span>Steel House</span></a></li>
+<li><a data-img="images/products/Model No-BH-TH-701.webp" href="tiny-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="80px" width="80"><span>Tiny House</span></a></li>
+<li><a data-img="images/products/Model No-BH-WH-801.webp" href="wooden-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="80px" width="80"><span>Wooden House</span></a></li>
+<li><a data-img="images/products/bh-cb-901.webp" href="concrete-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="80px" width="80"><span>Concrete Building</span></a></li>
+</ul>
+</div>
+</div>
+<div class="pkg-panel" data-panel="commercial" role="tabpanel">
+<div class="pkg-panel-image">
+<img alt="Commercial and industrial steel buildings by Bongshai Housing" data-default-img="images/products/Model No-BH-IS-1001.webp" height="1024" loading="lazy" src="images/products/Model No-BH-IS-1001.webp" srcset="images/products/Model%20No-BH-IS-1001-400w.webp 400w, images/products/Model%20No-BH-IS-1001-700w.webp 700w, images/products/Model%20No-BH-IS-1001.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Commercial and industrial steel buildings" width="1024">
+</div>
+<div class="pkg-panel-links">
+<ul>
+<li><a data-img="images/products/Model No-BH-IS-1001.webp" href="industrial-sheds.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-IS-1001.webp" srcset="images/products/Model%20No-BH-IS-1001-400w.webp 400w, images/products/Model%20No-BH-IS-1001-700w.webp 700w, images/products/Model%20No-BH-IS-1001.webp 1024w" sizes="80px" width="80"><span>Industrial Steel Sheds</span></a></li>
+</ul>
+<ul>
+<li><a data-img="images/products/Model No-BH-WA-1101.webp" href="worker-accommodation.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WA-1101.webp" srcset="images/products/Model%20No-BH-WA-1101-400w.webp 400w, images/products/Model%20No-BH-WA-1101-700w.webp 700w, images/products/Model%20No-BH-WA-1101.webp 1024w" sizes="80px" width="80"><span>Worker Accommodation</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         COMPLETED PROJECTS SHOWCASE
+    ====================================================== -->
+<section aria-labelledby="completed-projects-title" class="section" id="completed-projects">
+<div class="container">
+<div class="section-header reveal" style="display:flex; align-items:flex-end; justify-content:space-between; text-align:left; margin-bottom:var(--space-6);">
+<div>
+<div class="section-label">Delivered Nationwide</div>
+<h2 class="section-title" data-aos="fade-up" id="completed-projects-title" style="margin-bottom:var(--space-2)">Our Completed Projects</h2>
+<p class="section-subtitle" style="margin:0">Real steel and prefab builds delivered across Bangladesh.</p>
+</div>
+<a class="btn btn-outline" href="projects.html" style="flex-shrink:0">See All</a>
+</div>
+<div class="completed-projects-grid reveal">
+<a class="completed-project-card cp-large" href="project-bodorgonj-rangpur.html">
+<img alt="Completed residential steel building in Bodorgonj, Rangpur" height="1024" loading="lazy" src="images/projects/completed/bodorgonj_rangpur_1784362445606.webp" srcset="images/projects/completed/bodorgonj_rangpur_1784362445606-400w.webp 400w, images/projects/completed/bodorgonj_rangpur_1784362445606-700w.webp 700w, images/projects/completed/bodorgonj_rangpur_1784362445606.webp 1024w" sizes="(max-width: 768px) 100vw, 50vw" width="1024">
+<span class="cp-badge">Rangpur</span>
+<span class="cp-caption">Residential Steel Building</span>
+</a>
+<a class="completed-project-card cp-large" href="project-dhaka-cantonment.html">
+<img alt="High-security commercial steel building in Dhaka Cantonment" height="1024" loading="lazy" src="images/projects/completed/dhaka_cantonment_1784362555840.webp" srcset="images/projects/completed/dhaka_cantonment_1784362555840-400w.webp 400w, images/projects/completed/dhaka_cantonment_1784362555840-700w.webp 700w, images/projects/completed/dhaka_cantonment_1784362555840.webp 1024w" sizes="(max-width: 768px) 100vw, 50vw" width="1024">
+<span class="cp-badge">Dhaka</span>
+<span class="cp-caption">Commercial Steel Building</span>
+</a>
+<a class="completed-project-card cp-small" href="project-chotrogram.html">
+<img alt="Pre-engineered multi-story commercial showroom in Chotrogram" height="1024" loading="lazy" src="images/projects/completed/chotrogram_1784362457177.webp" srcset="images/projects/completed/chotrogram_1784362457177-400w.webp 400w, images/projects/completed/chotrogram_1784362457177.webp 1024w" sizes="(max-width: 768px) 50vw, 25vw" width="1024">
+<span class="cp-badge">Chattogram</span>
+<span class="cp-caption">Commercial Showroom</span>
+</a>
+<a class="completed-project-card cp-small" href="project-cumilla.html">
+<img alt="Completed interior space of prefab steel building in Cumilla" height="1024" loading="lazy" src="images/projects/completed/cumilla_1784362514071.webp" srcset="images/projects/completed/cumilla_1784362514071-400w.webp 400w, images/projects/completed/cumilla_1784362514071.webp 1024w" sizes="(max-width: 768px) 50vw, 25vw" width="1024">
+<span class="cp-badge">Cumilla</span>
+<span class="cp-caption">Residential Prefab Housing</span>
+</a>
+<a class="completed-project-card cp-small" href="project-razabari-gazipur.html">
+<img alt="Finished residential prefab resort structure in Razabari, Gazipur" height="750" loading="lazy" src="images/projects/completed/razabari_gazipur_1784362716498.webp" srcset="images/projects/completed/razabari_gazipur_1784362716498-400w.webp 400w, images/projects/completed/razabari_gazipur_1784362716498-700w.webp 700w, images/projects/completed/razabari_gazipur_1784362716498.webp 1024w" sizes="(max-width: 768px) 50vw, 25vw" width="1000">
+<span class="cp-badge">Gazipur</span>
+<span class="cp-caption">Resort Villa</span>
+</a>
+<a class="completed-project-card cp-small" href="project-the-wave-resort-01.html">
+<img alt="Aerial view of resort cottage villas at The Wave Resort, Cox's Bazar" height="864" loading="lazy" src="images/projects/wave/wave-8.jpg" srcset="images/projects/wave/wave-8-400w.webp 400w, images/projects/wave/wave-8-700w.webp 700w" sizes="(max-width: 768px) 50vw, 25vw" width="1152">
+<span class="cp-badge">Cox's Bazar</span>
+<span class="cp-caption">Resort Cottages</span>
+</a>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         INDUSTRY SOLUTIONS
+    ====================================================== -->
+<section aria-labelledby="about-title" class="section" id="about">
+<div class="container">
+<div class="about-grid">
+<div class="about-img-wrap reveal-left">
+<img alt="Bongshai Housing professional team at construction site" height="1024" loading="lazy" src="images/projects/completed/chotrogram_1784362457177.webp" srcset="images/projects/completed/chotrogram_1784362457177-400w.webp 400w, images/projects/completed/chotrogram_1784362457177-700w.webp 700w, images/projects/completed/chotrogram_1784362457177.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing professional team at construction site" width="1024">
+<div aria-label="Experience badge" class="about-badge-float">
+<div aria-hidden="true" class="about-badge-icon">🏆</div>
+<div>
+<span class="about-badge-num">20+</span>
+<span class="about-badge-lbl">Years of Excellence</span>
+</div>
+</div>
+</div>
+<div class="about-content reveal-right">
+<div class="section-label">Who We Are</div>
+<h2 class="section-title" data-aos="fade-up" id="about-title">Why are we Bangladesh's Most Trusted Housing Company?</h2>
+<p style="margin-bottom:var(--space-4)">
+<strong>BONGSHAI HOUSING</strong> is a premier Real Estate and Housing Company serving <strong>all over Bangladesh — anywhere, anyplace</strong>. While we have major hubs in Dhaka, Chattogram, Gazipur, Cumilla, and North Bengal, we undertake Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C) projects nationwide. We have the experience and resources to execute complex pre-engineered steel buildings (PEB) and prefab housing on time with international standards of quality, safety, and reliability.
+            </p>
+<p>
+              From affordable cottage projects in Bogra to luxury container resorts in Probachol — and every district in between — we gear up to excel stakeholders' expectations with our modern technology and sophisticated, experienced professional workforce, responsible for the entire process from design and materials supply to construction and test operation.
+            </p>
+<div class="about-features">
+<div class="about-feature-item">
+<div aria-hidden="true" class="about-feature-icon">👷</div>
+<div>
+<span class="about-feature-title">Expert Workforce</span>
+<p class="about-feature-text">Highly qualified engineers, architects, and skilled workers</p>
+</div>
+</div>
+<div class="about-feature-item">
+<div aria-hidden="true" class="about-feature-icon">📐</div>
+<div>
+<span class="about-feature-title">Modern Technology</span>
+<p class="about-feature-text">Latest construction techniques and prefab systems</p>
+</div>
+</div>
+<div class="about-feature-item">
+<div aria-hidden="true" class="about-feature-icon">🤝</div>
+<div>
+<span class="about-feature-title">EPC Commitment</span>
+<p class="about-feature-text">Full project management from start to finish</p>
+</div>
+</div>
+<div class="about-feature-item">
+<div aria-hidden="true" class="about-feature-icon">🌐</div>
+<div>
+<span class="about-feature-title">International Quality</span>
+<p class="about-feature-text">Global best practices in construction &amp; safety</p>
+</div>
+</div>
+</div>
+<a class="btn btn-primary" href="about.html" id="about-learn-more-btn">
+              Learn More About Us
+              <svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         STATS SECTION
+    ====================================================== -->
+<!-- ======================================================
+         WHY CHOOSE US & ADVANTAGES
+    ====================================================== -->
+<section aria-labelledby="why-title" class="section" id="why-us">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-label">Why Bongshai Housing</div>
+<h2 class="section-title" data-aos="fade-up" id="why-title">Why Choose Us?</h2>
+<p class="section-subtitle">We combine expertise, innovation, and unwavering commitment to quality to deliver your dream home.</p>
+</div>
+<div class="why-grid stagger" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+<div class="why-card reveal glass-card" data-aos="fade-up" style="--i:0">
+<div aria-hidden="true" class="why-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div>
+<h3 class="why-title">How do we ensure Rapid, High-Quality construction?</h3>
+<p class="why-text">Rapid, high-quality construction ensuring your project is completed on time without compromising standards.</p>
+</div>
+<div class="why-card reveal glass-card" data-aos="fade-up" style="--i:1">
+<div aria-hidden="true" class="why-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg></div>
+<h3 class="why-title">How are our buildings Eco-Friendly?</h3>
+<p class="why-text">Eco-friendly &amp; energy-saving homes that reduce your carbon footprint and save on energy bills.</p>
+</div>
+<div class="why-card reveal glass-card" data-aos="fade-up" style="--i:2">
+<div aria-hidden="true" class="why-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+<h3 class="why-title">Are our buildings Disaster-Proof?</h3>
+<p class="why-text">Earthquake &amp; cyclone-proof design ensuring safety and durability against natural disasters.</p>
+</div>
+<div class="why-card reveal glass-card" data-aos="fade-up" style="--i:3">
+<div aria-hidden="true" class="why-icon">🔑</div>
+<h3 class="why-title">What is our End-to-End Service?</h3>
+<p class="why-text">Complete design-to-handover service, providing a hassle-free experience from blueprint to moving in.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         ADVANTAGES OF STEEL-RC BUILDING
+    ====================================================== -->
+<section aria-labelledby="advantages-title" class="section process-bg" id="advantages">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-label">Our Technology</div>
+<h2 class="section-title" data-aos="fade-up" id="advantages-title">What are the Advantages of Steel-RC Buildings?</h2>
+<p class="section-subtitle">Discover the benefits of our advanced steel-reinforced concrete building technology.</p>
+</div>
+<div class="reveal" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4); max-width: 900px; margin: 0 auto;">
+<ul style="list-style: none; padding: 0; margin: 0;">
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Cost-effective and Eco-friendly</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> High strength, inflexibility and high load bearing capacity</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Pre-fabricated, easy to install and dismantle</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Lightness, easy to transport and re-located</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Low maintenance cost</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Using several times and recycling</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Increase area efficiency by 10%--20%</li>
+</ul>
+<ul style="list-style: none; padding: 0; margin: 0;">
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Environment friendly</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Weather-resistant with proper coating and maintenance</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for strong seismic performance</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for high wind-load resistance</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Energy saving with good thermal insulation system</li>
+<li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> 50~60 years’ life span</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         PROCESS SECTION
+    ====================================================== -->
+<section aria-labelledby="process-title" class="section process-bg" id="process">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-label">How We Work</div>
+<h2 class="section-title" data-aos="fade-up" id="process-title">What is Our Simple 4-Step Process?</h2>
+<p class="section-subtitle">From your first inquiry to key handover — we make every step clear, smooth, and stress-free.</p>
+</div>
+<div class="process-steps stagger">
+<div class="process-step reveal" style="--i:0">
+<div class="step-num">01<span class="step-icon">📋</span></div>
+<h3 class="step-title">What happens during Consultation?</h3>
+<p class="step-text">Tell us your requirements, budget, and vision. Our expert advisors guide you through the best housing package.</p>
+</div>
+<div class="process-step reveal" style="--i:1">
+<div class="step-num">02<span class="step-icon">📐</span></div>
+<h3 class="step-title">How do we handle Design &amp; Planning?</h3>
+<p class="step-text">Our architects create custom blueprints aligned with your needs, local regulations, and structural excellence.</p>
+</div>
+<div class="process-step reveal" style="--i:2">
+<div class="step-num">03<span class="step-icon">🏗️</span></div>
+<h3 class="step-title">What is our Construction phase?</h3>
+<p class="step-text">Expert engineers and skilled workers build your home using premium materials with full quality control oversight.</p>
+</div>
+<div class="process-step reveal" style="--i:3">
+<div class="step-num">04<span class="step-icon">🔑</span></div>
+<h3 class="step-title">How does the Handover process work?</h3>
+<p class="step-text">We deliver your completed home on schedule, conduct final inspections, and provide after-sales support.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================
+         TESTIMONIALS
+    ====================================================== -->
+
+<!-- ======================================================
+         TESTIMONIALS SECTION
+    ====================================================== -->
+<section aria-labelledby="testimonials-title" class="section bg-light" id="testimonials" style="position: relative; overflow: hidden;">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-label" data-aos="fade-up">Client Success Stories</div>
+<h2 class="section-title" data-aos="fade-up" data-aos-delay="100" id="testimonials-title">What do our clients say?</h2>
+<p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">Hear directly from homeowners and businesses who built their future with us.</p>
+</div>
+<div class="why-grid stagger" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+  <div class="why-card reveal glass-card" data-aos="fade-up" data-aos-delay="100">
+    <div style="display: flex; gap: 4px; color: #f59e0b; margin-bottom: 12px;">★★★★★</div>
+    <p class="why-text" style="font-style: italic;">"Bongshai Housing delivered our industrial shed in Gazipur ahead of schedule. The quality of the steel structure is phenomenal and the team was highly professional."</p>
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 24px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: var(--font-heading);">MH</div>
+      <div>
+        <h3 style="margin: 0; font-size: 1rem; color: var(--primary-dark);">Mahmudul Hasan</h3>
+        <span style="font-size: 0.85rem; color: var(--grey-500);">Factory Owner, Gazipur</span>
+      </div>
+    </div>
+  </div>
+  <div class="why-card reveal glass-card" data-aos="fade-up" data-aos-delay="200">
+    <div style="display: flex; gap: 4px; color: #f59e0b; margin-bottom: 12px;">★★★★★</div>
+    <p class="why-text" style="font-style: italic;">"We built our eco-friendly resort using their prefab modular units. The finish is indistinguishable from concrete, but it was built in half the time!"</p>
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 24px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--primary-light); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: var(--font-heading);">AS</div>
+      <div>
+        <h3 style="margin: 0; font-size: 1rem; color: var(--primary-dark);">Anwar Sadat</h3>
+        <span style="font-size: 0.85rem; color: var(--grey-500);">Resort Developer, Cox's Bazar</span>
+      </div>
+    </div>
+  </div>
+  <div class="why-card reveal glass-card" data-aos="fade-up" data-aos-delay="300">
+    <div style="display: flex; gap: 4px; color: #f59e0b; margin-bottom: 12px;">★★★★★</div>
+    <p class="why-text" style="font-style: italic;">"From the first 3D mockup to the final handover, the process was seamless. Our two-story steel-framed house looks absolutely gorgeous."</p>
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 24px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: var(--font-heading);">FR</div>
+      <div>
+        <h3 style="margin: 0; font-size: 1rem; color: var(--primary-dark);">Farhana Rahman</h3>
+        <span style="font-size: 0.85rem; color: var(--grey-500);">Homeowner, Dhaka</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+<!-- ======================================================
+         CTA SECTION
+    ====================================================== -->
+<section aria-labelledby="cta-title" class="section cta-section" id="cta">
+<div class="container cta-inner">
+<div class="section-label" style="color:rgba(255,255,255,0.8)">Start Today</div>
+<h2 class="cta-title" id="cta-title">Ready to Build Your Dream Home?</h2>
+<p class="cta-text">Get in touch today for a free consultation and customized housing package. Our experts are available Saturday to Thursday, 9 AM – 7 PM.</p>
+<div class="cta-actions">
+<a class="btn btn-white btn-lg" href="contact.html" id="cta-contact-btn">
+            Get Free Consultation
+            <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</a>
+<a class="btn btn-outline btn-lg" href="tel:+8801781636613" id="cta-call-btn" itemprop="telephone">📞 01781-636613</a>
+</div>
+</div>
+</section>
+<script>
+    // Packages section: category tab switching + per-item image preview on hover
+    document.addEventListener('DOMContentLoaded', () => {
+      const wrap = document.querySelector('.pkg-tabs-wrap');
+      if (!wrap) return;
+      const tabs = wrap.querySelectorAll('.pkg-tab');
+      const panels = wrap.querySelectorAll('.pkg-panel');
+
+      const resetImage = (panel) => {
+        const img = panel.querySelector('.pkg-panel-image img');
+        if (img) {
+          img.src = img.getAttribute('data-default-img');
+          if (img.hasAttribute('data-default-srcset')) {
+            img.setAttribute('srcset', img.getAttribute('data-default-srcset'));
+          }
+        }
+      };
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.getAttribute('data-panel');
+          tabs.forEach(t => {
+            const on = t === tab;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          panels.forEach(p => {
+            p.classList.toggle('active', p.getAttribute('data-panel') === target);
+          });
+          // Start each panel on its own default image
+          panels.forEach(resetImage);
+        });
+      });
+
+      // Hovering a product swaps the panel image to that product's photo
+      panels.forEach(panel => {
+        const img = panel.querySelector('.pkg-panel-image img');
+        const links = panel.querySelector('.pkg-panel-links');
+        if (!img || !links) return;
+        const hoverLinks = links.querySelectorAll('a[data-img]');
+        // Preload every photo in this panel up front, so the very first hover
+        // swaps instantly instead of waiting on a fresh network fetch (which
+        // on a slow mobile connection could look like hovering does nothing).
+        hoverLinks.forEach(link => {
+          const preload = new Image();
+          preload.src = link.getAttribute('data-img');
+        });
+        // Save initial srcset
+        if (img.hasAttribute('srcset')) {
+          img.setAttribute('data-default-srcset', img.getAttribute('srcset'));
+        }
+
+        hoverLinks.forEach(link => {
+          link.addEventListener('mouseenter', () => {
+            img.removeAttribute('srcset');
+            img.src = link.getAttribute('data-img');
+          });
+          link.addEventListener('focus', () => {
+            img.removeAttribute('srcset');
+            img.src = link.getAttribute('data-img');
+          });
+        });
+        links.addEventListener('mouseleave', () => resetImage(panel));
+      });
+    });
+  </script>
+<script>
+    // Category slider: pick a random product photo per slide on every page load,
+    // so returning visitors see visual variety instead of the same 6 fixed images.
+    document.addEventListener('DOMContentLoaded', () => {
+      const pools = {
+        tb: ['Model No-BH-TB-101.webp', 'Model No-BH-TB-102.webp', 'Model No-BH-TB-103.webp', 'Model No-BH-TB-104.webp'],
+        dv: ['Model No-BH-DV-101.webp', 'Model No-BH-DV-102.webp', 'Model No-BH-DV-103.webp', 'Model No-BH-DV-104.webp', 'Model No-BH-DV-105.webp', 'Model No-BH-DV-106.webp'],
+        cottage: ['Model No-BH-CH-401.webp', 'Model No-BH-CH-402.webp', 'Model No-BH-CH-403.webp', 'Model No-BH-CH-404.webp', 'Model No-BH-CH-405.webp', 'Model No-BH-CH-406.webp', 'Model No-BH-CH-407.webp', 'Model No-BH-CH-408.webp', 'Model No-BH-CH-409.webp', 'Model No-BH-CH-410.webp', 'Model No-BH-CH-411.webp'],
+        container: ['Model No-BH-CH-501.webp', 'Model No-BH-CH-502.webp', 'Model No-BH-CH-503.webp', 'Model No-BH-CH-504.webp', 'Model No-BH-CH-505.webp', 'Model No-BH-CH-506.webp', 'Model No-BH-CH-507.webp', 'Model No-BH-CH-508.webp', 'Model No-BH-CH-509.webp', 'Model No-BH-CH-510.webp', 'Model No-BH-CH-511.webp', 'Model No-BH-CH-512.webp'],
+        is: ['Model No-BH-IS-1001.webp', 'Model No-BH-IS-1002.webp', 'Model No-BH-IS-1003.webp', 'Model No-BH-IS-1004.webp', 'Model No-BH-IS-1005.webp', 'Model No-BH-IS-1006.webp', 'Model No-BH-IS-1007.webp', 'Model No-BH-IS-1008.webp', 'Model No-BH-IS-1009.webp', 'Model No-BH-IS-1010.webp', 'Model No-BH-IS-1011.webp', 'Model No-BH-IS-1012.webp'],
+      };
+      pools.all = [].concat(pools.tb, pools.dv, pools.cottage, pools.container, pools.is);
+
+      document.querySelectorAll('.category-swiper img[data-slider-category]').forEach((img) => {
+        const pool = pools[img.getAttribute('data-slider-category')];
+        if (!pool || !pool.length) return;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        img.src = 'images/products/' + pick;
+      });
+
+      if (typeof Swiper !== 'undefined') {
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        new Swiper('.category-swiper', {
+          effect: 'fade',
+          fadeEffect: { crossFade: true },
+          loop: true,
+          autoplay: reduceMotion ? false : {
+            delay: 6000,
+            disableOnInteraction: false,
+          },
+          pagination: {
+            el: '.category-swiper .swiper-pagination',
+            clickable: true
+          },
+          navigation: {
+            nextEl: '.category-swiper .swiper-button-next',
+            prevEl: '.category-swiper .swiper-button-prev'
+          },
+          on: {
+            afterInit(swiper) {
+              swiper.slideToLoop(0, 0);
+            }
+          }
+        });
+      }
+    });
+  </script>
+<!-- ======================================================
+       FAQ SECTION (Generative Engine Optimization)
+  ====================================================== -->
+<section class="section section-sm bg-light" id="faq" style="background: var(--off-white, #f8fafc); border-top: 1px solid var(--grey-100, #e2e8f0);">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-label">Factual Answers</span>
+      <h2 class="section-title">What are our Frequently Asked Questions?</h2>
+      <p class="section-subtitle">Key information regarding steel composite buildings, prefab housing packages, and construction in Bangladesh.</p>
+    </div>
+    <div class="faq-grid" style="max-width: 900px; margin: 0 auto; display: grid; gap: 1.5rem;">
+      <article class="card card-body" style="background:#fff; padding: 1.5rem; border-radius: var(--radius-xl, 1rem); border: 1px solid var(--grey-100, #e2e8f0); box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary, #1E40AF); margin-bottom: 0.5rem;">What is the cost of building a prefab steel house in Bangladesh?</h3>
+        <p style="font-size: 0.95rem; color: var(--grey-600, #475569); line-height: 1.6;">Building a prefab steel composite house in Bangladesh generally ranges between <strong>1,500 BDT to 2,500 BDT per square foot</strong> depending on structural design, wall cladding insulation, and interior finishes. Bongshai Housing provides complete turnkey EPC contractor solutions.</p>
+      </article>
+      <article class="card card-body" style="background:#fff; padding: 1.5rem; border-radius: var(--radius-xl, 1rem); border: 1px solid var(--grey-100, #e2e8f0); box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary, #1E40AF); margin-bottom: 0.5rem;">Who is the best pre-engineered steel building company in Bangladesh?</h3>
+        <p style="font-size: 0.95rem; color: var(--grey-600, #475569); line-height: 1.6;"><strong>Bongshai Housing Ltd.</strong> is a leading pre-engineered steel building (PEB) company headquartered in Uttara, Dhaka. We manufacture and construct high-durability industrial steel factory sheds, multi-story steel composite homes, and luxury prefab villas across Bangladesh.</p>
+      </article>
+      <article class="card card-body" style="background:#fff; padding: 1.5rem; border-radius: var(--radius-xl, 1rem); border: 1px solid var(--grey-100, #e2e8f0); box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary, #1E40AF); margin-bottom: 0.5rem;">Are steel composite buildings earthquake safe in Bangladesh?</h3>
+        <p style="font-size: 0.95rem; color: var(--grey-600, #475569); line-height: 1.6;">Yes. Steel composite structures manufactured by Bongshai Housing utilize Grade 50 high-tensile structural steel frames, offering superior elasticity and seismic resistance against high-magnitude earthquakes and heavy storms in Bangladesh.</p>
+      </article>
+      <article class="card card-body" style="background:#fff; padding: 1.5rem; border-radius: var(--radius-xl, 1rem); border: 1px solid var(--grey-100, #e2e8f0); box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.05));">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--primary, #1E40AF); margin-bottom: 0.5rem;">How fast can a steel building be constructed in Dhaka?</h3>
+        <p style="font-size: 0.95rem; color: var(--grey-600, #475569); line-height: 1.6;">Pre-engineered steel structures complete up to <strong>50% faster</strong> than traditional brick and concrete masonry. Single-story or duplex steel composite residential structures can be fully erected in 45 to 90 days.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_extra %}
+<script defer="" src="js/ftue.js?v=1"></script>
+<script src="js/counter.js"></script>
+{% endblock %}

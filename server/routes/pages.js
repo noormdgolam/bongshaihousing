@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 
 // Bare status route at the app root. index.html isn't converted yet (that's
@@ -10,22 +12,32 @@ router.get('/', (req, res) => {
   res.status(200).type('html').send('<!doctype html><title>Bongshai Housing - Node app</title>Bongshai Housing Node app is running (Phase 1, staging).');
 });
 
-// Phase 1 scope: prove the templating pattern on one real page (career.html,
-// the one with the form we just migrated) rather than converting all 223
-// pages in this pass. Same URL as today - GET /career.html - so nothing
-// about the live site changes yet. More pages get added to this router as
-// they're converted.
-router.get('/career.html', (req, res) => {
-  res.render('pages/career.njk', {
-    title: 'Jobs at Bongshai Housing | Bongshai Housing Bangladesh',
-    description: "Join Bongshai Housing's team. Explore current openings in engineering, construction, and sales at Bangladesh's leading steel building and prefab housing company.",
-    keywords: 'Careers, steel building Bangladesh, prefab housing Dhaka, Bongshai Housing, EPC contractor Bangladesh, pre-engineered steel buildings',
-    canonical: 'https://bongshaihousing.com/career.html',
-    ogTitle: 'Careers | Bongshai Housing - Steel Structure Manufacturer in Bangladesh',
-    ogDescription: 'Join a leading steel structure manufacturer and pre-engineered steel building company in Bangladesh. Apply today!',
-    twitterTitle: 'Careers | Bongshai Housing',
-    twitterDescription: 'Steel building & construction jobs at a leading pre-engineered steel building company in Bangladesh. Apply now.',
+// Data-driven page rendering: server/scripts/convert-pages.js extracts each
+// static page's head metadata + <main id="main-content"> body into a .njk
+// template plus an entry here, so adding a converted page is "run the
+// script" rather than hand-writing a router.get() block per page.
+const registryPath = path.join(__dirname, '..', 'page-registry.json');
+const registry = fs.existsSync(registryPath) ? JSON.parse(fs.readFileSync(registryPath, 'utf8')) : {};
+
+for (const [urlPath, meta] of Object.entries(registry)) {
+  router.get(urlPath, (req, res) => {
+    res.render(meta.template, {
+      title: meta.title,
+      description: meta.description,
+      keywords: meta.keywords,
+      category: meta.category,
+      canonical: meta.canonical,
+      ogType: meta.ogType,
+      ogTitle: meta.ogTitle,
+      ogDescription: meta.ogDescription,
+      ogImage: meta.ogImage,
+      ogImageWidth: meta.ogImageWidth,
+      ogImageHeight: meta.ogImageHeight,
+      twitterTitle: meta.twitterTitle,
+      twitterDescription: meta.twitterDescription,
+      whatsappHref: meta.whatsappHref,
+    });
   });
-});
+}
 
 module.exports = router;

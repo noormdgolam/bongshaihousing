@@ -1,0 +1,96 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Bongshai Housing",
+    "description": "BONGSHAI HOUSING is Bangladesh base Real Estate and Housing Company undertaking EPC projects with international standards.",
+    "url": "https://bongshaihousing.com/about-us/",
+    "isPartOf": {"@type": "WebSite", "url": "https://bongshaihousing.com"}
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About Us",
+      "item": "https://bongshaihousing.com/about.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Skilled Workers",
+      "item": "https://bongshaihousing.com/team-skilled-workers.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Bongshai Housing Skilled Workers",
+  "description": "Skilled construction workforce at Bongshai Housing with expertise in steel structure erection, concrete work, and prefab building assembly.",
+  "url": "https://bongshaihousing.com/team-skilled-workers.html",
+  "dateModified": "2026-08-08",
+  "about": {
+    "@type": "Organization",
+    "@id": "https://bongshaihousing.com/#organization",
+    "name": "Bongshai Housing Ltd.",
+    "foundingDate": "2008",
+    "employee": [
+      {"@type": "Person", "name": "SMA AWAL", "jobTitle": "Chief Engineer"},
+      {"@type": "Person", "name": "Farjana Maria", "jobTitle": "Architect"},
+      {"@type": "Person", "name": "MD Golam Noor", "jobTitle": "IT Lead"}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="page-hero" aria-labelledby="page-title">
+      <div class="container page-hero-content">
+        <span class="page-hero-label">Our Team</span>
+        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Skilled Workers</h1>
+        <p class="page-hero-text">Educated in safety, quality, compliance, and best construction practices.</p>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="about.html">About Us</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Skilled Workers</span>
+        </nav>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="team-detail-title">
+      <div class="container">
+        <div class="about-grid" style="grid-template-columns: 1fr;">
+          <div class="about-content reveal visible">
+            <div class="section-label">👨‍🔧 Expertise</div>
+            <h2 id="team-detail-title">Skilled Workers Details</h2>
+            <p style="margin-bottom:var(--space-4)">The execution of our high-quality projects relies heavily on our exceptionally trained foremen and skilled construction workers.</p>
+            <p style="margin-bottom:var(--space-4)">Bongshai Housing invests in continuous training for our workforce, ensuring they are well-versed in modern construction methodologies, safety protocols, and compliance regulations.</p>
+            <p style="margin-bottom:var(--space-4)">Their hard work, precision, and dedication on the ground are what turn architectural blueprints into magnificent realities.</p>
+
+            <div style="margin-top:var(--space-8)">
+              <a href="about.html" class="btn btn-outline">← Back to About Us</a>
+              <a href="contact.html" class="btn btn-primary" style="margin-left:var(--space-3)">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

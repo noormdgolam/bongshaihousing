@@ -1,0 +1,342 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About Us",
+      "item": "https://bongshaihousing.com/about.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About Bongshai Housing Ltd. — Bangladesh's Premier Steel Building Company",
+  "description": "Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building (PEB) company and EPC contractor with 20+ years of experience, 500+ delivered projects, ISO 9001:2015 certification, and a team of expert engineers and architects.",
+  "url": "https://bongshaihousing.com/about.html",
+  "dateModified": "2026-08-08",
+  "isPartOf": {"@type": "WebSite", "url": "https://bongshaihousing.com"},
+  "about": {
+    "@type": ["Organization", "HomeAndConstructionBusiness", "GeneralContractor"],
+    "@id": "https://bongshaihousing.com/#organization",
+    "name": "Bongshai Housing Ltd.",
+    "alternateName": ["Bongshai Housing", "Bongshai Steel Building Company"],
+    "url": "https://bongshaihousing.com",
+    "logo": "https://bongshaihousing.com/images/logo.png",
+    "description": "Bangladesh's premier pre-engineered steel building (PEB) manufacturer and EPC contractor. Founded in 2008, delivering residential prefab homes, industrial factory sheds, and turnkey EPC projects across all 64 districts of Bangladesh.",
+    "slogan": "Low Cost, High Quality",
+    "foundingDate": "2008",
+    "numberOfEmployees": {"@type": "QuantitativeValue", "value": 200},
+    "knowsAbout": [
+      "Pre-Engineered Steel Buildings (PEB)",
+      "EPC Contracting Bangladesh",
+      "Steel Composite Building Construction",
+      "Prefab Housing Bangladesh",
+      "Industrial Factory Shed Construction",
+      "Architectural Design Bangladesh",
+      "Structural Engineering Bangladesh"
+    ],
+    "hasCredential": [
+      {"@type": "EducationalOccupationalCredential", "name": "ISO 9001:2015 Quality Management System"},
+      {"@type": "EducationalOccupationalCredential", "name": "OHSAS 18001 / ISO 45001 Safety Management"},
+      {"@type": "EducationalOccupationalCredential", "name": "In-house Material Testing Laboratory"}
+    ],
+    "employee": [
+      {
+        "@type": "Person",
+        "name": "SMA AWAL",
+        "jobTitle": "Chief Engineer",
+        "worksFor": {"@id": "https://bongshaihousing.com/#organization"},
+        "description": "Chief Engineer at Bongshai Housing Ltd., overseeing structural engineering, pre-engineered steel building (PEB) design, and quality assurance for all construction projects across Bangladesh."
+      },
+      {
+        "@type": "Person",
+        "name": "MD Golam Noor",
+        "jobTitle": "IT Lead",
+        "worksFor": {"@id": "https://bongshaihousing.com/#organization"},
+        "description": "IT Lead at Bongshai Housing Ltd., managing digital operations, web systems, and technology infrastructure."
+      },
+      {
+        "@type": "Person",
+        "name": "Farjana Maria",
+        "jobTitle": "Architect",
+        "worksFor": {"@id": "https://bongshaihousing.com/#organization"},
+        "description": "Architect at Bongshai Housing Ltd., responsible for custom residential and commercial building design, floor plan development, and client-facing architectural blueprints across Bangladesh."
+      }
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+    "telephone": ["+8801781636613", "+8801714104940"],
+    "email": "sales@bongshai.com",
+    "areaServed": {"@type": "Country", "name": "Bangladesh"}
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Who are we?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BONGSHAI HOUSING is a Bangladesh-based Real Estate and Housing Company undertaking projects on an Engineering-Procurement-Construction & Commissioning (EPC&C) basis. We deliver complex projects with international standards of quality, safety, and reliability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Our Mission?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To deliver world-class, affordable, and innovative housing solutions across Bangladesh — providing every family and business with access to quality construction built on the pillars of integrity, safety, and excellence."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Our Vision?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To become South Asia's most respected prefab and real estate company — recognized globally for transforming the housing landscape with cutting-edge technology, sustainable construction practices, and an uncompromising dedication to client satisfaction."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is in our Senior Management?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our Senior Management consists of DGMs, Project Managers, and Architects with decades of international and domestic construction experience leading every project."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is in our Engineering Team?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our engineering team includes Site Engineers, QC Engineers, and Tender Executives trained in civil, structural, and architectural engineering disciplines."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who handles our Marketing & Sales?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Dedicated Marketing & Sales Executives handle all operations, ensuring seamless client communication, transparent pricing, and lasting relationships."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do we manage Quality Control?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our QC team ensures every construction stage meets or exceeds international standards for materials, workmanship, and safety."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who are our Skilled Workers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our workforce includes highly trained Foremen and skilled construction workers educated in safety, quality, compliance, and best construction practices."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is our Client Service approach?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We provide a dedicated client service team available Saturday to Thursday, ensuring prompt responses and complete satisfaction throughout your project."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- PAGE HERO -->
+    <section class="page-hero" aria-labelledby="page-title">
+      <div class="container page-hero-content">
+        <span class="page-hero-label">About Us</span>
+        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Bangladesh's Most Trusted<br>Housing Company</h1>
+        <p class="page-hero-text">20+ years of building dreams with international quality, innovative prefab technology, and an unwavering commitment to excellence.</p>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">About Us</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+    <section class="section" style="padding: 2rem 0; background: var(--off-white);">
+      <div class="container">
+        <p><strong>Bongshai Housing is a trusted pre-engineered steel building and EPC company in Bangladesh. We provide world-class, affordable, and rapid prefab construction solutions for residential, commercial, and industrial clients with over 20 years of excellence.</strong></p>
+        <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+          By <strong>Bongshai Housing Engineering Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT CONTENT -->
+    <section class="section" aria-labelledby="about-story-title">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-img-wrap reveal-left">
+            <img src="images/about-team.webp" srcset="images/about-team-400w.webp 400w, images/about-team-700w.webp 700w, images/about-team.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Bongshai Housing professional engineering team" loading="lazy" title="Bongshai Housing professional engineering team" width="1024" height="1024">
+            <div class="about-badge-float">
+              <div class="about-badge-icon" aria-hidden="true">🏆</div>
+              <div>
+                <span class="about-badge-num">20+</span>
+                <span class="about-badge-lbl">Years of Excellence</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-content reveal-right">
+            <div class="section-label" data-aos="fade-up">Our Story</div>
+            <h2 id="about-story-title">Who are we?</h2>
+            <p style="margin-bottom:var(--space-4)">
+              <strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The company undertakes projects on the basis of <strong>Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C)</strong>.
+            </p>
+            <p style="margin-bottom:var(--space-4)">
+              We have the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability. The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce.
+            </p>
+            <p>
+              BONGSHAI HOUSING will be responsible for the entire process of the project, ranging from design and materials supply to construction/installation and test operation. We maintain a great deal of experience in preparation, co-ordination, implementation, new-build, and maintenance works.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION & VISION -->
+    <section class="section" style="background:var(--off-white)" aria-labelledby="mission-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label" data-aos="fade-up">Our Purpose</div>
+          <h2 class="section-title" data-aos="fade-up" id="mission-title">What are our Mission &amp; Vision?</h2>
+        </div>
+        <div class="stagger product-grid">
+          <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:0;text-align:left">
+            <div class="why-icon" style="margin:0 0 var(--space-5)" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+            <h3 class="why-title">What is Our Mission?</h3>
+            <p class="why-text">To deliver world-class, affordable, and innovative housing solutions across Bangladesh — providing every family and business with access to quality construction built on the pillars of integrity, safety, and excellence. We aim to be the most trusted EPC housing company, creating lasting value for all stakeholders through innovation and commitment.</p>
+          </div>
+          <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:1;text-align:left">
+            <div class="why-icon" style="margin:0 0 var(--space-5)" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></div>
+            <h3 class="why-title">What is Our Vision?</h3>
+            <p class="why-text">To become South Asia's most respected prefab and real estate company — recognized globally for transforming the housing landscape with cutting-edge technology, sustainable construction practices, and an uncompromising dedication to client satisfaction. We envision a Bangladesh where quality housing is accessible to all.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM & EXPERTISE -->
+    <section class="section" aria-labelledby="team-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label" data-aos="fade-up">Our People</div>
+          <h2 class="section-title" data-aos="fade-up" id="team-title">Who makes up our Expert Team &amp; Qualified Staff?</h2>
+          <p class="section-subtitle" data-aos="fade-up">Our workforce brings together strong educational backgrounds, extensive experience, and specialized training.</p>
+        </div>
+        <div class="why-grid stagger">
+          <a href="team-senior-management.html" class="why-card reveal glass-card" data-aos="fade-up" style="--i:0; text-decoration:none; color:inherit; display:block;">
+            <div class="why-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+            <h3 class="why-title">Who is in our Senior Management?</h3>
+            <p class="why-text">DGM, Project Managers, and Architects with decades of international and domestic construction experience leading every project.</p>
+            <div style="margin-top:var(--space-4); color:var(--primary); font-weight:600; font-size:0.9rem;">View Details →</div>
+          </a>
+          <a href="team-engineering.html" class="why-card reveal glass-card" data-aos="fade-up" style="--i:1; text-decoration:none; color:inherit; display:block;">
+            <div class="why-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+            <h3 class="why-title">Who is in our Engineering Team?</h3>
+            <p class="why-text">Site Engineers, QC Engineers, and Tender Executives trained in civil, structural, and architectural engineering disciplines.</p>
+            <div style="margin-top:var(--space-4); color:var(--primary); font-weight:600; font-size:0.9rem;">View Details →</div>
+          </a>
+          <a href="team-marketing-sales.html" class="why-card reveal glass-card" data-aos="fade-up" style="--i:2; text-decoration:none; color:inherit; display:block;">
+            <div class="why-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></div>
+            <h3 class="why-title">Who handles our Marketing &amp; Sales?</h3>
+            <p class="why-text">Dedicated Marketing &amp; Sales Executives who ensure seamless client communication, transparent pricing, and lasting relationships.</p>
+            <div style="margin-top:var(--space-4); color:var(--primary); font-weight:600; font-size:0.9rem;">View Details →</div>
+          </a>
+          <a href="team-quality-control.html" class="why-card reveal glass-card" data-aos="fade-up" style="--i:3; text-decoration:none; color:inherit; display:block;">
+            <div class="why-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+            <h3 class="why-title">How do we manage Quality Control?</h3>
+            <p class="why-text">Our QC team ensures every construction stage meets or exceeds international standards for materials, workmanship, and safety.</p>
+            <div style="margin-top:var(--space-4); color:var(--primary); font-weight:600; font-size:0.9rem;">View Details →</div>
+          </a>
+          <a href="team-skilled-workers.html" class="why-card reveal glass-card" data-aos="fade-up" style="--i:4; text-decoration:none; color:inherit; display:block;">
+            <div class="why-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"></path><path d="M2 20h20"></path><path d="M14 12v.01"></path></svg></div>
+            <h3 class="why-title">Who are our Skilled Workers?</h3>
+            <p class="why-text">Highly trained Foremen and skilled construction workers educated in safety, quality, compliance, and best construction practices.</p>
+            <div style="margin-top:var(--space-4); color:var(--primary); font-weight:600; font-size:0.9rem;">View Details →</div>
+          </a>
+          <a href="team-client-service.html" class="why-card reveal glass-card" data-aos="fade-up" style="--i:5; text-decoration:none; color:inherit; display:block;">
+            <div class="why-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+            <h3 class="why-title">What is our Client Service approach?</h3>
+            <p class="why-text">A dedicated client service team available Saturday to Thursday, ensuring prompt responses and complete satisfaction throughout your project.</p>
+            <div style="margin-top:var(--space-4); color:var(--primary); font-weight:600; font-size:0.9rem;">View Details →</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section stats-section" aria-label="Company achievements">
+      <div class="container">
+        <div class="stats-grid stagger">
+          <div class="stat-card reveal" style="--i:0">
+            <div class="stat-card-icon" aria-hidden="true">🏠</div>
+            <div class="stat-card-num">500<span class="gold">+</span></div>
+            <div class="stat-card-label">Homes Delivered</div>
+          </div>
+          <div class="stat-card reveal" style="--i:1">
+            <div class="stat-card-icon" aria-hidden="true">🏆</div>
+            <div class="stat-card-num">20<span class="gold">+</span></div>
+            <div class="stat-card-label">Years Experience</div>
+          </div>
+          <div class="stat-card reveal" style="--i:2">
+            <div class="stat-card-icon" aria-hidden="true">👷</div>
+            <div class="stat-card-num">200<span class="gold">+</span></div>
+            <div class="stat-card-label">Expert Professionals</div>
+          </div>
+          <div class="stat-card reveal" style="--i:3">
+            <div class="stat-card-icon" aria-hidden="true">😊</div>
+            <div class="stat-card-num">98<span class="gold">%</span></div>
+            <div class="stat-card-label">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section cta-section" aria-labelledby="about-cta-title">
+      <div class="container cta-inner">
+        <h2 class="cta-title" id="about-cta-title">Let's Build Something Great Together</h2>
+        <p class="cta-text">Contact our team today for a free consultation. We're ready to turn your housing vision into a reality.</p>
+        <div class="cta-actions">
+          <a href="contact.html" class="btn btn-white btn-lg" id="about-cta-btn">Get Free Consultation</a>
+          <a href="career.html" class="btn btn-outline btn-lg" id="about-career-btn">Join Our Team</a>
+        </div>
+      </div>
+    </section>
+{% endblock %}

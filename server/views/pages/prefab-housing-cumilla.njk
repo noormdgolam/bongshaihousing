@@ -1,0 +1,473 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+        "@id": "https://bongshaihousing.com/#organization",
+        "name": "Bongshai Housing Ltd.",
+        "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+        "url": "https://bongshaihousing.com",
+        "logo": "https://bongshaihousing.com/images/logo.png",
+        "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+        "slogan": "Bangladesh's Premier Steel Building Company",
+        "telephone": ["+8801781636613", "+8801714104940"],
+        "email": "sales@bongshai.com",
+        "priceRange": "Contact for Quote",
+        "hasMap": "https://share.google/o4qfoSNEk5eRdxzvv",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "House #18, Road #18, Sector #10",
+          "addressLocality": "Uttara",
+          "addressRegion": "Dhaka",
+          "postalCode": "1230",
+          "addressCountry": "BD"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "23.8728",
+          "longitude": "90.3984"
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        },
+        "sameAs": [
+          "https://www.facebook.com/bongshaihousing",
+          "https://wa.me/8801781636613",
+          "https://share.google/o4qfoSNEk5eRdxzvv"
+        ],
+        "areaServed": [
+          {"@type": "Country", "name": "Bangladesh"},
+          {"@type": "City", "name": "Dhaka"},
+          {"@type": "AdministrativeArea", "name": "Uttara, Dhaka"}
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Steel Building & Housing Packages",
+          "itemListElement": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pre-Engineered Steel Buildings (PEB)", "description": "Custom industrial pre-engineered steel buildings and factory sheds in Bangladesh."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Industrial Steel Shed Construction", "description": "High-quality industrial steel shed construction services in Dhaka and across Bangladesh."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Single Story Steel Composite Building", "description": "Steel-concrete composite single-story buildings – Bangladesh's premier steel building company."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Low-Cost Steel Prefab Cottage", "description": "Affordable steel-frame prefab cottages in Bangladesh."}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Luxury Steel Prefab Villa", "description": "Premium steel prefab villas with luxury finishes in Bangladesh."}}
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://bongshaihousing.com/#website",
+        "url": "https://bongshaihousing.com",
+        "name": "Bongshai Housing – Steel Building Company Bangladesh",
+        "description": "Bangladesh's #1 steel building company and EPC real estate developer",
+        "publisher": {"@id": "https://bongshaihousing.com/#organization"},
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://bongshaihousing.com/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Service Areas",
+      "item": "https://bongshaihousing.com/service-areas.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Prefab Housing & Steel Buildings in Cumilla",
+      "item": "https://bongshaihousing.com/prefab-housing-cumilla.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Prefab Housing in Cumilla - Bongshai Housing Bangladesh",
+  "description": "Bongshai Housing provides pre-engineered steel buildings and prefab housing services in Cumilla district. All building types available. ISO certified. Founded 2008.",
+  "provider": {"@type": "Organization", "@id": "https://bongshaihousing.com/#organization", "name": "Bongshai Housing Ltd.", "foundingDate": "2008"},
+  "areaServed": {"@type": "AdministrativeArea", "name": "Cumilla, Chattogram Division, Bangladesh"},
+  "url": "https://bongshaihousing.com/prefab-housing-cumilla.html",
+  "dateModified": "2026-08-08"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- ======================================================
+         HERO SECTION
+    ====================================================== -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="hero-bg">
+        <img loading="lazy" src="images/hero-bg.webp" srcset="images/hero-bg-400w.webp 400w, images/hero-bg-700w.webp 700w, images/hero-bg.webp 1024w" sizes="100vw" alt="Modern prefab housing by Bongshai Housing Bangladesh" fetchpriority="high" title="Modern prefab housing by Bongshai Housing Bangladesh" width="1024" height="1024">
+      </div>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content container">
+        <div class="hero-badge" aria-label="Company status">
+          <span class="dot"></span>
+          Cumilla's Premier Housing Developer
+        </div>
+
+        <h1 class="hero-title" data-aos="fade-up" id="hero-title" style="font-size: clamp(1.75rem, 3.5vw, 3rem); line-height: 1.15; letter-spacing: -0.02em;">
+          Premier Prefab Housing in <span class="highlight">Cumilla</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          From affordable prefab cottages to luxurious villas — we deliver world-class construction with EPC commitment, international quality, and unmatched value.
+        </p>
+
+        <div class="hero-actions">
+          <a href="products-and-solutions.html" class="btn btn-primary btn-lg" id="hero-explore-btn">
+            Explore Properties
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="contact.html" class="btn btn-outline btn-lg" id="hero-contact-btn">Contact Us Today</a>
+        </div>
+
+        <div class="hero-stats" aria-label="Company statistics">
+          <div class="stat-item">
+            <span class="stat-number">500<span class="stat-plus">+</span></span>
+            <span class="stat-label">Projects Completed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">20<span class="stat-plus">+</span></span>
+            <span class="stat-label">Years Experience</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">98<span class="stat-plus">%</span></span>
+            <span class="stat-label">Client Satisfaction</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">9</span>
+            <span class="stat-label">Housing Packages</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    
+
+    <!-- ======================================================
+         ABOUT SECTION
+    ====================================================== -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-grid">
+
+          <div class="about-img-wrap reveal-left">
+            <img src="images/about-team.webp" srcset="images/about-team-400w.webp 400w, images/about-team-700w.webp 700w, images/about-team.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Bongshai Housing professional team at construction site" loading="lazy" title="Bongshai Housing professional team at construction site" width="1024" height="1024">
+            <div class="about-badge-float" aria-label="Experience badge">
+              <div class="about-badge-icon" aria-hidden="true">🏆</div>
+              <div>
+                <span class="about-badge-num">20+</span>
+                <span class="about-badge-lbl">Years of Excellence</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-content reveal-right">
+            <div class="section-label">Who We Are</div>
+            <h2 class="section-title" data-aos="fade-up" id="about-title">Bangladesh's Most Trusted Housing Company</h2>
+            <p style="margin-bottom:var(--space-4)">
+              <strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The Company undertakes projects on the basis of Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C), with the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability.
+            </p>
+            <p>
+              The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce — responsible for the entire process from design and materials supply to construction and test operation.
+            </p>
+
+            <div class="about-features">
+              <div class="about-feature-item">
+                <div class="about-feature-icon" aria-hidden="true">👷</div>
+                <div>
+                  <span class="about-feature-title">Expert Workforce</span>
+                  <p class="about-feature-text">Highly qualified engineers, architects, and skilled workers</p>
+                </div>
+              </div>
+              <div class="about-feature-item">
+                <div class="about-feature-icon" aria-hidden="true">📐</div>
+                <div>
+                  <span class="about-feature-title">Modern Technology</span>
+                  <p class="about-feature-text">Latest construction techniques and prefab systems</p>
+                </div>
+              </div>
+              <div class="about-feature-item">
+                <div class="about-feature-icon" aria-hidden="true">🤝</div>
+                <div>
+                  <span class="about-feature-title">EPC Commitment</span>
+                  <p class="about-feature-text">Full project management from start to finish</p>
+                </div>
+              </div>
+              <div class="about-feature-item">
+                <div class="about-feature-icon" aria-hidden="true">🌐</div>
+                <div>
+                  <span class="about-feature-title">International Quality</span>
+                  <p class="about-feature-text">Global best practices in construction &amp; safety</p>
+                </div>
+              </div>
+            </div>
+
+            <a href="about.html" class="btn btn-primary" id="about-learn-more-btn">
+              Learn More About Us
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         PROPERTIES SECTION
+    ====================================================== -->
+    <section class="section" style="background:var(--off-white)" id="properties" aria-labelledby="properties-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Our Packages</div>
+          <h2 class="section-title" data-aos="fade-up" id="properties-title">Premium Housing Packages</h2>
+          <p class="section-subtitle">Choose from our expertly designed housing solutions — crafted for every budget, lifestyle, and ambition.</p>
+        </div>
+
+        <div class="properties-grid stagger">
+
+          <!-- Apartment Building -->
+          <article class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0" aria-labelledby="two-story-title">
+            <div class="property-img-wrap">
+              <img src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Apartment Building by Bongshai Housing" loading="lazy" title="Apartment Building by Bongshai Housing" width="1024" height="1024">
+              <div class="property-badge-top">
+                <span class="badge badge-navy">Dual-Level</span>
+              </div>
+            </div>
+            <div class="property-card-body" data-aos="fade-up">
+              <span class="property-type">🏢 Residential Build</span>
+              <h3 class="property-name" id="two-story-title">Apartment Building</h3>
+              <p class="property-desc">Spacious dual-level apartment homes built for Cumilla's growing families.</p>
+                            <a href="apartment-building.html" class="btn-card-link">View Package Details</a>
+            </div>
+          </article>
+
+          <!-- Duplex Steel Building -->
+          <article class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1" aria-labelledby="duplex-title">
+            <div class="property-img-wrap">
+              <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Duplex Steel Building by Bongshai Housing" loading="lazy" title="Duplex Steel Building by Bongshai Housing" width="1024" height="1024">
+              <div class="property-badge-top">
+                <span class="badge badge-gold">Premium Living</span>
+              </div>
+            </div>
+            <div class="property-card-body" data-aos="fade-up">
+              <span class="property-type">🏘️ Luxury Villa</span>
+              <h3 class="property-name" id="duplex-title">Duplex Steel Building</h3>
+              <p class="property-desc">Premium multi-family duplex living for Cumilla's growing neighborhoods.</p>
+                            <a href="duplex-steel-building.html" class="btn-card-link">View Package Details</a>
+            </div>
+          </article>
+
+          <!-- Simplex Steel Building -->
+          <article class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2" aria-labelledby="single-story-title">
+            <div class="property-img-wrap">
+              <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Steel Building by Bongshai Housing" loading="lazy" title="Simplex Steel Building by Bongshai Housing" width="1024" height="1024">
+              <div class="property-badge-top">
+                <span class="badge badge-green">Standard</span>
+              </div>
+            </div>
+            <div class="property-card-body" data-aos="fade-up">
+              <span class="property-type">🏠 Essential Housing</span>
+              <h3 class="property-name" id="single-story-title">Simplex Steel Building</h3>
+              <p class="property-desc">Durable, cost-effective simplex buildings for Cumilla homes and businesses.</p>
+                            <a href="simplex-steel-building.html" class="btn-card-link">View Package Details</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         INDUSTRY SOLUTIONS
+    ====================================================== -->
+    
+
+    <!-- ======================================================
+         STATS SECTION
+    ====================================================== -->
+    <section class="section stats-section" aria-label="Company statistics">
+      <div class="container">
+        <div class="stats-grid stagger">
+          <div class="stat-card reveal" style="--i:0">
+            <div class="stat-card-icon" aria-hidden="true">🏠</div>
+            <div class="stat-card-num">500<span class="gold">+</span></div>
+            <div class="stat-card-label">Homes Delivered</div>
+          </div>
+          <div class="stat-card reveal" style="--i:1">
+            <div class="stat-card-icon" aria-hidden="true">😊</div>
+            <div class="stat-card-num">98<span class="gold">%</span></div>
+            <div class="stat-card-label">Client Satisfaction Rate</div>
+          </div>
+          <div class="stat-card reveal" style="--i:2">
+            <div class="stat-card-icon" aria-hidden="true">🏆</div>
+            <div class="stat-card-num">20<span class="gold">+</span></div>
+            <div class="stat-card-label">Years of Excellence</div>
+          </div>
+          <div class="stat-card reveal" style="--i:3">
+            <div class="stat-card-icon" aria-hidden="true">👷</div>
+            <div class="stat-card-num">200<span class="gold">+</span></div>
+            <div class="stat-card-label">Expert Professionals</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         WHY CHOOSE US & ADVANTAGES
+    ====================================================== -->
+    <section class="section" id="why-us" aria-labelledby="why-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Why Bongshai Housing</div>
+          <h2 class="section-title" data-aos="fade-up" id="why-title">Why Choose Us?</h2>
+          <p class="section-subtitle">We combine expertise, innovation, and unwavering commitment to quality to deliver your dream home.</p>
+        </div>
+
+        <div class="why-grid stagger" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+          <div class="why-card reveal" style="--i:0">
+            <div class="why-icon" aria-hidden="true">⏱️</div>
+            <h3 class="why-title">Rapid, High-Quality</h3>
+            <p class="why-text">Rapid, high-quality construction ensuring your project is completed on time without compromising standards.</p>
+          </div>
+          <div class="why-card reveal" style="--i:1">
+            <div class="why-icon" aria-hidden="true">🌿</div>
+            <h3 class="why-title">Eco-Friendly</h3>
+            <p class="why-text">Eco-friendly &amp; energy-saving homes that reduce your carbon footprint and save on energy bills.</p>
+          </div>
+          <div class="why-card reveal" style="--i:2">
+            <div class="why-icon" aria-hidden="true">🛡️</div>
+            <h3 class="why-title">Disaster-Proof</h3>
+            <p class="why-text">Earthquake &amp; cyclone-proof design ensuring safety and durability against natural disasters.</p>
+          </div>
+          <div class="why-card reveal" style="--i:3">
+            <div class="why-icon" aria-hidden="true">🔑</div>
+            <h3 class="why-title">End-to-End Service</h3>
+            <p class="why-text">Complete design-to-handover service, providing a hassle-free experience from blueprint to moving in.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         ADVANTAGES OF STEEL-RC BUILDING
+    ====================================================== -->
+    <section class="section process-bg" id="advantages" aria-labelledby="advantages-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Our Technology</div>
+          <h2 class="section-title" data-aos="fade-up" id="advantages-title">Advantage of Steel-RC Building</h2>
+          <p class="section-subtitle">Discover the benefits of our advanced steel-reinforced concrete building technology.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4); max-width: 900px; margin: 0 auto;" class="reveal">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Cost-effective and Eco-friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> High strength, inflexibility and high load bearing capacity</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Pre-fabricated, easy to install and dismantle</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Lightness, easy to transport and re-located</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Low maintenance cost</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Using several times and recycling</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Increase area efficiency by 10%--20%</li>
+          </ul>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Environment friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Weather-resistant with proper coating and maintenance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for strong seismic performance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for high wind-load resistance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Energy saving with good thermal insulation system</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> 50~60 years’ life span</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         PROCESS SECTION
+    ====================================================== -->
+    <section class="section process-bg" id="process" aria-labelledby="process-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">How We Work</div>
+          <h2 class="section-title" data-aos="fade-up" id="process-title">Our Simple 4-Step Process</h2>
+          <p class="section-subtitle">From your first inquiry to key handover — we make every step clear, smooth, and stress-free.</p>
+        </div>
+
+        <div class="process-steps stagger">
+          <div class="process-step reveal" style="--i:0">
+            <div class="step-num">01<span class="step-icon">📋</span></div>
+            <h3 class="step-title">Consultation</h3>
+            <p class="step-text">Tell us your requirements, budget, and vision. Our expert advisors guide you through the best housing package.</p>
+          </div>
+          <div class="process-step reveal" style="--i:1">
+            <div class="step-num">02<span class="step-icon">📐</span></div>
+            <h3 class="step-title">Design &amp; Planning</h3>
+            <p class="step-text">Our architects create custom blueprints aligned with your needs, local regulations, and structural excellence.</p>
+          </div>
+          <div class="process-step reveal" style="--i:2">
+            <div class="step-num">03<span class="step-icon">🏗️</span></div>
+            <h3 class="step-title">Construction</h3>
+            <p class="step-text">Expert engineers and skilled workers build your home using premium materials with full quality control oversight.</p>
+          </div>
+          <div class="process-step reveal" style="--i:3">
+            <div class="step-num">04<span class="step-icon">🔑</span></div>
+            <h3 class="step-title">Handover</h3>
+            <p class="step-text">We deliver your completed home on schedule, conduct final inspections, and provide after-sales support.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TESTIMONIALS
+    ====================================================== -->
+    
+
+    <!-- ======================================================
+         CTA SECTION
+    ====================================================== -->
+    <section class="section cta-section" id="cta" aria-labelledby="cta-title">
+      <div class="container cta-inner">
+        <div class="section-label" style="color:rgba(255,255,255,0.8)">Start Today</div>
+        <h2 class="cta-title" id="cta-title">Ready to Build Your Dream Home?</h2>
+        <p class="cta-text">Get in touch today for a free consultation and customized housing package. Our experts are available Saturday to Thursday, 9 AM – 7 PM.</p>
+        <div class="cta-actions">
+          <a href="contact.html" class="btn btn-white btn-lg" id="cta-contact-btn">
+            Get Free Consultation
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-outline btn-lg" id="cta-call-btn">📞 01781-636613</a>
+        </div>
+      </div>
+    </section>
+{% endblock %}

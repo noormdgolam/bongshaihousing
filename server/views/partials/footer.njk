@@ -94,8 +94,8 @@
 </div>
 </footer>
 
-  <a href="https://wa.me/8801781636613" class="whatsapp-float" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
-    <div class="whatsapp-float-pulse"></div>💬
+  <a href="{{ whatsappHref or 'https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20have%20a%20question.' }}" class="whatsapp-float" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
+    <div class="whatsapp-float-pulse" aria-hidden="true"></div>💬
   </a>
 
   <script>
@@ -105,6 +105,18 @@
     const hamburger = document.getElementById('hamburgerBtn');
     const drawer = document.getElementById('mobileDrawer');
     hamburger.addEventListener('click', () => { const isOpen = drawer.classList.toggle('open'); hamburger.classList.toggle('open', isOpen); hamburger.setAttribute('aria-expanded', isOpen); document.body.style.overflow = isOpen ? 'hidden' : ''; });
+    // Category sidebar mobile toggle
+    (function() {
+      var toggle = document.getElementById('catSidebarToggle');
+      var body = document.getElementById('catSidebarBody');
+      if (toggle && body) {
+        toggle.addEventListener('click', function() {
+          var isOpen = body.classList.toggle('open');
+          toggle.classList.toggle('open', isOpen);
+          toggle.setAttribute('aria-expanded', isOpen);
+        });
+      }
+    })();
     const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.12 });
     document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
   </script>
