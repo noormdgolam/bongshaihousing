@@ -102,13 +102,13 @@
 {% endblock %}
 
 {% block content %}
-<section aria-labelledby="ssb-page-title" class="page-hero">
+<section aria-labelledby="ssb-page-title" class="page-hero"{% if dbCategory and dbCategory.hero_image %} style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.85)), url('/{{ dbCategory.hero_image | replace('^/', '') }}') center/cover no-repeat;"{% endif %}>
 <div class="container page-hero-content">
 <span class="page-hero-label">Composite Construction</span>
-<h1 class="page-hero-title" data-aos="fade-up" id="ssb-page-title">Apartment Building</h1>
-<p class="page-hero-text">Two-floor steel-composite apartment buildings designed for multi-family or rental-style living — durable, expandable, and built for Bangladesh’s urban density.</p>
+<h1 class="page-hero-title" data-aos="fade-up" id="ssb-page-title">{{ dbCategory.name if (dbCategory and dbCategory.name) else 'Apartment Building' }}</h1>
+<p class="page-hero-text">{{ dbCategory.description if (dbCategory and dbCategory.description) else 'Two-floor steel-composite apartment buildings designed for multi-family or rental-style living — durable, expandable, and built for Bangladesh’s urban density.' }}</p>
 <nav aria-label="Breadcrumb" class="breadcrumb">
-<a href="index.html">Home</a><span>/</span><a href="products-and-solutions.html">Products</a><span>/</span><span aria-current="page">Apartment Building</span>
+<a href="index.html">Home</a><span>/</span><a href="products-and-solutions.html">Products</a><span>/</span><span aria-current="page">{{ dbCategory.name if (dbCategory and dbCategory.name) else 'Apartment Building' }}</span>
 </nav>
 </div>
 </section>

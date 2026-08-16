@@ -67,9 +67,50 @@ if (registry['/projects.html']) {
   });
 }
 
+// ── Category landing pages — DB-driven hero / description override ──────────
+// Pulls hero image/description from the DB category row when present,
+// falling back to the template's static content if DB is empty or offline.
+const CATEGORY_LANDING_PAGES = [
+  'apartment-building.html',
+  'concrete-building.html',
+  'container-house.html',
+  'cottage-house.html',
+  'duplex-steel-building.html',
+  'industrial-sheds.html',
+  'luxury-villa.html',
+  'simplex-steel-building.html',
+  'steel-house.html',
+  'tiny-house.html',
+  'wooden-house.html',
+  'worker-accommodation.html',
+];
+
+for (const pageFile of CATEGORY_LANDING_PAGES) {
+  const urlPath = `/${pageFile}`;
+  if (registry[urlPath]) {
+    const meta = registry[urlPath];
+    router.get(urlPath, async (req, res) => {
+      let dbCategory = null;
+      if (db) {
+        try {
+          const pageSlug = pageFile.replace(/\.html$/, '');
+          dbCategory = await db('categories')
+            .where({ landing_page_slug: pageFile })
+            .orWhere({ slug: pageSlug })
+            .orWhere({ landing_page_slug: pageSlug })
+            .first();
+        } catch (err) {
+          console.error(`category DB fetch failed for ${pageFile}, rendering static fallback:`, err.message);
+        }
+      }
+      res.render(meta.template, renderVars(meta, { dbCategory }));
+    });
+  }
+}
+
 // ── Generic registry loop (static pages) ──────────────────────────────────
-// /projects.html is already registered above with a dynamic handler,
-// so Express will match it first and never reach that entry here.
+// /projects.html and category landing pages are already registered above with
+// dynamic handlers, so Express will match them first and never reach them here.
 for (const [urlPath, meta] of Object.entries(registry)) {
   router.get(urlPath, (req, res) => {
     res.render(meta.template, renderVars(meta));
