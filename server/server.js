@@ -58,8 +58,14 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(express.static(path.join(REPO_ROOT), { extensions: ['html'], index: false }));
 }
 
+// bongshai-node-app is a separate directory from the site's actual files
+// (public_html/bongshaihousing.com/) in production - not a subdirectory of
+// it - so this can't reach for ../404.html the way dev mode can. Apache's
+// own .htaccess ErrorDocument 404 already covers the real site experience
+// for anything not proxied to Node; this only needs to handle a request
+// that made it to Node but matched no route here.
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(REPO_ROOT, '404.html'));
+  res.status(404).json({ status: 'error', message: 'Not found.' });
 });
 
 // eslint-disable-next-line no-unused-vars
