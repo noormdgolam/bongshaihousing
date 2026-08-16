@@ -59,6 +59,7 @@ router.post('/apply_career.php', upload.single('cv'), async (req, res) => {
     });
     return res.status(200).json({ status: 'success', message: 'Application submitted successfully.' });
   } catch (err) {
+    console.error('apply_career.php mail failure:', err);
     return res.status(500).json({ status: 'error', message: 'Email could not be sent. Please check server configuration.' });
   }
 });

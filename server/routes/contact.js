@@ -53,6 +53,7 @@ router.post('/send_email.php', async (req, res) => {
     });
     return res.status(200).json({ status: 'success', message: 'Message sent successfully.' });
   } catch (err) {
+    console.error('send_email.php mail failure:', err);
     return res.status(500).json({ status: 'error', message: 'Message could not be sent. Please check your mail server configuration.' });
   }
 });
