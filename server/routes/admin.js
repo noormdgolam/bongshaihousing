@@ -13,13 +13,11 @@ router.get('/admin', async (req, res) => {
   const [productCount] = await db('products').count({ count: '*' });
   const [categoryCount] = await db('categories').count({ count: '*' });
   const [projectCount] = await db('projects').count({ count: '*' });
-  const [careerCount] = await db('career_listings').count({ count: '*' });
   res.render('admin/dashboard.njk', adminVars(req, {
     counts: {
       products: productCount.count,
       categories: categoryCount.count,
       projects: projectCount.count,
-      careerListings: careerCount.count,
     },
   }));
 });
@@ -176,51 +174,6 @@ router.post('/admin/projects/:id', async (req, res) => {
 router.post('/admin/projects/:id/delete', async (req, res) => {
   await db('projects').where({ id: req.params.id }).del();
   res.redirect('/admin/projects');
-});
-
-// ---- Career Listings ----
-
-router.get('/admin/career-listings', async (req, res) => {
-  const listings = await db('career_listings').orderBy('sort_order');
-  res.render('admin/career-listings/list.njk', adminVars(req, { listings }));
-});
-
-router.get('/admin/career-listings/new', (req, res) => {
-  res.render('admin/career-listings/form.njk', adminVars(req, { listing: null, error: null }));
-});
-
-router.post('/admin/career-listings', async (req, res) => {
-  const { slug, title, description, department, location, open, sort_order } = req.body;
-  try {
-    const [id] = await db('career_listings').insert({
-      slug, title, description: description || null, department: department || null,
-      location: location || 'Uttara, Dhaka', open: open === 'on', sort_order: sort_order || 0,
-    });
-    res.redirect(`/admin/career-listings/${id}/edit`);
-  } catch (err) {
-    res.status(400).render('admin/career-listings/form.njk', adminVars(req, { listing: req.body, error: err.message }));
-  }
-});
-
-router.get('/admin/career-listings/:id/edit', async (req, res) => {
-  const listing = await db('career_listings').where({ id: req.params.id }).first();
-  if (!listing) return res.status(404).send('Not found');
-  res.render('admin/career-listings/form.njk', adminVars(req, { listing, error: null }));
-});
-
-router.post('/admin/career-listings/:id', async (req, res) => {
-  const { slug, title, description, department, location, open, sort_order } = req.body;
-  await db('career_listings').where({ id: req.params.id }).update({
-    slug, title, description: description || null, department: department || null,
-    location: location || 'Uttara, Dhaka', open: open === 'on', sort_order: sort_order || 0,
-    updated_at: db.fn.now(),
-  });
-  res.redirect(`/admin/career-listings/${req.params.id}/edit`);
-});
-
-router.post('/admin/career-listings/:id/delete', async (req, res) => {
-  await db('career_listings').where({ id: req.params.id }).del();
-  res.redirect('/admin/career-listings');
 });
 
 module.exports = router;

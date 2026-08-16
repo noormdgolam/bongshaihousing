@@ -11,9 +11,9 @@ const { ConnectSessionKnexStore } = require('connect-session-knex');
 
 const db = require('./lib/db');
 const contactRouter = require('./routes/contact');
-const careerRouter = require('./routes/career');
 const counterRouter = require('./routes/counter');
 const pagesRouter = require('./routes/pages');
+const productsRouter = require('./routes/products');
 const adminAuthRouter = require('./routes/admin-auth');
 const adminRouter = require('./routes/admin');
 
@@ -74,10 +74,9 @@ app.set('view engine', 'njk');
 // process). Kept here so `npm run dev` renders a usable page locally.
 // Asset directories are safe to register early (no dynamic route ever
 // matches /images, /css, /js, /fonts), but the repo-root static fallback
-// for the *other* 222 not-yet-converted pages must come AFTER the routers
-// below - otherwise it shadows converted pages like /career.html by
-// serving the old static file straight off disk before Express ever
-// reaches the Nunjucks-rendered route.
+// for the *other* converted pages must come AFTER the routers
+// below - otherwise it shadows them by serving the old static file
+// straight off disk before Express ever reaches the Nunjucks-rendered route.
 if (process.env.NODE_ENV !== 'production') {
   app.use('/images', express.static(path.join(REPO_ROOT, 'images')));
   app.use('/css', express.static(path.join(REPO_ROOT, 'css')));
@@ -109,9 +108,9 @@ app.use((req, res, next) => {
 
 app.use('/', adminAuthRouter);
 app.use('/', adminRouter);
+app.use('/', productsRouter); // DB-driven product slug pages (bh-*, dv-*, lcv-*) — must precede pagesRouter
 app.use('/', pagesRouter);
 app.use('/', contactRouter);
-app.use('/', careerRouter);
 app.use('/', counterRouter);
 
 if (process.env.NODE_ENV !== 'production') {

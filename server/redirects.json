@@ -28,10 +28,6 @@
       "to": "/luxury-villa.html",
       "permanent": true
     },
-    "/career": {
-      "to": "/career.html",
-      "permanent": true
-    },
     "/two-story-building": {
       "to": "/apartment-building.html",
       "permanent": true
@@ -74,10 +70,6 @@
     },
     "/single-story-building": {
       "to": "/simplex-steel-building.html",
-      "permanent": true
-    },
-    "/career-apply-now": {
-      "to": "/career.html",
       "permanent": true
     },
     "/login": {
@@ -134,22 +126,6 @@
     },
     "/luxury-villa": {
       "to": "/luxury-villa.html",
-      "permanent": true
-    },
-    "/architect": {
-      "to": "/career.html",
-      "permanent": true
-    },
-    "/deputy-general-managerdgm": {
-      "to": "/career.html",
-      "permanent": true
-    },
-    "/project-manager": {
-      "to": "/career.html",
-      "permanent": true
-    },
-    "/foreman-civil-construction": {
-      "to": "/career.html",
       "permanent": true
     },
     "/project": {

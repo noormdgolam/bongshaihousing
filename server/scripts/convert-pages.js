@@ -31,7 +31,8 @@ const REPO_ROOT = path.join(__dirname, '..', '..');
 const VIEWS_PAGES_DIR = path.join(__dirname, '..', 'views', 'pages');
 const REGISTRY_PATH = path.join(__dirname, '..', 'page-registry.json');
 
-const EXCLUDE = new Set(['_header.html', '_footer.html', '_mobile_drawer.html', '404.html', 'offline.html', 'career.html', 'index.html']);
+const EXCLUDE = new Set(['_header.html', '_footer.html', '_mobile_drawer.html', '404.html', 'offline.html', 'index.html']);
+
 
 function text(el) {
   return el ? el.textContent.trim() : null;

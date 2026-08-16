@@ -10,7 +10,17 @@ const router = express.Router();
 const registryPath = path.join(__dirname, '..', 'page-registry.json');
 const registry = fs.existsSync(registryPath) ? JSON.parse(fs.readFileSync(registryPath, 'utf8')) : {};
 
-function renderVars(meta) {
+// DB is optional on this router — if it's not available (local dev without
+// MySQL, or a transient hiccup), these pages still render from their static
+// template content rather than returning a 500.
+let db;
+try {
+  db = require('../lib/db');
+} catch (e) {
+  db = null;
+}
+
+function renderVars(meta, extra) {
   return {
     title: meta.title,
     description: meta.description,
@@ -28,9 +38,38 @@ function renderVars(meta) {
     whatsappHref: meta.whatsappHref,
     bodyClass: meta.bodyClass,
     showQuoteShortcut: meta.showQuoteShortcut,
+    ...extra,
   };
 }
 
+
+
+
+// ── /projects.html — DB-driven project grid ───────────────────────────────
+// Same pattern: fetches published projects and passes as `dbProjects`.
+// Falls back to [] if DB is unavailable; projects.njk uses the existing
+// static content when dbProjects is empty.
+if (registry['/projects.html']) {
+  const projectsMeta = registry['/projects.html'];
+  router.get('/projects.html', async (req, res) => {
+    let dbProjects = [];
+    if (db) {
+      try {
+        dbProjects = await db('projects')
+          .where({ published: true })
+          .orderBy('sort_order')
+          .select('id', 'slug', 'title', 'location', 'description', 'image', 'status_label');
+      } catch (err) {
+        console.error('projects DB fetch failed, rendering static fallback:', err.message);
+      }
+    }
+    res.render(projectsMeta.template, renderVars(projectsMeta, { dbProjects }));
+  });
+}
+
+// ── Generic registry loop (static pages) ──────────────────────────────────
+// /projects.html is already registered above with a dynamic handler,
+// so Express will match it first and never reach that entry here.
 for (const [urlPath, meta] of Object.entries(registry)) {
   router.get(urlPath, (req, res) => {
     res.render(meta.template, renderVars(meta));
@@ -56,3 +95,4 @@ if (registry['/index.html']) {
 }
 
 module.exports = router;
+

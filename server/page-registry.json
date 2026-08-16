@@ -1,18 +1,4 @@
 {
-  "/career.html": {
-    "urlPath": "/career.html",
-    "title": "Jobs at Bongshai Housing | Bongshai Housing Bangladesh",
-    "description": "Join Bongshai Housing's team. Explore current openings in engineering, construction, and sales at Bangladesh's leading steel building and prefab housing company.",
-    "keywords": "Careers, steel building Bangladesh, prefab housing Dhaka, Bongshai Housing, EPC contractor Bangladesh, pre-engineered steel buildings",
-    "canonical": "https://bongshaihousing.com/career.html",
-    "ogTitle": "Careers | Bongshai Housing - Steel Structure Manufacturer in Bangladesh",
-    "ogDescription": "Join a leading steel structure manufacturer and pre-engineered steel building company in Bangladesh. Apply today!",
-    "ogImage": null,
-    "twitterTitle": "Careers | Bongshai Housing",
-    "twitterDescription": "Steel building & construction jobs at a leading pre-engineered steel building company in Bangladesh. Apply now.",
-    "template": "pages/career.njk",
-    "showQuoteShortcut": true
-  },
   "/about.html": {
     "urlPath": "/about.html",
     "title": "Bongshai Housing | Pre-Engineered Steel Buildings",
