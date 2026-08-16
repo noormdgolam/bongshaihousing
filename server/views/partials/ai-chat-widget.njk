@@ -587,11 +587,11 @@
     // Bold **text**
     safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    // Phone / WhatsApp links
-    safe = safe.replace(/(\+?880\s?1[3-9]\d{2}-?\d{6})/g, '<a href="https://wa.me/8801711200241" target="_blank" rel="noopener noreferrer">📞 $1</a>');
+    // URLs first (before adding internal <a> tags)
+    safe = safe.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 
-    // URLs
-    safe = safe.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    // Phone numbers (if not already inside an anchor tag)
+    safe = safe.replace(/(?<!href=")(?<!">)(\+?880\s?1[3-9]\d{2}-?\d{6})/g, '<a href="https://wa.me/8801711200241" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">📞 $1</a>');
 
     // Convert newlines to paragraphs/breaks
     return safe.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');

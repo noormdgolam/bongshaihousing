@@ -70,20 +70,19 @@ nunjucks.configure(path.join(__dirname, 'views'), {
 });
 app.set('view engine', 'njk');
 
-// Dev-only convenience: in production this is Apache's job (see the
-// architecture note in the plan - static assets stay off the Node
-// process). Kept here so `npm run dev` renders a usable page locally.
-// Asset directories are safe to register early (no dynamic route ever
-// matches /images, /css, /js, /fonts), but the repo-root static fallback
-// for the *other* converted pages must come AFTER the routers
-// below - otherwise it shadows them by serving the old static file
-// straight off disk before Express ever reaches the Nunjucks-rendered route.
-if (process.env.NODE_ENV !== 'production') {
-  app.use('/images', express.static(path.join(REPO_ROOT, 'images')));
-  app.use('/css', express.static(path.join(REPO_ROOT, 'css')));
-  app.use('/js', express.static(path.join(REPO_ROOT, 'js')));
-  app.use('/fonts', express.static(path.join(REPO_ROOT, 'fonts')));
-}
+// Static asset directories: /css, /js, /images, /fonts, plus root assets
+// In production on cPanel, Apache handles these directly; in Node dev/staging,
+// Express serves them cleanly so styles and media always load.
+app.use('/images', express.static(path.join(REPO_ROOT, 'images'), { maxAge: '1d' }));
+app.use('/css', express.static(path.join(REPO_ROOT, 'css'), { maxAge: '1d' }));
+app.use('/js', express.static(path.join(REPO_ROOT, 'js'), { maxAge: '1d' }));
+app.use('/fonts', express.static(path.join(REPO_ROOT, 'fonts'), { maxAge: '7d' }));
+app.use('/favicon.ico', express.static(path.join(REPO_ROOT, 'favicon.ico')));
+app.use('/manifest.json', express.static(path.join(REPO_ROOT, 'manifest.json')));
+app.use('/sw.js', express.static(path.join(REPO_ROOT, 'sw.js')));
+app.use('/sitemap.xml', express.static(path.join(REPO_ROOT, 'sitemap.xml')));
+app.use('/llms.txt', express.static(path.join(REPO_ROOT, 'llms.txt')));
+app.use('/robots.txt', express.static(path.join(REPO_ROOT, 'robots.txt')));
 
 // Old/broken URL parity with the static site's .htaccess RewriteRules
 // (Search Console fixes, renamed model numbers, dead WordPress-scanner
