@@ -14,6 +14,7 @@ const contactRouter = require('./routes/contact');
 const counterRouter = require('./routes/counter');
 const pagesRouter = require('./routes/pages');
 const productsRouter = require('./routes/products');
+const aiChatRouter = require('./routes/ai-chat');
 const adminAuthRouter = require('./routes/admin-auth');
 const adminRouter = require('./routes/admin');
 
@@ -109,6 +110,7 @@ app.use((req, res, next) => {
 app.use('/', adminAuthRouter);
 app.use('/', adminRouter);
 app.use('/', productsRouter); // DB-driven product slug pages (bh-*, dv-*, lcv-*) — must precede pagesRouter
+app.use('/', aiChatRouter);   // AI Sales Assistant API endpoint (/api/ai-chat)
 app.use('/', pagesRouter);
 app.use('/', contactRouter);
 app.use('/', counterRouter);
