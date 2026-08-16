@@ -4,7 +4,11 @@
 // without the native-binary/platform-target headaches a full ORM
 // (Prisma's query engine) would add on top of this shared host's own
 // constraints (see [[project-node-hosting-quirks]]).
-require('dotenv').config();
+// knex's CLI changes the working directory to this file's own folder
+// before running migrate/seed commands, so a bare dotenv.config() (which
+// defaults to reading .env from process.cwd()) silently misses the real
+// .env one level up - load it by explicit path instead.
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 
 const connection = {
   host: process.env.DB_HOST,
