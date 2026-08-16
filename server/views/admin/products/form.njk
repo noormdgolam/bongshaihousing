@@ -55,21 +55,91 @@
 <div class="card">
   <h2 style="font-size:1rem;">Building Specifications ({{ specs.length }})</h2>
   <table>
-    <thead><tr><th>Item</th><th>Materials</th></tr></thead>
+    <thead><tr><th>Item</th><th>Materials</th><th></th></tr></thead>
     <tbody>
-      {% for s in specs %}<tr><td>{{ s.spec_key }}</td><td>{{ s.spec_value }}</td></tr>{% endfor %}
+      {% for s in specs %}
+      <tr>
+        <form method="post" action="/admin/products/{{ product.id }}/specs/{{ s.id }}" style="display:contents;">
+          <td><input type="text" name="spec_key" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td style="white-space:nowrap;">
+            <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Save</button>
+            <button type="submit" formaction="/admin/products/{{ product.id }}/specs/{{ s.id }}/delete" formnovalidate class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;" onclick="return confirm('Delete this spec row?');">Del</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+      <tr>
+        <form method="post" action="/admin/products/{{ product.id }}/specs" style="display:contents;">
+          <td><input type="text" name="spec_key" placeholder="e.g. WALL" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" placeholder="e.g. 2.5'' RC precast concrete panel" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><button type="submit" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;">+ Add</button></td>
+        </form>
+      </tr>
     </tbody>
   </table>
 </div>
+
 <div class="card">
   <h2 style="font-size:1rem;">Floor-Area Variants ({{ variants.length }})</h2>
-  <table>
-    <thead><tr><th>Area</th><th>Bed</th><th>Bath</th><th>Kitchen</th></tr></thead>
-    <tbody>
-      {% for v in variants %}<tr><td>{{ v.area_label or v.area_sqft }} sqft</td><td>{{ v.bed or '—' }}</td><td>{{ v.bath or '—' }}</td><td>{{ v.kitchen or '—' }}</td></tr>{% endfor %}
-    </tbody>
-  </table>
+  {% for v in variants %}
+  <div style="border:1px solid var(--grey-200); border-radius:8px; padding:14px; margin-bottom:14px;">
+    <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}" style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:10px;">
+      <div><label style="font-size:0.75rem; display:block;">Area (sqft)</label><input type="text" name="area_sqft" value="{{ v.area_sqft or '' }}" style="width:80px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Label</label><input type="text" name="area_label" value="{{ v.area_label or '' }}" style="width:100px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Bed</label><input type="number" name="bed" value="{{ v.bed or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Bath</label><input type="number" name="bath" value="{{ v.bath or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Kitchen</label><input type="number" name="kitchen" value="{{ v.kitchen or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Living</label><input type="number" name="living" value="{{ v.living or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <button type="submit" class="btn" style="padding:5px 12px; font-size:0.8rem;">Save</button>
+    </form>
+    <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/delete" style="display:inline;" onsubmit="return confirm('Delete this variant and all its rooms?');">
+      <button type="submit" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-bottom:10px;">Delete Variant</button>
+    </form>
+
+    <table style="margin-top:8px;">
+      <thead><tr><th>Floor</th><th>Section</th><th>Area</th><th>Length</th><th>Width</th><th></th></tr></thead>
+      <tbody>
+        {% for r in v.rooms %}
+        <tr>
+          <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms/{{ r.id }}" style="display:contents;">
+            <td><input type="text" name="floor_label" value="{{ r.floor_label or '' }}" style="width:80px; padding:3px 5px;"></td>
+            <td><input type="text" name="section" value="{{ r.section }}" style="width:140px; padding:3px 5px;"></td>
+            <td><input type="text" name="area_sqft" value="{{ r.area_sqft or '' }}" style="width:60px; padding:3px 5px;"></td>
+            <td><input type="text" name="length_ft" value="{{ r.length_ft or '' }}" style="width:50px; padding:3px 5px;"></td>
+            <td><input type="text" name="width_ft" value="{{ r.width_ft or '' }}" style="width:50px; padding:3px 5px;"></td>
+            <td style="white-space:nowrap;">
+              <button type="submit" class="btn" style="padding:3px 8px; font-size:0.75rem;">Save</button>
+              <button type="submit" formaction="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms/{{ r.id }}/delete" formnovalidate class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;">Del</button>
+            </td>
+          </form>
+        </tr>
+        {% endfor %}
+        <tr>
+          <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms" style="display:contents;">
+            <td><input type="text" name="floor_label" placeholder="optional" style="width:80px; padding:3px 5px;"></td>
+            <td><input type="text" name="section" placeholder="e.g. Master bed" style="width:140px; padding:3px 5px;"></td>
+            <td><input type="text" name="area_sqft" style="width:60px; padding:3px 5px;"></td>
+            <td><input type="text" name="length_ft" style="width:50px; padding:3px 5px;"></td>
+            <td><input type="text" name="width_ft" style="width:50px; padding:3px 5px;"></td>
+            <td><button type="submit" class="btn btn-primary" style="padding:3px 8px; font-size:0.75rem;">+ Add</button></td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  <form method="post" action="/admin/products/{{ product.id }}/variants" style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; padding-top:8px; border-top:1px dashed var(--grey-200);">
+    <div><label style="font-size:0.75rem; display:block;">Area (sqft)</label><input type="text" name="area_sqft" required style="width:80px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Bed</label><input type="number" name="bed" style="width:60px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Bath</label><input type="number" name="bath" style="width:60px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Kitchen</label><input type="number" name="kitchen" style="width:60px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Living</label><input type="number" name="living" style="width:60px; padding:4px 6px;"></div>
+    <button type="submit" class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;">+ Add New Variant</button>
+  </form>
 </div>
+
 <form method="post" action="/admin/products/{{ product.id }}/delete" onsubmit="return confirm('Delete this product? This also removes its specs and variants.');">
   <button type="submit" class="btn btn-danger">Delete Product</button>
 </form>
