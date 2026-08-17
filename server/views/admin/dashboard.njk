@@ -1,111 +1,254 @@
 {% extends "admin-layout.njk" %}
-{% block title %}Dashboard{% endblock %}
-{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Dashboard Overview</h1>{% endblock %}
+{% block title %}Executive CMS Dashboard{% endblock %}
+{% block header %}
+<div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+  <div>
+    <h1 style="font-size:1.2rem; font-weight:800; margin:0; color:var(--grey-900);">📊 Executive Dashboard</h1>
+    <div style="font-size:0.82rem; color:var(--grey-500); margin-top:2px;">
+      Welcome back, <strong>{{ adminName or 'Admin' }}</strong> ({{ adminRole | capitalize }}) &bull; {{ systemInfo.serverTime }}
+    </div>
+  </div>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <span class="pill pill-success" style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px;">
+      <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span>
+      Node {{ systemInfo.nodeVersion }} &bull; Live
+    </span>
+    <a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">🎨 Theme Studio</a>
+    <a href="/" target="_blank" class="btn btn-primary" style="font-size:0.82rem; padding:6px 12px;">🌐 Live Website ↗</a>
+  </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<!-- Quick Stats Grid -->
-<div class="stat-grid" style="margin-bottom:24px;">
-  <div class="stat-card" style="border-left: 4px solid var(--primary);">
-    <div class="num">{{ counts.leads }}</div>
-    <div class="label">Total Inquiries / Leads</div>
-    {% if counts.newLeads > 0 %}
-    <span class="pill pill-success" style="margin-top:6px;">{{ counts.newLeads }} New</span>
-    {% endif %}
+
+<!-- 1. Top Executive KPI Cards -->
+<div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-bottom:24px;">
+  
+  <!-- KPI 1: Inquiries Pipeline -->
+  <div class="card" style="padding:18px; border-left:4px solid var(--primary); display:flex; flex-direction:column; justify-content:space-between; margin:0;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Quote Inquiries</div>
+        <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.leads }}</div>
+      </div>
+      <span style="font-size:1.5rem;">📥</span>
+    </div>
+    <div style="margin-top:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      {% if counts.newLeads > 0 %}
+      <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">🔴 {{ counts.newLeads }} Action Needed</span>
+      {% else %}
+      <span class="pill pill-success" style="font-size:0.75rem;">✓ All Caught Up</span>
+      {% endif %}
+      <span class="pill pill-muted" style="font-size:0.75rem;">{{ counts.convertedLeads }} Converted ({{ counts.conversionRate }}%)</span>
+    </div>
   </div>
-  <div class="stat-card" style="border-left: 4px solid #3B82F6;">
-    <div class="num">{{ counts.products }}</div>
-    <div class="label">Product Models</div>
+
+  <!-- KPI 2: Product Catalog & Models -->
+  <div class="card" style="padding:18px; border-left:4px solid #3B82F6; display:flex; flex-direction:column; justify-content:space-between; margin:0;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Steel Models Catalog</div>
+        <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.products }}</div>
+      </div>
+      <span style="font-size:1.5rem;">📦</span>
+    </div>
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.publishedProducts }}</strong> Live &bull; <strong>{{ counts.categories }}</strong> Categories</span>
+      <a href="/admin/products/new" style="font-size:0.78rem; font-weight:700; color:#3B82F6;">+ Add Model</a>
+    </div>
   </div>
-  <div class="stat-card" style="border-left: 4px solid #10B981;">
-    <div class="num">{{ counts.categories }}</div>
-    <div class="label">Categories</div>
+
+  <!-- KPI 3: Coverage & Projects -->
+  <div class="card" style="padding:18px; border-left:4px solid #10B981; display:flex; flex-direction:column; justify-content:space-between; margin:0;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Nationwide Coverage</div>
+        <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.serviceAreas }} <span style="font-size:0.9rem; font-weight:600; color:var(--grey-500);">Districts</span></div>
+      </div>
+      <span style="font-size:1.5rem;">📍</span>
+    </div>
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.dedicatedServiceAreas }}</strong> Landing Pages &bull; <strong>{{ counts.projects }}</strong> Projects</span>
+      <a href="/admin/service-areas" style="font-size:0.78rem; font-weight:700; color:#10B981;">Manage</a>
+    </div>
   </div>
-  <div class="stat-card" style="border-left: 4px solid #F59E0B;">
-    <div class="num">{{ counts.projects }}</div>
-    <div class="label">Completed Projects</div>
+
+  <!-- KPI 4: Active Live Theme -->
+  <div class="card" style="padding:18px; border-left:4px solid #8B5CF6; display:flex; flex-direction:column; justify-content:space-between; margin:0;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Active Theme Studio</div>
+        <div style="font-size:1.15rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1.2;">{{ activeTheme.name or 'Bongshai Royal' }}</div>
+      </div>
+      <div style="display:flex; gap:3px;">
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ activeTheme.primary or '#1E40AF' }}; display:inline-block;"></span>
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ activeTheme.accent or '#EAB308' }}; display:inline-block;"></span>
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ activeTheme.bg_color or '#FFFFFF' }}; border:1px solid #ccc; display:inline-block;"></span>
+      </div>
+    </div>
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span class="pill" style="font-size:0.72rem; background:#ede9fe; color:#6d28d9; font-weight:700;">
+        {{ '🌙 Dark Mode' if activeTheme.is_dark else '☀️ Light Mode' }} &bull; 24 Presets
+      </span>
+      <a href="/admin/theme-editor" style="font-size:0.78rem; font-weight:700; color:#8B5CF6;">Customize →</a>
+    </div>
   </div>
-  <div class="stat-card" style="border-left: 4px solid #8B5CF6;">
-    <div class="num">{{ counts.serviceAreas or 64 }}</div>
-    <div class="label">Service Areas (Districts)</div>
-  </div>
-  <div class="stat-card" style="border-left: 4px solid #EC4899;">
-    <div class="num">{{ counts.faqs or 22 }}</div>
-    <div class="label">FAQs (Rich Snippets)</div>
-  </div>
-  <div class="stat-card" style="border-left: 4px solid #06B6D4;">
-    <div class="num">{{ counts.teamMembers or 14 }}</div>
-    <div class="label">Team Members</div>
-  </div>
+
 </div>
 
-<!-- Quick Shortcuts -->
-<div class="card" style="margin-bottom:24px; padding:16px 20px;">
-  <div style="font-weight:700; font-size:0.95rem; margin-bottom:12px; color:var(--grey-700);">⚡ Quick Actions</div>
-  <div style="display:flex; gap:10px; flex-wrap:wrap;">
-    <a href="/admin/products/new" class="btn btn-primary">➕ Add Product Model</a>
-    <a href="/admin/projects/new" class="btn">➕ Add Project</a>
-    <a href="/admin/categories/new" class="btn">➕ Add Category</a>
-    <a href="/admin/service-areas" class="btn">📍 Service Areas</a>
-    <a href="/admin/faqs" class="btn">❓ Manage FAQs</a>
-    <a href="/admin/team-members" class="btn">👥 Team Members</a>
-    <a href="/admin/media" class="btn">🖼️ Media Library</a>
-    <a href="/admin/theme-editor" class="btn">🎨 Theme Studio</a>
-    <a href="/admin/leads" class="btn">📥 View Inquiries</a>
-    <a href="/" target="_blank" class="btn" style="margin-left:auto;">🌐 View Live Website</a>
+<!-- 2. Operations & Content Matrix (Grouped Workspace Cards) -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-bottom:24px;">
+  
+  <!-- Group 1: Commercial & Catalog Suite -->
+  <div class="card" style="margin:0; padding:18px;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--grey-100); padding-bottom:10px;">
+      <span style="font-size:1.2rem;">📦</span>
+      <div>
+        <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Product Catalog &amp; Architecture</h3>
+        <div style="font-size:0.76rem; color:var(--grey-500);">Pre-engineered steel models, categories &amp; floor area specs</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <a href="/admin/products" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        📦 All Products ({{ counts.products }})
+      </a>
+      <a href="/admin/products/new" class="btn btn-primary" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        ➕ Add Model
+      </a>
+      <a href="/admin/categories" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        📁 Categories ({{ counts.categories }})
+      </a>
+      <a href="/admin/categories/new" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        ➕ Add Category
+      </a>
+    </div>
   </div>
+
+  <!-- Group 2: Portfolio & Nationwide Footprint -->
+  <div class="card" style="margin:0; padding:18px;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--grey-100); padding-bottom:10px;">
+      <span style="font-size:1.2rem;">🏗️</span>
+      <div>
+        <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Projects &amp; Service Coverage</h3>
+        <div style="font-size:0.76rem; color:var(--grey-500);">Case studies, media library and 64 district landing pages</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <a href="/admin/projects" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        🏗️ Projects ({{ counts.projects }})
+      </a>
+      <a href="/admin/projects/new" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        ➕ Add Project
+      </a>
+      <a href="/admin/service-areas" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        📍 64 Districts Coverage
+      </a>
+      <a href="/admin/media" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        🖼️ Media ({{ counts.mediaCount }} files)
+      </a>
+    </div>
+  </div>
+
+  <!-- Group 3: Social Proof, AEO & Team -->
+  <div class="card" style="margin:0; padding:18px;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--grey-100); padding-bottom:10px;">
+      <span style="font-size:1.2rem;">💬</span>
+      <div>
+        <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Social Proof, SEO &amp; Team</h3>
+        <div style="font-size:0.76rem; color:var(--grey-500);">Client testimonials, Rich Snippets FAQs, and engineering roster</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <a href="/admin/faqs" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        ❓ FAQs ({{ counts.faqs }})
+      </a>
+      <a href="/admin/testimonials" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        💬 Testimonials ({{ counts.testimonials }})
+      </a>
+      <a href="/admin/team-members" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        👥 Team ({{ counts.teamMembers }})
+      </a>
+      <a href="/admin/theme-editor" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
+        🎨 24 Theme Studio
+      </a>
+    </div>
+  </div>
+
 </div>
 
-<!-- Recent Inquiries Table -->
-<div class="card">
-  <div class="toolbar" style="margin-bottom:12px;">
-    <h2 style="font-size:1.05rem; font-weight:700; margin:0;">📥 Recent Customer Quote Inquiries</h2>
-    <a href="/admin/leads" class="btn" style="font-size:0.85rem;">View All Leads →</a>
+<!-- 3. Recent Customer Inquiries with 1-Click Fast Actions -->
+<div class="card" style="margin-bottom:24px;">
+  <div class="toolbar" style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <div>
+      <h2 style="font-size:1.05rem; font-weight:800; margin:0; color:var(--grey-900);">📥 Customer Quote Inquiries</h2>
+      <div style="font-size:0.8rem; color:var(--grey-500); margin-top:2px;">
+        High-intent leads from contact forms &amp; interactive pricing calculators
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="/admin/leads/export/csv" class="btn" style="font-size:0.8rem; padding:6px 12px;">📤 Export CSV</a>
+      <a href="/admin/leads" class="btn btn-primary" style="font-size:0.8rem; padding:6px 12px;">View All {{ counts.leads }} Leads →</a>
+    </div>
   </div>
 
   {% if recentLeads and recentLeads.length %}
   <div style="overflow-x:auto;">
-    <table>
+    <table style="width:100%; border-collapse:collapse;">
       <thead>
         <tr>
-          <th>Date</th>
-          <th>Customer</th>
-          <th>Phone / WhatsApp</th>
-          <th>Location</th>
-          <th>Model / Area</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase;">Time</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase;">Client</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase;">Quick Connect</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase;">District / Area</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase;">Model / Scope</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase;">Status</th>
+          <th style="padding:10px 12px; font-size:0.75rem; text-transform:uppercase; text-align:right;">Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for lead in recentLeads %}
-        <tr>
-          <td style="color:var(--grey-500); font-size:0.8rem; white-space:nowrap;">
+        <tr style="border-bottom:1px solid var(--grey-100);">
+          <td style="color:var(--grey-500); font-size:0.78rem; white-space:nowrap; padding:10px 12px;">
             {{ lead.created_at | string | truncate(16, true, '') }}
           </td>
-          <td>
-            <strong>{{ lead.name }}</strong>
-            <div style="font-size:0.8rem; color:var(--grey-500);">{{ lead.email }}</div>
+          <td style="padding:10px 12px;">
+            <strong style="color:var(--grey-900); font-size:0.88rem;">{{ lead.name }}</strong>
+            {% if lead.email %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ lead.email }}</div>{% endif %}
           </td>
-          <td>
-            <a href="tel:{{ lead.phone }}" style="font-weight:600;">{{ lead.phone }}</a>
-            <a href="https://wa.me/{{ lead.phone | replace('+', '') | replace('-', '') | replace(' ', '') }}?text=Hello%20{{ lead.name | urlencode }}%2C%20regarding%20your%20Bongshai%20Housing%20quote" target="_blank" style="margin-left:6px; color:#10B981;" title="Chat on WhatsApp">💬</a>
-          </td>
-          <td>{{ lead.upazila or '' }} {{ lead.district or 'N/A' }}</td>
-          <td>
-            <span class="pill pill-muted">{{ lead.model or 'General Inquiry' }}</span>
-            {% if lead.floor_area %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ lead.floor_area }} Sq.Ft</div>{% endif %}
-          </td>
-          <td>
-            {% if lead.status == 'new' %}
-            <span class="pill pill-success">New</span>
-            {% elif lead.status == 'contacted' %}
-            <span class="pill" style="background:#dbeafe; color:#1e40af;">Contacted</span>
+          <td style="padding:10px 12px; white-space:nowrap;">
+            {% if lead.phone %}
+            <div style="display:flex; align-items:center; gap:6px;">
+              <a href="tel:{{ lead.phone }}" class="btn" style="padding:3px 8px; font-size:0.75rem; font-weight:700; color:var(--primary);" title="Call Phone">
+                📞 {{ lead.phone }}
+              </a>
+              <a href="https://wa.me/{{ lead.phone | replace('+', '') | replace('-', '') | replace(' ', '') }}?text=Hello%20{{ lead.name | urlencode }}%2C%20regarding%20your%20Bongshai%20Housing%20quote%20request" target="_blank" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#25D366; color:white; border:none;" title="Chat on WhatsApp">
+                💬 WhatsApp
+              </a>
+            </div>
             {% else %}
-            <span class="pill pill-muted">{{ lead.status }}</span>
+            <span style="color:var(--grey-400); font-size:0.8rem;">No Phone</span>
             {% endif %}
           </td>
-          <td>
-            <a href="/admin/leads/{{ lead.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">Details</a>
+          <td style="padding:10px 12px; font-size:0.84rem; color:var(--grey-700);">
+            {{ lead.upazila or '' }} {{ lead.district or 'Bangladesh' }}
+          </td>
+          <td style="padding:10px 12px;">
+            <span class="pill pill-muted" style="font-size:0.75rem;">{{ lead.model or 'General Estimate' }}</span>
+            {% if lead.floor_area %}<div style="font-size:0.72rem; color:var(--grey-500); margin-top:2px;">{{ lead.floor_area }} Sq.Ft</div>{% endif %}
+          </td>
+          <td style="padding:10px 12px;">
+            <form method="post" action="/admin/leads/{{ lead.id }}/quick-status" style="margin:0;">
+              <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 6px; border-radius:12px; border:1px solid var(--grey-200); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#fee2e2; color:#b91c1c;{% elif lead.status == 'contacted' %}#dbeafe; color:#1e40af;{% elif lead.status == 'converted' %}#d1fae5; color:#065f46;{% else %}#f1f5f9; color:#475569;{% endif %}">
+                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>🔴 New</option>
+                <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>🔵 Contacted</option>
+                <option value="qualified" {% if lead.status == 'qualified' %}selected{% endif %}>🟡 Qualified</option>
+                <option value="converted" {% if lead.status == 'converted' %}selected{% endif %}>🟢 Converted</option>
+                <option value="closed" {% if lead.status == 'closed' %}selected{% endif %}>⚪ Closed</option>
+              </select>
+            </form>
+          </td>
+          <td style="padding:10px 12px; text-align:right; white-space:nowrap;">
+            <a href="/admin/leads/{{ lead.id }}" class="btn" style="padding:3px 8px; font-size:0.75rem;">Inspect Details →</a>
           </td>
         </tr>
         {% endfor %}
@@ -113,10 +256,71 @@
     </table>
   </div>
   {% else %}
-  <p style="color:var(--grey-500); margin:12px 0; font-size:0.9rem;">
-    No customer inquiries in the database yet. New quote requests from <code>contact.html</code> and the website forms will automatically appear here.
-  </p>
+  <div style="text-align:center; padding:32px 16px; color:var(--grey-500);">
+    <div style="font-size:2rem; margin-bottom:8px;">📬</div>
+    <div style="font-weight:700; color:var(--grey-700);">No customer inquiries logged yet</div>
+    <div style="font-size:0.85rem; margin-top:4px;">Incoming quote requests from contact forms and calculator widgets will automatically stream here.</div>
+  </div>
   {% endif %}
 </div>
-{% endblock %}
 
+<!-- 4. Split Bottom Row: Recent Audit Activity + System Health -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+  
+  <!-- Left: Live Activity Log Stream -->
+  <div class="card" style="margin:0; padding:18px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--grey-100); padding-bottom:8px;">
+      <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">🕘 Recent Activity Trail</h3>
+      {% if adminRole == 'admin' or adminRole == 'superadmin' %}
+      <a href="/admin/activity" style="font-size:0.78rem; font-weight:700; color:var(--primary);">Full Audit Log →</a>
+      {% endif %}
+    </div>
+    {% if recentActivities and recentActivities.length %}
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      {% for act in recentActivities %}
+      <div style="display:flex; gap:10px; align-items:flex-start; font-size:0.8rem;">
+        <span style="padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:700; text-transform:uppercase; background:{% if act.action == 'create' %}#d1fae5; color:#065f46;{% elif act.action == 'delete' %}#fee2e2; color:#b91c1c;{% elif act.action == 'status_change' %}#dbeafe; color:#1e40af;{% else %}#f1f5f9; color:#475569;{% endif %}">
+          {{ act.action }}
+        </span>
+        <div style="flex:1;">
+          <div style="color:var(--grey-800); font-weight:600;">{{ act.summary or (act.action + ' ' + act.entity_type) }}</div>
+          <div style="font-size:0.72rem; color:var(--grey-400);">By {{ act.admin_name or 'Admin' }} &bull; {{ act.created_at | string | truncate(16, true, '') }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="font-size:0.82rem; color:var(--grey-500); padding:12px 0;">
+      No audit entries recorded yet. System administrative actions are logged in real-time.
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Right: Technical Infrastructure & Engine Specs -->
+  <div class="card" style="margin:0; padding:18px;">
+    <div style="margin-bottom:12px; border-bottom:1px solid var(--grey-100); padding-bottom:8px;">
+      <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">⚙️ Engine &amp; Hosting Architecture</h3>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.82rem;">
+      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+        <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">Node.js Engine</div>
+        <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">{{ systemInfo.nodeVersion }} (Express SSR)</div>
+      </div>
+      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+        <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">Database Layer</div>
+        <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">Knex Query Engine</div>
+      </div>
+      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+        <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">Theme Engine</div>
+        <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">24 Light &amp; Dark Presets</div>
+      </div>
+      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+        <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">AEO &amp; Search Engine</div>
+        <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">Dynamic JSON-LD &amp; Index</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
