@@ -373,10 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // mousemove). js/3d-tilt.js is the single tilt implementation now.
 
 // ==========================================================================
-// Phase 2: Floating FAQ Chatbot (scripted, no AI/API — keyword-matched
-// free-text replies + button menu + human handoff via WhatsApp/Call/Email)
+// Phase 2: Floating FAQ Chatbot (scripted legacy assistant)
+// Obsolete: Replaced by server-rendered AI Sales Assistant (partials/ai-chat-widget.njk)
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+    // If the modern AI Sales Assistant widget is present on the page, skip legacy chatbot
+    if (document.getElementById('bhAiChatWidget') || document.querySelector('.bh-ai-widget') || document.getElementById('bhAiChatToggle')) {
+        return;
+    }
+
     const oldWhatsapp = document.querySelector('.whatsapp-float');
     if(oldWhatsapp) oldWhatsapp.style.display = 'none';
 
