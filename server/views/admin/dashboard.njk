@@ -3,7 +3,7 @@
 {% block header %}
 <div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
   <div>
-    <h1 style="font-size:1.2rem; font-weight:800; margin:0; color:var(--grey-900);">📊 Executive Dashboard</h1>
+    <h1 style="font-size:1.2rem; font-weight:800; margin:0; color:var(--grey-900);">Executive Dashboard</h1>
     <div style="font-size:0.82rem; color:var(--grey-500); margin-top:2px;">
       Welcome back, <strong>{{ adminName or 'Admin' }}</strong> ({{ adminRole | capitalize }}) &bull; {{ systemInfo.serverTime }}
     </div>
@@ -14,10 +14,10 @@
       Node {{ systemInfo.nodeVersion }} &bull; Live
     </span>
     {% if adminRole != 'sales' %}
-    <a href="/admin/themes" class="btn" style="font-size:0.82rem; padding:6px 12px;">🎭 Themes</a>
-    <a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">⚡ Studio Pro</a>
+    <a href="/admin/themes" class="btn" style="font-size:0.82rem; padding:6px 12px;">Themes</a>
+    <a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">Studio Pro</a>
     {% endif %}
-    <a href="/" target="_blank" class="btn btn-primary" style="font-size:0.82rem; padding:6px 12px;">🌐 Live Website ↗</a>
+    <a href="/" target="_blank" class="btn btn-primary" style="font-size:0.82rem; padding:6px 12px;">Live Website ↗</a>
   </div>
 </div>
 {% endblock %}
@@ -25,25 +25,19 @@
 {% block content %}
 <style>
   .op-group-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--grey-100); }
-  .op-group-icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0; }
+  .op-group-bar { width:4px; height:28px; border-radius:2px; flex-shrink:0; background:var(--tile-accent, var(--primary)); }
   .op-tiles { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .op-tile {
     display:flex; align-items:center; gap:10px;
     padding:10px 12px; border-radius:9px;
-    background:var(--grey-50); border:1px solid transparent;
+    background:var(--grey-50); border:1px solid transparent; border-left:3px solid transparent;
     color:var(--grey-900); text-decoration:none;
     transition:transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
   }
-  .op-tile:hover { transform:translateY(-1px); text-decoration:none; background:white; border-color:var(--tile-accent, var(--primary)); box-shadow:0 3px 10px rgba(15,23,42,0.07); }
-  .op-tile-icon {
-    width:30px; height:30px; border-radius:8px; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center; font-size:0.95rem;
-    background:var(--tile-accent-soft, var(--grey-100)); color:var(--tile-accent, var(--grey-700));
-  }
+  .op-tile:hover { transform:translateY(-1px); text-decoration:none; background:white; border-color:var(--tile-accent, var(--primary)); border-left-color:var(--tile-accent, var(--primary)); box-shadow:0 3px 10px rgba(15,23,42,0.07); }
   .op-tile-label { font-size:0.83rem; font-weight:650; line-height:1.25; }
   .op-tile-sub { font-size:0.72rem; color:var(--grey-500); font-weight:500; }
-  .op-tile.is-primary .op-tile-icon { background:var(--tile-accent, var(--primary)); color:white; }
-  .op-tile.is-primary { background:var(--tile-accent-soft, #eef2ff); }
+  .op-tile.is-primary { background:var(--tile-accent-soft, #eef2ff); border-left-color:var(--tile-accent, var(--primary)); font-weight:700; }
   @media (max-width: 480px) { .op-tiles { grid-template-columns:1fr; } }
 </style>
 
@@ -57,13 +51,12 @@
         <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Quote Inquiries</div>
         <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.leads }}</div>
       </div>
-      <span style="font-size:1.5rem;">📥</span>
     </div>
     <div style="margin-top:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
       {% if counts.newLeads > 0 %}
-      <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">🔴 {{ counts.newLeads }} Action Needed</span>
+      <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">{{ counts.newLeads }} Action Needed</span>
       {% else %}
-      <span class="pill pill-success" style="font-size:0.75rem;">✓ All Caught Up</span>
+      <span class="pill pill-success" style="font-size:0.75rem;">All Caught Up</span>
       {% endif %}
       <span class="pill pill-muted" style="font-size:0.75rem;">{{ counts.convertedLeads }} Converted ({{ counts.conversionRate }}%)</span>
     </div>
@@ -76,7 +69,6 @@
         <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Steel Models Catalog</div>
         <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.products }}</div>
       </div>
-      <span style="font-size:1.5rem;">📦</span>
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.publishedProducts }}</strong> Live &bull; <strong>{{ counts.categories }}</strong> Categories</span>
@@ -91,7 +83,6 @@
         <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Nationwide Coverage</div>
         <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.serviceAreas }} <span style="font-size:0.9rem; font-weight:600; color:var(--grey-500);">Districts</span></div>
       </div>
-      <span style="font-size:1.5rem;">📍</span>
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.dedicatedServiceAreas }}</strong> Landing Pages &bull; <strong>{{ counts.projects }}</strong> Projects</span>
@@ -114,7 +105,7 @@
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
       <span class="pill" style="font-size:0.72rem; background:#ede9fe; color:#6d28d9; font-weight:700;">
-        {{ '🌙 Dark Mode' if activeTheme.is_dark else '☀️ Light Mode' }} &bull; 24 Presets
+        {{ 'Dark Mode' if activeTheme.is_dark else 'Light Mode' }} &bull; 24 Presets
       </span>
       {% if adminRole != 'sales' %}<a href="/admin/theme-editor" style="font-size:0.78rem; font-weight:700; color:#8B5CF6;">Customize →</a>{% endif %}
     </div>
@@ -129,7 +120,7 @@
   <!-- Group 1: Commercial & Catalog Suite -->
   <div class="card" style="margin:0; padding:18px; --tile-accent:#2563EB; --tile-accent-soft:#eff6ff;">
     <div class="op-group-head">
-      <span class="op-group-icon" style="background:#eff6ff; color:#2563EB;">📦</span>
+      <span class="op-group-bar"></span>
       <div>
         <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Product Catalog &amp; Architecture</h3>
         <div style="font-size:0.76rem; color:var(--grey-500);">Pre-engineered steel models, categories &amp; floor area specs</div>
@@ -137,20 +128,16 @@
     </div>
     <div class="op-tiles">
       <a href="/admin/products" class="op-tile">
-        <span class="op-tile-icon">📦</span>
         <span><span class="op-tile-label">All Products</span><br><span class="op-tile-sub">{{ counts.products }} models</span></span>
       </a>
       <a href="/admin/products/new" class="op-tile is-primary">
-        <span class="op-tile-icon">➕</span>
-        <span class="op-tile-label">Add Model</span>
+        <span class="op-tile-label">+ Add Model</span>
       </a>
       <a href="/admin/categories" class="op-tile">
-        <span class="op-tile-icon">📁</span>
         <span><span class="op-tile-label">Categories</span><br><span class="op-tile-sub">{{ counts.categories }} total</span></span>
       </a>
       <a href="/admin/categories/new" class="op-tile">
-        <span class="op-tile-icon">➕</span>
-        <span class="op-tile-label">Add Category</span>
+        <span class="op-tile-label">+ Add Category</span>
       </a>
     </div>
   </div>
@@ -158,7 +145,7 @@
   <!-- Group 2: Portfolio & Nationwide Footprint -->
   <div class="card" style="margin:0; padding:18px; --tile-accent:#059669; --tile-accent-soft:#ecfdf5;">
     <div class="op-group-head">
-      <span class="op-group-icon" style="background:#ecfdf5; color:#059669;">🏗️</span>
+      <span class="op-group-bar"></span>
       <div>
         <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Projects &amp; Service Coverage</h3>
         <div style="font-size:0.76rem; color:var(--grey-500);">Case studies, media library and 64 district landing pages</div>
@@ -166,19 +153,15 @@
     </div>
     <div class="op-tiles">
       <a href="/admin/projects" class="op-tile">
-        <span class="op-tile-icon">🏗️</span>
         <span><span class="op-tile-label">Projects</span><br><span class="op-tile-sub">{{ counts.projects }} listed</span></span>
       </a>
       <a href="/admin/projects/new" class="op-tile is-primary">
-        <span class="op-tile-icon">➕</span>
-        <span class="op-tile-label">Add Project</span>
+        <span class="op-tile-label">+ Add Project</span>
       </a>
       <a href="/admin/service-areas" class="op-tile">
-        <span class="op-tile-icon">📍</span>
         <span class="op-tile-label">64 Districts</span>
       </a>
       <a href="/admin/media" class="op-tile">
-        <span class="op-tile-icon">🖼️</span>
         <span><span class="op-tile-label">Media</span><br><span class="op-tile-sub">{{ counts.mediaCount }} files</span></span>
       </a>
     </div>
@@ -187,7 +170,7 @@
   <!-- Group 3: Social Proof, AEO & Team -->
   <div class="card" style="margin:0; padding:18px; --tile-accent:#7C3AED; --tile-accent-soft:#f5f3ff;">
     <div class="op-group-head">
-      <span class="op-group-icon" style="background:#f5f3ff; color:#7C3AED;">💬</span>
+      <span class="op-group-bar"></span>
       <div>
         <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Social Proof, SEO &amp; Team</h3>
         <div style="font-size:0.76rem; color:var(--grey-500);">Client testimonials, Rich Snippets FAQs, and engineering roster</div>
@@ -195,23 +178,18 @@
     </div>
     <div class="op-tiles">
       <a href="/admin/faqs" class="op-tile">
-        <span class="op-tile-icon">❓</span>
         <span><span class="op-tile-label">FAQs</span><br><span class="op-tile-sub">{{ counts.faqs }} live</span></span>
       </a>
       <a href="/admin/testimonials" class="op-tile">
-        <span class="op-tile-icon">💬</span>
         <span><span class="op-tile-label">Testimonials</span><br><span class="op-tile-sub">{{ counts.testimonials }} live</span></span>
       </a>
       <a href="/admin/team-members" class="op-tile">
-        <span class="op-tile-icon">👥</span>
         <span><span class="op-tile-label">Team</span><br><span class="op-tile-sub">{{ counts.teamMembers }} members</span></span>
       </a>
       <a href="/admin/themes" class="op-tile">
-        <span class="op-tile-icon">🎭</span>
         <span><span class="op-tile-label">Themes</span><br><span class="op-tile-sub">24 Presets</span></span>
       </a>
       <a href="/admin/theme-editor" class="op-tile is-primary">
-        <span class="op-tile-icon">⚡</span>
         <span class="op-tile-label">Studio Pro</span>
       </a>
     </div>
@@ -224,13 +202,13 @@
 <div class="card" style="margin-bottom:24px;">
   <div class="toolbar" style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
     <div>
-      <h2 style="font-size:1.05rem; font-weight:800; margin:0; color:var(--grey-900);">📥 Customer Quote Inquiries</h2>
+      <h2 style="font-size:1.05rem; font-weight:800; margin:0; color:var(--grey-900);">Customer Quote Inquiries</h2>
       <div style="font-size:0.8rem; color:var(--grey-500); margin-top:2px;">
         High-intent leads from contact forms &amp; interactive pricing calculators
       </div>
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
-      <a href="/admin/leads/export/csv" class="btn" style="font-size:0.8rem; padding:6px 12px;">📤 Export CSV</a>
+      <a href="/admin/leads/export/csv" class="btn" style="font-size:0.8rem; padding:6px 12px;">Export CSV</a>
       <a href="/admin/leads" class="btn btn-primary" style="font-size:0.8rem; padding:6px 12px;">View All {{ counts.leads }} Leads →</a>
     </div>
   </div>
@@ -263,10 +241,10 @@
             {% if lead.phone %}
             <div style="display:flex; align-items:center; gap:6px;">
               <a href="tel:{{ lead.phone }}" class="btn" style="padding:3px 8px; font-size:0.75rem; font-weight:700; color:var(--primary);" title="Call Phone">
-                📞 {{ lead.phone }}
+                {{ lead.phone }}
               </a>
               <a href="https://wa.me/{{ lead.phone | replace('+', '') | replace('-', '') | replace(' ', '') }}?text=Hello%20{{ lead.name | urlencode }}%2C%20regarding%20your%20Bongshai%20Housing%20quote%20request" target="_blank" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#25D366; color:white; border:none;" title="Chat on WhatsApp">
-                💬 WhatsApp
+                WhatsApp
               </a>
             </div>
             {% else %}
@@ -283,11 +261,11 @@
           <td style="padding:10px 12px;">
             <form method="post" action="/admin/leads/{{ lead.id }}/quick-status" style="margin:0;">
               <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 6px; border-radius:12px; border:1px solid var(--grey-200); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#fee2e2; color:#b91c1c;{% elif lead.status == 'contacted' %}#dbeafe; color:#1e40af;{% elif lead.status == 'converted' %}#d1fae5; color:#065f46;{% else %}#f1f5f9; color:#475569;{% endif %}">
-                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>🔴 New</option>
-                <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>🔵 Contacted</option>
-                <option value="qualified" {% if lead.status == 'qualified' %}selected{% endif %}>🟡 Qualified</option>
-                <option value="converted" {% if lead.status == 'converted' %}selected{% endif %}>🟢 Converted</option>
-                <option value="closed" {% if lead.status == 'closed' %}selected{% endif %}>⚪ Closed</option>
+                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
+                <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                <option value="qualified" {% if lead.status == 'qualified' %}selected{% endif %}>Qualified</option>
+                <option value="converted" {% if lead.status == 'converted' %}selected{% endif %}>Converted</option>
+                <option value="closed" {% if lead.status == 'closed' %}selected{% endif %}>Closed</option>
               </select>
             </form>
           </td>
@@ -301,7 +279,6 @@
   </div>
   {% else %}
   <div style="text-align:center; padding:32px 16px; color:var(--grey-500);">
-    <div style="font-size:2rem; margin-bottom:8px;">📬</div>
     <div style="font-weight:700; color:var(--grey-700);">No customer inquiries logged yet</div>
     <div style="font-size:0.85rem; margin-top:4px;">Incoming quote requests from contact forms and calculator widgets will automatically stream here.</div>
   </div>
@@ -314,7 +291,7 @@
   <!-- Left: Live Activity Log Stream -->
   <div class="card" style="margin:0; padding:18px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--grey-100); padding-bottom:8px;">
-      <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">🕘 Recent Activity Trail</h3>
+      <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Recent Activity Trail</h3>
       {% if adminRole == 'admin' or adminRole == 'superadmin' %}
       <a href="/admin/activity" style="font-size:0.78rem; font-weight:700; color:var(--primary);">Full Audit Log →</a>
       {% endif %}
@@ -343,7 +320,7 @@
   <!-- Right: Technical Infrastructure & Engine Specs -->
   <div class="card" style="margin:0; padding:18px;">
     <div style="margin-bottom:12px; border-bottom:1px solid var(--grey-100); padding-bottom:8px;">
-      <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">⚙️ Engine &amp; Hosting Architecture</h3>
+      <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Engine &amp; Hosting Architecture</h3>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.82rem;">
       <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
