@@ -13,7 +13,10 @@
       <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span>
       Node {{ systemInfo.nodeVersion }} &bull; Live
     </span>
-    <a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">🎨 Theme Studio</a>
+    {% if adminRole == 'admin' or adminRole == 'superadmin' %}
+    <a href="/admin/themes" class="btn" style="font-size:0.82rem; padding:6px 12px;">🎭 Themes</a>
+    <a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">⚡ Studio Pro</a>
+    {% endif %}
     <a href="/" target="_blank" class="btn btn-primary" style="font-size:0.82rem; padding:6px 12px;">🌐 Live Website ↗</a>
   </div>
 </div>
@@ -202,10 +205,16 @@
         <span class="op-tile-icon">👥</span>
         <span><span class="op-tile-label">Team</span><br><span class="op-tile-sub">{{ counts.teamMembers }} members</span></span>
       </a>
-      <a href="/admin/theme-editor" class="op-tile is-primary">
-        <span class="op-tile-icon">🎨</span>
-        <span class="op-tile-label">Theme Studio</span>
+      {% if adminRole == 'admin' or adminRole == 'superadmin' %}
+      <a href="/admin/themes" class="op-tile">
+        <span class="op-tile-icon">🎭</span>
+        <span><span class="op-tile-label">Themes</span><br><span class="op-tile-sub">24 Presets</span></span>
       </a>
+      <a href="/admin/theme-editor" class="op-tile is-primary">
+        <span class="op-tile-icon">⚡</span>
+        <span class="op-tile-label">Studio Pro</span>
+      </a>
+      {% endif %}
     </div>
   </div>
 
