@@ -108,7 +108,13 @@ app.use('/search-index.json', express.static(path.join(REPO_ROOT, 'search-index.
 app.use('/sw.js', express.static(path.join(REPO_ROOT, 'sw.js')));
 app.use('/', sitemapRouter); // dynamic sitemap.xml, DB products/projects merged with the static entries
 app.use('/llms.txt', express.static(path.join(REPO_ROOT, 'llms.txt')));
+app.use('/llms-full.txt', express.static(path.join(REPO_ROOT, 'llms-full.txt')));
 app.use('/robots.txt', express.static(path.join(REPO_ROOT, 'robots.txt')));
+app.use('/agent-permissions.json', express.static(path.join(REPO_ROOT, 'agent-permissions.json')));
+// Domain-ownership verification token (Bing/Search Console-style) -
+// domain-specific, so inert on this test subdomain today, but needs to
+// resolve once this app becomes bongshaihousing.com's real production site.
+app.use('/f446c3814965a067992e82231bb56211.txt', express.static(path.join(REPO_ROOT, 'f446c3814965a067992e82231bb56211.txt')));
 
 // Old/broken URL parity with the static site's .htaccess RewriteRules
 // (Search Console fixes, renamed model numbers, dead WordPress-scanner
