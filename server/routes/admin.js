@@ -1239,7 +1239,7 @@ router.post('/admin/users/:id/delete', requireRole('admin', 'superadmin'), async
 // columns to flag which files are actually still referenced vs orphaned
 // (safe to delete - e.g. after replacing a product's photo).
 
-router.get('/admin/media', async (req, res) => {
+router.get('/admin/media', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   let files = [];
   try {
     files = fs.readdirSync(UPLOADS_DIR)
@@ -1264,10 +1264,42 @@ router.get('/admin/media', async (req, res) => {
     f.inUse = inUse.has(f.path);
   }
 
-  res.render('admin/media/list.njk', adminVars(req, { files, unusedCount: files.filter((f) => !f.inUse).length }));
+  res.render('admin/media/list.njk', adminVars(req, {
+    files,
+    unusedCount: files.filter((f) => !f.inUse).length,
+    uploaded: req.query.uploaded === '1',
+  }));
 });
 
-router.post('/admin/media/:filename/delete', async (req, res) => {
+router.post('/admin/media/upload', requireRole('admin', 'superadmin', 'editor'), upload.array('images', 10), async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).redirect('/admin/media?error=no_files');
+    }
+    const uploadedPaths = [];
+    for (const file of req.files) {
+      const savedPath = await processAndSaveImage(file.buffer, file.originalname);
+      uploadedPaths.push(savedPath);
+    }
+    await logActivity(req, {
+      action: 'create',
+      entityType: 'media',
+      summary: `Uploaded ${uploadedPaths.length} image(s) to Media Library`,
+    });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, uploaded: uploadedPaths });
+    }
+    res.redirect('/admin/media?uploaded=1');
+  } catch (err) {
+    console.error('Media upload error:', err.message);
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    res.redirect('/admin/media?error=' + encodeURIComponent(err.message));
+  }
+});
+
+router.post('/admin/media/:filename/delete', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   const filename = path.basename(req.params.filename); // strip any path traversal
   const filePath = path.join(UPLOADS_DIR, filename);
   try {
