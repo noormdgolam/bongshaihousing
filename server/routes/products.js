@@ -75,6 +75,38 @@ router.get('/:slug.html', async (req, res, next) => {
       .orderBy('sort_order')
       .limit(4);
 
+    // Cheapest variant's true total area per related product, so their
+    // cards can show a real "From ৳X" price instead of the same static
+    // "Contact for Quote" this page just stopped showing for the main
+    // product - keeping the two inconsistent would look like a bug. Uses
+    // the same "Total Building Area" room-row logic as the main product
+    // above: a naive area_sqft (the per-floor tier key) would understate
+    // 2-floor families by roughly half, the same bug already fixed there.
+    if (relatedProducts.length) {
+      const relatedIds = relatedProducts.map((p) => p.id);
+      const relatedVariants = await db('product_variants').whereIn('product_id', relatedIds);
+      if (relatedVariants.length) {
+        const relatedRooms = await db('product_rooms')
+          .whereIn('product_variant_id', relatedVariants.map((v) => v.id))
+          .where('section', 'like', '%Total Building Area%');
+        const totalRowByVariant = new Map(relatedRooms.map((r) => [r.product_variant_id, r.area_sqft]));
+        const minTotalAreaByProduct = new Map();
+        for (const v of relatedVariants) {
+          const totalArea = totalRowByVariant.get(v.id) || v.area_sqft;
+          const current = minTotalAreaByProduct.get(v.product_id);
+          if (current === undefined || totalArea < current) {
+            minTotalAreaByProduct.set(v.product_id, totalArea);
+          }
+        }
+        for (const rp of relatedProducts) {
+          const minTotalArea = minTotalAreaByProduct.get(rp.id);
+          rp.fromPriceFormatted = (minTotalArea && rp.price_per_sqft)
+            ? formatTaka(minTotalArea * rp.price_per_sqft)
+            : null;
+        }
+      }
+    }
+
     res.render('pages/product-detail.njk', {
       title: product.title,
       description: product.description,

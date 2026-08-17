@@ -31,15 +31,11 @@
   <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
     <div style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
     <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">Model No-{{ product.model_number }}</h2>
-    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;" aria-live="polite">
       <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{% if variants.length and variants[0].estimatedPriceFormatted %}Estimated Price{% else %}Pricing{% endif %}</span>
       <span class="bh-variant-price" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">{% if variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
     </div>
-    {% if variants.length and variants[0].estimatedPriceFormatted %}
-    <p class="bh-variant-price-note" style="font-size: 0.78rem; color: var(--grey-500); margin: 0 0 var(--space-5);">Based on {{ variants[0].totalArea }} sq.ft total{% if variants.length > 1 %} at this size — select another size below to recalculate{% endif %}. Final quotation depends on land, finish, and customization.</p>
-    {% else %}
-    <div style="margin-bottom: var(--space-5);"></div>
-    {% endif %}
+    <p class="bh-variant-price-note" style="font-size: 0.78rem; color: var(--grey-500); margin: 0 0 var(--space-5); min-height: 1em;" aria-live="polite">{% if variants.length and variants[0].estimatedPriceFormatted %}Based on {{ variants[0].totalArea }} sq.ft total{% if variants.length > 1 %} at this size — select another size below to recalculate{% endif %}. Final quotation depends on land, finish, and customization.{% endif %}</p>
 
     <div class="pd-trust-strip">
       <span>⚡ 45–60 day build</span>
@@ -60,7 +56,7 @@
         <button type="button" class="btn bh-variant-btn{% if loop.first %} active{% endif %}" data-variant-index="{{ loop.index0 }}" style="padding: 6px 14px; font-size: 0.85rem;">{{ v.area_label or v.area_sqft }} Sq.Ft</button>
         {% endfor %}
       </div>
-      <div class="bh-variant-summary" style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.88rem; color: var(--grey-700);">
+      <div class="bh-variant-summary" style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.88rem; color: var(--grey-700);" aria-live="polite">
         <span>🛏️ <strong class="bh-variant-bed">{{ variants[0].bed }} Bedrooms</strong></span>
         <span>🚿 <strong class="bh-variant-bath">{{ variants[0].bath }} Bathroom{% if variants[0].bath != 1 %}s{% endif %}</strong></span>
         <span>🍳 <strong>1 Kitchen</strong></span>
@@ -171,7 +167,7 @@
       <div class="property-card-body" data-aos="fade-up">
         <span class="property-type">{{ category.name }}</span>
         <h2 class="property-name">Model No-{{ rp.model_number }}</h2>
-        <div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Contact for Quote</span></div>
+        <div class="property-price"><span class="property-price-label">{% if rp.fromPriceFormatted %}From{% else %}Pricing{% endif %}</span><span class="property-price-value" style="font-size:0.95rem;">{{ rp.fromPriceFormatted or 'Contact for Quote' }}</span></div>
         <a class="btn btn-primary" href="{{ rp.slug }}" style="width:100%;justify-content:center;">View Details</a>
       </div>
     </div>
