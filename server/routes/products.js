@@ -14,6 +14,21 @@ const router = express.Router();
 // while supporting all standard and custom product slugs created in admin panel
 const PRODUCT_SLUG_PATTERN = /^(bh-[a-z0-9-]+|dv-[a-z0-9-]+|lcv-[a-z0-9-]+)\.html$/;
 
+// Bangladeshi Lakh/Crore comma grouping (e.g. 3500000 -> "35,00,000"),
+// plain digits since product pages are English-only.
+function formatTaka(n) {
+  let s = Math.round(n).toString();
+  const last3 = s.slice(-3);
+  let rest = s.slice(0, -3);
+  if (rest !== '') {
+    rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+    s = rest + ',' + last3;
+  } else {
+    s = last3;
+  }
+  return '৳' + s;
+}
+
 router.get('/:slug.html', async (req, res, next) => {
   const slug = `${req.params.slug}.html`;
   if (!PRODUCT_SLUG_PATTERN.test(slug)) return next();
@@ -40,6 +55,17 @@ router.get('/:slug.html', async (req, res, next) => {
       }
       for (const v of variants) {
         v.rooms = roomsByVariant.get(v.id) || [];
+        // v.area_sqft is the tier key, which for 2-floor families (Ground
+        // Floor + First floor) is the PER-FLOOR area, not the whole
+        // building - using it directly would price a duplex at half its
+        // real size. The seed data already computes the true total into a
+        // "Total Building Area" row for those families; single-floor
+        // families don't have that row, so v.area_sqft is already correct
+        // for them.
+        const totalRow = v.rooms.find((r) => r.section && /total building area/i.test(r.section));
+        v.totalArea = (totalRow && totalRow.area_sqft) || v.area_sqft;
+        v.estimatedPrice = product.price_per_sqft ? Math.round(v.totalArea * product.price_per_sqft) : null;
+        v.estimatedPriceFormatted = v.estimatedPrice ? formatTaka(v.estimatedPrice) : null;
       }
     }
 

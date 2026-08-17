@@ -31,10 +31,15 @@
   <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
     <div style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
     <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">Model No-{{ product.model_number }}</h2>
-    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);">
-      <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Pricing</span>
-      <span style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">Contact for Quote</span>
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;">
+      <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{% if variants.length and variants[0].estimatedPriceFormatted %}Estimated Price{% else %}Pricing{% endif %}</span>
+      <span class="bh-variant-price" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">{% if variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
     </div>
+    {% if variants.length and variants[0].estimatedPriceFormatted %}
+    <p class="bh-variant-price-note" style="font-size: 0.78rem; color: var(--grey-500); margin: 0 0 var(--space-5);">Based on {{ variants[0].totalArea }} sq.ft total{% if variants.length > 1 %} at this size — select another size below to recalculate{% endif %}. Final quotation depends on land, finish, and customization.</p>
+    {% else %}
+    <div style="margin-bottom: var(--space-5);"></div>
+    {% endif %}
 
     <div class="pd-trust-strip">
       <span>⚡ 45–60 day build</span>
@@ -100,6 +105,8 @@
   var panels = document.querySelectorAll('.bh-variant-panel');
   var bedEl = document.querySelector('.bh-variant-bed');
   var bathEl = document.querySelector('.bh-variant-bath');
+  var priceEl = document.querySelector('.bh-variant-price');
+  var priceNoteEl = document.querySelector('.bh-variant-price-note');
   buttons.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var idx = btn.getAttribute('data-variant-index');
@@ -108,6 +115,15 @@
       var v = variantData[idx];
       if (v && bedEl) bedEl.textContent = v.bed + ' Bedrooms';
       if (v && bathEl) bathEl.textContent = v.bath + ' Bathroom' + (v.bath !== 1 ? 's' : '');
+      if (v && priceEl) {
+        if (v.estimatedPriceFormatted) {
+          priceEl.textContent = v.estimatedPriceFormatted;
+          if (priceNoteEl) priceNoteEl.textContent = 'Based on ' + v.totalArea + ' sq.ft total at this size. Final quotation depends on land, finish, and customization.';
+        } else {
+          priceEl.textContent = 'Contact for Quote';
+          if (priceNoteEl) priceNoteEl.textContent = '';
+        }
+      }
     });
   });
 })();
