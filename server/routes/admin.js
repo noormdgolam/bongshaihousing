@@ -4,6 +4,7 @@ const express = require('express');
 const multer = require('multer');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
+const requireRole = require('../middleware/requireRole');
 
 const { processAndSaveImage, UPLOADS_DIR } = require('../lib/image-processor');
 const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
@@ -1060,11 +1061,11 @@ router.post('/admin/team-members/:id/delete', async (req, res) => {
   }
 });
 
-// ---- WordPress-Style Themes Directory & Theme Customizer ----
+// ---- WordPress-Style Themes Directory & Theme Customizer (Admin Only) ----
 
 const pageRegistry = require('../page-registry.json');
 
-router.get('/admin/themes', async (req, res) => {
+router.get('/admin/themes', requireRole('admin', 'superadmin'), async (req, res) => {
   const currentTheme = await getThemeSettings();
   if (currentTheme) {
     currentTheme.is_dark = isThemeDark(currentTheme);
@@ -1079,7 +1080,7 @@ router.get('/admin/themes', async (req, res) => {
   }));
 });
 
-router.post('/admin/themes/activate/:slug', async (req, res) => {
+router.post('/admin/themes/activate/:slug', requireRole('admin', 'superadmin'), async (req, res) => {
   const { slug } = req.params;
   const preset = PRESETS[slug];
   if (!preset) {
@@ -1106,7 +1107,7 @@ router.post('/admin/themes/activate/:slug', async (req, res) => {
   }
 });
 
-router.get('/admin/theme-editor', async (req, res) => {
+router.get('/admin/theme-editor', requireRole('admin', 'superadmin'), async (req, res) => {
   let theme = await getThemeSettings();
   const presetParam = req.query.preset;
   if (presetParam && PRESETS[presetParam]) {
@@ -1124,7 +1125,7 @@ router.get('/admin/theme-editor', async (req, res) => {
   }));
 });
 
-router.post('/admin/theme-editor', async (req, res) => {
+router.post('/admin/theme-editor', requireRole('admin', 'superadmin'), async (req, res) => {
   try {
     const rawData = req.body;
     // Format checkboxes and values
@@ -1149,7 +1150,7 @@ router.post('/admin/theme-editor', async (req, res) => {
   }
 });
 
-router.post('/admin/theme-editor/reset', async (req, res) => {
+router.post('/admin/theme-editor/reset', requireRole('admin', 'superadmin'), async (req, res) => {
   try {
     await resetThemeSettings();
     logActivity(req, 'update', 'theme', null, `Reset theme to Bongshai Housing defaults`);
@@ -1162,7 +1163,7 @@ router.post('/admin/theme-editor/reset', async (req, res) => {
   }
 });
 
-router.get('/admin/theme-editor/export', async (req, res) => {
+router.get('/admin/theme-editor/export', requireRole('admin', 'superadmin'), async (req, res) => {
   const theme = await getThemeSettings();
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', 'attachment; filename="bongshai-theme-settings.json"');
@@ -1172,7 +1173,6 @@ router.get('/admin/theme-editor/export', async (req, res) => {
 // ---- Admin Users (role-gated: only 'admin' role can manage accounts) ----
 
 const bcrypt = require('bcryptjs');
-const requireRole = require('../middleware/requireRole');
 
 router.get('/admin/users', requireRole('admin', 'superadmin'), async (req, res) => {
   const users = await db('admin_users').select('id', 'email', 'name', 'role', 'last_login_at', 'created_at').orderBy('created_at');
