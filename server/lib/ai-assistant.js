@@ -31,7 +31,7 @@ CORE ADVANTAGES OVER TRADITIONAL RCC:
 
 PRODUCT CATEGORIES & PRICING GUIDELINES (BDT per sq.ft, matches the site's
 own published FAQ figures exactly - do not deviate from these numbers):
-- Industrial Steel Sheds & Worker Accommodation: Tk 900-950 / sq.ft.
+- Industrial Steel Sheds & Worker Accommodation: Tk 810-855 / sq.ft.
 - Tiny House & Wooden House: Tk 1,500 / sq.ft.
 - Cottage House: Tk 2,200 / sq.ft.
 - Apartment Building, Duplex Steel Building, Simplex Steel Building, Steel House, Concrete Building: Tk 2,500-2,750 / sq.ft.
