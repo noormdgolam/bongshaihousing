@@ -85,6 +85,27 @@
             <p style="margin-bottom:var(--space-4)">We believe in complete transparency. Our team ensures that you receive accurate pricing, detailed project scope information, and regular updates.</p>
             <p style="margin-bottom:var(--space-4)">Their goal is to build lasting relationships with our clients by understanding their unique needs and matching them with the perfect housing or commercial solutions.</p>
 
+            {% if dbTeamMembers and dbTeamMembers.length %}
+            <div class="team-roster-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:var(--space-6); margin-bottom:var(--space-6);">
+              {% for m in dbTeamMembers %}
+              <div class="glass-card reveal" style="padding:20px; border-radius:12px; border:1px solid var(--grey-200); background:white; display:flex; flex-direction:column; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                <div style="display:flex; gap:14px; align-items:center; margin-bottom:12px;">
+                  <div style="width:56px; height:56px; border-radius:50%; overflow:hidden; background:var(--grey-100); border:2px solid var(--primary); flex-shrink:0;">
+                    <img src="/{{ m.photo or 'images/about-team.webp' }}" alt="{{ m.name }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='/images/about-team.webp';">
+                  </div>
+                  <div>
+                    <h3 style="margin:0; font-size:1.05rem; color:var(--primary-dark); font-family:var(--font-heading);">{{ m.name }}</h3>
+                    <div style="font-size:0.85rem; color:var(--primary); font-weight:600; margin-top:2px;">{{ m.role }}</div>
+                  </div>
+                </div>
+                {% if m.bio %}
+                <p style="font-size:0.88rem; color:var(--grey-600); line-height:1.5; margin:0; flex:1;">{{ m.bio }}</p>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
             <div style="margin-top:var(--space-8)">
               <a href="about.html" class="btn btn-outline">← Back to About Us</a>
               <a href="contact.html" class="btn btn-primary" style="margin-left:var(--space-3)">Get a Quote</a>

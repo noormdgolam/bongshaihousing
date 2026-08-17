@@ -24,6 +24,7 @@ venv/
 !server/db/seeds/data/projects.json
 !server/db/seeds/data/service_areas.json
 !server/db/seeds/data/faqs.json
+!server/db/seeds/data/team_members.json
 !server/theme-settings.json
 !f446c3814965a067992e82231bb56211.txt
 

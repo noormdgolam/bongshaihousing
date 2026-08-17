@@ -197,6 +197,36 @@ for (const pageFile of CATEGORY_LANDING_PAGES) {
   }
 }
 
+// ── Team Department pages — DB-driven team members & leadership ──────────
+const TEAM_PAGES = [
+  { file: 'team-senior-management.html', dept: 'senior-management' },
+  { file: 'team-engineering.html', dept: 'engineering' },
+  { file: 'team-marketing-sales.html', dept: 'marketing-sales' },
+  { file: 'team-quality-control.html', dept: 'quality-control' },
+  { file: 'team-skilled-workers.html', dept: 'skilled-workers' },
+  { file: 'team-client-service.html', dept: 'client-service' },
+];
+
+for (const { file, dept } of TEAM_PAGES) {
+  const urlPath = `/${file}`;
+  if (registry[urlPath]) {
+    const meta = registry[urlPath];
+    router.get(urlPath, async (req, res) => {
+      let dbTeamMembers = [];
+      if (db) {
+        try {
+          dbTeamMembers = await db('team_members')
+            .where({ department: dept, published: true })
+            .orderBy('sort_order', 'asc');
+        } catch (err) {
+          console.error(`team_members DB fetch failed for ${dept}, rendering static fallback:`, err.message);
+        }
+      }
+      res.render(meta.template, renderVars(meta, { dbTeamMembers, teamDepartment: dept }));
+    });
+  }
+}
+
 // ── Generic registry loop (static pages) ──────────────────────────────────
 // /projects.html and category landing pages are already registered above with
 // dynamic handlers, so Express will match them first and never reach them here.
