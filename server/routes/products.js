@@ -26,8 +26,21 @@ router.get('/:slug.html', async (req, res, next) => {
     const specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
     const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
 
-    for (const v of variants) {
-      v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
+    // One batched query instead of one per variant (some models have 3+
+    // tiers) - a real difference under this host's small connection pool
+    // (see [[project-node-hosting-quirks]]).
+    if (variants.length) {
+      const allRooms = await db('product_rooms')
+        .whereIn('product_variant_id', variants.map((v) => v.id))
+        .orderBy('sort_order');
+      const roomsByVariant = new Map();
+      for (const room of allRooms) {
+        if (!roomsByVariant.has(room.product_variant_id)) roomsByVariant.set(room.product_variant_id, []);
+        roomsByVariant.get(room.product_variant_id).push(room);
+      }
+      for (const v of variants) {
+        v.rooms = roomsByVariant.get(v.id) || [];
+      }
     }
 
     const relatedProducts = await db('products')
