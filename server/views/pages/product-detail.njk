@@ -3,8 +3,8 @@
 <section class="page-hero" style="min-height: 30vh; padding: 100px 0 50px;">
 <div class="container page-hero-content" style="text-align: center;">
 <span class="page-hero-label">{{ category.name }}</span>
-<h1 class="page-hero-title" data-aos="fade-up">{{ product.model_number }}</h1>
-{% if product.description %}<p class="page-hero-text" style="max-width: 800px; margin: 0 auto 24px;">{{ product.description }}</p>{% endif %}
+<h1 class="page-hero-title" data-aos="fade-up">Model No-{{ product.model_number }}</h1>
+<p class="page-hero-text" style="max-width: 800px; margin: 0 auto 24px;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
 </div>
 </section>
 
@@ -18,18 +18,32 @@
   </div>
 
   <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
-    <span class="property-type" style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">{{ category.name }}</span>
-    <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">{{ product.model_number }}</h2>
+    <div style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
+    <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">Model No-{{ product.model_number }}</h2>
     <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: var(--space-5);">
       <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Pricing</span>
-      <span style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">
-        {% if product.price_per_sqft %}৳{{ product.price_per_sqft }} / sqft{% else %}Contact for Quote{% endif %}
-      </span>
+      <span style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">Contact for Quote</span>
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-100);">
       <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
       <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700;" target="_blank">💬 WhatsApp Now</a>
     </div>
+
+    {% if variants.length %}
+    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-100);">
+      <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Select Floor Area</span>
+      <div class="bh-variant-picker" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+        {% for v in variants %}
+        <button type="button" class="btn bh-variant-btn{% if loop.first %} active{% endif %}" data-variant-index="{{ loop.index0 }}" style="padding: 6px 14px; font-size: 0.85rem;">{{ v.area_label or v.area_sqft }} Sq.Ft</button>
+        {% endfor %}
+      </div>
+      <div class="bh-variant-summary" style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.88rem; color: var(--grey-700);">
+        <span>🛏️ <strong class="bh-variant-bed">{{ variants[0].bed }} Bedrooms</strong></span>
+        <span>🚿 <strong class="bh-variant-bath">{{ variants[0].bath }} Bathroom{% if variants[0].bath != 1 %}s{% endif %}</strong></span>
+        <span>🍳 <strong>1 Kitchen</strong></span>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </div>
 
@@ -40,7 +54,7 @@
     <p class="section-subtitle">Room breakdown for each floor-area option.</p>
   </div>
   {% for v in variants %}
-  <div class="card" style="margin-bottom: 24px; background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
+  <div class="card bh-variant-panel{% if not loop.first %} bh-variant-hidden{% endif %}" data-variant-index="{{ loop.index0 }}" style="margin-bottom: 24px; background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
     <h3 style="margin-top:0;">{{ v.area_label or v.area_sqft }} sqft{% if v.bed %} — {{ v.bed }} Bed{% endif %}{% if v.bath %}, {{ v.bath }} Bath{% endif %}</h3>
     {% if v.rooms.length %}
     <table class="modern-table">
@@ -60,6 +74,26 @@
   </div>
   {% endfor %}
 </section>
+<style>.bh-variant-hidden { display: none; } .bh-variant-btn.active { background: var(--primary); color: white; border-color: var(--primary); }</style>
+<script>
+(function () {
+  var variantData = {{ variants | dump | safe }};
+  var buttons = document.querySelectorAll('.bh-variant-btn');
+  var panels = document.querySelectorAll('.bh-variant-panel');
+  var bedEl = document.querySelector('.bh-variant-bed');
+  var bathEl = document.querySelector('.bh-variant-bath');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var idx = btn.getAttribute('data-variant-index');
+      buttons.forEach(function (b) { b.classList.toggle('active', b === btn); });
+      panels.forEach(function (p) { p.classList.toggle('bh-variant-hidden', p.getAttribute('data-variant-index') !== idx); });
+      var v = variantData[idx];
+      if (v && bedEl) bedEl.textContent = v.bed + ' Bedrooms';
+      if (v && bathEl) bathEl.textContent = v.bath + ' Bathroom' + (v.bath !== 1 ? 's' : '');
+    });
+  });
+})();
+</script>
 {% endif %}
 
 {% if specs.length %}
