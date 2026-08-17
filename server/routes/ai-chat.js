@@ -59,6 +59,7 @@ router.post('/api/ai-chat', async (req, res) => {
   const sanitizedContext = {
     pageUrl: stripTags(String(context?.pageUrl || '')).substring(0, 200),
     pageTitle: stripTags(String(context?.pageTitle || '')).substring(0, 200),
+    language: context?.language === 'en' ? 'en' : 'bn',
   };
 
   try {
@@ -69,9 +70,12 @@ router.post('/api/ai-chat', async (req, res) => {
     });
   } catch (err) {
     console.error('AI chat endpoint error:', err.message);
+    const fallback = sanitizedContext.language === 'en'
+      ? 'Welcome to Bongshai Housing! For instant pricing and technical consultations on steel structures and prefab villas, reach our engineers on WhatsApp: +880 1781-636613.'
+      : 'বঙ্গশাই হাউজিং-এ আপনাকে স্বাগতম! আমাদের স্টিল বিল্ডিং, ডুপ্লেক্স ও প্রিফ্যাব হাউজিং সংক্রান্ত যেকোনো তথ্যের জন্য সরাসরি আমাদের ইঞ্জিনিয়ারদের সাথে হোয়াটসঅ্যাপে কথা বলুন (+8801781636613) অথবা একটি কোটেশন রিকোয়েস্ট পাঠান।';
     return res.status(200).json({
       success: true,
-      message: 'বঙ্গশাই হাউজিং-এ আপনাকে স্বাগতম! আমাদের স্টিল বিল্ডিং, ডুপ্লেক্স ও প্রিফ্যাব হাউজিং সংক্রান্ত যেকোনো তথ্যের জন্য সরাসরি আমাদের ইঞ্জিনিয়ারদের সাথে হোয়াটসঅ্যাপে কথা বলুন (+8801781636613) অথবা একটি কোটেশন রিকোয়েস্ট পাঠান।\n\nWelcome to Bongshai Housing! For instant pricing and technical consultations on steel structures and prefab villas, reach our engineers on WhatsApp: +880 1781-636613.',
+      message: fallback,
     });
   }
 });

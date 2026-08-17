@@ -19,6 +19,7 @@
         </div>
       </div>
       <div class="bh-ai-header-actions">
+        <button id="bhAiLangToggle" class="bh-ai-icon-btn bh-ai-lang-toggle" type="button" title="Switch language">EN</button>
         <button id="bhAiResetBtn" class="bh-ai-icon-btn" title="Clear chat" aria-label="Clear chat">🔄</button>
         <button id="bhAiCloseBtn" class="bh-ai-icon-btn" title="Close chat" aria-label="Close chat">✕</button>
       </div>
@@ -90,6 +91,14 @@
 
 .bh-ai-toggle-btn[hidden] {
   display: none;
+}
+
+.bh-ai-lang-toggle {
+  font-size: 11px;
+  font-weight: 700;
+  width: auto;
+  padding: 0 8px;
+  min-width: 30px;
 }
 .bh-ai-toggle-btn {
   display: flex;
@@ -592,6 +601,38 @@
 
   const STORAGE_KEY = 'bh_ai_chat_history_v1';
 
+  const UI_STRINGS = {"bn":{"chip1Label":"🧮 তাৎক্ষণিক খরচ হিসাব করুন","chip2Prompt":"স্টিল বিল্ডিং তৈরি করতে কত দিন সময় লাগে?","chip2Label":"⚡ কত দিনে তৈরি হয়?","chip3Prompt":"ফ্যাক্টরি বা ইন্ডাস্ট্রিয়াল শেডের রেট কত?","chip3Label":"🏭 ফ্যাক্টরি শেড রেট","chip4Prompt":"BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান","chip4Label":"📐 BH-SB-302 মডেল","placeholder":"আপনার প্রশ্ন লিখুন (e.g. ২ তলা বাড়ির খরচ)...","welcomeBody":"আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা ইন্ডাস্ট্রিয়াল ফ্যাক্টরি শেড নিয়ে যেকোনো প্রশ্ন করতে পারেন।","errFallback1":"আমাদের সার্ভারের সাথে সংযোগে সাময়িক ত্রুটি হয়েছে। অনুগ্রহ করে সরাসরি আমাদের হোয়াটসঅ্যাপে নক দিন: +880 1781-636613.","errFallback2":"সংযোগ বিচ্ছিন্ন হয়েছে। আমাদের হটলাইন +8801781636613-এ যোগাযোগ করুন।"},"en":{"chip1Label":"🧮 Instant Cost Estimate","chip2Prompt":"How long does it take to build a steel building?","chip2Label":"⚡ How long does it take?","chip3Prompt":"What are the rates for factory or industrial sheds?","chip3Label":"🏭 Factory shed rates","chip4Prompt":"Tell me details about the BH-SB-302 model","chip4Label":"📐 BH-SB-302 model","placeholder":"Type your question (e.g. cost of a 2-story house)...","welcomeBody":"I'm your AI sales and engineering assistant. Ask me about your land size, duplex/simplex house costs, container homes, or industrial factory sheds.","errFallback1":"We're having a temporary issue connecting to our server. Please reach us directly on WhatsApp: +880 1781-636613.","errFallback2":"Connection lost. Please contact our hotline: +8801781636613."}};
+  const langToggleBtn = document.getElementById('bhAiLangToggle');
+  let currentLang = localStorage.getItem('bh_ai_lang') === 'en' ? 'en' : 'bn';
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('bh_ai_lang', lang);
+    const s = UI_STRINGS[lang];
+    if (langToggleBtn) {
+      langToggleBtn.textContent = lang === 'bn' ? 'EN' : 'বাং';
+      langToggleBtn.title = lang === 'bn' ? 'Switch to English' : 'Switch to Bengali';
+    }
+    if (input) input.placeholder = s.placeholder;
+    var chipEstimate = document.querySelector('.bh-ai-chip-estimate');
+    if (chipEstimate) chipEstimate.textContent = s.chip1Label;
+    var promptChips = document.querySelectorAll('.bh-ai-chip:not(.bh-ai-chip-estimate)');
+    var chipKeys = ['chip2', 'chip3', 'chip4'];
+    promptChips.forEach(function (btn, i) {
+      var key = chipKeys[i];
+      if (!key) return;
+      btn.textContent = s[key + 'Label'];
+      btn.setAttribute('data-prompt', s[key + 'Prompt']);
+    });
+  }
+
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', function () {
+      applyLanguage(currentLang === 'bn' ? 'en' : 'bn');
+    });
+  }
+  applyLanguage(currentLang);
+
   let conversation = [];
 
   // Load from session storage
@@ -811,7 +852,8 @@
           messages: conversation,
           context: {
             pageUrl: window.location.pathname,
-            pageTitle: document.title
+            pageTitle: document.title,
+            language: currentLang
           }
         })
       });
@@ -822,11 +864,11 @@
       if (data && data.message) {
         appendMessage('assistant', data.message);
       } else {
-        appendMessage('assistant', 'আমাদের সার্ভারের সাথে সংযোগে সাময়িক ত্রুটি হয়েছে। অনুগ্রহ করে সরাসরি আমাদের হোয়াটসঅ্যাপে নক দিন: +880 1781-636613.');
+        appendMessage('assistant', UI_STRINGS[currentLang].errFallback1);
       }
     } catch (err) {
       typingIndicator.setAttribute('hidden', '');
-      appendMessage('assistant', 'সংযোগ বিচ্ছিন্ন হয়েছে। আমাদের হটলাইন +8801781636613-এ যোগাযোগ করুন।');
+      appendMessage('assistant', UI_STRINGS[currentLang].errFallback2);
     } finally {
       input.disabled = false;
       sendBtn.disabled = false;

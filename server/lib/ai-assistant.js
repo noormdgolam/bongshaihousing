@@ -88,6 +88,14 @@ async function callGroqAPI(messages, userContext = {}) {
 
   const dynamicCatalog = await getDynamicCatalogContext();
 
+  // Language is an explicit user choice from the widget's EN/BN toggle, not
+  // auto-detected from the message text - auto-detection was producing
+  // answers that mixed or guessed the wrong language regardless of what the
+  // customer actually wanted to read.
+  const languageInstruction = userContext.language === 'en'
+    ? 'Respond only in fluent, natural English, regardless of what language the user\'s message is written in.'
+    : 'Respond only in fluent, standard Bengali (বাংলা), regardless of what language the user\'s message is written in.';
+
   const systemPrompt = {
     role: 'system',
     content: `${BONGSHAI_KNOWLEDGE}\n${dynamicCatalog}\n
@@ -99,7 +107,7 @@ INSTRUCTIONS FOR ASSISTANT:
 1. Always give an Answer-First opening (direct and concise).
 2. Recommend specific models or solutions matching the customer's budget, land size, or requirements.
 3. Suggest estimated construction costs accurately using the guidelines.
-4. If the user asks in Bengali (or Banglish), answer in fluent, standard Bengali. If in English, answer in English.
+4. ${languageInstruction}
 5. Provide actionable guidance and recommend contacting Bongshai Housing sales engineers on WhatsApp (+8801781636613) or submitting the Quote form.
 `
   };
