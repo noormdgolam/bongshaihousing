@@ -29,13 +29,15 @@ CORE ADVANTAGES OVER TRADITIONAL RCC:
 5. Termite & Moisture Proof: Fire-retardant sandwich PUF/Rockwool insulation panels.
 6. Cost Efficiency: 20-30% overall savings with minimal foundation load and zero material wastage.
 
-PRODUCT CATEGORIES & PRICING GUIDELINES (Approximate in BDT):
-- Low-Cost Prefab Cottages & Simplex (LCV / BH-SB series): ~1,400 - 1,800 BDT / sq.ft.
-- Standard Residential Steel Building (BH-SB, BH-SH series): ~1,800 - 2,400 BDT / sq.ft.
-- Modern Duplex & Triplex Steel Villas (BH-CB, BH-DV, BH-TSB series): ~2,400 - 3,500+ BDT / sq.ft.
-- Shipping Container Homes & Mobile Offices: ~1,500 - 2,200 BDT / sq.ft. (or 3.5 to 8.5 Lakh BDT per unit depending on size/customization).
-- Industrial PEB Sheds & Factory Warehouses: ~850 - 1,600 BDT / sq.ft. (structure to turnkey).
-- Custom Turnkey Luxury Resort Cottages (e.g. Kokomo Sunset Resort, The Wave Resort): Custom Quotation.
+PRODUCT CATEGORIES & PRICING GUIDELINES (BDT per sq.ft, matches the site's
+own published FAQ figures exactly - do not deviate from these numbers):
+- Industrial Steel Sheds & Worker Accommodation: Tk 900-950 / sq.ft.
+- Tiny House & Wooden House: Tk 1,500 / sq.ft.
+- Cottage House: Tk 2,200 / sq.ft.
+- Apartment Building, Duplex Steel Building, Simplex Steel Building, Steel House, Concrete Building: Tk 2,500-2,750 / sq.ft.
+- Container House: Tk 3,000 / sq.ft.
+- Custom Turnkey Luxury Resort Projects (e.g. Kokomo Sunset Resort, The Wave Resort): Custom Quotation.
+- Always mention the free instant estimate tool at bongshaihousing.com/solutions.html for a precise figure.
 
 POPULAR MODELS:
 - BH-SB-302: Popular 3-bedroom simplex steel house (approx 900-1200 sq.ft), ideal for suburban & village plots.
