@@ -1,0 +1,116 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Analytics{% endblock %}
+{% block header %}<h2 style="margin:0;">Analytics</h2>{% endblock %}
+{% block content %}
+<style>
+  .an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .an-barlist .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.88rem; }
+  .an-barlist .label { width: 140px; flex-shrink: 0; color: var(--grey-700); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .an-barlist .track { flex: 1; background: var(--grey-100); border-radius: 4px; height: 10px; overflow: hidden; }
+  .an-barlist .fill { background: var(--primary); height: 100%; border-radius: 4px; }
+  .an-barlist .count { width: 40px; text-align: right; font-weight: 700; color: var(--grey-900); }
+  .an-empty { color: var(--grey-500); font-size: 0.88rem; padding: 12px 0; }
+  .an-sparkline { width: 100%; height: 60px; }
+</style>
+
+<div class="an-grid">
+  <div class="stat-card"><div class="num">{{ totalViews30d }}</div><div class="label">Page views (30d)</div></div>
+  <div class="stat-card"><div class="num">{{ totalLeads30d }}</div><div class="label">New inquiries (30d)</div></div>
+  {% set closedCount = 0 %}
+  {% for f in leadFunnel %}{% if f.status == 'closed' %}{% set closedCount = f.count %}{% endif %}{% endfor %}
+  <div class="stat-card"><div class="num">{{ closedCount }}</div><div class="label">Closed deals (all-time)</div></div>
+</div>
+
+<div class="an-grid" style="grid-template-columns: 2fr 1fr;">
+  <div class="card">
+    <h3 style="margin-top:0;">Traffic — last 30 days</h3>
+    {% if trafficTrend.length %}
+      {% set maxV = 1 %}
+      {% for d in trafficTrend %}{% if d.count > maxV %}{% set maxV = d.count %}{% endif %}{% endfor %}
+      <svg class="an-sparkline" viewBox="0 0 {{ trafficTrend.length * 20 }} 60" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#1E40AF" stroke-width="2"
+          points="{% for d in trafficTrend %}{{ loop.index0 * 20 }},{{ 58 - (d.count / maxV * 54) }} {% endfor %}" />
+      </svg>
+      <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--grey-500);">
+        <span>{{ trafficTrend[0].day }}</span>
+        <span>{{ trafficTrend[trafficTrend.length - 1].day }}</span>
+      </div>
+    {% else %}
+      <div class="an-empty">No traffic data yet — page views are logged going forward from today.</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Inquiry sources</h3>
+    <div class="an-barlist">
+      {% if leadSources.length %}
+        {% set maxS = 1 %}
+        {% for s in leadSources %}{% if s.count > maxS %}{% set maxS = s.count %}{% endif %}{% endfor %}
+        {% for s in leadSources %}
+        <div class="row">
+          <div class="label">{{ s.source }}</div>
+          <div class="track"><div class="fill" style="width:{{ (s.count / maxS * 100) | round }}%"></div></div>
+          <div class="count">{{ s.count }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="an-empty">No inquiries yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="an-grid">
+  <div class="card">
+    <h3 style="margin-top:0;">Inquiry funnel</h3>
+    <div class="an-barlist">
+      {% if leadFunnel.length %}
+        {% set maxF = 1 %}
+        {% for f in leadFunnel %}{% if f.count > maxF %}{% set maxF = f.count %}{% endif %}{% endfor %}
+        {% for f in leadFunnel %}
+        <div class="row">
+          <div class="label">{{ f.status }}</div>
+          <div class="track"><div class="fill" style="width:{{ (f.count / maxF * 100) | round }}%"></div></div>
+          <div class="count">{{ f.count }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="an-empty">No inquiries yet.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Most-requested models</h3>
+    <div class="an-barlist">
+      {% if topModels.length %}
+        {% set maxM = 1 %}
+        {% for m in topModels %}{% if m.count > maxM %}{% set maxM = m.count %}{% endif %}{% endfor %}
+        {% for m in topModels %}
+        <div class="row">
+          <div class="label">{{ m.model }}</div>
+          <div class="track"><div class="fill" style="width:{{ (m.count / maxM * 100) | round }}%"></div></div>
+          <div class="count">{{ m.count }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="an-empty">No model data yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0;">Top pages — last 30 days</h3>
+  <table>
+    <thead><tr><th>Path</th><th style="width:100px;">Views</th></tr></thead>
+    <tbody>
+      {% for p in topPages %}
+      <tr><td>{{ p.path }}</td><td>{{ p.count }}</td></tr>
+      {% else %}
+      <tr><td colspan="2" class="an-empty">No traffic data yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
