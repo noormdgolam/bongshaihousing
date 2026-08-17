@@ -1,8 +1,11 @@
 name: Deploy to cPanel via FTP
+# Auto-deploy-on-push disabled during the bongshaihousing.com cutover to the
+# Node app - a push to main mid-cutover would overwrite public_html with
+# stale static files and race the new app. Re-add the `push:` trigger below
+# once the cutover is confirmed stable, or run this manually via
+# workflow_dispatch in the meantime if a static-only fix is truly needed.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch: {}
 
 jobs:
   web-deploy:
