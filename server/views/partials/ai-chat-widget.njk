@@ -26,7 +26,7 @@
 
     <!-- Quick Prompts Pill Row -->
     <div class="bh-ai-quick-prompts" id="bhAiQuickPrompts">
-      <button class="bh-ai-chip" data-prompt="ডুপ্লেক্স স্টিল বাড়ির খরচ কেমন পড়বে?">🏠 ডুপ্লেক্স বাড়ির খরচ</button>
+      <button class="bh-ai-chip bh-ai-chip-estimate" data-flow="estimate">🧮 তাৎক্ষণিক খরচ হিসাব করুন</button>
       <button class="bh-ai-chip" data-prompt="স্টিল বিল্ডিং তৈরি করতে কত দিন সময় লাগে?">⚡ কত দিনে তৈরি হয়?</button>
       <button class="bh-ai-chip" data-prompt="ফ্যাক্টরি বা ইন্ডাস্ট্রিয়াল শেডের রেট কত?">🏭 ফ্যাক্টরি শেড রেট</button>
       <button class="bh-ai-chip" data-prompt="BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান">📐 BH-SB-302 মডেল</button>
@@ -85,7 +85,7 @@
   bottom: 90px;
   right: 24px;
   z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans Bengali", sans-serif;
 }
 
 .bh-ai-toggle-btn[hidden] {
@@ -251,6 +251,9 @@
 }
 
 /* Quick Prompts */
+.bh-ai-quick-prompts[hidden] {
+  display: none;
+}
 .bh-ai-quick-prompts {
   display: flex;
   gap: 6px;
@@ -348,6 +351,75 @@
 }
 .bh-ai-msg-user .bh-ai-bubble a {
   color: #93C5FD;
+}
+
+.bh-ai-table-wrap {
+  overflow-x: auto;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+.bh-ai-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12.5px;
+}
+.bh-ai-table th,
+.bh-ai-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #E5E7EB;
+  white-space: nowrap;
+}
+.bh-ai-table thead th {
+  background: #E5E7EB;
+  font-weight: 700;
+}
+.bh-ai-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.bh-ai-msg-user .bh-ai-table th,
+.bh-ai-msg-user .bh-ai-table td {
+  border-bottom-color: rgba(255, 255, 255, 0.25);
+}
+.bh-ai-msg-user .bh-ai-table thead th {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bh-ai-flow-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.bh-ai-flow-btn {
+  background: #ffffff;
+  border: 1px solid #1E40AF;
+  color: #1E40AF;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.bh-ai-flow-btn:hover {
+  background: #1E40AF;
+  color: #ffffff;
+}
+.bh-ai-flow-cancel {
+  display: block;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: #9CA3AF;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+.bh-ai-flow-cancel:hover {
+  color: #6B7280;
 }
 
 .bh-ai-bubble-actions {
@@ -588,12 +660,77 @@
     });
   }
 
+  // Shared inline formatting (bold/links/phone) used both for plain text
+  // and for individual markdown-table cells.
+  function formatInline(str) {
+    str = str.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    str = str.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    str = str.replace(/(?<!href=")(?<!">)(\+?880\s?1[3-9]\d{2}-?\d{6})/g, (match, num) => {
+      const digits = num.replace(/[^0-9]/g, '');
+      return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">📞 ${match}</a>`;
+    });
+    return str;
+  }
+
+  function splitTableRow(row) {
+    let r = row.trim();
+    if (r.startsWith('|')) r = r.slice(1);
+    if (r.endsWith('|')) r = r.slice(0, -1);
+    return r.split('|').map((c) => c.trim());
+  }
+
+  // Pulls GFM-style markdown tables (header | header \n --- | --- \n cell | cell)
+  // out of the text and replaces each with a placeholder token, so the later
+  // bold/link/newline regexes (which run on the whole string) can't mangle
+  // table markup. Returns { text, tables } - placeholders get swapped back
+  // in as the final step of formatText().
+  function extractMarkdownTables(text) {
+    const lines = text.split('\n');
+    const tables = [];
+    const out = [];
+    let i = 0;
+    const separatorRe = /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)+\|?\s*$/;
+
+    while (i < lines.length) {
+      const line = lines[i];
+      const next = lines[i + 1];
+      if (line && line.includes('|') && next && separatorRe.test(next)) {
+        const headerCells = splitTableRow(line);
+        i += 2;
+        const rows = [];
+        while (i < lines.length && lines[i].includes('|') && lines[i].trim() !== '') {
+          rows.push(splitTableRow(lines[i]));
+          i++;
+        }
+        let html = '<div class="bh-ai-table-wrap"><table class="bh-ai-table"><thead><tr>';
+        headerCells.forEach((c) => (html += `<th>${formatInline(c)}</th>`));
+        html += '</tr></thead><tbody>';
+        rows.forEach((r) => {
+          html += '<tr>';
+          r.forEach((c) => (html += `<td>${formatInline(c)}</td>`));
+          html += '</tr>';
+        });
+        html += '</tbody></table></div>';
+        const token = ` TBL${tables.length} `;
+        tables.push(html);
+        out.push(token);
+      } else {
+        out.push(line);
+        i++;
+      }
+    }
+    return { text: out.join('\n'), tables };
+  }
+
   function formatText(text) {
-    // Simple sanitizing & markdown-like parsing for bold and links
+    // Simple sanitizing & markdown-like parsing for bold, links and tables
     let safe = text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
+
+    const { text: withoutTables, tables } = extractMarkdownTables(safe);
+    safe = withoutTables;
 
     // Bold **text**
     safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -611,7 +748,14 @@
     });
 
     // Convert newlines to paragraphs/breaks
-    return safe.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+    safe = safe.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+
+    // Restore table placeholders with their pre-rendered HTML
+    tables.forEach((html, idx) => {
+      safe = safe.replace(` TBL${idx} `, html);
+    });
+
+    return safe;
   }
 
   function appendMessage(role, text, save = true) {
@@ -647,6 +791,11 @@
 
     input.value = '';
     appendMessage('user', text);
+
+    if (typeof COST_TRIGGER_RE !== 'undefined' && COST_TRIGGER_RE.test(text) && !estimateState) {
+      startEstimateFlow();
+      return;
+    }
 
     // Disable input while generating
     input.disabled = true;
@@ -685,6 +834,175 @@
       scrollBottom();
     }
   }
+
+
+  // ── Flow A: Instant Cost Estimate (deterministic, code-computed - never
+  // routed through the LLM, since a hallucinated price is worse than none) ──
+
+  const ESTIMATE_TYPES = [{"id":"tiny","label":"🏡 Tiny / উডেন হাউজ","rateLow":1500,"rateHigh":null,"tiers":"tiny"},{"id":"cottage","label":"🏘️ Cottage হাউজ","rateLow":2200,"rateHigh":null,"tiers":"small"},{"id":"simplex","label":"🏠 সিমপ্লেক্স Steel হাউজ","rateLow":2500,"rateHigh":2750,"tiers":"small"},{"id":"duplex","label":"🏢 ডুপ্লেক্স Steel বিল্ডিং","rateLow":2500,"rateHigh":2750,"tiers":"multi"},{"id":"apartment","label":"🏬 Apartment বিল্ডিং","rateLow":2500,"rateHigh":2750,"tiers":"multi"},{"id":"steelhouse","label":"🏗️ Steel হাউজ (মাল্টি-স্টোরি)","rateLow":2500,"rateHigh":2750,"tiers":"multi"},{"id":"concrete","label":"🧱 Concrete বিল্ডিং","rateLow":2500,"rateHigh":2750,"tiers":"small"},{"id":"container","label":"📦 কনটেইনার হাউজ","rateLow":3000,"rateHigh":null,"tiers":"container"},{"id":"industrial","label":"🏭 Industrial শেড","rateLow":900,"rateHigh":950,"tiers":"industrial"}];
+  const ESTIMATE_TIER_SETS = {"tiny":[{"min":250,"max":350,"label":"২৫০–৩৫০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":500,"label":"৪০০–৫০০ বর্গফুট (২ বেডরুম)"}],"small":[{"min":400,"max":600,"label":"৪০০–৬০০ বর্গফুট (২ বেডরুম)"},{"min":750,"max":900,"label":"৭৫০–৯০০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1200,"label":"১০৫০–১২০০ বর্গফুট (৪ বেডরুম)"}],"multi":[{"min":1200,"max":1200,"label":"৬০০ বর্গফুট/ফ্লোর × ২ তলা (৩ বেডরুম, ২ বাথরুম)"},{"min":1700,"max":1700,"label":"৮৫০ বর্গফুট/ফ্লোর × ২ তলা (৫ বেডরুম, ৪ বাথরুম)"}],"container":[{"min":160,"max":160,"label":"২০ ফুট কনটেইনার (~১৬০ বর্গফুট)"},{"min":320,"max":320,"label":"৪০ ফুট কনটেইনার (~৩২০ বর্গফুট)"}],"industrial":[{"min":2000,"max":2000,"label":"২,০০০ বর্গফুট"},{"min":5000,"max":5000,"label":"৫,০০০ বর্গফুট"},{"min":10000,"max":10000,"label":"১০,০০০ বর্গফুট"}]};
+
+  let estimateState = null;
+
+  function bnDigits(str) {
+    const map = { '0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯' };
+    return String(str).replace(/[0-9]/g, (d) => map[d]);
+  }
+
+  function formatTaka(n) {
+    let s = Math.round(n).toString();
+    const last3 = s.slice(-3);
+    let rest = s.slice(0, -3);
+    if (rest !== '') {
+      rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+      s = rest + ',' + last3;
+    } else {
+      s = last3;
+    }
+    return bnDigits(s) + ' টাকা';
+  }
+
+  function setFlowInputMode(active) {
+    if (active) {
+      form.setAttribute('hidden', '');
+      if (quickPrompts) quickPrompts.setAttribute('hidden', '');
+    } else {
+      form.removeAttribute('hidden');
+      if (quickPrompts) quickPrompts.removeAttribute('hidden');
+    }
+  }
+
+  function appendFlowMessage(bodyHtml) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'bh-ai-msg bh-ai-msg-bot';
+    msgDiv.innerHTML = `
+      <div class="bh-ai-bubble">${bodyHtml}</div>
+      <span class="bh-ai-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+    `;
+    messagesContainer.appendChild(msgDiv);
+    scrollBottom();
+  }
+
+  function appendFlowUserChoice(label) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'bh-ai-msg bh-ai-msg-user';
+    msgDiv.innerHTML = `
+      <div class="bh-ai-bubble"><p>${label}</p></div>
+      <span class="bh-ai-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+    `;
+    messagesContainer.appendChild(msgDiv);
+    scrollBottom();
+  }
+
+  function flowOptionsHtml(options) {
+    return '<div class="bh-ai-flow-options">' +
+      options.map((o) => `<button class="bh-ai-flow-btn" data-value="${o.value}">${o.label}</button>`).join('') +
+      '</div><button class="bh-ai-flow-cancel" data-flow-cancel="1">❌ বাতিল করুন</button>';
+  }
+
+  function startEstimateFlow() {
+    estimateState = { step: 'type' };
+    setFlowInputMode(true);
+    const options = ESTIMATE_TYPES.map((t) => ({ value: t.id, label: t.label }));
+    appendFlowMessage('<p><strong>কোন ধরনের বাড়ির জন্য খরচ জানতে চান?</strong></p>' + flowOptionsHtml(options));
+  }
+
+  function handleEstimateTypeChoice(typeId) {
+    const type = ESTIMATE_TYPES.find((t) => t.id === typeId);
+    if (!type) return;
+    estimateState.type = type;
+    estimateState.step = 'size';
+    appendFlowUserChoice(type.label);
+    const tiers = ESTIMATE_TIER_SETS[type.tiers];
+    const options = tiers.map((tier, idx) => ({ value: idx, label: tier.label }));
+    appendFlowMessage('<p><strong>সাইজ কেমন হবে?</strong></p>' + flowOptionsHtml(options));
+  }
+
+  function handleEstimateSizeChoice(idx) {
+    const tiers = ESTIMATE_TIER_SETS[estimateState.type.tiers];
+    const tier = tiers[idx];
+    if (!tier) return;
+    estimateState.tier = tier;
+    appendFlowUserChoice(tier.label);
+
+    if (estimateState.type.rateHigh) {
+      estimateState.step = 'finish';
+      const options = [
+        { value: 'standard', label: 'Standard' },
+        { value: 'luxury', label: 'Luxury' },
+      ];
+      appendFlowMessage('<p><strong>ফিনিশিং লেভেল?</strong></p>' + flowOptionsHtml(options));
+    } else {
+      estimateState.finish = 'standard';
+      renderEstimateResult();
+    }
+  }
+
+  function handleEstimateFinishChoice(finish) {
+    estimateState.finish = finish;
+    appendFlowUserChoice(finish === 'luxury' ? 'Luxury' : 'Standard');
+    renderEstimateResult();
+  }
+
+  function renderEstimateResult() {
+    const { type, tier, finish } = estimateState;
+    const rate = finish === 'luxury' && type.rateHigh ? type.rateHigh : type.rateLow;
+    const low = tier.min * rate;
+    const high = tier.max * rate;
+    const rangeText = low === high ? formatTaka(low) : (formatTaka(low) + ' – ' + formatTaka(high));
+    const finishSuffix = type.rateHigh ? (', ' + (finish === 'luxury' ? 'Luxury ফিনিশ' : 'Standard ফিনিশ')) : '';
+    const waText = encodeURIComponent('Hello Bongshai Housing, I want a quote for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
+
+    appendFlowMessage(`
+      <p><strong>${type.label}</strong> (${tier.label}${finishSuffix}) নির্মাণের আনুমানিক খরচ: <strong>${rangeText}</strong></p>
+      <p style="font-size:12px; color:#6B7280;">এটি একটি প্রাথমিক হিসাব — জমির অবস্থান, সেটব্যাক ও ফিনিশিং অনুযায়ী চূড়ান্ত কোটেশন ভিন্ন হতে পারে।</p>
+      <div class="bh-ai-bubble-actions">
+        <a href="https://wa.me/8801781636613?text=${waText}" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">📞 টিমের সাথে কথা বলুন</a>
+        <a href="contact.html" class="bh-ai-cta-btn" style="background:#1E40AF;">🏠 সাইট ভিজিট বুক করুন</a>
+      </div>
+    `);
+
+    estimateState = null;
+    setFlowInputMode(false);
+    input.focus();
+  }
+
+  function cancelEstimateFlow() {
+    estimateState = null;
+    setFlowInputMode(false);
+    appendFlowMessage('<p>ঠিক আছে। আরও কিছু জানতে চাইলে লিখুন।</p>');
+    input.focus();
+  }
+
+  messagesContainer.addEventListener('click', (e) => {
+    const cancelBtn = e.target.closest('[data-flow-cancel]');
+    if (cancelBtn) {
+      cancelEstimateFlow();
+      return;
+    }
+    const btn = e.target.closest('.bh-ai-flow-btn');
+    if (!btn || !estimateState) return;
+    const value = btn.getAttribute('data-value');
+    if (estimateState.step === 'type') {
+      handleEstimateTypeChoice(value);
+    } else if (estimateState.step === 'size') {
+      handleEstimateSizeChoice(parseInt(value, 10));
+    } else if (estimateState.step === 'finish') {
+      handleEstimateFinishChoice(value);
+    }
+  });
+
+  const COST_TRIGGER_RE = /দাম\s*কত|খরচ\s*কত|কত\s*টাকা|cost\s*koto|koto\s*cost|price\s*koto|koto\s*price|instant\s*estimate|তাৎক্ষণিক[\s\S]{0,4}হিসাব/i;
+
+  if (quickPrompts) {
+    quickPrompts.addEventListener('click', (e) => {
+      const flowBtn = e.target.closest('.bh-ai-chip[data-flow="estimate"]');
+      if (flowBtn) {
+        startEstimateFlow();
+      }
+    }, true);
+  }
+
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

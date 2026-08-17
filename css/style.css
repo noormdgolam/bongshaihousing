@@ -63,9 +63,13 @@ html, body {
   --warning:        #d97706;
   --error:          #dc2626;
 
-  /* Typography — Modern Google Font (Inter) */
-  --font-body:      'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-heading:   'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Typography — Modern Google Font (Inter), with Noto Sans Bengali as the
+     fallback for Bengali script (Inter has no Bengali glyphs, so the browser
+     already renders Bangla text via the next font in this stack — this just
+     makes sure that font is a proper, complete Bengali typeface instead of
+     whatever generic one happens to be installed on the visitor's device). */
+  --font-body:      'Inter', 'Noto Sans Bengali', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-heading:   'Inter', 'Noto Sans Bengali', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   --fs-xs:    0.75rem;    /* 12px */
   --fs-sm:    0.875rem;   /* 14px */

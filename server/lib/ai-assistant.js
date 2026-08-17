@@ -124,9 +124,15 @@ INSTRUCTIONS FOR ASSISTANT:
         timeout: 15000,
       },
       (res) => {
-        let body = '';
-        res.on('data', (chunk) => (body += chunk));
+        // Collect raw Buffer chunks and decode once at the end. Bengali is
+        // almost entirely multi-byte UTF-8 sequences; decoding each TCP
+        // chunk separately (e.g. `body += chunk`) corrupts any character
+        // whose bytes happen to straddle a chunk boundary, producing
+        // scattered U+FFFD replacement characters mid-word.
+        const chunks = [];
+        res.on('data', (chunk) => chunks.push(chunk));
         res.on('end', () => {
+          const body = Buffer.concat(chunks).toString('utf8');
           if (res.statusCode >= 200 && res.statusCode < 300) {
             try {
               const data = JSON.parse(body);
