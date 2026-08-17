@@ -57,16 +57,15 @@ const themesHtml = env.render('admin/themes/index.njk', {
 });
 
 const themeDirectoryChecks = [
-  { test: themesHtml.includes('Themes Directory'), name: 'Themes Directory Title' },
-  { test: themesHtml.includes('ACTIVE THEME'), name: 'Active Theme Spotlight' },
-  { test: themesHtml.includes('Slate Midnight'), name: 'Active Theme Name' },
-  { test: themesHtml.includes('Customize in Elementor Studio Pro'), name: 'Elementor Pro Jump Button' },
+  { test: themesHtml.includes('Themes') && themesHtml.includes('btn-wp-add'), name: 'WordPress Themes Header & Add Button' },
+  { test: themesHtml.includes('Active: Slate Midnight'), name: 'Active Theme Blue Label' },
+  { test: themesHtml.includes('wp-btn-customize'), name: 'Customize Button in Active Footer' },
+  { test: themesHtml.includes('wp-add-theme-card'), name: 'Add Theme Dashed Card' },
   { test: themesHtml.includes('data-filter="catalog-first"'), name: 'Catalog-First Filter Tab' },
   { test: themesHtml.includes('data-filter="trust-first"'), name: 'Trust-First Filter Tab' },
   { test: themesHtml.includes('data-filter="story-process"'), name: 'Story-Process Filter Tab' },
   { test: themesHtml.includes('data-filter="broken-grid"'), name: 'Broken-Grid Filter Tab' },
   { test: themesHtml.includes('data-filter="stats-minimal"'), name: 'Stats-Led Filter Tab' },
-  { test: themesHtml.includes('data-filter="mobile-priority"'), name: 'Mobile-Priority Filter Tab' },
   { test: themesHtml.includes('action="/admin/themes/activate/'), name: 'Theme Activation Form Actions' },
 ];
 
