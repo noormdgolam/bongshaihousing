@@ -839,8 +839,7 @@
   // ── Flow A: Instant Cost Estimate (deterministic, code-computed - never
   // routed through the LLM, since a hallucinated price is worse than none) ──
 
-  const ESTIMATE_TYPES = [{"id":"tiny","label":"🏡 Tiny / উডেন হাউজ","rateLow":1500,"rateHigh":null,"tiers":"tiny"},{"id":"cottage","label":"🏘️ Cottage হাউজ","rateLow":2200,"rateHigh":null,"tiers":"small"},{"id":"simplex","label":"🏠 সিমপ্লেক্স Steel হাউজ","rateLow":2500,"rateHigh":2750,"tiers":"small"},{"id":"duplex","label":"🏢 ডুপ্লেক্স Steel বিল্ডিং","rateLow":2500,"rateHigh":2750,"tiers":"multi"},{"id":"apartment","label":"🏬 Apartment বিল্ডিং","rateLow":2500,"rateHigh":2750,"tiers":"multi"},{"id":"steelhouse","label":"🏗️ Steel হাউজ (মাল্টি-স্টোরি)","rateLow":2500,"rateHigh":2750,"tiers":"multi"},{"id":"concrete","label":"🧱 Concrete বিল্ডিং","rateLow":2500,"rateHigh":2750,"tiers":"small"},{"id":"container","label":"📦 কনটেইনার হাউজ","rateLow":3000,"rateHigh":null,"tiers":"container"},{"id":"industrial","label":"🏭 Industrial শেড","rateLow":900,"rateHigh":950,"tiers":"industrial"}];
-  const ESTIMATE_TIER_SETS = {"tiny":[{"min":250,"max":350,"label":"২৫০–৩৫০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":500,"label":"৪০০–৫০০ বর্গফুট (২ বেডরুম)"}],"small":[{"min":400,"max":600,"label":"৪০০–৬০০ বর্গফুট (২ বেডরুম)"},{"min":750,"max":900,"label":"৭৫০–৯০০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1200,"label":"১০৫০–১২০০ বর্গফুট (৪ বেডরুম)"}],"multi":[{"min":1200,"max":1200,"label":"৬০০ বর্গফুট/ফ্লোর × ২ তলা (৩ বেডরুম, ২ বাথরুম)"},{"min":1700,"max":1700,"label":"৮৫০ বর্গফুট/ফ্লোর × ২ তলা (৫ বেডরুম, ৪ বাথরুম)"}],"container":[{"min":160,"max":160,"label":"২০ ফুট কনটেইনার (~১৬০ বর্গফুট)"},{"min":320,"max":320,"label":"৪০ ফুট কনটেইনার (~৩২০ বর্গফুট)"}],"industrial":[{"min":2000,"max":2000,"label":"২,০০০ বর্গফুট"},{"min":5000,"max":5000,"label":"৫,০০০ বর্গফুট"},{"min":10000,"max":10000,"label":"১০,০০০ বর্গফুট"}]};
+  const ESTIMATE_TYPES = [{"id":"apartment","label":"🏬 Apartment বিল্ডিং","rate":3200,"tiers":[{"min":1050,"max":1500,"label":"১০৫০–১৫০০ বর্গফুট"}]},{"id":"duplex","label":"🏢 ডুপ্লেক্স Steel বিল্ডিং","rate":2250,"tiers":[{"min":600,"max":600,"label":"৬০০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৪ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"simplex","label":"🏠 সিমপ্লেক্স Steel হাউজ","rate":2500,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"cottage","label":"🏘️ Cottage হাউজ","rate":1900,"tiers":[{"min":320,"max":320,"label":"৩২০ বর্গফুট (১ বেডরুম)"},{"min":440,"max":440,"label":"৪৪০ বর্গফুট (২ বেডরুম)"},{"min":560,"max":560,"label":"৫৬০ বর্গফুট (২ বেডরুম)"},{"min":600,"max":600,"label":"৬০০ বর্গফুট (২ বেডরুম)"},{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"container","label":"📦 কনটেইনার হাউজ","rate":2500,"tiers":[{"min":300,"max":300,"label":"৩০০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":400,"label":"৪০০ বর্গফুট (২ বেডরুম)"}]},{"id":"steelhouse","label":"🏗️ Steel হাউজ","rate":2000,"tiers":[{"min":600,"max":600,"label":"৬০০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৪ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"tiny","label":"🏡 Tiny হাউজ","rate":2500,"tiers":[{"min":300,"max":300,"label":"৩০০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":400,"label":"৪০০ বর্গফুট (২ বেডরুম)"}]},{"id":"wooden","label":"🪵 Wooden হাউজ","rate":2500,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"concrete","label":"🧱 Concrete বিল্ডিং","rate":2750,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]}];
 
   let estimateState = null;
 
@@ -913,48 +912,27 @@
     estimateState.type = type;
     estimateState.step = 'size';
     appendFlowUserChoice(type.label);
-    const tiers = ESTIMATE_TIER_SETS[type.tiers];
-    const options = tiers.map((tier, idx) => ({ value: idx, label: tier.label }));
+    const options = type.tiers.map((tier, idx) => ({ value: idx, label: tier.label }));
     appendFlowMessage('<p><strong>সাইজ কেমন হবে?</strong></p>' + flowOptionsHtml(options));
   }
 
   function handleEstimateSizeChoice(idx) {
-    const tiers = ESTIMATE_TIER_SETS[estimateState.type.tiers];
-    const tier = tiers[idx];
+    const tier = estimateState.type.tiers[idx];
     if (!tier) return;
     estimateState.tier = tier;
     appendFlowUserChoice(tier.label);
-
-    if (estimateState.type.rateHigh) {
-      estimateState.step = 'finish';
-      const options = [
-        { value: 'standard', label: 'Standard' },
-        { value: 'luxury', label: 'Luxury' },
-      ];
-      appendFlowMessage('<p><strong>ফিনিশিং লেভেল?</strong></p>' + flowOptionsHtml(options));
-    } else {
-      estimateState.finish = 'standard';
-      renderEstimateResult();
-    }
-  }
-
-  function handleEstimateFinishChoice(finish) {
-    estimateState.finish = finish;
-    appendFlowUserChoice(finish === 'luxury' ? 'Luxury' : 'Standard');
     renderEstimateResult();
   }
 
   function renderEstimateResult() {
-    const { type, tier, finish } = estimateState;
-    const rate = finish === 'luxury' && type.rateHigh ? type.rateHigh : type.rateLow;
-    const low = tier.min * rate;
-    const high = tier.max * rate;
+    const { type, tier } = estimateState;
+    const low = tier.min * type.rate;
+    const high = tier.max * type.rate;
     const rangeText = low === high ? formatTaka(low) : (formatTaka(low) + ' – ' + formatTaka(high));
-    const finishSuffix = type.rateHigh ? (', ' + (finish === 'luxury' ? 'Luxury ফিনিশ' : 'Standard ফিনিশ')) : '';
     const waText = encodeURIComponent('Hello Bongshai Housing, I want a quote for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
 
     appendFlowMessage(`
-      <p><strong>${type.label}</strong> (${tier.label}${finishSuffix}) নির্মাণের আনুমানিক খরচ: <strong>${rangeText}</strong></p>
+      <p><strong>${type.label}</strong> (${tier.label}) নির্মাণের আনুমানিক খরচ: <strong>${rangeText}</strong></p>
       <p style="font-size:12px; color:#6B7280;">এটি একটি প্রাথমিক হিসাব — জমির অবস্থান, সেটব্যাক ও ফিনিশিং অনুযায়ী চূড়ান্ত কোটেশন ভিন্ন হতে পারে।</p>
       <div class="bh-ai-bubble-actions">
         <a href="https://wa.me/8801781636613?text=${waText}" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">📞 টিমের সাথে কথা বলুন</a>
@@ -987,8 +965,6 @@
       handleEstimateTypeChoice(value);
     } else if (estimateState.step === 'size') {
       handleEstimateSizeChoice(parseInt(value, 10));
-    } else if (estimateState.step === 'finish') {
-      handleEstimateFinishChoice(value);
     }
   });
 
