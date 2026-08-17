@@ -20,6 +20,29 @@
 {% endblock %}
 
 {% block content %}
+<style>
+  .op-group-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--grey-100); }
+  .op-group-icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0; }
+  .op-tiles { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .op-tile {
+    display:flex; align-items:center; gap:10px;
+    padding:10px 12px; border-radius:9px;
+    background:var(--grey-50); border:1px solid transparent;
+    color:var(--grey-900); text-decoration:none;
+    transition:transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+  }
+  .op-tile:hover { transform:translateY(-1px); text-decoration:none; background:white; border-color:var(--tile-accent, var(--primary)); box-shadow:0 3px 10px rgba(15,23,42,0.07); }
+  .op-tile-icon {
+    width:30px; height:30px; border-radius:8px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+    background:var(--tile-accent-soft, var(--grey-100)); color:var(--tile-accent, var(--grey-700));
+  }
+  .op-tile-label { font-size:0.83rem; font-weight:650; line-height:1.25; }
+  .op-tile-sub { font-size:0.72rem; color:var(--grey-500); font-weight:500; }
+  .op-tile.is-primary .op-tile-icon { background:var(--tile-accent, var(--primary)); color:white; }
+  .op-tile.is-primary { background:var(--tile-accent-soft, #eef2ff); }
+  @media (max-width: 480px) { .op-tiles { grid-template-columns:1fr; } }
+</style>
 
 <!-- 1. Top Executive KPI Cards -->
 <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-bottom:24px;">
@@ -100,76 +123,88 @@
 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-bottom:24px;">
   
   <!-- Group 1: Commercial & Catalog Suite -->
-  <div class="card" style="margin:0; padding:18px;">
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--grey-100); padding-bottom:10px;">
-      <span style="font-size:1.2rem;">📦</span>
+  <div class="card" style="margin:0; padding:18px; --tile-accent:#2563EB; --tile-accent-soft:#eff6ff;">
+    <div class="op-group-head">
+      <span class="op-group-icon" style="background:#eff6ff; color:#2563EB;">📦</span>
       <div>
         <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Product Catalog &amp; Architecture</h3>
         <div style="font-size:0.76rem; color:var(--grey-500);">Pre-engineered steel models, categories &amp; floor area specs</div>
       </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-      <a href="/admin/products" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        📦 All Products ({{ counts.products }})
+    <div class="op-tiles">
+      <a href="/admin/products" class="op-tile">
+        <span class="op-tile-icon">📦</span>
+        <span><span class="op-tile-label">All Products</span><br><span class="op-tile-sub">{{ counts.products }} models</span></span>
       </a>
-      <a href="/admin/products/new" class="btn btn-primary" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        ➕ Add Model
+      <a href="/admin/products/new" class="op-tile is-primary">
+        <span class="op-tile-icon">➕</span>
+        <span class="op-tile-label">Add Model</span>
       </a>
-      <a href="/admin/categories" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        📁 Categories ({{ counts.categories }})
+      <a href="/admin/categories" class="op-tile">
+        <span class="op-tile-icon">📁</span>
+        <span><span class="op-tile-label">Categories</span><br><span class="op-tile-sub">{{ counts.categories }} total</span></span>
       </a>
-      <a href="/admin/categories/new" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        ➕ Add Category
+      <a href="/admin/categories/new" class="op-tile">
+        <span class="op-tile-icon">➕</span>
+        <span class="op-tile-label">Add Category</span>
       </a>
     </div>
   </div>
 
   <!-- Group 2: Portfolio & Nationwide Footprint -->
-  <div class="card" style="margin:0; padding:18px;">
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--grey-100); padding-bottom:10px;">
-      <span style="font-size:1.2rem;">🏗️</span>
+  <div class="card" style="margin:0; padding:18px; --tile-accent:#059669; --tile-accent-soft:#ecfdf5;">
+    <div class="op-group-head">
+      <span class="op-group-icon" style="background:#ecfdf5; color:#059669;">🏗️</span>
       <div>
         <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Projects &amp; Service Coverage</h3>
         <div style="font-size:0.76rem; color:var(--grey-500);">Case studies, media library and 64 district landing pages</div>
       </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-      <a href="/admin/projects" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        🏗️ Projects ({{ counts.projects }})
+    <div class="op-tiles">
+      <a href="/admin/projects" class="op-tile">
+        <span class="op-tile-icon">🏗️</span>
+        <span><span class="op-tile-label">Projects</span><br><span class="op-tile-sub">{{ counts.projects }} listed</span></span>
       </a>
-      <a href="/admin/projects/new" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        ➕ Add Project
+      <a href="/admin/projects/new" class="op-tile is-primary">
+        <span class="op-tile-icon">➕</span>
+        <span class="op-tile-label">Add Project</span>
       </a>
-      <a href="/admin/service-areas" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        📍 64 Districts Coverage
+      <a href="/admin/service-areas" class="op-tile">
+        <span class="op-tile-icon">📍</span>
+        <span class="op-tile-label">64 Districts</span>
       </a>
-      <a href="/admin/media" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        🖼️ Media ({{ counts.mediaCount }} files)
+      <a href="/admin/media" class="op-tile">
+        <span class="op-tile-icon">🖼️</span>
+        <span><span class="op-tile-label">Media</span><br><span class="op-tile-sub">{{ counts.mediaCount }} files</span></span>
       </a>
     </div>
   </div>
 
   <!-- Group 3: Social Proof, AEO & Team -->
-  <div class="card" style="margin:0; padding:18px;">
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--grey-100); padding-bottom:10px;">
-      <span style="font-size:1.2rem;">💬</span>
+  <div class="card" style="margin:0; padding:18px; --tile-accent:#7C3AED; --tile-accent-soft:#f5f3ff;">
+    <div class="op-group-head">
+      <span class="op-group-icon" style="background:#f5f3ff; color:#7C3AED;">💬</span>
       <div>
         <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Social Proof, SEO &amp; Team</h3>
         <div style="font-size:0.76rem; color:var(--grey-500);">Client testimonials, Rich Snippets FAQs, and engineering roster</div>
       </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-      <a href="/admin/faqs" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        ❓ FAQs ({{ counts.faqs }})
+    <div class="op-tiles">
+      <a href="/admin/faqs" class="op-tile">
+        <span class="op-tile-icon">❓</span>
+        <span><span class="op-tile-label">FAQs</span><br><span class="op-tile-sub">{{ counts.faqs }} live</span></span>
       </a>
-      <a href="/admin/testimonials" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        💬 Testimonials ({{ counts.testimonials }})
+      <a href="/admin/testimonials" class="op-tile">
+        <span class="op-tile-icon">💬</span>
+        <span><span class="op-tile-label">Testimonials</span><br><span class="op-tile-sub">{{ counts.testimonials }} live</span></span>
       </a>
-      <a href="/admin/team-members" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        👥 Team ({{ counts.teamMembers }})
+      <a href="/admin/team-members" class="op-tile">
+        <span class="op-tile-icon">👥</span>
+        <span><span class="op-tile-label">Team</span><br><span class="op-tile-sub">{{ counts.teamMembers }} members</span></span>
       </a>
-      <a href="/admin/theme-editor" class="btn" style="justify-content:flex-start; font-size:0.8rem; padding:8px 10px;">
-        🎨 24 Theme Studio
+      <a href="/admin/theme-editor" class="op-tile is-primary">
+        <span class="op-tile-icon">🎨</span>
+        <span class="op-tile-label">Theme Studio</span>
       </a>
     </div>
   </div>
