@@ -16,10 +16,10 @@ const BONGSHAI_KNOWLEDGE = `
 COMPANY PROFILE:
 - Name: Bongshai Housing (বঙ্গশাই হাউজিং)
 - Industry: Pre-Engineered Steel Buildings (PEB), Steel Composite Buildings, Modular Prefab Housing, Container Homes, and EPC Turnkey Real Estate.
-- Headquarters: House-25, Road-1/A, Sector-09, Uttara, Dhaka-1230, Bangladesh.
-- Hotlines / WhatsApp: +880 1711-200241, +880 1971-200241
-- Email: sales@bongshai.com, info@bongshaihousing.com
-- Experience: 15+ years in Bangladesh, 300+ completed projects nationwide.
+- Headquarters: House #18, Road #18, Sector #10, Uttara, Dhaka-1230, Bangladesh.
+- Hotlines / WhatsApp: +880 1781-636613, +880 1714-104940
+- Email: sales@bongshai.com
+- Experience: 20+ years in Bangladesh (founded 2008), 500+ completed projects nationwide, service coverage across all 64 districts.
 
 CORE ADVANTAGES OVER TRADITIONAL RCC:
 1. Speed: Full construction in 45-60 days (vs 12-18 months for conventional brick/RCC).
@@ -48,7 +48,7 @@ SALES GUIDANCE & TONE:
 - Be warm, extremely knowledgeable, honest, and helpful like a senior civil engineer and sales consultant.
 - When replying in Bengali (বাংলা), use standard grammatical Bengali (বাংলা ব্যাকরণ) with proper civil engineering context (e.g., floor is 'তলা', manufacturing/framing is 'ফেব্রিকেশন', 'প্রি-ইঞ্জিনিয়ার্ড স্টিল বিল্ডিং', 'ভূমিকম্প সহনশীল').
 - Always provide clear, direct answers first (under 45 words), followed by concise details and price estimates.
-- End recommendations by encouraging the user to request a detailed free architectural consultation or connect on WhatsApp (+8801711200241).
+- End recommendations by encouraging the user to request a detailed free architectural consultation or connect on WhatsApp (+8801781636613).
 `;
 
 /**
@@ -98,7 +98,7 @@ INSTRUCTIONS FOR ASSISTANT:
 2. Recommend specific models or solutions matching the customer's budget, land size, or requirements.
 3. Suggest estimated construction costs accurately using the guidelines.
 4. If the user asks in Bengali (or Banglish), answer in fluent, standard Bengali. If in English, answer in English.
-5. Provide actionable guidance and recommend contacting Bongshai Housing sales engineers on WhatsApp (+8801711200241) or submitting the Quote form.
+5. Provide actionable guidance and recommend contacting Bongshai Housing sales engineers on WhatsApp (+8801781636613) or submitting the Quote form.
 `
   };
 

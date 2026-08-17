@@ -107,7 +107,7 @@ const DEFAULT_THEME = {
   announcement_bg: '#1E3A8A',
   announcement_color: '#FDE047',
   announcement_link: 'contact.html',
-  hotline_phone: '+880 1711-200241',
+  hotline_phone: '+880 1781-636613',
 
   // Floating Widgets
   ai_widget_primary: '#1E40AF',

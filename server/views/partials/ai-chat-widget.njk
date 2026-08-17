@@ -40,7 +40,7 @@
           <p><strong>স্বাগতম বঙ্গশাই হাউজিং-এ!</strong> 👋</p>
           <p>আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা ইন্ডাস্ট্রিয়াল ফ্যাক্টরি শেড নিয়ে যেকোনো প্রশ্ন করতে পারেন।</p>
           <div class="bh-ai-bubble-actions">
-            <a href="https://wa.me/8801711200241?text=Hello%20Bongshai%20Housing%2C%20I%20want%20a%20quote" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
+            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20a%20quote" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
               💬 WhatsApp-এ কথা বলুন
             </a>
           </div>
@@ -595,8 +595,14 @@
     // URLs first (before adding internal <a> tags)
     safe = safe.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 
-    // Phone numbers (if not already inside an anchor tag)
-    safe = safe.replace(/(?<!href=")(?<!">)(\+?880\s?1[3-9]\d{2}-?\d{6})/g, '<a href="https://wa.me/8801711200241" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">📞 $1</a>');
+    // Phone numbers (if not already inside an anchor tag) - link to whichever
+    // number actually appears in the text, not a hardcoded one (a wrong
+    // number here would silently send a customer's WhatsApp message to the
+    // wrong contact regardless of what number the AI actually mentioned).
+    safe = safe.replace(/(?<!href=")(?<!">)(\+?880\s?1[3-9]\d{2}-?\d{6})/g, (match, num) => {
+      const digits = num.replace(/[^0-9]/g, '');
+      return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">📞 ${match}</a>`;
+    });
 
     // Convert newlines to paragraphs/breaks
     return safe.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
@@ -661,11 +667,11 @@
       if (data && data.message) {
         appendMessage('assistant', data.message);
       } else {
-        appendMessage('assistant', 'আমাদের সার্ভারের সাথে সংযোগে সাময়িক ত্রুটি হয়েছে। অনুগ্রহ করে সরাসরি আমাদের হোয়াটসঅ্যাপে নক দিন: +880 1711-200241.');
+        appendMessage('assistant', 'আমাদের সার্ভারের সাথে সংযোগে সাময়িক ত্রুটি হয়েছে। অনুগ্রহ করে সরাসরি আমাদের হোয়াটসঅ্যাপে নক দিন: +880 1781-636613.');
       }
     } catch (err) {
       typingIndicator.setAttribute('hidden', '');
-      appendMessage('assistant', 'সংযোগ বিচ্ছিন্ন হয়েছে। আমাদের হটলাইন +8801711200241-এ যোগাযোগ করুন।');
+      appendMessage('assistant', 'সংযোগ বিচ্ছিন্ন হয়েছে। আমাদের হটলাইন +8801781636613-এ যোগাযোগ করুন।');
     } finally {
       input.disabled = false;
       sendBtn.disabled = false;
