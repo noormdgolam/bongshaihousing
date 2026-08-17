@@ -61,6 +61,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 8, // 8 hours
   },
 }));
@@ -139,8 +140,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/admin', require('./middleware/csrf'));
 app.use('/', adminAuthRouter);
 app.use('/', adminRouter);
+
+// Page-view logging for the admin Analytics dashboard - GET requests only,
+// after admin routes (so admin browsing never counts as traffic), fire-and-
+// forget so a DB hiccup never adds latency to a real page load.
+app.use((req, res, next) => {
+  if (req.method === 'GET' && db) {
+    db('page_views').insert({ path: req.path }).catch(() => {});
+  }
+  next();
+});
+
 app.use('/', productsRouter); // DB-driven product slug pages (bh-*, dv-*, lcv-*) — must precede pagesRouter
 app.use('/', aiChatRouter);   // AI Sales Assistant API endpoint (/api/ai-chat)
 app.use('/', pagesRouter);

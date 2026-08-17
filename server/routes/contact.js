@@ -11,9 +11,39 @@ try {
 
 const router = express.Router();
 
+// Per-IP rate limit: this route sends real SMTP mail and generates a PDF on
+// every hit, unlike the honeypot (which only catches bots that fill the
+// hidden field) - a script that skips the honeypot could otherwise spam
+// unlimited submissions, burning SMTP send quota / getting the sending
+// domain flagged. Same in-memory Map pattern as admin-auth.js's login
+// lockout (single-process app, no Redis needed).
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const submitAttempts = new Map(); // ip -> { count, windowStart }
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const state = submitAttempts.get(ip);
+  if (!state || now - state.windowStart > RATE_LIMIT_WINDOW_MS) {
+    submitAttempts.set(ip, { count: 1, windowStart: now });
+    return false;
+  }
+  state.count += 1;
+  if (submitAttempts.size > 5000) {
+    for (const [key, val] of submitAttempts.entries()) {
+      if (now - val.windowStart > RATE_LIMIT_WINDOW_MS) submitAttempts.delete(key);
+    }
+  }
+  return state.count > RATE_LIMIT_MAX;
+}
+
 // Mirrors send_email.php, wired to contact.html's #contactForm (submits JSON).
 router.post('/send_email.php', async (req, res) => {
   const body = req.body || {};
+
+  if (isRateLimited(req.ip)) {
+    return res.status(429).json({ status: 'error', message: 'Too many requests. Please try again in a few minutes.' });
+  }
 
   // Honeypot: legitimate visitors never see or fill this field (hidden via
   // CSS + aria-hidden in contact.html), so a non-empty value means a bot.

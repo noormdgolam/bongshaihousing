@@ -562,6 +562,16 @@ const CACHE_TTL_MS = 10000; // 10 seconds
 /**
  * Load active theme settings from DB with fallback to JSON and defaults
  */
+// custom_css renders unescaped inside a <style> tag on every public page
+// (layout.njk) - a value containing "</style><script>...</script>" would
+// close the style context and execute site-wide. Stripping any style/script
+// tag substrings removes the only way to break out of that context, without
+// needing to fully parse/validate the CSS itself.
+function sanitizeCustomCss(css) {
+  if (!css) return '';
+  return String(css).replace(/<\/?\s*(style|script)\b[^>]*>?/gi, '');
+}
+
 async function getThemeSettings() {
   const now = Date.now();
   if (cachedTheme && now - lastFetchTime < CACHE_TTL_MS) {
@@ -579,6 +589,7 @@ async function getThemeSettings() {
         if (row && row.data) {
           const parsed = typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
           settings = { ...DEFAULT_THEME, ...parsed };
+          settings.custom_css = sanitizeCustomCss(settings.custom_css);
           cachedTheme = settings;
           lastFetchTime = now;
           return settings;
@@ -599,6 +610,7 @@ async function getThemeSettings() {
     console.error('Failed to load fallback theme JSON:', e.message);
   }
 
+  settings.custom_css = sanitizeCustomCss(settings.custom_css);
   cachedTheme = settings;
   lastFetchTime = now;
   return settings;

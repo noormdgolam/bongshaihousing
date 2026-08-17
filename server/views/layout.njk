@@ -594,11 +594,19 @@
       type: 'BH_INSPECTOR_SELECT',
       sectionKey: sectionKey,
       label: label,
-    }, '*');
+    }, window.location.origin);
   }, true);
 
-  // Window message router
+  // Window message router. Origin check matters here specifically because
+  // this listener runs on every public page for every visitor (it's in the
+  // shared layout, not gated to the admin theme editor) - without it, any
+  // page that gets a window handle to a visitor's tab (window.open() does
+  // not require framing, so X-Frame-Options doesn't block this) could post
+  // a fake BH_THEME_UPDATE and inject arbitrary CSS into that visitor's
+  // live page. The theme editor's own preview iframe is same-origin, so
+  // this check doesn't affect the legitimate use.
   window.addEventListener('message', function(event) {
+    if (event.origin !== window.location.origin) return;
     if (!event.data) return;
 
     if (event.data.type === 'BH_SET_INSPECTOR_MODE') {

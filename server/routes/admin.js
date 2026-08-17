@@ -4,7 +4,6 @@ const express = require('express');
 const multer = require('multer');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
-const { logActivity } = require('../lib/activityLog');
 
 const UPLOADS_DIR = path.join(__dirname, '..', '..', 'images', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
@@ -1362,6 +1361,48 @@ router.get('/admin/activity', async (req, res) => {
     return res.status(500).send('Database unavailable: ' + err.message);
   }
   res.render('admin/activity/list.njk', adminVars(req, { entries }));
+});
+
+// ---- Analytics ----
+
+router.get('/admin/analytics', async (req, res) => {
+  const empty = {
+    leadFunnel: [], leadTrend: [], topModels: [], leadSources: [],
+    topPages: [], trafficTrend: [], totalViews30d: 0, totalLeads30d: 0,
+  };
+  if (!db) return res.render('admin/analytics.njk', adminVars(req, empty));
+
+  try {
+    const hasLeads = await db.schema.hasTable('leads');
+    const hasViews = await db.schema.hasTable('page_views');
+
+    const [leadFunnel, leadTrend, topModels, leadSources] = hasLeads ? await Promise.all([
+      db('leads').select('status').count({ count: '*' }).groupBy('status'),
+      db('leads').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
+        .select(db.raw('DATE(created_at) as day')).count({ count: '*' }).groupBy('day').orderBy('day'),
+      db('leads').whereNotNull('model').where('model', '!=', '')
+        .select('model').count({ count: '*' }).groupBy('model').orderBy('count', 'desc').limit(8),
+      db('leads').select('source').count({ count: '*' }).groupBy('source').orderBy('count', 'desc'),
+    ]) : [[], [], [], []];
+
+    const [topPages, trafficTrend] = hasViews ? await Promise.all([
+      db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
+        .select('path').count({ count: '*' }).groupBy('path').orderBy('count', 'desc').limit(12),
+      db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
+        .select(db.raw('DATE(created_at) as day')).count({ count: '*' }).groupBy('day').orderBy('day'),
+    ]) : [[], []];
+
+    const totalViews30d = trafficTrend.reduce((sum, r) => sum + Number(r.count), 0);
+    const totalLeads30d = leadTrend.reduce((sum, r) => sum + Number(r.count), 0);
+
+    res.render('admin/analytics.njk', adminVars(req, {
+      leadFunnel, leadTrend, topModels, leadSources, topPages, trafficTrend,
+      totalViews30d, totalLeads30d,
+    }));
+  } catch (err) {
+    console.error('Analytics query error:', err.message);
+    res.render('admin/analytics.njk', adminVars(req, empty));
+  }
 });
 
 module.exports = router;
