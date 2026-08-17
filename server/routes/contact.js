@@ -41,7 +41,7 @@ router.post('/send_email.php', async (req, res) => {
   // Save to database leads table if DB is available
   if (db) {
     try {
-      await db('leads').insert({
+      const [leadId] = await db('leads').insert({
         name,
         email,
         phone,
@@ -54,6 +54,17 @@ router.post('/send_email.php', async (req, res) => {
         status: 'new',
         source: 'contact_form',
       });
+
+      const hasActivity = await db.schema.hasTable('activity_log');
+      if (hasActivity) {
+        await db('activity_log').insert({
+          admin_name: 'Website Lead Capture',
+          action: 'create',
+          entity_type: 'lead',
+          entity_id: leadId || null,
+          summary: `New quote inquiry from ${name} (${district}) for ${model}`,
+        });
+      }
     } catch (dbErr) {
       console.error('Failed to save lead to database:', dbErr.message);
     }

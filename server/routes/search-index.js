@@ -76,6 +76,22 @@ router.get('/search-index.json', async (req, res) => {
       });
     }
 
+    const hasServiceAreas = await db.schema.hasTable('service_areas');
+    if (hasServiceAreas) {
+      const areas = await db('service_areas').where({ has_dedicated_page: true }).select('district', 'division', 'page_slug');
+      for (const a of areas) {
+        const url = normalizeUrl(a.page_slug || `steel-building-${a.district.toLowerCase()}`);
+        if (!dbUrls.has(url)) {
+          dbUrls.add(url);
+          dbEntries.push({
+            title: `Pre-Engineered Steel Building in ${a.district}, ${a.division} | Bongshai Housing`,
+            desc: `Leading steel building manufacturer and EPC contractor in ${a.district} district, ${a.division} division. Factory sheds, duplex villas, and warehouse construction.`,
+            url,
+          });
+        }
+      }
+    }
+
     // Keep static entries that are not replaced by DB entries
     const staticEntries = staticData.filter((item) => {
       const u = normalizeUrl(item.url);

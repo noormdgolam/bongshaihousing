@@ -10,10 +10,9 @@ const db = require('../lib/db');
 
 const router = express.Router();
 
-// Cheap pre-filter so the other ~210 non-product pages (category landing
-// pages, about/contact/etc.) never hit the DB at all - only URLs shaped
-// like a scraped product slug even attempt a lookup.
-const PRODUCT_SLUG_PATTERN = /^(bh-[a-z]+-\d+|dv-\d+|lcv-\d+)\.html$/;
+// Cheap pre-filter so non-product pages never hit the DB unnecessarily
+// while supporting all standard and custom product slugs created in admin panel
+const PRODUCT_SLUG_PATTERN = /^(bh-[a-z0-9-]+|dv-[a-z0-9-]+|lcv-[a-z0-9-]+)\.html$/;
 
 router.get('/:slug.html', async (req, res, next) => {
   const slug = `${req.params.slug}.html`;
