@@ -392,6 +392,12 @@
   background: #F9FAFB;
   border-top: 1px solid #F3F4F6;
 }
+/* Same specificity gotcha as .bh-ai-toggle-btn above: the class rule's
+   display:flex beats the browser's default [hidden] { display: none },
+   so setting the hidden attribute via JS did nothing visually - the
+   indicator stayed on screen even after typingIndicator.setAttribute
+   ('hidden', '') ran. */
+.bh-ai-typing[hidden] { display: none; }
 
 .bh-ai-dots {
   display: flex;
