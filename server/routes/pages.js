@@ -87,6 +87,75 @@ if (registry['/service-areas.html']) {
   });
 }
 
+// ── /faq.html — DB-driven Frequently Asked Questions & Schema.org JSON-LD ──
+// Pulls published FAQs grouped by category from DB, dynamically regenerates
+// valid FAQPage JSON-LD schema, falling back to static markup if DB is empty or offline.
+if (registry['/faq.html']) {
+  const faqMeta = registry['/faq.html'];
+  router.get('/faq.html', async (req, res) => {
+    let dbFaqs = [];
+    let faqCategories = [];
+    let faqJsonLd = null;
+
+    if (db) {
+      try {
+        dbFaqs = await db('faqs')
+          .where({ published: true })
+          .orderBy('category', 'asc')
+          .orderBy('sort_order', 'asc');
+
+        if (dbFaqs.length > 0) {
+          // Group by category maintaining order
+          const groupMap = new Map();
+          for (const f of dbFaqs) {
+            const cat = f.category || 'General';
+            if (!groupMap.has(cat)) groupMap.set(cat, []);
+            groupMap.get(cat).push(f);
+          }
+          faqCategories = Array.from(groupMap.entries()).map(([name, items]) => ({
+            name,
+            items,
+          }));
+
+          // Generate dynamic Schema.org FAQPage JSON-LD
+          faqJsonLd = {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            'dateModified': '2026-08-17',
+            'speakable': {
+              '@type': 'SpeakableSpecification',
+              'cssSelector': ['.faq-answer', '.faq-question'],
+            },
+            'author': {
+              '@type': 'Person',
+              'name': 'SMA AWAL',
+              'jobTitle': 'Chief Engineer',
+              'worksFor': {
+                '@type': 'Organization',
+                'name': 'Bongshai Housing Ltd.',
+                'foundingDate': '2008',
+                'url': 'https://bongshaihousing.com',
+              },
+            },
+            'mainEntity': dbFaqs.map(f => ({
+              '@type': 'Question',
+              'name': f.question,
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': f.answer.replace(/<[^>]+>/g, '').trim(),
+              },
+            })),
+          };
+        }
+      } catch (err) {
+        console.error('faqs DB fetch failed, rendering static fallback:', err.message);
+      }
+    }
+
+    res.render(faqMeta.template, renderVars(faqMeta, { dbFaqs, faqCategories, faqJsonLd }));
+  });
+}
+
 // ── Category landing pages — DB-driven hero / description override ──────────
 // Pulls hero image/description from the DB category row when present,
 // falling back to the template's static content if DB is empty or offline.

@@ -1,5 +1,10 @@
 {% extends "layout.njk" %}
 {% block head_extra %}
+{% if faqJsonLd %}
+<script type="application/ld+json">
+{{ faqJsonLd | dump(2) | safe }}
+</script>
+{% else %}
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -125,7 +130,8 @@
       }
     ]
   }
-  </script>
+</script>
+{% endif %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -175,6 +181,21 @@
       <div class="container" style="max-width: 900px;">
         <h2 id="content-title" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Frequently Asked Questions</h2>
 
+        {% if faqCategories and faqCategories.length %}
+        {% for cat in faqCategories %}
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">{{ cat.name }}</h2>
+
+          {% for f in cat.items %}
+          <details class="faq-item">
+            <summary>{{ f.question }}</summary>
+            <div class="faq-answer">{{ f.answer | safe }}</div>
+          </details>
+          {% endfor %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- 100% Static Fallback when DB is unpopulated or offline -->
         <div class="faq-category reveal visible">
           <h2 class="faq-category-title">What are the General questions?</h2>
 
@@ -304,6 +325,7 @@
             <div class="faq-answer">Yes. The floor-area tiers on each model page are starting points - share your land dimensions and requirements with our team, and we'll adapt the layout to fit.</div>
           </details>
         </div>
+        {% endif %}
 
         <div class="reveal" style="text-align:center; margin-top: var(--space-10); padding: var(--space-8); background: var(--off-white); border-radius: 16px;">
           <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--primary-dark); margin-bottom: var(--space-3);">Do you Still have questions?</h2>
