@@ -510,9 +510,12 @@
 </div>
 </div>
 </section>
-<!-- ======================================================
-         ABOUT SECTION
-    ====================================================== -->
+{% set archetypeLead = 'catalog' %}
+{% if theme.archetype == 'trust-first' %}{% set archetypeLead = 'trust' %}
+{% elif theme.archetype == 'story-process' %}{% set archetypeLead = 'story' %}
+{% endif %}
+
+{% set catalogBlock %}
 <!-- ======================================================
          PROPERTIES SECTION
     ====================================================== -->
@@ -572,6 +575,8 @@
 </div>
 </div>
 </section>
+{% endset %}
+{% set trustBlock %}
 <!-- ======================================================
          COMPLETED PROJECTS SHOWCASE
     ====================================================== -->
@@ -619,6 +624,53 @@
 </div>
 </div>
 </section>
+{% endset %}
+
+{% set storyBlock %}
+<!-- ======================================================
+         PROCESS SECTION
+    ====================================================== -->
+<section aria-labelledby="process-title" class="section process-bg" id="process">
+<div class="container">
+<div class="section-header reveal">
+<div class="section-label">How We Work</div>
+<h2 class="section-title" data-aos="fade-up" id="process-title">What is Our Simple 4-Step Process?</h2>
+<p class="section-subtitle">From your first inquiry to key handover — we make every step clear, smooth, and stress-free.</p>
+</div>
+<div class="process-steps stagger">
+<div class="process-step reveal" style="--i:0">
+<div class="step-num">01<span class="step-icon">📋</span></div>
+<h3 class="step-title">What happens during Consultation?</h3>
+<p class="step-text">Tell us your requirements, budget, and vision. Our expert advisors guide you through the best housing package.</p>
+</div>
+<div class="process-step reveal" style="--i:1">
+<div class="step-num">02<span class="step-icon">📐</span></div>
+<h3 class="step-title">How do we handle Design &amp; Planning?</h3>
+<p class="step-text">Our architects create custom blueprints aligned with your needs, local regulations, and structural excellence.</p>
+</div>
+<div class="process-step reveal" style="--i:2">
+<div class="step-num">03<span class="step-icon">🏗️</span></div>
+<h3 class="step-title">What is our Construction phase?</h3>
+<p class="step-text">Expert engineers and skilled workers build your home using premium materials with full quality control oversight.</p>
+</div>
+<div class="process-step reveal" style="--i:3">
+<div class="step-num">04<span class="step-icon">🔑</span></div>
+<h3 class="step-title">How does the Handover process work?</h3>
+<p class="step-text">We deliver your completed home on schedule, conduct final inspections, and provide after-sales support.</p>
+</div>
+</div>
+</div>
+</section>
+{% endset %}
+
+{% if archetypeLead == 'trust' %}
+  {{ trustBlock | safe }}{{ catalogBlock | safe }}
+{% elif archetypeLead == 'story' %}
+  {{ storyBlock | safe }}{{ catalogBlock | safe }}{{ trustBlock | safe }}
+{% else %}
+  {{ catalogBlock | safe }}{{ trustBlock | safe }}
+{% endif %}
+
 <!-- ======================================================
          INDUSTRY SOLUTIONS
     ====================================================== -->
@@ -750,40 +802,7 @@
 </div>
 </div>
 </section>
-<!-- ======================================================
-         PROCESS SECTION
-    ====================================================== -->
-<section aria-labelledby="process-title" class="section process-bg" id="process">
-<div class="container">
-<div class="section-header reveal">
-<div class="section-label">How We Work</div>
-<h2 class="section-title" data-aos="fade-up" id="process-title">What is Our Simple 4-Step Process?</h2>
-<p class="section-subtitle">From your first inquiry to key handover — we make every step clear, smooth, and stress-free.</p>
-</div>
-<div class="process-steps stagger">
-<div class="process-step reveal" style="--i:0">
-<div class="step-num">01<span class="step-icon">📋</span></div>
-<h3 class="step-title">What happens during Consultation?</h3>
-<p class="step-text">Tell us your requirements, budget, and vision. Our expert advisors guide you through the best housing package.</p>
-</div>
-<div class="process-step reveal" style="--i:1">
-<div class="step-num">02<span class="step-icon">📐</span></div>
-<h3 class="step-title">How do we handle Design &amp; Planning?</h3>
-<p class="step-text">Our architects create custom blueprints aligned with your needs, local regulations, and structural excellence.</p>
-</div>
-<div class="process-step reveal" style="--i:2">
-<div class="step-num">03<span class="step-icon">🏗️</span></div>
-<h3 class="step-title">What is our Construction phase?</h3>
-<p class="step-text">Expert engineers and skilled workers build your home using premium materials with full quality control oversight.</p>
-</div>
-<div class="process-step reveal" style="--i:3">
-<div class="step-num">04<span class="step-icon">🔑</span></div>
-<h3 class="step-title">How does the Handover process work?</h3>
-<p class="step-text">We deliver your completed home on schedule, conduct final inspections, and provide after-sales support.</p>
-</div>
-</div>
-</div>
-</section>
+{% if archetypeLead != 'story' %}{{ storyBlock | safe }}{% endif %}
 <!-- ======================================================
          TESTIMONIALS
     ====================================================== -->
