@@ -142,7 +142,7 @@
 
   /* Left Sidebar Controls */
   .te-controls {
-    width: 380px;
+    width: 400px;
     background: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
     overflow-y: auto;
@@ -150,92 +150,73 @@
     flex-direction: column;
     flex-shrink: 0;
   }
+  .te-controls::-webkit-scrollbar { width: 6px; }
+  .te-controls::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
 
-  /* Accordion Sections */
+  /* Collapsible Sections */
   .te-section {
     border-bottom: 1px solid var(--sidebar-border);
   }
   .te-section-header {
-    padding: 14px 18px;
-    font-size: 0.88rem;
+    padding: 12px 16px;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: white;
-    cursor: pointer;
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
     user-select: none;
-    background: rgba(255,255,255,0.02);
-    transition: background 0.15s;
+    background: rgba(0,0,0,0.1);
   }
   .te-section-header:hover {
-    background: rgba(255,255,255,0.05);
-  }
-  .te-section-body {
-    padding: 16px 18px;
-    background: #182234;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .te-section[data-collapsed="true"] .te-section-body {
-    display: none;
+    background: rgba(255,255,255,0.03);
   }
   .te-section-icon {
-    transition: transform 0.2s;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
   }
   .te-section[data-collapsed="true"] .te-section-icon {
     transform: rotate(-90deg);
   }
+  .te-section[data-collapsed="true"] .te-section-body {
+    display: none;
+  }
+  .te-section-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
 
-  /* Form Elements */
+  /* Form Fields */
   .te-field {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    transition: background 0.15s, border-color 0.15s;
-    cursor: pointer;
-  }
-  .te-field:hover {
-    background: rgba(255, 255, 255, 0.02);
-  }
-  .te-field:focus-within, .te-field.active-field {
-    background: rgba(59, 130, 246, 0.08);
-    border-color: rgba(59, 130, 246, 0.35);
-  }
-  .te-field:focus-within .te-label, .te-field.active-field .te-label {
-    color: #60A5FA;
   }
   .te-label {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 600;
     color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: color 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
   .te-input, .te-select, .te-textarea {
-    width: 100%;
     background: #0F172A;
     border: 1px solid var(--sidebar-border);
     border-radius: 6px;
     color: white;
-    padding: 8px 10px;
-    font-size: 0.85rem;
+    padding: 7px 10px;
+    font-size: 0.84rem;
     font-family: inherit;
     outline: none;
     transition: border-color 0.15s;
   }
   .te-input:focus, .te-select:focus, .te-textarea:focus {
     border-color: var(--primary-blue);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
-
-  /* Color Input Wrapper */
   .te-color-row {
     display: flex;
     align-items: center;
@@ -261,39 +242,104 @@
     font-family: monospace;
   }
 
-  /* Presets Grid */
+  /* Presets Filter Tabs & Grid */
+  .te-preset-tabs {
+    display: flex;
+    gap: 4px;
+    background: #090D16;
+    padding: 3px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .te-preset-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 5px 8px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .te-preset-tab:hover { color: white; }
+  .te-preset-tab.active {
+    background: var(--primary-blue);
+    color: white;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+  }
+
   .te-presets-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
   }
+  .te-presets-grid::-webkit-scrollbar { width: 5px; }
+  .te-presets-grid::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
+
   .te-preset-card {
     background: #0F172A;
     border: 1px solid var(--sidebar-border);
     border-radius: 8px;
-    padding: 10px;
+    padding: 9px;
     cursor: pointer;
     transition: all 0.15s;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .te-preset-card:hover {
     border-color: var(--primary-blue);
     transform: translateY(-2px);
+    background: #141E33;
+  }
+  .te-preset-card.active {
+    border-color: var(--primary-blue);
+    background: #141E33;
+    box-shadow: 0 0 0 1px var(--primary-blue);
   }
   .te-preset-title {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 6px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .te-preset-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 10px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .te-preset-badge.light {
+    background: rgba(245, 158, 11, 0.18);
+    color: #FBBF24;
+  }
+  .te-preset-badge.dark {
+    background: rgba(168, 85, 247, 0.22);
+    color: #C084FC;
   }
   .te-preset-dots {
     display: flex;
     gap: 4px;
+    align-items: center;
+    margin-top: 6px;
   }
   .te-preset-dot {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
 
   /* Right Canvas Preview Area */
@@ -403,6 +449,8 @@
       <option value="/interactive-tools.html">Interactive Tools (/interactive-tools.html)</option>
       <option value="/projects.html">Projects (/projects.html)</option>
       <option value="/service-areas.html">Service Areas (/service-areas.html)</option>
+      <option value="/faq.html">FAQs (/faq.html)</option>
+      <option value="/team-senior-management.html">Senior Management (/team-senior-management.html)</option>
     </select>
   </div>
 
@@ -425,62 +473,47 @@
   <!-- Left Controls Panel -->
   <aside class="te-controls">
 
-    <!-- 1. Preset Palettes -->
+    <!-- 1. Preset Palettes (24 Curated Light & Dark Themes) -->
     <div class="te-section" data-collapsed="false">
       <div class="te-section-header" data-target="preset" data-label="Theme Preset Palettes">
-        <span>✨ 1-Click Curated Presets</span>
+        <span>✨ 24 Curated Presets (Light &amp; Dark)</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
-        <div class="te-presets-grid">
-          <div class="te-preset-card" data-preset="bongshai_royal" data-target="preset" data-label="Bongshai Royal Preset">
-            <div class="te-preset-title">Bongshai Royal</div>
+        <!-- Filter Tabs -->
+        <div class="te-preset-tabs">
+          <button type="button" class="te-preset-tab active" data-filter="all">All (24)</button>
+          <button type="button" class="te-preset-tab" data-filter="light">☀️ Light (12)</button>
+          <button type="button" class="te-preset-tab" data-filter="dark">🌙 Dark (12)</button>
+        </div>
+
+        <!-- Search Input -->
+        <input type="text" id="tePresetSearch" class="te-input" placeholder="🔍 Search palettes (e.g. midnight, obsidian, eco)..." style="font-size:0.8rem;">
+
+        <!-- Presets Grid -->
+        <div class="te-presets-grid" id="tePresetsGrid">
+          {% for key, p in presets %}
+          <div class="te-preset-card" data-preset="{{ key }}" data-mode="{{ p.mode or ('dark' if p.is_dark else 'light') }}" data-name="{{ p.name | lower }}" data-target="preset" data-label="{{ p.name }} Palette">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
+              <div class="te-preset-title" title="{{ p.name }}">{{ p.name }}</div>
+              <span class="te-preset-badge {% if p.mode == 'dark' or p.is_dark %}dark{% else %}light{% endif %}">{{ '🌙 Dark' if (p.mode == 'dark' or p.is_dark) else '☀️ Light' }}</span>
+            </div>
             <div class="te-preset-dots">
-              <span class="te-preset-dot" style="background:#1E40AF;"></span>
-              <span class="te-preset-dot" style="background:#EAB308;"></span>
-              <span class="te-preset-dot" style="background:#1E3A8A;"></span>
+              <span class="te-preset-dot" style="background:{{ p.primary }};" title="Primary: {{ p.primary }}"></span>
+              <span class="te-preset-dot" style="background:{{ p.accent }};" title="Accent: {{ p.accent }}"></span>
+              <span class="te-preset-dot" style="background:{{ p.bg_color or '#FFFFFF' }}; border:1px solid rgba(255,255,255,0.2);" title="Background: {{ p.bg_color or '#FFFFFF' }}"></span>
+              <span class="te-preset-dot" style="background:{{ p.surface_color or '#F8FAFC' }}; border:1px solid rgba(255,255,255,0.2);" title="Surface: {{ p.surface_color or '#F8FAFC' }}"></span>
             </div>
           </div>
-          <div class="te-preset-card" data-preset="emerald_eco" data-target="preset" data-label="Emerald Eco Preset">
-            <div class="te-preset-title">Emerald Eco</div>
-            <div class="te-preset-dots">
-              <span class="te-preset-dot" style="background:#047857;"></span>
-              <span class="te-preset-dot" style="background:#F59E0B;"></span>
-              <span class="te-preset-dot" style="background:#064E3B;"></span>
-            </div>
-          </div>
-          <div class="te-preset-card" data-preset="titanium_slate" data-target="preset" data-label="Titanium Slate Preset">
-            <div class="te-preset-title">Titanium Slate</div>
-            <div class="te-preset-dots">
-              <span class="te-preset-dot" style="background:#1E293B;"></span>
-              <span class="te-preset-dot" style="background:#06B6D4;"></span>
-              <span class="te-preset-dot" style="background:#0F172A;"></span>
-            </div>
-          </div>
-          <div class="te-preset-card" data-preset="corporate_indigo" data-target="preset" data-label="Indigo Crimson Preset">
-            <div class="te-preset-title">Indigo Crimson</div>
-            <div class="te-preset-dots">
-              <span class="te-preset-dot" style="background:#4338CA;"></span>
-              <span class="te-preset-dot" style="background:#F43F5E;"></span>
-              <span class="te-preset-dot" style="background:#312E81;"></span>
-            </div>
-          </div>
-          <div class="te-preset-card" data-preset="modern_steel_crimson" data-target="preset" data-label="Crimson Gold Preset">
-            <div class="te-preset-title">Crimson Gold</div>
-            <div class="te-preset-dots">
-              <span class="te-preset-dot" style="background:#BE123C;"></span>
-              <span class="te-preset-dot" style="background:#D97706;"></span>
-              <span class="te-preset-dot" style="background:#881337;"></span>
-            </div>
-          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
 
-    <!-- 2. Brand Colors -->
+    <!-- 2. Brand & Surface Colors -->
     <div class="te-section" data-collapsed="false">
-      <div class="te-section-header" data-target="primary" data-label="Brand Colors">
-        <span>🎨 Brand Colors</span>
+      <div class="te-section-header" data-target="primary" data-label="Brand &amp; Surface Colors">
+        <span>🎨 Brand &amp; Surface Colors</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
@@ -509,7 +542,7 @@
         </div>
 
         <div class="te-field" data-target="accent" data-label="Accent Color (Badges, Stars, Highlights)">
-          <label class="te-label">Accent / Highlight (Gold/Yellow)</label>
+          <label class="te-label">Accent / Highlight</label>
           <div class="te-color-row">
             <input type="color" id="accentColor" class="te-color-picker" value="{{ theme.accent }}">
             <input type="text" id="accentColorText" class="te-input te-color-text" value="{{ theme.accent }}">
@@ -521,6 +554,39 @@
           <div class="te-color-row">
             <input type="color" id="accentLightColor" class="te-color-picker" value="{{ theme.accent_light }}">
             <input type="text" id="accentLightColorText" class="te-input te-color-text" value="{{ theme.accent_light }}">
+          </div>
+        </div>
+
+        <!-- Real Background & Surface Color Tokens -->
+        <div class="te-field" data-target="bg_color" data-label="Page Background Color">
+          <label class="te-label">Page Background Color</label>
+          <div class="te-color-row">
+            <input type="color" id="bgColor" class="te-color-picker" value="{{ theme.bg_color or '#ffffff' }}">
+            <input type="text" id="bgColorText" class="te-input te-color-text" value="{{ theme.bg_color or '#ffffff' }}">
+          </div>
+        </div>
+
+        <div class="te-field" data-target="surface_color" data-label="Surface / Card Color">
+          <label class="te-label">Surface / Card Color</label>
+          <div class="te-color-row">
+            <input type="color" id="surfaceColor" class="te-color-picker" value="{{ theme.surface_color or '#f8fafc' }}">
+            <input type="text" id="surfaceColorText" class="te-input te-color-text" value="{{ theme.surface_color or '#f8fafc' }}">
+          </div>
+        </div>
+
+        <div class="te-field" data-target="text_color" data-label="Main Text Color">
+          <label class="te-label">Main Text Color</label>
+          <div class="te-color-row">
+            <input type="color" id="textColor" class="te-color-picker" value="{{ theme.text_color or '#0f172a' }}">
+            <input type="text" id="textColorText" class="te-input te-color-text" value="{{ theme.text_color or '#0f172a' }}">
+          </div>
+        </div>
+
+        <div class="te-field" data-target="text_muted" data-label="Muted Text Color">
+          <label class="te-label">Muted / Subtitle Text Color</label>
+          <div class="te-color-row">
+            <input type="color" id="textMutedColor" class="te-color-picker" value="{{ theme.text_muted or '#64748b' }}">
+            <input type="text" id="textMutedColorText" class="te-input te-color-text" value="{{ theme.text_muted or '#64748b' }}">
           </div>
         </div>
       </div>
@@ -665,6 +731,16 @@
   const accentLightColor = document.getElementById('accentLightColor');
   const accentLightColorText = document.getElementById('accentLightColorText');
 
+  // Background & Surface Tokens
+  const bgColor = document.getElementById('bgColor');
+  const bgColorText = document.getElementById('bgColorText');
+  const surfaceColor = document.getElementById('surfaceColor');
+  const surfaceColorText = document.getElementById('surfaceColorText');
+  const textColor = document.getElementById('textColor');
+  const textColorText = document.getElementById('textColorText');
+  const textMutedColor = document.getElementById('textMutedColor');
+  const textMutedColorText = document.getElementById('textMutedColorText');
+
   const fontHeading = document.getElementById('fontHeading');
   const fontBody = document.getElementById('fontBody');
   const radiusStyle = document.getElementById('radiusStyle');
@@ -682,6 +758,7 @@
 
   // Sync color inputs
   function bindColorPair(picker, text) {
+    if (!picker || !text) return;
     picker.addEventListener('input', () => {
       text.value = picker.value.toUpperCase();
       sendLiveUpdate();
@@ -699,11 +776,16 @@
   bindColorPair(primaryLightColor, primaryLightColorText);
   bindColorPair(accentColor, accentColorText);
   bindColorPair(accentLightColor, accentLightColorText);
+  bindColorPair(bgColor, bgColorText);
+  bindColorPair(surfaceColor, surfaceColorText);
+  bindColorPair(textColor, textColorText);
+  bindColorPair(textMutedColor, textMutedColorText);
   bindColorPair(announcementBg, announcementBgText);
   bindColorPair(announcementColor, announcementColorText);
 
   // Text inputs & dropdowns live sync
   [fontHeading, fontBody, radiusStyle, showAnnouncement, announcementText, announcementLink, customCss].forEach(el => {
+    if (!el) return;
     el.addEventListener('input', sendLiveUpdate);
     el.addEventListener('change', sendLiveUpdate);
   });
@@ -728,6 +810,10 @@
       accent: accentColor.value,
       accent_light: accentLightColor.value,
       accent_dark: '#CA8A04',
+      bg_color: bgColor.value,
+      surface_color: surfaceColor.value,
+      text_color: textColor.value,
+      text_muted: textMutedColor.value,
       font_heading: fontHeading.value,
       font_body: fontBody.value,
       radius_sm: rad.sm,
@@ -796,6 +882,14 @@
     { el: accentColorText, target: 'accent', label: 'Accent Color & Badges' },
     { el: accentLightColor, target: 'accent_light', label: 'Accent Light (Badges & Tags)' },
     { el: accentLightColorText, target: 'accent_light', label: 'Accent Light (Badges & Tags)' },
+    { el: bgColor, target: 'bg_color', label: 'Page Background Color' },
+    { el: bgColorText, target: 'bg_color', label: 'Page Background Color' },
+    { el: surfaceColor, target: 'surface_color', label: 'Surface & Card Color' },
+    { el: surfaceColorText, target: 'surface_color', label: 'Surface & Card Color' },
+    { el: textColor, target: 'text_color', label: 'Main Text Color' },
+    { el: textColorText, target: 'text_color', label: 'Main Text Color' },
+    { el: textMutedColor, target: 'text_muted', label: 'Muted Text Color' },
+    { el: textMutedColorText, target: 'text_muted', label: 'Muted Text Color' },
     { el: fontHeading, target: 'heading_font', label: 'Heading Font Family (h1, h2, h3)' },
     { el: fontBody, target: 'body_font', label: 'Body Text Font Family' },
     { el: showAnnouncement, target: 'announcement', label: 'Top Announcement Bar Visibility' },
@@ -822,9 +916,49 @@
     sendLiveUpdate();
   });
 
+  // Presets Filter Tabs (All / Light / Dark)
+  const filterTabs = document.querySelectorAll('.te-preset-tab');
+  const presetSearch = document.getElementById('tePresetSearch');
+  const presetCards = document.querySelectorAll('.te-preset-card');
+
+  function applyPresetFilter() {
+    const activeTab = document.querySelector('.te-preset-tab.active');
+    const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    const query = (presetSearch ? presetSearch.value : '').toLowerCase().trim();
+
+    presetCards.forEach(card => {
+      const mode = card.getAttribute('data-mode') || 'light';
+      const name = card.getAttribute('data-name') || '';
+
+      const matchesMode = (filter === 'all') || (mode === filter);
+      const matchesSearch = !query || name.includes(query);
+
+      if (matchesMode && matchesSearch) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      applyPresetFilter();
+    });
+  });
+
+  if (presetSearch) {
+    presetSearch.addEventListener('input', applyPresetFilter);
+  }
+
   // Presets 1-Click Apply
-  document.querySelectorAll('.te-preset-card').forEach(card => {
+  presetCards.forEach(card => {
     card.addEventListener('click', () => {
+      presetCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
       const presetKey = card.getAttribute('data-preset');
       const label = card.getAttribute('data-label') || 'Preset Palettes';
       const p = presetsData[presetKey];
@@ -835,8 +969,13 @@
       if (p.primary_light) { primaryLightColor.value = p.primary_light; primaryLightColorText.value = p.primary_light; }
       if (p.accent) { accentColor.value = p.accent; accentColorText.value = p.accent; }
       if (p.accent_light) { accentLightColor.value = p.accent_light; accentLightColorText.value = p.accent_light; }
+      if (p.bg_color) { bgColor.value = p.bg_color; bgColorText.value = p.bg_color; }
+      if (p.surface_color) { surfaceColor.value = p.surface_color; surfaceColorText.value = p.surface_color; }
+      if (p.text_color) { textColor.value = p.text_color; textColorText.value = p.text_color; }
+      if (p.text_muted) { textMutedColor.value = p.text_muted; textMutedColorText.value = p.text_muted; }
       if (p.announcement_bg) { announcementBg.value = p.announcement_bg; announcementBgText.value = p.announcement_bg; }
       if (p.announcement_color) { announcementColor.value = p.announcement_color; announcementColorText.value = p.announcement_color; }
+      if (p.font_heading) { fontHeading.value = p.font_heading; }
 
       sendLiveUpdate();
       sendHighlight('preset', label);

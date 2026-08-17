@@ -54,6 +54,70 @@
       {% if themeCssVars %}{{ themeCssVars | safe }}{% endif %}
     }
   </style>
+  <style id="bh-theme-adaptive-styles">
+    {% if theme.is_dark %}
+    .navbar {
+      background: rgba(11, 15, 25, 0.88) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    .navbar .nav-link {
+      color: #E2E8F0 !important;
+    }
+    .navbar .nav-phone {
+      color: #F1F5F9 !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    .dropdown, .mobile-drawer {
+      background: var(--surface-color, #131C2E) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      color: #F1F5F9 !important;
+    }
+    .dropdown-item, .mobile-nav-link {
+      color: #CBD5E1 !important;
+    }
+    .dropdown-item:hover, .mobile-nav-link:hover {
+      background: rgba(255, 255, 255, 0.06) !important;
+      color: var(--primary) !important;
+    }
+    .card, .why-card, .contact-form-wrap, .glass-card {
+      background: var(--surface-color, #131C2E) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    .form-control {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #F8FAFC !important;
+    }
+    .form-label {
+      color: #CBD5E1 !important;
+    }
+    .property-card {
+      background: rgba(19, 28, 46, 0.8) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    .property-card:hover {
+      background: rgba(19, 28, 46, 0.95) !important;
+    }
+    .step-num {
+      background: var(--surface-color, #131C2E) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #94A3B8 !important;
+    }
+    .features-strip {
+      background: var(--surface-color, #131C2E) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    .compare-table th {
+      background: var(--primary-dark) !important;
+    }
+    .compare-table tbody tr:nth-child(2n) td {
+      background: rgba(255, 255, 255, 0.03) !important;
+    }
+    .compare-table td {
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    {% endif %}
+  </style>
   <style id="bh-theme-announcement-styles">
     .bh-top-announcement {
       font-size: 0.82rem;
@@ -463,6 +527,25 @@
 
       // 1. Update CSS Custom Properties in 0ms real-time
       const styleEl = document.getElementById('bh-theme-custom-vars');
+      const adaptiveEl = document.getElementById('bh-theme-adaptive-styles');
+
+      const bg = (theme.bg_color || '#ffffff').toLowerCase();
+      let isDark = Boolean(theme.is_dark);
+      if (theme.is_dark === undefined) {
+        const hex = bg.replace('#', '');
+        if (hex.length === 6) {
+          const r = parseInt(hex.substring(0, 2), 16);
+          const g = parseInt(hex.substring(2, 4), 16);
+          const b = parseInt(hex.substring(4, 6), 16);
+          isDark = (0.299 * r + 0.587 * g + 0.114 * b) < 128;
+        }
+      }
+
+      const bgColor = theme.bg_color || (isDark ? '#0B0F19' : '#ffffff');
+      const surfaceColor = theme.surface_color || (isDark ? '#131C2E' : '#f8fafc');
+      const textColor = theme.text_color || (isDark ? '#F1F5F9' : '#0f172a');
+      const textMuted = theme.text_muted || (isDark ? '#94A3B8' : '#64748b');
+
       if (styleEl) {
         styleEl.innerHTML = `
           :root {
@@ -471,15 +554,82 @@
             --primary-light: ${theme.primary_light};
             --accent: ${theme.accent};
             --accent-light: ${theme.accent_light};
-            --accent-dark: ${theme.accent_dark};
+            --accent-dark: ${theme.accent_dark || '#CA8A04'};
             --font-heading: ${theme.font_heading};
             --font-body: ${theme.font_body};
             --radius-sm: ${theme.radius_sm};
             --radius-md: ${theme.radius_md};
             --radius-lg: ${theme.radius_lg};
             --radius-xl: ${theme.radius_xl};
+
+            --bg-color: ${bgColor};
+            --surface-color: ${surfaceColor};
+            --text-color: ${textColor};
+            --text-muted: ${textMuted};
+
+            --white: ${bgColor};
+            --off-white: ${surfaceColor};
+            --dark: ${textColor};
+            --grey-900: ${isDark ? textColor : '#0f172a'};
+            --grey-800: ${isDark ? '#E2E8F0' : '#1e293b'};
+            --grey-700: ${isDark ? '#CBD5E1' : '#334155'};
+            --grey-600: ${textMuted};
+            --grey-500: ${textMuted};
+            --grey-400: ${isDark ? '#64748B' : '#94a3b8'};
+            --grey-300: ${isDark ? '#475569' : '#cbd5e1'};
+            --grey-200: ${isDark ? 'rgba(255,255,255,0.14)' : '#cbd5e1'};
+            --grey-100: ${isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0'};
+            --grey-50: ${isDark ? 'rgba(255,255,255,0.04)' : '#f1f5f9'};
           }
         `;
+      }
+
+      if (adaptiveEl) {
+        adaptiveEl.innerHTML = isDark ? `
+          .navbar {
+            background: rgba(11, 15, 25, 0.88) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+          }
+          .navbar .nav-link { color: #E2E8F0 !important; }
+          .navbar .nav-phone { color: #F1F5F9 !important; border-color: rgba(255, 255, 255, 0.2) !important; }
+          .dropdown, .mobile-drawer {
+            background: var(--surface-color, #131C2E) !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+            color: #F1F5F9 !important;
+          }
+          .dropdown-item, .mobile-nav-link { color: #CBD5E1 !important; }
+          .dropdown-item:hover, .mobile-nav-link:hover {
+            background: rgba(255, 255, 255, 0.06) !important;
+            color: var(--primary) !important;
+          }
+          .card, .why-card, .contact-form-wrap, .glass-card {
+            background: var(--surface-color, #131C2E) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+          }
+          .form-control {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            color: #F8FAFC !important;
+          }
+          .form-label { color: #CBD5E1 !important; }
+          .property-card {
+            background: rgba(19, 28, 46, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+          }
+          .property-card:hover { background: rgba(19, 28, 46, 0.95) !important; }
+          .step-num {
+            background: var(--surface-color, #131C2E) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            color: #94A3B8 !important;
+          }
+          .features-strip {
+            background: var(--surface-color, #131C2E) !important;
+            border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+          }
+          .compare-table th { background: var(--primary-dark) !important; }
+          .compare-table tbody tr:nth-child(2n) td { background: rgba(255, 255, 255, 0.03) !important; }
+          .compare-table td { border-bottom-color: rgba(255, 255, 255, 0.08) !important; }
+        ` : '';
       }
 
       // 2. Update Top Announcement Banner in real-time
