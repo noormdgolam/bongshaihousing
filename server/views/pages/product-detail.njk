@@ -1,19 +1,30 @@
 {% extends "layout.njk" %}
 {% block content %}
-<section class="page-hero" style="min-height: 30vh; padding: 100px 0 50px;">
+<section class="page-hero" style="min-height: 22vh; padding: 90px 0 30px;">
 <div class="container page-hero-content" style="text-align: center;">
 <span class="page-hero-label">{{ category.name }}</span>
 <h1 class="page-hero-title" data-aos="fade-up">Model No-{{ product.model_number }}</h1>
-<p class="page-hero-text" style="max-width: 800px; margin: 0 auto 24px;">A perfect blend of affordability, durability, and modern design. Engineered for immediate assembly with premium finishes.</p>
+<nav class="breadcrumb" style="justify-content: center;">
+<a href="index.html">Home</a> <span aria-hidden="true">/</span>
+{% if category.landing_page_slug %}<a href="{{ category.landing_page_slug }}">{{ category.name }}</a>{% else %}<a href="products-and-solutions.html">Products</a>{% endif %} <span aria-hidden="true">/</span>
+<span aria-current="page">Model No-{{ product.model_number }}</span>
+</nav>
 </div>
 </section>
 
 <div class="container" style="padding: 40px 0;">
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start;">
 
-  <div style="flex: 1 1 500px; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100);">
+  <div class="pd-gallery">
     {% if product.main_image %}
-    <img src="{{ product.main_image }}" alt="{{ product.title }}" style="width: 100%; height: auto; display: block;" loading="eager">
+    <a href="{{ product.main_image }}" class="pd-gallery-link" data-pd-lightbox aria-label="View full-size image of {{ product.title }}">
+      <img
+        src="{{ product.main_image }}"
+        srcset="{{ product.main_image | replace('.webp', '-400w.webp') }} 400w, {{ product.main_image | replace('.webp', '-700w.webp') }} 700w, {{ product.main_image }} 1024w"
+        sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"
+        alt="{{ product.title }}" width="1024" height="1024" style="width: 100%; height: auto; display: block;" loading="eager" fetchpriority="high">
+      <span class="pd-gallery-zoom" aria-hidden="true">🔍 Tap to enlarge</span>
+    </a>
     {% endif %}
   </div>
 
@@ -24,7 +35,14 @@
       <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Pricing</span>
       <span style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">Contact for Quote</span>
     </div>
-    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-100);">
+
+    <div class="pd-trust-strip">
+      <span>⚡ 45–60 day build</span>
+      <span>🛡️ Earthquake resistant</span>
+      <span>🌪️ 200+ km/h wind rated</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--grey-100);">
       <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
       <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700;" target="_blank">💬 WhatsApp Now</a>
     </div>
@@ -110,5 +128,71 @@
 </section>
 {% endif %}
 
+{% if relatedProducts.length %}
+<section class="section" aria-labelledby="related-title">
+  <div class="section-header reveal">
+    <h2 class="section-title" id="related-title">More in {{ category.name }}</h2>
+    <p class="section-subtitle">Other models in the same category you might like.</p>
+  </div>
+  <div class="stagger product-grid">
+    {% for rp in relatedProducts %}
+    <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+      <div class="property-img-wrap">
+        {% if rp.main_image %}
+        <img
+          alt="Bongshai Housing Model No-{{ rp.model_number }}"
+          loading="lazy"
+          src="{{ rp.main_image }}"
+          srcset="{{ rp.main_image | replace('.webp', '-400w.webp') }} 400w, {{ rp.main_image | replace('.webp', '-700w.webp') }} 700w, {{ rp.main_image }} 1024w"
+          sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"
+          title="Bongshai Housing Model No-{{ rp.model_number }}" width="1024" height="1024">
+        {% endif %}
+      </div>
+      <div class="property-card-body" data-aos="fade-up">
+        <span class="property-type">{{ category.name }}</span>
+        <h2 class="property-name">Model No-{{ rp.model_number }}</h2>
+        <div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Contact for Quote</span></div>
+        <a class="btn btn-primary" href="{{ rp.slug }}" style="width:100%;justify-content:center;">View Details</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 </div>
+
+<div class="pd-sticky-cta" aria-hidden="false">
+  <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary">Get a Free Quote</a>
+  <a href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." class="btn" style="background:#25D366; color:#fff; border:none;" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+</div>
+
+<div class="pd-lightbox" id="pdLightbox" hidden>
+  <button type="button" class="pd-lightbox-close" aria-label="Close">✕</button>
+  <img src="" alt="">
+</div>
+<script>
+(function () {
+  var trigger = document.querySelector('[data-pd-lightbox]');
+  var lightbox = document.getElementById('pdLightbox');
+  if (!trigger || !lightbox) return;
+  var img = lightbox.querySelector('img');
+  var closeBtn = lightbox.querySelector('.pd-lightbox-close');
+
+  trigger.addEventListener('click', function (e) {
+    e.preventDefault();
+    img.src = trigger.getAttribute('href');
+    img.alt = trigger.querySelector('img') ? trigger.querySelector('img').alt : '';
+    lightbox.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+  });
+  function close() {
+    lightbox.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  }
+  closeBtn.addEventListener('click', close);
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
 {% endblock %}

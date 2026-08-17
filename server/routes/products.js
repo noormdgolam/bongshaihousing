@@ -30,6 +30,12 @@ router.get('/:slug.html', async (req, res, next) => {
       v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
     }
 
+    const relatedProducts = await db('products')
+      .where({ category_id: product.category_id, published: true })
+      .whereNot({ id: product.id })
+      .orderBy('sort_order')
+      .limit(4);
+
     res.render('pages/product-detail.njk', {
       title: product.title,
       description: product.description,
@@ -41,6 +47,7 @@ router.get('/:slug.html', async (req, res, next) => {
       product,
       specs,
       variants,
+      relatedProducts,
     });
   } catch (err) {
     // DB hiccup: fall through to the static registry-driven page rather
