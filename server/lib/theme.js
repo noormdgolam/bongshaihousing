@@ -31,6 +31,19 @@ const DEFAULT_THEME = {
   font_body: "'Inter', sans-serif",
   font_size_base: '16px',
 
+  // Layout & Spacing
+  container_width: '1280px',
+  section_spacing: 'normal', // 'compact', 'normal', 'spacious', 'luxury'
+  shadow_preset: 'modern', // 'flat', 'subtle', 'modern', 'elevation', 'glow'
+  glassmorphism_blur: '16px',
+  card_lift: '6px',
+  button_style: 'gradient', // 'gradient', 'solid', 'outline'
+
+  // Header & Navbar
+  navbar_sticky: true,
+  navbar_blur: true,
+  navbar_height: '80px',
+
   // Border Radius
   radius_sm: '4px',
   radius_md: '8px',
@@ -50,8 +63,12 @@ const DEFAULT_THEME = {
   whatsapp_color: '#25D366',
   ai_widget_position: 'right', // 'right' or 'left'
 
-  // Custom CSS
+  // Motion & Animation
+  transition_speed: '0.25s',
+
+  // Custom Code
   custom_css: '',
+  custom_js: '',
 };
 
 /**
@@ -649,6 +666,11 @@ function generateCssVariables(theme) {
   const textColor = t.text_color || (isDark ? '#F1F5F9' : '#0f172a');
   const textMuted = t.text_muted || (isDark ? '#94A3B8' : '#64748b');
 
+  let sectionPad = '6rem';
+  if (t.section_spacing === 'compact') sectionPad = '3.5rem';
+  else if (t.section_spacing === 'spacious') sectionPad = '8rem';
+  else if (t.section_spacing === 'luxury') sectionPad = '10rem';
+
   return `
     --primary: ${t.primary};
     --primary-dark: ${t.primary_dark};
@@ -662,6 +684,10 @@ function generateCssVariables(theme) {
     --radius-md: ${t.radius_md};
     --radius-lg: ${t.radius_lg};
     --radius-xl: ${t.radius_xl};
+    --container-max: ${t.container_width || '1280px'};
+    --nav-height: ${t.navbar_height || '80px'};
+    --space-24: ${sectionPad};
+    --transition-base: all ${t.transition_speed || '0.25s'} ease;
 
     /* Theme Tokens */
     --bg-color: ${bgColor};

@@ -1075,13 +1075,57 @@ router.post('/admin/team-members/:id/delete', async (req, res) => {
   }
 });
 
-// ---- Visual Theme & Layout Customizer ----
+// ---- WordPress-Style Themes Directory & Theme Customizer ----
 
-const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME } = require('../lib/theme');
 const pageRegistry = require('../page-registry.json');
 
+router.get('/admin/themes', async (req, res) => {
+  const currentTheme = await getThemeSettings();
+  if (currentTheme) {
+    currentTheme.is_dark = isThemeDark(currentTheme);
+  }
+  const activatedSlug = req.query.theme;
+  const activatedPreset = activatedSlug && PRESETS[activatedSlug];
+  res.render('admin/themes/index.njk', adminVars(req, {
+    presets: PRESETS,
+    currentTheme,
+    activated: req.query.activated === '1',
+    activatedThemeName: activatedPreset ? activatedPreset.name : null,
+  }));
+});
+
+router.post('/admin/themes/activate/:slug', async (req, res) => {
+  const { slug } = req.params;
+  const preset = PRESETS[slug];
+  if (!preset) {
+    return res.status(404).send('Theme preset not found');
+  }
+  try {
+    const currentTheme = await getThemeSettings();
+    const newTheme = {
+      ...currentTheme,
+      ...preset,
+      name: preset.name,
+      is_dark: isThemeDark(preset),
+    };
+    await saveThemeSettings(newTheme);
+    logActivity(req, 'update', 'theme', null, `Activated theme: "${preset.name}"`);
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, message: `Theme "${preset.name}" activated!` });
+    }
+    res.redirect(`/admin/themes?activated=1&theme=${encodeURIComponent(slug)}`);
+  } catch (err) {
+    console.error('Failed to activate theme:', err);
+    res.status(500).send('Theme activation failed: ' + err.message);
+  }
+});
+
 router.get('/admin/theme-editor', async (req, res) => {
-  const theme = await getThemeSettings();
+  let theme = await getThemeSettings();
+  const presetParam = req.query.preset;
+  if (presetParam && PRESETS[presetParam]) {
+    theme = { ...theme, ...PRESETS[presetParam] };
+  }
   const pagesList = Object.keys(pageRegistry).sort();
   res.render('admin/theme-editor.njk', adminVars(req, {
     theme,
@@ -1090,6 +1134,7 @@ router.get('/admin/theme-editor', async (req, res) => {
     defaultTheme: DEFAULT_THEME,
     saved: req.query.saved === '1',
     reset: req.query.reset === '1',
+    initialPreset: presetParam || null,
   }));
 });
 
@@ -1100,8 +1145,11 @@ router.post('/admin/theme-editor', async (req, res) => {
     const newSettings = {
       ...rawData,
       show_announcement: rawData.show_announcement === 'on' || rawData.show_announcement === true || rawData.show_announcement === 'true',
+      navbar_sticky: rawData.navbar_sticky === 'on' || rawData.navbar_sticky === true || rawData.navbar_sticky === 'true',
+      navbar_blur: rawData.navbar_blur === 'on' || rawData.navbar_blur === true || rawData.navbar_blur === 'true',
     };
     await saveThemeSettings(newSettings);
+    logActivity(req, 'update', 'theme', null, `Published visual theme customization updates`);
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
       return res.json({ success: true, message: 'Theme saved successfully!' });
     }
@@ -1118,6 +1166,7 @@ router.post('/admin/theme-editor', async (req, res) => {
 router.post('/admin/theme-editor/reset', async (req, res) => {
   try {
     await resetThemeSettings();
+    logActivity(req, 'update', 'theme', null, `Reset theme to Bongshai Housing defaults`);
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
       return res.json({ success: true, message: 'Theme reset to defaults!' });
     }

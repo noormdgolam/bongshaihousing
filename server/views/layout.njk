@@ -517,11 +517,94 @@
     hideTimeout = setTimeout(clearHighlight, 6000);
   }
 
+  // Elementor-Style Interactive Inspector Mode
+  let inspectorActive = false;
+
+  document.addEventListener('mouseover', function(e) {
+    if (!inspectorActive) return;
+    const target = e.target.closest('section, header, footer, .navbar, .property-card, .btn-primary, .btn, h1, h2, h3, form, .why-card, .compare-table, #bhTopAnnouncement, .ai-chat-btn, .features-strip, .step-item');
+    if (!target) return;
+
+    let label = 'Component';
+    let sectionKey = 'style';
+    if (target.id === 'bhTopAnnouncement' || target.closest('#bhTopAnnouncement')) {
+      label = 'Announcement Bar';
+      sectionKey = 'announcement';
+    } else if (target.classList.contains('navbar') || target.closest('.navbar')) {
+      label = 'Navbar Header';
+      sectionKey = 'navbar';
+    } else if (target.tagName === 'H1' || target.classList.contains('page-hero') || target.closest('.page-hero')) {
+      label = 'Hero & Typography';
+      sectionKey = 'typography';
+    } else if (target.classList.contains('btn-primary') || target.classList.contains('btn')) {
+      label = 'Buttons & CTA';
+      sectionKey = 'buttons';
+    } else if (target.classList.contains('property-card') || target.classList.contains('why-card') || target.classList.contains('card')) {
+      label = 'Cards & Surfaces';
+      sectionKey = 'cards';
+    } else if (target.classList.contains('features-strip')) {
+      label = 'Layout & Spacing';
+      sectionKey = 'layout';
+    } else if (target.tagName === 'FOOTER' || target.closest('footer')) {
+      label = 'Footer';
+      sectionKey = 'footer';
+    } else if (target.classList.contains('ai-chat-btn') || target.closest('#ai-chat-widget')) {
+      label = 'AI Assistant Widget';
+      sectionKey = 'widgets';
+    }
+
+    showHighlight({ el: target }, label);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!inspectorActive) return;
+    const target = e.target.closest('section, header, footer, .navbar, .property-card, .btn-primary, .btn, h1, h2, h3, form, .why-card, .compare-table, #bhTopAnnouncement, .ai-chat-btn, .features-strip, .step-item') || e.target;
+    e.preventDefault();
+    e.stopPropagation();
+
+    let sectionKey = 'style';
+    let label = 'Component';
+    if (target.id === 'bhTopAnnouncement' || target.closest('#bhTopAnnouncement')) {
+      sectionKey = 'announcement';
+      label = 'Announcement Bar';
+    } else if (target.classList.contains('navbar') || target.closest('.navbar')) {
+      sectionKey = 'navbar';
+      label = 'Navbar Header';
+    } else if (target.tagName === 'H1' || target.classList.contains('page-hero') || target.closest('.page-hero')) {
+      sectionKey = 'typography';
+      label = 'Hero & Typography';
+    } else if (target.classList.contains('btn-primary') || target.classList.contains('btn')) {
+      sectionKey = 'buttons';
+      label = 'Buttons & CTA';
+    } else if (target.classList.contains('property-card') || target.classList.contains('why-card') || target.classList.contains('card')) {
+      sectionKey = 'cards';
+      label = 'Cards & Surfaces';
+    } else if (target.classList.contains('features-strip')) {
+      sectionKey = 'layout';
+      label = 'Layout & Spacing';
+    } else if (target.tagName === 'FOOTER' || target.closest('footer')) {
+      sectionKey = 'footer';
+      label = 'Footer';
+    } else if (target.classList.contains('ai-chat-btn') || target.closest('#ai-chat-widget')) {
+      sectionKey = 'widgets';
+      label = 'AI Assistant Widget';
+    }
+
+    window.parent.postMessage({
+      type: 'BH_INSPECTOR_SELECT',
+      sectionKey: sectionKey,
+      label: label,
+    }, '*');
+  }, true);
+
   // Window message router
   window.addEventListener('message', function(event) {
     if (!event.data) return;
 
-    if (event.data.type === 'BH_THEME_UPDATE') {
+    if (event.data.type === 'BH_SET_INSPECTOR_MODE') {
+      inspectorActive = Boolean(event.data.active);
+      if (!inspectorActive) clearHighlight();
+    } else if (event.data.type === 'BH_THEME_UPDATE') {
       const theme = event.data.theme;
       if (!theme) return;
 
@@ -546,6 +629,11 @@
       const textColor = theme.text_color || (isDark ? '#F1F5F9' : '#0f172a');
       const textMuted = theme.text_muted || (isDark ? '#94A3B8' : '#64748b');
 
+      let sectionPad = '6rem';
+      if (theme.section_spacing === 'compact') sectionPad = '3.5rem';
+      else if (theme.section_spacing === 'spacious') sectionPad = '8rem';
+      else if (theme.section_spacing === 'luxury') sectionPad = '10rem';
+
       if (styleEl) {
         styleEl.innerHTML = `
           :root {
@@ -561,6 +649,10 @@
             --radius-md: ${theme.radius_md};
             --radius-lg: ${theme.radius_lg};
             --radius-xl: ${theme.radius_xl};
+            --container-max: ${theme.container_width || '1280px'};
+            --nav-height: ${theme.navbar_height || '80px'};
+            --space-24: ${sectionPad};
+            --transition-base: all ${theme.transition_speed || '0.25s'} ease;
 
             --bg-color: ${bgColor};
             --surface-color: ${surfaceColor};
@@ -664,7 +756,9 @@
     }
   });
 
-  document.addEventListener('click', clearHighlight);
+  document.addEventListener('click', function(e) {
+    if (!inspectorActive) clearHighlight();
+  });
 })();
 </script>
 {% block scripts_extra %}{% endblock %}

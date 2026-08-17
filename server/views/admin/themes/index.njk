@@ -1,0 +1,277 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Themes Directory — Bongshai Housing{% endblock %}
+{% block header %}
+<div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px;">
+  <div>
+    <h1 style="font-size:1.2rem; font-weight:800; margin:0; color:var(--grey-900);">🎭 Themes Directory</h1>
+    <div style="font-size:0.82rem; color:var(--grey-500); margin-top:2px;">
+      24 complete structural themes with distinct layouts, card styling, typography pairings &amp; color identities
+    </div>
+  </div>
+  <div style="display:flex; gap:8px;">
+    <a href="/admin/theme-editor" class="btn btn-primary" style="font-size:0.82rem; padding:6px 14px;">
+      ⚡ Open Elementor Studio Pro →
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% if activated %}
+<div class="card" style="background:#ecfdf5; border-color:#a7f3d0; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;">
+  <div style="display:flex; align-items:center; gap:10px; color:#065f46; font-weight:700; font-size:0.88rem;">
+    <span style="font-size:1.2rem;">✅</span>
+    <span>Theme "<strong>{{ activatedThemeName or 'Selected Theme' }}</strong>" successfully activated and published live!</span>
+  </div>
+  <a href="/" target="_blank" class="btn" style="background:#059669; color:white; font-size:0.78rem; padding:4px 10px;">View Live Site ↗</a>
+</div>
+{% endif %}
+
+<!-- 1. Active Theme Spotlight Card -->
+<div class="card" style="margin-bottom:24px; padding:20px; border-left:5px solid var(--primary); background:linear-gradient(to right, rgba(30,64,175,0.03), transparent);">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+    
+    <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+      <!-- Active Theme Swatch Box -->
+      <div style="width:120px; height:84px; border-radius:8px; background:{{ currentTheme.bg_color or '#ffffff' }}; border:2px solid var(--grey-300); box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:8px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="width:12px; height:12px; border-radius:50%; background:{{ currentTheme.primary or '#1E40AF' }};"></span>
+          <span style="width:12px; height:12px; border-radius:50%; background:{{ currentTheme.accent or '#EAB308' }};"></span>
+          <span style="width:12px; height:12px; border-radius:50%; background:{{ currentTheme.surface_color or '#f8fafc' }}; border:1px solid #ccc;"></span>
+        </div>
+        <div style="font-size:0.65rem; font-weight:800; color:{{ currentTheme.text_color or '#0f172a' }}; background:rgba(0,0,0,0.04); padding:2px 4px; border-radius:4px; text-align:center;">
+          {{ currentTheme.font_heading or 'Inter' }}
+        </div>
+        <div style="height:4px; border-radius:2px; background:linear-gradient(to right, {{ currentTheme.primary or '#1E40AF' }}, {{ currentTheme.accent or '#EAB308' }});"></div>
+      </div>
+
+      <!-- Active Theme Info -->
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="pill pill-success" style="font-size:0.72rem; font-weight:800; text-transform:uppercase;">● ACTIVE THEME</span>
+          <span class="pill pill-muted" style="font-size:0.72rem;">{{ '🌙 Dark Mode' if currentTheme.is_dark else '☀️ Light Mode' }}</span>
+        </div>
+        <h2 style="font-size:1.3rem; font-weight:800; color:var(--grey-900); margin:4px 0 2px;">{{ currentTheme.name or 'Bongshai Royal' }}</h2>
+        <div style="font-size:0.82rem; color:var(--grey-600); max-width:600px;">
+          {{ currentTheme.description or 'Executive architectural steel theme tailored for pre-engineered buildings and industrial EPC developments.' }}
+        </div>
+        <div style="font-size:0.75rem; color:var(--grey-500); margin-top:6px;">
+          Heading Font: <strong>{{ currentTheme.font_heading }}</strong> &bull; Body Font: <strong>{{ currentTheme.font_body }}</strong> &bull; Spacing: <strong>{{ currentTheme.section_spacing or 'Normal' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Theme CTAs -->
+    <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+      <a href="/admin/theme-editor" class="btn btn-primary" style="font-size:0.88rem; padding:8px 16px; font-weight:700;">
+        ⚡ Customize in Elementor Studio Pro →
+      </a>
+      <div style="font-size:0.75rem; color:var(--grey-500);">Live 0ms WYSIWYG Editor</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 2. Filter Tabs & Search Bar -->
+<div class="card" style="margin-bottom:20px; padding:12px 16px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    
+    <!-- Filter Tabs -->
+    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-tab active" data-filter="all">All (24)</button>
+      <button type="button" class="btn btn-tab" data-filter="light">☀️ Light (12)</button>
+      <button type="button" class="btn btn-tab" data-filter="dark">🌙 Dark (12)</button>
+      <button type="button" class="btn btn-tab" data-filter="industrial">🏗️ Industrial PEB (6)</button>
+      <button type="button" class="btn btn-tab" data-filter="residential">🏡 Villa &amp; Duplex (6)</button>
+      <button type="button" class="btn btn-tab" data-filter="commercial">🏢 Corporate EPC (6)</button>
+      <button type="button" class="btn btn-tab" data-filter="hightech">🚀 High-Tech Steel (6)</button>
+    </div>
+
+    <!-- Search Box -->
+    <div style="min-width:240px;">
+      <input type="text" id="themeSearch" placeholder="🔍 Search themes by name, style, niche..." class="form-control" style="font-size:0.82rem; padding:6px 12px; border-radius:20px;">
+    </div>
+
+  </div>
+</div>
+
+<!-- 3. Themes Gallery Grid (24 Themes) -->
+<div class="themes-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:20px;">
+  {% for slug, t in presets %}
+  {% set isActive = (currentTheme.name == t.name) or (currentTheme.primary == t.primary and currentTheme.bg_color == t.bg_color) %}
+  <div class="card theme-card {% if isActive %}is-active-card{% endif %}" 
+       data-slug="{{ slug }}"
+       data-name="{{ t.name | lower }}"
+       data-mode="{{ t.mode or ('dark' if t.is_dark else 'light') }}"
+       data-category="{{ t.category or 'commercial' }}"
+       data-desc="{{ t.description | lower }}"
+       style="margin:0; padding:0; display:flex; flex-direction:column; overflow:hidden; border-radius:10px; border:1px solid {% if isActive %}var(--primary){% else %}var(--grey-200){% endif %}; position:relative; transition:all 0.2s ease;">
+    
+    <!-- Active Ribbon -->
+    {% if isActive %}
+    <div style="position:absolute; top:12px; right:12px; z-index:10; background:var(--primary); color:white; font-size:0.7rem; font-weight:800; padding:3px 8px; border-radius:20px; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
+      ✓ ACTIVE
+    </div>
+    {% endif %}
+
+    <!-- Theme Visual Preview Mockup -->
+    <div style="height:140px; background:{{ t.bg_color or '#ffffff' }}; position:relative; padding:12px; display:flex; flex-direction:column; justify-content:space-between; border-bottom:1px solid var(--grey-200); box-shadow:inset 0 0 20px rgba(0,0,0,0.03);">
+      
+      <!-- Mock Topbar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; background:{{ t.announcement_bg or t.primary_dark }}; padding:3px 8px; border-radius:4px;">
+        <span style="font-size:0.58rem; color:{{ t.announcement_color or '#ffffff' }}; font-weight:700;">⚡ BONGSHAI PRE-ENGINEERED STEEL</span>
+        <span style="width:6px; height:6px; border-radius:50%; background:{{ t.accent or '#EAB308' }};"></span>
+      </div>
+
+      <!-- Mock Hero Card -->
+      <div style="background:{{ t.surface_color or '#f8fafc' }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:6px; padding:8px; margin:6px 0; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:0.72rem; font-weight:800; color:{{ t.text_color or '#0f172a' }}; font-family:{{ t.font_heading }};">
+            {{ t.name }}
+          </div>
+          <div style="font-size:0.58rem; color:{{ t.text_muted or '#64748b' }};">
+            {{ t.layout_style or 'Modern Architecture' }}
+          </div>
+        </div>
+        <div style="background:{{ t.primary }}; color:white; font-size:0.58rem; font-weight:700; padding:3px 6px; border-radius:{{ t.radius_sm or '4px' }};">
+          CTA
+        </div>
+      </div>
+
+      <!-- Mock Color Palette Swatches Strip -->
+      <div style="display:flex; gap:6px; align-items:center;">
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ t.primary }}; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Primary: {{ t.primary }}"></span>
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ t.accent }}; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Accent: {{ t.accent }}"></span>
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ t.surface_color }}; border:1px solid #999;" title="Surface: {{ t.surface_color }}"></span>
+        <span style="width:14px; height:14px; border-radius:50%; background:{{ t.bg_color }}; border:1px solid #999;" title="Background: {{ t.bg_color }}"></span>
+        <span style="font-size:0.62rem; color:{{ t.text_muted }}; font-weight:700; margin-left:auto;">
+          {{ t.font_heading }}
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Theme Info Body -->
+    <div style="padding:14px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+      
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <h3 style="font-size:0.95rem; font-weight:800; margin:0; color:var(--grey-900);">{{ t.name }}</h3>
+          <span class="pill" style="font-size:0.65rem; background:{% if t.is_dark %}#1e293b; color:#93c5fd;{% else %}#f1f5f9; color:#475569;{% endif %};">
+            {{ '🌙 Dark' if t.is_dark else '☀️ Light' }}
+          </span>
+        </div>
+
+        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px;">
+          <span class="pill pill-muted" style="font-size:0.65rem; padding:1px 6px;">{{ t.category | capitalize }}</span>
+          <span class="pill pill-muted" style="font-size:0.65rem; padding:1px 6px;">{{ t.card_style or 'Modern' }}</span>
+          <span class="pill pill-muted" style="font-size:0.65rem; padding:1px 6px;">{{ t.hero_style or 'Hero' }}</span>
+        </div>
+
+        <p style="font-size:0.78rem; color:var(--grey-600); line-height:1.4; margin:0 0 12px;">
+          {{ t.description or 'Full pre-engineered steel construction theme with optimized styling tokens.' }}
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; border-top:1px solid var(--grey-100); padding-top:10px;">
+        <form method="post" action="/admin/themes/activate/{{ slug }}" style="margin:0;">
+          <button type="submit" class="btn {% if isActive %}btn-success{% else %}btn-outline{% endif %}" style="width:100%; font-size:0.75rem; padding:6px 8px; justify-content:center;">
+            {% if isActive %}✓ Active{% else %}⚡ Activate{% endif %}
+          </button>
+        </form>
+
+        <a href="/admin/theme-editor?preset={{ slug }}" class="btn btn-primary" style="font-size:0.75rem; padding:6px 8px; justify-content:center;">
+          🎨 Customize →
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+  .btn-tab {
+    background: var(--grey-100);
+    border: 1px solid var(--grey-200);
+    color: var(--grey-700);
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-tab:hover {
+    background: var(--grey-200);
+    color: var(--grey-900);
+  }
+  .btn-tab.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 2px 6px rgba(30,64,175,0.3);
+  }
+  .theme-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-color: var(--primary) !important;
+  }
+  .is-active-card {
+    box-shadow: 0 4px 14px rgba(30,64,175,0.15);
+  }
+</style>
+
+<script>
+(function() {
+  const tabs = document.querySelectorAll('.btn-tab');
+  const searchInput = document.getElementById('themeSearch');
+  const cards = document.querySelectorAll('.theme-card');
+
+  function filterThemes() {
+    const activeTab = document.querySelector('.btn-tab.active');
+    const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+
+    cards.forEach(card => {
+      const mode = card.getAttribute('data-mode') || 'light';
+      const category = card.getAttribute('data-category') || 'commercial';
+      const name = card.getAttribute('data-name') || '';
+      const desc = card.getAttribute('data-desc') || '';
+
+      let matchesFilter = true;
+      if (filter === 'light') matchesFilter = (mode === 'light');
+      else if (filter === 'dark') matchesFilter = (mode === 'dark');
+      else if (filter === 'industrial') matchesFilter = (category === 'industrial');
+      else if (filter === 'residential') matchesFilter = (category === 'residential');
+      else if (filter === 'commercial') matchesFilter = (category === 'commercial');
+      else if (filter === 'hightech') matchesFilter = (category === 'hightech');
+
+      const matchesSearch = !query || name.includes(query) || desc.includes(query);
+
+      if (matchesFilter && matchesSearch) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      filterThemes();
+    });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterThemes);
+  }
+})();
+</script>
+
+{% endblock %}
