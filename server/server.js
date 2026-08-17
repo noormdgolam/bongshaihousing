@@ -61,6 +61,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 8, // 8 hours
   },
 }));
@@ -139,6 +140,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/admin', require('./middleware/csrf'));
 app.use('/', adminAuthRouter);
 app.use('/', adminRouter);
 app.use('/', productsRouter); // DB-driven product slug pages (bh-*, dv-*, lcv-*) — must precede pagesRouter
