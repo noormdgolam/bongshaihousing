@@ -13,7 +13,7 @@
       <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span>
       Node {{ systemInfo.nodeVersion }} &bull; Live
     </span>
-    <a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">🎨 Theme Studio</a>
+    {% if adminRole != 'sales' %}<a href="/admin/theme-editor" class="btn" style="font-size:0.82rem; padding:6px 12px;">🎨 Theme Studio</a>{% endif %}
     <a href="/" target="_blank" class="btn btn-primary" style="font-size:0.82rem; padding:6px 12px;">🌐 Live Website ↗</a>
   </div>
 </div>
@@ -77,7 +77,7 @@
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.publishedProducts }}</strong> Live &bull; <strong>{{ counts.categories }}</strong> Categories</span>
-      <a href="/admin/products/new" style="font-size:0.78rem; font-weight:700; color:#3B82F6;">+ Add Model</a>
+      {% if adminRole != 'sales' %}<a href="/admin/products/new" style="font-size:0.78rem; font-weight:700; color:#3B82F6;">+ Add Model</a>{% endif %}
     </div>
   </div>
 
@@ -92,7 +92,7 @@
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.dedicatedServiceAreas }}</strong> Landing Pages &bull; <strong>{{ counts.projects }}</strong> Projects</span>
-      <a href="/admin/service-areas" style="font-size:0.78rem; font-weight:700; color:#10B981;">Manage</a>
+      {% if adminRole != 'sales' %}<a href="/admin/service-areas" style="font-size:0.78rem; font-weight:700; color:#10B981;">Manage</a>{% endif %}
     </div>
   </div>
 
@@ -113,15 +113,16 @@
       <span class="pill" style="font-size:0.72rem; background:#ede9fe; color:#6d28d9; font-weight:700;">
         {{ '🌙 Dark Mode' if activeTheme.is_dark else '☀️ Light Mode' }} &bull; 24 Presets
       </span>
-      <a href="/admin/theme-editor" style="font-size:0.78rem; font-weight:700; color:#8B5CF6;">Customize →</a>
+      {% if adminRole != 'sales' %}<a href="/admin/theme-editor" style="font-size:0.78rem; font-weight:700; color:#8B5CF6;">Customize →</a>{% endif %}
     </div>
   </div>
 
 </div>
 
 <!-- 2. Operations & Content Matrix (Grouped Workspace Cards) -->
+{% if adminRole != 'sales' %}
 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-bottom:24px;">
-  
+
   <!-- Group 1: Commercial & Catalog Suite -->
   <div class="card" style="margin:0; padding:18px; --tile-accent:#2563EB; --tile-accent-soft:#eff6ff;">
     <div class="op-group-head">
@@ -210,6 +211,7 @@
   </div>
 
 </div>
+{% endif %}
 
 <!-- 3. Recent Customer Inquiries with 1-Click Fast Actions -->
 <div class="card" style="margin-bottom:24px;">

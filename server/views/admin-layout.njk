@@ -68,9 +68,10 @@
     <nav>
       <a href="/admin">📊 Dashboard</a>
       <a href="/admin/analytics">📈 Analytics</a>
+      <a href="/admin/leads">📥 Inquiries / Leads</a>
+      {% if adminRole != 'sales' %}
       <a href="/admin/themes">🎭 Themes Directory</a>
       <a href="/admin/theme-editor">⚡ Theme Studio Pro</a>
-      <a href="/admin/leads">📥 Inquiries / Leads</a>
       <a href="/admin/products">📦 Products</a>
       <a href="/admin/categories">📁 Categories</a>
       <a href="/admin/projects">🏗️ Projects</a>
@@ -79,6 +80,7 @@
       <a href="/admin/team-members">👥 Team Members</a>
       <a href="/admin/media">🖼️ Media Library</a>
       <a href="/admin/testimonials">💬 Testimonials</a>
+      {% endif %}
       {% if adminRole == 'admin' or adminRole == 'superadmin' %}
       <a href="/admin/users">👤 Users</a>
       <a href="/admin/activity">🕘 Activity Log</a>

@@ -10,7 +10,8 @@
   <div class="form-row">
     <label for="role">Role</label>
     <select id="role" name="role">
-      <option value="editor" {% if user.role == 'editor' %}selected{% endif %}>Editor (content only)</option>
+      <option value="sales" {% if user.role == 'sales' %}selected{% endif %}>Sales (leads/CRM only)</option>
+      <option value="editor" {% if user.role == 'editor' %}selected{% endif %}>Editor (content, no users/leads restriction)</option>
       <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin (full access incl. user management)</option>
     </select>
   </div>

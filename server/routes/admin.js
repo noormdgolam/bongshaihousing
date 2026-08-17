@@ -38,8 +38,23 @@ const upload = multer({
 });
 
 const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
+const requireRole = require('../middleware/requireRole');
 const router = express.Router();
 router.use('/admin', requireAdmin);
+
+// Content-management sections are off-limits to the 'sales' role (scoped
+// to leads/CRM only) - 'admin' and 'editor' both keep full content access,
+// same as before this gate existed. Dashboard, Analytics, and Leads stay
+// ungated (open to every logged-in role); Users stays admin-only (below).
+const CONTENT_SECTIONS = [
+  '/admin/products', '/admin/categories', '/admin/projects',
+  '/admin/service-areas', '/admin/faqs', '/admin/team-members',
+  '/admin/testimonials', '/admin/media', '/admin/theme-editor',
+  '/admin/themes', '/admin/api/upload',
+];
+for (const section of CONTENT_SECTIONS) {
+  router.use(section, requireRole('admin', 'editor'));
+}
 
 function adminVars(req, extra) {
   return { adminName: req.session.adminName, adminRole: req.session.adminRole, ...extra };
@@ -1186,7 +1201,6 @@ router.get('/admin/theme-editor/export', async (req, res) => {
 // ---- Admin Users (role-gated: only 'admin' role can manage accounts) ----
 
 const bcrypt = require('bcryptjs');
-const requireRole = require('../middleware/requireRole');
 
 router.get('/admin/users', requireRole('admin', 'superadmin'), async (req, res) => {
   const users = await db('admin_users').select('id', 'email', 'name', 'role', 'last_login_at', 'created_at').orderBy('created_at');
