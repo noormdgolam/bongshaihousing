@@ -193,6 +193,21 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    cursor: pointer;
+  }
+  .te-field:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .te-field:focus-within, .te-field.active-field {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.35);
+  }
+  .te-field:focus-within .te-label, .te-field.active-field .te-label {
+    color: #60A5FA;
   }
   .te-label {
     font-size: 0.78rem;
@@ -200,6 +215,8 @@
     color: var(--text-muted);
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    transition: color 0.15s;
   }
   .te-input, .te-select, .te-textarea {
     width: 100%;
@@ -215,6 +232,7 @@
   }
   .te-input:focus, .te-select:focus, .te-textarea:focus {
     border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
 
   /* Color Input Wrapper */
@@ -409,13 +427,13 @@
 
     <!-- 1. Preset Palettes -->
     <div class="te-section" data-collapsed="false">
-      <div class="te-section-header">
+      <div class="te-section-header" data-target="preset" data-label="Theme Preset Palettes">
         <span>✨ 1-Click Curated Presets</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
         <div class="te-presets-grid">
-          <div class="te-preset-card" data-preset="bongshai_royal">
+          <div class="te-preset-card" data-preset="bongshai_royal" data-target="preset" data-label="Bongshai Royal Preset">
             <div class="te-preset-title">Bongshai Royal</div>
             <div class="te-preset-dots">
               <span class="te-preset-dot" style="background:#1E40AF;"></span>
@@ -423,7 +441,7 @@
               <span class="te-preset-dot" style="background:#1E3A8A;"></span>
             </div>
           </div>
-          <div class="te-preset-card" data-preset="emerald_eco">
+          <div class="te-preset-card" data-preset="emerald_eco" data-target="preset" data-label="Emerald Eco Preset">
             <div class="te-preset-title">Emerald Eco</div>
             <div class="te-preset-dots">
               <span class="te-preset-dot" style="background:#047857;"></span>
@@ -431,7 +449,7 @@
               <span class="te-preset-dot" style="background:#064E3B;"></span>
             </div>
           </div>
-          <div class="te-preset-card" data-preset="titanium_slate">
+          <div class="te-preset-card" data-preset="titanium_slate" data-target="preset" data-label="Titanium Slate Preset">
             <div class="te-preset-title">Titanium Slate</div>
             <div class="te-preset-dots">
               <span class="te-preset-dot" style="background:#1E293B;"></span>
@@ -439,7 +457,7 @@
               <span class="te-preset-dot" style="background:#0F172A;"></span>
             </div>
           </div>
-          <div class="te-preset-card" data-preset="corporate_indigo">
+          <div class="te-preset-card" data-preset="corporate_indigo" data-target="preset" data-label="Indigo Crimson Preset">
             <div class="te-preset-title">Indigo Crimson</div>
             <div class="te-preset-dots">
               <span class="te-preset-dot" style="background:#4338CA;"></span>
@@ -447,7 +465,7 @@
               <span class="te-preset-dot" style="background:#312E81;"></span>
             </div>
           </div>
-          <div class="te-preset-card" data-preset="modern_steel_crimson">
+          <div class="te-preset-card" data-preset="modern_steel_crimson" data-target="preset" data-label="Crimson Gold Preset">
             <div class="te-preset-title">Crimson Gold</div>
             <div class="te-preset-dots">
               <span class="te-preset-dot" style="background:#BE123C;"></span>
@@ -461,12 +479,12 @@
 
     <!-- 2. Brand Colors -->
     <div class="te-section" data-collapsed="false">
-      <div class="te-section-header">
+      <div class="te-section-header" data-target="primary" data-label="Brand Colors">
         <span>🎨 Brand Colors</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
-        <div class="te-field">
+        <div class="te-field" data-target="primary" data-label="Primary Brand Color (Buttons &amp; Logos)">
           <label class="te-label">Primary Brand Color</label>
           <div class="te-color-row">
             <input type="color" id="primaryColor" class="te-color-picker" value="{{ theme.primary }}">
@@ -474,7 +492,7 @@
           </div>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="primary_dark" data-label="Primary Dark (Footers &amp; Hover States)">
           <label class="te-label">Primary Dark (Hover &amp; Footers)</label>
           <div class="te-color-row">
             <input type="color" id="primaryDarkColor" class="te-color-picker" value="{{ theme.primary_dark }}">
@@ -482,7 +500,7 @@
           </div>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="primary_light" data-label="Primary Light (Gradients &amp; Highlights)">
           <label class="te-label">Primary Light (Gradients &amp; Accents)</label>
           <div class="te-color-row">
             <input type="color" id="primaryLightColor" class="te-color-picker" value="{{ theme.primary_light }}">
@@ -490,7 +508,7 @@
           </div>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="accent" data-label="Accent Color (Badges, Stars, Highlights)">
           <label class="te-label">Accent / Highlight (Gold/Yellow)</label>
           <div class="te-color-row">
             <input type="color" id="accentColor" class="te-color-picker" value="{{ theme.accent }}">
@@ -498,7 +516,7 @@
           </div>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="accent_light" data-label="Accent Light (Badges &amp; Tags)">
           <label class="te-label">Accent Light</label>
           <div class="te-color-row">
             <input type="color" id="accentLightColor" class="te-color-picker" value="{{ theme.accent_light }}">
@@ -510,12 +528,12 @@
 
     <!-- 3. Typography -->
     <div class="te-section" data-collapsed="false">
-      <div class="te-section-header">
+      <div class="te-section-header" data-target="heading_font" data-label="Typography &amp; Fonts">
         <span>✍️ Typography &amp; Fonts</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
-        <div class="te-field">
+        <div class="te-field" data-target="heading_font" data-label="Heading Font Family (h1, h2, h3)">
           <label class="te-label">Heading Font Family</label>
           <select id="fontHeading" class="te-select">
             <option value="'Inter', sans-serif" {% if theme.font_heading == "'Inter', sans-serif" %}selected{% endif %}>Inter (Modern Sans)</option>
@@ -526,7 +544,7 @@
           </select>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="body_font" data-label="Body Text Font Family">
           <label class="te-label">Body Text Font Family</label>
           <select id="fontBody" class="te-select">
             <option value="'Inter', sans-serif" {% if theme.font_body == "'Inter', sans-serif" %}selected{% endif %}>Inter</option>
@@ -539,29 +557,29 @@
 
     <!-- 4. Top Announcement Banner -->
     <div class="te-section" data-collapsed="false">
-      <div class="te-section-header">
+      <div class="te-section-header" data-target="announcement" data-label="Top Announcement Banner">
         <span>📢 Top Announcement Banner</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
-        <div class="te-field">
+        <div class="te-field" data-target="announcement" data-label="Top Announcement Bar Visibility">
           <label class="te-label" style="display:flex; align-items:center; gap:8px; cursor:pointer;">
             <input type="checkbox" id="showAnnouncement" {% if theme.show_announcement %}checked{% endif %} style="width:16px; height:16px;">
             Enable Top Promo Announcement Bar
           </label>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="announcement_text" data-label="Announcement Message Text">
           <label class="te-label">Announcement Text</label>
           <textarea id="announcementText" class="te-textarea" rows="2">{{ theme.announcement_text }}</textarea>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="announcement_link" data-label="Announcement Action Link Button">
           <label class="te-label">Banner Action Link</label>
           <input type="text" id="announcementLink" class="te-input" value="{{ theme.announcement_link }}">
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="announcement_bg" data-label="Announcement Background Color">
           <label class="te-label">Banner Background Color</label>
           <div class="te-color-row">
             <input type="color" id="announcementBg" class="te-color-picker" value="{{ theme.announcement_bg }}">
@@ -569,7 +587,7 @@
           </div>
         </div>
 
-        <div class="te-field">
+        <div class="te-field" data-target="announcement_color" data-label="Announcement Text &amp; Link Color">
           <label class="te-label">Banner Text &amp; Accent Color</label>
           <div class="te-color-row">
             <input type="color" id="announcementColor" class="te-color-picker" value="{{ theme.announcement_color }}">
@@ -581,12 +599,12 @@
 
     <!-- 5. Layout & Corners -->
     <div class="te-section" data-collapsed="false">
-      <div class="te-section-header">
+      <div class="te-section-header" data-target="radius" data-label="Border Radius &amp; Corners">
         <span>📐 Border Radius &amp; Corners</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
-        <div class="te-field">
+        <div class="te-field" data-target="radius" data-label="Corner Roundness (Buttons, Cards, Badges)">
           <label class="te-label">Corner Roundness</label>
           <select id="radiusStyle" class="te-select">
             <option value="sharp" {% if theme.radius_md == '2px' %}selected{% endif %}>Sharp / Industrial (2px)</option>
@@ -600,12 +618,12 @@
 
     <!-- 6. Custom CSS Live Injector -->
     <div class="te-section" data-collapsed="true">
-      <div class="te-section-header">
+      <div class="te-section-header" data-target="custom_css" data-label="Custom CSS Live Injection">
         <span>💻 Custom CSS Live Code</span>
         <span class="te-section-icon">▼</span>
       </div>
       <div class="te-section-body">
-        <div class="te-field">
+        <div class="te-field" data-target="custom_css" data-label="Custom CSS Live Code Editor">
           <label class="te-label">Inject Custom CSS (Live updates)</label>
           <textarea id="customCss" class="te-textarea" rows="6" placeholder="/* Custom CSS overrides */&#10;.navbar { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }">{{ theme.custom_css }}</textarea>
         </div>
@@ -736,6 +754,69 @@
     }
   }
 
+  // Visual Pinpoint to Canvas (shows user where the setting changes visually)
+  function sendHighlight(target, label) {
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({
+        type: 'BH_THEME_HIGHLIGHT',
+        target: target,
+        label: label
+      }, '*');
+    }
+  }
+
+  function clearHighlight() {
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({
+        type: 'BH_THEME_CLEAR_HIGHLIGHT'
+      }, '*');
+    }
+  }
+
+  // Highlight on click/focus/input across all sidebar fields & section headers
+  document.querySelectorAll('.te-field, .te-section-header').forEach(el => {
+    const target = el.getAttribute('data-target');
+    const label = el.getAttribute('data-label');
+    if (!target) return;
+
+    el.addEventListener('click', () => {
+      sendHighlight(target, label);
+    });
+  });
+
+  // Direct element event bindings for instant visual feedback
+  const inputPinpoints = [
+    { el: primaryColor, target: 'primary', label: 'Primary Brand Color' },
+    { el: primaryColorText, target: 'primary', label: 'Primary Brand Color' },
+    { el: primaryDarkColor, target: 'primary_dark', label: 'Primary Dark (Footers & Hover States)' },
+    { el: primaryDarkColorText, target: 'primary_dark', label: 'Primary Dark (Footers & Hover States)' },
+    { el: primaryLightColor, target: 'primary_light', label: 'Primary Light & Gradients' },
+    { el: primaryLightColorText, target: 'primary_light', label: 'Primary Light & Gradients' },
+    { el: accentColor, target: 'accent', label: 'Accent Color & Badges' },
+    { el: accentColorText, target: 'accent', label: 'Accent Color & Badges' },
+    { el: accentLightColor, target: 'accent_light', label: 'Accent Light (Badges & Tags)' },
+    { el: accentLightColorText, target: 'accent_light', label: 'Accent Light (Badges & Tags)' },
+    { el: fontHeading, target: 'heading_font', label: 'Heading Font Family (h1, h2, h3)' },
+    { el: fontBody, target: 'body_font', label: 'Body Text Font Family' },
+    { el: showAnnouncement, target: 'announcement', label: 'Top Announcement Bar Visibility' },
+    { el: announcementText, target: 'announcement_text', label: 'Announcement Message Text' },
+    { el: announcementLink, target: 'announcement_link', label: 'Announcement Action Link Button' },
+    { el: announcementBg, target: 'announcement_bg', label: 'Announcement Background Color' },
+    { el: announcementBgText, target: 'announcement_bg', label: 'Announcement Background Color' },
+    { el: announcementColor, target: 'announcement_color', label: 'Announcement Text & Accent Color' },
+    { el: announcementColorText, target: 'announcement_color', label: 'Announcement Text & Accent Color' },
+    { el: radiusStyle, target: 'radius', label: 'Corner Roundness (Buttons, Cards, Badges)' },
+    { el: customCss, target: 'custom_css', label: 'Custom CSS Live Styles' }
+  ];
+
+  inputPinpoints.forEach(item => {
+    if (!item.el) return;
+    const trigger = () => sendHighlight(item.target, item.label);
+    item.el.addEventListener('focus', trigger);
+    item.el.addEventListener('click', trigger);
+    item.el.addEventListener('input', trigger);
+  });
+
   // Re-send update when iframe finishes loading a new page
   iframe.addEventListener('load', () => {
     sendLiveUpdate();
@@ -745,6 +826,7 @@
   document.querySelectorAll('.te-preset-card').forEach(card => {
     card.addEventListener('click', () => {
       const presetKey = card.getAttribute('data-preset');
+      const label = card.getAttribute('data-label') || 'Preset Palettes';
       const p = presetsData[presetKey];
       if (!p) return;
 
@@ -757,6 +839,7 @@
       if (p.announcement_color) { announcementColor.value = p.announcement_color; announcementColorText.value = p.announcement_color; }
 
       sendLiveUpdate();
+      sendHighlight('preset', label);
     });
   });
 
