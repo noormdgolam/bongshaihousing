@@ -104,6 +104,7 @@ app.use('/js', express.static(path.join(REPO_ROOT, 'js'), { maxAge: '1d' }));
 app.use('/fonts', express.static(path.join(REPO_ROOT, 'fonts'), { maxAge: '7d' }));
 app.use('/favicon.ico', express.static(path.join(REPO_ROOT, 'favicon.ico')));
 app.use('/manifest.json', express.static(path.join(REPO_ROOT, 'manifest.json')));
+app.use('/search-index.json', express.static(path.join(REPO_ROOT, 'search-index.json')));
 app.use('/sw.js', express.static(path.join(REPO_ROOT, 'sw.js')));
 app.use('/', sitemapRouter); // dynamic sitemap.xml, DB products/projects merged with the static entries
 app.use('/llms.txt', express.static(path.join(REPO_ROOT, 'llms.txt')));
