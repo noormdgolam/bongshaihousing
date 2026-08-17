@@ -5,29 +5,12 @@ const multer = require('multer');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
 
-const UPLOADS_DIR = path.join(__dirname, '..', '..', 'images', 'uploads');
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
-
-const uploadStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!fs.existsSync(UPLOADS_DIR)) {
-      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-    }
-    cb(null, UPLOADS_DIR);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    const baseName = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '-').slice(0, 40);
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E6);
-    cb(null, `${baseName}-${uniqueSuffix}${ext}`);
-  }
-});
+const { processAndSaveImage, UPLOADS_DIR } = require('../lib/image-processor');
+const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
 
 const upload = multer({
-  storage: uploadStorage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -37,7 +20,6 @@ const upload = multer({
   }
 });
 
-const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
 const router = express.Router();
 router.use('/admin', requireAdmin);
 
@@ -361,8 +343,8 @@ router.get('/admin/products/new', async (req, res) => {
 
 router.post('/admin/products', upload.single('main_image_file'), async (req, res) => {
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, published } = req.body;
-  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (main_image || null);
   try {
+    const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (main_image || null);
     const [id] = await db('products').insert({
       category_id, model_number, slug, title, description,
       price_per_sqft: price_per_sqft || null,
@@ -391,7 +373,7 @@ router.get('/admin/products/:id/edit', async (req, res) => {
 
 router.post('/admin/products/:id', upload.single('main_image_file'), async (req, res) => {
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, published } = req.body;
-  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (main_image || null);
+  const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (main_image || null);
   await db('products').where({ id: req.params.id }).update({
     category_id, model_number, slug, title, description,
     price_per_sqft: price_per_sqft || null,
@@ -557,8 +539,8 @@ router.get('/admin/projects/new', (req, res) => {
 
 router.post('/admin/projects', upload.single('image_file'), async (req, res) => {
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
-  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (image || null);
   try {
+    const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (image || null);
     const [id] = await db('projects').insert({
       slug, title, location: location || null, description: description || null,
       image: finalImage,
@@ -580,7 +562,7 @@ router.get('/admin/projects/:id/edit', async (req, res) => {
 
 router.post('/admin/projects/:id', upload.single('image_file'), async (req, res) => {
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
-  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (image || null);
+  const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (image || null);
   await db('projects').where({ id: req.params.id }).update({
     slug, title, location: location || null, description: description || null,
     image: finalImage,
@@ -592,19 +574,23 @@ router.post('/admin/projects/:id', upload.single('image_file'), async (req, res)
   res.redirect(`/admin/projects/${req.params.id}/edit`);
 });
 
-// Generic Image Upload API (JSON Response)
-router.post('/admin/api/upload', upload.single('file'), (req, res) => {
+// Generic Image Upload API (JSON Response with WebP Conversion)
+router.post('/admin/api/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ success: false, error: 'No file uploaded' });
   }
-  const relativePath = `images/uploads/${req.file.filename}`;
-  res.json({
-    success: true,
-    url: relativePath,
-    filename: req.file.filename,
-    size: req.file.size,
-    mimetype: req.file.mimetype,
-  });
+  try {
+    const relativePath = await processAndSaveImage(req.file.buffer, req.file.originalname);
+    res.json({
+      success: true,
+      url: relativePath,
+      filename: path.basename(relativePath),
+      size: req.file.size,
+      mimetype: 'image/webp',
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 router.post('/admin/projects/:id/delete', async (req, res) => {
@@ -979,7 +965,7 @@ router.post('/admin/team-members', upload.single('photo_file'), async (req, res)
 
     let photoPath = photo ? photo.trim().replace(/^\/+/, '') : 'images/about-team.webp';
     if (req.file) {
-      photoPath = `images/uploads/${req.file.filename}`;
+      photoPath = await processAndSaveImage(req.file.buffer, req.file.originalname, { maxWidth: 800 });
     }
 
     let finalSort = parseInt(sort_order, 10);
@@ -1034,7 +1020,7 @@ router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, 
 
     let photoPath = photo ? photo.trim().replace(/^\/+/, '') : 'images/about-team.webp';
     if (req.file) {
-      photoPath = `images/uploads/${req.file.filename}`;
+      photoPath = await processAndSaveImage(req.file.buffer, req.file.originalname, { maxWidth: 800 });
     }
 
     let finalSort = parseInt(sort_order, 10);
