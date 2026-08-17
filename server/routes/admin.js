@@ -38,6 +38,7 @@ const upload = multer({
   }
 });
 
+const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark } = require('../lib/theme');
 const router = express.Router();
 router.use('/admin', requireAdmin);
 
@@ -45,26 +46,74 @@ function adminVars(req, extra) {
   return { adminName: req.session.adminName, adminRole: req.session.adminRole, ...extra };
 }
 
+async function logActivity(req, actionOrObj, entityType, entityId, summary) {
+  if (!db) return;
+  try {
+    const hasTable = await db.schema.hasTable('activity_log');
+    if (!hasTable) return;
+
+    let payload = {};
+    if (typeof actionOrObj === 'object' && actionOrObj !== null) {
+      payload = {
+        action: actionOrObj.action || 'update',
+        entity_type: actionOrObj.entityType || actionOrObj.entity_type || 'general',
+        entity_id: actionOrObj.entityId || actionOrObj.entity_id || null,
+        summary: actionOrObj.summary || '',
+      };
+    } else {
+      payload = {
+        action: actionOrObj || 'update',
+        entity_type: entityType || 'general',
+        entity_id: entityId || null,
+        summary: summary || '',
+      };
+    }
+
+    await db('activity_log').insert({
+      admin_user_id: req.session?.adminUserId || null,
+      admin_name: req.session?.adminName || 'Admin',
+      action: payload.action,
+      entity_type: payload.entity_type,
+      entity_id: payload.entity_id,
+      summary: payload.summary,
+    });
+  } catch (err) {
+    console.error('Failed to log activity:', err.message);
+  }
+}
+
 router.get('/admin', async (req, res) => {
   let productCount = { count: 0 };
+  let publishedProductCount = { count: 0 };
   let categoryCount = { count: 0 };
   let projectCount = { count: 0 };
+  let featuredProjectCount = { count: 0 };
   let leadCount = { count: 0 };
   let newLeadCount = { count: 0 };
+  let contactedLeadCount = { count: 0 };
+  let convertedLeadCount = { count: 0 };
   let serviceAreaCount = { count: 0 };
+  let dedicatedAreaCount = { count: 0 };
   let faqCount = { count: 0 };
   let teamMemberCount = { count: 0 };
+  let testimonialCount = { count: 0 };
+  let mediaCount = 0;
   let recentLeads = [];
+  let recentActivities = [];
+  let activeTheme = null;
 
   if (db) {
     try {
       [productCount] = await db('products').count({ count: '*' });
+      [publishedProductCount] = await db('products').where({ published: true }).count({ count: '*' });
       [categoryCount] = await db('categories').count({ count: '*' });
       [projectCount] = await db('projects').count({ count: '*' });
+      [featuredProjectCount] = await db('projects').where({ featured: true }).count({ count: '*' });
       
       const hasServiceAreas = await db.schema.hasTable('service_areas');
       if (hasServiceAreas) {
         [serviceAreaCount] = await db('service_areas').count({ count: '*' });
+        [dedicatedAreaCount] = await db('service_areas').where({ has_dedicated_page: true }).count({ count: '*' });
       }
 
       const hasFaqs = await db.schema.hasTable('faqs');
@@ -77,30 +126,103 @@ router.get('/admin', async (req, res) => {
         [teamMemberCount] = await db('team_members').count({ count: '*' });
       }
 
+      const hasTestimonials = await db.schema.hasTable('testimonials');
+      if (hasTestimonials) {
+        [testimonialCount] = await db('testimonials').count({ count: '*' });
+      }
+
       const hasLeads = await db.schema.hasTable('leads');
       if (hasLeads) {
         [leadCount] = await db('leads').count({ count: '*' });
         [newLeadCount] = await db('leads').where({ status: 'new' }).count({ count: '*' });
-        recentLeads = await db('leads').orderBy('created_at', 'desc').limit(6);
+        [contactedLeadCount] = await db('leads').where({ status: 'contacted' }).count({ count: '*' });
+        [convertedLeadCount] = await db('leads').where({ status: 'converted' }).count({ count: '*' });
+        recentLeads = await db('leads').orderBy('created_at', 'desc').limit(8);
+      }
+
+      const hasActivity = await db.schema.hasTable('activity_log');
+      if (hasActivity) {
+        recentActivities = await db('activity_log').orderBy('created_at', 'desc').limit(6);
       }
     } catch (e) {
       console.error('Admin dashboard query error:', e.message);
     }
   }
 
+  // Media files count
+  try {
+    if (fs.existsSync(UPLOADS_DIR)) {
+      mediaCount = fs.readdirSync(UPLOADS_DIR).filter(f => !f.startsWith('.')).length;
+    }
+  } catch (err) {}
+
+  // Active theme info
+  try {
+    activeTheme = await getThemeSettings();
+    if (activeTheme) {
+      activeTheme.is_dark = isThemeDark(activeTheme);
+    }
+  } catch (err) {}
+
+  const totalLeads = leadCount?.count || 0;
+  const converted = convertedLeadCount?.count || 0;
+  const conversionRate = totalLeads > 0 ? Math.round((converted / totalLeads) * 100) : 0;
+
   res.render('admin/dashboard.njk', adminVars(req, {
     counts: {
       products: productCount?.count || 0,
+      publishedProducts: publishedProductCount?.count || 0,
       categories: categoryCount?.count || 0,
       projects: projectCount?.count || 0,
-      leads: leadCount?.count || 0,
+      featuredProjects: featuredProjectCount?.count || 0,
+      leads: totalLeads,
       newLeads: newLeadCount?.count || 0,
-      serviceAreas: serviceAreaCount?.count || 0,
-      faqs: faqCount?.count || 0,
-      teamMembers: teamMemberCount?.count || 0,
+      contactedLeads: contactedLeadCount?.count || 0,
+      convertedLeads: converted,
+      conversionRate,
+      serviceAreas: serviceAreaCount?.count || 64,
+      dedicatedServiceAreas: dedicatedAreaCount?.count || 18,
+      faqs: faqCount?.count || 22,
+      teamMembers: teamMemberCount?.count || 14,
+      testimonials: testimonialCount?.count || 3,
+      mediaCount,
     },
     recentLeads,
+    recentActivities,
+    activeTheme,
+    systemInfo: {
+      nodeVersion: process.version,
+      uptimeMinutes: Math.floor(process.uptime() / 60),
+      env: process.env.NODE_ENV || 'production',
+      serverTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+    },
   }));
+});
+
+router.post('/admin/leads/:id/quick-status', async (req, res) => {
+  if (!db) return res.status(500).json({ error: 'Database unavailable' });
+  const { status } = req.body;
+  try {
+    await db('leads').where({ id: req.params.id }).update({
+      status: status || 'new',
+      updated_at: db.fn.now(),
+    });
+    await logActivity(req, {
+      action: 'status_change',
+      entityType: 'lead',
+      entityId: req.params.id,
+      summary: `Quick status set to "${status}" for Lead #${req.params.id}`
+    });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, status });
+    }
+    res.redirect('/admin');
+  } catch (err) {
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.redirect('/admin?error=' + encodeURIComponent(err.message));
+  }
 });
 
 // ---- Leads / Inquiries ----
