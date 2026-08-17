@@ -52,6 +52,7 @@ router.get('/admin', async (req, res) => {
   let leadCount = { count: 0 };
   let newLeadCount = { count: 0 };
   let serviceAreaCount = { count: 0 };
+  let faqCount = { count: 0 };
   let recentLeads = [];
 
   if (db) {
@@ -63,6 +64,11 @@ router.get('/admin', async (req, res) => {
       const hasServiceAreas = await db.schema.hasTable('service_areas');
       if (hasServiceAreas) {
         [serviceAreaCount] = await db('service_areas').count({ count: '*' });
+      }
+
+      const hasFaqs = await db.schema.hasTable('faqs');
+      if (hasFaqs) {
+        [faqCount] = await db('faqs').count({ count: '*' });
       }
 
       const hasLeads = await db.schema.hasTable('leads');
@@ -84,6 +90,7 @@ router.get('/admin', async (req, res) => {
       leads: leadCount?.count || 0,
       newLeads: newLeadCount?.count || 0,
       serviceAreas: serviceAreaCount?.count || 0,
+      faqs: faqCount?.count || 0,
     },
     recentLeads,
   }));
@@ -599,6 +606,175 @@ router.post('/admin/service-areas/:id/delete', async (req, res) => {
     await db('service_areas').where({ id: req.params.id }).del();
     await logActivity(req, { action: 'delete', entityType: 'service_area', entityId: req.params.id, summary: `Deleted service area ${sa ? sa.district : req.params.id}` });
     res.redirect('/admin/service-areas');
+  } catch (e) {
+    res.status(400).send('Delete error: ' + e.message);
+  }
+});
+
+// ---- Frequently Asked Questions (FAQ) Management ----
+
+const DEFAULT_FAQ_CATEGORIES = [
+  'General',
+  'Products & Models',
+  'Pricing & Financing',
+  'Construction Process',
+  'Quality & Getting Started',
+];
+
+router.get('/admin/faqs', async (req, res) => {
+  let faqs = [];
+  const search = (req.query.q || '').trim();
+  const categoryFilter = req.query.category || 'all';
+  const statusFilter = req.query.status || 'all';
+
+  if (db) {
+    try {
+      let query = db('faqs').orderBy('category', 'asc').orderBy('sort_order', 'asc');
+      if (categoryFilter && categoryFilter !== 'all') {
+        query = query.where({ category: categoryFilter });
+      }
+      if (statusFilter === 'published') {
+        query = query.where({ published: true });
+      } else if (statusFilter === 'draft') {
+        query = query.where({ published: false });
+      }
+      if (search) {
+        query = query.where((builder) => {
+          builder.where('question', 'like', `%${search}%`)
+            .orWhere('answer', 'like', `%${search}%`)
+            .orWhere('category', 'like', `%${search}%`);
+        });
+      }
+      faqs = await query;
+    } catch (err) {
+      console.error('FAQs list query error:', err.message);
+    }
+  }
+
+  // Get list of existing unique categories
+  let categories = [...DEFAULT_FAQ_CATEGORIES];
+  if (db) {
+    try {
+      const dbCats = await db('faqs').distinct('category').whereNotNull('category');
+      const catNames = dbCats.map(c => c.category).filter(Boolean);
+      categories = Array.from(new Set([...DEFAULT_FAQ_CATEGORIES, ...catNames]));
+    } catch (e) {}
+  }
+
+  const publishedCount = faqs.filter(f => f.published).length;
+
+  res.render('admin/faqs/list.njk', adminVars(req, {
+    faqs,
+    categories,
+    search,
+    categoryFilter,
+    statusFilter,
+    totalCount: faqs.length,
+    publishedCount,
+  }));
+});
+
+router.get('/admin/faqs/new', async (req, res) => {
+  let categories = [...DEFAULT_FAQ_CATEGORIES];
+  if (db) {
+    try {
+      const dbCats = await db('faqs').distinct('category').whereNotNull('category');
+      const catNames = dbCats.map(c => c.category).filter(Boolean);
+      categories = Array.from(new Set([...DEFAULT_FAQ_CATEGORIES, ...catNames]));
+    } catch (e) {}
+  }
+  res.render('admin/faqs/form.njk', adminVars(req, { faq: { published: true, sort_order: 0 }, categories, error: null }));
+});
+
+router.post('/admin/faqs', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { question, answer, category, published, sort_order } = req.body;
+  try {
+    if (!question || !question.trim()) throw new Error('Question text is required');
+    if (!answer || !answer.trim()) throw new Error('Answer text is required');
+
+    let finalSort = parseInt(sort_order, 10);
+    if (isNaN(finalSort)) {
+      const [{ maxSort }] = await db('faqs').max('sort_order as maxSort');
+      finalSort = (maxSort ?? -1) + 1;
+    }
+
+    await db('faqs').insert({
+      question: question.trim(),
+      answer: answer.trim(),
+      category: category && category.trim() ? category.trim() : 'General',
+      published: published === 'on' || published === true || published === 'true',
+      sort_order: finalSort,
+    });
+    res.redirect('/admin/faqs');
+  } catch (e) {
+    let categories = [...DEFAULT_FAQ_CATEGORIES];
+    try {
+      const dbCats = await db('faqs').distinct('category').whereNotNull('category');
+      categories = Array.from(new Set([...DEFAULT_FAQ_CATEGORIES, ...dbCats.map(c => c.category).filter(Boolean)]));
+    } catch (err) {}
+    res.render('admin/faqs/form.njk', adminVars(req, {
+      faq: req.body,
+      categories,
+      error: e.message,
+    }));
+  }
+});
+
+router.get('/admin/faqs/:id/edit', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const faq = await db('faqs').where({ id: req.params.id }).first();
+    if (!faq) return res.status(404).send('FAQ item not found');
+
+    let categories = [...DEFAULT_FAQ_CATEGORIES];
+    const dbCats = await db('faqs').distinct('category').whereNotNull('category');
+    categories = Array.from(new Set([...DEFAULT_FAQ_CATEGORIES, ...dbCats.map(c => c.category).filter(Boolean)]));
+
+    res.render('admin/faqs/form.njk', adminVars(req, { faq, categories, error: null }));
+  } catch (e) {
+    res.status(500).send('Database error: ' + e.message);
+  }
+});
+
+router.post('/admin/faqs/:id', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { question, answer, category, published, sort_order } = req.body;
+  try {
+    if (!question || !question.trim()) throw new Error('Question text is required');
+    if (!answer || !answer.trim()) throw new Error('Answer text is required');
+
+    let finalSort = parseInt(sort_order, 10);
+    if (isNaN(finalSort)) finalSort = 0;
+
+    await db('faqs').where({ id: req.params.id }).update({
+      question: question.trim(),
+      answer: answer.trim(),
+      category: category && category.trim() ? category.trim() : 'General',
+      published: published === 'on' || published === true || published === 'true',
+      sort_order: finalSort,
+      updated_at: db.fn.now(),
+    });
+    res.redirect('/admin/faqs');
+  } catch (e) {
+    let categories = [...DEFAULT_FAQ_CATEGORIES];
+    try {
+      const dbCats = await db('faqs').distinct('category').whereNotNull('category');
+      categories = Array.from(new Set([...DEFAULT_FAQ_CATEGORIES, ...dbCats.map(c => c.category).filter(Boolean)]));
+    } catch (err) {}
+    res.render('admin/faqs/form.njk', adminVars(req, {
+      faq: { ...req.body, id: req.params.id },
+      categories,
+      error: e.message,
+    }));
+  }
+});
+
+router.post('/admin/faqs/:id/delete', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    await db('faqs').where({ id: req.params.id }).del();
+    res.redirect('/admin/faqs');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
   }

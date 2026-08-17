@@ -254,60 +254,268 @@
 <script src="js/page-transition.js?v=1" defer></script>
 <script src="js/global-upgrades.min.js?v=3.13" defer></script>
 
-<!-- Live Theme Editor postMessage Listener (Shopify/Webflow Standard) -->
+<!-- Live Theme Editor postMessage Listener & Visual Pinpoint Engine -->
 <script>
-window.addEventListener('message', function(event) {
-  if (!event.data || event.data.type !== 'BH_THEME_UPDATE') return;
-  const theme = event.data.theme;
-  if (!theme) return;
+(function() {
+  let activeOverlays = [];
+  let hideTimeout = null;
 
-  // 1. Update CSS Custom Properties in 0ms real-time
-  const styleEl = document.getElementById('bh-theme-custom-vars');
-  if (styleEl) {
-    styleEl.innerHTML = `
-      :root {
-        --primary: ${theme.primary};
-        --primary-dark: ${theme.primary_dark};
-        --primary-light: ${theme.primary_light};
-        --accent: ${theme.accent};
-        --accent-light: ${theme.accent_light};
-        --accent-dark: ${theme.accent_dark};
-        --font-heading: ${theme.font_heading};
-        --font-body: ${theme.font_body};
-        --radius-sm: ${theme.radius_sm};
-        --radius-md: ${theme.radius_md};
-        --radius-lg: ${theme.radius_lg};
-        --radius-xl: ${theme.radius_xl};
+  function clearHighlight() {
+    if (hideTimeout) clearTimeout(hideTimeout);
+    activeOverlays.forEach(function(el) { el.remove(); });
+    activeOverlays = [];
+  }
+
+  function getElementsForTarget(target) {
+    var primary = null;
+    var all = [];
+    switch (target) {
+      case 'primary':
+      case 'primary_dark':
+      case 'primary_light':
+        primary = document.querySelector('.btn-primary, .page-hero .btn, .navbar-brand, .theme-primary-bg, button[type="submit"]') || document.querySelector('.navbar');
+        all = Array.from(document.querySelectorAll('.btn-primary, .page-hero .btn, .navbar-brand, .theme-primary-bg, button[type="submit"], .stat-card, .footer-col h3, .nav-cta'));
+        break;
+      case 'accent':
+      case 'accent_light':
+      case 'accent_dark':
+        primary = document.querySelector('.page-hero-label, .badge, .property-type, h1 span, .text-accent, .phone-btn') || document.querySelector('.page-hero-title');
+        all = Array.from(document.querySelectorAll('.page-hero-label, .badge, .property-type, h1 span, h2 span, .text-accent, .phone-btn, .trust-signals strong, .cta-badge'));
+        break;
+      case 'heading_font':
+      case 'font_heading':
+        primary = document.querySelector('h1, .page-hero-title') || document.querySelector('h2');
+        all = Array.from(document.querySelectorAll('h1, h2, h3, .page-hero-title, .section-title, .hero-title'));
+        break;
+      case 'body_font':
+      case 'font_body':
+        primary = document.querySelector('.page-hero-text, p.lead, main p') || document.querySelector('p');
+        all = Array.from(document.querySelectorAll('.page-hero-text, p.lead, main p, .container p, .hero-text'));
+        break;
+      case 'announcement':
+      case 'show_announcement':
+      case 'announcement_text':
+      case 'announcement_link':
+      case 'announcement_bg':
+      case 'announcement_color':
+        primary = document.getElementById('bhTopAnnouncement') || document.querySelector('header, .navbar');
+        all = primary ? [primary] : [];
+        break;
+      case 'radius':
+      case 'radius_md':
+      case 'radius_style':
+        primary = document.querySelector('.btn-primary, .btn, .card, .page-hero-label') || document.querySelector('.btn');
+        all = Array.from(document.querySelectorAll('.btn, .card, .page-hero-label, input, .property-card, .stat-card, .btn-primary'));
+        break;
+      case 'preset':
+        primary = document.querySelector('.page-hero, .navbar') || document.body;
+        all = Array.from(document.querySelectorAll('.btn-primary, .page-hero-label, h1 span, .navbar'));
+        break;
+      case 'custom_css':
+        primary = document.querySelector('main, .page-hero') || document.body;
+        all = primary ? [primary] : [];
+        break;
+      default:
+        primary = null;
+        all = [];
+    }
+    return { primary: primary, all: all };
+  }
+
+  function showHighlight(target, label) {
+    clearHighlight();
+    if (!target) return;
+
+    const data = getElementsForTarget(target);
+    const mainEl = data.primary || (data.all.length > 0 ? data.all[0] : null);
+    if (!mainEl) return;
+
+    // 1. Smooth scroll to primary element
+    if (target.includes('announcement')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (typeof mainEl.scrollIntoView === 'function') {
+      mainEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 2. Setup styles for laser pulse & tag
+    const isAccent = target.includes('accent');
+    const borderColor = isAccent ? '#F59E0B' : '#38BDF8';
+    const bgGlow = isAccent ? 'rgba(245, 158, 11, 0.18)' : 'rgba(56, 189, 248, 0.18)';
+    const shadowColor = isAccent ? 'rgba(245, 158, 11, 0.55)' : 'rgba(56, 189, 248, 0.55)';
+
+    if (!document.getElementById('bh-theme-pinpoint-styles')) {
+      const pinStyle = document.createElement('style');
+      pinStyle.id = 'bh-theme-pinpoint-styles';
+      pinStyle.innerHTML = `
+        @keyframes bhLaserPulse {
+          0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 0 15px rgba(56, 189, 248, 0.4); }
+          50% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0), 0 0 25px rgba(56, 189, 248, 0.8); }
+          100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 0 15px rgba(56, 189, 248, 0.4); }
+        }
+        @keyframes bhTagBounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+        .bh-pinpoint-box {
+          position: absolute;
+          pointer-events: none;
+          z-index: 999999;
+          border-radius: 8px;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          animation: bhLaserPulse 1.8s infinite;
+        }
+        .bh-pinpoint-tag {
+          position: absolute;
+          top: -30px;
+          left: 4px;
+          background: #0B1120;
+          color: #38BDF8;
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          padding: 4px 10px;
+          border-radius: 20px;
+          border: 1px solid #38BDF8;
+          box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          white-space: nowrap;
+          animation: bhTagBounce 2s infinite ease-in-out;
+        }
+        .bh-pinpoint-secondary {
+          position: absolute;
+          pointer-events: none;
+          z-index: 999998;
+          border-radius: 6px;
+          border: 2px dashed rgba(56, 189, 248, 0.7);
+          background: rgba(56, 189, 248, 0.08);
+          transition: all 0.2s ease;
+        }
+      `;
+      document.head.appendChild(pinStyle);
+    }
+
+    function createBox(el, isMain) {
+      if (!el) return null;
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 && rect.height === 0) return null;
+
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+      const box = document.createElement('div');
+      box.className = isMain ? 'bh-pinpoint-box' : 'bh-pinpoint-secondary';
+      
+      const pad = 4;
+      box.style.top = (rect.top + scrollTop - pad) + 'px';
+      box.style.left = (rect.left + scrollLeft - pad) + 'px';
+      box.style.width = (rect.width + pad * 2) + 'px';
+      box.style.height = (rect.height + pad * 2) + 'px';
+      box.style.borderColor = borderColor;
+      box.style.background = isMain ? bgGlow : 'rgba(56, 189, 248, 0.06)';
+
+      if (isMain) {
+        box.style.border = '2.5px solid ' + borderColor;
+        box.style.boxShadow = '0 0 0 3px ' + bgGlow + ', 0 0 20px ' + shadowColor;
+        if (label) {
+          const tag = document.createElement('div');
+          tag.className = 'bh-pinpoint-tag';
+          tag.style.borderColor = borderColor;
+          tag.style.color = isAccent ? '#FDE047' : '#38BDF8';
+          tag.innerHTML = '<span style="font-size:12px;">📍</span> <span>' + label + '</span>';
+          box.appendChild(tag);
+        }
       }
-    `;
+
+      document.body.appendChild(box);
+      activeOverlays.push(box);
+      return box;
+    }
+
+    createBox(mainEl, true);
+
+    // Secondary highlights for visible elements
+    if (data.all && data.all.length > 1) {
+      let count = 0;
+      data.all.forEach(function(el) {
+        if (el !== mainEl && count < 5) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top >= -200 && rect.bottom <= window.innerHeight + 400) {
+            createBox(el, false);
+            count++;
+          }
+        }
+      });
+    }
+
+    hideTimeout = setTimeout(clearHighlight, 6000);
   }
 
-  // 2. Update Top Announcement Banner in real-time
-  const banner = document.getElementById('bhTopAnnouncement');
-  const bannerText = document.getElementById('bhAnnouncementText');
-  const bannerLink = document.getElementById('bhAnnouncementLink');
-  if (banner) {
-    banner.style.display = theme.show_announcement ? 'block' : 'none';
-    banner.style.backgroundColor = theme.announcement_bg || '#1E3A8A';
-    banner.style.color = theme.announcement_color || '#FDE047';
-  }
-  if (bannerText && theme.announcement_text) {
-    bannerText.textContent = theme.announcement_text;
-  }
-  if (bannerLink) {
-    bannerLink.style.color = theme.announcement_color || '#FDE047';
-    if (theme.announcement_link) bannerLink.setAttribute('href', theme.announcement_link);
-  }
+  // Window message router
+  window.addEventListener('message', function(event) {
+    if (!event.data) return;
 
-  // 3. Update Custom CSS in real-time
-  let customCssEl = document.getElementById('bh-theme-custom-css');
-  if (!customCssEl) {
-    customCssEl = document.createElement('style');
-    customCssEl.id = 'bh-theme-custom-css';
-    document.head.appendChild(customCssEl);
-  }
-  customCssEl.innerHTML = theme.custom_css || '';
-});
+    if (event.data.type === 'BH_THEME_UPDATE') {
+      const theme = event.data.theme;
+      if (!theme) return;
+
+      // 1. Update CSS Custom Properties in 0ms real-time
+      const styleEl = document.getElementById('bh-theme-custom-vars');
+      if (styleEl) {
+        styleEl.innerHTML = `
+          :root {
+            --primary: ${theme.primary};
+            --primary-dark: ${theme.primary_dark};
+            --primary-light: ${theme.primary_light};
+            --accent: ${theme.accent};
+            --accent-light: ${theme.accent_light};
+            --accent-dark: ${theme.accent_dark};
+            --font-heading: ${theme.font_heading};
+            --font-body: ${theme.font_body};
+            --radius-sm: ${theme.radius_sm};
+            --radius-md: ${theme.radius_md};
+            --radius-lg: ${theme.radius_lg};
+            --radius-xl: ${theme.radius_xl};
+          }
+        `;
+      }
+
+      // 2. Update Top Announcement Banner in real-time
+      const banner = document.getElementById('bhTopAnnouncement');
+      const bannerText = document.getElementById('bhAnnouncementText');
+      const bannerLink = document.getElementById('bhAnnouncementLink');
+      if (banner) {
+        banner.style.display = theme.show_announcement ? 'block' : 'none';
+        banner.style.backgroundColor = theme.announcement_bg || '#1E3A8A';
+        banner.style.color = theme.announcement_color || '#FDE047';
+      }
+      if (bannerText && theme.announcement_text) {
+        bannerText.textContent = theme.announcement_text;
+      }
+      if (bannerLink) {
+        bannerLink.style.color = theme.announcement_color || '#FDE047';
+        if (theme.announcement_link) bannerLink.setAttribute('href', theme.announcement_link);
+      }
+
+      // 3. Update Custom CSS in real-time
+      let customCssEl = document.getElementById('bh-theme-custom-css');
+      if (!customCssEl) {
+        customCssEl = document.createElement('style');
+        customCssEl.id = 'bh-theme-custom-css';
+        document.head.appendChild(customCssEl);
+      }
+      customCssEl.innerHTML = theme.custom_css || '';
+    } else if (event.data.type === 'BH_THEME_HIGHLIGHT') {
+      showHighlight(event.data.target, event.data.label);
+    } else if (event.data.type === 'BH_THEME_CLEAR_HIGHLIGHT') {
+      clearHighlight();
+    }
+  });
+
+  document.addEventListener('click', clearHighlight);
+})();
 </script>
 {% block scripts_extra %}{% endblock %}
 </body>
