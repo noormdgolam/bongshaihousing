@@ -88,6 +88,9 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+.bh-ai-toggle-btn[hidden] {
+  display: none;
+}
 .bh-ai-toggle-btn {
   display: flex;
   align-items: center;
@@ -537,11 +540,13 @@
     if (shouldOpen) {
       chatBox.removeAttribute('hidden');
       toggleBtn.setAttribute('aria-expanded', 'true');
+      toggleBtn.setAttribute('hidden', '');
       input.focus();
       scrollBottom();
     } else {
       chatBox.setAttribute('hidden', '');
       toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.removeAttribute('hidden');
     }
   }
 

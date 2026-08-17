@@ -1,0 +1,22 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Admin Users{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Admin Users</h1>{% endblock %}
+{% block content %}
+<div class="toolbar"><div></div><a href="/admin/users/new" class="btn btn-primary">+ New User</a></div>
+<table>
+  <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Last Login</th><th></th></tr></thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.name }}</td>
+      <td>{{ u.email }}</td>
+      <td><span class="pill {% if u.role == 'admin' %}pill-success{% else %}pill-muted{% endif %}">{{ u.role }}</span></td>
+      <td>{{ u.last_login_at or 'Never' }}</td>
+      <td><a href="/admin/users/{{ u.id }}/edit">Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" style="text-align:center; color:var(--grey-500);">No users.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

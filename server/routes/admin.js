@@ -652,4 +652,109 @@ router.get('/admin/theme-editor/export', async (req, res) => {
   res.send(JSON.stringify(theme, null, 2));
 });
 
+// ---- Admin Users (role-gated: only 'admin' role can manage accounts) ----
+
+const bcrypt = require('bcryptjs');
+const requireRole = require('../middleware/requireRole');
+
+router.get('/admin/users', requireRole('admin', 'superadmin'), async (req, res) => {
+  const users = await db('admin_users').select('id', 'email', 'name', 'role', 'last_login_at', 'created_at').orderBy('created_at');
+  res.render('admin/users/list.njk', adminVars(req, { users }));
+});
+
+router.get('/admin/users/new', requireRole('admin', 'superadmin'), (req, res) => {
+  res.render('admin/users/form.njk', adminVars(req, { user: null, error: null }));
+});
+
+router.post('/admin/users', requireRole('admin', 'superadmin'), async (req, res) => {
+  const { email, name, role, password } = req.body;
+  if (!password || password.length < 8) {
+    return res.status(400).render('admin/users/form.njk', adminVars(req, { user: req.body, error: 'Password must be at least 8 characters.' }));
+  }
+  try {
+    const password_hash = await bcrypt.hash(password, 12);
+    const [id] = await db('admin_users').insert({ email, name, role: role || 'editor', password_hash });
+    res.redirect(`/admin/users/${id}/edit`);
+  } catch (err) {
+    res.status(400).render('admin/users/form.njk', adminVars(req, { user: req.body, error: err.message }));
+  }
+});
+
+router.get('/admin/users/:id/edit', requireRole('admin', 'superadmin'), async (req, res) => {
+  const user = await db('admin_users').where({ id: req.params.id }).first();
+  if (!user) return res.status(404).send('Not found');
+  res.render('admin/users/form.njk', adminVars(req, { user, error: null }));
+});
+
+router.post('/admin/users/:id', requireRole('admin', 'superadmin'), async (req, res) => {
+  const { email, name, role, password } = req.body;
+  const update = { email, name, role: role || 'editor', updated_at: db.fn.now() };
+  if (password && password.length > 0) {
+    if (password.length < 8) {
+      const user = await db('admin_users').where({ id: req.params.id }).first();
+      return res.status(400).render('admin/users/form.njk', adminVars(req, { user: { ...user, ...req.body }, error: 'Password must be at least 8 characters.' }));
+    }
+    update.password_hash = await bcrypt.hash(password, 12);
+  }
+  await db('admin_users').where({ id: req.params.id }).update(update);
+  res.redirect(`/admin/users/${req.params.id}/edit`);
+});
+
+router.post('/admin/users/:id/delete', requireRole('admin', 'superadmin'), async (req, res) => {
+  if (Number(req.params.id) === req.session.adminUserId) {
+    return res.status(400).send('You cannot delete your own account while logged in as it.');
+  }
+  const [{ count }] = await db('admin_users').count({ count: '*' });
+  if (Number(count) <= 1) {
+    return res.status(400).send('Cannot delete the last remaining admin account.');
+  }
+  await db('admin_users').where({ id: req.params.id }).del();
+  res.redirect('/admin/users');
+});
+
+// ---- Media Library ----
+// Browses images/uploads/ (everything the admin panel's own file-upload
+// widgets save to) and cross-references product/category/project image
+// columns to flag which files are actually still referenced vs orphaned
+// (safe to delete - e.g. after replacing a product's photo).
+
+router.get('/admin/media', async (req, res) => {
+  let files = [];
+  try {
+    files = fs.readdirSync(UPLOADS_DIR)
+      .filter((f) => !f.startsWith('.'))
+      .map((f) => {
+        const stat = fs.statSync(path.join(UPLOADS_DIR, f));
+        return { filename: f, path: `images/uploads/${f}`, size: stat.size, mtime: stat.mtime };
+      })
+      .sort((a, b) => b.mtime - a.mtime);
+  } catch (err) {
+    console.error('Media library read error:', err.message);
+  }
+
+  const [productImages, categoryImages, projectImages] = await Promise.all([
+    db('products').whereNotNull('main_image').pluck('main_image'),
+    db('categories').whereNotNull('hero_image').pluck('hero_image'),
+    db('projects').whereNotNull('image').pluck('image'),
+  ]);
+  const inUse = new Set([...productImages, ...categoryImages, ...projectImages]);
+
+  for (const f of files) {
+    f.inUse = inUse.has(f.path);
+  }
+
+  res.render('admin/media/list.njk', adminVars(req, { files, unusedCount: files.filter((f) => !f.inUse).length }));
+});
+
+router.post('/admin/media/:filename/delete', async (req, res) => {
+  const filename = path.basename(req.params.filename); // strip any path traversal
+  const filePath = path.join(UPLOADS_DIR, filename);
+  try {
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  } catch (err) {
+    console.error('Media delete error:', err.message);
+  }
+  res.redirect('/admin/media');
+});
+
 module.exports = router;
