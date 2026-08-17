@@ -1,318 +1,506 @@
 {% extends "admin-layout.njk" %}
-{% block title %}Themes Directory — Bongshai Housing{% endblock %}
+{% block title %}Themes — Bongshai Housing{% endblock %}
+
 {% block header %}
-<div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px;">
-  <div>
-    <h1 style="font-size:1.2rem; font-weight:800; margin:0; color:var(--grey-900);">🎭 WordPress-Style Themes Directory</h1>
-    <div style="font-size:0.82rem; color:var(--grey-500); margin-top:2px;">
-      6 ThemeForest-tier structural archetypes &bull; 24 curated design packages with bespoke typography &amp; layouts
-    </div>
-  </div>
-  <div style="display:flex; gap:8px;">
-    <a href="/admin/theme-editor" class="btn btn-primary" style="font-size:0.82rem; padding:6px 14px;">
-      ⚡ Open Elementor Studio Pro →
-    </a>
+<div class="wp-themes-header">
+  <div style="display:flex; align-items:center; gap:16px;">
+    <h1 style="font-size:1.4rem; font-weight:700; margin:0; color:#1d2327;">Themes</h1>
+    <a href="/admin/theme-editor" class="btn-wp-add">Add Theme</a>
   </div>
 </div>
 {% endblock %}
 
 {% block content %}
 
+<!-- WordPress Banner Notice -->
+<div class="wp-notice" id="wpNotice">
+  <div style="display:flex; align-items:center; gap:12px;">
+    <span style="font-size:1.3rem;">⭐</span>
+    <span style="font-size:0.88rem; color:#1d2327;">
+      <strong>AI Studio Just Landed:</strong> Elementor Pro-grade visual theme customizer with real-time 0ms WYSIWYG preview! 
+      <a href="/admin/theme-editor" style="color:#2271b1; text-decoration:underline; font-weight:600; margin-left:4px;">Open Studio Pro →</a>
+    </span>
+  </div>
+  <button type="button" class="wp-notice-dismiss" onclick="document.getElementById('wpNotice').style.display='none';" title="Dismiss notice">✕</button>
+</div>
+
 {% if activated %}
-<div class="card" style="background:#ecfdf5; border-color:#a7f3d0; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;">
+<div class="card" style="background:#ecfdf5; border-color:#a7f3d0; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; border-radius:4px;">
   <div style="display:flex; align-items:center; gap:10px; color:#065f46; font-weight:700; font-size:0.88rem;">
     <span style="font-size:1.2rem;">✅</span>
     <span>Theme "<strong>{{ activatedThemeName or 'Selected Theme' }}</strong>" successfully activated and published live!</span>
   </div>
-  <a href="/" target="_blank" class="btn" style="background:#059669; color:white; font-size:0.78rem; padding:4px 10px;">View Live Site ↗</a>
+  <a href="/" target="_blank" class="btn" style="background:#059669; color:white; font-size:0.78rem; padding:4px 10px; border-radius:3px;">View Live Site ↗</a>
 </div>
 {% endif %}
 
-<!-- 1. Active Theme Spotlight Card -->
-<div class="card" style="margin-bottom:24px; padding:20px; border-left:5px solid var(--primary); background:linear-gradient(to right, rgba(30,64,175,0.03), transparent);">
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
-    
-    <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
-      <!-- Active Theme Swatch Box -->
-      <div style="width:130px; height:90px; border-radius:8px; background:{{ currentTheme.bg_color or '#ffffff' }}; border:2px solid var(--grey-300); box-shadow:0 4px 12px rgba(0,0,0,0.08); padding:8px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="width:12px; height:12px; border-radius:50%; background:{{ currentTheme.primary or '#1E40AF' }};"></span>
-          <span style="width:12px; height:12px; border-radius:50%; background:{{ currentTheme.accent or '#EAB308' }};"></span>
-          <span style="width:12px; height:12px; border-radius:50%; background:{{ currentTheme.surface_color or '#f8fafc' }}; border:1px solid #ccc;"></span>
-        </div>
-        <div style="font-size:0.65rem; font-weight:800; color:{{ currentTheme.text_color or '#0f172a' }}; background:rgba(0,0,0,0.04); padding:2px 4px; border-radius:4px; text-align:center;">
-          {{ currentTheme.font_heading or 'Inter' }}
-        </div>
-        <div style="height:4px; border-radius:2px; background:linear-gradient(to right, {{ currentTheme.primary or '#1E40AF' }}, {{ currentTheme.accent or '#EAB308' }});"></div>
-      </div>
+<!-- Top Filter & Search Bar (WordPress Style) -->
+<div class="wp-toolbar">
+  <div class="wp-filter-links">
+    <button type="button" class="wp-filter-link active" data-filter="all">All <span class="count">(24)</span></button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="light">☀️ Light <span class="count">(12)</span></button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="dark">🌙 Dark <span class="count">(12)</span></button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="catalog-first">📦 Catalog-First</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="trust-first">🛡️ Trust-First</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="story-process">🔨 Story-Process</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="broken-grid">✨ Broken-Grid</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="stats-minimal">📊 Stats-Led</button>
+  </div>
 
-      <!-- Active Theme Info -->
-      <div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span class="pill pill-success" style="font-size:0.72rem; font-weight:800; text-transform:uppercase;">● ACTIVE THEME</span>
-          <span class="pill pill-muted" style="font-size:0.72rem;">{{ '🌙 Dark Mode' if currentTheme.is_dark else '☀️ Light Mode' }}</span>
-          <span class="pill" style="font-size:0.72rem; background:#eff6ff; color:#1d4ed8; font-weight:700;">📐 {{ currentTheme.archetype | replace('-', ' ') | title or 'Catalog First' }}</span>
-        </div>
-        <h2 style="font-size:1.3rem; font-weight:800; color:var(--grey-900); margin:4px 0 2px;">{{ currentTheme.name or 'Bongshai Royal' }}</h2>
-        <div style="font-size:0.82rem; color:var(--grey-600); max-width:600px;">
-          {{ currentTheme.description or 'Executive architectural steel theme tailored for pre-engineered buildings and industrial EPC developments.' }}
-        </div>
-        <div style="font-size:0.75rem; color:var(--grey-500); margin-top:6px;">
-          Heading Font: <strong>{{ currentTheme.font_heading }}</strong> &bull; Body: <strong>{{ currentTheme.font_body }}</strong> &bull; Archetype: <strong>{{ currentTheme.archetype or 'catalog-first' }}</strong>
-        </div>
-      </div>
-    </div>
-
-    <!-- Active Theme CTAs -->
-    <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
-      <a href="/admin/theme-editor" class="btn btn-primary" style="font-size:0.88rem; padding:8px 16px; font-weight:700;">
-        ⚡ Customize in Elementor Studio Pro →
-      </a>
-      <div style="font-size:0.75rem; color:var(--grey-500);">Live 0ms WYSIWYG Editor</div>
-    </div>
-
+  <div class="wp-search-box">
+    <label for="themeSearch" style="font-size:0.85rem; color:#50575e; margin-right:8px;">Search installed themes</label>
+    <input type="search" id="themeSearch" class="wp-search-input" placeholder="">
   </div>
 </div>
 
-<!-- 2. Filter Tabs & Search Bar -->
-<div class="card" style="margin-bottom:20px; padding:12px 16px;">
-  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-    
-    <!-- Filter Tabs -->
-    <div style="display:flex; gap:6px; flex-wrap:wrap;">
-      <button type="button" class="btn btn-tab active" data-filter="all">All (24)</button>
-      <button type="button" class="btn btn-tab" data-filter="light">☀️ Light (12)</button>
-      <button type="button" class="btn btn-tab" data-filter="dark">🌙 Dark (12)</button>
-      <button type="button" class="btn btn-tab" data-filter="catalog-first">📦 Catalog-First (4)</button>
-      <button type="button" class="btn btn-tab" data-filter="trust-first">🛡️ Trust-First (4)</button>
-      <button type="button" class="btn btn-tab" data-filter="story-process">🔨 Story-Process (4)</button>
-      <button type="button" class="btn btn-tab" data-filter="broken-grid">✨ Broken-Grid (4)</button>
-      <button type="button" class="btn btn-tab" data-filter="stats-minimal">📊 Stats-Led (4)</button>
-      <button type="button" class="btn btn-tab" data-filter="mobile-priority">📱 Mobile-Priority (4)</button>
-    </div>
+<!-- WordPress Themes Grid -->
+<div class="wp-themes-grid" id="wpThemesGrid">
 
-    <!-- Search Box -->
-    <div style="min-width:240px;">
-      <input type="text" id="themeSearch" placeholder="🔍 Search themes by name, archetype, niche..." class="form-control" style="font-size:0.82rem; padding:6px 12px; border-radius:20px;">
-    </div>
-
-  </div>
-</div>
-
-<!-- 3. Themes Gallery Grid (24 Themes with Archetype Schematics) -->
-<div class="themes-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(295px, 1fr)); gap:20px;">
   {% for slug, t in presets %}
   {% set isActive = (currentTheme.name == t.name) or (currentTheme.primary == t.primary and currentTheme.bg_color == t.bg_color) %}
-  <div class="card theme-card {% if isActive %}is-active-card{% endif %}" 
+  
+  <div class="wp-theme-card {% if isActive %}is-active-theme{% endif %}"
        data-slug="{{ slug }}"
        data-name="{{ t.name | lower }}"
        data-mode="{{ t.mode or ('dark' if t.is_dark else 'light') }}"
        data-archetype="{{ t.archetype or 'catalog-first' }}"
-       data-category="{{ t.category or 'commercial' }}"
-       data-desc="{{ t.description | lower }}"
-       style="margin:0; padding:0; display:flex; flex-direction:column; overflow:hidden; border-radius:10px; border:1px solid {% if isActive %}var(--primary){% else %}var(--grey-200){% endif %}; position:relative; transition:all 0.2s ease;">
+       data-desc="{{ t.description | lower }}">
     
-    <!-- Active Ribbon -->
+    <!-- Screenshot / Preview Frame -->
+    <div class="wp-theme-screenshot" style="background:{{ t.bg_color or '#ffffff' }}; color:{{ t.text_color or '#0f172a' }};">
+      
+      <!-- Top mini header bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-bottom:1px solid {% if t.is_dark %}rgba(255,255,255,0.08){% else %}rgba(0,0,0,0.06){% endif %};">
+        <span style="font-size:0.65rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.primary }};">BONGSHAI</span>
+        <div style="display:flex; gap:6px; font-size:0.5rem; color:{{ t.text_muted }};">
+          <span>Home</span>
+          <span>Models</span>
+          <span>Projects</span>
+          <span>Contact</span>
+        </div>
+      </div>
+
+      <!-- Hero & Archetype Showcase Area -->
+      <div style="padding:14px 12px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+        
+        {% if t.archetype == 'broken-grid' %}
+        <!-- Broken Grid Asymmetric Layout -->
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="flex:1.2;">
+            <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; line-height:1.2; color:{{ t.text_color }};">
+              {{ t.name }}
+            </div>
+            <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:4px; line-height:1.3;">
+              Asymmetric broken-grid editorial architecture.
+            </div>
+            <span style="display:inline-block; margin-top:6px; background:{{ t.primary }}; color:white; font-size:0.5rem; font-weight:700; padding:2px 6px; border-radius:3px;">Explore</span>
+          </div>
+          <div style="flex:0.8; height:60px; background:linear-gradient(135deg, {{ t.primary }}, {{ t.accent }}); border-radius:4px; opacity:0.85; display:flex; align-items:center; justify-content:center; color:white; font-size:0.55rem; font-weight:700; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+            Project Frame
+          </div>
+        </div>
+
+        {% elif t.archetype == 'trust-first' %}
+        <!-- Trust First Layout -->
+        <div>
+          <div style="text-align:center;">
+            <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }};">
+              {{ t.name }}
+            </div>
+            <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:2px;">
+              ISO 9001:2015 &bull; BNBC 2020 Seismic Certified
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:8px;">
+            <div style="background:rgba(234,179,8,0.15); border:1px solid {{ t.accent }}; border-radius:3px; padding:3px; font-size:0.48rem; text-align:center; font-weight:700; color:{{ t.accent }};">BNBC 2020</div>
+            <div style="background:rgba(30,64,175,0.15); border:1px solid {{ t.primary }}; border-radius:3px; padding:3px; font-size:0.48rem; text-align:center; font-weight:700; color:{{ t.primary }};">500+ Builds</div>
+            <div style="background:rgba(16,185,129,0.15); border:1px solid #10B981; border-radius:3px; padding:3px; font-size:0.48rem; text-align:center; font-weight:700; color:#10B981;">★★★★★ 5.0</div>
+          </div>
+        </div>
+
+        {% elif t.archetype == 'story-process' %}
+        <!-- Story Process Layout -->
+        <div>
+          <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }};">
+            {{ t.name }}
+          </div>
+          <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:2px;">4-Stage 45-60 Day Turnkey Build Timeline</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; background:{{ t.surface_color }}; padding:6px 8px; border-radius:4px; margin-top:8px; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %};">
+            <span style="font-size:0.52rem; font-weight:800; background:{{ t.primary }}; color:white; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">1</span>
+            <span style="height:2px; flex:1; background:{{ t.primary }}; margin:0 3px;"></span>
+            <span style="font-size:0.52rem; font-weight:800; background:{{ t.primary }}; color:white; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">2</span>
+            <span style="height:2px; flex:1; background:{{ t.accent }}; margin:0 3px;"></span>
+            <span style="font-size:0.52rem; font-weight:800; background:{{ t.accent }}; color:black; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">3</span>
+            <span style="height:2px; flex:1; background:#10B981; margin:0 3px;"></span>
+            <span style="font-size:0.52rem; font-weight:800; background:#10B981; color:white; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">✓</span>
+          </div>
+        </div>
+
+        {% elif t.archetype == 'stats-minimal' %}
+        <!-- Stats Minimal Layout -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }}; text-transform:uppercase;">{{ t.name }}</span>
+            <span style="font-size:0.48rem; color:{{ t.primary }}; font-weight:700;">HEAVY METALLURGY</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:3px; margin-top:8px;">
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.text_color }};">64</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Districts</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.text_color }};">500+</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Builds</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.text_color }};">20+</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Years</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.accent }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.accent }};">45d</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Turnkey</div></div>
+          </div>
+        </div>
+
+        {% else %}
+        <!-- Catalog First Layout -->
+        <div>
+          <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }};">
+            {{ t.name }}
+          </div>
+          <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:2px;">Steel Models &amp; Floor Area Matrix</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:8px;">
+            <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:4px; text-align:center;"><div style="font-size:0.52rem; font-weight:700; color:{{ t.primary }};">BH-SB</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">1,400 sqft</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:4px; text-align:center;"><div style="font-size:0.52rem; font-weight:700; color:{{ t.primary }};">BH-DX</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">2,400 sqft</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:4px; text-align:center;"><div style="font-size:0.52rem; font-weight:700; color:{{ t.primary }};">PEB-SHED</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">10k sqft</div></div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <!-- Color swatch dots footer -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 12px; border-top:1px solid {% if t.is_dark %}rgba(255,255,255,0.08){% else %}rgba(0,0,0,0.06){% endif %}; background:{{ t.surface_color }};">
+        <div style="display:flex; gap:5px;">
+          <span style="width:10px; height:10px; border-radius:50%; background:{{ t.primary }};" title="Primary: {{ t.primary }}"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:{{ t.accent }};" title="Accent: {{ t.accent }}"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:{{ t.bg_color }}; border:1px solid #888;" title="Canvas: {{ t.bg_color }}"></span>
+        </div>
+        <span style="font-size:0.6rem; color:{{ t.text_muted }}; font-weight:600;">{{ t.font_heading }}</span>
+      </div>
+
+    </div>
+
+    <!-- Active vs Inactive Bottom Footer -->
     {% if isActive %}
-    <div style="position:absolute; top:10px; right:10px; z-index:10; background:var(--primary); color:white; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:20px; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
-      ✓ ACTIVE
+    <!-- Active Theme Blue Bar (Exact WordPress Layout) -->
+    <div class="wp-active-footer">
+      <span class="wp-active-label">Active: {{ t.name }}</span>
+      <a href="/admin/theme-editor" class="wp-btn-customize">Customize</a>
+    </div>
+    {% else %}
+    <!-- Inactive Theme Standard Footer -->
+    <div class="wp-inactive-footer">
+      <span class="wp-theme-title">{{ t.name }}</span>
+    </div>
+
+    <!-- Hover Actions Overlay -->
+    <div class="wp-theme-overlay">
+      <form method="post" action="/admin/themes/activate/{{ slug }}" style="margin:0;">
+        <button type="submit" class="wp-btn-activate">⚡ Activate</button>
+      </form>
+      <a href="/admin/theme-editor?preset={{ slug }}" class="wp-btn-preview">🎨 Live Preview</a>
     </div>
     {% endif %}
 
-    <!-- Theme Visual Preview Mockup with Structural Wireframe Schematic -->
-    <div style="height:155px; background:{{ t.bg_color or '#ffffff' }}; position:relative; padding:10px 12px; display:flex; flex-direction:column; justify-content:space-between; border-bottom:1px solid var(--grey-200); overflow:hidden;">
-      
-      <!-- Mock Announcement Bar -->
-      <div style="display:flex; justify-content:space-between; align-items:center; background:{{ t.announcement_bg or t.primary_dark }}; padding:2px 6px; border-radius:3px;">
-        <span style="font-size:0.55rem; color:{{ t.announcement_color or '#ffffff' }}; font-weight:700;">⚡ BONGSHAI STEEL &bull; 45-60 DAYS</span>
-        <span style="width:5px; height:5px; border-radius:50%; background:{{ t.accent or '#EAB308' }};"></span>
-      </div>
-
-      <!-- ─── ARCHETYPE SCHEMATICS ─── -->
-
-      {% if t.archetype == 'broken-grid' %}
-      <!-- 1. Broken-Grid Schematic: Asymmetric split hero + overlapping floating cards -->
-      <div style="display:flex; gap:6px; height:78px; align-items:center;">
-        <div style="flex:1.2; background:{{ t.surface_color or '#f8fafc' }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:6px; padding:6px; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
-          <div style="font-size:0.65rem; font-weight:800; color:{{ t.text_color or '#0f172a' }}; font-family:{{ t.font_heading }}; line-height:1.1;">{{ t.name }}</div>
-          <div style="display:flex; gap:4px; margin-top:2px;">
-            <span style="background:{{ t.primary }}; color:white; font-size:0.5rem; font-weight:700; padding:1px 4px; border-radius:3px;">Explore</span>
-            <span style="background:rgba(0,0,0,0.05); color:{{ t.text_muted }}; font-size:0.5rem; padding:1px 3px; border-radius:3px;">Quote</span>
-          </div>
-        </div>
-        <div style="flex:0.8; height:100%; display:flex; flex-direction:column; gap:4px;">
-          <div style="flex:1; background:linear-gradient(135deg, {{ t.primary }}, {{ t.primary_dark }}); border-radius:4px; opacity:0.85; display:flex; align-items:center; justify-content:center; color:white; font-size:0.55rem; font-weight:700;">Overlapping</div>
-          <div style="flex:1; background:{{ t.surface_color }}; border:1px dashed {{ t.accent }}; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.5rem; color:{{ t.accent }}; font-weight:700;">Floating Card</div>
-        </div>
-      </div>
-
-      {% elif t.archetype == 'trust-first' %}
-      <!-- 2. Trust-First Schematic: Corporate hero + Trust Badge Strip + Testimonial cards -->
-      <div style="display:flex; flex-direction:column; gap:4px; height:78px; justify-content:center;">
-        <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.08){% endif %}; border-radius:4px; padding:4px 6px; display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.62rem; font-weight:800; color:{{ t.text_color }}; font-family:{{ t.font_heading }};">{{ t.name }}</span>
-          <span style="background:{{ t.primary }}; color:white; font-size:0.48rem; padding:1px 4px; border-radius:2px; font-weight:700;">ISO 9001</span>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:3px;">
-          <div style="background:rgba(234,179,8,0.12); border:1px solid {{ t.accent }}; border-radius:3px; padding:2px; font-size:0.46rem; text-align:center; font-weight:700; color:{{ t.accent }};">BNBC 2020</div>
-          <div style="background:rgba(30,64,175,0.12); border:1px solid {{ t.primary }}; border-radius:3px; padding:2px; font-size:0.46rem; text-align:center; font-weight:700; color:{{ t.primary }};">500+ Projects</div>
-          <div style="background:rgba(16,185,129,0.12); border:1px solid #10B981; border-radius:3px; padding:2px; font-size:0.46rem; text-align:center; font-weight:700; color:#10B981;">★★★★★ 5.0</div>
-        </div>
-      </div>
-
-      {% elif t.archetype == 'story-process' %}
-      <!-- 3. Story-Process Schematic: Hero + 4-Stage timeline sequence -->
-      <div style="display:flex; flex-direction:column; gap:4px; height:78px; justify-content:center;">
-        <div style="font-size:0.62rem; font-weight:800; color:{{ t.text_color }}; font-family:{{ t.font_heading }};">{{ t.name }}</div>
-        <div style="display:flex; align-items:center; justify-content:space-between; background:{{ t.surface_color }}; padding:6px; border-radius:4px; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %};">
-          <span style="font-size:0.5rem; font-weight:800; background:{{ t.primary }}; color:white; width:14px; height:14px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">1</span>
-          <span style="height:2px; flex:1; background:{{ t.primary }}; margin:0 3px;"></span>
-          <span style="font-size:0.5rem; font-weight:800; background:{{ t.primary }}; color:white; width:14px; height:14px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">2</span>
-          <span style="height:2px; flex:1; background:{{ t.primary }}; margin:0 3px;"></span>
-          <span style="font-size:0.5rem; font-weight:800; background:{{ t.accent }}; color:black; width:14px; height:14px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">3</span>
-          <span style="height:2px; flex:1; background:{{ t.accent }}; margin:0 3px;"></span>
-          <span style="font-size:0.5rem; font-weight:800; background:#10B981; color:white; width:14px; height:14px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">✓</span>
-        </div>
-      </div>
-
-      {% elif t.archetype == 'stats-minimal' %}
-      <!-- 4. Stats-Minimal Schematic: Industrial Header + 4 KPI metrics boxes -->
-      <div style="display:flex; flex-direction:column; gap:4px; height:78px; justify-content:center;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.62rem; font-weight:800; text-transform:uppercase; color:{{ t.text_color }}; font-family:{{ t.font_heading }};">{{ t.name }}</span>
-          <span style="font-size:0.5rem; color:{{ t.primary }}; font-weight:700;">HEAVY METALLURGY</span>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:3px;">
-          <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:2px; text-align:center;"><div style="font-size:0.55rem; font-weight:800; color:{{ t.text_color }};">64</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Districts</div></div>
-          <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:2px; text-align:center;"><div style="font-size:0.55rem; font-weight:800; color:{{ t.text_color }};">500+</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Builds</div></div>
-          <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:2px; text-align:center;"><div style="font-size:0.55rem; font-weight:800; color:{{ t.text_color }};">20+</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Years</div></div>
-          <div style="background:{{ t.surface_color }}; border:1px solid {{ t.accent }}; border-radius:2px; padding:2px; text-align:center;"><div style="font-size:0.55rem; font-weight:800; color:{{ t.accent }};">45d</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Turnkey</div></div>
-        </div>
-      </div>
-
-      {% elif t.archetype == 'mobile-priority' %}
-      <!-- 5. Mobile-Priority Schematic: App pill scroller + full width model card -->
-      <div style="display:flex; flex-direction:column; gap:4px; height:78px; justify-content:center;">
-        <div style="display:flex; gap:3px; overflow:hidden;">
-          <span style="background:{{ t.primary }}; color:white; font-size:0.46rem; padding:1px 6px; border-radius:10px; font-weight:700; white-space:nowrap;">All Models</span>
-          <span style="background:{{ t.surface_color }}; color:{{ t.text_muted }}; font-size:0.46rem; padding:1px 5px; border-radius:10px; border:1px solid rgba(0,0,0,0.1); white-space:nowrap;">Simplex</span>
-          <span style="background:{{ t.surface_color }}; color:{{ t.text_muted }}; font-size:0.46rem; padding:1px 5px; border-radius:10px; border:1px solid rgba(0,0,0,0.1); white-space:nowrap;">Duplex</span>
-          <span style="background:{{ t.surface_color }}; color:{{ t.text_muted }}; font-size:0.46rem; padding:1px 5px; border-radius:10px; border:1px solid rgba(0,0,0,0.1); white-space:nowrap;">PEB</span>
-        </div>
-        <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:6px; padding:4px 6px; display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.62rem; font-weight:800; color:{{ t.text_color }}; font-family:{{ t.font_heading }};">{{ t.name }}</span>
-          <span style="background:#25D366; color:white; font-size:0.5rem; font-weight:800; padding:2px 5px; border-radius:4px;">💬 WhatsApp</span>
-        </div>
-      </div>
-
-      {% else %}
-      <!-- 6. Catalog-First Schematic: High-density 3-card catalog grid -->
-      <div style="display:flex; flex-direction:column; gap:4px; height:78px; justify-content:center;">
-        <div style="font-size:0.62rem; font-weight:800; color:{{ t.text_color }}; font-family:{{ t.font_heading }};">{{ t.name }}</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:3px;">
-          <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:3px; text-align:center;"><div style="font-size:0.5rem; font-weight:700; color:{{ t.primary }};">BH-SB</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">1,400 sqft</div></div>
-          <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:3px; text-align:center;"><div style="font-size:0.5rem; font-weight:700; color:{{ t.primary }};">BH-DX</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">2,400 sqft</div></div>
-          <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.12){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:3px; text-align:center;"><div style="font-size:0.5rem; font-weight:700; color:{{ t.primary }};">PEB-SHED</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">10,000 sqft</div></div>
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- Mock Color Palette Swatches Strip -->
-      <div style="display:flex; gap:6px; align-items:center; border-top:1px solid rgba(0,0,0,0.05); padding-top:4px;">
-        <span style="width:12px; height:12px; border-radius:50%; background:{{ t.primary }};" title="Primary: {{ t.primary }}"></span>
-        <span style="width:12px; height:12px; border-radius:50%; background:{{ t.accent }};" title="Accent: {{ t.accent }}"></span>
-        <span style="width:12px; height:12px; border-radius:50%; background:{{ t.surface_color }}; border:1px solid #777;" title="Surface: {{ t.surface_color }}"></span>
-        <span style="width:12px; height:12px; border-radius:50%; background:{{ t.bg_color }}; border:1px solid #777;" title="Background: {{ t.bg_color }}"></span>
-        <span style="font-size:0.6rem; color:{{ t.text_muted }}; font-weight:700; margin-left:auto;">
-          {{ t.font_heading }}
-        </span>
-      </div>
-
-    </div>
-
-    <!-- Theme Info Body -->
-    <div style="padding:14px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
-      
-      <div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <h3 style="font-size:0.95rem; font-weight:800; margin:0; color:var(--grey-900);">{{ t.name }}</h3>
-          <span class="pill" style="font-size:0.65rem; background:{% if t.is_dark %}#1e293b; color:#93c5fd;{% else %}#f1f5f9; color:#475569;{% endif %};">
-            {{ '🌙 Dark' if t.is_dark else '☀️ Light' }}
-          </span>
-        </div>
-
-        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px;">
-          <span class="pill" style="font-size:0.65rem; padding:1px 6px; background:#eff6ff; color:#1d4ed8; font-weight:700;">
-            📐 {{ t.archetype | replace('-', ' ') | title or 'Catalog First' }}
-          </span>
-          <span class="pill pill-muted" style="font-size:0.65rem; padding:1px 6px;">{{ t.category | capitalize }}</span>
-        </div>
-
-        <p style="font-size:0.78rem; color:var(--grey-600); line-height:1.4; margin:0 0 12px;">
-          {{ t.description or 'ThemeForest-tier structural steel construction theme with optimized styling tokens.' }}
-        </p>
-      </div>
-
-      <!-- Action Buttons -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; border-top:1px solid var(--grey-100); padding-top:10px;">
-        <form method="post" action="/admin/themes/activate/{{ slug }}" style="margin:0;">
-          <button type="submit" class="btn {% if isActive %}btn-success{% else %}btn-outline{% endif %}" style="width:100%; font-size:0.75rem; padding:6px 8px; justify-content:center;">
-            {% if isActive %}✓ Active{% else %}⚡ Activate{% endif %}
-          </button>
-        </form>
-
-        <a href="/admin/theme-editor?preset={{ slug }}" class="btn btn-primary" style="font-size:0.75rem; padding:6px 8px; justify-content:center;">
-          🎨 Customize →
-        </a>
-      </div>
-
-    </div>
-
   </div>
   {% endfor %}
+
+  <!-- WordPress "Add Theme" Dashed Card -->
+  <a href="/admin/theme-editor" class="wp-add-theme-card" title="Create New Custom Theme in Studio Pro">
+    <div class="wp-add-theme-circle">+</div>
+    <span class="wp-add-theme-text">Add Theme</span>
+  </a>
+
 </div>
 
 <style>
-  .btn-tab {
-    background: var(--grey-100);
-    border: 1px solid var(--grey-200);
-    color: var(--grey-700);
+  /* ─── WordPress Themes Page Core Styles ─────────────────── */
+  .wp-themes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .btn-wp-add {
+    background: #f6f7f7;
+    color: #2271b1;
+    border: 1px solid #2271b1;
     padding: 5px 12px;
-    font-size: 0.78rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
     font-weight: 600;
-    border-radius: 6px;
+    text-decoration: none;
     cursor: pointer;
     transition: all 0.15s ease;
   }
-  .btn-tab:hover {
-    background: var(--grey-200);
-    color: var(--grey-900);
-  }
-  .btn-tab.active {
-    background: var(--primary);
-    border-color: var(--primary);
+  .btn-wp-add:hover {
+    background: #2271b1;
     color: white;
-    box-shadow: 0 2px 6px rgba(30,64,175,0.3);
   }
-  .theme-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    border-color: var(--primary) !important;
+
+  /* WordPress Banner Notice */
+  .wp-notice {
+    background: white;
+    border-left: 4px solid #72aee6;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 2px;
   }
-  .is-active-card {
-    box-shadow: 0 4px 14px rgba(30,64,175,0.15);
+  .wp-notice-dismiss {
+    background: none;
+    border: none;
+    color: #787c82;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+  }
+  .wp-notice-dismiss:hover { color: #d63638; }
+
+  /* Toolbar (Filter links & Search) */
+  .wp-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dcdcde;
+  }
+  .wp-filter-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .wp-filter-link {
+    background: none;
+    border: none;
+    color: #2271b1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+  .wp-filter-link:hover { color: #135e96; text-decoration: underline; }
+  .wp-filter-link.active { color: #000000; font-weight: 700; text-decoration: none; cursor: default; }
+  .wp-filter-link .count { color: #646970; font-weight: 400; }
+  .wp-filter-links .sep { color: #c3c4c7; }
+
+  .wp-search-box {
+    display: flex;
+    align-items: center;
+  }
+  .wp-search-input {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 0.85rem;
+    width: 220px;
+    background: white;
+    outline: none;
+  }
+  .wp-search-input:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+  }
+
+  /* Themes Grid */
+  .wp-themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 24px;
+  }
+
+  /* Theme Card */
+  .wp-theme-card {
+    background: white;
+    border: 1px solid #dcdcde;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 290px;
+    transition: all 0.2s ease;
+  }
+  .wp-theme-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Theme Screenshot Frame */
+  .wp-theme-screenshot {
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid #dcdcde;
+  }
+
+  /* Active Theme Footer (Royal Blue Bar) */
+  .wp-active-footer {
+    background: #2271b1;
+    color: white;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+  .wp-active-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wp-btn-customize {
+    background: white;
+    color: #2271b1;
+    border: 1px solid white;
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .wp-btn-customize:hover {
+    background: #f0f0f1;
+    color: #135e96;
+  }
+
+  /* Inactive Theme Footer */
+  .wp-inactive-footer {
+    padding: 12px 14px;
+    background: white;
+    margin-top: auto;
+  }
+  .wp-theme-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1d2327;
+  }
+
+  /* Hover Actions Overlay */
+  .wp-theme-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .wp-theme-card:not(.is-active-theme):hover .wp-theme-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .wp-btn-activate {
+    background: #2271b1;
+    color: white;
+    border: 1px solid #2271b1;
+    padding: 7px 16px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .wp-btn-activate:hover {
+    background: #135e96;
+    border-color: #135e96;
+  }
+
+  .wp-btn-preview {
+    background: #f6f7f7;
+    color: #2271b1;
+    border: 1px solid #c3c4c7;
+    padding: 7px 14px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .wp-btn-preview:hover {
+    background: #ffffff;
+    border-color: #2271b1;
+  }
+
+  /* "Add Theme" Dashed Card */
+  .wp-add-theme-card {
+    border: 2px dashed #c3c4c7;
+    background: transparent;
+    border-radius: 3px;
+    min-height: 290px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .wp-add-theme-card:hover {
+    border-color: #2271b1;
+    background: rgba(34, 113, 177, 0.02);
+  }
+  .wp-add-theme-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #787c82;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+  }
+  .wp-add-theme-card:hover .wp-add-theme-circle {
+    background: #2271b1;
+    color: white;
+  }
+  .wp-add-theme-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #50575e;
+  }
+  .wp-add-theme-card:hover .wp-add-theme-text {
+    color: #2271b1;
   }
 </style>
 
 <script>
 (function() {
-  const tabs = document.querySelectorAll('.btn-tab');
+  const filterLinks = document.querySelectorAll('.wp-filter-link');
   const searchInput = document.getElementById('themeSearch');
-  const cards = document.querySelectorAll('.theme-card');
+  const cards = document.querySelectorAll('.wp-theme-card');
 
   function filterThemes() {
-    const activeTab = document.querySelector('.btn-tab.active');
-    const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    const activeLink = document.querySelector('.wp-filter-link.active');
+    const filter = activeLink ? activeLink.getAttribute('data-filter') : 'all';
     const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
 
     cards.forEach(card => {
@@ -338,10 +526,10 @@
     });
   }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+  filterLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      filterLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
       filterThemes();
     });
   });
