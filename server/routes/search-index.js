@@ -29,13 +29,22 @@ router.get('/search-index.json', async (req, res) => {
       return res.json(staticData);
     }
 
-    // Fetch published products, categories, and projects from DB
+    // Fetch published products, categories, and projects from DB. Column
+    // names here must match the real schema in
+    // 20260817000002_create_product_catalog.js - selecting nonexistent
+    // columns (this used to ask for products.meta_title/meta_desc/tagline
+    // and categories.title, none of which exist; products only has title/
+    // description, categories has name/landing_page_slug not title/slug)
+    // throws a real SQL error, which silently fell into the catch below on
+    // every request - meaning this route never actually served live DB
+    // data, only ever the stale static file, for as long as it's existed.
     const products = await db('products')
       .where({ published: true })
-      .select('slug', 'title', 'meta_title', 'meta_desc', 'tagline', 'description');
+      .select('slug', 'title', 'description');
 
     const categories = await db('categories')
-      .select('slug', 'title', 'description');
+      .whereNotNull('landing_page_slug')
+      .select('landing_page_slug', 'name', 'description');
 
     const projects = await db('projects')
       .where({ published: true })
@@ -50,17 +59,17 @@ router.get('/search-index.json', async (req, res) => {
       const url = normalizeUrl(p.slug);
       dbUrls.add(url);
       dbEntries.push({
-        title: p.title || p.meta_title || 'Steel Building Model',
-        desc: p.meta_desc || p.tagline || (p.description ? p.description.slice(0, 160) : ''),
+        title: p.title || 'Steel Building Model',
+        desc: p.description ? p.description.slice(0, 160) : '',
         url,
       });
     }
 
     for (const c of categories) {
-      const url = normalizeUrl(c.slug);
+      const url = normalizeUrl(c.landing_page_slug);
       dbUrls.add(url);
       dbEntries.push({
-        title: `${c.title} | Pre-Engineered Steel Building Bangladesh`,
+        title: `${c.name} | Pre-Engineered Steel Building Bangladesh`,
         desc: c.description ? c.description.slice(0, 160) : '',
         url,
       });
