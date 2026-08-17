@@ -16,7 +16,11 @@ module.exports = function csrfProtection(req, res, next) {
 
   const submitted = req.body && req.body._csrf;
   if (!submitted || submitted !== req.session.csrfSecret) {
-    return res.status(403).type('html').send('<!doctype html><title>Forbidden</title>Invalid or expired form token. Go back, refresh the page, and try again.');
+    const message = 'Your form token expired or didn\'t match (often just means the page was open a while - refresh and try again).';
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(403).json({ success: false, error: message });
+    }
+    return res.status(403).type('html').send(`<!doctype html><title>Forbidden</title>${message}`);
   }
   next();
 };
