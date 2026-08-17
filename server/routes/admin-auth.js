@@ -53,12 +53,26 @@ router.post('/admin/login', async (req, res) => {
   }
 
   loginAttempts.delete(ip);
-  req.session.adminUserId = user.id;
-  req.session.adminName = user.name;
-  req.session.adminRole = user.role;
   await db('admin_users').where({ id: user.id }).update({ last_login_at: db.fn.now() });
 
-  res.redirect('/admin');
+  // Regenerate the session ID on login (not just set new data on the
+  // existing one) - otherwise the cookie a visitor already had before
+  // authenticating stays valid after, the classic session-fixation
+  // pattern. Cheap to close even without a known way to force a session
+  // ID onto a victim's browser today.
+  req.session.regenerate((err) => {
+    if (err) {
+      console.error('Session regenerate failed:', err.message);
+      return res.status(500).render('admin/login.njk', { error: 'Login failed, please try again.' });
+    }
+    req.session.adminUserId = user.id;
+    req.session.adminName = user.name;
+    req.session.adminRole = user.role;
+    req.session.save((saveErr) => {
+      if (saveErr) console.error('Session save failed:', saveErr.message);
+      res.redirect('/admin');
+    });
+  });
 });
 
 router.post('/admin/logout', (req, res) => {
