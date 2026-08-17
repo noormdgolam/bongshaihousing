@@ -121,8 +121,10 @@
               </div>
             </article>
             {% endfor %}
-          {% endif %}
-          {# ── Static project cards (curated, SEO-rich) ─────────────────────── #}
+          {% else %}
+          {# ── Static fallback cards (curated, SEO-rich) - only when the DB has
+               nothing yet, otherwise these rendered a second, duplicate copy of
+               every project alongside the DB loop above ─────────────────────── #}
           <article class="property-card filter-item reveal visible" data-tilt="" data-aos="fade-up" style="--i:0">
             <div class="property-img-wrap">
               <img src="images/projects/completed/bodorgonj_rangpur_1784362445606.webp" srcset="images/projects/completed/bodorgonj_rangpur_1784362445606-400w.webp 400w, images/projects/completed/bodorgonj_rangpur_1784362445606-700w.webp 700w, images/projects/completed/bodorgonj_rangpur_1784362445606.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Completed residential steel building in Bodorgonj, Rangpur" title="Steel building in Rangpur" style="width:100%; height:auto; display:block;" loading="lazy" width="1024" height="1024">
@@ -321,8 +323,9 @@
               <a href="project-the-wave-resort-04.html" class="btn-card-link">View Details</a>
             </div>
           </article>
+          {% endif %}
         </div>
-        
+
       </div>
     </section>
 
