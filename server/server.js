@@ -83,6 +83,12 @@ nunjucksEnv.addFilter('initials', (name) => {
   return (first + last).toUpperCase();
 });
 
+// Footer copyright year - was a client-side <span id="year"> filled by JS
+// after page load; server-rendering it removes the dependency on that
+// script actually running (an earlier JS error elsewhere on the page, or
+// JS disabled entirely, would otherwise leave the copyright line blank).
+nunjucksEnv.addGlobal('currentYear', new Date().getFullYear());
+
 // Global Theme Settings Middleware: injects active design tokens and CSS vars
 const { getThemeSettings, generateCssVariables } = require('./lib/theme');
 app.use(async (req, res, next) => {

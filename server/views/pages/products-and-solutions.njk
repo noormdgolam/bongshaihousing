@@ -364,7 +364,7 @@
 </div>
 </div>
 <div class="footer-bottom">
-<p class="footer-copy">© <span id="year">2025</span> Bongshai Housing Ltd. All Rights Reserved. | Dhaka, Bangladesh</p>
+<p class="footer-copy">© {{ currentYear }} Bongshai Housing Ltd. All Rights Reserved. | Dhaka, Bangladesh</p>
 <p class="footer-copy" style="margin-top:8px;">Part of the Bongshai Group — see also <a href="https://bongshaisteel.com/" target="_blank" rel="noopener" style="color:var(--accent-light); font-weight:700;">Bongshai Steel</a></p>
 <nav aria-label="Legal links" class="footer-legal">
 <a href="privacy-policy.html">Privacy Policy</a>
@@ -378,7 +378,6 @@
 <div class="whatsapp-float-pulse"></div>💬
   </a>
 <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
     const nav = document.getElementById('mainNav');
     window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
     const hamburger = document.getElementById('hamburgerBtn');
