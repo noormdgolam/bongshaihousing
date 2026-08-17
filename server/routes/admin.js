@@ -4,7 +4,6 @@ const express = require('express');
 const multer = require('multer');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
-const { logActivity } = require('../lib/activityLog');
 
 const UPLOADS_DIR = path.join(__dirname, '..', '..', 'images', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
@@ -1077,7 +1076,6 @@ router.post('/admin/team-members/:id/delete', async (req, res) => {
 
 // ---- Visual Theme & Layout Customizer ----
 
-const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME } = require('../lib/theme');
 const pageRegistry = require('../page-registry.json');
 
 router.get('/admin/theme-editor', async (req, res) => {
