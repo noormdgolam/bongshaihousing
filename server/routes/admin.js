@@ -53,6 +53,7 @@ router.get('/admin', async (req, res) => {
   let newLeadCount = { count: 0 };
   let serviceAreaCount = { count: 0 };
   let faqCount = { count: 0 };
+  let teamMemberCount = { count: 0 };
   let recentLeads = [];
 
   if (db) {
@@ -69,6 +70,11 @@ router.get('/admin', async (req, res) => {
       const hasFaqs = await db.schema.hasTable('faqs');
       if (hasFaqs) {
         [faqCount] = await db('faqs').count({ count: '*' });
+      }
+
+      const hasTeam = await db.schema.hasTable('team_members');
+      if (hasTeam) {
+        [teamMemberCount] = await db('team_members').count({ count: '*' });
       }
 
       const hasLeads = await db.schema.hasTable('leads');
@@ -91,6 +97,7 @@ router.get('/admin', async (req, res) => {
       newLeads: newLeadCount?.count || 0,
       serviceAreas: serviceAreaCount?.count || 0,
       faqs: faqCount?.count || 0,
+      teamMembers: teamMemberCount?.count || 0,
     },
     recentLeads,
   }));
@@ -775,6 +782,172 @@ router.post('/admin/faqs/:id/delete', async (req, res) => {
   try {
     await db('faqs').where({ id: req.params.id }).del();
     res.redirect('/admin/faqs');
+  } catch (e) {
+    res.status(400).send('Delete error: ' + e.message);
+  }
+});
+
+// ---- Team Members & Department Leadership Management ----
+
+const TEAM_DEPARTMENTS = [
+  { slug: 'senior-management', label: 'Senior Management', page: 'team-senior-management.html' },
+  { slug: 'engineering', label: 'Engineering Team', page: 'team-engineering.html' },
+  { slug: 'marketing-sales', label: 'Marketing & Sales', page: 'team-marketing-sales.html' },
+  { slug: 'quality-control', label: 'Quality Control', page: 'team-quality-control.html' },
+  { slug: 'skilled-workers', label: 'Skilled Workers', page: 'team-skilled-workers.html' },
+  { slug: 'client-service', label: 'Client Service', page: 'team-client-service.html' },
+];
+
+router.get('/admin/team-members', async (req, res) => {
+  let members = [];
+  const search = (req.query.q || '').trim();
+  const deptFilter = req.query.dept || 'all';
+  const statusFilter = req.query.status || 'all';
+
+  if (db) {
+    try {
+      let query = db('team_members').orderBy('department', 'asc').orderBy('sort_order', 'asc');
+      if (deptFilter && deptFilter !== 'all') {
+        query = query.where({ department: deptFilter });
+      }
+      if (statusFilter === 'published') {
+        query = query.where({ published: true });
+      } else if (statusFilter === 'draft') {
+        query = query.where({ published: false });
+      }
+      if (search) {
+        query = query.where((builder) => {
+          builder.where('name', 'like', `%${search}%`)
+            .orWhere('role', 'like', `%${search}%`)
+            .orWhere('bio', 'like', `%${search}%`);
+        });
+      }
+      members = await query;
+    } catch (err) {
+      console.error('Team members list query error:', err.message);
+    }
+  }
+
+  const publishedCount = members.filter(m => m.published).length;
+
+  res.render('admin/team-members/list.njk', adminVars(req, {
+    members,
+    departments: TEAM_DEPARTMENTS,
+    search,
+    deptFilter,
+    statusFilter,
+    totalCount: members.length,
+    publishedCount,
+  }));
+});
+
+router.get('/admin/team-members/new', (req, res) => {
+  res.render('admin/team-members/form.njk', adminVars(req, {
+    member: { published: true, sort_order: 0, photo: 'images/about-team.webp', department: 'senior-management' },
+    departments: TEAM_DEPARTMENTS,
+    error: null,
+  }));
+});
+
+router.post('/admin/team-members', upload.single('photo_file'), async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { name, role, bio, photo, department, published, sort_order } = req.body;
+  try {
+    if (!name || !name.trim()) throw new Error('Full Name is required');
+    if (!role || !role.trim()) throw new Error('Role / Designation is required');
+
+    let photoPath = photo ? photo.trim().replace(/^\/+/, '') : 'images/about-team.webp';
+    if (req.file) {
+      photoPath = `images/uploads/${req.file.filename}`;
+    }
+
+    let finalSort = parseInt(sort_order, 10);
+    if (isNaN(finalSort)) {
+      const [{ maxSort }] = await db('team_members').where({ department: department || 'senior-management' }).max('sort_order as maxSort');
+      finalSort = (maxSort ?? -1) + 1;
+    }
+
+    await db('team_members').insert({
+      name: name.trim(),
+      role: role.trim(),
+      bio: bio ? bio.trim() : '',
+      photo: photoPath,
+      department: department || 'senior-management',
+      published: published === 'on' || published === true || published === 'true',
+      sort_order: finalSort,
+    });
+
+    logActivity(req, 'create', 'team_member', null, `Added team member: ${name.trim()} (${role.trim()})`);
+    res.redirect('/admin/team-members');
+  } catch (e) {
+    res.render('admin/team-members/form.njk', adminVars(req, {
+      member: req.body,
+      departments: TEAM_DEPARTMENTS,
+      error: e.message,
+    }));
+  }
+});
+
+router.get('/admin/team-members/:id/edit', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const member = await db('team_members').where({ id: req.params.id }).first();
+    if (!member) return res.status(404).send('Team member not found');
+
+    res.render('admin/team-members/form.njk', adminVars(req, {
+      member,
+      departments: TEAM_DEPARTMENTS,
+      error: null,
+    }));
+  } catch (e) {
+    res.status(500).send('Database error: ' + e.message);
+  }
+});
+
+router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { name, role, bio, photo, department, published, sort_order } = req.body;
+  try {
+    if (!name || !name.trim()) throw new Error('Full Name is required');
+    if (!role || !role.trim()) throw new Error('Role / Designation is required');
+
+    let photoPath = photo ? photo.trim().replace(/^\/+/, '') : 'images/about-team.webp';
+    if (req.file) {
+      photoPath = `images/uploads/${req.file.filename}`;
+    }
+
+    let finalSort = parseInt(sort_order, 10);
+    if (isNaN(finalSort)) finalSort = 0;
+
+    await db('team_members').where({ id: req.params.id }).update({
+      name: name.trim(),
+      role: role.trim(),
+      bio: bio ? bio.trim() : '',
+      photo: photoPath,
+      department: department || 'senior-management',
+      published: published === 'on' || published === true || published === 'true',
+      sort_order: finalSort,
+      updated_at: db.fn.now(),
+    });
+
+    logActivity(req, 'update', 'team_member', req.params.id, `Updated team member: ${name.trim()}`);
+    res.redirect('/admin/team-members');
+  } catch (e) {
+    res.render('admin/team-members/form.njk', adminVars(req, {
+      member: { ...req.body, id: req.params.id },
+      departments: TEAM_DEPARTMENTS,
+      error: e.message,
+    }));
+  }
+});
+
+router.post('/admin/team-members/:id/delete', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const member = await db('team_members').where({ id: req.params.id }).first();
+    await db('team_members').where({ id: req.params.id }).del();
+    logActivity(req, 'delete', 'team_member', req.params.id, `Deleted team member: ${member ? member.name : req.params.id}`);
+    res.redirect('/admin/team-members');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
   }

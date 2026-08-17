@@ -127,6 +127,16 @@
           ]
         },
         "review": [
+          {% if dbTestimonials and dbTestimonials.length %}
+          {% for t in dbTestimonials %}
+          {
+            "@type": "Review",
+            "reviewRating": {"@type": "Rating", "ratingValue": "{{ t.rating or 5 }}", "bestRating": "5"},
+            "author": {"@type": "Person", "name": "{{ t.author_name | replace('\"', '\\\"') }}"},
+            "reviewBody": "{{ t.review_text | replace('\"', '\\\"') | replace('\r\n', ' ') | replace('\n', ' ') }}"
+          }{% if not loop.last %},{% endif %}
+          {% endfor %}
+          {% else %}
           {
             "@type": "Review",
             "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
@@ -145,11 +155,12 @@
             "author": {"@type": "Person", "name": "Farhana Rahman"},
             "reviewBody": "From the first 3D mockup to the final handover, the process was seamless. Our two-story steel-framed house looks absolutely gorgeous."
           }
+          {% endif %}
         ],
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "5",
-          "reviewCount": "3",
+          "reviewCount": "{{ dbTestimonials.length if dbTestimonials and dbTestimonials.length else 3 }}",
           "bestRating": "5"
         }
       },
