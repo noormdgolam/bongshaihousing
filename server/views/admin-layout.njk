@@ -73,7 +73,11 @@
       <a href="/admin/projects">🏗️ Projects</a>
       <a href="/admin/service-areas">📍 Service Areas</a>
       <a href="/admin/media">🖼️ Media Library</a>
-      {% if adminRole == 'admin' or adminRole == 'superadmin' %}<a href="/admin/users">👤 Users</a>{% endif %}
+      <a href="/admin/testimonials">💬 Testimonials</a>
+      {% if adminRole == 'admin' or adminRole == 'superadmin' %}
+      <a href="/admin/users">👤 Users</a>
+      <a href="/admin/activity">🕘 Activity Log</a>
+      {% endif %}
     </nav>
   </aside>
   <div class="admin-main">

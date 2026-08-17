@@ -64,12 +64,22 @@ app.use(session({
   },
 }));
 
-nunjucks.configure(path.join(__dirname, 'views'), {
+const nunjucksEnv = nunjucks.configure(path.join(__dirname, 'views'), {
   autoescape: true,
   express: app,
   noCache: process.env.NODE_ENV !== 'production',
 });
 app.set('view engine', 'njk');
+
+// "Mahmudul Hasan" -> "MH" for avatar initials (testimonials, etc.) -
+// first letter of the first and last words, not just the first N chars.
+nunjucksEnv.addFilter('initials', (name) => {
+  if (!name) return '';
+  const words = String(name).trim().split(/\s+/);
+  const first = words[0] ? words[0][0] : '';
+  const last = words.length > 1 ? words[words.length - 1][0] : '';
+  return (first + last).toUpperCase();
+});
 
 // Global Theme Settings Middleware: injects active design tokens and CSS vars
 const { getThemeSettings, generateCssVariables } = require('./lib/theme');

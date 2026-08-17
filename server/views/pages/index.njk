@@ -788,6 +788,22 @@
 <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">Hear directly from homeowners and businesses who built their future with us.</p>
 </div>
 <div class="why-grid stagger" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+{% if dbTestimonials and dbTestimonials.length %}
+  {% set avatarColors = ['var(--primary)', 'var(--primary-light)', 'var(--accent)'] %}
+  {% for t in dbTestimonials %}
+  <div class="why-card reveal glass-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 + 100 }}">
+    <div style="display: flex; gap: 4px; color: #f59e0b; margin-bottom: 12px;">{{ '★' * t.rating }}</div>
+    <p class="why-text" style="font-style: italic;">"{{ t.review_text }}"</p>
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 24px;">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: {{ avatarColors[loop.index0 % 3] }}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: var(--font-heading);">{{ t.author_name | initials }}</div>
+      <div>
+        <h3 style="margin: 0; font-size: 1rem; color: var(--primary-dark);">{{ t.author_name }}</h3>
+        {% if t.author_title %}<span style="font-size: 0.85rem; color: var(--grey-500);">{{ t.author_title }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
   <div class="why-card reveal glass-card" data-aos="fade-up" data-aos-delay="100">
     <div style="display: flex; gap: 4px; color: #f59e0b; margin-bottom: 12px;">★★★★★</div>
     <p class="why-text" style="font-style: italic;">"Bongshai Housing delivered our industrial shed in Gazipur ahead of schedule. The quality of the steel structure is phenomenal and the team was highly professional."</p>
@@ -821,6 +837,7 @@
       </div>
     </div>
   </div>
+{% endif %}
 </div>
 </div>
 </section>

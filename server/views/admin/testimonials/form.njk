@@ -1,0 +1,30 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if testimonial.id %}Edit Testimonial{% else %}New Testimonial{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if testimonial.id %}Edit Testimonial{% else %}New Testimonial{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" action="{% if testimonial.id %}/admin/testimonials/{{ testimonial.id }}{% else %}/admin/testimonials{% endif %}">
+  <div class="form-row"><label for="author_name">Author Name</label><input type="text" id="author_name" name="author_name" value="{{ testimonial.author_name or '' }}" required></div>
+  <div class="form-row"><label for="author_title">Author Title / Location</label><input type="text" id="author_title" name="author_title" value="{{ testimonial.author_title or '' }}" placeholder="e.g. Factory Owner, Gazipur"></div>
+  <div class="form-row">
+    <label for="rating">Rating</label>
+    <select id="rating" name="rating">
+      {% for n in [5,4,3,2,1] %}<option value="{{ n }}" {% if testimonial.rating == n %}selected{% endif %}>{{ n }} star{% if n != 1 %}s{% endif %}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="form-row"><label for="review_text">Review Text</label><textarea id="review_text" name="review_text" required>{{ testimonial.review_text or '' }}</textarea></div>
+  <div class="form-row"><label for="sort_order">Sort Order</label><input type="number" id="sort_order" name="sort_order" value="{{ testimonial.sort_order or 0 }}"></div>
+  <div class="form-row"><label><input type="checkbox" name="published" {% if testimonial.published or not testimonial.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label></div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if testimonial.id %}Save Changes{% else %}Create Testimonial{% endif %}</button>
+    <a href="/admin/testimonials" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+{% if testimonial.id %}
+<form method="post" action="/admin/testimonials/{{ testimonial.id }}/delete" onsubmit="return confirm('Delete this testimonial?');">
+  <button type="submit" class="btn btn-danger">Delete Testimonial</button>
+</form>
+{% endif %}
+{% endblock %}

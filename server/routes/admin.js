@@ -4,6 +4,7 @@ const express = require('express');
 const multer = require('multer');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
+const { logActivity } = require('../lib/activityLog');
 
 const UPLOADS_DIR = path.join(__dirname, '..', '..', 'images', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
@@ -183,6 +184,7 @@ router.post('/admin/leads/:id', async (req, res) => {
       admin_notes: admin_notes || null,
       updated_at: db.fn.now(),
     });
+    await logActivity(req, { action: 'status_change', entityType: 'lead', entityId: req.params.id, summary: `Lead #${req.params.id} status set to "${status || 'new'}"` });
     res.redirect(`/admin/leads/${req.params.id}`);
   } catch (e) {
     res.status(400).send('Update error: ' + e.message);
@@ -193,6 +195,7 @@ router.post('/admin/leads/:id/delete', async (req, res) => {
   if (!db) return res.status(500).send('Database unavailable');
   try {
     await db('leads').where({ id: req.params.id }).del();
+    await logActivity(req, { action: 'delete', entityType: 'lead', entityId: req.params.id, summary: `Deleted lead #${req.params.id}` });
     res.redirect('/admin/leads');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
@@ -266,7 +269,9 @@ router.post('/admin/products/:id', upload.single('main_image_file'), async (req,
 });
 
 router.post('/admin/products/:id/delete', async (req, res) => {
+  const p = await db('products').where({ id: req.params.id }).first();
   await db('products').where({ id: req.params.id }).del();
+  await logActivity(req, { action: 'delete', entityType: 'product', entityId: req.params.id, summary: `Deleted product ${p ? p.model_number : req.params.id}` });
   res.redirect('/admin/products');
 });
 
@@ -398,7 +403,9 @@ router.post('/admin/categories/:id', upload.single('hero_image_file'), async (re
 router.post('/admin/categories/:id/delete', async (req, res) => {
   const inUse = await db('products').where({ category_id: req.params.id }).first();
   if (inUse) return res.status(400).send('Cannot delete a category that still has products. Reassign or delete them first.');
+  const c = await db('categories').where({ id: req.params.id }).first();
   await db('categories').where({ id: req.params.id }).del();
+  await logActivity(req, { action: 'delete', entityType: 'category', entityId: req.params.id, summary: `Deleted category ${c ? c.name : req.params.id}` });
   res.redirect('/admin/categories');
 });
 
@@ -466,7 +473,9 @@ router.post('/admin/api/upload', upload.single('file'), (req, res) => {
 });
 
 router.post('/admin/projects/:id/delete', async (req, res) => {
+  const p = await db('projects').where({ id: req.params.id }).first();
   await db('projects').where({ id: req.params.id }).del();
+  await logActivity(req, { action: 'delete', entityType: 'project', entityId: req.params.id, summary: `Deleted project ${p ? p.title : req.params.id}` });
   res.redirect('/admin/projects');
 });
 
@@ -586,7 +595,9 @@ router.post('/admin/service-areas/:id', async (req, res) => {
 router.post('/admin/service-areas/:id/delete', async (req, res) => {
   if (!db) return res.status(500).send('Database unavailable');
   try {
+    const sa = await db('service_areas').where({ id: req.params.id }).first();
     await db('service_areas').where({ id: req.params.id }).del();
+    await logActivity(req, { action: 'delete', entityType: 'service_area', entityId: req.params.id, summary: `Deleted service area ${sa ? sa.district : req.params.id}` });
     res.redirect('/admin/service-areas');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
@@ -674,6 +685,7 @@ router.post('/admin/users', requireRole('admin', 'superadmin'), async (req, res)
   try {
     const password_hash = await bcrypt.hash(password, 12);
     const [id] = await db('admin_users').insert({ email, name, role: role || 'editor', password_hash });
+    await logActivity(req, { action: 'create', entityType: 'user', entityId: id, summary: `Created user ${email} (${role || 'editor'})` });
     res.redirect(`/admin/users/${id}/edit`);
   } catch (err) {
     res.status(400).render('admin/users/form.njk', adminVars(req, { user: req.body, error: err.message }));
@@ -697,6 +709,7 @@ router.post('/admin/users/:id', requireRole('admin', 'superadmin'), async (req, 
     update.password_hash = await bcrypt.hash(password, 12);
   }
   await db('admin_users').where({ id: req.params.id }).update(update);
+  await logActivity(req, { action: 'update', entityType: 'user', entityId: req.params.id, summary: `Updated user ${email} (role: ${role || 'editor'}${update.password_hash ? ', password reset' : ''})` });
   res.redirect(`/admin/users/${req.params.id}/edit`);
 });
 
@@ -708,7 +721,9 @@ router.post('/admin/users/:id/delete', requireRole('admin', 'superadmin'), async
   if (Number(count) <= 1) {
     return res.status(400).send('Cannot delete the last remaining admin account.');
   }
+  const u = await db('admin_users').where({ id: req.params.id }).first();
   await db('admin_users').where({ id: req.params.id }).del();
+  await logActivity(req, { action: 'delete', entityType: 'user', entityId: req.params.id, summary: `Deleted user ${u ? u.email : req.params.id}` });
   res.redirect('/admin/users');
 });
 
@@ -754,7 +769,79 @@ router.post('/admin/media/:filename/delete', async (req, res) => {
   } catch (err) {
     console.error('Media delete error:', err.message);
   }
+  await logActivity(req, { action: 'delete', entityType: 'media', summary: `Deleted upload ${filename}` });
   res.redirect('/admin/media');
+});
+
+// ---- Testimonials ----
+// Homepage's client reviews (visible section + JSON-LD structured data)
+// were hardcoded - and the company has essentially no independent
+// third-party review presence to fall back on (confirmed via a direct
+// web-search pass), so this is the actual social-proof source of truth
+// now, not a nice-to-have.
+
+router.get('/admin/testimonials', async (req, res) => {
+  let testimonials = [];
+  try {
+    testimonials = await db('testimonials').orderBy('sort_order');
+  } catch (err) {
+    console.error('Testimonials list error:', err.message);
+    return res.status(500).send('Database unavailable: ' + err.message);
+  }
+  res.render('admin/testimonials/list.njk', adminVars(req, { testimonials }));
+});
+
+router.get('/admin/testimonials/new', (req, res) => {
+  res.render('admin/testimonials/form.njk', adminVars(req, { testimonial: null, error: null }));
+});
+
+router.post('/admin/testimonials', async (req, res) => {
+  const { author_name, author_title, rating, review_text, published, sort_order } = req.body;
+  try {
+    const [id] = await db('testimonials').insert({
+      author_name, author_title: author_title || null, rating: rating || 5, review_text,
+      published: published === 'on', sort_order: sort_order || 0,
+    });
+    await logActivity(req, { action: 'create', entityType: 'testimonial', entityId: id, summary: `Added testimonial from ${author_name}` });
+    res.redirect(`/admin/testimonials/${id}/edit`);
+  } catch (err) {
+    res.status(400).render('admin/testimonials/form.njk', adminVars(req, { testimonial: req.body, error: err.message }));
+  }
+});
+
+router.get('/admin/testimonials/:id/edit', async (req, res) => {
+  const testimonial = await db('testimonials').where({ id: req.params.id }).first();
+  if (!testimonial) return res.status(404).send('Not found');
+  res.render('admin/testimonials/form.njk', adminVars(req, { testimonial, error: null }));
+});
+
+router.post('/admin/testimonials/:id', async (req, res) => {
+  const { author_name, author_title, rating, review_text, published, sort_order } = req.body;
+  await db('testimonials').where({ id: req.params.id }).update({
+    author_name, author_title: author_title || null, rating: rating || 5, review_text,
+    published: published === 'on', sort_order: sort_order || 0, updated_at: db.fn.now(),
+  });
+  res.redirect(`/admin/testimonials/${req.params.id}/edit`);
+});
+
+router.post('/admin/testimonials/:id/delete', async (req, res) => {
+  const t = await db('testimonials').where({ id: req.params.id }).first();
+  await db('testimonials').where({ id: req.params.id }).del();
+  await logActivity(req, { action: 'delete', entityType: 'testimonial', entityId: req.params.id, summary: `Deleted testimonial from ${t ? t.author_name : req.params.id}` });
+  res.redirect('/admin/testimonials');
+});
+
+// ---- Activity Log ----
+
+router.get('/admin/activity', async (req, res) => {
+  let entries = [];
+  try {
+    entries = await db('activity_log').orderBy('created_at', 'desc').limit(200);
+  } catch (err) {
+    console.error('Activity log list error:', err.message);
+    return res.status(500).send('Database unavailable: ' + err.message);
+  }
+  res.render('admin/activity/list.njk', adminVars(req, { entries }));
 });
 
 module.exports = router;

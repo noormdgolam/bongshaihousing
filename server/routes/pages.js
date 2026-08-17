@@ -146,8 +146,16 @@ for (const [urlPath, meta] of Object.entries(registry)) {
 // failed install even when npm install actually succeeded fine.
 if (registry['/index.html']) {
   const homeMeta = registry['/index.html'];
-  router.get('/', (req, res) => {
-    res.render(homeMeta.template, renderVars(homeMeta));
+  router.get('/', async (req, res) => {
+    let dbTestimonials = [];
+    if (db) {
+      try {
+        dbTestimonials = await db('testimonials').where({ published: true }).orderBy('sort_order');
+      } catch (err) {
+        console.error('testimonials DB fetch failed, rendering static fallback:', err.message);
+      }
+    }
+    res.render(homeMeta.template, renderVars(homeMeta, { dbTestimonials }));
   });
 } else {
   router.get('/', (req, res) => {

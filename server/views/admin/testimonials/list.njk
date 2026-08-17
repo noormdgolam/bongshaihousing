@@ -1,0 +1,22 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Testimonials{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Testimonials</h1>{% endblock %}
+{% block content %}
+<div class="toolbar"><div></div><a href="/admin/testimonials/new" class="btn btn-primary">+ New Testimonial</a></div>
+<table>
+  <thead><tr><th>Author</th><th>Rating</th><th>Review</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    {% for t in testimonials %}
+    <tr>
+      <td>{{ t.author_name }}<br><span style="color:var(--grey-500); font-size:0.8rem;">{{ t.author_title }}</span></td>
+      <td>{{ '★' * t.rating }}</td>
+      <td style="max-width:320px;">{{ t.review_text | truncate(90) }}</td>
+      <td>{% if t.published %}<span class="pill pill-success">Published</span>{% else %}<span class="pill pill-muted">Draft</span>{% endif %}</td>
+      <td><a href="/admin/testimonials/{{ t.id }}/edit">Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" style="text-align:center; color:var(--grey-500);">No testimonials yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
