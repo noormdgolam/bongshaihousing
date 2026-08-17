@@ -1,5 +1,17 @@
 const path = require('path');
 const fs = require('fs');
+const { stripTags } = require('../../lib/sanitize');
+
+/** A plain number stays as-is; an HTML-wrapped numeric string (e.g. total-row
+ * areas like "<span style='...'>600</span>") is stripped and parsed; empty/
+ * missing values (header rows with no area) become null rather than 0. */
+function numericFromMaybeHtml(value) {
+  if (typeof value === 'number') return value;
+  const stripped = stripTags(String(value || ''));
+  if (stripped === '') return null;
+  const n = Number(stripped);
+  return Number.isFinite(n) ? n : null;
+}
 
 // Landing-page slug doesn't always match the category name's own slugified
 // form - "Industrial Steel Sheds" -> industrial-sheds.html (no "steel" in
@@ -109,16 +121,32 @@ async function seedInto(knex, products) {
 
         if (Array.isArray(tier.rooms)) {
           await knex('product_rooms').insert(
-            tier.rooms.map((room, i) => ({
-              product_variant_id: variantId,
-              floor_label: room.floor || null,
-              section: room.section,
-              area_sqft: typeof room.area === 'number' ? room.area : null,
-              length_ft: typeof room.length === 'number' ? room.length : null,
-              width_ft: typeof room.width === 'number' ? room.width : null,
-              is_total_row: /total/i.test(room.section || ''),
-              sort_order: i,
-            }))
+            // The scraped `section`/`area` text carries raw <b>/<span>
+            // markup from the original static pages (bold floor headers
+            // like "Ground Floor" and colored "Total (...)" rows, whose
+            // area value is wrapped the same way, e.g. "<span
+            // style='...'>600</span>"). Stripped here rather than stored
+            // as-is: the template renders `section` through Nunjucks'
+            // default auto-escaping and would otherwise print the literal
+            // tags, and the wrapped area string failed the old numeric
+            // check and silently became null. `is_total_row` (already used
+            // by the template for bold styling) picks up both real total
+            // rows and the bold floor-header rows, so the intended
+            // emphasis survives the markup strip instead of being lost
+            // with it.
+            tier.rooms.map((room, i) => {
+              const rawSection = room.section || '';
+              return {
+                product_variant_id: variantId,
+                floor_label: room.floor || null,
+                section: stripTags(rawSection),
+                area_sqft: numericFromMaybeHtml(room.area),
+                length_ft: typeof room.length === 'number' ? room.length : null,
+                width_ft: typeof room.width === 'number' ? room.width : null,
+                is_total_row: /total/i.test(rawSection) || /<b>|font-weight:\s*700/i.test(rawSection),
+                sort_order: i,
+              };
+            })
           );
         }
       }
