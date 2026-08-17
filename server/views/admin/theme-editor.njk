@@ -618,6 +618,55 @@
 
     <!-- ─── TAB 3: LAYOUT & SPACING ──────────────────────────────── -->
     <div class="te-tab-content" id="tab-layout">
+
+      <!-- Structural Archetypes Switcher -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🏛️ Structural Archetype Layout</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Active Structural Framework</label>
+            <div class="te-archetype-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              
+              <div class="te-archetype-card {% if not theme.archetype or theme.archetype == 'catalog-first' %}active{% endif %}" data-archetype="catalog-first" style="cursor:pointer; border:1px solid {% if not theme.archetype or theme.archetype == 'catalog-first' %}var(--primary-blue){% else %}var(--sidebar-border){% endif %}; background:#0B0F19; border-radius:6px; padding:8px; transition:all 0.15s ease;">
+                <div style="font-size:0.75rem; font-weight:800; color:white; display:flex; align-items:center; gap:4px;">📦 Catalog-First</div>
+                <div style="font-size:0.62rem; color:var(--text-muted); margin-top:2px;">Models &amp; floor calculator above fold</div>
+              </div>
+
+              <div class="te-archetype-card {% if theme.archetype == 'trust-first' %}active{% endif %}" data-archetype="trust-first" style="cursor:pointer; border:1px solid {% if theme.archetype == 'trust-first' %}var(--primary-blue){% else %}var(--sidebar-border){% endif %}; background:#0B0F19; border-radius:6px; padding:8px; transition:all 0.15s ease;">
+                <div style="font-size:0.75rem; font-weight:800; color:white; display:flex; align-items:center; gap:4px;">🛡️ Trust-First</div>
+                <div style="font-size:0.62rem; color:var(--text-muted); margin-top:2px;">ISO, BNBC 2020 &amp; verified reviews lead</div>
+              </div>
+
+              <div class="te-archetype-card {% if theme.archetype == 'story-process' %}active{% endif %}" data-archetype="story-process" style="cursor:pointer; border:1px solid {% if theme.archetype == 'story-process' %}var(--primary-blue){% else %}var(--sidebar-border){% endif %}; background:#0B0F19; border-radius:6px; padding:8px; transition:all 0.15s ease;">
+                <div style="font-size:0.75rem; font-weight:800; color:white; display:flex; align-items:center; gap:4px;">🔨 Story-Process</div>
+                <div style="font-size:0.62rem; color:var(--text-muted); margin-top:2px;">4-stage 45-60 day timeline walkthrough</div>
+              </div>
+
+              <div class="te-archetype-card {% if theme.archetype == 'broken-grid' %}active{% endif %}" data-archetype="broken-grid" style="cursor:pointer; border:1px solid {% if theme.archetype == 'broken-grid' %}var(--primary-blue){% else %}var(--sidebar-border){% endif %}; background:#0B0F19; border-radius:6px; padding:8px; transition:all 0.15s ease;">
+                <div style="font-size:0.75rem; font-weight:800; color:white; display:flex; align-items:center; gap:4px;">✨ Broken-Grid</div>
+                <div style="font-size:0.62rem; color:var(--text-muted); margin-top:2px;">Asymmetric overlapping project photos</div>
+              </div>
+
+              <div class="te-archetype-card {% if theme.archetype == 'stats-minimal' %}active{% endif %}" data-archetype="stats-minimal" style="cursor:pointer; border:1px solid {% if theme.archetype == 'stats-minimal' %}var(--primary-blue){% else %}var(--sidebar-border){% endif %}; background:#0B0F19; border-radius:6px; padding:8px; transition:all 0.15s ease;">
+                <div style="font-size:0.75rem; font-weight:800; color:white; display:flex; align-items:center; gap:4px;">📊 Stats-Led</div>
+                <div style="font-size:0.62rem; color:var(--text-muted); margin-top:2px;">64 districts metallurgy data ticker</div>
+              </div>
+
+              <div class="te-archetype-card {% if theme.archetype == 'mobile-priority' %}active{% endif %}" data-archetype="mobile-priority" style="cursor:pointer; border:1px solid {% if theme.archetype == 'mobile-priority' %}var(--primary-blue){% else %}var(--sidebar-border){% endif %}; background:#0B0F19; border-radius:6px; padding:8px; transition:all 0.15s ease;">
+                <div style="font-size:0.75rem; font-weight:800; color:white; display:flex; align-items:center; gap:4px;">📱 Mobile-Priority</div>
+                <div style="font-size:0.62rem; color:var(--text-muted); margin-top:2px;">Touch category pills &amp; 1-tap WhatsApp</div>
+              </div>
+
+            </div>
+            <input type="hidden" id="themeArchetype" value="{{ theme.archetype or 'catalog-first' }}">
+          </div>
+        </div>
+      </div>
+
+      <!-- Container, Spacing & Corner Radii -->
       <div class="te-section" data-collapsed="false">
         <div class="te-section-header">
           <span>📐 Container, Spacing &amp; Shadows</span>
@@ -970,6 +1019,22 @@ const presetsData = {{ presets | dump | safe }};
     });
   }
 
+  const themeArchetype = document.getElementById('themeArchetype');
+
+  document.querySelectorAll('.te-archetype-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.te-archetype-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'var(--sidebar-border)';
+      });
+      card.classList.add('active');
+      card.style.borderColor = 'var(--primary-blue)';
+      const arch = card.getAttribute('data-archetype');
+      if (themeArchetype) themeArchetype.value = arch;
+      sendLiveUpdate();
+    });
+  });
+
   if (radiusRange) {
     radiusRange.addEventListener('input', () => {
       radiusVal.textContent = radiusRange.value + 'px';
@@ -984,6 +1049,7 @@ const presetsData = {{ presets | dump | safe }};
   function getCurrentThemeData() {
     const r = parseInt(radiusRange ? radiusRange.value : 8, 10);
     return {
+      archetype: themeArchetype ? themeArchetype.value : 'catalog-first',
       primary: primaryColor.value,
       primary_dark: primaryDarkColor.value,
       primary_light: primaryLightColor.value,
@@ -1017,6 +1083,14 @@ const presetsData = {{ presets | dump | safe }};
 
   function applyThemeData(theme) {
     if (!theme) return;
+    if (theme.archetype && themeArchetype) {
+      themeArchetype.value = theme.archetype;
+      document.querySelectorAll('.te-archetype-card').forEach(c => {
+        const isMatch = c.getAttribute('data-archetype') === theme.archetype;
+        c.classList.toggle('active', isMatch);
+        c.style.borderColor = isMatch ? 'var(--primary-blue)' : 'var(--sidebar-border)';
+      });
+    }
     if (theme.primary) { primaryColor.value = theme.primary; primaryColorText.value = theme.primary; }
     if (theme.primary_dark) { primaryDarkColor.value = theme.primary_dark; primaryDarkColorText.value = theme.primary_dark; }
     if (theme.primary_light) { primaryLightColor.value = theme.primary_light; primaryLightColorText.value = theme.primary_light; }

@@ -37,7 +37,7 @@ const upload = multer({
   }
 });
 
-const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark } = require('../lib/theme');
+const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
 const router = express.Router();
 router.use('/admin', requireAdmin);
 
@@ -1105,10 +1105,11 @@ router.post('/admin/themes/activate/:slug', async (req, res) => {
       ...currentTheme,
       ...preset,
       name: preset.name,
+      archetype: preset.archetype || 'catalog-first',
       is_dark: isThemeDark(preset),
     };
     await saveThemeSettings(newTheme);
-    logActivity(req, 'update', 'theme', null, `Activated theme: "${preset.name}"`);
+    logActivity(req, 'update', 'theme', null, `Activated theme: "${preset.name}" (${preset.archetype || 'catalog-first'})`);
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
       return res.json({ success: true, message: `Theme "${preset.name}" activated!` });
     }

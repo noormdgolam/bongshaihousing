@@ -117,6 +117,64 @@
       border-bottom-color: rgba(255, 255, 255, 0.08) !important;
     }
     {% endif %}
+
+    /* ─── 6 ThemeForest Structural Archetypes ─────────────────── */
+    /* 1. Broken-Grid Editorial Asymmetry */
+    body[data-archetype="broken-grid"] .property-grid {
+      align-items: flex-start;
+    }
+    body[data-archetype="broken-grid"] .property-card:nth-child(even) {
+      transform: translateY(20px);
+      margin-bottom: 20px;
+    }
+    body[data-archetype="broken-grid"] .hero-content {
+      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* 2. Trust-First Corporate Assurance */
+    body[data-archetype="trust-first"] .features-strip {
+      border-bottom: 3px solid var(--accent);
+    }
+    body[data-archetype="trust-first"] .why-card {
+      border-top: 3px solid var(--primary);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    /* 3. Story & Craft Process Timeline */
+    body[data-archetype="story-process"] .step-item {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    body[data-archetype="story-process"] .step-num {
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    /* 4. Heavy Metallurgy Stats-Led */
+    body[data-archetype="stats-minimal"] .hero-badge {
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+    }
+    body[data-archetype="stats-minimal"] .property-card {
+      border-radius: var(--radius-sm);
+    }
+    body[data-archetype="stats-minimal"] .btn {
+      border-radius: var(--radius-sm);
+    }
+
+    /* 5. Mobile-Priority Touch Architecture */
+    body[data-archetype="mobile-priority"] .category-tabs {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      gap: 8px;
+    }
   </style>
   <style id="bh-theme-announcement-styles">
     .bh-top-announcement {
@@ -153,7 +211,7 @@
   </style>
   {% endif %}
 </head>
-<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
+<body data-archetype="{{ theme.archetype or 'catalog-first' }}" class="{% if bodyClass %}{{ bodyClass }} {% endif %}archetype-{{ theme.archetype or 'catalog-first' }}">
 <a href="#main-content" class="skip-link">Skip to content</a>
 
 <!-- Top Announcement Bar -->
@@ -732,7 +790,13 @@
         ` : '';
       }
 
-      // 2. Update Top Announcement Banner in real-time
+      // 2. Update Structural Archetype in real-time
+      if (theme.archetype) {
+        document.body.setAttribute('data-archetype', theme.archetype);
+        document.body.className = document.body.className.replace(/archetype-[a-z-]+/g, '').trim() + ' archetype-' + theme.archetype;
+      }
+
+      // 3. Update Top Announcement Banner in real-time
       const banner = document.getElementById('bhTopAnnouncement');
       const bannerText = document.getElementById('bhAnnouncementText');
       const bannerLink = document.getElementById('bhAnnouncementLink');
