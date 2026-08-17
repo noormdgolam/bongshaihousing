@@ -56633,5 +56633,2390 @@
         "sort_order": 13
       }
     ]
+  },
+  {
+    "filename": "bh-ch-413.html",
+    "modelNumber": "BH-CH-413",
+    "categoryName": "Cottage House",
+    "categorySlug": "cottage-house",
+    "slug": "bh-ch-413.html",
+    "title": "BH-CH-413 | Cottage House | Bongshai Housing",
+    "description": "BH-CH-413 — premium Cottage House by Bongshai Housing, Bangladesh's leading steel structure manufacturer, delivering durable prefab construction nationwide. Elevated mountain-view cottage bungalow featuring a raised veranda, stone-clad pillars, and efficient layout.",
+    "pricePerSqft": 2200,
+    "priceCurrency": "BDT",
+    "mainImage": "images/products/bh-ch-413.webp",
+    "floorData": {
+      "400": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 400,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Living/Dining",
+            "area": 70,
+            "length": 10,
+            "width": 7
+          },
+          {
+            "section": "Kitchen",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room",
+            "area": 30,
+            "length": 6,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 40,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "600": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 600,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 32,
+            "length": 8,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 80,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "750": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 750,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 156,
+            "length": 13,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room 1",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 40,
+            "length": 10,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 74,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "900": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 900,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 50,
+            "length": 10,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 100,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1050": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1050,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Child bed 3",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 70,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1200": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1200,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 180,
+            "length": 15,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 3",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 200,
+            "length": 20,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 90,
+            "length": 10,
+            "width": 9
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 124,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      }
+    },
+    "buildingSpecs": [
+      {
+        "spec_key": "FOOTING",
+        "spec_value": "Precast RC footing & Tie beam with 2200 psi concrete.",
+        "sort_order": 0
+      },
+      {
+        "spec_key": "LIGHT STEEL STRUCTURE",
+        "spec_value": "Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa",
+        "sort_order": 1
+      },
+      {
+        "spec_key": "GROUND FLOOR",
+        "spec_value": "3’’ thickness cement concrete.",
+        "sort_order": 2
+      },
+      {
+        "spec_key": "OUTER WALL",
+        "spec_value": "2.5’’ thickness RC precast concrete panel",
+        "sort_order": 3
+      },
+      {
+        "spec_key": "INNER WALL",
+        "spec_value": "2’’ thickness RC precast concrete panel",
+        "sort_order": 4
+      },
+      {
+        "spec_key": "DOOR",
+        "spec_value": "7’x3.5’ steel frame with wooden shutter",
+        "sort_order": 5
+      },
+      {
+        "spec_key": "TOILET & KITCHEN DOOR",
+        "spec_value": "7’x2.5’ PVC frame with PVC shutter",
+        "sort_order": 6
+      },
+      {
+        "spec_key": "WINDOW",
+        "spec_value": "5’x4.5’ Thai frame, Glass shutter with Grill",
+        "sort_order": 7
+      },
+      {
+        "spec_key": "FLOOR FINISHING",
+        "spec_value": "16''x16'' Tiles",
+        "sort_order": 8
+      },
+      {
+        "spec_key": "PAINT",
+        "spec_value": "Weather coat and plastic paint",
+        "sort_order": 9
+      },
+      {
+        "spec_key": "ROOF TOP",
+        "spec_value": ".56mm steel industrial profile sheet",
+        "sort_order": 10
+      },
+      {
+        "spec_key": "BATHROOM FITTING",
+        "spec_value": "Metal fittings",
+        "sort_order": 11
+      },
+      {
+        "spec_key": "ELECTRIC WIRING",
+        "spec_value": "3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.",
+        "sort_order": 12
+      }
+    ]
+  },
+  {
+    "filename": "bh-ch-414.html",
+    "modelNumber": "BH-CH-414",
+    "categoryName": "Cottage House",
+    "categorySlug": "cottage-house",
+    "slug": "bh-ch-414.html",
+    "title": "BH-CH-414 | Cottage House | Bongshai Housing",
+    "description": "BH-CH-414 — premium Cottage House by Bongshai Housing, Bangladesh's leading steel structure manufacturer, delivering durable prefab construction nationwide. Contemporary luxury villa featuring wood-paneled fascia, expansive glass patio doors, and a natural timber deck.",
+    "pricePerSqft": 2200,
+    "priceCurrency": "BDT",
+    "mainImage": "images/products/bh-ch-414.webp",
+    "floorData": {
+      "400": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 400,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Living/Dining",
+            "area": 70,
+            "length": 10,
+            "width": 7
+          },
+          {
+            "section": "Kitchen",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room",
+            "area": 30,
+            "length": 6,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 40,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "600": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 600,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 32,
+            "length": 8,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 80,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "750": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 750,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 156,
+            "length": 13,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room 1",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 40,
+            "length": 10,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 74,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "900": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 900,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 50,
+            "length": 10,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 100,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1050": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1050,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Child bed 3",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 70,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1200": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1200,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 180,
+            "length": 15,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 3",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 200,
+            "length": 20,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 90,
+            "length": 10,
+            "width": 9
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 124,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      }
+    },
+    "buildingSpecs": [
+      {
+        "spec_key": "FOOTING",
+        "spec_value": "Precast RC footing & Tie beam with 2200 psi concrete.",
+        "sort_order": 0
+      },
+      {
+        "spec_key": "LIGHT STEEL STRUCTURE",
+        "spec_value": "Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa",
+        "sort_order": 1
+      },
+      {
+        "spec_key": "GROUND FLOOR",
+        "spec_value": "3’’ thickness cement concrete.",
+        "sort_order": 2
+      },
+      {
+        "spec_key": "OUTER WALL",
+        "spec_value": "2.5’’ thickness RC precast concrete panel",
+        "sort_order": 3
+      },
+      {
+        "spec_key": "INNER WALL",
+        "spec_value": "2’’ thickness RC precast concrete panel",
+        "sort_order": 4
+      },
+      {
+        "spec_key": "DOOR",
+        "spec_value": "7’x3.5’ steel frame with wooden shutter",
+        "sort_order": 5
+      },
+      {
+        "spec_key": "TOILET & KITCHEN DOOR",
+        "spec_value": "7’x2.5’ PVC frame with PVC shutter",
+        "sort_order": 6
+      },
+      {
+        "spec_key": "WINDOW",
+        "spec_value": "5’x4.5’ Thai frame, Glass shutter with Grill",
+        "sort_order": 7
+      },
+      {
+        "spec_key": "FLOOR FINISHING",
+        "spec_value": "16''x16'' Tiles",
+        "sort_order": 8
+      },
+      {
+        "spec_key": "PAINT",
+        "spec_value": "Weather coat and plastic paint",
+        "sort_order": 9
+      },
+      {
+        "spec_key": "ROOF TOP",
+        "spec_value": ".56mm steel industrial profile sheet",
+        "sort_order": 10
+      },
+      {
+        "spec_key": "BATHROOM FITTING",
+        "spec_value": "Metal fittings",
+        "sort_order": 11
+      },
+      {
+        "spec_key": "ELECTRIC WIRING",
+        "spec_value": "3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.",
+        "sort_order": 12
+      }
+    ]
+  },
+  {
+    "filename": "bh-ch-415.html",
+    "modelNumber": "BH-CH-415",
+    "categoryName": "Cottage House",
+    "categorySlug": "cottage-house",
+    "slug": "bh-ch-415.html",
+    "title": "BH-CH-415 | Cottage House | Bongshai Housing",
+    "description": "BH-CH-415 — premium Cottage House by Bongshai Housing, Bangladesh's leading steel structure manufacturer, delivering durable prefab construction nationwide. Two-level elevated tiny house pavilion with upper timber bedroom balcony and ground-floor open-air lounge.",
+    "pricePerSqft": 2200,
+    "priceCurrency": "BDT",
+    "mainImage": "images/products/bh-ch-415.webp",
+    "floorData": {
+      "400": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 400,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Living/Dining",
+            "area": 70,
+            "length": 10,
+            "width": 7
+          },
+          {
+            "section": "Kitchen",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room",
+            "area": 30,
+            "length": 6,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 40,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "600": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 600,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 32,
+            "length": 8,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 80,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "750": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 750,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 156,
+            "length": 13,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room 1",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 40,
+            "length": 10,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 74,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "900": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 900,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 50,
+            "length": 10,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 100,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1050": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1050,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Child bed 3",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 70,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1200": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1200,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 180,
+            "length": 15,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 3",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 200,
+            "length": 20,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 90,
+            "length": 10,
+            "width": 9
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 124,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      }
+    },
+    "buildingSpecs": [
+      {
+        "spec_key": "FOOTING",
+        "spec_value": "Precast RC footing & Tie beam with 2200 psi concrete.",
+        "sort_order": 0
+      },
+      {
+        "spec_key": "LIGHT STEEL STRUCTURE",
+        "spec_value": "Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa",
+        "sort_order": 1
+      },
+      {
+        "spec_key": "GROUND FLOOR",
+        "spec_value": "3’’ thickness cement concrete.",
+        "sort_order": 2
+      },
+      {
+        "spec_key": "OUTER WALL",
+        "spec_value": "2.5’’ thickness RC precast concrete panel",
+        "sort_order": 3
+      },
+      {
+        "spec_key": "INNER WALL",
+        "spec_value": "2’’ thickness RC precast concrete panel",
+        "sort_order": 4
+      },
+      {
+        "spec_key": "DOOR",
+        "spec_value": "7’x3.5’ steel frame with wooden shutter",
+        "sort_order": 5
+      },
+      {
+        "spec_key": "TOILET & KITCHEN DOOR",
+        "spec_value": "7’x2.5’ PVC frame with PVC shutter",
+        "sort_order": 6
+      },
+      {
+        "spec_key": "WINDOW",
+        "spec_value": "5’x4.5’ Thai frame, Glass shutter with Grill",
+        "sort_order": 7
+      },
+      {
+        "spec_key": "FLOOR FINISHING",
+        "spec_value": "16''x16'' Tiles",
+        "sort_order": 8
+      },
+      {
+        "spec_key": "PAINT",
+        "spec_value": "Weather coat and plastic paint",
+        "sort_order": 9
+      },
+      {
+        "spec_key": "ROOF TOP",
+        "spec_value": ".56mm steel industrial profile sheet",
+        "sort_order": 10
+      },
+      {
+        "spec_key": "BATHROOM FITTING",
+        "spec_value": "Metal fittings",
+        "sort_order": 11
+      },
+      {
+        "spec_key": "ELECTRIC WIRING",
+        "spec_value": "3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.",
+        "sort_order": 12
+      }
+    ]
+  },
+  {
+    "filename": "bh-ch-416.html",
+    "modelNumber": "BH-CH-416",
+    "categoryName": "Cottage House",
+    "categorySlug": "cottage-house",
+    "slug": "bh-ch-416.html",
+    "title": "BH-CH-416 | Cottage House | Bongshai Housing",
+    "description": "BH-CH-416 — premium Cottage House by Bongshai Housing, Bangladesh's leading steel structure manufacturer, delivering durable prefab construction nationwide. Compact modern cottage with vibrant magenta split-shed roof, autoclaved concrete block facade, and front porch.",
+    "pricePerSqft": 2200,
+    "priceCurrency": "BDT",
+    "mainImage": "images/products/bh-ch-416.webp",
+    "floorData": {
+      "400": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 400,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Living/Dining",
+            "area": 70,
+            "length": 10,
+            "width": 7
+          },
+          {
+            "section": "Kitchen",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room",
+            "area": 30,
+            "length": 6,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 40,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "600": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 600,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 32,
+            "length": 8,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 80,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "750": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 750,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 156,
+            "length": 13,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room 1",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 40,
+            "length": 10,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 74,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "900": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 900,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 50,
+            "length": 10,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 100,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1050": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1050,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Child bed 3",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 70,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1200": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1200,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 180,
+            "length": 15,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 3",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 200,
+            "length": 20,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 90,
+            "length": 10,
+            "width": 9
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 124,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      }
+    },
+    "buildingSpecs": [
+      {
+        "spec_key": "FOOTING",
+        "spec_value": "Precast RC footing & Tie beam with 2200 psi concrete.",
+        "sort_order": 0
+      },
+      {
+        "spec_key": "LIGHT STEEL STRUCTURE",
+        "spec_value": "Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa",
+        "sort_order": 1
+      },
+      {
+        "spec_key": "GROUND FLOOR",
+        "spec_value": "3’’ thickness cement concrete.",
+        "sort_order": 2
+      },
+      {
+        "spec_key": "OUTER WALL",
+        "spec_value": "2.5’’ thickness RC precast concrete panel",
+        "sort_order": 3
+      },
+      {
+        "spec_key": "INNER WALL",
+        "spec_value": "2’’ thickness RC precast concrete panel",
+        "sort_order": 4
+      },
+      {
+        "spec_key": "DOOR",
+        "spec_value": "7’x3.5’ steel frame with wooden shutter",
+        "sort_order": 5
+      },
+      {
+        "spec_key": "TOILET & KITCHEN DOOR",
+        "spec_value": "7’x2.5’ PVC frame with PVC shutter",
+        "sort_order": 6
+      },
+      {
+        "spec_key": "WINDOW",
+        "spec_value": "5’x4.5’ Thai frame, Glass shutter with Grill",
+        "sort_order": 7
+      },
+      {
+        "spec_key": "FLOOR FINISHING",
+        "spec_value": "16''x16'' Tiles",
+        "sort_order": 8
+      },
+      {
+        "spec_key": "PAINT",
+        "spec_value": "Weather coat and plastic paint",
+        "sort_order": 9
+      },
+      {
+        "spec_key": "ROOF TOP",
+        "spec_value": ".56mm steel industrial profile sheet",
+        "sort_order": 10
+      },
+      {
+        "spec_key": "BATHROOM FITTING",
+        "spec_value": "Metal fittings",
+        "sort_order": 11
+      },
+      {
+        "spec_key": "ELECTRIC WIRING",
+        "spec_value": "3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.",
+        "sort_order": 12
+      }
+    ]
+  },
+  {
+    "filename": "bh-ch-417.html",
+    "modelNumber": "BH-CH-417",
+    "categoryName": "Cottage House",
+    "categorySlug": "cottage-house",
+    "slug": "bh-ch-417.html",
+    "title": "BH-CH-417 | Cottage House | Bongshai Housing",
+    "description": "BH-CH-417 — premium Cottage House by Bongshai Housing, Bangladesh's leading steel structure manufacturer, delivering durable prefab construction nationwide. Modular 2-story shipping container duplex with cantilevered upper balcony, outdoor steel staircase, and wooden deck.",
+    "pricePerSqft": 2200,
+    "priceCurrency": "BDT",
+    "mainImage": "images/products/bh-ch-417.webp",
+    "floorData": {
+      "400": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 400,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Living/Dining",
+            "area": 70,
+            "length": 10,
+            "width": 7
+          },
+          {
+            "section": "Kitchen",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room",
+            "area": 30,
+            "length": 6,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 40,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "600": {
+        "bed": "2 Bedrooms",
+        "bath": "1 Bathroom",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 600,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 32,
+            "length": 8,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 80,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "750": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 750,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 156,
+            "length": 13,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 100,
+            "length": 10,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 60,
+            "length": 10,
+            "width": 6
+          },
+          {
+            "section": "Bath room 1",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 40,
+            "length": 10,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 74,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "900": {
+        "bed": "3 Bedrooms",
+        "bath": "2 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 900,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 50,
+            "length": 10,
+            "width": 5
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 100,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1050": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1050,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 168,
+            "length": 14,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Child bed 3",
+            "area": 120,
+            "length": 12,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 150,
+            "length": 15,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 80,
+            "length": 10,
+            "width": 8
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 70,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      },
+      "1200": {
+        "bed": "4 Bedrooms",
+        "bath": "3 Bathrooms",
+        "living": "1 Living Room",
+        "rooms": [
+          {
+            "section": "Total Floor Area",
+            "area": 1200,
+            "length": "-",
+            "width": "-"
+          },
+          {
+            "section": "Master bed",
+            "area": 180,
+            "length": 15,
+            "width": 12
+          },
+          {
+            "section": "Child bed 1",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 2",
+            "area": 144,
+            "length": 12,
+            "width": 12
+          },
+          {
+            "section": "Child bed 3",
+            "area": 130,
+            "length": 13,
+            "width": 10
+          },
+          {
+            "section": "Living room",
+            "area": 200,
+            "length": 20,
+            "width": 10
+          },
+          {
+            "section": "Kitchen",
+            "area": 90,
+            "length": 10,
+            "width": 9
+          },
+          {
+            "section": "Bath room 1",
+            "area": 48,
+            "length": 8,
+            "width": 6
+          },
+          {
+            "section": "Bath room 2",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Bath room 3",
+            "area": 40,
+            "length": 8,
+            "width": 5
+          },
+          {
+            "section": "Porch / Balcony",
+            "area": 60,
+            "length": 15,
+            "width": 4
+          },
+          {
+            "section": "Wall & Stairs area",
+            "area": 124,
+            "length": "-",
+            "width": "-"
+          }
+        ]
+      }
+    },
+    "buildingSpecs": [
+      {
+        "spec_key": "FOOTING",
+        "spec_value": "Precast RC footing & Tie beam with 2200 psi concrete.",
+        "sort_order": 0
+      },
+      {
+        "spec_key": "LIGHT STEEL STRUCTURE",
+        "spec_value": "Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa",
+        "sort_order": 1
+      },
+      {
+        "spec_key": "GROUND FLOOR",
+        "spec_value": "3’’ thickness cement concrete.",
+        "sort_order": 2
+      },
+      {
+        "spec_key": "OUTER WALL",
+        "spec_value": "2.5’’ thickness RC precast concrete panel",
+        "sort_order": 3
+      },
+      {
+        "spec_key": "INNER WALL",
+        "spec_value": "2’’ thickness RC precast concrete panel",
+        "sort_order": 4
+      },
+      {
+        "spec_key": "DOOR",
+        "spec_value": "7’x3.5’ steel frame with wooden shutter",
+        "sort_order": 5
+      },
+      {
+        "spec_key": "TOILET & KITCHEN DOOR",
+        "spec_value": "7’x2.5’ PVC frame with PVC shutter",
+        "sort_order": 6
+      },
+      {
+        "spec_key": "WINDOW",
+        "spec_value": "5’x4.5’ Thai frame, Glass shutter with Grill",
+        "sort_order": 7
+      },
+      {
+        "spec_key": "FLOOR FINISHING",
+        "spec_value": "16''x16'' Tiles",
+        "sort_order": 8
+      },
+      {
+        "spec_key": "PAINT",
+        "spec_value": "Weather coat and plastic paint",
+        "sort_order": 9
+      },
+      {
+        "spec_key": "ROOF TOP",
+        "spec_value": ".56mm steel industrial profile sheet",
+        "sort_order": 10
+      },
+      {
+        "spec_key": "BATHROOM FITTING",
+        "spec_value": "Metal fittings",
+        "sort_order": 11
+      },
+      {
+        "spec_key": "ELECTRIC WIRING",
+        "spec_value": "3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.",
+        "sort_order": 12
+      }
+    ]
   }
 ]
