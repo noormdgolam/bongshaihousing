@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Visual Theme &amp; Layout Editor — Bongshai Housing</title>
+<title>Theme Studio Pro — Elementor-Grade Visual Builder</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-dark: #0F172A;
-    --sidebar-bg: #1E293B;
-    --sidebar-border: #334155;
-    --card-bg: #1E293B;
+    --bg-dark: #0B1120;
+    --sidebar-bg: #131C2E;
+    --sidebar-border: #1E293B;
+    --card-bg: #1A263D;
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
     --primary-blue: #3B82F6;
@@ -32,9 +32,9 @@
     flex-direction: column;
   }
 
-  /* Top Global App Header */
+  /* ─── Topbar Header ─────────────────────────────────────────── */
   .te-topbar {
-    height: 54px;
+    height: 52px;
     background: #0B1120;
     border-bottom: 1px solid var(--sidebar-border);
     display: flex;
@@ -43,26 +43,31 @@
     padding: 0 16px;
     flex-shrink: 0;
     z-index: 100;
+    gap: 12px;
   }
   .te-brand {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.95rem;
     color: #ffffff;
+    white-space: nowrap;
   }
   .te-brand span { color: var(--primary-blue); }
-  .te-back-link {
-    font-size: 0.8rem;
+  .te-nav-link {
+    font-size: 0.78rem;
     color: var(--text-muted);
     text-decoration: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.08);
     transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
-  .te-back-link:hover { color: white; background: rgba(255,255,255,0.05); }
+  .te-nav-link:hover { color: white; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
 
   /* Device Switcher in Topbar */
   .te-device-bar {
@@ -72,23 +77,23 @@
     border: 1px solid var(--sidebar-border);
     border-radius: 8px;
     padding: 3px;
-    gap: 4px;
+    gap: 3px;
   }
   .te-device-btn {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     transition: all 0.15s;
   }
-  .te-device-btn:hover { color: white; }
+  .te-device-btn:hover { color: white; background: rgba(255,255,255,0.04); }
   .te-device-btn.active {
     background: var(--primary-blue);
     color: white;
@@ -102,28 +107,29 @@
     border: 1px solid var(--sidebar-border);
     border-radius: 6px;
     padding: 6px 12px;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     outline: none;
     cursor: pointer;
   }
 
-  /* Save & Actions */
-  .te-actions {
+  /* Top Tools & Actions */
+  .te-tools {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   .btn {
-    padding: 7px 14px;
+    padding: 6px 12px;
     border-radius: 6px;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     border: 1px solid transparent;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     transition: all 0.15s;
+    text-decoration: none;
   }
   .btn-primary { background: var(--primary-blue); color: white; }
   .btn-primary:hover { background: #2563EB; }
@@ -131,8 +137,21 @@
   .btn-success:hover { background: #059669; }
   .btn-outline { background: transparent; border-color: var(--sidebar-border); color: var(--text-muted); }
   .btn-outline:hover { color: white; border-color: #64748B; background: rgba(255,255,255,0.05); }
+  .btn-tool {
+    background: var(--sidebar-bg);
+    border: 1px solid var(--sidebar-border);
+    color: var(--text-muted);
+    padding: 5px 9px;
+    border-radius: 6px;
+  }
+  .btn-tool:hover { color: white; background: rgba(255,255,255,0.06); }
+  .btn-tool.active {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--primary-blue);
+    color: #60A5FA;
+  }
 
-  /* Main Workspace: Split View */
+  /* ─── Main Workspace: Split View ─────────────────────────────── */
   .te-workspace {
     flex: 1;
     display: flex;
@@ -141,56 +160,91 @@
   }
 
   /* Left Sidebar Controls */
-  .te-controls {
-    width: 400px;
+  .te-sidebar {
+    width: 420px;
     background: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    overflow: hidden;
+    z-index: 10;
   }
-  .te-controls::-webkit-scrollbar { width: 6px; }
-  .te-controls::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
 
-  /* Collapsible Sections */
-  .te-section {
+  /* Elementor Pro Tab Strip */
+  .te-tab-strip {
+    display: flex;
+    background: #0E1626;
     border-bottom: 1px solid var(--sidebar-border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .te-tab-strip::-webkit-scrollbar { display: none; }
+  .te-tab-btn {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .te-tab-btn:hover { color: white; background: rgba(255,255,255,0.02); }
+  .te-tab-btn.active {
+    color: #60A5FA;
+    border-bottom-color: var(--primary-blue);
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  /* Sidebar Scroll Area */
+  .te-tab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: none;
+  }
+  .te-tab-content.active {
+    display: block;
+  }
+
+  /* Accordions / Control Sections */
+  .te-section {
+    background: var(--card-bg);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
   }
   .te-section-header {
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-main);
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid transparent;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
     user-select: none;
-    background: rgba(0,0,0,0.1);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
   }
-  .te-section-header:hover {
-    background: rgba(255,255,255,0.03);
-  }
-  .te-section-icon {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    transition: transform 0.2s ease;
-  }
-  .te-section[data-collapsed="true"] .te-section-icon {
-    transform: rotate(-90deg);
-  }
-  .te-section[data-collapsed="true"] .te-section-body {
-    display: none;
-  }
+  .te-section-header:hover { background: rgba(255,255,255,0.05); }
   .te-section-body {
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
   }
+  .te-section[data-collapsed="true"] .te-section-body { display: none; }
+  .te-section[data-collapsed="true"] .te-section-header { border-bottom: none; }
 
-  /* Form Fields */
+  /* Control Form Rows */
   .te-field {
     display: flex;
     flex-direction: column;
@@ -200,22 +254,24 @@
     font-size: 0.76rem;
     font-weight: 600;
     color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .te-input, .te-select, .te-textarea {
     background: #0F172A;
     border: 1px solid var(--sidebar-border);
     border-radius: 6px;
     color: white;
+    font-size: 0.82rem;
     padding: 7px 10px;
-    font-size: 0.84rem;
-    font-family: inherit;
     outline: none;
-    transition: border-color 0.15s;
+    font-family: inherit;
+    width: 100%;
   }
   .te-input:focus, .te-select:focus, .te-textarea:focus {
     border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
   }
   .te-color-row {
     display: flex;
@@ -224,122 +280,84 @@
   }
   .te-color-picker {
     -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    border: 1px solid var(--sidebar-border);
+    border: none;
+    width: 32px;
+    height: 32px;
     border-radius: 6px;
     cursor: pointer;
-    padding: 2px;
+    background: transparent;
+    padding: 0;
+    flex-shrink: 0;
   }
   .te-color-picker::-webkit-color-swatch-wrapper { padding: 0; }
-  .te-color-picker::-webkit-color-swatch { border-radius: 4px; border: none; }
-  .te-color-text {
+  .te-color-picker::-webkit-color-swatch { border-radius: 6px; border: 1px solid var(--sidebar-border); }
+
+  /* Range Sliders */
+  .te-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .te-range {
     flex: 1;
-    text-transform: uppercase;
-    font-family: monospace;
+    accent-color: var(--primary-blue);
+    cursor: pointer;
+  }
+  .te-range-val {
+    font-size: 0.75rem;
+    color: #60A5FA;
+    font-weight: 700;
+    min-width: 45px;
+    text-align: right;
   }
 
-  /* Presets Filter Tabs & Grid */
-  .te-preset-tabs {
+  /* Preset Cards Grid inside Presets Tab */
+  .te-presets-filter {
     display: flex;
     gap: 4px;
-    background: #090D16;
-    padding: 3px;
-    border-radius: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
   }
   .te-preset-tab {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    padding: 5px 8px;
-    font-size: 0.74rem;
-    font-weight: 600;
+    padding: 4px 8px;
+    font-size: 0.72rem;
     border-radius: 4px;
+    background: #0F172A;
+    border: 1px solid var(--sidebar-border);
+    color: var(--text-muted);
     cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
+    font-weight: 600;
   }
-  .te-preset-tab:hover { color: white; }
   .te-preset-tab.active {
     background: var(--primary-blue);
     color: white;
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+    border-color: var(--primary-blue);
   }
-
-  .te-presets-grid {
+  .te-preset-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    max-height: 380px;
-    overflow-y: auto;
-    padding-right: 4px;
   }
-  .te-presets-grid::-webkit-scrollbar { width: 5px; }
-  .te-presets-grid::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
-
   .te-preset-card {
     background: #0F172A;
     border: 1px solid var(--sidebar-border);
-    border-radius: 8px;
-    padding: 9px;
+    border-radius: 6px;
+    padding: 8px;
     cursor: pointer;
-    transition: all 0.15s;
-    text-align: left;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 6px;
+    transition: all 0.15s;
+    position: relative;
   }
   .te-preset-card:hover {
     border-color: var(--primary-blue);
     transform: translateY(-2px);
-    background: #141E33;
   }
   .te-preset-card.active {
     border-color: var(--primary-blue);
-    background: #141E33;
+    background: rgba(59, 130, 246, 0.1);
     box-shadow: 0 0 0 1px var(--primary-blue);
-  }
-  .te-preset-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: white;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .te-preset-badge {
-    font-size: 0.62rem;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 10px;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-  }
-  .te-preset-badge.light {
-    background: rgba(245, 158, 11, 0.18);
-    color: #FBBF24;
-  }
-  .te-preset-badge.dark {
-    background: rgba(168, 85, 247, 0.22);
-    color: #C084FC;
-  }
-  .te-preset-dots {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    margin-top: 6px;
-  }
-  .te-preset-dot {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
 
   /* Right Canvas Preview Area */
@@ -353,46 +371,30 @@
     overflow: hidden;
     position: relative;
   }
-
-  /* Responsive Iframe Frame */
   .te-frame-wrapper {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1);
-    height: 100%;
     width: 100%;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
     overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    display: flex;
-    flex-direction: column;
   }
-  .te-frame-wrapper.mode-desktop {
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
-  .te-frame-wrapper.mode-tablet {
-    width: 768px;
-    max-width: 100%;
-    height: 95%;
-  }
-  .te-frame-wrapper.mode-mobile {
-    width: 375px;
-    max-width: 100%;
-    height: 95%;
-    border-radius: 28px;
-    border: 8px solid #1E293B;
-  }
+  .te-frame-wrapper.mode-desktop { width: 100%; height: 100%; border-radius: 0; }
+  .te-frame-wrapper.mode-laptop { width: 1024px; height: 95%; }
+  .te-frame-wrapper.mode-tablet { width: 768px; height: 95%; }
+  .te-frame-wrapper.mode-mobile { width: 375px; height: 720px; border-radius: 24px; border: 4px solid #1E293B; }
+  .te-frame-wrapper.mode-mobile.landscape { width: 720px; height: 375px; border-radius: 16px; }
 
-  .te-iframe {
+  iframe {
     width: 100%;
     height: 100%;
     border: none;
     background: white;
   }
 
-  /* Save Toast */
+  /* Toast Notification */
   .te-toast {
     position: fixed;
     bottom: 24px;
@@ -401,325 +403,506 @@
     color: white;
     padding: 10px 18px;
     border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    z-index: 1000;
     display: none;
-    animation: teSlideUp 0.3s ease;
-    z-index: 9999;
+    animation: toastSlide 0.25s ease-out;
   }
-  @keyframes teSlideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+  @keyframes toastSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
 </head>
 <body>
 
-<!-- Top Navigation Bar -->
+<!-- ─── 1. TOPBAR HEADER ─────────────────────────────────────────── -->
 <header class="te-topbar">
-  <div class="te-brand">
-    <span>🎨</span> Bongshai <span>Theme Studio</span>
-    <a href="/admin" class="te-back-link">← CMS Dashboard</a>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div class="te-brand">
+      <span>⚡</span> Bongshai Studio <small style="font-size:0.65rem; background:rgba(59,130,246,0.2); color:#60A5FA; padding:2px 6px; border-radius:4px; margin-left:4px;">PRO</small>
+    </div>
+    <a href="/admin/themes" class="te-nav-link">🎭 Themes Directory</a>
+    <a href="/admin" class="te-nav-link">← Dashboard</a>
   </div>
 
-  <!-- Device Switcher -->
+  <!-- Device Viewport Switcher -->
   <div class="te-device-bar">
-    <button class="te-device-btn active" data-mode="desktop" title="Desktop View (100%)">
-      🖥️ Desktop
-    </button>
-    <button class="te-device-btn" data-mode="tablet" title="Tablet View (768px)">
-      📱 Tablet
-    </button>
-    <button class="te-device-btn" data-mode="mobile" title="Mobile View (375px)">
-      📲 Mobile
-    </button>
+    <button type="button" class="te-device-btn active" data-mode="desktop" title="Desktop View (100%)">🖥️ Desktop</button>
+    <button type="button" class="te-device-btn" data-mode="laptop" title="Laptop View (1024px)">💻 Laptop</button>
+    <button type="button" class="te-device-btn" data-mode="tablet" title="Tablet View (768px)">📱 Tablet</button>
+    <button type="button" class="te-device-btn" data-mode="mobile" title="Mobile View (375px)">📲 Mobile</button>
+    <button type="button" class="te-device-btn" id="rotateBtn" title="Rotate Orientation">🔄</button>
   </div>
 
   <!-- Page Selector -->
-  <div>
-    <select id="tePageSelector" class="te-page-select" title="Switch preview page">
-      <option value="/">🏠 Home Page (/)</option>
-      <option value="/about.html">Company Profile (/about.html)</option>
-      <option value="/contact.html">Quote &amp; Contact (/contact.html)</option>
-      <option value="/simplex-steel-building.html">Simplex Steel (/simplex-steel-building.html)</option>
-      <option value="/duplex-steel-building.html">Duplex Steel (/duplex-steel-building.html)</option>
-      <option value="/container-house.html">Container House (/container-house.html)</option>
-      <option value="/industrial-sheds.html">Industrial Sheds (/industrial-sheds.html)</option>
-      <option value="/interactive-tools.html">Interactive Tools (/interactive-tools.html)</option>
-      <option value="/projects.html">Projects (/projects.html)</option>
-      <option value="/service-areas.html">Service Areas (/service-areas.html)</option>
-      <option value="/faq.html">FAQs (/faq.html)</option>
-      <option value="/team-senior-management.html">Senior Management (/team-senior-management.html)</option>
-    </select>
-  </div>
+  <select class="te-page-select" id="pageSelector">
+    <option value="/">🏠 Home (Landing Page)</option>
+    <option value="/about.html">ℹ️ About Us</option>
+    <option value="/simplex-steel-building.html">🏡 Simplex Steel Buildings</option>
+    <option value="/duplex-steel-building.html">🏰 Duplex Steel Villas</option>
+    <option value="/container-home.html">📦 Luxury Container Homes</option>
+    <option value="/industrial-steel-shed.html">🏭 Industrial PEB Factory Sheds</option>
+    <option value="/projects.html">🏗️ Completed Projects</option>
+    <option value="/faq.html">❓ FAQs &amp; Rich Snippets</option>
+    <option value="/team-senior-management.html">👥 Senior Management Team</option>
+    <option value="/service-areas.html">📍 64 Districts Coverage</option>
+    <option value="/contact.html">📞 Contact &amp; Quote Calculator</option>
+  </select>
 
-  <!-- Actions -->
-  <div class="te-actions">
-    <button id="teResetBtn" type="button" class="btn btn-outline" title="Reset all settings to original defaults">
-      🔄 Reset
-    </button>
-    <a href="/admin/theme-editor/export" class="btn btn-outline" title="Export theme settings as JSON">
-      📤 Export JSON
-    </a>
-    <button id="teSaveBtn" type="button" class="btn btn-success">
-      💾 Save &amp; Publish Live
-    </button>
+  <!-- Top Tools & Publish Actions -->
+  <div class="te-tools">
+    <button type="button" class="btn btn-tool" id="inspectorBtn" title="Elementor Inspector: Click any element on canvas to edit">🎯 Inspector</button>
+    <button type="button" class="btn btn-tool" id="undoBtn" title="Undo (Ctrl+Z)">↩️</button>
+    <button type="button" class="btn btn-tool" id="redoBtn" title="Redo (Ctrl+Y)">↪️</button>
+    <a href="/admin/theme-editor/export" class="btn btn-outline" title="Export Theme JSON">📤 Export</a>
+    <button type="button" class="btn btn-outline" id="resetBtn" title="Reset Defaults">🔄 Reset</button>
+    <button type="button" class="btn btn-success" id="saveBtn" style="font-weight:700;">💾 Save &amp; Publish</button>
   </div>
 </header>
 
-<!-- Main Workspace -->
-<main class="te-workspace">
-  <!-- Left Controls Panel -->
-  <aside class="te-controls">
+<!-- ─── 2. MAIN WORKSPACE ────────────────────────────────────────── -->
+<div class="te-workspace">
 
-    <!-- 1. Preset Palettes (24 Curated Light & Dark Themes) -->
-    <div class="te-section" data-collapsed="false">
-      <div class="te-section-header" data-target="preset" data-label="Theme Preset Palettes">
-        <span>✨ 24 Curated Presets (Light &amp; Dark)</span>
-        <span class="te-section-icon">▼</span>
-      </div>
-      <div class="te-section-body">
-        <!-- Filter Tabs -->
-        <div class="te-preset-tabs">
-          <button type="button" class="te-preset-tab active" data-filter="all">All (24)</button>
-          <button type="button" class="te-preset-tab" data-filter="light">☀️ Light (12)</button>
-          <button type="button" class="te-preset-tab" data-filter="dark">🌙 Dark (12)</button>
+  <!-- Left Sidebar Panel (Elementor Pro Multi-Tab System) -->
+  <aside class="te-sidebar">
+    
+    <!-- Tab Navigation Strip -->
+    <div class="te-tab-strip">
+      <button type="button" class="te-tab-btn active" data-tab="style">🎨 Style</button>
+      <button type="button" class="te-tab-btn" data-tab="typography">🔤 Typography</button>
+      <button type="button" class="te-tab-btn" data-tab="layout">📐 Layout</button>
+      <button type="button" class="te-tab-btn" data-tab="components">🧩 Components</button>
+      <button type="button" class="te-tab-btn" data-tab="motion">⚡ Motion</button>
+      <button type="button" class="te-tab-btn" data-tab="presets">✨ Presets (24)</button>
+      <button type="button" class="te-tab-btn" data-tab="code">💻 CSS/JS</button>
+      <button type="button" class="te-tab-btn" data-tab="navigator">📑 Navigator</button>
+    </div>
+
+    <!-- ─── TAB 1: GLOBAL STYLE & COLORS ────────────────────────── -->
+    <div class="te-tab-content active" id="tab-style">
+      
+      <!-- Brand Primary Colors -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🔵 Brand Primary Colors</span>
+          <span>▾</span>
         </div>
-
-        <!-- Search Input -->
-        <input type="text" id="tePresetSearch" class="te-input" placeholder="🔍 Search palettes (e.g. midnight, obsidian, eco)..." style="font-size:0.8rem;">
-
-        <!-- Presets Grid -->
-        <div class="te-presets-grid" id="tePresetsGrid">
-          {% for key, p in presets %}
-          <div class="te-preset-card" data-preset="{{ key }}" data-mode="{{ p.mode or ('dark' if p.is_dark else 'light') }}" data-name="{{ p.name | lower }}" data-target="preset" data-label="{{ p.name }} Palette">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
-              <div class="te-preset-title" title="{{ p.name }}">{{ p.name }}</div>
-              <span class="te-preset-badge {% if p.mode == 'dark' or p.is_dark %}dark{% else %}light{% endif %}">{{ '🌙 Dark' if (p.mode == 'dark' or p.is_dark) else '☀️ Light' }}</span>
-            </div>
-            <div class="te-preset-dots">
-              <span class="te-preset-dot" style="background:{{ p.primary }};" title="Primary: {{ p.primary }}"></span>
-              <span class="te-preset-dot" style="background:{{ p.accent }};" title="Accent: {{ p.accent }}"></span>
-              <span class="te-preset-dot" style="background:{{ p.bg_color or '#FFFFFF' }}; border:1px solid rgba(255,255,255,0.2);" title="Background: {{ p.bg_color or '#FFFFFF' }}"></span>
-              <span class="te-preset-dot" style="background:{{ p.surface_color or '#F8FAFC' }}; border:1px solid rgba(255,255,255,0.2);" title="Surface: {{ p.surface_color or '#F8FAFC' }}"></span>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Primary Brand Accent</label>
+            <div class="te-color-row">
+              <input type="color" id="primaryColor" class="te-color-picker" value="{{ theme.primary or '#1E40AF' }}">
+              <input type="text" id="primaryColorText" class="te-input" value="{{ theme.primary or '#1E40AF' }}">
             </div>
           </div>
-          {% endfor %}
+          <div class="te-field">
+            <label class="te-label">Primary Dark (Hover &amp; Headers)</label>
+            <div class="te-color-row">
+              <input type="color" id="primaryDarkColor" class="te-color-picker" value="{{ theme.primary_dark or '#1E3A8A' }}">
+              <input type="text" id="primaryDarkColorText" class="te-input" value="{{ theme.primary_dark or '#1E3A8A' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Primary Light (Badges &amp; Highlights)</label>
+            <div class="te-color-row">
+              <input type="color" id="primaryLightColor" class="te-color-picker" value="{{ theme.primary_light or '#3B82F6' }}">
+              <input type="text" id="primaryLightColorText" class="te-input" value="{{ theme.primary_light or '#3B82F6' }}">
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Accent Gold / Secondary Colors -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🟡 Accent &amp; Conversion Colors</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Accent Highlight (Gold / Amber / Coral)</label>
+            <div class="te-color-row">
+              <input type="color" id="accentColor" class="te-color-picker" value="{{ theme.accent or '#EAB308' }}">
+              <input type="text" id="accentColorText" class="te-input" value="{{ theme.accent or '#EAB308' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Accent Light (Badges)</label>
+            <div class="te-color-row">
+              <input type="color" id="accentLightColor" class="te-color-picker" value="{{ theme.accent_light or '#FDE047' }}">
+              <input type="text" id="accentLightColorText" class="te-input" value="{{ theme.accent_light or '#FDE047' }}">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas Foundations (Light & Dark) -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🌓 Canvas &amp; Surface Foundations</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Page Background Color</label>
+            <div class="te-color-row">
+              <input type="color" id="bgColor" class="te-color-picker" value="{{ theme.bg_color or '#ffffff' }}">
+              <input type="text" id="bgColorText" class="te-input" value="{{ theme.bg_color or '#ffffff' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Surface / Card Color</label>
+            <div class="te-color-row">
+              <input type="color" id="surfaceColor" class="te-color-picker" value="{{ theme.surface_color or '#f8fafc' }}">
+              <input type="text" id="surfaceColorText" class="te-input" value="{{ theme.surface_color or '#f8fafc' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Primary Text Color</label>
+            <div class="te-color-row">
+              <input type="color" id="textColor" class="te-color-picker" value="{{ theme.text_color or '#0f172a' }}">
+              <input type="text" id="textColorText" class="te-input" value="{{ theme.text_color or '#0f172a' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Muted / Subtitle Text Color</label>
+            <div class="te-color-row">
+              <input type="color" id="textMutedColor" class="te-color-picker" value="{{ theme.text_muted or '#64748b' }}">
+              <input type="text" id="textMutedColorText" class="te-input" value="{{ theme.text_muted or '#64748b' }}">
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- 2. Brand & Surface Colors -->
-    <div class="te-section" data-collapsed="false">
-      <div class="te-section-header" data-target="primary" data-label="Brand &amp; Surface Colors">
-        <span>🎨 Brand &amp; Surface Colors</span>
-        <span class="te-section-icon">▼</span>
-      </div>
-      <div class="te-section-body">
-        <div class="te-field" data-target="primary" data-label="Primary Brand Color (Buttons &amp; Logos)">
-          <label class="te-label">Primary Brand Color</label>
-          <div class="te-color-row">
-            <input type="color" id="primaryColor" class="te-color-picker" value="{{ theme.primary }}">
-            <input type="text" id="primaryColorText" class="te-input te-color-text" value="{{ theme.primary }}">
+    <!-- ─── TAB 2: TYPOGRAPHY ────────────────────────────────────── -->
+    <div class="te-tab-content" id="tab-typography">
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🔤 Font Families &amp; Hierarchy</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Heading Font Family</label>
+            <select id="fontHeading" class="te-select">
+              <option value="'Inter', sans-serif" {% if theme.font_heading == "'Inter', sans-serif" %}selected{% endif %}>Inter (Modern Clean)</option>
+              <option value="'Outfit', sans-serif" {% if theme.font_heading == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Architectural Bold)</option>
+              <option value="'Plus Jakarta Sans', sans-serif" {% if theme.font_heading == "'Plus Jakarta Sans', sans-serif" %}selected{% endif %}>Plus Jakarta Sans (High-Tech)</option>
+              <option value="'Poppins', sans-serif" {% if theme.font_heading == "'Poppins', sans-serif" %}selected{% endif %}>Poppins (Geometric Friendly)</option>
+              <option value="'Montserrat', sans-serif" {% if theme.font_heading == "'Montserrat', sans-serif" %}selected{% endif %}>Montserrat (Corporate Bold)</option>
+              <option value="'Playfair Display', serif" {% if theme.font_heading == "'Playfair Display', serif" %}selected{% endif %}>Playfair Display (Luxury Serif)</option>
+              <option value="'Roboto', sans-serif" {% if theme.font_heading == "'Roboto', sans-serif" %}selected{% endif %}>Roboto (Standard Neutral)</option>
+            </select>
           </div>
-        </div>
-
-        <div class="te-field" data-target="primary_dark" data-label="Primary Dark (Footers &amp; Hover States)">
-          <label class="te-label">Primary Dark (Hover &amp; Footers)</label>
-          <div class="te-color-row">
-            <input type="color" id="primaryDarkColor" class="te-color-picker" value="{{ theme.primary_dark }}">
-            <input type="text" id="primaryDarkColorText" class="te-input te-color-text" value="{{ theme.primary_dark }}">
+          <div class="te-field">
+            <label class="te-label">Body Font Family</label>
+            <select id="fontBody" class="te-select">
+              <option value="'Inter', sans-serif" {% if theme.font_body == "'Inter', sans-serif" %}selected{% endif %}>Inter (Optimal Readability)</option>
+              <option value="'Roboto', sans-serif" {% if theme.font_body == "'Roboto', sans-serif" %}selected{% endif %}>Roboto</option>
+              <option value="'Plus Jakarta Sans', sans-serif" {% if theme.font_body == "'Plus Jakarta Sans', sans-serif" %}selected{% endif %}>Plus Jakarta Sans</option>
+              <option value="system-ui, -apple-system, sans-serif" {% if theme.font_body == "system-ui, -apple-system, sans-serif" %}selected{% endif %}>System Native OS</option>
+            </select>
           </div>
-        </div>
-
-        <div class="te-field" data-target="primary_light" data-label="Primary Light (Gradients &amp; Highlights)">
-          <label class="te-label">Primary Light (Gradients &amp; Accents)</label>
-          <div class="te-color-row">
-            <input type="color" id="primaryLightColor" class="te-color-picker" value="{{ theme.primary_light }}">
-            <input type="text" id="primaryLightColorText" class="te-input te-color-text" value="{{ theme.primary_light }}">
-          </div>
-        </div>
-
-        <div class="te-field" data-target="accent" data-label="Accent Color (Badges, Stars, Highlights)">
-          <label class="te-label">Accent / Highlight</label>
-          <div class="te-color-row">
-            <input type="color" id="accentColor" class="te-color-picker" value="{{ theme.accent }}">
-            <input type="text" id="accentColorText" class="te-input te-color-text" value="{{ theme.accent }}">
-          </div>
-        </div>
-
-        <div class="te-field" data-target="accent_light" data-label="Accent Light (Badges &amp; Tags)">
-          <label class="te-label">Accent Light</label>
-          <div class="te-color-row">
-            <input type="color" id="accentLightColor" class="te-color-picker" value="{{ theme.accent_light }}">
-            <input type="text" id="accentLightColorText" class="te-input te-color-text" value="{{ theme.accent_light }}">
-          </div>
-        </div>
-
-        <!-- Real Background & Surface Color Tokens -->
-        <div class="te-field" data-target="bg_color" data-label="Page Background Color">
-          <label class="te-label">Page Background Color</label>
-          <div class="te-color-row">
-            <input type="color" id="bgColor" class="te-color-picker" value="{{ theme.bg_color or '#ffffff' }}">
-            <input type="text" id="bgColorText" class="te-input te-color-text" value="{{ theme.bg_color or '#ffffff' }}">
-          </div>
-        </div>
-
-        <div class="te-field" data-target="surface_color" data-label="Surface / Card Color">
-          <label class="te-label">Surface / Card Color</label>
-          <div class="te-color-row">
-            <input type="color" id="surfaceColor" class="te-color-picker" value="{{ theme.surface_color or '#f8fafc' }}">
-            <input type="text" id="surfaceColorText" class="te-input te-color-text" value="{{ theme.surface_color or '#f8fafc' }}">
-          </div>
-        </div>
-
-        <div class="te-field" data-target="text_color" data-label="Main Text Color">
-          <label class="te-label">Main Text Color</label>
-          <div class="te-color-row">
-            <input type="color" id="textColor" class="te-color-picker" value="{{ theme.text_color or '#0f172a' }}">
-            <input type="text" id="textColorText" class="te-input te-color-text" value="{{ theme.text_color or '#0f172a' }}">
-          </div>
-        </div>
-
-        <div class="te-field" data-target="text_muted" data-label="Muted Text Color">
-          <label class="te-label">Muted / Subtitle Text Color</label>
-          <div class="te-color-row">
-            <input type="color" id="textMutedColor" class="te-color-picker" value="{{ theme.text_muted or '#64748b' }}">
-            <input type="text" id="textMutedColorText" class="te-input te-color-text" value="{{ theme.text_muted or '#64748b' }}">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Typography -->
-    <div class="te-section" data-collapsed="false">
-      <div class="te-section-header" data-target="heading_font" data-label="Typography &amp; Fonts">
-        <span>✍️ Typography &amp; Fonts</span>
-        <span class="te-section-icon">▼</span>
-      </div>
-      <div class="te-section-body">
-        <div class="te-field" data-target="heading_font" data-label="Heading Font Family (h1, h2, h3)">
-          <label class="te-label">Heading Font Family</label>
-          <select id="fontHeading" class="te-select">
-            <option value="'Inter', sans-serif" {% if theme.font_heading == "'Inter', sans-serif" %}selected{% endif %}>Inter (Modern Sans)</option>
-            <option value="'Outfit', sans-serif" {% if theme.font_heading == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Geometric Premium)</option>
-            <option value="'Plus Jakarta Sans', sans-serif" {% if theme.font_heading == "'Plus Jakarta Sans', sans-serif" %}selected{% endif %}>Plus Jakarta Sans</option>
-            <option value="'Poppins', sans-serif" {% if theme.font_heading == "'Poppins', sans-serif" %}selected{% endif %}>Poppins (Rounded)</option>
-            <option value="'Roboto', sans-serif" {% if theme.font_heading == "'Roboto', sans-serif" %}selected{% endif %}>Roboto (Clean)</option>
-          </select>
-        </div>
-
-        <div class="te-field" data-target="body_font" data-label="Body Text Font Family">
-          <label class="te-label">Body Text Font Family</label>
-          <select id="fontBody" class="te-select">
-            <option value="'Inter', sans-serif" {% if theme.font_body == "'Inter', sans-serif" %}selected{% endif %}>Inter</option>
-            <option value="'Roboto', sans-serif" {% if theme.font_body == "'Roboto', sans-serif" %}selected{% endif %}>Roboto</option>
-            <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" {% if theme.font_body == "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" %}selected{% endif %}>System Native</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. Top Announcement Banner -->
-    <div class="te-section" data-collapsed="false">
-      <div class="te-section-header" data-target="announcement" data-label="Top Announcement Banner">
-        <span>📢 Top Announcement Banner</span>
-        <span class="te-section-icon">▼</span>
-      </div>
-      <div class="te-section-body">
-        <div class="te-field" data-target="announcement" data-label="Top Announcement Bar Visibility">
-          <label class="te-label" style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-            <input type="checkbox" id="showAnnouncement" {% if theme.show_announcement %}checked{% endif %} style="width:16px; height:16px;">
-            Enable Top Promo Announcement Bar
-          </label>
-        </div>
-
-        <div class="te-field" data-target="announcement_text" data-label="Announcement Message Text">
-          <label class="te-label">Announcement Text</label>
-          <textarea id="announcementText" class="te-textarea" rows="2">{{ theme.announcement_text }}</textarea>
-        </div>
-
-        <div class="te-field" data-target="announcement_link" data-label="Announcement Action Link Button">
-          <label class="te-label">Banner Action Link</label>
-          <input type="text" id="announcementLink" class="te-input" value="{{ theme.announcement_link }}">
-        </div>
-
-        <div class="te-field" data-target="announcement_bg" data-label="Announcement Background Color">
-          <label class="te-label">Banner Background Color</label>
-          <div class="te-color-row">
-            <input type="color" id="announcementBg" class="te-color-picker" value="{{ theme.announcement_bg }}">
-            <input type="text" id="announcementBgText" class="te-input te-color-text" value="{{ theme.announcement_bg }}">
-          </div>
-        </div>
-
-        <div class="te-field" data-target="announcement_color" data-label="Announcement Text &amp; Link Color">
-          <label class="te-label">Banner Text &amp; Accent Color</label>
-          <div class="te-color-row">
-            <input type="color" id="announcementColor" class="te-color-picker" value="{{ theme.announcement_color }}">
-            <input type="text" id="announcementColorText" class="te-input te-color-text" value="{{ theme.announcement_color }}">
+          <div class="te-field">
+            <label class="te-label">Base Font Size</label>
+            <div class="te-slider-row">
+              <input type="range" id="fontSizeBase" class="te-range" min="14" max="20" value="{{ theme.font_size_base | replace('px', '') or '16' }}">
+              <span class="te-range-val" id="fontSizeBaseVal">{{ theme.font_size_base or '16px' }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 5. Layout & Corners -->
-    <div class="te-section" data-collapsed="false">
-      <div class="te-section-header" data-target="radius" data-label="Border Radius &amp; Corners">
-        <span>📐 Border Radius &amp; Corners</span>
-        <span class="te-section-icon">▼</span>
-      </div>
-      <div class="te-section-body">
-        <div class="te-field" data-target="radius" data-label="Corner Roundness (Buttons, Cards, Badges)">
-          <label class="te-label">Corner Roundness</label>
-          <select id="radiusStyle" class="te-select">
-            <option value="sharp" {% if theme.radius_md == '2px' %}selected{% endif %}>Sharp / Industrial (2px)</option>
-            <option value="subtle" {% if theme.radius_md == '4px' %}selected{% endif %}>Subtle Rounded (4px)</option>
-            <option value="modern" {% if theme.radius_md == '8px' or not theme.radius_md %}selected{% endif %}>Modern Standard (8px)</option>
-            <option value="smooth" {% if theme.radius_md == '14px' %}selected{% endif %}>Smooth Curved (14px)</option>
-          </select>
+    <!-- ─── TAB 3: LAYOUT & SPACING ──────────────────────────────── -->
+    <div class="te-tab-content" id="tab-layout">
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>📐 Container, Spacing &amp; Shadows</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Container Max Width</label>
+            <select id="containerWidth" class="te-select">
+              <option value="1140px" {% if theme.container_width == '1140px' %}selected{% endif %}>Compact (1140px)</option>
+              <option value="1200px" {% if theme.container_width == '1200px' %}selected{% endif %}>Standard (1200px)</option>
+              <option value="1280px" {% if not theme.container_width or theme.container_width == '1280px' %}selected{% endif %}>Wide Modern (1280px)</option>
+              <option value="1400px" {% if theme.container_width == '1400px' %}selected{% endif %}>Ultra-Wide (1400px)</option>
+            </select>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Section Vertical Spacing</label>
+            <select id="sectionSpacing" class="te-select">
+              <option value="compact" {% if theme.section_spacing == 'compact' %}selected{% endif %}>Compact (3.5rem)</option>
+              <option value="normal" {% if not theme.section_spacing or theme.section_spacing == 'normal' %}selected{% endif %}>Normal (6rem)</option>
+              <option value="spacious" {% if theme.section_spacing == 'spacious' %}selected{% endif %}>Spacious (8rem)</option>
+              <option value="luxury" {% if theme.section_spacing == 'luxury' %}selected{% endif %}>Luxury (10rem)</option>
+            </select>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Corner Roundness Radius</label>
+            <div class="te-slider-row">
+              <input type="range" id="radiusRange" class="te-range" min="0" max="24" value="{{ theme.radius_md | replace('px', '') or '8' }}">
+              <span class="te-range-val" id="radiusVal">{{ theme.radius_md or '8px' }}</span>
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Shadow Preset</label>
+            <select id="shadowPreset" class="te-select">
+              <option value="flat">Flat Minimalist</option>
+              <option value="subtle">Subtle Elevation</option>
+              <option value="modern" selected>Modern Layered</option>
+              <option value="elevation">Deep Ambient</option>
+              <option value="glow">Neon Accent Glow</option>
+            </select>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Button Style</label>
+            <select id="buttonStyle" class="te-select">
+              <option value="gradient" selected>Vibrant Gradient</option>
+              <option value="solid">Solid Color</option>
+              <option value="outline">Modern Outline</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 6. Custom CSS Live Injector -->
-    <div class="te-section" data-collapsed="true">
-      <div class="te-section-header" data-target="custom_css" data-label="Custom CSS Live Injection">
-        <span>💻 Custom CSS Live Code</span>
-        <span class="te-section-icon">▼</span>
-      </div>
-      <div class="te-section-body">
-        <div class="te-field" data-target="custom_css" data-label="Custom CSS Live Code Editor">
-          <label class="te-label">Inject Custom CSS (Live updates)</label>
-          <textarea id="customCss" class="te-textarea" rows="6" placeholder="/* Custom CSS overrides */&#10;.navbar { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }">{{ theme.custom_css }}</textarea>
+    <!-- ─── TAB 4: COMPONENTS & HEADER ──────────────────────────── -->
+    <div class="te-tab-content" id="tab-components">
+      
+      <!-- Top Announcement Bar -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>📢 Top Announcement Banner</span>
+          <span>▾</span>
         </div>
+        <div class="te-section-body">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="showAnnouncement" {% if theme.show_announcement %}checked{% endif %}>
+            <label for="showAnnouncement" style="font-size:0.8rem; font-weight:700; color:white;">Enable Top Announcement Bar</label>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Banner Message (Bangla / English)</label>
+            <input type="text" id="announcementText" class="te-input" value="{{ theme.announcement_text or '' }}">
+          </div>
+          <div class="te-field">
+            <label class="te-label">Banner Background Color</label>
+            <div class="te-color-row">
+              <input type="color" id="announcementBg" class="te-color-picker" value="{{ theme.announcement_bg or '#1E3A8A' }}">
+              <input type="text" id="announcementBgText" class="te-input" value="{{ theme.announcement_bg or '#1E3A8A' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Banner Text &amp; Accent Color</label>
+            <div class="te-color-row">
+              <input type="color" id="announcementColor" class="te-color-picker" value="{{ theme.announcement_color or '#FDE047' }}">
+              <input type="text" id="announcementColorText" class="te-input" value="{{ theme.announcement_color or '#FDE047' }}">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation & Header -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🧭 Header &amp; Sticky Navbar</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="navbarSticky" {% if theme.navbar_sticky %}checked{% endif %}>
+            <label for="navbarSticky" style="font-size:0.8rem; font-weight:700; color:white;">Sticky Navbar on Scroll</label>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Direct Hotline Phone</label>
+            <input type="text" id="hotlinePhone" class="te-input" value="{{ theme.hotline_phone or '+880 1711-200241' }}">
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Widgets -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>💬 Floating AI &amp; WhatsApp Widgets</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">AI Chat Widget Primary Color</label>
+            <div class="te-color-row">
+              <input type="color" id="aiWidgetPrimary" class="te-color-picker" value="{{ theme.ai_widget_primary or '#1E40AF' }}">
+              <input type="text" id="aiWidgetPrimaryText" class="te-input" value="{{ theme.ai_widget_primary or '#1E40AF' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Widget Screen Alignment</label>
+            <select id="aiWidgetPosition" class="te-select">
+              <option value="right" {% if theme.ai_widget_position == 'right' %}selected{% endif %}>Bottom Right (Recommended)</option>
+              <option value="left" {% if theme.ai_widget_position == 'left' %}selected{% endif %}>Bottom Left</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── TAB 5: MOTION & DYNAMICS ────────────────────────────── -->
+    <div class="te-tab-content" id="tab-motion">
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>⚡ Animation Speeds &amp; Transitions</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">UI Transition Speed</label>
+            <select id="transitionSpeed" class="te-select">
+              <option value="0.15s" {% if theme.transition_speed == '0.15s' %}selected{% endif %}>Fast (0.15s)</option>
+              <option value="0.25s" {% if not theme.transition_speed or theme.transition_speed == '0.25s' %}selected{% endif %}>Balanced (0.25s)</option>
+              <option value="0.4s" {% if theme.transition_speed == '0.4s' %}selected{% endif %}>Smooth (0.40s)</option>
+              <option value="0.55s" {% if theme.transition_speed == '0.55s' %}selected{% endif %}>Spring Dynamics (0.55s)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TAB 6: 24 PRESETS GALLERY ───────────────────────────── -->
+    <div class="te-tab-content" id="tab-presets">
+      <input type="text" id="presetSearchInput" class="te-input" placeholder="🔍 Search 24 curated palettes..." style="margin-bottom:10px;">
+      <div class="te-presets-filter">
+        <button type="button" class="te-preset-tab active" data-filter="all">All (24)</button>
+        <button type="button" class="te-preset-tab" data-filter="light">☀️ Light (12)</button>
+        <button type="button" class="te-preset-tab" data-filter="dark">🌙 Dark (12)</button>
+      </div>
+
+      <div class="te-preset-grid" id="presetGridContainer">
+        {% for slug, p in presets %}
+        <div class="te-preset-card {% if initialPreset == slug or (theme.name == p.name) %}active{% endif %}"
+             data-preset="{{ slug }}"
+             data-mode="{{ p.mode or ('dark' if p.is_dark else 'light') }}"
+             data-name="{{ p.name | lower }}"
+             data-label="{{ p.name }}">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:0.75rem; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ p.name }}</strong>
+            <span style="font-size:0.62rem; color:var(--text-muted);">{{ '🌙' if p.is_dark else '☀️' }}</span>
+          </div>
+
+          <div style="display:flex; gap:3px; align-items:center; background:{{ p.bg_color or '#fff' }}; padding:4px 6px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);">
+            <span style="width:10px; height:10px; border-radius:50%; background:{{ p.primary }};"></span>
+            <span style="width:10px; height:10px; border-radius:50%; background:{{ p.accent }};"></span>
+            <span style="width:10px; height:10px; border-radius:50%; background:{{ p.surface_color }}; border:1px solid #777;"></span>
+            <span style="font-size:0.6rem; color:{{ p.text_color }}; font-weight:700; margin-left:auto;">Aa</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- ─── TAB 7: CUSTOM CSS & JS ──────────────────────────────── -->
+    <div class="te-tab-content" id="tab-code">
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>💻 Custom CSS (Live Injected)</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <textarea id="customCss" class="te-textarea" rows="12" placeholder="/* Write custom CSS overrides here... */">{{ theme.custom_css or '' }}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TAB 8: DOM NAVIGATOR TREE ───────────────────────────── -->
+    <div class="te-tab-content" id="tab-navigator">
+      <div style="font-size:0.8rem; font-weight:700; color:white; margin-bottom:10px;">📑 Page Sections Tree</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="announcement" style="justify-content:flex-start;">📢 Announcement Bar</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="navbar" style="justify-content:flex-start;">🧭 Navigation Header</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="hero" style="justify-content:flex-start;">🖼️ Page Hero Banner</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="features" style="justify-content:flex-start;">⚡ Features Strip</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="catalog" style="justify-content:flex-start;">📦 Product Catalog</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="why" style="justify-content:flex-start;">⭐ Why Choose Bongshai</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="steps" style="justify-content:flex-start;">🔄 Construction Process Steps</button>
+        <button type="button" class="btn btn-outline nav-tree-node" data-target="footer" style="justify-content:flex-start;">🦶 Site Footer</button>
       </div>
     </div>
 
   </aside>
 
-  <!-- Right Canvas: Live Iframe Preview -->
-  <section class="te-canvas">
-    <div id="teFrameWrapper" class="te-frame-wrapper mode-desktop">
-      <iframe id="tePreviewFrame" class="te-iframe" src="/" title="Live Site Preview"></iframe>
+  <!-- ─── 3. RIGHT PREVIEW CANVAS ──────────────────────────────── -->
+  <main class="te-canvas">
+    <div class="te-frame-wrapper mode-desktop" id="frameWrapper">
+      <iframe id="previewIframe" src="/" title="Website Live Preview Canvas"></iframe>
     </div>
-  </section>
-</main>
+  </main>
 
-<!-- Save Toast Notification -->
-<div id="teToast" class="te-toast">✅ Theme Saved &amp; Published Live!</div>
+</div>
+
+<!-- ─── 4. TOAST NOTIFICATION ────────────────────────────────────── -->
+<div class="te-toast" id="toastMessage">✅ Theme Published Live!</div>
 
 <script>
-(function() {
-  const iframe = document.getElementById('tePreviewFrame');
-  const frameWrapper = document.getElementById('teFrameWrapper');
-  const pageSelector = document.getElementById('tePageSelector');
-  const deviceButtons = document.querySelectorAll('.te-device-btn');
-  const saveBtn = document.getElementById('teSaveBtn');
-  const resetBtn = document.getElementById('teResetBtn');
-  const toast = document.getElementById('teToast');
+const presetsData = {{ presets | dump | safe }};
 
-  // Input elements
+(function() {
+  const iframe = document.getElementById('previewIframe');
+  const frameWrapper = document.getElementById('frameWrapper');
+  const pageSelector = document.getElementById('pageSelector');
+  const deviceButtons = document.querySelectorAll('.te-device-btn[data-mode]');
+  const rotateBtn = document.getElementById('rotateBtn');
+  const inspectorBtn = document.getElementById('inspectorBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const undoBtn = document.getElementById('undoBtn');
+  const redoBtn = document.getElementById('redoBtn');
+  const toast = document.getElementById('toastMessage');
+
+  // Tab Switching
+  const tabBtns = document.querySelectorAll('.te-tab-btn');
+  const tabContents = document.querySelectorAll('.te-tab-content');
+
+  function openTab(tabId) {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    tabContents.forEach(c => c.classList.remove('active'));
+    const btn = document.querySelector(`.te-tab-btn[data-tab="${tabId}"]`);
+    const content = document.getElementById(`tab-${tabId}`);
+    if (btn && content) {
+      btn.classList.add('active');
+      content.classList.add('active');
+    }
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      openTab(btn.getAttribute('data-tab'));
+    });
+  });
+
+  // State & History Stack (Undo / Redo)
+  const historyStack = [];
+  let historyIndex = -1;
+  const MAX_HISTORY = 30;
+
+  function syncPair(picker, text) {
+    if (!picker || !text) return;
+    picker.addEventListener('input', () => {
+      text.value = picker.value;
+      sendLiveUpdate();
+    });
+    text.addEventListener('input', () => {
+      if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) {
+        picker.value = text.value;
+        sendLiveUpdate();
+      }
+    });
+  }
+
+  // Inputs
   const primaryColor = document.getElementById('primaryColor');
   const primaryColorText = document.getElementById('primaryColorText');
   const primaryDarkColor = document.getElementById('primaryDarkColor');
@@ -731,7 +914,6 @@
   const accentLightColor = document.getElementById('accentLightColor');
   const accentLightColorText = document.getElementById('accentLightColorText');
 
-  // Background & Surface Tokens
   const bgColor = document.getElementById('bgColor');
   const bgColorText = document.getElementById('bgColorText');
   const surfaceColor = document.getElementById('surfaceColor');
@@ -743,246 +925,189 @@
 
   const fontHeading = document.getElementById('fontHeading');
   const fontBody = document.getElementById('fontBody');
-  const radiusStyle = document.getElementById('radiusStyle');
+  const fontSizeBase = document.getElementById('fontSizeBase');
+  const fontSizeBaseVal = document.getElementById('fontSizeBaseVal');
+
+  const containerWidth = document.getElementById('containerWidth');
+  const sectionSpacing = document.getElementById('sectionSpacing');
+  const radiusRange = document.getElementById('radiusRange');
+  const radiusVal = document.getElementById('radiusVal');
+  const shadowPreset = document.getElementById('shadowPreset');
+  const buttonStyle = document.getElementById('buttonStyle');
 
   const showAnnouncement = document.getElementById('showAnnouncement');
   const announcementText = document.getElementById('announcementText');
-  const announcementLink = document.getElementById('announcementLink');
   const announcementBg = document.getElementById('announcementBg');
   const announcementBgText = document.getElementById('announcementBgText');
   const announcementColor = document.getElementById('announcementColor');
   const announcementColorText = document.getElementById('announcementColorText');
+
+  const navbarSticky = document.getElementById('navbarSticky');
+  const hotlinePhone = document.getElementById('hotlinePhone');
+  const aiWidgetPrimary = document.getElementById('aiWidgetPrimary');
+  const aiWidgetPrimaryText = document.getElementById('aiWidgetPrimaryText');
+  const aiWidgetPosition = document.getElementById('aiWidgetPosition');
+  const transitionSpeed = document.getElementById('transitionSpeed');
   const customCss = document.getElementById('customCss');
 
-  const presetsData = {{ presets | dump | safe }};
+  syncPair(primaryColor, primaryColorText);
+  syncPair(primaryDarkColor, primaryDarkColorText);
+  syncPair(primaryLightColor, primaryLightColorText);
+  syncPair(accentColor, accentColorText);
+  syncPair(accentLightColor, accentLightColorText);
+  syncPair(bgColor, bgColorText);
+  syncPair(surfaceColor, surfaceColorText);
+  syncPair(textColor, textColorText);
+  syncPair(textMutedColor, textMutedColorText);
+  syncPair(announcementBg, announcementBgText);
+  syncPair(announcementColor, announcementColorText);
+  syncPair(aiWidgetPrimary, aiWidgetPrimaryText);
 
-  // Sync color inputs
-  function bindColorPair(picker, text) {
-    if (!picker || !text) return;
-    picker.addEventListener('input', () => {
-      text.value = picker.value.toUpperCase();
+  if (fontSizeBase) {
+    fontSizeBase.addEventListener('input', () => {
+      fontSizeBaseVal.textContent = fontSizeBase.value + 'px';
       sendLiveUpdate();
     });
-    text.addEventListener('input', () => {
-      if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) {
-        picker.value = text.value;
-        sendLiveUpdate();
-      }
+  }
+
+  if (radiusRange) {
+    radiusRange.addEventListener('input', () => {
+      radiusVal.textContent = radiusRange.value + 'px';
+      sendLiveUpdate();
     });
   }
 
-  bindColorPair(primaryColor, primaryColorText);
-  bindColorPair(primaryDarkColor, primaryDarkColorText);
-  bindColorPair(primaryLightColor, primaryLightColorText);
-  bindColorPair(accentColor, accentColorText);
-  bindColorPair(accentLightColor, accentLightColorText);
-  bindColorPair(bgColor, bgColorText);
-  bindColorPair(surfaceColor, surfaceColorText);
-  bindColorPair(textColor, textColorText);
-  bindColorPair(textMutedColor, textMutedColorText);
-  bindColorPair(announcementBg, announcementBgText);
-  bindColorPair(announcementColor, announcementColorText);
-
-  // Text inputs & dropdowns live sync
-  [fontHeading, fontBody, radiusStyle, showAnnouncement, announcementText, announcementLink, customCss].forEach(el => {
-    if (!el) return;
-    el.addEventListener('input', sendLiveUpdate);
-    el.addEventListener('change', sendLiveUpdate);
+  [fontHeading, fontBody, containerWidth, sectionSpacing, shadowPreset, buttonStyle, showAnnouncement, announcementText, navbarSticky, hotlinePhone, aiWidgetPosition, transitionSpeed, customCss].forEach(el => {
+    if (el) el.addEventListener('input', () => sendLiveUpdate());
   });
 
-  // Calculate radius tokens
-  function getRadiusTokens(style) {
-    switch (style) {
-      case 'sharp': return { sm: '0px', md: '2px', lg: '4px', xl: '6px' };
-      case 'subtle': return { sm: '2px', md: '4px', lg: '6px', xl: '8px' };
-      case 'smooth': return { sm: '6px', md: '14px', lg: '20px', xl: '24px' };
-      default: return { sm: '4px', md: '8px', lg: '12px', xl: '16px' };
-    }
-  }
-
-  // Get current active theme object
   function getCurrentThemeData() {
-    const rad = getRadiusTokens(radiusStyle.value);
+    const r = parseInt(radiusRange ? radiusRange.value : 8, 10);
     return {
       primary: primaryColor.value,
       primary_dark: primaryDarkColor.value,
       primary_light: primaryLightColor.value,
       accent: accentColor.value,
       accent_light: accentLightColor.value,
-      accent_dark: '#CA8A04',
       bg_color: bgColor.value,
       surface_color: surfaceColor.value,
       text_color: textColor.value,
       text_muted: textMutedColor.value,
       font_heading: fontHeading.value,
       font_body: fontBody.value,
-      radius_sm: rad.sm,
-      radius_md: rad.md,
-      radius_lg: rad.lg,
-      radius_xl: rad.xl,
+      font_size_base: (fontSizeBase ? fontSizeBase.value : '16') + 'px',
+      container_width: containerWidth ? containerWidth.value : '1280px',
+      section_spacing: sectionSpacing ? sectionSpacing.value : 'normal',
+      radius_sm: Math.max(2, Math.round(r * 0.5)) + 'px',
+      radius_md: r + 'px',
+      radius_lg: Math.round(r * 1.5) + 'px',
+      radius_xl: Math.round(r * 2) + 'px',
       show_announcement: showAnnouncement.checked,
       announcement_text: announcementText.value,
-      announcement_link: announcementLink.value,
       announcement_bg: announcementBg.value,
       announcement_color: announcementColor.value,
-      custom_css: customCss.value,
+      navbar_sticky: navbarSticky ? navbarSticky.checked : true,
+      hotline_phone: hotlinePhone ? hotlinePhone.value : '+880 1711-200241',
+      ai_widget_primary: aiWidgetPrimary.value,
+      ai_widget_position: aiWidgetPosition ? aiWidgetPosition.value : 'right',
+      transition_speed: transitionSpeed ? transitionSpeed.value : '0.25s',
+      custom_css: customCss ? customCss.value : '',
     };
   }
 
-  // 0ms Real-Time postMessage to iframe
-  function sendLiveUpdate() {
+  function applyThemeData(theme) {
+    if (!theme) return;
+    if (theme.primary) { primaryColor.value = theme.primary; primaryColorText.value = theme.primary; }
+    if (theme.primary_dark) { primaryDarkColor.value = theme.primary_dark; primaryDarkColorText.value = theme.primary_dark; }
+    if (theme.primary_light) { primaryLightColor.value = theme.primary_light; primaryLightColorText.value = theme.primary_light; }
+    if (theme.accent) { accentColor.value = theme.accent; accentColorText.value = theme.accent; }
+    if (theme.accent_light) { accentLightColor.value = theme.accent_light; accentLightColorText.value = theme.accent_light; }
+    if (theme.bg_color) { bgColor.value = theme.bg_color; bgColorText.value = theme.bg_color; }
+    if (theme.surface_color) { surfaceColor.value = theme.surface_color; surfaceColorText.value = theme.surface_color; }
+    if (theme.text_color) { textColor.value = theme.text_color; textColorText.value = theme.text_color; }
+    if (theme.text_muted) { textMutedColor.value = theme.text_muted; textMutedColorText.value = theme.text_muted; }
+    if (theme.font_heading) { fontHeading.value = theme.font_heading; }
+    if (theme.font_body) { fontBody.value = theme.font_body; }
+    if (theme.announcement_bg) { announcementBg.value = theme.announcement_bg; announcementBgText.value = theme.announcement_bg; }
+    if (theme.announcement_color) { announcementColor.value = theme.announcement_color; announcementColorText.value = theme.announcement_color; }
+    if (theme.custom_css !== undefined && customCss) { customCss.value = theme.custom_css; }
+    sendLiveUpdate(false);
+  }
+
+  function pushHistory() {
+    const snap = getCurrentThemeData();
+    historyStack.splice(historyIndex + 1);
+    historyStack.push(snap);
+    if (historyStack.length > MAX_HISTORY) historyStack.shift();
+    historyIndex = historyStack.length - 1;
+  }
+
+  pushHistory();
+
+  let updateTimeout = null;
+  function sendLiveUpdate(record = true) {
     const theme = getCurrentThemeData();
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({
-        type: 'BH_THEME_UPDATE',
-        theme: theme
-      }, '*');
+    if (iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'BH_THEME_UPDATE', theme: theme }, '*');
+    }
+    if (record) {
+      clearTimeout(updateTimeout);
+      updateTimeout = setTimeout(pushHistory, 400);
     }
   }
 
-  // Visual Pinpoint to Canvas (shows user where the setting changes visually)
-  function sendHighlight(target, label) {
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({
-        type: 'BH_THEME_HIGHLIGHT',
-        target: target,
-        label: label
-      }, '*');
+  // Undo / Redo
+  undoBtn.addEventListener('click', () => {
+    if (historyIndex > 0) {
+      historyIndex--;
+      applyThemeData(historyStack[historyIndex]);
     }
-  }
+  });
 
-  function clearHighlight() {
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({
-        type: 'BH_THEME_CLEAR_HIGHLIGHT'
-      }, '*');
+  redoBtn.addEventListener('click', () => {
+    if (historyIndex < historyStack.length - 1) {
+      historyIndex++;
+      applyThemeData(historyStack[historyIndex]);
     }
-  }
-
-  // Highlight on click/focus/input across all sidebar fields & section headers
-  document.querySelectorAll('.te-field, .te-section-header').forEach(el => {
-    const target = el.getAttribute('data-target');
-    const label = el.getAttribute('data-label');
-    if (!target) return;
-
-    el.addEventListener('click', () => {
-      sendHighlight(target, label);
-    });
   });
 
-  // Direct element event bindings for instant visual feedback
-  const inputPinpoints = [
-    { el: primaryColor, target: 'primary', label: 'Primary Brand Color' },
-    { el: primaryColorText, target: 'primary', label: 'Primary Brand Color' },
-    { el: primaryDarkColor, target: 'primary_dark', label: 'Primary Dark (Footers & Hover States)' },
-    { el: primaryDarkColorText, target: 'primary_dark', label: 'Primary Dark (Footers & Hover States)' },
-    { el: primaryLightColor, target: 'primary_light', label: 'Primary Light & Gradients' },
-    { el: primaryLightColorText, target: 'primary_light', label: 'Primary Light & Gradients' },
-    { el: accentColor, target: 'accent', label: 'Accent Color & Badges' },
-    { el: accentColorText, target: 'accent', label: 'Accent Color & Badges' },
-    { el: accentLightColor, target: 'accent_light', label: 'Accent Light (Badges & Tags)' },
-    { el: accentLightColorText, target: 'accent_light', label: 'Accent Light (Badges & Tags)' },
-    { el: bgColor, target: 'bg_color', label: 'Page Background Color' },
-    { el: bgColorText, target: 'bg_color', label: 'Page Background Color' },
-    { el: surfaceColor, target: 'surface_color', label: 'Surface & Card Color' },
-    { el: surfaceColorText, target: 'surface_color', label: 'Surface & Card Color' },
-    { el: textColor, target: 'text_color', label: 'Main Text Color' },
-    { el: textColorText, target: 'text_color', label: 'Main Text Color' },
-    { el: textMutedColor, target: 'text_muted', label: 'Muted Text Color' },
-    { el: textMutedColorText, target: 'text_muted', label: 'Muted Text Color' },
-    { el: fontHeading, target: 'heading_font', label: 'Heading Font Family (h1, h2, h3)' },
-    { el: fontBody, target: 'body_font', label: 'Body Text Font Family' },
-    { el: showAnnouncement, target: 'announcement', label: 'Top Announcement Bar Visibility' },
-    { el: announcementText, target: 'announcement_text', label: 'Announcement Message Text' },
-    { el: announcementLink, target: 'announcement_link', label: 'Announcement Action Link Button' },
-    { el: announcementBg, target: 'announcement_bg', label: 'Announcement Background Color' },
-    { el: announcementBgText, target: 'announcement_bg', label: 'Announcement Background Color' },
-    { el: announcementColor, target: 'announcement_color', label: 'Announcement Text & Accent Color' },
-    { el: announcementColorText, target: 'announcement_color', label: 'Announcement Text & Accent Color' },
-    { el: radiusStyle, target: 'radius', label: 'Corner Roundness (Buttons, Cards, Badges)' },
-    { el: customCss, target: 'custom_css', label: 'Custom CSS Live Styles' }
-  ];
-
-  inputPinpoints.forEach(item => {
-    if (!item.el) return;
-    const trigger = () => sendHighlight(item.target, item.label);
-    item.el.addEventListener('focus', trigger);
-    item.el.addEventListener('click', trigger);
-    item.el.addEventListener('input', trigger);
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      e.preventDefault();
+      undoBtn.click();
+    } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'Z'))) {
+      e.preventDefault();
+      redoBtn.click();
+    }
   });
 
-  // Re-send update when iframe finishes loading a new page
-  iframe.addEventListener('load', () => {
-    sendLiveUpdate();
+  // Inspector Mode
+  let inspectorActive = false;
+  inspectorBtn.addEventListener('click', () => {
+    inspectorActive = !inspectorActive;
+    inspectorBtn.classList.toggle('active', inspectorActive);
+    if (iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'BH_SET_INSPECTOR_MODE', active: inspectorActive }, '*');
+    }
   });
 
-  // Presets Filter Tabs (All / Light / Dark)
-  const filterTabs = document.querySelectorAll('.te-preset-tab');
-  const presetSearch = document.getElementById('tePresetSearch');
-  const presetCards = document.querySelectorAll('.te-preset-card');
-
-  function applyPresetFilter() {
-    const activeTab = document.querySelector('.te-preset-tab.active');
-    const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
-    const query = (presetSearch ? presetSearch.value : '').toLowerCase().trim();
-
-    presetCards.forEach(card => {
-      const mode = card.getAttribute('data-mode') || 'light';
-      const name = card.getAttribute('data-name') || '';
-
-      const matchesMode = (filter === 'all') || (mode === filter);
-      const matchesSearch = !query || name.includes(query);
-
-      if (matchesMode && matchesSearch) {
-        card.style.display = 'flex';
+  window.addEventListener('message', (event) => {
+    if (!event.data) return;
+    if (event.data.type === 'BH_INSPECTOR_SELECT') {
+      const key = event.data.sectionKey;
+      if (key === 'announcement' || key === 'navbar' || key === 'widgets') {
+        openTab('components');
+      } else if (key === 'typography') {
+        openTab('typography');
+      } else if (key === 'layout') {
+        openTab('layout');
       } else {
-        card.style.display = 'none';
+        openTab('style');
       }
-    });
-  }
-
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      applyPresetFilter();
-    });
+    }
   });
 
-  if (presetSearch) {
-    presetSearch.addEventListener('input', applyPresetFilter);
-  }
-
-  // Presets 1-Click Apply
-  presetCards.forEach(card => {
-    card.addEventListener('click', () => {
-      presetCards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-
-      const presetKey = card.getAttribute('data-preset');
-      const label = card.getAttribute('data-label') || 'Preset Palettes';
-      const p = presetsData[presetKey];
-      if (!p) return;
-
-      if (p.primary) { primaryColor.value = p.primary; primaryColorText.value = p.primary; }
-      if (p.primary_dark) { primaryDarkColor.value = p.primary_dark; primaryDarkColorText.value = p.primary_dark; }
-      if (p.primary_light) { primaryLightColor.value = p.primary_light; primaryLightColorText.value = p.primary_light; }
-      if (p.accent) { accentColor.value = p.accent; accentColorText.value = p.accent; }
-      if (p.accent_light) { accentLightColor.value = p.accent_light; accentLightColorText.value = p.accent_light; }
-      if (p.bg_color) { bgColor.value = p.bg_color; bgColorText.value = p.bg_color; }
-      if (p.surface_color) { surfaceColor.value = p.surface_color; surfaceColorText.value = p.surface_color; }
-      if (p.text_color) { textColor.value = p.text_color; textColorText.value = p.text_color; }
-      if (p.text_muted) { textMutedColor.value = p.text_muted; textMutedColorText.value = p.text_muted; }
-      if (p.announcement_bg) { announcementBg.value = p.announcement_bg; announcementBgText.value = p.announcement_bg; }
-      if (p.announcement_color) { announcementColor.value = p.announcement_color; announcementColorText.value = p.announcement_color; }
-      if (p.font_heading) { fontHeading.value = p.font_heading; }
-
-      sendLiveUpdate();
-      sendHighlight('preset', label);
-    });
-  });
-
-  // Device switcher
+  // Device & Page Selectors
   deviceButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       deviceButtons.forEach(b => b.classList.remove('active'));
@@ -992,17 +1117,50 @@
     });
   });
 
-  // Page selector
+  rotateBtn.addEventListener('click', () => {
+    frameWrapper.classList.toggle('landscape');
+  });
+
   pageSelector.addEventListener('change', () => {
     iframe.src = pageSelector.value;
   });
 
-  // Accordion toggle
+  iframe.addEventListener('load', () => {
+    sendLiveUpdate(false);
+    if (inspectorActive && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'BH_SET_INSPECTOR_MODE', active: true }, '*');
+    }
+  });
+
+  // DOM Navigator Nodes
+  document.querySelectorAll('.nav-tree-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const target = node.getAttribute('data-target');
+      if (iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'BH_THEME_HIGHLIGHT', target: target, label: node.textContent }, '*');
+      }
+    });
+  });
+
+  // Presets 1-Click Apply
+  const presetCards = document.querySelectorAll('.te-preset-card');
+  presetCards.forEach(card => {
+    card.addEventListener('click', () => {
+      presetCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const slug = card.getAttribute('data-preset');
+      const p = presetsData[slug];
+      if (p) {
+        applyThemeData(p);
+      }
+    });
+  });
+
+  // Accordion Toggle
   document.querySelectorAll('.te-section-header').forEach(header => {
     header.addEventListener('click', () => {
-      const section = header.parentElement;
-      const isCollapsed = section.getAttribute('data-collapsed') === 'true';
-      section.setAttribute('data-collapsed', isCollapsed ? 'false' : 'true');
+      const sec = header.parentElement;
+      sec.setAttribute('data-collapsed', sec.getAttribute('data-collapsed') === 'true' ? 'false' : 'true');
     });
   });
 
@@ -1010,30 +1168,26 @@
   saveBtn.addEventListener('click', async () => {
     saveBtn.disabled = true;
     saveBtn.textContent = '⏳ Saving...';
-
     const theme = getCurrentThemeData();
-
     try {
       const res = await fetch('/admin/theme-editor', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(theme)
       });
-
       const data = await res.json();
       if (data && data.success) {
-        showToast('✅ Theme Saved & Published Live!');
+        toast.textContent = '✅ Theme Saved & Published Live!';
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3500);
       } else {
         alert('Save error: ' + (data?.error || 'Unknown error'));
       }
     } catch (err) {
-      alert('Network error while saving theme: ' + err.message);
+      alert('Save failed: ' + err.message);
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = '💾 Save & Publish Live';
+      saveBtn.textContent = '💾 Save & Publish';
     }
   });
 
@@ -1041,23 +1195,12 @@
   resetBtn.addEventListener('click', async () => {
     if (!confirm('Reset all theme settings to Bongshai Housing defaults?')) return;
     try {
-      const res = await fetch('/admin/theme-editor/reset', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' }
-      });
+      await fetch('/admin/theme-editor/reset', { method: 'POST', headers: { 'Accept': 'application/json' } });
       window.location.reload();
     } catch (err) {
       alert('Reset failed: ' + err.message);
     }
   });
-
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(() => {
-      toast.style.display = 'none';
-    }, 3500);
-  }
 })();
 </script>
 </body>

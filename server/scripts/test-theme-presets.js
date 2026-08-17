@@ -127,7 +127,7 @@ const editorHtml = env.render('admin/theme-editor.njk', {
   adminRole: 'superadmin',
 });
 
-if (!editorHtml.includes('24 Curated Presets') || !editorHtml.includes('data-filter="dark"') || !editorHtml.includes('Page Background Color')) {
+if (!editorHtml.includes('Presets (24)') || !editorHtml.includes('data-filter="dark"') || !editorHtml.includes('Page Background Color')) {
   console.error('FAIL: Theme editor template failed rendering');
   process.exit(1);
 }
