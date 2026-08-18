@@ -273,10 +273,6 @@
                       <option value="BH-DV-210">Model No-BH-DV-210</option>
                       <option value="BH-DV-211">Model No-BH-DV-211</option>
                       <option value="BH-DV-212">Model No-BH-DV-212</option>
-                      <option value="DV-110">Model DV-110</option>
-                      <option value="DV-111">Model DV-111</option>
-                      <option value="DV-112">Model DV-112</option>
-                      <option value="DV-113">Model DV-113</option>
                     </optgroup>
 
                     <optgroup label="🏡 Low-Cost Villa / Other Options (LCV)">
@@ -517,20 +513,19 @@
     function rateForModel(modelValue) {
       if (modelValue === 'General Inquiry') return null;
       if (modelValue.startsWith('LCV')) return 1950;
-      if (/^DV-\d+$/.test(modelValue)) return 2500; // Duplex Premium (dv-110 to dv-113)
       const m = modelValue.match(/BH-([A-Z]+)-(\d+)/);
       if (!m) return null;
       const prefix = m[1], num = parseInt(m[2], 10);
       if (prefix === 'CB') return 2750;
-      if (prefix === 'CH') return (num >= 500) ? 3000 : 2200; // 5xx = Container House, 4xx = Cottage House
+      if (prefix === 'CH') return (num >= 500) ? 2500 : 1900; // 5xx = Container House, 4xx = Cottage House
       if (prefix === 'SB') return 2500;
-      if (prefix === 'SH') return 2500;
-      if (prefix === 'TH') return 1500;
-      if (prefix === 'WH') return 1500;
-      if (prefix === 'DV') return 2500;
-      if (prefix === 'TSB') return 2500;
-      if (prefix === 'IS') return 950;
-      if (prefix === 'WA') return 900;
+      if (prefix === 'SH') return 2000;
+      if (prefix === 'TH') return 2500;
+      if (prefix === 'WH') return 2500;
+      if (prefix === 'DV') return 2250;
+      if (prefix === 'TSB') return 3200;
+      if (prefix === 'IS') return 810;
+      if (prefix === 'WA') return 810;
       return null;
     }
 
