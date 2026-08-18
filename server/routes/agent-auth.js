@@ -83,6 +83,8 @@ router.post('/agent/signup', function (req, res, next) {
     'Permanent address': b.permanent_address,
     'District': b.district,
     'Thana': b.thana,
+    'TIN number': b.tin_number,
+    'Trade license number': b.trade_license_number,
     'Password': b.password,
   };
   for (const [label, val] of Object.entries(required)) {
@@ -95,12 +97,20 @@ router.post('/agent/signup', function (req, res, next) {
   const existing = await db('agents').where({ phone: b.phone }).first();
   if (existing) return fail('An account with this phone number already exists.');
 
+  const DOCUMENT_LABELS = {
+    doc_application_letter: 'Application letter',
+    doc_passport_photo: 'Passport-size photo',
+    doc_trade_license: 'Trade license',
+    doc_tin_certificate: 'TIN certificate',
+    doc_nid_copy: 'NID photocopy',
+  };
   const files = req.files || {};
   const docPaths = {};
   try {
     for (const field of DOCUMENT_FIELDS) {
       const f = files[field] && files[field][0];
-      docPaths[field] = f ? saveDocument(f.buffer, f.mimetype) : null;
+      if (!f) return fail(`${DOCUMENT_LABELS[field]} is required.`);
+      docPaths[field] = saveDocument(f.buffer, f.mimetype);
     }
   } catch (docErr) {
     return fail(docErr.message);

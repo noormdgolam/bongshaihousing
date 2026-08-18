@@ -84,12 +84,12 @@
       <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Registration &amp; Financials</h3>
       <div class="form-row" style="display:flex; gap:12px;">
         <div style="flex:1;">
-          <label for="tin_number">TIN Number <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <input type="text" id="tin_number" name="tin_number" value="{{ values.tin_number or '' }}">
+          <label for="tin_number">TIN Number</label>
+          <input type="text" id="tin_number" name="tin_number" value="{{ values.tin_number or '' }}" required>
         </div>
         <div style="flex:1;">
-          <label for="trade_license_number">Trade License Number <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <input type="text" id="trade_license_number" name="trade_license_number" value="{{ values.trade_license_number or '' }}">
+          <label for="trade_license_number">Trade License Number</label>
+          <input type="text" id="trade_license_number" name="trade_license_number" value="{{ values.trade_license_number or '' }}" required>
         </div>
       </div>
       <div class="form-row">
@@ -103,24 +103,24 @@
       <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Supporting Documents</h3>
       <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-6px;">JPG, PNG, or PDF, up to 10MB each.</p>
       <div class="form-row">
-        <label for="doc_application_letter">Application Letter (on company letterhead) <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="file" id="doc_application_letter" name="doc_application_letter" accept="image/*,application/pdf">
+        <label for="doc_application_letter">Application Letter (on company letterhead)</label>
+        <input type="file" id="doc_application_letter" name="doc_application_letter" accept="image/*,application/pdf" required>
       </div>
       <div class="form-row">
-        <label for="doc_passport_photo">Passport-size Photo <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="file" id="doc_passport_photo" name="doc_passport_photo" accept="image/*">
+        <label for="doc_passport_photo">Passport-size Photo</label>
+        <input type="file" id="doc_passport_photo" name="doc_passport_photo" accept="image/*" required>
       </div>
       <div class="form-row">
-        <label for="doc_trade_license">Trade License <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="file" id="doc_trade_license" name="doc_trade_license" accept="image/*,application/pdf">
+        <label for="doc_trade_license">Trade License</label>
+        <input type="file" id="doc_trade_license" name="doc_trade_license" accept="image/*,application/pdf" required>
       </div>
       <div class="form-row">
-        <label for="doc_tin_certificate">TIN Certificate <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="file" id="doc_tin_certificate" name="doc_tin_certificate" accept="image/*,application/pdf">
+        <label for="doc_tin_certificate">TIN Certificate</label>
+        <input type="file" id="doc_tin_certificate" name="doc_tin_certificate" accept="image/*,application/pdf" required>
       </div>
       <div class="form-row">
-        <label for="doc_nid_copy">NID Photocopy <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="file" id="doc_nid_copy" name="doc_nid_copy" accept="image/*,application/pdf">
+        <label for="doc_nid_copy">NID Photocopy</label>
+        <input type="file" id="doc_nid_copy" name="doc_nid_copy" accept="image/*,application/pdf" required>
       </div>
 
       <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Account Password</h3>
