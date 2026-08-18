@@ -46,6 +46,26 @@ const REPO_ROOT = path.join(__dirname, '..');
 // is exactly what that looks like from the outside.
 app.set('trust proxy', 1);
 
+// Domain/protocol canonicalization - the old .htaccess enforced this at
+// the Apache layer (RewriteCond %{HTTPS} off / %{HTTP_HOST} ^www\.), but
+// once Node Selector took over serving these paths directly, that logic
+// never got ported. Confirmed via Search Console: www./bare-http variants
+// were failing "page with redirect" validation because nothing was
+// actually redirecting them - not a validation-lag issue, a real gap.
+// Bare, non-www https://bongshaihousing.com is canonical, matching every
+// canonical/OG URL already hardcoded that way in page-registry.json and
+// products.js.
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') return next(); // local dev has no TLS - would redirect-loop otherwise
+  const host = req.hostname || '';
+  const isWww = host.startsWith('www.');
+  if (!req.secure || isWww) {
+    const targetHost = isWww ? host.slice(4) : host;
+    return res.redirect(301, `https://${targetHost}${req.originalUrl}`);
+  }
+  next();
+});
+
 // Security headers + gzip. In production, Apache already does this for
 // static assets (see .htaccess) - these cover the routes Node actually
 // serves (dynamic pages once they exist, and the form/counter APIs).
@@ -148,7 +168,12 @@ const redirectsPath = path.join(__dirname, 'redirects.json');
 const redirects = fs.existsSync(redirectsPath) ? JSON.parse(fs.readFileSync(redirectsPath, 'utf8')) : { exact: {}, prefix: {} };
 const redirectPrefixes = Object.entries(redirects.prefix || {});
 app.use((req, res, next) => {
-  const exactMatch = redirects.exact[req.path];
+  // Apache's original rules matched trailing slashes optionally
+  // (^login/?$) - the JSON map only stores the no-slash form, so strip
+  // one trailing slash before the exact-match lookup (root "/" excluded,
+  // it's already its own distinct key).
+  const normalizedPath = req.path.length > 1 && req.path.endsWith('/') ? req.path.slice(0, -1) : req.path;
+  const exactMatch = redirects.exact[normalizedPath];
   if (exactMatch) {
     return res.redirect(exactMatch.permanent ? 301 : 302, exactMatch.to);
   }
