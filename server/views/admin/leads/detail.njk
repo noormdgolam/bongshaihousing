@@ -99,6 +99,14 @@
       </form>
     </div>
 
+    <div class="card" style="border-top:3px solid #F59E0B;">
+      <h3 style="font-size:0.9rem; font-weight:700; color:#92400e; margin-top:0;">Convert to Order</h3>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-bottom:12px;">Sale confirmed? Create a tracked order and a customer portal login so they can follow construction progress.</p>
+      <form method="post" action="/admin/leads/{{ lead.id }}/convert-to-order">
+        <button type="submit" class="btn btn-primary" style="width:100%; background:#F59E0B; border-color:#F59E0B;">🏗️ Convert to Order</button>
+      </form>
+    </div>
+
     <div class="card" style="border-top:3px solid var(--danger);">
       <h3 style="font-size:0.9rem; font-weight:700; color:var(--danger); margin-top:0;">Delete Inquiry</h3>
       <p style="font-size:0.8rem; color:var(--grey-500); margin-bottom:12px;">Permanently remove this lead from the database.</p>

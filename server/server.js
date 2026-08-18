@@ -21,6 +21,8 @@ const adminAuthRouter = require('./routes/admin-auth');
 const adminRouter = require('./routes/admin');
 const agentAuthRouter = require('./routes/agent-auth');
 const agentRouter = require('./routes/agent');
+const customerAuthRouter = require('./routes/customer-auth');
+const customerRouter = require('./routes/customer');
 
 // The session store (and any other async DB init) can reject before
 // anything has a chance to .catch() it - without this, a single transient
@@ -163,6 +165,9 @@ app.use('/', adminRouter);
 app.use('/agent', require('./middleware/csrf'));
 app.use('/', agentAuthRouter);
 app.use('/', agentRouter);
+app.use('/my-project', require('./middleware/csrf'));
+app.use('/', customerAuthRouter);
+app.use('/', customerRouter);
 
 // Page-view logging for the admin Analytics dashboard - GET requests only,
 // after admin routes (so admin browsing never counts as traffic), fire-and-

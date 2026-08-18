@@ -1,0 +1,36 @@
+{% extends "customer-layout.njk" %}
+{% block title %}Track My Project{% endblock %}
+{% block body %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div class="card" style="width: 100%; max-width: 380px; padding:32px 28px;">
+    <div style="text-align:center; margin-bottom:24px;">
+      <div style="font-size:2rem; margin-bottom:4px;">🏗️</div>
+      <h1 style="font-size:1.4rem; font-weight:800; margin:0; color:var(--grey-900);">Track My Project</h1>
+      <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:4px;">Check your construction progress anytime.</p>
+    </div>
+
+    {% if error %}
+    <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/my-project/login">
+      <div class="form-row">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="01XXXXXXXXX" required autofocus>
+      </div>
+      <div class="form-row" style="margin-bottom:20px;">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:10px; font-weight:700; font-size:0.95rem;">Sign In →</button>
+    </form>
+
+    <p style="margin-top:16px; text-align:center; font-size:0.85rem; color:var(--grey-500);">
+      Don't have login details? Your Bongshai representative provides them once your order is confirmed.
+    </p>
+    <div style="margin-top:12px; text-align:center;">
+      <a href="/" style="font-size:0.8rem; color:var(--grey-500);">← Return to Bongshai Housing</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

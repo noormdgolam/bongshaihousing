@@ -1,13 +1,27 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const express = require('express');
 const multer = require('multer');
+const bcrypt = require('bcryptjs');
 const db = require('../lib/db');
 const requireAdmin = require('../middleware/requireAdmin');
 const requireRole = require('../middleware/requireRole');
 
 const { processAndSaveImage, UPLOADS_DIR } = require('../lib/image-processor');
 const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
+const { seedDefaultMilestones } = require('../lib/order-milestones');
+
+// Unambiguous charset (no 0/O/1/l/I) - customers read this off a phone
+// screen or hear it over a call from their sales rep, so avoid characters
+// that are easy to mis-key or mis-hear.
+function generateOrderPassword() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let out = '';
+  const bytes = crypto.randomBytes(8);
+  for (let i = 0; i < 8; i++) out += chars[bytes[i] % chars.length];
+  return out;
+}
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -101,6 +115,7 @@ router.get('/admin', async (req, res) => {
   let activeAgentCount = { count: 0 };
   let agentLeadCount = { count: 0 };
   let newAgentLeadCount = { count: 0 };
+  let activeOrderCount = { count: 0 };
 
   if (db) {
     try {
@@ -156,6 +171,11 @@ router.get('/admin', async (req, res) => {
         [agentLeadCount] = await db('agent_leads').count({ count: '*' });
         [newAgentLeadCount] = await db('agent_leads').where({ status: 'new' }).count({ count: '*' });
       }
+
+      const hasOrders = await db.schema.hasTable('orders');
+      if (hasOrders) {
+        [activeOrderCount] = await db('orders').where({ status: 'active' }).count({ count: '*' });
+      }
     } catch (e) {
       console.error('Admin dashboard query error:', e.message);
     }
@@ -202,6 +222,7 @@ router.get('/admin', async (req, res) => {
       activeAgents: activeAgentCount?.count || 0,
       agentLeads: agentLeadCount?.count || 0,
       newAgentLeads: newAgentLeadCount?.count || 0,
+      activeOrders: activeOrderCount?.count || 0,
     },
     recentLeads,
     recentActivities,
@@ -435,6 +456,114 @@ router.post('/admin/leads/:id/delete', async (req, res) => {
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
   }
+});
+
+// ---- Orders / Project Tracking (post-sale customer portal) ----
+
+router.post('/admin/leads/:id/convert-to-order', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  try {
+    const lead = await db('leads').where({ id: req.params.id }).first();
+    if (!lead) return res.status(404).send('Lead not found');
+
+    const plainPassword = generateOrderPassword();
+    const password_hash = await bcrypt.hash(plainPassword, 10);
+    const [orderId] = await db('orders').insert({
+      lead_id: lead.id,
+      customer_name: lead.name,
+      customer_phone: lead.phone,
+      customer_district: lead.district,
+      model_number: lead.model,
+      floor_area: lead.floor_area,
+      password_hash,
+    });
+    await seedDefaultMilestones(db, orderId);
+    await logActivity(req, { action: 'create', entityType: 'order', entityId: orderId, summary: `Created order #${orderId} from lead #${lead.id} (${lead.name})` });
+
+    res.redirect(`/admin/orders/${orderId}?generated_password=${encodeURIComponent(plainPassword)}`);
+  } catch (e) {
+    res.status(400).send('Convert error: ' + e.message);
+  }
+});
+
+router.get('/admin/orders', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const orders = await db('orders').orderBy('created_at', 'desc');
+  const orderIds = orders.map((o) => o.id);
+  const milestoneCounts = orderIds.length
+    ? await db('order_milestones').whereIn('order_id', orderIds).select('order_id', 'status')
+    : [];
+  const progressByOrder = {};
+  for (const o of orders) progressByOrder[o.id] = { done: 0, total: 0 };
+  for (const m of milestoneCounts) {
+    progressByOrder[m.order_id].total += 1;
+    if (m.status === 'done') progressByOrder[m.order_id].done += 1;
+  }
+  res.render('admin/orders/list.njk', adminVars(req, { orders, progressByOrder }));
+});
+
+router.get('/admin/orders/new', async (req, res) => {
+  res.render('admin/orders/form.njk', adminVars(req, { error: null, values: {} }));
+});
+
+router.post('/admin/orders', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { customer_name, customer_phone, customer_district, model_number, floor_area, total_price } = req.body;
+  if (!customer_name || !customer_phone) {
+    return res.status(400).render('admin/orders/form.njk', adminVars(req, { error: 'Customer name and phone are required.', values: req.body }));
+  }
+  try {
+    const plainPassword = generateOrderPassword();
+    const password_hash = await bcrypt.hash(plainPassword, 10);
+    const [orderId] = await db('orders').insert({
+      customer_name,
+      customer_phone,
+      customer_district: customer_district || null,
+      model_number: model_number || null,
+      floor_area: floor_area || null,
+      total_price: total_price || null,
+      password_hash,
+    });
+    await seedDefaultMilestones(db, orderId);
+    await logActivity(req, { action: 'create', entityType: 'order', entityId: orderId, summary: `Created order #${orderId} for ${customer_name}` });
+    res.redirect(`/admin/orders/${orderId}?generated_password=${encodeURIComponent(plainPassword)}`);
+  } catch (e) {
+    res.status(400).render('admin/orders/form.njk', adminVars(req, { error: e.message, values: req.body }));
+  }
+});
+
+router.get('/admin/orders/:id', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const order = await db('orders').where({ id: req.params.id }).first();
+  if (!order) return res.status(404).send('Order not found');
+  const milestones = await db('order_milestones').where({ order_id: order.id }).orderBy('sort_order', 'asc');
+  res.render('admin/orders/detail.njk', adminVars(req, {
+    order,
+    milestones,
+    generatedPassword: req.query.generated_password || null,
+  }));
+});
+
+router.post('/admin/orders/:id/status', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { status } = req.body;
+  if (!['active', 'completed', 'cancelled'].includes(status)) return res.status(400).send('Invalid status');
+  await db('orders').where({ id: req.params.id }).update({ status, updated_at: db.fn.now() });
+  await logActivity(req, { action: 'status_change', entityType: 'order', entityId: req.params.id, summary: `Order #${req.params.id} status set to "${status}"` });
+  res.redirect(`/admin/orders/${req.params.id}`);
+});
+
+router.post('/admin/orders/:id/milestones/:milestoneId/status', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { status } = req.body;
+  if (!['pending', 'in_progress', 'done'].includes(status)) return res.status(400).send('Invalid status');
+  await db('order_milestones').where({ id: req.params.milestoneId, order_id: req.params.id }).update({
+    status,
+    completed_at: status === 'done' ? db.fn.now() : null,
+    updated_at: db.fn.now(),
+  });
+  await logActivity(req, { action: 'update', entityType: 'order_milestone', entityId: req.params.milestoneId, summary: `Milestone updated to "${status}" on order #${req.params.id}` });
+  res.redirect(`/admin/orders/${req.params.id}`);
 });
 
 // ---- Products ----
@@ -1336,8 +1465,6 @@ router.get('/admin/theme-editor/export', requireRole('admin', 'superadmin', 'edi
 });
 
 // ---- Admin Users (role-gated: only 'admin' role can manage accounts) ----
-
-const bcrypt = require('bcryptjs');
 
 router.get('/admin/users', requireRole('admin', 'superadmin'), async (req, res) => {
   const users = await db('admin_users').select('id', 'email', 'name', 'role', 'last_login_at', 'created_at').orderBy('created_at');

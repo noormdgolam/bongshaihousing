@@ -1,0 +1,81 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Order #{{ order.id }} — {{ order.customer_name }}{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.15rem;">Order #{{ order.id }}: {{ order.customer_name }}</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/orders" class="btn">← Back to Orders</a></div>
+
+{% if generatedPassword %}
+<div class="card" style="border-left:4px solid #F59E0B; background:#fffbeb;">
+  <h3 style="margin-top:0; font-size:0.95rem; color:#92400e;">🔑 Portal Login Created — Share These Now</h3>
+  <p style="font-size:0.85rem; color:#78350f; margin-bottom:10px;">This password is shown only once. Relay it to the customer by phone or WhatsApp, then it's gone from this screen for good.</p>
+  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+    <div><span style="font-size:0.75rem; color:#92400e; text-transform:uppercase; font-weight:700;">Phone</span><br><strong style="font-size:1.1rem;">{{ order.customer_phone }}</strong></div>
+    <div><span style="font-size:0.75rem; color:#92400e; text-transform:uppercase; font-weight:700;">Password</span><br><strong style="font-size:1.1rem; font-family:monospace; letter-spacing:0.05em;">{{ generatedPassword }}</strong></div>
+    <div><span style="font-size:0.75rem; color:#92400e; text-transform:uppercase; font-weight:700;">Portal URL</span><br><strong style="font-size:0.9rem;">/my-project/login.html</strong></div>
+  </div>
+</div>
+{% endif %}
+
+<div class="admin-grid-2col">
+  <div>
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">👤 Customer &amp; Order Info</h2>
+      <div class="admin-grid-3col">
+        <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">Phone</span><a href="tel:{{ order.customer_phone }}" style="font-weight:700;">{{ order.customer_phone }}</a></div>
+        <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">District</span><span>{{ order.customer_district or 'N/A' }}</span></div>
+        <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">Model</span><span>{{ order.model_number or 'N/A' }}</span></div>
+        <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">Floor Area</span><span>{{ order.floor_area or 'N/A' }}</span></div>
+        <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">Total Price</span><span>{% if order.total_price %}Tk {{ order.total_price }}{% else %}N/A{% endif %}</span></div>
+        <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">Started</span><span>{{ order.created_at | date }}</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">📋 Build Milestones</h2>
+      <table>
+        <thead><tr><th>Stage</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for m in milestones %}
+          <tr>
+            <td>{{ m.title }}</td>
+            <td>
+              <form method="post" action="/admin/orders/{{ order.id }}/milestones/{{ m.id }}/status" style="margin:0;">
+                <select name="status" onchange="this.form.submit()" style="font-size:0.78rem; padding:4px 8px; border-radius:12px; border:1px solid var(--grey-200); font-weight:700; cursor:pointer; background:{% if m.status == 'done' %}#dcfce7; color:#16a34a;{% elif m.status == 'in_progress' %}#fef3c7; color:#92400e;{% else %}#f1f5f9; color:#64748b;{% endif %}">
+                  <option value="pending" {% if m.status == 'pending' %}selected{% endif %}>Pending</option>
+                  <option value="in_progress" {% if m.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                  <option value="done" {% if m.status == 'done' %}selected{% endif %}>Done</option>
+                </select>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">⚙️ Order Status</h2>
+      <form method="post" action="/admin/orders/{{ order.id }}/status">
+        <div class="form-row">
+          <label for="orderStatus">Status</label>
+          <select id="orderStatus" name="status">
+            <option value="active" {% if order.status == 'active' %}selected{% endif %}>🟢 Active</option>
+            <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>✅ Completed</option>
+            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>⚪ Cancelled</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" style="width:100%;">Save Status</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:0.9rem; font-weight:700; margin-top:0;">Customer Portal</h3>
+      <p style="font-size:0.82rem; color:var(--grey-500);">Your customer can check progress anytime at <strong>/my-project/login.html</strong> using their phone number and the password you set when this order was created.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

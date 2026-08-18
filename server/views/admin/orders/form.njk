@@ -1,0 +1,38 @@
+{% extends "admin-layout.njk" %}
+{% block title %}New Order{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">+ New Order</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/orders" class="btn">← Back to Orders</a></div>
+<div class="card" style="max-width:520px;">
+  {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+  <form method="post" action="/admin/orders">
+    <div class="form-row">
+      <label for="customer_name">Customer Name</label>
+      <input type="text" id="customer_name" name="customer_name" value="{{ values.customer_name or '' }}" required>
+    </div>
+    <div class="form-row">
+      <label for="customer_phone">Customer Phone</label>
+      <input type="text" id="customer_phone" name="customer_phone" value="{{ values.customer_phone or '' }}" placeholder="01XXXXXXXXX" required>
+    </div>
+    <div class="form-row">
+      <label for="customer_district">District</label>
+      <input type="text" id="customer_district" name="customer_district" value="{{ values.customer_district or '' }}">
+    </div>
+    <div class="form-row">
+      <label for="model_number">Model / Building Type</label>
+      <input type="text" id="model_number" name="model_number" value="{{ values.model_number or '' }}">
+    </div>
+    <div class="form-row">
+      <label for="floor_area">Floor Area (sqft)</label>
+      <input type="text" id="floor_area" name="floor_area" value="{{ values.floor_area or '' }}">
+    </div>
+    <div class="form-row">
+      <label for="total_price">Total Price (Tk, optional)</label>
+      <input type="number" id="total_price" name="total_price" value="{{ values.total_price or '' }}">
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Create Order &amp; Generate Portal Login</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
