@@ -97,6 +97,10 @@ router.get('/admin', async (req, res) => {
   let recentLeads = [];
   let recentActivities = [];
   let activeTheme = null;
+  let pendingAgentCount = { count: 0 };
+  let activeAgentCount = { count: 0 };
+  let agentLeadCount = { count: 0 };
+  let newAgentLeadCount = { count: 0 };
 
   if (db) {
     try {
@@ -140,6 +144,18 @@ router.get('/admin', async (req, res) => {
       if (hasActivity) {
         recentActivities = await db('activity_log').orderBy('created_at', 'desc').limit(6);
       }
+
+      const hasAgents = await db.schema.hasTable('agents');
+      if (hasAgents) {
+        [pendingAgentCount] = await db('agents').where({ status: 'pending' }).count({ count: '*' });
+        [activeAgentCount] = await db('agents').where({ status: 'active' }).count({ count: '*' });
+      }
+
+      const hasAgentLeads = await db.schema.hasTable('agent_leads');
+      if (hasAgentLeads) {
+        [agentLeadCount] = await db('agent_leads').count({ count: '*' });
+        [newAgentLeadCount] = await db('agent_leads').where({ status: 'new' }).count({ count: '*' });
+      }
     } catch (e) {
       console.error('Admin dashboard query error:', e.message);
     }
@@ -182,6 +198,10 @@ router.get('/admin', async (req, res) => {
       teamMembers: teamMemberCount?.count || 14,
       testimonials: testimonialCount?.count || 3,
       mediaCount,
+      pendingAgents: pendingAgentCount?.count || 0,
+      activeAgents: activeAgentCount?.count || 0,
+      agentLeads: agentLeadCount?.count || 0,
+      newAgentLeads: newAgentLeadCount?.count || 0,
     },
     recentLeads,
     recentActivities,
@@ -272,6 +292,36 @@ router.get('/admin/agent-leads', async (req, res) => {
     .select('agent_leads.*', 'agents.name as agent_name', 'agents.phone as agent_phone')
     .orderBy('agent_leads.created_at', 'desc');
   res.render('admin/agents/leads.njk', adminVars(req, { leads }));
+});
+
+router.post('/admin/agent-leads/:id/status', async (req, res) => {
+  if (!db) return res.status(500).json({ error: 'Database unavailable' });
+  const { status } = req.body;
+  const allowed = ['new', 'contacted', 'quoted', 'won', 'lost'];
+  if (!allowed.includes(status)) {
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    return res.redirect('/admin/agent-leads');
+  }
+  try {
+    await db('agent_leads').where({ id: req.params.id }).update({ status, updated_at: db.fn.now() });
+    await logActivity(req, {
+      action: 'status_change',
+      entityType: 'agent_lead',
+      entityId: req.params.id,
+      summary: `Agent lead #${req.params.id} status set to "${status}"`,
+    });
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, status });
+    }
+    res.redirect('/admin/agent-leads');
+  } catch (err) {
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(400).json({ error: err.message });
+    }
+    res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
+  }
 });
 
 // ---- Leads / Inquiries ----

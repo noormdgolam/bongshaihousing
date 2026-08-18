@@ -114,11 +114,52 @@
     </div>
   </div>
 
+  <!-- KPI 5: Agent Network -->
+  <div class="card" style="padding:18px; border-left:4px solid #F59E0B; display:flex; flex-direction:column; justify-content:space-between; margin:0;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">Agent Network</div>
+        <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.agentLeads }} <span style="font-size:0.9rem; font-weight:600; color:var(--grey-500);">Leads</span></div>
+      </div>
+      <div class="kpi-icon">🤝</div>
+    </div>
+    <div style="margin-top:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      {% if counts.pendingAgents > 0 %}
+      <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">{{ counts.pendingAgents }} Application{{ 's' if counts.pendingAgents != 1 }} Pending</span>
+      {% else %}
+      <span class="pill pill-success" style="font-size:0.75rem;">All Reviewed</span>
+      {% endif %}
+      <span class="pill pill-muted" style="font-size:0.75rem;">{{ counts.activeAgents }} Active Agents</span>
+    </div>
+  </div>
+
 </div>
 
 <!-- 2. Operations & Content Matrix (Grouped Workspace Cards) -->
 {% if adminRole != 'sales' %}
 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-bottom:24px;">
+
+  <!-- Group 0: Agent Network & Referrals -->
+  <div class="card" style="margin:0; padding:18px; --tile-accent:#F59E0B; --tile-accent-soft:#fffbeb;">
+    <div class="op-group-head">
+      <span class="op-group-bar"></span>
+      <div>
+        <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Agent Network &amp; Referrals</h3>
+        <div style="font-size:0.76rem; color:var(--grey-500);">Distributor applications and field-agent submitted leads</div>
+      </div>
+    </div>
+    <div class="op-tiles">
+      <a href="/admin/agents?status=pending" class="op-tile {{ 'is-primary' if counts.pendingAgents > 0 }}">
+        <span><span class="op-tile-label">Applications</span><br><span class="op-tile-sub">{{ counts.pendingAgents }} pending review</span></span>
+      </a>
+      <a href="/admin/agents?status=active" class="op-tile">
+        <span><span class="op-tile-label">Active Agents</span><br><span class="op-tile-sub">{{ counts.activeAgents }} approved</span></span>
+      </a>
+      <a href="/admin/agent-leads" class="op-tile">
+        <span><span class="op-tile-label">Agent Leads</span><br><span class="op-tile-sub">{{ counts.agentLeads }} total, {{ counts.newAgentLeads }} new</span></span>
+      </a>
+    </div>
+  </div>
 
   <!-- Group 1: Commercial & Catalog Suite -->
   <div class="card" style="margin:0; padding:18px; --tile-accent:#2563EB; --tile-accent-soft:#eff6ff;">

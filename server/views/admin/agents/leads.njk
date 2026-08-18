@@ -17,7 +17,17 @@
       <td>{{ lead.customer_phone }}</td>
       <td>{{ lead.customer_district or '—' }}</td>
       <td>{{ lead.product_interest or '—' }}</td>
-      <td><span class="pill {% if lead.status == 'won' %}pill-success{% elif lead.status == 'lost' %}pill-muted{% endif %}">{{ lead.status }}</span></td>
+      <td>
+        <form method="post" action="/admin/agent-leads/{{ lead.id }}/status" style="margin:0;">
+          <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 6px; border-radius:12px; border:1px solid var(--grey-200); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">
+            <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
+            <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+            <option value="quoted" {% if lead.status == 'quoted' %}selected{% endif %}>Quoted</option>
+            <option value="won" {% if lead.status == 'won' %}selected{% endif %}>Won</option>
+            <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
+          </select>
+        </form>
+      </td>
       <td>{{ lead.agent_name }} <span style="color:var(--grey-500); font-size:0.8rem;">({{ lead.agent_phone }})</span></td>
       <td>{{ lead.created_at | date }}</td>
     </tr>
