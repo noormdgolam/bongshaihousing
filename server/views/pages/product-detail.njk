@@ -24,7 +24,7 @@
         src="{{ product.main_image }}"
         srcset="{{ product.main_image | replace('.webp', '-400w.webp') }} 400w, {{ product.main_image | replace('.webp', '-700w.webp') }} 700w, {{ product.main_image }} 1024w"
         sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"
-        alt="{{ product.title }}" width="1024" height="1024" style="width: 100%; height: auto; display: block;" loading="eager" fetchpriority="high">
+        alt="{{ product.main_image_alt or product.title }}" width="1024" height="1024" style="width: 100%; height: auto; display: block;" loading="eager" fetchpriority="high">
       <span class="pd-gallery-zoom" aria-hidden="true">🔍 Tap to enlarge</span>
     </a>
     <div class="pd-gallery-thumbs">

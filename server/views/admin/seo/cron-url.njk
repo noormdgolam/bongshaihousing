@@ -1,0 +1,26 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Continuous SEO Automation{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">🔁 Continuous Automation</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/seo" class="btn">← Back to SEO Dashboard</a></div>
+
+{% if not secret %}
+<div class="card" style="border-left:4px solid #F59E0B;">
+  <p style="margin:0;">Save your API key in <a href="/admin/seo/settings">Settings</a> first - that generates the automation token this page needs.</p>
+</div>
+{% else %}
+<div class="card" style="max-width:640px;">
+  <h2 style="margin-top:0; font-size:1rem;">Set up a daily generation run</h2>
+  <p style="font-size:0.85rem; color:var(--grey-500);">
+    This does NOT publish anything by itself - it only drafts new suggestions into the review queue on a schedule, so you always have fresh drafts waiting without having to click "Generate" yourself. You still approve or reject everything from <a href="/admin/seo/suggestions">Suggestions</a>.
+  </p>
+  <p style="font-size:0.85rem; margin-top:14px;">In cPanel → <strong>Cron Jobs</strong>, add a new job:</p>
+  <ul style="font-size:0.85rem; color:var(--grey-700);">
+    <li>Common Setting: <strong>Once Per Day</strong> (or your preferred cadence)</li>
+    <li>Command:</li>
+  </ul>
+  <pre style="background:var(--grey-900); color:#e2e8f0; padding:12px 14px; border-radius:8px; font-size:0.78rem; overflow-x:auto; white-space:pre-wrap; word-break:break-all;">curl -s "https://bongshaihousing.com/seo-cron/generate?token={{ secret }}"</pre>
+  <p style="font-size:0.78rem; color:var(--grey-500); margin-top:10px;">This URL is a secret - anyone with it can trigger a generation run (which costs API credits), so only paste it into cPanel's Cron Jobs field, nowhere else. Regenerate it by clearing and re-saving your API key in Settings if it ever leaks.</p>
+</div>
+{% endif %}
+{% endblock %}

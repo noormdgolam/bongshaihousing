@@ -11,6 +11,9 @@ const requireRole = require('../middleware/requireRole');
 const { processAndSaveImage, UPLOADS_DIR } = require('../lib/image-processor');
 const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
 const { seedDefaultMilestones } = require('../lib/order-milestones');
+const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/settings');
+const { runTechnicalAudit } = require('../lib/seo/audit');
+const { generateBatch } = require('../lib/seo/generate');
 
 // Unambiguous charset (no 0/O/1/l/I) - customers read this off a phone
 // screen or hear it over a call from their sales rep, so avoid characters
@@ -1713,6 +1716,118 @@ router.get('/admin/analytics', async (req, res) => {
   } catch (err) {
     console.error('Analytics query error:', err.message);
     res.render('admin/analytics.njk', adminVars(req, empty));
+  }
+});
+
+// ---- SEO Automation ----
+
+router.get('/admin/seo', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const settings = await getSeoSettings();
+  const [openIssues] = await db('seo_audit_issues').where({ status: 'open' }).count({ count: '*' });
+  const [pendingSuggestions] = await db('seo_suggestions').where({ status: 'pending' }).count({ count: '*' });
+  const issuesByType = await db('seo_audit_issues').where({ status: 'open' })
+    .select('issue_type').count({ count: '*' }).groupBy('issue_type');
+  const recentSuggestions = await db('seo_suggestions').where({ status: 'pending' }).orderBy('created_at', 'desc').limit(6);
+  res.render('admin/seo/dashboard.njk', adminVars(req, {
+    hasApiKey: Boolean(settings.anthropic_api_key),
+    openIssueCount: openIssues?.count || 0,
+    pendingCount: pendingSuggestions?.count || 0,
+    issuesByType,
+    recentSuggestions,
+  }));
+});
+
+router.get('/admin/seo/settings', requireRole('admin', 'superadmin'), async (req, res) => {
+  const settings = await getSeoSettings();
+  res.render('admin/seo/settings.njk', adminVars(req, {
+    maskedKey: maskKey(settings.anthropic_api_key),
+    hasKey: Boolean(settings.anthropic_api_key),
+    model: settings.claude_model,
+    saved: req.query.saved === '1',
+  }));
+});
+
+router.post('/admin/seo/settings', requireRole('admin', 'superadmin'), async (req, res) => {
+  const { anthropic_api_key, claude_model } = req.body;
+  const updates = { claude_model: claude_model || 'claude-haiku-4-5-20251001' };
+  if (anthropic_api_key && anthropic_api_key.trim()) updates.anthropic_api_key = anthropic_api_key.trim();
+  await saveSeoSettings(updates);
+  if (!(await db('seo_settings').where({ setting_key: 'cron_secret' }).first())) {
+    await db('seo_settings').insert({ setting_key: 'cron_secret', setting_value: crypto.randomBytes(24).toString('hex') });
+  }
+  await logActivity(req, { action: 'update', entityType: 'seo_settings', summary: 'Updated SEO automation settings' });
+  res.redirect('/admin/seo/settings?saved=1');
+});
+
+router.get('/admin/seo/cron-url', requireRole('admin', 'superadmin'), async (req, res) => {
+  const secretRow = await db('seo_settings').where({ setting_key: 'cron_secret' }).first();
+  const secret = secretRow ? secretRow.setting_value : null;
+  res.render('admin/seo/cron-url.njk', adminVars(req, { secret }));
+});
+
+router.post('/admin/seo/audit/run', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  try {
+    const count = await runTechnicalAudit();
+    await logActivity(req, { action: 'update', entityType: 'seo_audit', summary: `Ran SEO technical audit - ${count} open issue(s)` });
+  } catch (e) {
+    console.error('SEO audit error:', e.message);
+  }
+  res.redirect('/admin/seo/audit');
+});
+
+router.get('/admin/seo/audit', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const issues = await db('seo_audit_issues').where({ status: 'open' }).orderBy('created_at', 'desc');
+  res.render('admin/seo/audit.njk', adminVars(req, { issues }));
+});
+
+router.post('/admin/seo/audit/:id/ignore', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  await db('seo_audit_issues').where({ id: req.params.id }).update({ status: 'ignored', updated_at: db.fn.now() });
+  res.redirect('/admin/seo/audit');
+});
+
+router.get('/admin/seo/suggestions', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const statusFilter = req.query.status || 'pending';
+  let query = db('seo_suggestions').orderBy('created_at', 'desc');
+  if (statusFilter !== 'all') query = query.where({ status: statusFilter });
+  const suggestions = await query;
+  res.render('admin/seo/suggestions.njk', adminVars(req, { suggestions, statusFilter }));
+});
+
+router.post('/admin/seo/suggestions/:id/approve', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const s = await db('seo_suggestions').where({ id: req.params.id }).first();
+  if (!s) return res.status(404).send('Suggestion not found');
+  try {
+    if (s.target_type === 'product' && s.target_id) {
+      const COLUMN_MAP = { meta_title: 'meta_title', meta_description: 'meta_description', alt_text: 'main_image_alt', content_copy: 'description' };
+      const column = COLUMN_MAP[s.suggestion_type];
+      if (column) {
+        await db('products').where({ id: s.target_id }).update({ [column]: s.suggested_value, updated_at: db.fn.now() });
+      }
+    }
+    await db('seo_suggestions').where({ id: s.id }).update({
+      status: 'approved', reviewed_at: db.fn.now(), reviewed_by: req.session.adminUserId,
+    });
+    await logActivity(req, { action: 'update', entityType: 'seo_suggestion', entityId: s.id, summary: `Approved ${s.suggestion_type} suggestion for ${s.target_label}` });
+  } catch (e) {
+    console.error('SEO approve error:', e.message);
+  }
+  res.redirect(req.get('Referer') || '/admin/seo/suggestions');
+});
+
+router.post('/admin/seo/suggestions/:id/reject', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  await db('seo_suggestions').where({ id: req.params.id }).update({
+    status: 'rejected', reviewed_at: db.fn.now(), reviewed_by: req.session.adminUserId,
+  });
+  res.redirect(req.get('Referer') || '/admin/seo/suggestions');
+});
+
+router.post('/admin/seo/generate', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  try {
+    const result = await generateBatch(10);
+    await logActivity(req, { action: 'create', entityType: 'seo_suggestion', summary: `AI generation run: ${result.suggestionsCreated} suggestion(s) from ${result.productsProcessed} product(s)${result.errors.length ? `, ${result.errors.length} error(s)` : ''}` });
+    res.redirect('/admin/seo/suggestions?generated=' + result.suggestionsCreated);
+  } catch (e) {
+    res.redirect('/admin/seo?error=' + encodeURIComponent(e.message));
   }
 });
 

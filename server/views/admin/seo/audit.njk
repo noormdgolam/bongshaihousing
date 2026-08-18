@@ -1,0 +1,39 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Technical SEO Audit{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">🩺 Technical SEO Audit</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <a href="/admin/seo" class="btn">← Back to SEO Dashboard</a>
+  <form method="post" action="/admin/seo/audit/run">
+    <button type="submit" class="btn btn-primary">Re-run Audit</button>
+  </form>
+</div>
+
+{% if issues.length %}
+<table>
+  <thead><tr><th>Issue</th><th>Item</th><th>Detail</th><th></th></tr></thead>
+  <tbody>
+    {% for i in issues %}
+    <tr>
+      <td><span class="pill pill-muted">{{ i.issue_type | replace('_', ' ') | capitalize }}</span></td>
+      <td>
+        {% if i.target_type == 'product' and i.target_id %}
+        <a href="/admin/products/{{ i.target_id }}">{{ i.target_label }}</a>
+        {% else %}
+        {{ i.target_label }}
+        {% endif %}
+      </td>
+      <td style="font-size:0.85rem; color:var(--grey-500);">{{ i.detail }}</td>
+      <td>
+        <form method="post" action="/admin/seo/audit/{{ i.id }}/ignore" style="margin:0;">
+          <button type="submit" class="btn" style="padding:3px 10px; font-size:0.78rem;">Ignore</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card"><p style="color:var(--grey-500); margin:0;">No open issues. Run the audit if you've recently added products.</p></div>
+{% endif %}
+{% endblock %}

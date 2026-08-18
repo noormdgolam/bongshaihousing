@@ -1,0 +1,47 @@
+{% extends "admin-layout.njk" %}
+{% block title %}SEO Settings{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">⚙️ SEO Automation Settings</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/seo" class="btn">← Back to SEO Dashboard</a></div>
+
+{% if saved %}
+<div class="card" style="border-left:4px solid var(--success);">
+  <p style="margin:0; color:var(--success); font-weight:700;">✓ Settings saved.</p>
+</div>
+{% endif %}
+
+<div class="card" style="max-width:520px;">
+  <h2 style="margin-top:0; font-size:1rem;">Anthropic API Key</h2>
+  {% if hasKey %}
+  <p style="font-size:0.85rem; color:var(--grey-500);">Current key: <code>{{ maskedKey }}</code></p>
+  {% else %}
+  <p style="font-size:0.85rem; color:var(--grey-500);">No key saved yet. Get one at <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>.</p>
+  {% endif %}
+  <form method="post" action="/admin/seo/settings">
+    <div class="form-row">
+      <label for="anthropic_api_key">{% if hasKey %}Replace API Key{% else %}API Key{% endif %}</label>
+      <input type="password" id="anthropic_api_key" name="anthropic_api_key" placeholder="sk-ant-...">
+      <p style="font-size:0.75rem; color:var(--grey-500); margin-top:4px;">Leave blank to keep the current key.</p>
+    </div>
+    <div class="form-row">
+      <label for="claude_model">Model</label>
+      <select id="claude_model" name="claude_model">
+        <option value="claude-haiku-4-5-20251001" {% if model == 'claude-haiku-4-5-20251001' %}selected{% endif %}>Claude Haiku 4.5 (fast, cheap - recommended for volume SEO copy)</option>
+        <option value="claude-sonnet-5" {% if model == 'claude-sonnet-5' %}selected{% endif %}>Claude Sonnet 5 (higher quality, more expensive)</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" style="width:100%;">Save Settings</button>
+    </div>
+  </form>
+</div>
+
+<div class="card" style="max-width:520px;">
+  <h3 style="margin-top:0; font-size:0.9rem;">How this works</h3>
+  <ul style="font-size:0.85rem; color:var(--grey-700); padding-left:20px; margin-bottom:0;">
+    <li>The key is stored in the database only, never in a file on disk.</li>
+    <li>AI never edits a live page directly - every suggestion lands in a review queue for you to approve or reject.</li>
+    <li>Suggestions are grounded only in your actual product data at generation time - the AI can't invent prices or specs.</li>
+  </ul>
+</div>
+{% endblock %}

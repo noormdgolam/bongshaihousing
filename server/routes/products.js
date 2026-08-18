@@ -170,11 +170,11 @@ router.get('/:slug.html', async (req, res, next) => {
     }
 
     res.render('pages/product-detail.njk', {
-      title: product.title,
-      description: product.description,
+      title: product.meta_title || product.title,
+      description: product.meta_description || product.description,
       canonical: `https://bongshaihousing.com/${product.slug}`,
-      ogTitle: product.title,
-      ogDescription: product.description,
+      ogTitle: product.meta_title || product.title,
+      ogDescription: product.meta_description || product.description,
       ogImage: product.main_image ? `https://bongshaihousing.com/${product.main_image}` : undefined,
       category: category || { name: '' },
       product,
