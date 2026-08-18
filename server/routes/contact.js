@@ -2,6 +2,7 @@ const express = require('express');
 const { stripTags, singleLine, sanitizeEmail, safeFilenamePart } = require('../lib/sanitize');
 const { buildQuotePdf } = require('../lib/pdf');
 const { sendMail } = require('../lib/mailer');
+const { formatTakaAscii } = require('../lib/format');
 let db;
 try {
   db = require('../lib/db');
@@ -69,9 +70,10 @@ router.post('/send_email.php', async (req, res) => {
   }
 
   // Save to database leads table if DB is available
+  let leadId = null;
   if (db) {
     try {
-      const [leadId] = await db('leads').insert({
+      [leadId] = await db('leads').insert({
         name,
         email,
         phone,
@@ -100,11 +102,27 @@ router.post('/send_email.php', async (req, res) => {
     }
   }
 
+  // Ballpark estimate for the sales rep's reference, not a customer-facing
+  // quote - only computed when the form's free-text model/floor-area
+  // values happen to match a real catalog entry and a real number.
+  let estimatedPrice = null;
+  if (db && model !== 'N/A') {
+    try {
+      const product = await db('products').where({ model_number: model }).first();
+      const numericArea = Number(floorArea);
+      if (product && product.price_per_sqft && Number.isFinite(numericArea) && numericArea > 0) {
+        estimatedPrice = formatTakaAscii(numericArea * product.price_per_sqft);
+      }
+    } catch (priceErr) {
+      console.error('Failed to compute estimated price for PDF:', priceErr.message);
+    }
+  }
+
   const filename = `${safeFilenamePart(name)}_${safeFilenamePart(model)}.pdf`;
 
   let pdfBuffer;
   try {
-    pdfBuffer = await buildQuotePdf({ name, email, phone, district, upazila, model, floorArea, bedrooms, message });
+    pdfBuffer = await buildQuotePdf({ name, email, phone, district, upazila, model, floorArea, bedrooms, message, leadId, estimatedPrice });
   } catch (err) {
     return res.status(500).json({ status: 'error', message: `Failed to generate PDF. Error: ${err.message}` });
   }

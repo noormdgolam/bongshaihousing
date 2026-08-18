@@ -7,6 +7,7 @@
 // category landing pages, which stay on the old path for now.
 const express = require('express');
 const db = require('../lib/db');
+const { formatTaka } = require('../lib/format');
 
 const router = express.Router();
 
@@ -77,21 +78,6 @@ function roomIcon(section) {
   if (/store|storage/.test(s)) return '📦';
   if (/garage|parking/.test(s)) return '🚗';
   return '🏠';
-}
-
-// Bangladeshi Lakh/Crore comma grouping (e.g. 3500000 -> "35,00,000"),
-// plain digits since product pages are English-only.
-function formatTaka(n) {
-  let s = Math.round(n).toString();
-  const last3 = s.slice(-3);
-  let rest = s.slice(0, -3);
-  if (rest !== '') {
-    rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
-    s = rest + ',' + last3;
-  } else {
-    s = last3;
-  }
-  return '৳' + s;
 }
 
 router.get('/:slug.html', async (req, res, next) => {
