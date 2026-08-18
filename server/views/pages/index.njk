@@ -1,75 +1,14 @@
 {% extends "layout.njk" %}
 {% block head_extra %}
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="preload" href="css/style.min.css?v=4.11" as="style">
   <link rel="preload" href="css/home-karmod-theme.min.css?v=1.10" as="style">
-  <!-- Google Fonts: Non-blocking preload for Inter + Titillium Web (homepage theme) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap"></noscript>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<!-- ═══ PRIMARY SEO – Target: Steel Building Company Bangladesh ═══ -->
-<title>{{ title }}</title>
-<meta content="{{ description }}" name="description"/>
-<meta content="{{ keywords }}" name="keywords"/>
-<meta content="Bongshai Housing Ltd." name="author"/>
-<meta content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" name="robots"/>
-<meta content="3 days" name="revisit-after"/>
-<meta content="English" name="language"/>
-<meta content="general" name="rating"/>
-<meta content="{{ category }}" name="category"/>
-<meta content="Bangladesh" name="coverage"/>
-<meta content="global" name="distribution"/>
-<meta content="Steel Building Company, Real Estate Developer, EPC Contractor" name="classification"/>
-<link href="{{ canonical }}" rel="canonical"/>
-<!-- Open Graph / Facebook -->
-<meta content="{{ ogType or 'website' }}" property="og:type"/>
-<meta content="{{ canonical }}" property="og:url"/>
-<meta content="{{ ogTitle or title }}" property="og:title"/>
-<meta content="{{ ogDescription or description }}" property="og:description"/>
-<meta content="{{ ogImage or 'https://bongshaihousing.com/images/logo-icon-512.webp' }}" property="og:image"/>
-<meta content="{{ ogImageWidth or 512 }}" property="og:image:width"/>
-<meta content="{{ ogImageHeight or 512 }}" property="og:image:height"/>
-<meta content="Bongshai Housing" property="og:site_name"/>
-<meta content="en_BD" property="og:locale"/>
-<!-- Twitter Card -->
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="@bongshaihousing" name="twitter:site"/>
-<meta content="{{ twitterTitle or ogTitle or title }}" name="twitter:title"/>
-<meta content="{{ twitterDescription or ogDescription or description }}" name="twitter:description"/>
-<meta content="{{ ogImage or 'https://bongshaihousing.com/images/logo-icon-512.webp' }}" name="twitter:image"/>
-<!-- ═══ LOCAL SEO – Dhaka / Bangladesh ═══ -->
-<meta content="BD-C" name="geo.region"/>
-<meta content="Uttara, Dhaka, Bangladesh" name="geo.placename"/>
-<meta content="23.8728;90.3984" name="geo.position"/>
-<meta content="23.8728, 90.3984" name="ICBM"/>
-<meta content="Steel Building Company Bangladesh – Bongshai Housing" name="DC.title"/>
-<meta content="Premier steel building and prefab housing company in Bangladesh. Serving Dhaka, Uttara, Chittagong and all divisions." name="DC.description"/>
-<meta content="Steel Building Company, Prefab Housing, Real Estate Bangladesh" name="DC.subject"/>
-<meta content="Bangladesh" name="DC.coverage"/>
-<meta content="en" name="DC.language"/>
-<!-- Hreflang for International SEO -->
-<link href="{{ canonical }}" hreflang="en" rel="alternate"/><link href="{{ canonical }}" hreflang="x-default" rel="alternate"/>
-<!-- Favicon -->
-<link href="images/favicon.svg" rel="icon" type="image/svg+xml"/>
-<link href="images/logo-icon-192.webp" rel="apple-touch-icon" sizes="180x180"/>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<!-- Preconnect for Performance -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<!-- Styles -->
-<link href="css/style.min.css?v=4.11" rel="stylesheet"/>
-<link href="css/home-karmod-theme.min.css?v=1.10" rel="stylesheet"/>
+  <link href="css/home-karmod-theme.min.css?v=1.10" rel="stylesheet"/>
 <!-- Schema.org Structured Data -->
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+        "@type": ["LocalBusiness", "GeneralContractor", "RealEstateAgent", "HomeAndConstructionBusiness"],
         "@id": "https://bongshaihousing.com/#organization",
         "name": "Bongshai Housing Ltd.",
         "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
@@ -303,14 +242,10 @@
   ]
 }
 </script>
-<link href="{{ canonical }}" hreflang="en-BD" rel="alternate"/><link href="{{ canonical }}" hreflang="x-default" rel="alternate"/>
 <link href="css/aos.css" rel="stylesheet"/>
-<link href="/manifest.json" rel="manifest"/>
-<meta content="#1E40AF" name="theme-color"/>
 <!-- Swiper JS for homepage category slider -->
 <link href="css/swiper-bundle.min.css" rel="stylesheet"/>
 <script defer src="js/swiper-custom.min.js"></script>
-<!-- AEO:INJECTED -->
 {% endblock %}
 
 {% block content %}
@@ -544,17 +479,17 @@
 </div>
 <div class="pkg-panel-links">
 <ul>
-<li><a data-img="images/products/Model No-BH-TB-101.webp" href="apartment-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="80px" width="80"><span>Apartment Building</span></a></li>
-<li><a data-img="images/products/dv-101.webp" href="duplex-steel-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="80px" width="80"><span>Duplex Steel Building</span></a></li>
-<li><a data-img="images/products/bh-sb-301.webp" href="simplex-steel-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="80px" width="80"><span>Simplex Steel Building</span></a></li>
-<li><a data-img="images/products/Model No-BH-CH-401.webp" href="cottage-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="80px" width="80"><span>Cottage House</span></a></li>
-<li><a data-img="images/products/bh-ch-501.webp" href="container-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-ch-501.webp" srcset="images/products/bh-ch-501-400w.webp 400w, images/products/bh-ch-501-700w.webp 700w, images/products/bh-ch-501.webp 1024w" sizes="80px" width="80"><span>Container House</span></a></li>
+<li><a data-img="images/products/Model No-BH-TB-101.webp" href="apartment-building.html"><img alt="Model BH-TB-101 Apartment Building by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="80px" width="80"><span>Apartment Building</span></a></li>
+<li><a data-img="images/products/dv-101.webp" href="duplex-steel-building.html"><img alt="Model DV-101 Duplex Steel Building by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="80px" width="80"><span>Duplex Steel Building</span></a></li>
+<li><a data-img="images/products/bh-sb-301.webp" href="simplex-steel-building.html"><img alt="Model BH-SB-301 Simplex Steel Building by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="80px" width="80"><span>Simplex Steel Building</span></a></li>
+<li><a data-img="images/products/Model No-BH-CH-401.webp" href="cottage-house.html"><img alt="Model BH-CH-401 Prefab Cottage House by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="80px" width="80"><span>Cottage House</span></a></li>
+<li><a data-img="images/products/bh-ch-501.webp" href="container-house.html"><img alt="Model BH-CH-501 Modular Container House by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-ch-501.webp" srcset="images/products/bh-ch-501-400w.webp 400w, images/products/bh-ch-501-700w.webp 700w, images/products/bh-ch-501.webp 1024w" sizes="80px" width="80"><span>Container House</span></a></li>
 </ul>
 <ul>
-<li><a data-img="images/products/Model No-BH-SH-601.webp" href="steel-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="80px" width="80"><span>Steel House</span></a></li>
-<li><a data-img="images/products/Model No-BH-TH-701.webp" href="tiny-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="80px" width="80"><span>Tiny House</span></a></li>
-<li><a data-img="images/products/Model No-BH-WH-801.webp" href="wooden-house.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="80px" width="80"><span>Wooden House</span></a></li>
-<li><a data-img="images/products/bh-cb-901.webp" href="concrete-building.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="80px" width="80"><span>Concrete Building</span></a></li>
+<li><a data-img="images/products/Model No-BH-SH-601.webp" href="steel-house.html"><img alt="Model BH-SH-601 Steel House Residence by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="80px" width="80"><span>Steel House</span></a></li>
+<li><a data-img="images/products/Model No-BH-TH-701.webp" href="tiny-house.html"><img alt="Model BH-TH-701 Modern Tiny House by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="80px" width="80"><span>Tiny House</span></a></li>
+<li><a data-img="images/products/Model No-BH-WH-801.webp" href="wooden-house.html"><img alt="Model BH-WH-801 Wooden Prefab House by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="80px" width="80"><span>Wooden House</span></a></li>
+<li><a data-img="images/products/bh-cb-901.webp" href="concrete-building.html"><img alt="Model BH-CB-901 Concrete Composite Building by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="80px" width="80"><span>Concrete Building</span></a></li>
 </ul>
 </div>
 </div>
@@ -564,10 +499,10 @@
 </div>
 <div class="pkg-panel-links">
 <ul>
-<li><a data-img="images/products/Model No-BH-IS-1001.webp" href="industrial-sheds.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-IS-1001.webp" srcset="images/products/Model%20No-BH-IS-1001-400w.webp 400w, images/products/Model%20No-BH-IS-1001-700w.webp 700w, images/products/Model%20No-BH-IS-1001.webp 1024w" sizes="80px" width="80"><span>Industrial Steel Sheds</span></a></li>
+<li><a data-img="images/products/Model No-BH-IS-1001.webp" href="industrial-sheds.html"><img alt="Model BH-IS-1001 Heavy-Duty Industrial Steel Shed by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-IS-1001.webp" srcset="images/products/Model%20No-BH-IS-1001-400w.webp 400w, images/products/Model%20No-BH-IS-1001-700w.webp 700w, images/products/Model%20No-BH-IS-1001.webp 1024w" sizes="80px" width="80"><span>Industrial Steel Sheds</span></a></li>
 </ul>
 <ul>
-<li><a data-img="images/products/Model No-BH-WA-1101.webp" href="worker-accommodation.html"><img alt="" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WA-1101.webp" srcset="images/products/Model%20No-BH-WA-1101-400w.webp 400w, images/products/Model%20No-BH-WA-1101-700w.webp 700w, images/products/Model%20No-BH-WA-1101.webp 1024w" sizes="80px" width="80"><span>Worker Accommodation</span></a></li>
+<li><a data-img="images/products/Model No-BH-WA-1101.webp" href="worker-accommodation.html"><img alt="Model BH-WA-1101 Worker Accommodation Steel Facility by Bongshai Housing" class="pkg-thumb" height="56" loading="lazy" src="images/products/Model No-BH-WA-1101.webp" srcset="images/products/Model%20No-BH-WA-1101-400w.webp 400w, images/products/Model%20No-BH-WA-1101-700w.webp 700w, images/products/Model%20No-BH-WA-1101.webp 1024w" sizes="80px" width="80"><span>Worker Accommodation</span></a></li>
 </ul>
 </div>
 </div>

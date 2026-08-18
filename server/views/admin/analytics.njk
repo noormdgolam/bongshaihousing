@@ -1,68 +1,281 @@
 {% extends "admin-layout.njk" %}
-{% block title %}Analytics{% endblock %}
-{% block header %}<h2 style="margin:0;">Analytics</h2>{% endblock %}
+{% block title %}Analytics & Visitor Stats{% endblock %}
+{% block header %}<h2 style="margin:0;">Site Analytics & Visitor Intelligence</h2>{% endblock %}
 {% block content %}
 <style>
-  .an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .an-grid-2col { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .an-grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
   .an-barlist .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.88rem; }
   .an-barlist .label { width: 140px; flex-shrink: 0; color: var(--grey-700); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .an-barlist .track { flex: 1; background: var(--grey-100); border-radius: 4px; height: 10px; overflow: hidden; }
   .an-barlist .fill { background: var(--primary); height: 100%; border-radius: 4px; }
   .an-barlist .count { width: 40px; text-align: right; font-weight: 700; color: var(--grey-900); }
-  .an-empty { color: var(--grey-500); font-size: 0.88rem; padding: 12px 0; }
-  .an-sparkline { width: 100%; height: 60px; }
+  .an-empty { color: var(--grey-500); font-size: 0.88rem; padding: 16px 0; text-align: center; }
+  .an-sparkline { width: 100%; height: 65px; }
+
+  .visitor-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .visitor-table th { background: rgba(255,255,255,0.4); padding: 10px 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--grey-500); }
+  .visitor-table td { padding: 10px 12px; border-bottom: 1px solid rgba(15,23,42,0.06); vertical-align: middle; }
+  .visitor-table tr:hover td { background: rgba(255,255,255,0.4); }
+
+  .ip-badge { display: inline-flex; align-items: center; gap: 4px; font-family: monospace; font-size: 0.82rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: rgba(30,64,175,0.08); color: var(--primary); border: 1px solid rgba(30,64,175,0.15); }
+  .badge-dev { background: rgba(100,116,139,0.1); color: var(--grey-700); }
+  .device-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+  .dev-desktop { background: #e0f2fe; color: #0369a1; }
+  .dev-mobile { background: #dcfce7; color: #15803d; }
+  .dev-tablet { background: #fef3c7; color: #b45309; }
+  .dev-bot { background: #fee2e2; color: #b91c1c; }
+
+  .filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; background: var(--glass); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--glass-border); }
+  .filter-input { flex: 1; min-width: 180px; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(15,23,42,0.15); background: rgba(255,255,255,0.8); font-size: 0.88rem; }
+  .filter-select { padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(15,23,42,0.15); background: rgba(255,255,255,0.8); font-size: 0.88rem; }
+  .page-link-pill { display: inline-block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--primary); }
+
+  @media (max-width: 900px) {
+    .an-grid-2col { grid-template-columns: 1fr; }
+  }
 </style>
 
+<!-- KPI Top Cards -->
 <div class="an-grid">
-  <div class="stat-card"><div class="num">{{ totalViews30d }}</div><div class="label">Page views (30d)</div></div>
-  <div class="stat-card"><div class="num">{{ totalLeads30d }}</div><div class="label">New inquiries (30d)</div></div>
+  <div class="stat-card">
+    <div class="num">{{ totalViews30d }}</div>
+    <div class="label">Total Page Views (30d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ uniqueVisitors30d }}</div>
+    <div class="label">Unique Visitors (30d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ totalLeads30d }}</div>
+    <div class="label">New Inquiries (30d)</div>
+  </div>
   {% set closedCount = 0 %}
   {% for f in leadFunnel %}{% if f.status == 'closed' %}{% set closedCount = f.count %}{% endif %}{% endfor %}
-  <div class="stat-card"><div class="num">{{ closedCount }}</div><div class="label">Closed deals (all-time)</div></div>
+  <div class="stat-card">
+    <div class="num">{{ closedCount }}</div>
+    <div class="label">Closed Deals (All-Time)</div>
+  </div>
 </div>
 
-<div class="an-grid" style="grid-template-columns: 2fr 1fr;">
+<!-- Traffic Trend & Geography -->
+<div class="an-grid-2col">
+  <!-- Traffic Sparkline -->
   <div class="card">
-    <h3 style="margin-top:0;">Traffic — last 30 days</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="margin:0;">📈 Traffic Trend — Last 30 Days</h3>
+      <span style="font-size:0.8rem; color:var(--grey-500);">Total: {{ totalViews30d }} views</span>
+    </div>
     {% if trafficTrend.length %}
       {% set maxV = 1 %}
       {% for d in trafficTrend %}{% if d.count > maxV %}{% set maxV = d.count %}{% endif %}{% endfor %}
-      <svg class="an-sparkline" viewBox="0 0 {{ trafficTrend.length * 20 }} 60" preserveAspectRatio="none">
-        <polyline fill="none" stroke="#1E40AF" stroke-width="2"
-          points="{% for d in trafficTrend %}{{ loop.index0 * 20 }},{{ 58 - (d.count / maxV * 54) }} {% endfor %}" />
+      <svg class="an-sparkline" viewBox="0 0 {{ trafficTrend.length * 20 }} 65" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#1E40AF" stroke-width="2.5"
+          points="{% for d in trafficTrend %}{{ loop.index0 * 20 }},{{ 60 - (d.count / maxV * 52) }} {% endfor %}" />
       </svg>
-      <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--grey-500);">
+      <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--grey-500); margin-top:6px;">
         <span>{{ trafficTrend[0].day }}</span>
         <span>{{ trafficTrend[trafficTrend.length - 1].day }}</span>
       </div>
     {% else %}
-      <div class="an-empty">No traffic data yet — page views are logged going forward from today.</div>
+      <div class="an-empty">No traffic data recorded in the last 30 days.</div>
     {% endif %}
   </div>
 
+  <!-- Country Breakdown -->
   <div class="card">
-    <h3 style="margin-top:0;">Inquiry sources</h3>
+    <h3 style="margin-top:0; margin-bottom:14px;">🌍 Visitors by Country</h3>
     <div class="an-barlist">
-      {% if leadSources.length %}
-        {% set maxS = 1 %}
-        {% for s in leadSources %}{% if s.count > maxS %}{% set maxS = s.count %}{% endif %}{% endfor %}
-        {% for s in leadSources %}
+      {% if countryBreakdown.length %}
+        {% set maxC = 1 %}
+        {% for c in countryBreakdown %}{% if c.count > maxC %}{% set maxC = c.count %}{% endif %}{% endfor %}
+        {% for c in countryBreakdown %}
         <div class="row">
-          <div class="label">{{ s.source }}</div>
-          <div class="track"><div class="fill" style="width:{{ (s.count / maxS * 100) | round }}%"></div></div>
-          <div class="count">{{ s.count }}</div>
+          <div class="label" title="{{ c.country }}">
+            <span>{{ c.flag }}</span> {{ c.country }}
+          </div>
+          <div class="track"><div class="fill" style="width:{{ (c.count / maxC * 100) | round }}%"></div></div>
+          <div class="count">{{ c.count }}</div>
         </div>
         {% endfor %}
       {% else %}
-        <div class="an-empty">No inquiries yet.</div>
+        <div class="an-empty">No country location data yet.</div>
       {% endif %}
     </div>
   </div>
 </div>
 
-<div class="an-grid">
+<!-- Device, Browser & Inquiry Channels -->
+<div class="an-grid-3col">
+  <!-- Devices -->
   <div class="card">
-    <h3 style="margin-top:0;">Inquiry funnel</h3>
+    <h3 style="margin-top:0; margin-bottom:12px;">📱 Device Breakdown</h3>
+    <div class="an-barlist">
+      {% if deviceBreakdown.length %}
+        {% set maxD = 1 %}
+        {% for d in deviceBreakdown %}{% if d.count > maxD %}{% set maxD = d.count %}{% endif %}{% endfor %}
+        {% for d in deviceBreakdown %}
+        <div class="row">
+          <div class="label">
+            {% if d.device_type == 'Mobile' %}📱
+            {% elif d.device_type == 'Tablet' %}📟
+            {% elif d.device_type == 'Bot / Crawler' %}🤖
+            {% else %}💻{% endif %}
+            {{ d.device_type or 'Desktop' }}
+          </div>
+          <div class="track"><div class="fill" style="width:{{ (d.count / maxD * 100) | round }}%"></div></div>
+          <div class="count">{{ d.count }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="an-empty">No device data yet.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Browsers -->
+  <div class="card">
+    <h3 style="margin-top:0; margin-bottom:12px;">🌐 Top Browsers</h3>
+    <div class="an-barlist">
+      {% if browserBreakdown.length %}
+        {% set maxB = 1 %}
+        {% for b in browserBreakdown %}{% if b.count > maxB %}{% set maxB = b.count %}{% endif %}{% endfor %}
+        {% for b in browserBreakdown %}
+        <div class="row">
+          <div class="label">{{ b.browser or 'Unknown' }}</div>
+          <div class="track"><div class="fill" style="width:{{ (b.count / maxB * 100) | round }}%"></div></div>
+          <div class="count">{{ b.count }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="an-empty">No browser data yet.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Top Visited Pages -->
+  <div class="card">
+    <h3 style="margin-top:0; margin-bottom:12px;">🔥 Top Visited Pages</h3>
+    <div class="an-barlist">
+      {% if topPages.length %}
+        {% set maxP = 1 %}
+        {% for p in topPages %}{% if p.count > maxP %}{% set maxP = p.count %}{% endif %}{% endfor %}
+        {% for p in topPages %}
+        <div class="row">
+          <div class="label" title="{{ p.path }}">{{ p.path }}</div>
+          <div class="track"><div class="fill" style="width:{{ (p.count / maxP * 100) | round }}%"></div></div>
+          <div class="count">{{ p.count }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="an-empty">No page traffic data yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Real-Time Visitor Activity Log -->
+<div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+    <div>
+      <h3 style="margin:0;">👥 Real-Time Visitor Details & Hit Log</h3>
+      <p style="margin:4px 0 0; font-size:0.85rem; color:var(--grey-500);">Live stream of incoming visitors with IP, location, device, and page navigation.</p>
+    </div>
+    <span class="pill pill-success">Live Tracking Active</span>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <form method="GET" action="/admin/analytics" class="filter-bar">
+    <input type="text" name="q" placeholder="Search by IP, Path, City, or Referrer..." value="{{ activeFilter.q }}" class="filter-input" />
+    <select name="device" class="filter-select">
+      <option value="">All Devices</option>
+      <option value="Desktop" {% if activeFilter.device == 'Desktop' %}selected{% endif %}>Desktop</option>
+      <option value="Mobile" {% if activeFilter.device == 'Mobile' %}selected{% endif %}>Mobile</option>
+      <option value="Tablet" {% if activeFilter.device == 'Tablet' %}selected{% endif %}>Tablet</option>
+      <option value="Bot / Crawler" {% if activeFilter.device == 'Bot / Crawler' %}selected{% endif %}>Bot / Crawler</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+    {% if activeFilter.q or activeFilter.device or activeFilter.country %}
+    <a href="/admin/analytics" class="btn">Reset</a>
+    {% endif %}
+  </form>
+
+  <div style="overflow-x:auto;">
+    <table class="visitor-table">
+      <thead>
+        <tr>
+          <th>Time (BST)</th>
+          <th>IP Address</th>
+          <th>Country / City</th>
+          <th>Page Visited</th>
+          <th>Device &amp; OS</th>
+          <th>Browser</th>
+          <th>Traffic Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in recentVisitors %}
+        <tr>
+          <td style="white-space:nowrap; color:var(--grey-700); font-size:0.82rem;">
+            🕒 {{ v.formattedTime }}
+          </td>
+          <td>
+            <span class="ip-badge {% if v.country_code == 'LOC' %}badge-dev{% endif %}">
+              {{ v.ip or '127.0.0.1' }}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:1.1rem;">{{ v.flag }}</span>
+              <div>
+                <strong>{{ v.country or 'Bangladesh' }}</strong>
+                {% if v.city %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ v.city }}</div>{% endif %}
+              </div>
+            </div>
+          </td>
+          <td>
+            <a href="{{ v.path }}" target="_blank" class="page-link-pill" title="{{ v.path }}">
+              {{ v.path }}
+            </a>
+          </td>
+          <td>
+            {% if v.device_type == 'Mobile' %}
+              <span class="device-pill dev-mobile">📱 Mobile</span>
+            {% elif v.device_type == 'Tablet' %}
+              <span class="device-pill dev-tablet">📟 Tablet</span>
+            {% elif v.device_type == 'Bot / Crawler' %}
+              <span class="device-pill dev-bot">🤖 Bot</span>
+            {% else %}
+              <span class="device-pill dev-desktop">💻 Desktop</span>
+            {% endif %}
+            {% if v.os and v.os != 'Other' %}
+              <span style="font-size:0.75rem; color:var(--grey-500); margin-left:4px;">({{ v.os }})</span>
+            {% endif %}
+          </td>
+          <td>
+            <span style="color:var(--grey-700); font-weight:500;">{{ v.browser or 'Chrome' }}</span>
+          </td>
+          <td>
+            <span style="font-size:0.8rem; color:var(--grey-600);">{{ v.referrer or 'Direct Traffic' }}</span>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="an-empty">
+            No visitor logs match your search or filter. Visit any page on the site to see hits appear here in real time.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Inquiries & Funnel Analytics -->
+<div class="an-grid" style="margin-top:20px;">
+  <div class="card">
+    <h3 style="margin-top:0;">📥 Inquiry Funnel</h3>
     <div class="an-barlist">
       {% if leadFunnel.length %}
         {% set maxF = 1 %}
@@ -75,13 +288,13 @@
         </div>
         {% endfor %}
       {% else %}
-        <div class="an-empty">No inquiries yet.</div>
+        <div class="an-empty">No inquiries logged yet.</div>
       {% endif %}
     </div>
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0;">Most-requested models</h3>
+    <h3 style="margin-top:0;">🏗️ Most-Requested Models</h3>
     <div class="an-barlist">
       {% if topModels.length %}
         {% set maxM = 1 %}
@@ -94,23 +307,28 @@
         </div>
         {% endfor %}
       {% else %}
-        <div class="an-empty">No model data yet.</div>
+        <div class="an-empty">No model inquiries yet.</div>
       {% endif %}
     </div>
   </div>
-</div>
 
-<div class="card">
-  <h3 style="margin-top:0;">Top pages — last 30 days</h3>
-  <table>
-    <thead><tr><th>Path</th><th style="width:100px;">Views</th></tr></thead>
-    <tbody>
-      {% for p in topPages %}
-      <tr><td>{{ p.path }}</td><td>{{ p.count }}</td></tr>
+  <div class="card">
+    <h3 style="margin-top:0;">📣 Inquiry Lead Sources</h3>
+    <div class="an-barlist">
+      {% if leadSources.length %}
+        {% set maxS = 1 %}
+        {% for s in leadSources %}{% if s.count > maxS %}{% set maxS = s.count %}{% endif %}{% endfor %}
+        {% for s in leadSources %}
+        <div class="row">
+          <div class="label">{{ s.source }}</div>
+          <div class="track"><div class="fill" style="width:{{ (s.count / maxS * 100) | round }}%"></div></div>
+          <div class="count">{{ s.count }}</div>
+        </div>
+        {% endfor %}
       {% else %}
-      <tr><td colspan="2" class="an-empty">No traffic data yet.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+        <div class="an-empty">No lead sources recorded yet.</div>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -14,6 +14,7 @@ const { seedDefaultMilestones } = require('../lib/order-milestones');
 const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/settings');
 const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch } = require('../lib/seo/generate');
+const { COUNTRY_MAP } = require('../lib/visitor-tracker');
 
 // Unambiguous charset (no 0/O/1/l/I) - customers read this off a phone
 // screen or hear it over a call from their sales rep, so avoid characters
@@ -1677,12 +1678,14 @@ router.get('/admin/activity', async (req, res) => {
   res.render('admin/activity/list.njk', adminVars(req, { entries }));
 });
 
-// ---- Analytics ----
+// ---- Analytics & Visitor Stats ----
 
 router.get('/admin/analytics', async (req, res) => {
   const empty = {
     leadFunnel: [], leadTrend: [], topModels: [], leadSources: [],
     topPages: [], trafficTrend: [], totalViews30d: 0, totalLeads30d: 0,
+    recentVisitors: [], countryBreakdown: [], deviceBreakdown: [], browserBreakdown: [],
+    uniqueVisitors30d: 0, activeFilter: {},
   };
   if (!db) return res.render('admin/analytics.njk', adminVars(req, empty));
 
@@ -1699,19 +1702,113 @@ router.get('/admin/analytics', async (req, res) => {
       db('leads').select('source').count({ count: '*' }).groupBy('source').orderBy('count', 'desc'),
     ]) : [[], [], [], []];
 
-    const [topPages, trafficTrend] = hasViews ? await Promise.all([
-      db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
-        .select('path').count({ count: '*' }).groupBy('path').orderBy('count', 'desc').limit(12),
-      db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
-        .select(db.raw('DATE(created_at) as day')).count({ count: '*' }).groupBy('day').orderBy('day'),
-    ]) : [[], []];
+    let topPages = [];
+    let trafficTrend = [];
+    let recentVisitors = [];
+    let countryBreakdown = [];
+    let deviceBreakdown = [];
+    let browserBreakdown = [];
+    let uniqueVisitors30d = 0;
+
+    if (hasViews) {
+      const filterCountry = (req.query.country || '').trim();
+      const filterDevice = (req.query.device || '').trim();
+      const searchQuery = (req.query.q || '').trim();
+
+      let visitorQuery = db('page_views').orderBy('id', 'desc').limit(60);
+
+      if (filterCountry) {
+        visitorQuery = visitorQuery.where('country', filterCountry);
+      }
+      if (filterDevice) {
+        visitorQuery = visitorQuery.where('device_type', filterDevice);
+      }
+      if (searchQuery) {
+        visitorQuery = visitorQuery.where((builder) => {
+          builder.where('ip', 'like', `%${searchQuery}%`)
+            .orWhere('path', 'like', `%${searchQuery}%`)
+            .orWhere('country', 'like', `%${searchQuery}%`)
+            .orWhere('city', 'like', `%${searchQuery}%`)
+            .orWhere('referrer', 'like', `%${searchQuery}%`);
+        });
+      }
+
+      const [
+        tp,
+        tt,
+        visitors,
+        countries,
+        devices,
+        browsers,
+        uniqueRes,
+      ] = await Promise.all([
+        db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
+          .select('path').count({ count: '*' }).groupBy('path').orderBy('count', 'desc').limit(10),
+        db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
+          .select(db.raw('DATE(created_at) as day')).count({ count: '*' }).groupBy('day').orderBy('day'),
+        visitorQuery,
+        db('page_views').whereNotNull('country').where('country', '!=', '')
+          .select('country', 'country_code')
+          .count({ count: '*' })
+          .groupBy('country', 'country_code')
+          .orderBy('count', 'desc')
+          .limit(8),
+        db('page_views').whereNotNull('device_type').where('device_type', '!=', '')
+          .select('device_type')
+          .count({ count: '*' })
+          .groupBy('device_type')
+          .orderBy('count', 'desc'),
+        db('page_views').whereNotNull('browser').where('browser', '!=', '')
+          .select('browser')
+          .count({ count: '*' })
+          .groupBy('browser')
+          .orderBy('count', 'desc')
+          .limit(6),
+        db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
+          .whereNotNull('ip')
+          .countDistinct({ count: 'ip' })
+          .first(),
+      ]);
+
+      topPages = tp;
+      trafficTrend = tt;
+      uniqueVisitors30d = Number(uniqueRes?.count || 0);
+
+      countryBreakdown = countries.map((c) => ({
+        ...c,
+        flag: COUNTRY_MAP[c.country_code]?.flag || (c.country_code === 'LOC' ? '💻' : '🌍'),
+      }));
+
+      deviceBreakdown = devices;
+      browserBreakdown = browsers;
+
+      recentVisitors = visitors.map((v) => ({
+        ...v,
+        flag: COUNTRY_MAP[v.country_code]?.flag || (v.country_code === 'LOC' ? '💻' : '🌍'),
+        formattedTime: v.created_at ? new Date(v.created_at).toLocaleString('en-US', {
+          timeZone: 'Asia/Dhaka',
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true,
+        }) : 'Recent',
+      }));
+    }
 
     const totalViews30d = trafficTrend.reduce((sum, r) => sum + Number(r.count), 0);
     const totalLeads30d = leadTrend.reduce((sum, r) => sum + Number(r.count), 0);
 
     res.render('admin/analytics.njk', adminVars(req, {
       leadFunnel, leadTrend, topModels, leadSources, topPages, trafficTrend,
-      totalViews30d, totalLeads30d,
+      totalViews30d, totalLeads30d, uniqueVisitors30d,
+      recentVisitors, countryBreakdown, deviceBreakdown, browserBreakdown,
+      activeFilter: {
+        country: (req.query.country || '').trim(),
+        device: (req.query.device || '').trim(),
+        q: (req.query.q || '').trim(),
+      },
     }));
   } catch (err) {
     console.error('Analytics query error:', err.message);

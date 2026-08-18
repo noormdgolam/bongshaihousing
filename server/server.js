@@ -24,6 +24,7 @@ const agentRouter = require('./routes/agent');
 const customerAuthRouter = require('./routes/customer-auth');
 const customerRouter = require('./routes/customer');
 const seoCronRouter = require('./routes/seo-cron');
+const { extractVisitorInfo } = require('./lib/visitor-tracker');
 
 // The session store (and any other async DB init) can reject before
 // anything has a chance to .catch() it - without this, a single transient
@@ -171,12 +172,29 @@ app.use('/', customerAuthRouter);
 app.use('/', customerRouter);
 app.use('/', seoCronRouter);
 
-// Page-view logging for the admin Analytics dashboard - GET requests only,
+// Page-view & visitor logging for the admin Analytics dashboard - GET requests only,
 // after admin routes (so admin browsing never counts as traffic), fire-and-
 // forget so a DB hiccup never adds latency to a real page load.
 app.use((req, res, next) => {
-  if (req.method === 'GET' && db) {
-    db('page_views').insert({ path: req.path }).catch(() => {});
+  const isStaticAsset = /\.(css|js|map|png|jpg|jpeg|webp|svg|ico|woff|woff2|ttf|eot|json|xml|txt)$/i.test(req.path);
+  if (req.method === 'GET' && !isStaticAsset && db) {
+    try {
+      const visitor = extractVisitorInfo(req);
+      db('page_views').insert({
+        path: req.path,
+        ip: visitor.ip,
+        country: visitor.country,
+        country_code: visitor.country_code,
+        city: visitor.city,
+        user_agent: visitor.user_agent,
+        device_type: visitor.device_type,
+        browser: visitor.browser,
+        os: visitor.os,
+        referrer: visitor.referrer,
+      }).catch(() => {});
+    } catch (e) {
+      // Ignore logging error to prevent affecting user experience
+    }
   }
   next();
 });
