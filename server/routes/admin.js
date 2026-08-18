@@ -423,6 +423,12 @@ async function resolveImage(files, fieldName, manualValue) {
 }
 
 router.post('/admin/products', galleryUpload, async (req, res) => {
+  // multipart bodies skip the global CSRF middleware's check (req.body
+  // isn't parsed until multer runs, inside this route) - verified here
+  // instead, now that galleryUpload has populated it.
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published } = req.body;
   try {
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
@@ -457,6 +463,9 @@ router.get('/admin/products/:id/edit', async (req, res) => {
 });
 
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published } = req.body;
   const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
   const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
@@ -576,6 +585,9 @@ router.get('/admin/categories/new', (req, res) => {
 });
 
 router.post('/admin/categories', upload.single('hero_image_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
   const finalImage = req.file ? `images/uploads/${req.file.filename}` : (hero_image || null);
   try {
@@ -597,6 +609,9 @@ router.get('/admin/categories/:id/edit', async (req, res) => {
 });
 
 router.post('/admin/categories/:id', upload.single('hero_image_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
   const finalImage = req.file ? `images/uploads/${req.file.filename}` : (hero_image || null);
   await db('categories').where({ id: req.params.id }).update({
@@ -627,6 +642,9 @@ router.get('/admin/projects/new', (req, res) => {
 });
 
 router.post('/admin/projects', upload.single('image_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
   try {
     const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (image || null);
@@ -650,6 +668,9 @@ router.get('/admin/projects/:id/edit', async (req, res) => {
 });
 
 router.post('/admin/projects/:id', upload.single('image_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (image || null);
   await db('projects').where({ id: req.params.id }).update({
@@ -665,6 +686,8 @@ router.post('/admin/projects/:id', upload.single('image_file'), async (req, res)
 
 // Generic Image Upload API (JSON Response with WebP Conversion)
 router.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
   if (!req.file) {
     return res.status(400).json({ success: false, error: 'No file uploaded' });
   }
@@ -1046,6 +1069,8 @@ router.get('/admin/team-members/new', (req, res) => {
 });
 
 router.post('/admin/team-members', upload.single('photo_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
   if (!db) return res.status(500).send('Database unavailable');
   const { name, role, bio, photo, department, published, sort_order } = req.body;
   try {
@@ -1101,6 +1126,8 @@ router.get('/admin/team-members/:id/edit', async (req, res) => {
 });
 
 router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
   if (!db) return res.status(500).send('Database unavailable');
   const { name, role, bio, photo, department, published, sort_order } = req.body;
   try {

@@ -68,6 +68,12 @@ router.post('/agent/signup', function (req, res, next) {
   const values = { ...b };
   const fail = (error) => res.status(400).render('agent/signup.njk', { error, districts: BANGLADESH_DISTRICTS, values });
 
+  // multipart bodies skip the global CSRF middleware's check (req.body
+  // isn't parsed yet at that point) - verified here instead, now that
+  // multer has populated it.
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
   const required = {
     'Business/establishment name': b.business_name,
     'Owner/applicant name': b.name,
