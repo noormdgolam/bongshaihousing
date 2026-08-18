@@ -1,0 +1,97 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Agent Application{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">🤝 {{ agent.business_name or agent.name }}</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <a href="/admin/agents" class="btn">← Back to Agents</a>
+  <div>
+    <span class="pill {% if agent.status == 'active' %}pill-success{% elif agent.status == 'rejected' %}pill-muted{% endif %}">{{ agent.status }}</span>
+  </div>
+</div>
+
+<div class="admin-grid-2col">
+  <div>
+    <div class="card">
+      <h3 style="margin-top:0;">Business Information</h3>
+      <table>
+        <tr><th style="width:220px;">Business Name</th><td>{{ agent.business_name or '—' }}</td></tr>
+        <tr><th>Owner / Applicant</th><td>{{ agent.name }}</td></tr>
+        <tr><th>Contact Address</th><td>{{ agent.contact_address or '—' }}</td></tr>
+        <tr><th>Mobile</th><td>{{ agent.phone }}</td></tr>
+        <tr><th>Landline</th><td>{{ agent.landline_phone or '—' }}</td></tr>
+        <tr><th>Email</th><td>{{ agent.email or '—' }}</td></tr>
+        <tr><th>NID Number</th><td>{{ agent.nid_number or '—' }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Business Details</h3>
+      <table>
+        <tr><th style="width:220px;">Current Business Type(s)</th><td>{{ agent.current_business_types or '—' }}</td></tr>
+        <tr><th>Current Business Address</th><td>{{ agent.current_business_address or '—' }}</td></tr>
+        <tr><th>Permanent Address</th><td>{{ agent.permanent_address or '—' }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Proposed Territory</h3>
+      <table>
+        <tr><th style="width:220px;">District</th><td>{{ agent.district }}</td></tr>
+        <tr><th>Thana / Upazila</th><td>{{ agent.thana or '—' }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Registration &amp; Financials</h3>
+      <table>
+        <tr><th style="width:220px;">TIN Number</th><td>{{ agent.tin_number or '—' }}</td></tr>
+        <tr><th>Trade License Number</th><td>{{ agent.trade_license_number or '—' }}</td></tr>
+        <tr><th>Own Fund</th><td>{{ agent.funding_own_fund or '—' }}</td></tr>
+        <tr><th>Bank Funding</th><td>{{ agent.funding_bank or '—' }}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h3 style="margin-top:0;">Supporting Documents</h3>
+      {% set docLabels = {
+        doc_application_letter: '📄 Application Letter',
+        doc_passport_photo: '🖼️ Passport Photo',
+        doc_trade_license: '📋 Trade License',
+        doc_tin_certificate: '🧾 TIN Certificate',
+        doc_nid_copy: '🪪 NID Copy'
+      } %}
+      {% for field in documentFields %}
+      <div style="padding:8px 0; border-bottom:1px solid var(--grey-100); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.9rem;">{{ docLabels[field] }}</span>
+        {% if agent[field] %}
+        <a href="/admin/agents/{{ agent.id }}/document/{{ field }}" target="_blank" class="btn" style="padding:4px 10px; font-size:0.78rem;">View</a>
+        {% else %}
+        <span style="font-size:0.78rem; color:var(--grey-500);">Not provided</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Review</h3>
+      <p style="font-size:0.85rem; color:var(--grey-500);">Applied {{ agent.created_at | date }}</p>
+      {% if agent.status != 'active' %}
+      <form method="post" action="/admin/agents/{{ agent.id }}/status" style="margin-bottom:8px;">
+        <input type="hidden" name="status" value="active">
+        <input type="hidden" name="redirect_to" value="detail">
+        <button type="submit" class="btn btn-primary" style="width:100%;">Approve Application</button>
+      </form>
+      {% endif %}
+      {% if agent.status != 'rejected' %}
+      <form method="post" action="/admin/agents/{{ agent.id }}/status">
+        <input type="hidden" name="status" value="rejected">
+        <input type="hidden" name="redirect_to" value="detail">
+        <button type="submit" class="btn btn-danger" style="width:100%;">Reject Application</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

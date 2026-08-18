@@ -15,19 +15,21 @@
 {% if agents.length %}
 <table>
   <thead>
-    <tr><th>Name</th><th>Phone</th><th>District</th><th>Status</th><th>Applied</th><th>Actions</th></tr>
+    <tr><th>Business</th><th>Owner</th><th>Phone</th><th>Territory</th><th>Status</th><th>Applied</th><th>Actions</th></tr>
   </thead>
   <tbody>
     {% for a in agents %}
     <tr>
+      <td>{{ a.business_name or '—' }}</td>
       <td>{{ a.name }}</td>
       <td>{{ a.phone }}</td>
-      <td>{{ a.district }}</td>
+      <td>{{ a.district }}{% if a.thana %}, {{ a.thana }}{% endif %}</td>
       <td>
         <span class="pill {% if a.status == 'active' %}pill-success{% elif a.status == 'rejected' %}pill-muted{% endif %}">{{ a.status }}</span>
       </td>
       <td>{{ a.created_at | date }}</td>
       <td>
+        <a href="/admin/agents/{{ a.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">View</a>
         {% if a.status != 'active' %}
         <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
           <input type="hidden" name="status" value="active">

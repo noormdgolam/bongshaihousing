@@ -4,7 +4,7 @@
 <div class="agent-topbar">
   <div class="brand">🤝 Bongshai Agent Portal</div>
   <div class="who">
-    {{ agent.name }} <span style="opacity:0.7;">· {{ agent.district }}</span>
+    {{ agent.name }} <span style="opacity:0.7;">· {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</span>
     <form method="post" action="/agent/logout" style="display:inline;">
       <button type="submit" class="btn btn-ghost">Log out</button>
     </form>
@@ -15,6 +15,43 @@
   {% if error %}
   <div class="error-box">{{ error }}</div>
   {% endif %}
+
+  <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    <div>
+      <div style="font-weight:800; font-size:1.05rem; color:var(--grey-900);">{{ agent.business_name or agent.name }}</div>
+      <div style="color:var(--grey-500); font-size:0.85rem;">Territory: {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+    </div>
+    <span class="pill pill-won" style="font-size:0.8rem;">Active Distributor</span>
+  </div>
+
+  <div class="card">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(90px, 1fr)); gap:12px; text-align:center;">
+      <div>
+        <div style="font-size:1.6rem; font-weight:800; color:var(--primary);">{{ stats.total }}</div>
+        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Total Leads</div>
+      </div>
+      <div>
+        <div style="font-size:1.6rem; font-weight:800; color:#1e40af;">{{ stats.new }}</div>
+        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">New</div>
+      </div>
+      <div>
+        <div style="font-size:1.6rem; font-weight:800; color:#92400e;">{{ stats.contacted }}</div>
+        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Contacted</div>
+      </div>
+      <div>
+        <div style="font-size:1.6rem; font-weight:800; color:#4338ca;">{{ stats.quoted }}</div>
+        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Quoted</div>
+      </div>
+      <div>
+        <div style="font-size:1.6rem; font-weight:800; color:var(--success);">{{ stats.won }}</div>
+        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Won</div>
+      </div>
+      <div>
+        <div style="font-size:1.6rem; font-weight:800; color:var(--grey-500);">{{ stats.lost }}</div>
+        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Lost</div>
+      </div>
+    </div>
+  </div>
 
   <div class="card">
     <h2 style="margin-top:0; font-size:1.05rem;">Submit a New Lead</h2>

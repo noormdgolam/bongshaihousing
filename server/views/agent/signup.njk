@@ -1,53 +1,152 @@
 {% extends "agent-layout.njk" %}
-{% block title %}Agent Sign Up{% endblock %}
+{% block title %}Distributor Application{% endblock %}
 {% block body %}
-<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); padding:20px;">
-  <div class="card" style="width: 100%; max-width: 460px; padding:32px 28px;">
+<div style="min-height:100vh; padding:32px 16px; background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);">
+  <div class="card" style="max-width: 640px; margin: 0 auto; padding:32px 28px;">
     <div style="text-align:center; margin-bottom:22px;">
       <div style="font-size:2rem; margin-bottom:4px;">🤝</div>
-      <h1 style="font-size:1.4rem; font-weight:800; margin:0; color:var(--grey-900);">Become a Bongshai Agent</h1>
-      <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:6px;">Refer customers, track your leads, earn commission. Available in all 64 districts.</p>
+      <h1 style="font-size:1.4rem; font-weight:800; margin:0; color:var(--grey-900);">Bongshai Housing Distributorship Application</h1>
+      <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:6px;">Apply to represent Bongshai Housing & Real Estate in your area. Reviewed by our team before your account is activated.</p>
     </div>
 
     {% if error %}
     <div class="error-box">{{ error }}</div>
     {% endif %}
 
-    <form method="post" action="/agent/signup">
+    <form method="post" action="/agent/signup" enctype="multipart/form-data">
+      <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px;">Business Information</h3>
       <div class="form-row">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" value="{{ values.name or '' }}" required autofocus>
+        <label for="business_name">Business/Establishment Name</label>
+        <input type="text" id="business_name" name="business_name" value="{{ values.business_name or '' }}" required>
       </div>
       <div class="form-row">
-        <label for="phone">Phone Number (WhatsApp preferred)</label>
-        <input type="tel" id="phone" name="phone" value="{{ values.phone or '' }}" placeholder="01XXXXXXXXX" required>
+        <label for="name">Business Owner / Applicant Name</label>
+        <input type="text" id="name" name="name" value="{{ values.name or '' }}" required>
+      </div>
+      <div class="form-row">
+        <label for="contact_address">Contact Address</label>
+        <input type="text" id="contact_address" name="contact_address" value="{{ values.contact_address or '' }}" required>
+      </div>
+      <div class="form-row" style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="landline_phone">Phone (landline, optional)</label>
+          <input type="text" id="landline_phone" name="landline_phone" value="{{ values.landline_phone or '' }}">
+        </div>
+        <div style="flex:1;">
+          <label for="phone">Mobile Number</label>
+          <input type="tel" id="phone" name="phone" value="{{ values.phone or '' }}" placeholder="01XXXXXXXXX" required>
+        </div>
       </div>
       <div class="form-row">
         <label for="email">Email Address <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
         <input type="email" id="email" name="email" value="{{ values.email or '' }}">
       </div>
       <div class="form-row">
-        <label for="district">Your District</label>
-        <select id="district" name="district" required>
-          <option value="" disabled {% if not values.district %}selected{% endif %}>Select your district</option>
-          {% for d in districts %}
-          <option value="{{ d }}" {% if values.district == d %}selected{% endif %}>{{ d }}</option>
-          {% endfor %}
-        </select>
+        <label for="nid_number">Applicant's National ID (NID) Number</label>
+        <input type="text" id="nid_number" name="nid_number" value="{{ values.nid_number or '' }}" required>
+      </div>
+
+      <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Business Details</h3>
+      <div class="form-row">
+        <label>Current Business Type(s) <span style="font-weight:400; color:var(--grey-500);">(up to 3, optional)</span></label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" name="business_type_1" placeholder="1)" value="{{ values.business_type_1 or '' }}">
+          <input type="text" name="business_type_2" placeholder="2)" value="{{ values.business_type_2 or '' }}">
+          <input type="text" name="business_type_3" placeholder="3)" value="{{ values.business_type_3 or '' }}">
+        </div>
       </div>
       <div class="form-row">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8">
+        <label for="current_business_address">Current Business Address <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <textarea id="current_business_address" name="current_business_address">{{ values.current_business_address or '' }}</textarea>
       </div>
       <div class="form-row">
-        <label for="confirm_password">Confirm Password</label>
-        <input type="password" id="confirm_password" name="confirm_password" required minlength="8">
+        <label for="permanent_address">Permanent Address</label>
+        <textarea id="permanent_address" name="permanent_address" required>{{ values.permanent_address or '' }}</textarea>
       </div>
-      <button type="submit" class="btn btn-accent" style="width:100%; padding:11px; font-size:0.95rem;">Create Agent Account</button>
+
+      <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Proposed Territory</h3>
+      <div class="form-row" style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="district">District</label>
+          <select id="district" name="district" required>
+            <option value="" disabled {% if not values.district %}selected{% endif %}>Select district</option>
+            {% for d in districts %}
+            <option value="{{ d }}" {% if values.district == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div style="flex:1;">
+          <label for="thana">Thana / Upazila</label>
+          <input type="text" id="thana" name="thana" value="{{ values.thana or '' }}" required>
+        </div>
+      </div>
+
+      <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Registration &amp; Financials</h3>
+      <div class="form-row" style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="tin_number">TIN Number <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <input type="text" id="tin_number" name="tin_number" value="{{ values.tin_number or '' }}">
+        </div>
+        <div style="flex:1;">
+          <label for="trade_license_number">Trade License Number <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <input type="text" id="trade_license_number" name="trade_license_number" value="{{ values.trade_license_number or '' }}">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Funding Status for Distributorship <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <div style="display:flex; gap:12px;">
+          <input type="text" name="funding_own_fund" placeholder="Own fund (amount/details)" style="flex:1;">
+          <input type="text" name="funding_bank" placeholder="From bank (amount/details)" style="flex:1;">
+        </div>
+      </div>
+
+      <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Supporting Documents</h3>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-6px;">JPG, PNG, or PDF, up to 10MB each.</p>
+      <div class="form-row">
+        <label for="doc_application_letter">Application Letter (on company letterhead) <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="file" id="doc_application_letter" name="doc_application_letter" accept="image/*,application/pdf">
+      </div>
+      <div class="form-row">
+        <label for="doc_passport_photo">Passport-size Photo <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="file" id="doc_passport_photo" name="doc_passport_photo" accept="image/*">
+      </div>
+      <div class="form-row">
+        <label for="doc_trade_license">Trade License <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="file" id="doc_trade_license" name="doc_trade_license" accept="image/*,application/pdf">
+      </div>
+      <div class="form-row">
+        <label for="doc_tin_certificate">TIN Certificate <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="file" id="doc_tin_certificate" name="doc_tin_certificate" accept="image/*,application/pdf">
+      </div>
+      <div class="form-row">
+        <label for="doc_nid_copy">NID Photocopy <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="file" id="doc_nid_copy" name="doc_nid_copy" accept="image/*,application/pdf">
+      </div>
+
+      <h3 style="font-size:0.95rem; color:var(--primary-dark); border-bottom:1px solid var(--grey-100); padding-bottom:6px; margin-top:22px;">Account Password</h3>
+      <div class="form-row" style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8">
+        </div>
+        <div style="flex:1;">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" required minlength="8">
+        </div>
+      </div>
+
+      <div class="form-row" style="background:var(--grey-50); padding:12px 14px; border-radius:8px; margin-top:18px;">
+        <label style="display:flex; align-items:flex-start; gap:8px; font-weight:400; cursor:pointer;">
+          <input type="checkbox" name="certification_agreed" required style="margin-top:3px;">
+          <span style="font-size:0.85rem; color:var(--grey-700);">I certify that the information provided above is correct in all respects. I understand that any false statement may result in cancellation of my distributorship.</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-accent" style="width:100%; padding:12px; font-size:0.95rem; margin-top:16px;">Submit Application</button>
     </form>
 
     <p style="margin-top:16px; text-align:center; font-size:0.85rem; color:var(--grey-500);">
-      Already registered? <a href="/agent/login.html">Log in</a>
+      Already have an account? <a href="/agent/login.html">Log in</a>
     </p>
     <div style="margin-top:12px; text-align:center;">
       <a href="/" style="font-size:0.8rem; color:var(--grey-500);">← Return to Bongshai Housing</a>

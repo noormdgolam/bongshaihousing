@@ -4,20 +4,25 @@ const requireAgent = require('../middleware/requireAgent');
 
 const router = express.Router();
 
+async function leadStats(agentId) {
+  const leads = await db('agent_leads').where({ agent_id: agentId }).orderBy('created_at', 'desc');
+  const stats = { total: leads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0 };
+  for (const l of leads) stats[l.status] = (stats[l.status] || 0) + 1;
+  return { leads, stats };
+}
+
 router.get('/agent/dashboard.html', requireAgent, async (req, res) => {
-  const leads = await db('agent_leads')
-    .where({ agent_id: req.agent.id })
-    .orderBy('created_at', 'desc');
-  res.render('agent/dashboard.njk', { agent: req.agent, leads, error: null });
+  const { leads, stats } = await leadStats(req.agent.id);
+  res.render('agent/dashboard.njk', { agent: req.agent, leads, stats, error: null });
 });
 
 router.post('/agent/leads', requireAgent, async (req, res) => {
   const { customer_name, customer_phone, customer_district, product_interest, notes } = req.body;
 
   if (!customer_name || !customer_phone) {
-    const leads = await db('agent_leads').where({ agent_id: req.agent.id }).orderBy('created_at', 'desc');
+    const { leads, stats } = await leadStats(req.agent.id);
     return res.status(400).render('agent/dashboard.njk', {
-      agent: req.agent, leads, error: 'Customer name and phone number are required.',
+      agent: req.agent, leads, stats, error: 'Customer name and phone number are required.',
     });
   }
 

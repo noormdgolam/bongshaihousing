@@ -1,8 +1,22 @@
 const express = require('express');
+const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const db = require('../lib/db');
+const { saveDocument } = require('../lib/document-uploader');
 
 const router = express.Router();
+
+const DOCUMENT_FIELDS = ['doc_application_letter', 'doc_passport_photo', 'doc_trade_license', 'doc_tin_certificate', 'doc_nid_copy'];
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const ok = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'].includes(file.mimetype);
+    cb(ok ? null : new Error('Only JPG, PNG, WebP, or PDF files are accepted.'), ok);
+  },
+});
+const documentUpload = upload.fields(DOCUMENT_FIELDS.map((name) => ({ name, maxCount: 1 })));
 
 // Same in-memory brute-force lockout as admin-auth.js - one process, no
 // Redis needed, and login is checked against a phone number an attacker
@@ -42,31 +56,82 @@ router.get('/agent/signup.html', (req, res) => {
   res.render('agent/signup.njk', { error: null, districts: BANGLADESH_DISTRICTS, values: {} });
 });
 
-router.post('/agent/signup', async (req, res) => {
-  const { name, phone, email, district, password, confirm_password } = req.body;
-  const values = { name, phone, email, district };
+router.post('/agent/signup', function (req, res, next) {
+  documentUpload(req, res, (err) => {
+    if (err) {
+      return res.status(400).render('agent/signup.njk', { error: err.message, districts: BANGLADESH_DISTRICTS, values: req.body || {} });
+    }
+    next();
+  });
+}, async (req, res) => {
+  const b = req.body;
+  const values = { ...b };
+  const fail = (error) => res.status(400).render('agent/signup.njk', { error, districts: BANGLADESH_DISTRICTS, values });
 
-  if (!name || !phone || !district || !password) {
-    return res.status(400).render('agent/signup.njk', { error: 'Name, phone, district, and password are required.', districts: BANGLADESH_DISTRICTS, values });
+  const required = {
+    'Business/establishment name': b.business_name,
+    'Owner/applicant name': b.name,
+    'Contact address': b.contact_address,
+    'Mobile number': b.phone,
+    'National ID (NID) number': b.nid_number,
+    'Permanent address': b.permanent_address,
+    'District': b.district,
+    'Thana': b.thana,
+    'Password': b.password,
+  };
+  for (const [label, val] of Object.entries(required)) {
+    if (!val || !String(val).trim()) return fail(`${label} is required.`);
   }
-  if (password.length < 8) {
-    return res.status(400).render('agent/signup.njk', { error: 'Password must be at least 8 characters.', districts: BANGLADESH_DISTRICTS, values });
-  }
-  if (password !== confirm_password) {
-    return res.status(400).render('agent/signup.njk', { error: 'Passwords do not match.', districts: BANGLADESH_DISTRICTS, values });
+  if (b.password.length < 8) return fail('Password must be at least 8 characters.');
+  if (b.password !== b.confirm_password) return fail('Passwords do not match.');
+  if (b.certification_agreed !== 'on') return fail('You must certify that the information provided is correct.');
+
+  const existing = await db('agents').where({ phone: b.phone }).first();
+  if (existing) return fail('An account with this phone number already exists.');
+
+  const files = req.files || {};
+  const docPaths = {};
+  try {
+    for (const field of DOCUMENT_FIELDS) {
+      const f = files[field] && files[field][0];
+      docPaths[field] = f ? saveDocument(f.buffer, f.mimetype) : null;
+    }
+  } catch (docErr) {
+    return fail(docErr.message);
   }
 
-  const existing = await db('agents').where({ phone }).first();
-  if (existing) {
-    return res.status(400).render('agent/signup.njk', { error: 'An account with this phone number already exists.', districts: BANGLADESH_DISTRICTS, values });
-  }
+  const businessTypes = [b.business_type_1, b.business_type_2, b.business_type_3]
+    .map((t) => (t || '').trim()).filter(Boolean).join(', ') || null;
 
-  const password_hash = await bcrypt.hash(password, 10);
+  const password_hash = await bcrypt.hash(b.password, 10);
   await db('agents').insert({
-    name, phone, email: email || null, district, password_hash, status: 'pending',
+    name: b.name,
+    phone: b.phone,
+    email: b.email || null,
+    district: b.district,
+    thana: b.thana,
+    password_hash,
+    status: 'pending',
+    business_name: b.business_name,
+    contact_address: b.contact_address,
+    landline_phone: b.landline_phone || null,
+    nid_number: b.nid_number,
+    current_business_types: businessTypes,
+    current_business_address: b.current_business_address || null,
+    permanent_address: b.permanent_address,
+    tin_number: b.tin_number || null,
+    trade_license_number: b.trade_license_number || null,
+    funding_own_fund: b.funding_own_fund || null,
+    funding_bank: b.funding_bank || null,
+    doc_application_letter: docPaths.doc_application_letter,
+    doc_passport_photo: docPaths.doc_passport_photo,
+    doc_trade_license: docPaths.doc_trade_license,
+    doc_tin_certificate: docPaths.doc_tin_certificate,
+    doc_nid_copy: docPaths.doc_nid_copy,
+    certification_agreed: true,
   });
 
-  res.render('agent/signup-pending.njk', { name });
+  res.render('agent/signup-pending.njk', { name: b.name });
 });
 
 router.get('/agent/login.html', (req, res) => {
@@ -95,7 +160,7 @@ router.post('/agent/login', async (req, res) => {
   }
 
   if (agent.status === 'pending') {
-    return res.status(403).render('agent/login.njk', { error: 'Your account is still awaiting approval. We\'ll notify you once it\'s active.' });
+    return res.status(403).render('agent/login.njk', { error: 'Your application is still under review. We\'ll notify you once it\'s approved.' });
   }
   if (agent.status === 'rejected') {
     return res.status(403).render('agent/login.njk', { error: 'This account is not active. Contact Bongshai Housing for details.' });

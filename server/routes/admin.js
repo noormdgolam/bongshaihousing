@@ -236,6 +236,25 @@ router.get('/admin/agents', async (req, res) => {
   res.render('admin/agents/list.njk', adminVars(req, { agents, statusFilter, counts }));
 });
 
+router.get('/admin/agents/:id', async (req, res) => {
+  const agent = await db('agents').where({ id: req.params.id }).first();
+  if (!agent) return res.status(404).send('Agent not found');
+  const documentFields = ['doc_application_letter', 'doc_passport_photo', 'doc_trade_license', 'doc_tin_certificate', 'doc_nid_copy'];
+  res.render('admin/agents/detail.njk', adminVars(req, { agent, documentFields }));
+});
+
+router.get('/admin/agents/:id/document/:field', async (req, res) => {
+  const allowedFields = ['doc_application_letter', 'doc_passport_photo', 'doc_trade_license', 'doc_tin_certificate', 'doc_nid_copy'];
+  if (!allowedFields.includes(req.params.field)) return res.status(400).send('Invalid document field');
+  const agent = await db('agents').where({ id: req.params.id }).first();
+  const filename = agent && agent[req.params.field];
+  if (!filename) return res.status(404).send('Document not found');
+  const { documentPath } = require('../lib/document-uploader');
+  res.sendFile(documentPath(filename), (err) => {
+    if (err) res.status(404).send('Document file not found on disk');
+  });
+});
+
 router.post('/admin/agents/:id/status', async (req, res) => {
   const { status } = req.body;
   if (!['pending', 'active', 'rejected'].includes(status)) {
@@ -243,6 +262,7 @@ router.post('/admin/agents/:id/status', async (req, res) => {
   }
   await db('agents').where({ id: req.params.id }).update({ status, updated_at: db.fn.now() });
   await logActivity(req, { action: 'update', entityType: 'agent', entityId: req.params.id, summary: `Set agent #${req.params.id} status to ${status}` });
+  if (req.body.redirect_to === 'detail') return res.redirect(`/admin/agents/${req.params.id}`);
   res.redirect('/admin/agents?status=' + encodeURIComponent(req.query.status || 'pending'));
 });
 
