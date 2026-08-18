@@ -17,14 +17,27 @@
 
   <div class="pd-gallery">
     {% if product.main_image %}
+    {% set gallery_images = [product.main_image, product.image_2, product.image_3] %}
     <a href="{{ product.main_image }}" class="pd-gallery-link" data-pd-lightbox aria-label="View full-size image of {{ product.title }}">
       <img
+        id="pdMainImage"
         src="{{ product.main_image }}"
         srcset="{{ product.main_image | replace('.webp', '-400w.webp') }} 400w, {{ product.main_image | replace('.webp', '-700w.webp') }} 700w, {{ product.main_image }} 1024w"
         sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"
         alt="{{ product.title }}" width="1024" height="1024" style="width: 100%; height: auto; display: block;" loading="eager" fetchpriority="high">
       <span class="pd-gallery-zoom" aria-hidden="true">🔍 Tap to enlarge</span>
     </a>
+    <div class="pd-gallery-thumbs">
+      {% for img in gallery_images %}
+      {% if img %}
+      <button type="button" class="pd-gallery-thumb{% if loop.first %} active{% endif %}" data-full="{{ img }}" aria-label="View image {{ loop.index }} of {{ product.title }}">
+        <img src="{{ img }}" alt="" loading="lazy">
+      </button>
+      {% else %}
+      <div class="pd-gallery-thumb pd-gallery-thumb-empty" aria-hidden="true">📷</div>
+      {% endif %}
+      {% endfor %}
+    </div>
     {% endif %}
   </div>
 
@@ -75,20 +88,34 @@
   {% for v in variants %}
   <div class="card bh-variant-panel{% if not loop.first %} bh-variant-hidden{% endif %}" data-variant-index="{{ loop.index0 }}" style="margin-bottom: 24px; background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
     <h3 style="margin-top:0;">{{ v.area_label or v.area_sqft }} sqft{% if v.bed %} — {{ v.bed }} Bed{% endif %}{% if v.bath %}, {{ v.bath }} Bath{% endif %}</h3>
-    {% if v.rooms.length %}
-    <table class="modern-table">
-      <thead><tr><th>Section</th><th>Area (sq.ft)</th><th>Length (ft)</th><th>Width (ft)</th></tr></thead>
-      <tbody>
-        {% for r in v.rooms %}
-        <tr {% if r.is_total_row %}style="font-weight:700;"{% endif %}>
-          <td>{% if r.floor_label %}{{ r.floor_label }}: {% endif %}{{ r.section }}</td>
-          <td>{{ r.area_sqft or '' }}</td>
-          <td>{{ r.length_ft or '' }}</td>
-          <td>{{ r.width_ft or '' }}</td>
-        </tr>
+    {% if v.roomGroups.length %}
+    <div class="pd-room-breakdown">
+      {% for g in v.roomGroups %}
+      <div class="pd-room-group">
+        {% if g.label %}
+        <div class="pd-room-group-header">
+          <span>{{ g.label }}</span>
+          {% if g.total %}<span class="pd-room-group-total">{{ g.total }} sqft total</span>{% endif %}
+        </div>
+        {% endif %}
+        {% for r in g.rows %}
+        <div class="pd-room-row">
+          <span class="pd-room-icon" aria-hidden="true">{{ r.icon }}</span>
+          <span class="pd-room-name">{{ r.section }}</span>
+          <span class="pd-room-bar"><span class="pd-room-bar-fill" style="width: {{ r.barPct }}%;"></span></span>
+          <span class="pd-room-area">{{ r.area_sqft or '' }}{% if r.area_sqft %} sqft{% endif %}</span>
+          <span class="pd-room-dims">{% if r.length_ft and r.width_ft %}{{ r.length_ft }}' × {{ r.width_ft }}'{% endif %}</span>
+        </div>
         {% endfor %}
-      </tbody>
-    </table>
+      </div>
+      {% endfor %}
+      {% if v.roomGroupsBuildingTotal %}
+      <div class="pd-room-building-total">
+        <span>Total Building Area</span>
+        <span>{{ v.roomGroupsBuildingTotal }} sqft</span>
+      </div>
+      {% endif %}
+    </div>
     {% endif %}
   </div>
   {% endfor %}
@@ -191,21 +218,42 @@
 (function () {
   var trigger = document.querySelector('[data-pd-lightbox]');
   var lightbox = document.getElementById('pdLightbox');
-  if (!trigger || !lightbox) return;
-  var img = lightbox.querySelector('img');
+  var mainImg = document.getElementById('pdMainImage');
+  var thumbs = document.querySelectorAll('.pd-gallery-thumb:not(.pd-gallery-thumb-empty)');
+  if (!lightbox) return;
+  var lbImg = lightbox.querySelector('img');
   var closeBtn = lightbox.querySelector('.pd-lightbox-close');
 
-  trigger.addEventListener('click', function (e) {
-    e.preventDefault();
-    img.src = trigger.getAttribute('href');
-    img.alt = trigger.querySelector('img') ? trigger.querySelector('img').alt : '';
+  function openLightbox(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
     lightbox.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
-  });
+  }
   function close() {
     lightbox.setAttribute('hidden', '');
     document.body.style.overflow = '';
   }
+  if (trigger) {
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      openLightbox(mainImg ? mainImg.src : trigger.getAttribute('href'), mainImg ? mainImg.alt : '');
+    });
+  }
+  // Thumbnails swap which image is shown large; clicking the already-active
+  // one opens the lightbox instead of doing nothing.
+  thumbs.forEach(function (thumb) {
+    thumb.addEventListener('click', function () {
+      var full = thumb.getAttribute('data-full');
+      if (thumb.classList.contains('active')) {
+        openLightbox(full, mainImg ? mainImg.alt : '');
+        return;
+      }
+      thumbs.forEach(function (t) { t.classList.toggle('active', t === thumb); });
+      if (mainImg) mainImg.src = full;
+      if (trigger) trigger.setAttribute('href', full);
+    });
+  });
   closeBtn.addEventListener('click', close);
   lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });

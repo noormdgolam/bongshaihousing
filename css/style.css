@@ -2445,6 +2445,101 @@ textarea.form-control {
 }
 
 /* ─── Mobile Landscape / Tablet Small (≤ 768px) ─── */
+/* Room/materials breakdown table — never had base desktop styling, only
+   the mobile card-layout override below, so it fell back to raw browser
+   <table> defaults (content-width, no borders) and left a huge empty gap
+   next to it inside its full-width card container. */
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.modern-table thead th {
+  text-align: left;
+  padding: 10px 16px;
+  background: var(--off-white);
+  color: var(--grey-700);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid var(--grey-100);
+}
+.modern-table tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--grey-100);
+  color: var(--grey-700);
+}
+.modern-table tbody td:first-child {
+  font-weight: 600;
+  color: var(--grey-900);
+}
+.modern-table tbody tr:last-child td { border-bottom: none; }
+.modern-table tbody tr:hover { background: var(--off-white); }
+
+/* Room breakdown — grouped-by-floor list with a proportional bar per
+   room, replacing the flat spec table. Row shape mirrors the raw data:
+   icon | name | share-of-floor bar | area | dimensions. */
+.pd-room-group { margin-bottom: 4px; }
+.pd-room-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 16px;
+  margin-top: 10px;
+  background: var(--off-white);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-size: 0.95rem;
+}
+.pd-room-group-header .pd-room-group-total {
+  font-weight: 600;
+  color: var(--grey-500);
+  font-size: 0.8rem;
+}
+.pd-room-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 110px 76px 60px;
+  align-items: center;
+  column-gap: 10px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--grey-100);
+}
+.pd-room-row:hover { background: var(--off-white); }
+.pd-room-icon { font-size: 1rem; text-align: center; }
+.pd-room-name { font-weight: 600; color: var(--grey-900); font-size: 0.9rem; }
+.pd-room-bar {
+  display: block;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--grey-100);
+  overflow: hidden;
+}
+.pd-room-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--radius-full);
+}
+.pd-room-area { text-align: right; font-weight: 700; color: var(--primary-dark); font-size: 0.85rem; white-space: nowrap; }
+.pd-room-dims { text-align: right; color: var(--grey-500); font-size: 0.78rem; white-space: nowrap; }
+.pd-room-building-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: var(--primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .pd-room-row { grid-template-columns: 24px 1fr 68px; }
+  .pd-room-bar, .pd-room-dims { display: none; }
+}
+
 @media (max-width: 768px) {
   :root {
     --nav-height: 64px;
@@ -5133,6 +5228,35 @@ body.dark-mode img.logo {
   padding: 6px 12px;
   border-radius: 20px;
   pointer-events: none;
+}
+.pd-gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+.pd-gallery-thumb {
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid transparent;
+  background: var(--off-white);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.pd-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-gallery-thumb.active { border-color: var(--primary); }
+.pd-gallery-thumb:not(.active):not(.pd-gallery-thumb-empty):hover { border-color: var(--grey-100); }
+.pd-gallery-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey-500);
+  font-size: 1.4rem;
+  border: 2px dashed var(--grey-100);
+  cursor: default;
+  opacity: 0.6;
 }
 
 .pd-trust-strip {

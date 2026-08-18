@@ -356,15 +356,32 @@ router.get('/admin/products/new', async (req, res) => {
   res.render('admin/products/form.njk', adminVars(req, { product: null, categories, error: null }));
 });
 
-router.post('/admin/products', upload.single('main_image_file'), async (req, res) => {
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, published } = req.body;
+const galleryUpload = upload.fields([
+  { name: 'main_image_file', maxCount: 1 },
+  { name: 'image_2_file', maxCount: 1 },
+  { name: 'image_3_file', maxCount: 1 },
+]);
+
+// One uploaded file field resolves to a saved path, falling through to
+// the matching manual-path text field when nothing was uploaded.
+async function resolveImage(files, fieldName, manualValue) {
+  const file = files && files[fieldName] && files[fieldName][0];
+  return file ? await processAndSaveImage(file.buffer, file.originalname) : (manualValue || null);
+}
+
+router.post('/admin/products', galleryUpload, async (req, res) => {
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published } = req.body;
   try {
-    const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (main_image || null);
+    const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
+    const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
+    const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
     const [id] = await db('products').insert({
       category_id, model_number, slug, title, description,
       price_per_sqft: price_per_sqft || null,
       price_currency: price_currency || 'BDT',
       main_image: finalImage,
+      image_2: finalImage2,
+      image_3: finalImage3,
       published: published === 'on' || published === true || published === 'true',
     });
     res.redirect(`/admin/products/${id}/edit`);
@@ -386,14 +403,18 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null }));
 });
 
-router.post('/admin/products/:id', upload.single('main_image_file'), async (req, res) => {
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, published } = req.body;
-  const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (main_image || null);
+router.post('/admin/products/:id', galleryUpload, async (req, res) => {
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published } = req.body;
+  const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
+  const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
+  const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
   await db('products').where({ id: req.params.id }).update({
     category_id, model_number, slug, title, description,
     price_per_sqft: price_per_sqft || null,
     price_currency: price_currency || 'BDT',
     main_image: finalImage,
+    image_2: finalImage2,
+    image_3: finalImage3,
     published: published === 'on' || published === true || published === 'true',
     updated_at: db.fn.now(),
   });
