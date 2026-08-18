@@ -6,13 +6,20 @@
 // the static file for DB-backed entries while keeping every other
 // existing static URL (falls back to the static file's own entries for
 // anything not sourced from the DB, so nothing regresses).
+//
+// The reference list of non-DB URLs lives in server/data/, not at the repo
+// root - production deploys only the server/ tree (flattened to its own
+// app root, separate from the docroot), so a path reaching outside server/
+// resolves to a different, nonexistent location there than it does in
+// local dev. Keeping the file inside server/ means one relative path works
+// in both places.
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const db = require('../lib/db');
 
 const router = express.Router();
-const STATIC_SITEMAP_PATH = path.join(__dirname, '..', '..', 'sitemap.xml');
+const STATIC_SITEMAP_PATH = path.join(__dirname, '..', 'data', 'static-sitemap.xml');
 
 function today() {
   return new Date().toISOString().slice(0, 10);
