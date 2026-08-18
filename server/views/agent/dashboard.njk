@@ -1,13 +1,19 @@
 {% extends "agent-layout.njk" %}
 {% block title %}My Dashboard{% endblock %}
 {% block body %}
-<div class="agent-topbar">
-  <div class="brand">🤝 Bongshai Agent Portal</div>
-  <div class="who">
-    {{ agent.name }} <span style="opacity:0.7;">· {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</span>
-    <form method="post" action="/agent/logout" style="display:inline;">
+<div class="agent-hero">
+  <div class="agent-hero-top">
+    <div class="agent-hero-brand">🤝 Bongshai Agent Portal</div>
+    <form method="post" action="/agent/logout">
       <button type="submit" class="btn btn-ghost">Log out</button>
     </form>
+  </div>
+  <div class="agent-hero-profile">
+    <div>
+      <div class="agent-hero-name">{{ agent.business_name or agent.name }}</div>
+      <div class="agent-hero-meta">👤 {{ agent.name }} &nbsp;·&nbsp; 📍 {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+    </div>
+    <span class="pill pill-won">● Active Distributor</span>
   </div>
 </div>
 
@@ -16,95 +22,84 @@
   <div class="error-box">{{ error }}</div>
   {% endif %}
 
-  <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-    <div>
-      <div style="font-weight:800; font-size:1.05rem; color:var(--grey-900);">{{ agent.business_name or agent.name }}</div>
-      <div style="color:var(--grey-500); font-size:0.85rem;">Territory: {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+  <div class="agent-stats-row">
+    <div class="agent-stat">
+      <span class="agent-stat-icon">📊</span>
+      <div><div class="agent-stat-num" style="color:var(--primary);">{{ stats.total }}</div><div class="agent-stat-label">Total</div></div>
     </div>
-    <span class="pill pill-won" style="font-size:0.8rem;">Active Distributor</span>
-  </div>
-
-  <div class="card">
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(90px, 1fr)); gap:12px; text-align:center;">
-      <div>
-        <div style="font-size:1.6rem; font-weight:800; color:var(--primary);">{{ stats.total }}</div>
-        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Total Leads</div>
-      </div>
-      <div>
-        <div style="font-size:1.6rem; font-weight:800; color:#1e40af;">{{ stats.new }}</div>
-        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">New</div>
-      </div>
-      <div>
-        <div style="font-size:1.6rem; font-weight:800; color:#92400e;">{{ stats.contacted }}</div>
-        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Contacted</div>
-      </div>
-      <div>
-        <div style="font-size:1.6rem; font-weight:800; color:#4338ca;">{{ stats.quoted }}</div>
-        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Quoted</div>
-      </div>
-      <div>
-        <div style="font-size:1.6rem; font-weight:800; color:var(--success);">{{ stats.won }}</div>
-        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Won</div>
-      </div>
-      <div>
-        <div style="font-size:1.6rem; font-weight:800; color:var(--grey-500);">{{ stats.lost }}</div>
-        <div style="font-size:0.75rem; color:var(--grey-500); text-transform:uppercase;">Lost</div>
-      </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">🆕</span>
+      <div><div class="agent-stat-num" style="color:#1e40af;">{{ stats.new }}</div><div class="agent-stat-label">New</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">📞</span>
+      <div><div class="agent-stat-num" style="color:#92400e;">{{ stats.contacted }}</div><div class="agent-stat-label">Contacted</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">💬</span>
+      <div><div class="agent-stat-num" style="color:#4338ca;">{{ stats.quoted }}</div><div class="agent-stat-label">Quoted</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">✅</span>
+      <div><div class="agent-stat-num" style="color:var(--success);">{{ stats.won }}</div><div class="agent-stat-label">Won</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">✖️</span>
+      <div><div class="agent-stat-num" style="color:var(--grey-500);">{{ stats.lost }}</div><div class="agent-stat-label">Lost</div></div>
     </div>
   </div>
 
-  <div class="card">
-    <h2 style="margin-top:0; font-size:1.05rem;">Submit a New Lead</h2>
-    <form method="post" action="/agent/leads">
-      <div class="form-row">
-        <label for="customer_name">Customer Name</label>
-        <input type="text" id="customer_name" name="customer_name" required>
-      </div>
-      <div class="form-row">
-        <label for="customer_phone">Customer Phone</label>
-        <input type="tel" id="customer_phone" name="customer_phone" placeholder="01XXXXXXXXX" required>
-      </div>
-      <div class="form-row">
-        <label for="customer_district">Customer District <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="text" id="customer_district" name="customer_district">
-      </div>
-      <div class="form-row">
-        <label for="product_interest">Product Interest <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <input type="text" id="product_interest" name="product_interest" placeholder="e.g. Simplex Steel Building">
-      </div>
-      <div class="form-row">
-        <label for="notes">Notes <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-        <textarea id="notes" name="notes" placeholder="Land size, budget, timeline, anything useful for follow-up"></textarea>
-      </div>
-      <button type="submit" class="btn btn-accent">Submit Lead</button>
-    </form>
-  </div>
-
-  <div class="card">
-    <h2 style="margin-top:0; font-size:1.05rem;">My Leads ({{ leads.length }})</h2>
-    {% if leads.length %}
-    <div style="overflow-x:auto;">
-      <table>
-        <thead>
-          <tr><th>Customer</th><th>Phone</th><th>District</th><th>Interest</th><th>Status</th><th>Submitted</th></tr>
-        </thead>
-        <tbody>
-          {% for lead in leads %}
-          <tr>
-            <td data-label="Customer">{{ lead.customer_name }}</td>
-            <td data-label="Phone">{{ lead.customer_phone }}</td>
-            <td data-label="District">{{ lead.customer_district or '—' }}</td>
-            <td data-label="Interest">{{ lead.product_interest or '—' }}</td>
-            <td data-label="Status"><span class="pill pill-{{ lead.status }}">{{ lead.status }}</span></td>
-            <td data-label="Submitted">{{ lead.created_at | date }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+  <div class="agent-grid">
+    <div class="card agent-lead-form-card">
+      <h2 style="margin-top:0; font-size:1.05rem;">➕ Submit a New Lead</h2>
+      <form method="post" action="/agent/leads">
+        <div class="form-row">
+          <label for="customer_name">Customer Name</label>
+          <input type="text" id="customer_name" name="customer_name" required>
+        </div>
+        <div class="form-row">
+          <label for="customer_phone">Customer Phone</label>
+          <input type="tel" id="customer_phone" name="customer_phone" placeholder="01XXXXXXXXX" required>
+        </div>
+        <div class="form-row">
+          <label for="customer_district">Customer District <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <input type="text" id="customer_district" name="customer_district">
+        </div>
+        <div class="form-row">
+          <label for="product_interest">Product Interest <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <input type="text" id="product_interest" name="product_interest" placeholder="e.g. Simplex Steel Building">
+        </div>
+        <div class="form-row">
+          <label for="notes">Notes <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <textarea id="notes" name="notes" placeholder="Land size, budget, timeline, anything useful for follow-up"></textarea>
+        </div>
+        <button type="submit" class="btn btn-accent" style="width:100%;">Submit Lead</button>
+      </form>
     </div>
-    {% else %}
-    <p style="color:var(--grey-500); font-size:0.9rem;">No leads submitted yet — use the form above to add your first one.</p>
-    {% endif %}
+
+    <div class="card agent-leads-card">
+      <h2 style="margin-top:0; font-size:1.05rem;">📋 My Leads <span style="color:var(--grey-500); font-weight:400;">({{ leads.length }})</span></h2>
+      {% if leads.length %}
+      <div class="agent-lead-list">
+        {% for lead in leads %}
+        <div class="agent-lead-row">
+          <div class="agent-lead-main">
+            <span class="agent-lead-name">{{ lead.customer_name }}</span>
+            <span class="pill pill-{{ lead.status }}">{{ lead.status }}</span>
+          </div>
+          <div class="agent-lead-details">
+            <span>📱 {{ lead.customer_phone }}</span>
+            {% if lead.customer_district %}<span>📍 {{ lead.customer_district }}</span>{% endif %}
+            {% if lead.product_interest %}<span>🏠 {{ lead.product_interest }}</span>{% endif %}
+            <span class="agent-lead-date">{{ lead.created_at | date }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="color:var(--grey-500); font-size:0.9rem;">No leads submitted yet — use the form to add your first one.</p>
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}

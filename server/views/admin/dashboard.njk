@@ -24,17 +24,17 @@
 
 {% block content %}
 <style>
-  .op-group-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--grey-100); }
+  .op-group-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(15,23,42,0.08); }
   .op-group-bar { width:4px; height:28px; border-radius:2px; flex-shrink:0; background:var(--tile-accent, var(--primary)); }
   .op-tiles { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .op-tile {
     display:flex; align-items:center; gap:10px;
-    padding:10px 12px; border-radius:9px;
-    background:var(--grey-50); border:1px solid transparent; border-left:3px solid transparent;
+    padding:10px 12px; border-radius:11px;
+    background:rgba(255,255,255,0.4); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.35); border-left:3px solid transparent;
     color:var(--grey-900); text-decoration:none;
     transition:transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
   }
-  .op-tile:hover { transform:translateY(-1px); text-decoration:none; background:white; border-color:var(--tile-accent, var(--primary)); border-left-color:var(--tile-accent, var(--primary)); box-shadow:0 3px 10px rgba(15,23,42,0.07); }
+  .op-tile:hover { transform:translateY(-1px); text-decoration:none; background:rgba(255,255,255,0.75); border-color:var(--tile-accent, var(--primary)); border-left-color:var(--tile-accent, var(--primary)); box-shadow:0 3px 10px rgba(15,23,42,0.1); }
   .op-tile-label { font-size:0.83rem; font-weight:650; line-height:1.25; }
   .op-tile-sub { font-size:0.72rem; color:var(--grey-500); font-weight:500; }
   .op-tile.is-primary { background:var(--tile-accent-soft, #eef2ff); border-left-color:var(--tile-accent, var(--primary)); font-weight:700; }
@@ -71,7 +71,7 @@
       </div>
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-      <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.publishedProducts }}</strong> Live &bull; <strong>{{ counts.categories }}</strong> Categories</span>
+      <span style="font-size:0.8rem; color:var(--grey-600, #475569);"><strong>{{ counts.publishedProducts }}</strong> Live &bull; <strong>{{ counts.categories }}</strong> Categories</span>
       {% if adminRole != 'sales' %}<a href="/admin/products/new" style="font-size:0.78rem; font-weight:700; color:#3B82F6;">+ Add Model</a>{% endif %}
     </div>
   </div>
@@ -85,7 +85,7 @@
       </div>
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-      <span style="font-size:0.8rem; color:var(--grey-600);"><strong>{{ counts.dedicatedServiceAreas }}</strong> Landing Pages &bull; <strong>{{ counts.projects }}</strong> Projects</span>
+      <span style="font-size:0.8rem; color:var(--grey-600, #475569);"><strong>{{ counts.dedicatedServiceAreas }}</strong> Landing Pages &bull; <strong>{{ counts.projects }}</strong> Projects</span>
       {% if adminRole != 'sales' %}<a href="/admin/service-areas" style="font-size:0.78rem; font-weight:700; color:#10B981;">Manage</a>{% endif %}
     </div>
   </div>
@@ -248,7 +248,7 @@
               </a>
             </div>
             {% else %}
-            <span style="color:var(--grey-400); font-size:0.8rem;">No Phone</span>
+            <span style="color:var(--grey-400, #94a3b8); font-size:0.8rem;">No Phone</span>
             {% endif %}
           </td>
           <td style="padding:10px 12px; font-size:0.84rem; color:var(--grey-700);">
@@ -304,8 +304,8 @@
           {{ act.action }}
         </span>
         <div style="flex:1;">
-          <div style="color:var(--grey-800); font-weight:600;">{{ act.summary or (act.action + ' ' + act.entity_type) }}</div>
-          <div style="font-size:0.72rem; color:var(--grey-400);">By {{ act.admin_name or 'Admin' }} &bull; {{ act.created_at | string | truncate(16, true, '') }}</div>
+          <div style="color:var(--grey-800, #1e293b); font-weight:600;">{{ act.summary or (act.action + ' ' + act.entity_type) }}</div>
+          <div style="font-size:0.72rem; color:var(--grey-400, #94a3b8);">By {{ act.admin_name or 'Admin' }} &bull; {{ act.created_at | string | truncate(16, true, '') }}</div>
         </div>
       </div>
       {% endfor %}
@@ -323,19 +323,19 @@
       <h3 style="font-size:0.92rem; font-weight:800; margin:0; color:var(--grey-900);">Engine &amp; Hosting Architecture</h3>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.82rem;">
-      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+      <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(6px); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.35);">
         <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">Node.js Engine</div>
         <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">{{ systemInfo.nodeVersion }} (Express SSR)</div>
       </div>
-      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+      <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(6px); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.35);">
         <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">Database Layer</div>
         <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">Knex Query Engine</div>
       </div>
-      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+      <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(6px); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.35);">
         <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">Theme Engine</div>
         <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">24 Light &amp; Dark Presets</div>
       </div>
-      <div style="background:var(--grey-50); padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+      <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(6px); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.35);">
         <div style="color:var(--grey-500); font-size:0.72rem; text-transform:uppercase; font-weight:700;">AEO &amp; Search Engine</div>
         <div style="font-weight:800; color:var(--grey-900); margin-top:2px;">Dynamic JSON-LD &amp; Index</div>
       </div>
