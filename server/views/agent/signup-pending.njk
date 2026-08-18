@@ -1,0 +1,21 @@
+{% extends "agent-layout.njk" %}
+{% block title %}Application Received{% endblock %}
+{% block body %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); padding:20px;">
+  <div class="card" style="width: 100%; max-width: 460px; padding:36px 28px; text-align:center;">
+    <div style="font-size:2.4rem; margin-bottom:8px;">✅</div>
+    <h1 style="font-size:1.3rem; font-weight:800; margin:0 0 8px; color:var(--grey-900);">Application received, {{ name }}!</h1>
+    <p style="color: var(--grey-700); font-size: 0.92rem; line-height:1.6;">
+      Your agent account is pending review. Our team will approve it shortly - once approved,
+      you can log in and start submitting leads.
+    </p>
+    <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:16px;">
+      Questions? WhatsApp us at
+      <a href="https://wa.me/8801781636613" target="_blank" rel="noopener noreferrer">+880 1781-636613</a>.
+    </p>
+    <div style="margin-top:22px;">
+      <a href="/" class="btn btn-primary" style="padding:10px 20px;">Return to Bongshai Housing</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

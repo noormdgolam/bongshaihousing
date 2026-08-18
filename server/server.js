@@ -19,6 +19,8 @@ const sitemapRouter = require('./routes/sitemap');
 const searchIndexRouter = require('./routes/search-index');
 const adminAuthRouter = require('./routes/admin-auth');
 const adminRouter = require('./routes/admin');
+const agentAuthRouter = require('./routes/agent-auth');
+const agentRouter = require('./routes/agent');
 
 // The session store (and any other async DB init) can reject before
 // anything has a chance to .catch() it - without this, a single transient
@@ -81,6 +83,15 @@ nunjucksEnv.addFilter('initials', (name) => {
   const first = words[0] ? words[0][0] : '';
   const last = words.length > 1 ? words[words.length - 1][0] : '';
   return (first + last).toUpperCase();
+});
+
+// Formats a DB timestamp (Date object or string) for display - no
+// moment/date-fns dependency for one simple "18 Aug 2026" style format.
+nunjucksEnv.addFilter('date', (value) => {
+  if (!value) return '';
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 });
 
 // Footer copyright year - was a client-side <span id="year"> filled by JS
@@ -149,6 +160,9 @@ app.use((req, res, next) => {
 app.use('/admin', require('./middleware/csrf'));
 app.use('/', adminAuthRouter);
 app.use('/', adminRouter);
+app.use('/agent', require('./middleware/csrf'));
+app.use('/', agentAuthRouter);
+app.use('/', agentRouter);
 
 // Page-view logging for the admin Analytics dashboard - GET requests only,
 // after admin routes (so admin browsing never counts as traffic), fire-and-

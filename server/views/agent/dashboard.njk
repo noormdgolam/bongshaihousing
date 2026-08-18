@@ -1,0 +1,73 @@
+{% extends "agent-layout.njk" %}
+{% block title %}My Dashboard{% endblock %}
+{% block body %}
+<div class="agent-topbar">
+  <div class="brand">🤝 Bongshai Agent Portal</div>
+  <div class="who">
+    {{ agent.name }} <span style="opacity:0.7;">· {{ agent.district }}</span>
+    <form method="post" action="/agent/logout" style="display:inline;">
+      <button type="submit" class="btn btn-ghost">Log out</button>
+    </form>
+  </div>
+</div>
+
+<div class="agent-content">
+  {% if error %}
+  <div class="error-box">{{ error }}</div>
+  {% endif %}
+
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1.05rem;">Submit a New Lead</h2>
+    <form method="post" action="/agent/leads">
+      <div class="form-row">
+        <label for="customer_name">Customer Name</label>
+        <input type="text" id="customer_name" name="customer_name" required>
+      </div>
+      <div class="form-row">
+        <label for="customer_phone">Customer Phone</label>
+        <input type="tel" id="customer_phone" name="customer_phone" placeholder="01XXXXXXXXX" required>
+      </div>
+      <div class="form-row">
+        <label for="customer_district">Customer District <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="text" id="customer_district" name="customer_district">
+      </div>
+      <div class="form-row">
+        <label for="product_interest">Product Interest <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="text" id="product_interest" name="product_interest" placeholder="e.g. Simplex Steel Building">
+      </div>
+      <div class="form-row">
+        <label for="notes">Notes <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <textarea id="notes" name="notes" placeholder="Land size, budget, timeline, anything useful for follow-up"></textarea>
+      </div>
+      <button type="submit" class="btn btn-accent">Submit Lead</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1.05rem;">My Leads ({{ leads.length }})</h2>
+    {% if leads.length %}
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr><th>Customer</th><th>Phone</th><th>District</th><th>Interest</th><th>Status</th><th>Submitted</th></tr>
+        </thead>
+        <tbody>
+          {% for lead in leads %}
+          <tr>
+            <td data-label="Customer">{{ lead.customer_name }}</td>
+            <td data-label="Phone">{{ lead.customer_phone }}</td>
+            <td data-label="District">{{ lead.customer_district or '—' }}</td>
+            <td data-label="Interest">{{ lead.product_interest or '—' }}</td>
+            <td data-label="Status"><span class="pill pill-{{ lead.status }}">{{ lead.status }}</span></td>
+            <td data-label="Submitted">{{ lead.created_at | date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--grey-500); font-size:0.9rem;">No leads submitted yet — use the form above to add your first one.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

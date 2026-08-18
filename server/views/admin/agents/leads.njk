@@ -1,0 +1,30 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Agent Leads{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">📥 Agent-Submitted Leads</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <a href="/admin/agents" class="btn">← Back to Agents</a>
+</div>
+{% if leads.length %}
+<table>
+  <thead>
+    <tr><th>Customer</th><th>Phone</th><th>District</th><th>Interest</th><th>Status</th><th>Agent</th><th>Submitted</th></tr>
+  </thead>
+  <tbody>
+    {% for lead in leads %}
+    <tr>
+      <td>{{ lead.customer_name }}</td>
+      <td>{{ lead.customer_phone }}</td>
+      <td>{{ lead.customer_district or '—' }}</td>
+      <td>{{ lead.product_interest or '—' }}</td>
+      <td><span class="pill {% if lead.status == 'won' %}pill-success{% elif lead.status == 'lost' %}pill-muted{% endif %}">{{ lead.status }}</span></td>
+      <td>{{ lead.agent_name }} <span style="color:var(--grey-500); font-size:0.8rem;">({{ lead.agent_phone }})</span></td>
+      <td>{{ lead.created_at | date }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card"><p style="color:var(--grey-500); margin:0;">No agent leads submitted yet.</p></div>
+{% endif %}
+{% endblock %}

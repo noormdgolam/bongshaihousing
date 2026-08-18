@@ -1,0 +1,57 @@
+{% extends "agent-layout.njk" %}
+{% block title %}Agent Sign Up{% endblock %}
+{% block body %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); padding:20px;">
+  <div class="card" style="width: 100%; max-width: 460px; padding:32px 28px;">
+    <div style="text-align:center; margin-bottom:22px;">
+      <div style="font-size:2rem; margin-bottom:4px;">🤝</div>
+      <h1 style="font-size:1.4rem; font-weight:800; margin:0; color:var(--grey-900);">Become a Bongshai Agent</h1>
+      <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:6px;">Refer customers, track your leads, earn commission. Available in all 64 districts.</p>
+    </div>
+
+    {% if error %}
+    <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/agent/signup">
+      <div class="form-row">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" value="{{ values.name or '' }}" required autofocus>
+      </div>
+      <div class="form-row">
+        <label for="phone">Phone Number (WhatsApp preferred)</label>
+        <input type="tel" id="phone" name="phone" value="{{ values.phone or '' }}" placeholder="01XXXXXXXXX" required>
+      </div>
+      <div class="form-row">
+        <label for="email">Email Address <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+        <input type="email" id="email" name="email" value="{{ values.email or '' }}">
+      </div>
+      <div class="form-row">
+        <label for="district">Your District</label>
+        <select id="district" name="district" required>
+          <option value="" disabled {% if not values.district %}selected{% endif %}>Select your district</option>
+          {% for d in districts %}
+          <option value="{{ d }}" {% if values.district == d %}selected{% endif %}>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8">
+      </div>
+      <div class="form-row">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required minlength="8">
+      </div>
+      <button type="submit" class="btn btn-accent" style="width:100%; padding:11px; font-size:0.95rem;">Create Agent Account</button>
+    </form>
+
+    <p style="margin-top:16px; text-align:center; font-size:0.85rem; color:var(--grey-500);">
+      Already registered? <a href="/agent/login.html">Log in</a>
+    </p>
+    <div style="margin-top:12px; text-align:center;">
+      <a href="/" style="font-size:0.8rem; color:var(--grey-500);">← Return to Bongshai Housing</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

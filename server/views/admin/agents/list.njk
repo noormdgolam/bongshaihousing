@@ -1,0 +1,51 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Agents{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">🤝 Field Agents</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <div>
+    <a href="?status=pending" class="btn {% if statusFilter == 'pending' %}btn-primary{% endif %}">Pending ({{ counts.pending }})</a>
+    <a href="?status=active" class="btn {% if statusFilter == 'active' %}btn-primary{% endif %}">Active ({{ counts.active }})</a>
+    <a href="?status=rejected" class="btn {% if statusFilter == 'rejected' %}btn-primary{% endif %}">Rejected ({{ counts.rejected }})</a>
+    <a href="?status=all" class="btn {% if statusFilter == 'all' %}btn-primary{% endif %}">All</a>
+  </div>
+  <a href="/admin/agent-leads" class="btn">📥 View All Agent Leads</a>
+</div>
+
+{% if agents.length %}
+<table>
+  <thead>
+    <tr><th>Name</th><th>Phone</th><th>District</th><th>Status</th><th>Applied</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for a in agents %}
+    <tr>
+      <td>{{ a.name }}</td>
+      <td>{{ a.phone }}</td>
+      <td>{{ a.district }}</td>
+      <td>
+        <span class="pill {% if a.status == 'active' %}pill-success{% elif a.status == 'rejected' %}pill-muted{% endif %}">{{ a.status }}</span>
+      </td>
+      <td>{{ a.created_at | date }}</td>
+      <td>
+        {% if a.status != 'active' %}
+        <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
+          <input type="hidden" name="status" value="active">
+          <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Approve</button>
+        </form>
+        {% endif %}
+        {% if a.status != 'rejected' %}
+        <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
+          <input type="hidden" name="status" value="rejected">
+          <button type="submit" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;">Reject</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card"><p style="color:var(--grey-500); margin:0;">No agents in this category.</p></div>
+{% endif %}
+{% endblock %}

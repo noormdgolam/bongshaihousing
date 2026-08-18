@@ -221,6 +221,39 @@ router.post('/admin/leads/:id/quick-status', async (req, res) => {
   }
 });
 
+// ---- Agents (field sales/referral) ----
+
+router.get('/admin/agents', async (req, res) => {
+  const statusFilter = req.query.status || 'pending';
+  let query = db('agents').orderBy('created_at', 'desc');
+  if (statusFilter !== 'all') query = query.where({ status: statusFilter });
+  const agents = await query;
+  const counts = {
+    pending: await db('agents').where({ status: 'pending' }).count('id as c').then((r) => r[0].c),
+    active: await db('agents').where({ status: 'active' }).count('id as c').then((r) => r[0].c),
+    rejected: await db('agents').where({ status: 'rejected' }).count('id as c').then((r) => r[0].c),
+  };
+  res.render('admin/agents/list.njk', adminVars(req, { agents, statusFilter, counts }));
+});
+
+router.post('/admin/agents/:id/status', async (req, res) => {
+  const { status } = req.body;
+  if (!['pending', 'active', 'rejected'].includes(status)) {
+    return res.status(400).send('Invalid status');
+  }
+  await db('agents').where({ id: req.params.id }).update({ status, updated_at: db.fn.now() });
+  await logActivity(req, { action: 'update', entityType: 'agent', entityId: req.params.id, summary: `Set agent #${req.params.id} status to ${status}` });
+  res.redirect('/admin/agents?status=' + encodeURIComponent(req.query.status || 'pending'));
+});
+
+router.get('/admin/agent-leads', async (req, res) => {
+  const leads = await db('agent_leads')
+    .join('agents', 'agents.id', 'agent_leads.agent_id')
+    .select('agent_leads.*', 'agents.name as agent_name', 'agents.phone as agent_phone')
+    .orderBy('agent_leads.created_at', 'desc');
+  res.render('admin/agents/leads.njk', adminVars(req, { leads }));
+});
+
 // ---- Leads / Inquiries ----
 
 router.get('/admin/leads', async (req, res) => {
