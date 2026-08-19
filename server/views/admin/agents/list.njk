@@ -1,6 +1,7 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Agents{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem;">🤝 Field Agents</h1>{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('handshake', 20) }} Field Agents</h1>{% endblock %}
 {% block content %}
 <div class="toolbar">
   <div>
@@ -9,7 +10,10 @@
     <a href="?status=rejected" class="btn {% if statusFilter == 'rejected' %}btn-primary{% endif %}">Rejected ({{ counts.rejected }})</a>
     <a href="?status=all" class="btn {% if statusFilter == 'all' %}btn-primary{% endif %}">All</a>
   </div>
-  <a href="/admin/agent-leads" class="btn">📥 View All Agent Leads</a>
+  <div style="display:flex; gap:8px;">
+    <a href="/admin/agents/invite" class="btn btn-primary">{{ icons.icon('plus', 16) }} Invite Agents</a>
+    <a href="/admin/agent-leads" class="btn">{{ icons.icon('inbox', 16) }} View All Agent Leads</a>
+  </div>
 </div>
 
 {% if agents.length %}

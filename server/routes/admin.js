@@ -16,6 +16,17 @@ const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch } = require('../lib/seo/generate');
 const { COUNTRY_MAP } = require('../lib/visitor-tracker');
 const { saveDocumentIn, documentPathIn } = require('../lib/document-uploader');
+const { parseExcelBuffer, sendPendingBatch } = require('../lib/agent-invitations');
+
+const excelUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const ok = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(file.mimetype)
+      || /\.(xlsx|xls)$/i.test(file.originalname || '');
+    cb(ok ? null : new Error('Only .xlsx or .xls files are accepted.'), ok);
+  },
+});
 
 // Unambiguous charset (no 0/O/1/l/I) - customers read this off a phone
 // screen or hear it over a call from their sales rep, so avoid characters
@@ -289,6 +300,67 @@ router.get('/admin/agents', async (req, res) => {
     rejected: await db('agents').where({ status: 'rejected' }).count('id as c').then((r) => r[0].c),
   };
   res.render('admin/agents/list.njk', adminVars(req, { agents, statusFilter, counts }));
+});
+
+// Registered before /admin/agents/:id on purpose - "invite" would
+// otherwise match as an :id value and 404 as "agent not found".
+router.get('/admin/agents/invite', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const invitations = await db('agent_invitations').orderBy('created_at', 'desc');
+  const counts = {
+    pending: invitations.filter((i) => i.status === 'pending').length,
+    sent: invitations.filter((i) => i.status === 'sent').length,
+    failed: invitations.filter((i) => i.status === 'failed').length,
+  };
+  res.render('admin/agents/invite.njk', adminVars(req, {
+    invitations, counts,
+    imported: req.query.imported || null,
+    skipped: req.query.skipped || null,
+    duplicates: req.query.duplicates || null,
+    error: req.query.error || null,
+  }));
+});
+
+router.post('/admin/agents/invite/import', requireRole('admin', 'superadmin', 'editor'), excelUpload.single('excel_file'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  if (!req.file) return res.redirect('/admin/agents/invite?error=' + encodeURIComponent('No file uploaded.'));
+  try {
+    const { rows, skipped } = await parseExcelBuffer(req.file.buffer);
+    if (!rows.length) return res.redirect('/admin/agents/invite?error=' + encodeURIComponent('No usable rows found in that file.'));
+
+    const existingPhones = new Set((await db('agent_invitations').whereNotNull('phone').select('phone')).map((r) => r.phone));
+    const existingAgentPhones = new Set((await db('agents').whereNotNull('phone').select('phone')).map((r) => r.phone));
+
+    const toInsert = [];
+    let duplicates = 0;
+    for (const row of rows) {
+      if (row.phone && (existingPhones.has(row.phone) || existingAgentPhones.has(row.phone))) { duplicates += 1; continue; }
+      if (row.phone) existingPhones.add(row.phone);
+      toInsert.push(row);
+    }
+    if (toInsert.length) await db('agent_invitations').insert(toInsert);
+    await logActivity(req, { action: 'create', entityType: 'agent_invitation', summary: `Imported ${toInsert.length} agent invitation(s) from Excel (${duplicates} duplicate, ${skipped} unusable rows skipped)` });
+
+    res.redirect(`/admin/agents/invite?imported=${toInsert.length}&skipped=${skipped}&duplicates=${duplicates}`);
+  } catch (e) {
+    res.redirect('/admin/agents/invite?error=' + encodeURIComponent(e.message));
+  }
+});
+
+router.post('/admin/agents/invite/send', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  try {
+    const result = await sendPendingBatch(20);
+    await logActivity(req, { action: 'update', entityType: 'agent_invitation', summary: `Sent ${result.sent}/${result.processed} distributor invitation email(s)${result.errors.length ? `, ${result.errors.length} failed` : ''}` });
+  } catch (e) {
+    console.error('Invitation send error:', e.message);
+  }
+  res.redirect('/admin/agents/invite');
+});
+
+router.post('/admin/agents/invite/:id/delete', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  await db('agent_invitations').where({ id: req.params.id }).del();
+  res.redirect('/admin/agents/invite');
 });
 
 router.get('/admin/agents/:id', async (req, res) => {

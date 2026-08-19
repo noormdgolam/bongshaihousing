@@ -28,13 +28,14 @@ function getTransporter() {
  * @param {object} opts
  * @param {string} opts.to
  * @param {string} opts.subject
- * @param {string} opts.text
+ * @param {string} [opts.text]
+ * @param {string} [opts.html]
  * @param {string} [opts.replyTo]
  * @param {Array<{filename: string, content: Buffer, contentType: string}>} [opts.attachments]
  */
-async function sendMail({ to, subject, text, replyTo, attachments }) {
+async function sendMail({ to, subject, text, html, replyTo, attachments }) {
   const from = process.env.MAIL_FROM || 'no-reply@bongshaihousing.com';
-  await getTransporter().sendMail({ from, to, subject, text, replyTo, attachments });
+  await getTransporter().sendMail({ from, to, subject, text, html, replyTo, attachments });
 }
 
 module.exports = { sendMail };
