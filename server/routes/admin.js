@@ -16,15 +16,15 @@ const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch } = require('../lib/seo/generate');
 const { COUNTRY_MAP } = require('../lib/visitor-tracker');
 const { saveDocumentIn, documentPathIn } = require('../lib/document-uploader');
-const { parseExcelBuffer, sendPendingBatch } = require('../lib/agent-invitations');
+const { parseExcelBuffer, parseCsvBuffer, sendPendingBatch } = require('../lib/agent-invitations');
 
 const excelUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const ok = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(file.mimetype)
-      || /\.(xlsx|xls)$/i.test(file.originalname || '');
-    cb(ok ? null : new Error('Only .xlsx or .xls files are accepted.'), ok);
+    const ok = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel', 'text/csv', 'application/csv'].includes(file.mimetype)
+      || /\.(xlsx|xls|csv)$/i.test(file.originalname || '');
+    cb(ok ? null : new Error('Only .xlsx, .xls, or .csv files are accepted.'), ok);
   },
 });
 
@@ -326,7 +326,8 @@ router.post('/admin/agents/invite/import', requireRole('admin', 'superadmin', 'e
 
   if (!req.file) return res.redirect('/admin/agents/invite?error=' + encodeURIComponent('No file uploaded.'));
   try {
-    const { rows, skipped } = await parseExcelBuffer(req.file.buffer);
+    const isCsv = /\.csv$/i.test(req.file.originalname || '') || ['text/csv', 'application/csv'].includes(req.file.mimetype);
+    const { rows, skipped } = isCsv ? await parseCsvBuffer(req.file.buffer) : await parseExcelBuffer(req.file.buffer);
     if (!rows.length) return res.redirect('/admin/agents/invite?error=' + encodeURIComponent('No usable rows found in that file.'));
 
     const existingPhones = new Set((await db('agent_invitations').whereNotNull('phone').select('phone')).map((r) => r.phone));
@@ -340,7 +341,7 @@ router.post('/admin/agents/invite/import', requireRole('admin', 'superadmin', 'e
       toInsert.push(row);
     }
     if (toInsert.length) await db('agent_invitations').insert(toInsert);
-    await logActivity(req, { action: 'create', entityType: 'agent_invitation', summary: `Imported ${toInsert.length} agent invitation(s) from Excel (${duplicates} duplicate, ${skipped} unusable rows skipped)` });
+    await logActivity(req, { action: 'create', entityType: 'agent_invitation', summary: `Imported ${toInsert.length} agent invitation(s) from ${isCsv ? 'CSV' : 'Excel'} (${duplicates} duplicate, ${skipped} unusable rows skipped)` });
 
     res.redirect(`/admin/agents/invite?imported=${toInsert.length}&skipped=${skipped}&duplicates=${duplicates}`);
   } catch (e) {

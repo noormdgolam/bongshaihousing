@@ -54,6 +54,70 @@ async function parseExcelBuffer(buffer) {
   return { rows, skipped };
 }
 
+// Minimal RFC4180 CSV tokenizer - handles quoted fields (embedded commas,
+// escaped "" quotes). No external dependency needed for this one bounded job.
+function parseCsvRows(text) {
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; }
+      } else {
+        field += c;
+      }
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ',') {
+      row.push(field); field = '';
+    } else if (c === '\r') {
+      // skip - the following \n closes the row
+    } else if (c === '\n') {
+      row.push(field); field = '';
+      rows.push(row); row = [];
+    } else {
+      field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+// Same header-synonym matching and row shape as parseExcelBuffer, just fed
+// from a hand-rolled CSV tokenizer instead of ExcelJS.
+async function parseCsvBuffer(buffer) {
+  let text = buffer.toString('utf8');
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // strip UTF-8 BOM
+  const table = parseCsvRows(text).filter((r) => r.length > 1 || (r.length === 1 && r[0] !== ''));
+  if (!table.length) throw new Error('No rows found in this file.');
+
+  const headerRow = table[0];
+  const nameCol = matchColumn(headerRow, HEADER_SYNONYMS.name);
+  const phoneCol = matchColumn(headerRow, HEADER_SYNONYMS.phone);
+  const emailCol = matchColumn(headerRow, HEADER_SYNONYMS.email);
+  const districtCol = matchColumn(headerRow, HEADER_SYNONYMS.district);
+
+  if (nameCol === -1 && phoneCol === -1) {
+    throw new Error('Could not find a Name or Phone column. Expected headers like "Name", "Phone", "Email" in row 1.');
+  }
+
+  const rows = [];
+  let skipped = 0;
+  for (let i = 1; i < table.length; i++) {
+    const values = table[i];
+    const name = nameCol >= 0 ? String(values[nameCol] || '').trim() : '';
+    const phone = phoneCol >= 0 ? String(values[phoneCol] || '').trim() : '';
+    const email = emailCol >= 0 ? String(values[emailCol] || '').trim() : '';
+    const district = districtCol >= 0 ? String(values[districtCol] || '').trim() : '';
+    if (!name && !phone) { skipped += 1; continue; }
+    rows.push({ name: name || phone, phone: phone || null, email: email || null, district: district || null });
+  }
+  return { rows, skipped };
+}
+
 function invitationEmailHtml(name) {
   return `
   <div style="font-family: Arial, Helvetica, sans-serif; max-width: 560px; margin: 0 auto; color: #1e293b;">
@@ -111,4 +175,4 @@ async function sendPendingBatch(limit = 20) {
   return { processed: candidates.length, sent, errors };
 }
 
-module.exports = { parseExcelBuffer, sendInvitation, sendPendingBatch };
+module.exports = { parseExcelBuffer, parseCsvBuffer, sendInvitation, sendPendingBatch };

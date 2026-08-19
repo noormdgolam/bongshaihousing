@@ -15,11 +15,11 @@
 <div class="admin-grid-2col">
   <div>
     <div class="card">
-      <h2 style="margin-top:0; font-size:1rem;">Import from Excel</h2>
-      <p style="font-size:0.85rem; color:var(--grey-500);">Upload a .xlsx or .xls file with columns like Name, Phone, Email, District (any reasonable header names work). Rows matching an existing invitation or agent phone number are skipped automatically.</p>
+      <h2 style="margin-top:0; font-size:1rem;">Import List</h2>
+      <p style="font-size:0.85rem; color:var(--grey-500);">Upload a .xlsx, .xls, or .csv file with columns like Name, Phone, Email, District (any reasonable header names work). Rows matching an existing invitation or agent phone number are skipped automatically.</p>
       <form method="post" action="/admin/agents/invite/import" enctype="multipart/form-data">
         <div class="form-row" style="margin-bottom:0;">
-          <input type="file" name="excel_file" accept=".xlsx,.xls" required>
+          <input type="file" name="excel_file" accept=".xlsx,.xls,.csv" required>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" style="width:100%;">Import List</button>
