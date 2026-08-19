@@ -23,7 +23,6 @@ const agentAuthRouter = require('./routes/agent-auth');
 const agentRouter = require('./routes/agent');
 const customerAuthRouter = require('./routes/customer-auth');
 const customerRouter = require('./routes/customer');
-const seoCronRouter = require('./routes/seo-cron');
 const { extractVisitorInfo } = require('./lib/visitor-tracker');
 
 // The session store (and any other async DB init) can reject before
@@ -64,6 +63,30 @@ app.use((req, res, next) => {
     return res.redirect(301, `https://${targetHost}${req.originalUrl}`);
   }
   next();
+});
+
+// SEO cron webhook - inlined directly here (not a mounted sub-router) and
+// placed as early as possible in the middleware chain. It was previously
+// its own router file mounted near the bottom via app.use('/', ...) and
+// consistently 404'd despite the file, mount, and require chain all
+// verifying byte-correct on the live server across multiple restarts -
+// moving it here is a pragmatic fix for an unresolved routing mystery,
+// not a diagnosed root cause. If this also 404s, the problem is upstream
+// of Express entirely (cPanel Setup Node.js App URL/path config).
+app.get('/seo-cron/generate', async (req, res) => {
+  try {
+    const dbModule = require('./lib/db');
+    const secretRow = await dbModule('seo_settings').where({ setting_key: 'cron_secret' }).first();
+    const secret = secretRow ? secretRow.setting_value : null;
+    if (!secret || req.query.token !== secret) {
+      return res.status(403).json({ success: false, error: 'Invalid or missing token' });
+    }
+    const { generateBatch } = require('./lib/seo/generate');
+    const result = await generateBatch(10);
+    res.json({ success: true, ...result });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
 });
 
 // Security headers + gzip. In production, Apache already does this for
@@ -195,7 +218,6 @@ app.use('/', agentRouter);
 app.use('/my-project', require('./middleware/csrf'));
 app.use('/', customerAuthRouter);
 app.use('/', customerRouter);
-app.use('/', seoCronRouter);
 
 // Page-view & visitor logging for the admin Analytics dashboard - GET requests only,
 // after admin routes (so admin browsing never counts as traffic), fire-and-
