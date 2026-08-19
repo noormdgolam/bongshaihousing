@@ -17,6 +17,34 @@
 </div>
 {% endif %}
 
+<div class="card">
+  <h2 style="margin-top:0; font-size:1rem;">Email Composer</h2>
+  <p style="font-size:0.85rem; color:var(--grey-500);">The header banner, "Apply for Distributorship" button, and footer address stay fixed — only the pitch text below is editable. Use <code>{{ '{{name}}' }}</code> anywhere you want the recipient's name inserted (falls back to "Sir/Madam" when a row has no name). Leave a blank line between paragraphs.</p>
+  <form method="post" action="/admin/agents/invite/template">
+    <div style="display:grid; grid-template-columns:260px 1fr; gap:16px;">
+      <div class="form-row" style="margin-bottom:0;">
+        <label for="from_address">From address</label>
+        <select id="from_address" name="from_address" style="width:100%;">
+          {% for opt in fromAddressOptions %}
+          <option value="{{ opt.value }}" {% if template.from_address == opt.value %}selected{% endif %}>{{ opt.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row" style="margin-bottom:0;">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" value="{{ template.subject }}" style="width:100%;" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin:16px 0 0;">
+      <label for="body">Body</label>
+      <textarea id="body" name="body" rows="12" style="width:100%; font-family:inherit; font-size:0.9rem; line-height:1.5;" required>{{ template.body }}</textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Composer</button>
+    </div>
+  </form>
+</div>
+
 <div class="admin-grid-2col">
   <div>
     <div class="card">
@@ -62,32 +90,6 @@
   </div>
 
   <div>
-    <div class="card">
-      <h2 style="margin-top:0; font-size:1rem;">Email Composer</h2>
-      <p style="font-size:0.85rem; color:var(--grey-500);">The header banner, "Apply for Distributorship" button, and footer address stay fixed - only the pitch text below is editable. Use <code>{{ '{{name}}' }}</code> anywhere you want the recipient's name inserted (falls back to "Sir/Madam" when a row has no name). Leave a blank line between paragraphs.</p>
-      <form method="post" action="/admin/agents/invite/template">
-        <div class="form-row">
-          <label for="from_address">From address</label>
-          <select id="from_address" name="from_address">
-            {% for opt in fromAddressOptions %}
-            <option value="{{ opt.value }}" {% if template.from_address == opt.value %}selected{% endif %}>{{ opt.label }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="subject">Subject</label>
-          <input type="text" id="subject" name="subject" value="{{ template.subject }}" required>
-        </div>
-        <div class="form-row" style="margin-bottom:0;">
-          <label for="body">Body</label>
-          <textarea id="body" name="body" rows="8" required>{{ template.body }}</textarea>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary" style="width:100%;">Save Composer</button>
-        </div>
-      </form>
-    </div>
-
     <div class="card">
       <h2 style="margin-top:0; font-size:1rem;">Send Invitations</h2>
       <div style="display:flex; justify-content:space-around; text-align:center; margin-bottom:16px;">
