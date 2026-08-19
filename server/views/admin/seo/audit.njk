@@ -4,9 +4,12 @@
 {% block content %}
 <div class="toolbar">
   <a href="/admin/seo" class="btn">← Back to SEO Dashboard</a>
-  <form method="post" action="/admin/seo/audit/run">
-    <button type="submit" class="btn btn-primary">Re-run Audit</button>
-  </form>
+  <div style="display:flex; gap:8px;">
+    <a href="/admin/seo/audit/export/csv" class="btn">Export CSV</a>
+    <form method="post" action="/admin/seo/audit/run" style="margin:0;">
+      <button type="submit" class="btn btn-primary">Re-run Audit</button>
+    </form>
+  </div>
 </div>
 
 {% if issues.length %}

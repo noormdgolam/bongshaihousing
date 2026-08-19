@@ -9,6 +9,7 @@
     <a href="/admin/seo/suggestions?status=approved" class="btn {% if statusFilter == 'approved' %}btn-primary{% endif %}">Approved</a>
     <a href="/admin/seo/suggestions?status=rejected" class="btn {% if statusFilter == 'rejected' %}btn-primary{% endif %}">Rejected</a>
     <a href="/admin/seo/suggestions?status=all" class="btn {% if statusFilter == 'all' %}btn-primary{% endif %}">All</a>
+    <a href="/admin/seo/suggestions/export/csv?status={{ statusFilter }}" class="btn">Export CSV</a>
   </div>
 </div>
 

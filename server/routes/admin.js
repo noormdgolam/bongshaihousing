@@ -1872,6 +1872,49 @@ router.get('/admin/seo/audit', requireRole('admin', 'superadmin', 'editor'), asy
   res.render('admin/seo/audit.njk', adminVars(req, { issues }));
 });
 
+function csvCell(v) {
+  return `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
+}
+
+router.get('/admin/seo/audit/export/csv', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const issues = await db('seo_audit_issues').where({ status: 'open' }).orderBy('created_at', 'desc');
+  const headers = ['ID', 'Issue Type', 'Item', 'Detail', 'Detected'];
+  const rows = issues.map((i) => [
+    i.id,
+    csvCell(i.issue_type),
+    csvCell(i.target_label),
+    csvCell(i.detail),
+    csvCell(i.created_at ? new Date(i.created_at).toISOString().slice(0, 19).replace('T', ' ') : ''),
+  ].join(','));
+  const csvContent = [headers.join(','), ...rows].join('\r\n');
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="bongshai-seo-audit-${new Date().toISOString().slice(0, 10)}.csv"`);
+  res.send('﻿' + csvContent);
+});
+
+router.get('/admin/seo/suggestions/export/csv', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const statusFilter = req.query.status || 'pending';
+  let query = db('seo_suggestions').orderBy('created_at', 'desc');
+  if (statusFilter !== 'all') query = query.where({ status: statusFilter });
+  const suggestions = await query;
+  const headers = ['ID', 'Type', 'Item', 'Field', 'Current Value', 'Suggested Value', 'Reasoning', 'Status', 'Created'];
+  const rows = suggestions.map((s) => [
+    s.id,
+    csvCell(s.suggestion_type),
+    csvCell(s.target_label),
+    csvCell(s.field_name),
+    csvCell(s.current_value),
+    csvCell(s.suggested_value),
+    csvCell(s.reasoning),
+    csvCell(s.status),
+    csvCell(s.created_at ? new Date(s.created_at).toISOString().slice(0, 19).replace('T', ' ') : ''),
+  ].join(','));
+  const csvContent = [headers.join(','), ...rows].join('\r\n');
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="bongshai-seo-suggestions-${new Date().toISOString().slice(0, 10)}.csv"`);
+  res.send('﻿' + csvContent);
+});
+
 router.post('/admin/seo/audit/:id/ignore', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   await db('seo_audit_issues').where({ id: req.params.id }).update({ status: 'ignored', updated_at: db.fn.now() });
   res.redirect('/admin/seo/audit');
