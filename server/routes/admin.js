@@ -292,37 +292,108 @@ router.post('/admin/leads/:id/quick-status', async (req, res) => {
 
 // ---- Agents (field sales/referral) ----
 
+function applyAgentSearch(query, search) {
+  if (!search) return query;
+  return query.where((builder) => {
+    builder.where('name', 'like', `%${search}%`)
+      .orWhere('business_name', 'like', `%${search}%`)
+      .orWhere('phone', 'like', `%${search}%`)
+      .orWhere('email', 'like', `%${search}%`)
+      .orWhere('district', 'like', `%${search}%`);
+  });
+}
+
 router.get('/admin/agents', async (req, res) => {
   const statusFilter = req.query.status || 'pending';
+  const search = (req.query.q || '').trim();
   let query = db('agents').orderBy('created_at', 'desc');
   if (statusFilter !== 'all') query = query.where({ status: statusFilter });
+  query = applyAgentSearch(query, search);
   const agents = await query;
   const counts = {
     pending: await db('agents').where({ status: 'pending' }).count('id as c').then((r) => r[0].c),
     active: await db('agents').where({ status: 'active' }).count('id as c').then((r) => r[0].c),
     rejected: await db('agents').where({ status: 'rejected' }).count('id as c').then((r) => r[0].c),
   };
-  res.render('admin/agents/list.njk', adminVars(req, { agents, statusFilter, counts }));
+  res.render('admin/agents/list.njk', adminVars(req, { agents, statusFilter, counts, search }));
+});
+
+router.get('/admin/agents/export/csv', async (req, res) => {
+  try {
+    const statusFilter = req.query.status || 'all';
+    const search = (req.query.q || '').trim();
+    let query = db('agents').orderBy('created_at', 'desc');
+    if (statusFilter !== 'all') query = query.where({ status: statusFilter });
+    query = applyAgentSearch(query, search);
+    const agents = await query;
+
+    const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const headers = ['ID', 'Applied', 'Business Name', 'Owner', 'Phone', 'Email', 'District', 'Thana', 'TIN', 'Trade License', 'Status', 'Reviewed By', 'Reviewed At', 'Admin Notes'];
+    const rows = agents.map((a) => [
+      a.id,
+      esc(a.created_at ? new Date(a.created_at).toISOString().replace('T', ' ').slice(0, 19) : ''),
+      esc(a.business_name), esc(a.name), esc(a.phone), esc(a.email),
+      esc(a.district), esc(a.thana), esc(a.tin_number), esc(a.trade_license_number),
+      esc(a.status), esc(a.reviewed_by),
+      esc(a.reviewed_at ? new Date(a.reviewed_at).toISOString().replace('T', ' ').slice(0, 19) : ''),
+      esc(a.admin_notes),
+    ].join(','));
+
+    const csvContent = [headers.join(','), ...rows].join('\r\n');
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="bongshai-agents-${new Date().toISOString().slice(0, 10)}.csv"`);
+    res.send('﻿' + csvContent);
+  } catch (e) {
+    res.status(500).send('Export error: ' + e.message);
+  }
 });
 
 // Registered before /admin/agents/:id on purpose - "invite" would
 // otherwise match as an :id value and 404 as "agent not found".
+const INVITE_PAGE_SIZE = 50;
+
 router.get('/admin/agents/invite', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
-  const invitations = await db('agent_invitations').orderBy('created_at', 'desc');
+  const search = (req.query.q || '').trim();
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+
   const counts = {
-    pending: invitations.filter((i) => i.status === 'pending').length,
-    sent: invitations.filter((i) => i.status === 'sent').length,
-    failed: invitations.filter((i) => i.status === 'failed').length,
+    pending: await db('agent_invitations').where({ status: 'pending' }).count('id as c').then((r) => r[0].c),
+    sent: await db('agent_invitations').where({ status: 'sent' }).count('id as c').then((r) => r[0].c),
+    failed: await db('agent_invitations').where({ status: 'failed' }).count('id as c').then((r) => r[0].c),
   };
+
+  let listQuery = db('agent_invitations').orderBy('created_at', 'desc');
+  if (search) {
+    listQuery = listQuery.where((builder) => {
+      builder.where('name', 'like', `%${search}%`)
+        .orWhere('phone', 'like', `%${search}%`)
+        .orWhere('email', 'like', `%${search}%`);
+    });
+  }
+  const totalMatching = await listQuery.clone().count('id as c').then((r) => r[0].c);
+  const totalPages = Math.max(1, Math.ceil(totalMatching / INVITE_PAGE_SIZE));
+  const invitations = await listQuery.limit(INVITE_PAGE_SIZE).offset((page - 1) * INVITE_PAGE_SIZE);
+
   const template = await getInvitationTemplate();
   res.render('admin/agents/invite.njk', adminVars(req, {
     invitations, counts, template, fromAddressOptions: FROM_ADDRESS_OPTIONS,
+    search, page, totalPages, totalMatching,
     imported: req.query.imported || null,
     skipped: req.query.skipped || null,
     duplicates: req.query.duplicates || null,
     error: req.query.error || null,
     templateSaved: req.query.templateSaved || null,
+    resent: req.query.resent || null,
   }));
+});
+
+router.post('/admin/agents/invite/resend-failed', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  const count = await db('agent_invitations').where({ status: 'failed' }).update({ status: 'pending', error_message: null });
+  await logActivity(req, { action: 'update', entityType: 'agent_invitation', summary: `Reset ${count} failed invitation(s) back to pending for resend` });
+  res.redirect('/admin/agents/invite?resent=' + count);
 });
 
 router.post('/admin/agents/invite/template', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
@@ -390,7 +461,34 @@ router.get('/admin/agents/:id', async (req, res) => {
   const agent = await db('agents').where({ id: req.params.id }).first();
   if (!agent) return res.status(404).send('Agent not found');
   const documentFields = ['doc_application_letter', 'doc_passport_photo', 'doc_trade_license', 'doc_tin_certificate', 'doc_nid_copy'];
-  res.render('admin/agents/detail.njk', adminVars(req, { agent, documentFields }));
+
+  // Territory-conflict check - channel-partner recruitment best practice is
+  // to enforce territory capacity/duplicate logic rather than approve every
+  // applicant into an already-covered area. Same district (and same thana
+  // when both have one) among OTHER active agents.
+  let territoryConflicts = [];
+  if (agent.district) {
+    let conflictQuery = db('agents')
+      .where({ status: 'active', district: agent.district })
+      .whereNot({ id: agent.id });
+    if (agent.thana) conflictQuery = conflictQuery.where({ thana: agent.thana });
+    territoryConflicts = await conflictQuery.select('id', 'business_name', 'name', 'thana');
+  }
+
+  const referralLeads = await db('agent_leads').where({ agent_id: agent.id }).orderBy('created_at', 'desc');
+  const referralStats = { total: referralLeads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0 };
+  for (const l of referralLeads) referralStats[l.status] = (referralStats[l.status] || 0) + 1;
+
+  res.render('admin/agents/detail.njk', adminVars(req, {
+    agent, documentFields, territoryConflicts,
+    referralLeads: referralLeads.slice(0, 5), referralStats,
+  }));
+});
+
+router.post('/admin/agents/:id/notes', async (req, res) => {
+  await db('agents').where({ id: req.params.id }).update({ admin_notes: req.body.admin_notes || null, updated_at: db.fn.now() });
+  await logActivity(req, { action: 'update', entityType: 'agent', entityId: req.params.id, summary: `Updated internal notes on agent #${req.params.id}` });
+  res.redirect(`/admin/agents/${req.params.id}`);
 });
 
 router.get('/admin/agents/:id/document/:field', async (req, res) => {
@@ -410,18 +508,38 @@ router.post('/admin/agents/:id/status', async (req, res) => {
   if (!['pending', 'active', 'rejected'].includes(status)) {
     return res.status(400).send('Invalid status');
   }
-  await db('agents').where({ id: req.params.id }).update({ status, updated_at: db.fn.now() });
+  const update = { status, updated_at: db.fn.now() };
+  if (status === 'active' || status === 'rejected') {
+    update.reviewed_by = req.session.adminName || null;
+    update.reviewed_at = db.fn.now();
+  }
+  await db('agents').where({ id: req.params.id }).update(update);
   await logActivity(req, { action: 'update', entityType: 'agent', entityId: req.params.id, summary: `Set agent #${req.params.id} status to ${status}` });
   if (req.body.redirect_to === 'detail') return res.redirect(`/admin/agents/${req.params.id}`);
   res.redirect('/admin/agents?status=' + encodeURIComponent(req.query.status || 'pending'));
 });
 
 router.get('/admin/agent-leads', async (req, res) => {
-  const leads = await db('agent_leads')
+  const statusFilter = req.query.status || 'all';
+  const agentFilter = req.query.agent_id || '';
+  const search = (req.query.q || '').trim();
+
+  let query = db('agent_leads')
     .join('agents', 'agents.id', 'agent_leads.agent_id')
-    .select('agent_leads.*', 'agents.name as agent_name', 'agents.phone as agent_phone')
+    .select('agent_leads.*', 'agents.name as agent_name', 'agents.phone as agent_phone', 'agents.business_name as agent_business_name')
     .orderBy('agent_leads.created_at', 'desc');
-  res.render('admin/agents/leads.njk', adminVars(req, { leads }));
+  if (statusFilter !== 'all') query = query.where('agent_leads.status', statusFilter);
+  if (agentFilter) query = query.where('agent_leads.agent_id', agentFilter);
+  if (search) {
+    query = query.where((builder) => {
+      builder.where('agent_leads.customer_name', 'like', `%${search}%`)
+        .orWhere('agent_leads.customer_phone', 'like', `%${search}%`)
+        .orWhere('agent_leads.customer_district', 'like', `%${search}%`);
+    });
+  }
+  const leads = await query;
+  const agentsForFilter = await db('agents').where({ status: 'active' }).orderBy('name').select('id', 'name', 'business_name');
+  res.render('admin/agents/leads.njk', adminVars(req, { leads, statusFilter, agentFilter, search, agentsForFilter }));
 });
 
 router.post('/admin/agent-leads/:id/status', async (req, res) => {

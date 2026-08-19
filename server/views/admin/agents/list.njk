@@ -5,15 +5,25 @@
 {% block content %}
 <div class="toolbar">
   <div>
-    <a href="?status=pending" class="btn {% if statusFilter == 'pending' %}btn-primary{% endif %}">Pending ({{ counts.pending }})</a>
-    <a href="?status=active" class="btn {% if statusFilter == 'active' %}btn-primary{% endif %}">Active ({{ counts.active }})</a>
-    <a href="?status=rejected" class="btn {% if statusFilter == 'rejected' %}btn-primary{% endif %}">Rejected ({{ counts.rejected }})</a>
-    <a href="?status=all" class="btn {% if statusFilter == 'all' %}btn-primary{% endif %}">All</a>
+    <a href="?status=pending{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'pending' %}btn-primary{% endif %}">Pending ({{ counts.pending }})</a>
+    <a href="?status=active{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'active' %}btn-primary{% endif %}">Active ({{ counts.active }})</a>
+    <a href="?status=rejected{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'rejected' %}btn-primary{% endif %}">Rejected ({{ counts.rejected }})</a>
+    <a href="?status=all{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'all' %}btn-primary{% endif %}">All</a>
   </div>
   <div style="display:flex; gap:8px;">
     <a href="/admin/agents/invite" class="btn btn-primary">{{ icons.icon('plus', 16) }} Invite Agents</a>
     <a href="/admin/agent-leads" class="btn">{{ icons.icon('inbox', 16) }} View All Agent Leads</a>
   </div>
+</div>
+
+<div class="card" style="padding:12px 16px;">
+  <form method="get" action="/admin/agents" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+    <input type="hidden" name="status" value="{{ statusFilter }}">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search by business, owner, phone, email, district..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:280px; flex:1;">
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if search %}<a href="?status={{ statusFilter }}" class="btn">Clear</a>{% endif %}
+    <a href="/admin/agents/export/csv?status={{ statusFilter }}{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn" style="font-weight:600;">📥 Export CSV</a>
+  </form>
 </div>
 
 {% if agents.length %}
