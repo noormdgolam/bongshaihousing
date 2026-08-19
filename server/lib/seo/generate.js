@@ -31,7 +31,7 @@ async function generateForProduct(productId) {
     .first();
   if (!product) throw new Error('Product not found');
 
-  const raw = await callClaude(SYSTEM_PROMPT, buildProductPrompt(product), { maxTokens: 800 });
+  const raw = await callAI(SYSTEM_PROMPT, buildProductPrompt(product), { maxTokens: 800 });
   // Models frequently wrap JSON in a ```json fence despite being told not
   // to - strip one if present rather than let every single generation
   // fail on a formatting quirk that has nothing to do with the content.
