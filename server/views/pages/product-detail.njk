@@ -240,17 +240,23 @@
       openLightbox(mainImg ? mainImg.src : trigger.getAttribute('href'), mainImg ? mainImg.alt : '');
     });
   }
-  // Thumbnails swap which image is shown large; clicking the already-active
-  // one opens the lightbox instead of doing nothing.
+  // Thumbnails only ever swap which image is shown in the main box - zoom
+  // is exclusively a main-box action (the "Tap to enlarge" affordance lives
+  // there, not on the thumbnails). mainImg has a srcset with width
+  // descriptors, which the browser uses in place of src once present -
+  // just setting mainImg.src on click silently does nothing visually since
+  // srcset still points at the old image. Clearing srcset (and sizes, its
+  // required pair) forces the browser to actually use the new src.
   thumbs.forEach(function (thumb) {
     thumb.addEventListener('click', function () {
+      if (thumb.classList.contains('active')) return;
       var full = thumb.getAttribute('data-full');
-      if (thumb.classList.contains('active')) {
-        openLightbox(full, mainImg ? mainImg.alt : '');
-        return;
-      }
       thumbs.forEach(function (t) { t.classList.toggle('active', t === thumb); });
-      if (mainImg) mainImg.src = full;
+      if (mainImg) {
+        mainImg.removeAttribute('srcset');
+        mainImg.removeAttribute('sizes');
+        mainImg.src = full;
+      }
       if (trigger) trigger.setAttribute('href', full);
     });
   });
