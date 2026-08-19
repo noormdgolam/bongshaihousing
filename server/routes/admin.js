@@ -15,6 +15,7 @@ const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/setting
 const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch } = require('../lib/seo/generate');
 const { COUNTRY_MAP } = require('../lib/visitor-tracker');
+const { saveDocumentIn, documentPathIn } = require('../lib/document-uploader');
 
 // Unambiguous charset (no 0/O/1/l/I) - customers read this off a phone
 // screen or hear it over a call from their sales rep, so avoid characters
@@ -37,6 +38,15 @@ const upload = multer({
       cb(new Error('Only image files (JPEG, PNG, WebP, SVG, GIF, AVIF) are allowed'));
     }
   }
+});
+
+const documentUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const ok = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'].includes(file.mimetype);
+    cb(ok ? null : new Error('Only JPG, PNG, WebP, or PDF files are accepted.'), ok);
+  },
 });
 
 const router = express.Router();
@@ -541,11 +551,52 @@ router.get('/admin/orders/:id', async (req, res) => {
   const order = await db('orders').where({ id: req.params.id }).first();
   if (!order) return res.status(404).send('Order not found');
   const milestones = await db('order_milestones').where({ order_id: order.id }).orderBy('sort_order', 'asc');
+  const documents = await db('order_documents').where({ order_id: order.id }).orderBy('created_at', 'desc');
   res.render('admin/orders/detail.njk', adminVars(req, {
     order,
     milestones,
+    documents,
     generatedPassword: req.query.generated_password || null,
+    error: req.query.error || null,
   }));
+});
+
+router.post('/admin/orders/:id/documents', documentUpload.single('document_file'), async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  const order = await db('orders').where({ id: req.params.id }).first();
+  if (!order) return res.status(404).send('Order not found');
+  const { title } = req.body;
+  if (!req.file || !title || !title.trim()) {
+    return res.redirect(`/admin/orders/${req.params.id}?error=` + encodeURIComponent('A title and a file are both required.'));
+  }
+  try {
+    const filePath = saveDocumentIn('order-docs', req.file.buffer, req.file.mimetype);
+    await db('order_documents').insert({
+      order_id: order.id, title: title.trim(), file_path: filePath, mimetype: req.file.mimetype,
+    });
+    await logActivity(req, { action: 'create', entityType: 'order_document', entityId: order.id, summary: `Uploaded "${title.trim()}" to order #${order.id}` });
+  } catch (e) {
+    return res.redirect(`/admin/orders/${req.params.id}?error=` + encodeURIComponent(e.message));
+  }
+  res.redirect(`/admin/orders/${req.params.id}`);
+});
+
+router.post('/admin/orders/:id/documents/:docId/delete', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  await db('order_documents').where({ id: req.params.docId, order_id: req.params.id }).del();
+  res.redirect(`/admin/orders/${req.params.id}`);
+});
+
+router.get('/admin/orders/:id/documents/:docId', async (req, res) => {
+  if (!db) return res.status(500).send('Database unavailable');
+  const doc = await db('order_documents').where({ id: req.params.docId, order_id: req.params.id }).first();
+  if (!doc) return res.status(404).send('Document not found');
+  res.sendFile(documentPathIn('order-docs', doc.file_path), (err) => {
+    if (err && !res.headersSent) res.status(404).send('Document file not found on disk');
+  });
 });
 
 router.post('/admin/orders/:id/status', async (req, res) => {
@@ -1707,6 +1758,19 @@ router.get('/admin/analytics', async (req, res) => {
         .select('model').count({ count: '*' }).groupBy('model').orderBy('count', 'desc').limit(8),
       db('leads').select('source').count({ count: '*' }).groupBy('source').orderBy('count', 'desc'),
     ]) : [[], [], [], []];
+
+    // Agent-referred leads live in a separate table (agent_leads), so they
+    // never show up in the `leads.source` breakdown above even though
+    // they're a real, distinct lead channel - fold them in as one more bar
+    // rather than leaving this chart showing a single "contact_form" bucket.
+    const hasAgentLeads = await db.schema.hasTable('agent_leads');
+    if (hasAgentLeads) {
+      const [{ count: agentLeadCount }] = await db('agent_leads').count({ count: '*' });
+      if (Number(agentLeadCount) > 0) {
+        leadSources.push({ source: 'agent_referral', count: agentLeadCount });
+        leadSources.sort((a, b) => Number(b.count) - Number(a.count));
+      }
+    }
 
     let topPages = [];
     let trafficTrend = [];

@@ -55,6 +55,19 @@
     </div>
   </div>
 
+  {% if documents.length %}
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1.05rem;">📐 Design Documents</h2>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      {% for d in documents %}
+      <a href="/my-project/documents/{{ d.id }}" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(255,255,255,0.5); border-radius:10px; border:1px solid rgba(255,255,255,0.4); font-weight:600; font-size:0.9rem;">
+        📄 {{ d.title }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
   <p style="text-align:center; font-size:0.8rem; color:rgba(255,255,255,0.75);">
     Questions about your project? Contact your Bongshai representative directly.
   </p>

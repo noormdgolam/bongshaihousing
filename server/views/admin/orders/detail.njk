@@ -4,6 +4,8 @@
 {% block content %}
 <div style="margin-bottom:16px;"><a href="/admin/orders" class="btn">← Back to Orders</a></div>
 
+{% if error %}<div class="card"><div class="error-box" style="margin:0;">{{ error }}</div></div>{% endif %}
+
 {% if generatedPassword %}
 <div class="card" style="border-left:4px solid #F59E0B; background:#fffbeb;">
   <h3 style="margin-top:0; font-size:0.95rem; color:#92400e;">🔑 Portal Login Created — Share These Now</h3>
@@ -51,6 +53,38 @@
           {% endfor %}
         </tbody>
       </table>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">📐 Design Documents</h2>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-4px;">Floor plans, elevations, or specs the customer can view/download from their portal.</p>
+      {% if documents.length %}
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+        {% for d in documents %}
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:var(--grey-50); border-radius:6px; border:1px solid var(--grey-200);">
+          <a href="/admin/orders/{{ order.id }}/documents/{{ d.id }}" target="_blank" style="font-size:0.88rem; font-weight:600;">📄 {{ d.title }}</a>
+          <form method="post" action="/admin/orders/{{ order.id }}/documents/{{ d.id }}/delete" style="margin:0;" onsubmit="return confirm('Remove this document?');">
+            <button type="submit" class="btn btn-danger" style="padding:3px 10px; font-size:0.75rem;">Remove</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="color:var(--grey-500); font-size:0.85rem;">No documents uploaded yet.</p>
+      {% endif %}
+      <form method="post" action="/admin/orders/{{ order.id }}/documents" enctype="multipart/form-data" style="border-top:1px solid var(--grey-100); padding-top:14px;">
+        <div class="form-row">
+          <label for="doc_title">Document Title</label>
+          <input type="text" id="doc_title" name="title" placeholder="e.g. Ground Floor Plan" required>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label for="document_file">File (JPG, PNG, WebP, or PDF - up to 15MB)</label>
+          <input type="file" id="document_file" name="document_file" accept="image/*,application/pdf" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" style="width:100%;">Upload Document</button>
+        </div>
+      </form>
     </div>
   </div>
 
