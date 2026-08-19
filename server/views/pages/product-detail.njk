@@ -41,6 +41,62 @@
     {% endif %}
   </div>
 
+  <div class="pd-lightbox" id="pdLightbox" hidden>
+    <button type="button" class="pd-lightbox-close" aria-label="Close">✕</button>
+    <img src="" alt="">
+  </div>
+  <script>
+  (function () {
+    var trigger = document.querySelector('[data-pd-lightbox]');
+    var lightbox = document.getElementById('pdLightbox');
+    var mainImg = document.getElementById('pdMainImage');
+    var thumbs = document.querySelectorAll('.pd-gallery-thumb:not(.pd-gallery-thumb-empty)');
+    if (!lightbox) return;
+    var lbImg = lightbox.querySelector('img');
+    var closeBtn = lightbox.querySelector('.pd-lightbox-close');
+
+    function openLightbox(src, alt) {
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lightbox.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      lightbox.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+    if (trigger) {
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        openLightbox(mainImg ? mainImg.src : trigger.getAttribute('href'), mainImg ? mainImg.alt : '');
+      });
+    }
+    // Thumbnails only ever swap which image is shown in the main box - zoom
+    // is exclusively a main-box action (the "Tap to enlarge" affordance lives
+    // there, not on the thumbnails). mainImg has a srcset with width
+    // descriptors, which the browser uses in place of src once present -
+    // just setting mainImg.src on click silently does nothing visually since
+    // srcset still points at the old image. Clearing srcset (and sizes, its
+    // required pair) forces the browser to actually use the new src.
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        if (thumb.classList.contains('active')) return;
+        var full = thumb.getAttribute('data-full');
+        thumbs.forEach(function (t) { t.classList.toggle('active', t === thumb); });
+        if (mainImg) {
+          mainImg.removeAttribute('srcset');
+          mainImg.removeAttribute('sizes');
+          mainImg.src = full;
+        }
+        if (trigger) trigger.setAttribute('href', full);
+      });
+    });
+    closeBtn.addEventListener('click', close);
+    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  })();
+  </script>
+
   <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
     <div style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
     <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">Model No-{{ product.model_number }}</h2>
@@ -209,60 +265,4 @@
   <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary">Get a Free Quote</a>
   <a href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." class="btn" style="background:#25D366; color:#fff; border:none;" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
 </div>
-
-<div class="pd-lightbox" id="pdLightbox" hidden>
-  <button type="button" class="pd-lightbox-close" aria-label="Close">✕</button>
-  <img src="" alt="">
-</div>
-<script>
-(function () {
-  var trigger = document.querySelector('[data-pd-lightbox]');
-  var lightbox = document.getElementById('pdLightbox');
-  var mainImg = document.getElementById('pdMainImage');
-  var thumbs = document.querySelectorAll('.pd-gallery-thumb:not(.pd-gallery-thumb-empty)');
-  if (!lightbox) return;
-  var lbImg = lightbox.querySelector('img');
-  var closeBtn = lightbox.querySelector('.pd-lightbox-close');
-
-  function openLightbox(src, alt) {
-    lbImg.src = src;
-    lbImg.alt = alt || '';
-    lightbox.removeAttribute('hidden');
-    document.body.style.overflow = 'hidden';
-  }
-  function close() {
-    lightbox.setAttribute('hidden', '');
-    document.body.style.overflow = '';
-  }
-  if (trigger) {
-    trigger.addEventListener('click', function (e) {
-      e.preventDefault();
-      openLightbox(mainImg ? mainImg.src : trigger.getAttribute('href'), mainImg ? mainImg.alt : '');
-    });
-  }
-  // Thumbnails only ever swap which image is shown in the main box - zoom
-  // is exclusively a main-box action (the "Tap to enlarge" affordance lives
-  // there, not on the thumbnails). mainImg has a srcset with width
-  // descriptors, which the browser uses in place of src once present -
-  // just setting mainImg.src on click silently does nothing visually since
-  // srcset still points at the old image. Clearing srcset (and sizes, its
-  // required pair) forces the browser to actually use the new src.
-  thumbs.forEach(function (thumb) {
-    thumb.addEventListener('click', function () {
-      if (thumb.classList.contains('active')) return;
-      var full = thumb.getAttribute('data-full');
-      thumbs.forEach(function (t) { t.classList.toggle('active', t === thumb); });
-      if (mainImg) {
-        mainImg.removeAttribute('srcset');
-        mainImg.removeAttribute('sizes');
-        mainImg.src = full;
-      }
-      if (trigger) trigger.setAttribute('href', full);
-    });
-  });
-  closeBtn.addEventListener('click', close);
-  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-})();
-</script>
 {% endblock %}
