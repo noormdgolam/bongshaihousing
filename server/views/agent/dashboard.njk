@@ -1,9 +1,10 @@
 {% extends "agent-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}My Dashboard{% endblock %}
 {% block body %}
 <div class="agent-hero">
   <div class="agent-hero-top">
-    <div class="agent-hero-brand">🤝 Bongshai Agent Portal</div>
+    <div class="agent-hero-brand">{{ icons.icon('handshake', 20) }} Bongshai Agent Portal</div>
     <form method="post" action="/agent/logout">
       <button type="submit" class="btn btn-ghost">Log out</button>
     </form>
@@ -11,7 +12,7 @@
   <div class="agent-hero-profile">
     <div>
       <div class="agent-hero-name">{{ agent.business_name or agent.name }}</div>
-      <div class="agent-hero-meta">👤 {{ agent.name }} &nbsp;·&nbsp; 📍 {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+      <div class="agent-hero-meta">{{ icons.icon('user', 15) }} {{ agent.name }} &nbsp;·&nbsp; {{ icons.icon('map-pin', 15) }} {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
     </div>
     <span class="pill pill-won">● Active Distributor</span>
   </div>
@@ -24,34 +25,34 @@
 
   <div class="agent-stats-row">
     <div class="agent-stat">
-      <span class="agent-stat-icon">📊</span>
+      <span class="agent-stat-icon">{{ icons.icon('chart-bar', 24) }}</span>
       <div><div class="agent-stat-num" style="color:var(--primary);">{{ stats.total }}</div><div class="agent-stat-label">Total</div></div>
     </div>
     <div class="agent-stat">
-      <span class="agent-stat-icon">🆕</span>
+      <span class="agent-stat-icon">{{ icons.icon('sparkles', 24) }}</span>
       <div><div class="agent-stat-num" style="color:#1e40af;">{{ stats.new }}</div><div class="agent-stat-label">New</div></div>
     </div>
     <div class="agent-stat">
-      <span class="agent-stat-icon">📞</span>
+      <span class="agent-stat-icon">{{ icons.icon('phone', 24) }}</span>
       <div><div class="agent-stat-num" style="color:#92400e;">{{ stats.contacted }}</div><div class="agent-stat-label">Contacted</div></div>
     </div>
     <div class="agent-stat">
-      <span class="agent-stat-icon">💬</span>
+      <span class="agent-stat-icon">{{ icons.icon('chat', 24) }}</span>
       <div><div class="agent-stat-num" style="color:#4338ca;">{{ stats.quoted }}</div><div class="agent-stat-label">Quoted</div></div>
     </div>
     <div class="agent-stat">
-      <span class="agent-stat-icon">✅</span>
+      <span class="agent-stat-icon">{{ icons.icon('check-circle', 24) }}</span>
       <div><div class="agent-stat-num" style="color:var(--success);">{{ stats.won }}</div><div class="agent-stat-label">Won</div></div>
     </div>
     <div class="agent-stat">
-      <span class="agent-stat-icon">✖️</span>
+      <span class="agent-stat-icon">{{ icons.icon('x-circle', 24) }}</span>
       <div><div class="agent-stat-num" style="color:var(--grey-500);">{{ stats.lost }}</div><div class="agent-stat-label">Lost</div></div>
     </div>
   </div>
 
   <div class="agent-grid">
     <div class="card agent-lead-form-card">
-      <h2 style="margin-top:0; font-size:1.05rem;">➕ Submit a New Lead</h2>
+      <h2 style="margin-top:0; font-size:1.05rem;">{{ icons.icon('plus', 18) }} Submit a New Lead</h2>
       <form method="post" action="/agent/leads">
         <div class="form-row">
           <label for="customer_name">Customer Name</label>
@@ -78,7 +79,7 @@
     </div>
 
     <div class="card agent-leads-card">
-      <h2 style="margin-top:0; font-size:1.05rem;">📋 My Leads <span style="color:var(--grey-500); font-weight:400;">({{ leads.length }})</span></h2>
+      <h2 style="margin-top:0; font-size:1.05rem;">{{ icons.icon('clipboard-list', 18) }} My Leads <span style="color:var(--grey-500); font-weight:400;">({{ leads.length }})</span></h2>
       {% if leads.length %}
       <div class="agent-lead-list">
         {% for lead in leads %}
@@ -88,9 +89,9 @@
             <span class="pill pill-{{ lead.status }}">{{ lead.status }}</span>
           </div>
           <div class="agent-lead-details">
-            <span>📱 {{ lead.customer_phone }}</span>
-            {% if lead.customer_district %}<span>📍 {{ lead.customer_district }}</span>{% endif %}
-            {% if lead.product_interest %}<span>🏠 {{ lead.product_interest }}</span>{% endif %}
+            <span>{{ icons.icon('phone', 14) }} {{ lead.customer_phone }}</span>
+            {% if lead.customer_district %}<span>{{ icons.icon('map-pin', 14) }} {{ lead.customer_district }}</span>{% endif %}
+            {% if lead.product_interest %}<span>{{ icons.icon('home', 14) }} {{ lead.product_interest }}</span>{% endif %}
             <span class="agent-lead-date">{{ lead.created_at | date }}</span>
           </div>
         </div>

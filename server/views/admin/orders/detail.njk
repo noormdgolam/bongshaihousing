@@ -1,4 +1,5 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Order #{{ order.id }} — {{ order.customer_name }}{% endblock %}
 {% block header %}<h1 style="margin:0; font-size:1.15rem;">Order #{{ order.id }}: {{ order.customer_name }}</h1>{% endblock %}
 {% block content %}
@@ -8,7 +9,7 @@
 
 {% if generatedPassword %}
 <div class="card" style="border-left:4px solid #F59E0B; background:#fffbeb;">
-  <h3 style="margin-top:0; font-size:0.95rem; color:#92400e;">🔑 Portal Login Created — Share These Now</h3>
+  <h3 style="margin-top:0; font-size:0.95rem; color:#92400e; display:flex; align-items:center; gap:6px;">{{ icons.icon('lock', 17) }} Portal Login Created — Share These Now</h3>
   <p style="font-size:0.85rem; color:#78350f; margin-bottom:10px;">This password is shown only once. Relay it to the customer by phone or WhatsApp, then it's gone from this screen for good.</p>
   <div style="display:flex; gap:20px; flex-wrap:wrap;">
     <div><span style="font-size:0.75rem; color:#92400e; text-transform:uppercase; font-weight:700;">Phone</span><br><strong style="font-size:1.1rem;">{{ order.customer_phone }}</strong></div>
@@ -21,7 +22,7 @@
 <div class="admin-grid-2col">
   <div>
     <div class="card">
-      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">👤 Customer &amp; Order Info</h2>
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">{{ icons.icon('user', 17) }} Customer &amp; Order Info</h2>
       <div class="admin-grid-3col">
         <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">Phone</span><a href="tel:{{ order.customer_phone }}" style="font-weight:700;">{{ order.customer_phone }}</a></div>
         <div><span style="font-size:0.8rem; color:var(--grey-500); display:block;">District</span><span>{{ order.customer_district or 'N/A' }}</span></div>
@@ -33,7 +34,7 @@
     </div>
 
     <div class="card">
-      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">📋 Build Milestones</h2>
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">{{ icons.icon('clipboard-list', 17) }} Build Milestones</h2>
       <table>
         <thead><tr><th>Stage</th><th>Status</th></tr></thead>
         <tbody>
@@ -56,13 +57,13 @@
     </div>
 
     <div class="card">
-      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">📐 Design Documents</h2>
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">{{ icons.icon('document-text', 17) }} Design Documents</h2>
       <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-4px;">Floor plans, elevations, or specs the customer can view/download from their portal.</p>
       {% if documents.length %}
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
         {% for d in documents %}
         <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:var(--grey-50); border-radius:6px; border:1px solid var(--grey-200);">
-          <a href="/admin/orders/{{ order.id }}/documents/{{ d.id }}" target="_blank" style="font-size:0.88rem; font-weight:600;">📄 {{ d.title }}</a>
+          <a href="/admin/orders/{{ order.id }}/documents/{{ d.id }}" target="_blank" style="font-size:0.88rem; font-weight:600; display:flex; align-items:center; gap:6px;">{{ icons.icon('document-text', 16) }} {{ d.title }}</a>
           <form method="post" action="/admin/orders/{{ order.id }}/documents/{{ d.id }}/delete" style="margin:0;" onsubmit="return confirm('Remove this document?');">
             <button type="submit" class="btn btn-danger" style="padding:3px 10px; font-size:0.75rem;">Remove</button>
           </form>
@@ -90,7 +91,7 @@
 
   <div>
     <div class="card">
-      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">⚙️ Order Status</h2>
+      <h2 style="font-size:1rem; font-weight:700; margin-top:0; border-bottom:1px solid var(--grey-100); padding-bottom:10px; color:var(--grey-700);">{{ icons.icon('cog', 17) }} Order Status</h2>
       <form method="post" action="/admin/orders/{{ order.id }}/status">
         <div class="form-row">
           <label for="orderStatus">Status</label>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% import "partials/icons.njk" as icons %}
 <title>{% block title %}Admin{% endblock %} — Bongshai Housing</title>
 <meta name="robots" content="noindex, nofollow" />
 {% if csrfToken %}<meta name="csrf-token" content="{{ csrfToken }}">{% endif %}
@@ -31,7 +32,9 @@
     border-right: 1px solid rgba(255,255,255,0.12);
   }
   .admin-sidebar .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.14); margin-bottom: 12px; }
-  .admin-sidebar nav a { display: block; padding: 10px 20px; color: #cbd5e1; border-radius: 8px; margin: 2px 8px; }
+  .admin-sidebar nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #cbd5e1; border-radius: 8px; margin: 2px 8px; }
+  .admin-sidebar nav a svg { opacity: 0.75; }
+  .admin-sidebar nav a:hover svg, .admin-sidebar nav a.active svg { opacity: 1; }
   .admin-sidebar nav a:hover, .admin-sidebar nav a.active { background: rgba(255,255,255,0.12); color: white; text-decoration: none; }
   .admin-main { flex: 1; min-width: 0; }
   .admin-topbar {
@@ -114,28 +117,28 @@
   <aside class="admin-sidebar">
     <div class="brand">Bongshai CMS</div>
     <nav>
-      <a href="/admin">📊 Dashboard</a>
-      <a href="/admin/analytics">📈 Analytics</a>
-      <a href="/admin/seo">🔍 SEO</a>
-      <a href="/admin/leads">📥 Inquiries / Leads</a>
-      <a href="/admin/orders">🏗️ Orders</a>
-      <a href="/admin/agents">🤝 Agents</a>
-      <a href="/admin/agent-leads">📥 Agent Leads</a>
+      <a href="/admin">{{ icons.icon('chart-bar', 18) }} Dashboard</a>
+      <a href="/admin/analytics">{{ icons.icon('trending-up', 18) }} Analytics</a>
+      <a href="/admin/seo">{{ icons.icon('search', 18) }} SEO</a>
+      <a href="/admin/leads">{{ icons.icon('inbox', 18) }} Inquiries / Leads</a>
+      <a href="/admin/orders">{{ icons.icon('building-2', 18) }} Orders</a>
+      <a href="/admin/agents">{{ icons.icon('handshake', 18) }} Agents</a>
+      <a href="/admin/agent-leads">{{ icons.icon('inbox', 18) }} Agent Leads</a>
       {% if adminRole != 'sales' %}
-      <a href="/admin/themes">🎭 Themes Directory</a>
-      <a href="/admin/theme-editor">⚡ Theme Studio Pro</a>
-      <a href="/admin/products">📦 Products</a>
-      <a href="/admin/categories">📁 Categories</a>
-      <a href="/admin/projects">🏗️ Projects</a>
-      <a href="/admin/service-areas">📍 Service Areas</a>
-      <a href="/admin/faqs">❓ FAQs</a>
-      <a href="/admin/team-members">👥 Team Members</a>
-      <a href="/admin/media">🖼️ Media Library</a>
-      <a href="/admin/testimonials">💬 Testimonials</a>
+      <a href="/admin/themes">{{ icons.icon('sparkles', 18) }} Themes Directory</a>
+      <a href="/admin/theme-editor">{{ icons.icon('cog', 18) }} Theme Studio Pro</a>
+      <a href="/admin/products">{{ icons.icon('clipboard-list', 18) }} Products</a>
+      <a href="/admin/categories">{{ icons.icon('folder', 18) }} Categories</a>
+      <a href="/admin/projects">{{ icons.icon('building', 18) }} Projects</a>
+      <a href="/admin/service-areas">{{ icons.icon('map-pin', 18) }} Service Areas</a>
+      <a href="/admin/faqs">{{ icons.icon('question', 18) }} FAQs</a>
+      <a href="/admin/team-members">{{ icons.icon('users', 18) }} Team Members</a>
+      <a href="/admin/media">{{ icons.icon('photo', 18) }} Media Library</a>
+      <a href="/admin/testimonials">{{ icons.icon('chat', 18) }} Testimonials</a>
       {% endif %}
       {% if adminRole == 'admin' or adminRole == 'superadmin' %}
-      <a href="/admin/users">👤 Users</a>
-      <a href="/admin/activity">🕘 Activity Log</a>
+      <a href="/admin/users">{{ icons.icon('users', 18) }} Users</a>
+      <a href="/admin/activity">{{ icons.icon('clock', 18) }} Activity Log</a>
       {% endif %}
     </nav>
   </aside>

@@ -1,9 +1,10 @@
 {% extends "customer-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}My Project{% endblock %}
 {% block body %}
 <div class="customer-hero">
   <div class="customer-hero-top">
-    <div class="customer-hero-brand">🏗️ Bongshai Housing</div>
+    <div class="customer-hero-brand">{{ icons.icon('crane', 20) }} Bongshai Housing</div>
     <form method="post" action="/my-project/logout">
       <button type="submit" class="btn btn-ghost">Log out</button>
     </form>
@@ -37,7 +38,7 @@
   </div>
 
   <div class="card">
-    <h2 style="margin-top:0; font-size:1.05rem;">📋 Build Timeline</h2>
+    <h2 style="margin-top:0; font-size:1.05rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('clipboard-list', 19) }} Build Timeline</h2>
     <div class="milestone-list">
       {% for m in milestones %}
       <div class="milestone-item {{ m.status }}">
@@ -57,11 +58,11 @@
 
   {% if documents.length %}
   <div class="card">
-    <h2 style="margin-top:0; font-size:1.05rem;">📐 Design Documents</h2>
+    <h2 style="margin-top:0; font-size:1.05rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('document-text', 19) }} Design Documents</h2>
     <div style="display:flex; flex-direction:column; gap:8px;">
       {% for d in documents %}
       <a href="/my-project/documents/{{ d.id }}" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(255,255,255,0.5); border-radius:10px; border:1px solid rgba(255,255,255,0.4); font-weight:600; font-size:0.9rem;">
-        📄 {{ d.title }}
+        {{ icons.icon('document-text', 17) }} {{ d.title }}
       </a>
       {% endfor %}
     </div>

@@ -1,6 +1,7 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Technical SEO Audit{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem;">🩺 Technical SEO Audit</h1>{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('stethoscope', 20) }} Technical SEO Audit</h1>{% endblock %}
 {% block content %}
 <div class="toolbar">
   <a href="/admin/seo" class="btn">← Back to SEO Dashboard</a>

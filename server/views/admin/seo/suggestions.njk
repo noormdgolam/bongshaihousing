@@ -1,6 +1,7 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}SEO Suggestions{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem;">✨ AI SEO Suggestions</h1>{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('sparkles', 20) }} AI SEO Suggestions</h1>{% endblock %}
 {% block content %}
 <div class="toolbar">
   <a href="/admin/seo" class="btn">← Back to SEO Dashboard</a>
@@ -36,16 +37,16 @@
   </div>
 
   {% if s.reasoning %}
-  <p style="font-size:0.8rem; color:var(--grey-500); margin-top:10px; margin-bottom:0;">💡 {{ s.reasoning }}</p>
+  <p style="font-size:0.8rem; color:var(--grey-500); margin-top:10px; margin-bottom:0; display:flex; align-items:flex-start; gap:6px;">{{ icons.icon('bulb', 15) }} {{ s.reasoning }}</p>
   {% endif %}
 
   {% if s.status == 'pending' %}
   <div style="display:flex; gap:8px; margin-top:14px;">
     <form method="post" action="/admin/seo/suggestions/{{ s.id }}/approve" style="flex:1; margin:0;">
-      <button type="submit" class="btn btn-primary" style="width:100%; background:var(--success); border-color:var(--success);">✓ Approve &amp; Publish</button>
+      <button type="submit" class="btn btn-primary" style="width:100%; background:var(--success); border-color:var(--success);">{{ icons.icon('check-circle', 16) }} Approve &amp; Publish</button>
     </form>
     <form method="post" action="/admin/seo/suggestions/{{ s.id }}/reject" style="flex:1; margin:0;">
-      <button type="submit" class="btn btn-danger" style="width:100%;">✕ Reject</button>
+      <button type="submit" class="btn btn-danger" style="width:100%;">{{ icons.icon('x-circle', 16) }} Reject</button>
     </form>
   </div>
   {% endif %}

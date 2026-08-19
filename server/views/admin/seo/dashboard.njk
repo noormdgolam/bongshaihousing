@@ -1,9 +1,10 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}SEO Automation{% endblock %}
 {% block header %}
 <div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
-  <h1 style="margin:0; font-size:1.2rem;">🔍 SEO Automation</h1>
-  <a href="/admin/seo/settings" class="btn">⚙️ Settings</a>
+  <h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('search', 20) }} SEO Automation</h1>
+  <a href="/admin/seo/settings" class="btn">{{ icons.icon('cog', 16) }} Settings</a>
 </div>
 {% endblock %}
 {% block content %}
@@ -51,7 +52,7 @@
     <h2 style="margin-top:0; font-size:1rem;">Generate AI Suggestions</h2>
     <p style="font-size:0.85rem; color:var(--grey-500);">Drafts up to 10 products' worth of meta titles, descriptions, alt text, and thin-content rewrites - grounded in live product data. Nothing publishes until you approve it below.</p>
     <form method="post" action="/admin/seo/generate">
-      <button type="submit" class="btn btn-accent" style="width:100%;" {% if not hasApiKey %}disabled{% endif %}>✨ Generate Now</button>
+      <button type="submit" class="btn btn-accent" style="width:100%;" {% if not hasApiKey %}disabled{% endif %}>{{ icons.icon('sparkles', 16) }} Generate Now</button>
     </form>
     <a href="/admin/seo/cron-url" style="font-size:0.8rem; display:block; margin-top:10px;">Set up continuous automation via cron →</a>
   </div>

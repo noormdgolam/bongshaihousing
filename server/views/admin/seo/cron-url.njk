@@ -1,6 +1,7 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Continuous SEO Automation{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem;">🔁 Continuous Automation</h1>{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('refresh', 20) }} Continuous Automation</h1>{% endblock %}
 {% block content %}
 <div style="margin-bottom:16px;"><a href="/admin/seo" class="btn">← Back to SEO Dashboard</a></div>
 

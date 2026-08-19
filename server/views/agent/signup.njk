@@ -1,11 +1,12 @@
 {% extends "agent-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Distributor Application{% endblock %}
 {% block body %}
 <div style="min-height:100vh; padding:32px 16px;">
   <div style="max-width: 640px; margin: 0 auto;">
 
     <div style="text-align:center; margin-bottom:22px; color:white;">
-      <div style="font-size:2.2rem; margin-bottom:6px;">🤝</div>
+      <div style="margin-bottom:6px;">{{ icons.icon('handshake', 40) }}</div>
       <h1 style="font-size:1.5rem; font-weight:800; margin:0;">Bongshai Housing Distributorship Application</h1>
       <p style="opacity:0.85; font-size:0.85rem; margin-top:6px;">Apply to represent Bongshai Housing &amp; Real Estate in your area. Reviewed by our team before your account is activated.</p>
     </div>
@@ -17,7 +18,7 @@
     <form method="post" action="/agent/signup" enctype="multipart/form-data">
 
       <div class="card">
-        <div class="signup-section-head"><span class="signup-step">1</span><span class="signup-section-icon">🏢</span><h3>Business Information</h3></div>
+        <div class="signup-section-head"><span class="signup-step">1</span><span class="signup-section-icon">{{ icons.icon('building', 22) }}</span><h3>Business Information</h3></div>
         <div class="form-row">
           <label for="business_name">Business/Establishment Name</label>
           <input type="text" id="business_name" name="business_name" value="{{ values.business_name or '' }}" required>
@@ -51,7 +52,7 @@
       </div>
 
       <div class="card">
-        <div class="signup-section-head"><span class="signup-step">2</span><span class="signup-section-icon">📋</span><h3>Business Details</h3></div>
+        <div class="signup-section-head"><span class="signup-step">2</span><span class="signup-section-icon">{{ icons.icon('clipboard-list', 22) }}</span><h3>Business Details</h3></div>
         <div class="form-row">
           <label>Current Business Type(s) <span style="font-weight:400; color:var(--grey-500);">(up to 3, optional)</span></label>
           <div style="display:flex; gap:8px;">
@@ -71,7 +72,7 @@
       </div>
 
       <div class="card">
-        <div class="signup-section-head"><span class="signup-step">3</span><span class="signup-section-icon">📍</span><h3>Proposed Territory</h3></div>
+        <div class="signup-section-head"><span class="signup-step">3</span><span class="signup-section-icon">{{ icons.icon('map-pin', 22) }}</span><h3>Proposed Territory</h3></div>
         <div class="form-row" style="display:flex; gap:12px; margin-bottom:0;">
           <div style="flex:1;">
             <label for="district">District</label>
@@ -90,7 +91,7 @@
       </div>
 
       <div class="card">
-        <div class="signup-section-head"><span class="signup-step">4</span><span class="signup-section-icon">💰</span><h3>Registration &amp; Financials</h3></div>
+        <div class="signup-section-head"><span class="signup-step">4</span><span class="signup-section-icon">{{ icons.icon('banknotes', 22) }}</span><h3>Registration &amp; Financials</h3></div>
         <div class="form-row" style="display:flex; gap:12px;">
           <div style="flex:1;">
             <label for="tin_number">TIN Number</label>
@@ -111,7 +112,7 @@
       </div>
 
       <div class="card">
-        <div class="signup-section-head"><span class="signup-step">5</span><span class="signup-section-icon">📎</span><h3>Supporting Documents</h3></div>
+        <div class="signup-section-head"><span class="signup-step">5</span><span class="signup-section-icon">{{ icons.icon('paper-clip', 22) }}</span><h3>Supporting Documents</h3></div>
         <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-4px;">JPG, PNG, or PDF, up to 10MB each. All five are required with your application.</p>
         <div class="form-row">
           <label for="doc_application_letter">Application Letter (on company letterhead)</label>
@@ -136,7 +137,7 @@
       </div>
 
       <div class="card">
-        <div class="signup-section-head"><span class="signup-step">6</span><span class="signup-section-icon">🔒</span><h3>Account Password</h3></div>
+        <div class="signup-section-head"><span class="signup-step">6</span><span class="signup-section-icon">{{ icons.icon('lock', 22) }}</span><h3>Account Password</h3></div>
         <div class="form-row" style="display:flex; gap:12px; margin-bottom:0;">
           <div style="flex:1;">
             <label for="password">Password</label>

@@ -1,8 +1,9 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Orders{% endblock %}
 {% block header %}
 <div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
-  <h1 style="margin:0; font-size:1.2rem;">🏗️ Orders &amp; Project Tracking</h1>
+  <h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('building-2', 20) }} Orders &amp; Project Tracking</h1>
   <a href="/admin/orders/new" class="btn btn-primary">+ New Order</a>
 </div>
 {% endblock %}

@@ -1,10 +1,11 @@
 {% extends "agent-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}Agent Login{% endblock %}
 {% block body %}
 <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); padding:20px;">
   <div class="card" style="width: 100%; max-width: 380px; padding:32px 28px;">
     <div style="text-align:center; margin-bottom:24px;">
-      <div style="font-size:2rem; margin-bottom:4px;">🤝</div>
+      <div style="color:var(--primary); margin-bottom:4px;">{{ icons.icon('handshake', 36) }}</div>
       <h1 style="font-size:1.4rem; font-weight:800; margin:0; color:var(--grey-900);">Agent Login</h1>
       <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:4px;">Sign in to submit and track your leads.</p>
     </div>

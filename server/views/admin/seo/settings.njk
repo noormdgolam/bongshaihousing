@@ -1,12 +1,13 @@
 {% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
 {% block title %}SEO Settings{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem;">⚙️ SEO Automation Settings</h1>{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('cog', 20) }} SEO Automation Settings</h1>{% endblock %}
 {% block content %}
 <div style="margin-bottom:16px;"><a href="/admin/seo" class="btn">← Back to SEO Dashboard</a></div>
 
 {% if saved %}
 <div class="card" style="border-left:4px solid var(--success);">
-  <p style="margin:0; color:var(--success); font-weight:700;">✓ Settings saved.</p>
+  <p style="margin:0; color:var(--success); font-weight:700; display:flex; align-items:center; gap:6px;">{{ icons.icon('check-circle', 16) }} Settings saved.</p>
 </div>
 {% endif %}
 
