@@ -13,7 +13,7 @@ const router = express.Router();
 // route added directly in server.js has 404'd on restart twice tonight
 // (the seo-cron saga) while every addition to an already-required router
 // file (this one, admin.js) has reliably taken effect after every deploy.
-router.get('/health', async (req, res) => {
+router.get('/uptime-check-bh2026', async (req, res) => {
   if (!db) return res.status(503).json({ status: 'error', db: 'unavailable' });
   try {
     await db.raw('SELECT 1');
