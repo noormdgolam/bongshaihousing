@@ -124,12 +124,15 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function getDistrictPage(districtName) {
+        // DB-marked pages take priority, but a district present in the DB
+        // without has_dedicated_page set (or no DB rows at all) should still
+        // fall through to the static list - previously this branched on
+        // whether serverAreas was merely present, which meant any DB result
+        // with zero has_dedicated_page rows returned null for every single
+        // district and silently dropped all 21 dedicated-page links.
         if (!districtName) return null;
         const key = districtName.toLowerCase();
-        if (serverAreas && Array.isArray(serverAreas)) {
-            return dbPageMap[key] || null;
-        }
-        return defaultDistrictPages[key] || null;
+        return dbPageMap[key] || defaultDistrictPages[key] || null;
     }
     
     function renderDistricts(data) {

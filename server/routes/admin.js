@@ -1042,7 +1042,7 @@ router.post('/admin/categories', upload.single('hero_image_file'), async (req, r
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
-  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (hero_image || null);
+  const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
   try {
     const [id] = await db('categories').insert({
       slug, name, landing_page_slug: landing_page_slug || null,
@@ -1066,7 +1066,7 @@ router.post('/admin/categories/:id', upload.single('hero_image_file'), async (re
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
-  const finalImage = req.file ? `images/uploads/${req.file.filename}` : (hero_image || null);
+  const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
   await db('categories').where({ id: req.params.id }).update({
     slug, name, landing_page_slug: landing_page_slug || null, description: description || null,
     hero_image: finalImage, sort_order: sort_order || 0, updated_at: db.fn.now(),
