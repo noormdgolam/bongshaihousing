@@ -47,16 +47,26 @@ async function processAndSaveImage(buffer, originalName, options = {}) {
     try {
       const outputFilename = `${base}-${unique}.webp`;
       const outputPath = path.join(UPLOADS_DIR, outputFilename);
+      const source = sharp(buffer).rotate(); // auto-orient based on EXIF
 
-      await sharp(buffer)
-        .rotate() // auto-orient based on EXIF
-        .resize({
-          width: maxWidth,
-          withoutEnlargement: true,
-          fit: 'inside',
-        })
+      await source.clone()
+        .resize({ width: maxWidth, withoutEnlargement: true, fit: 'inside' })
         .webp({ quality, effort: 4 })
         .toFile(outputPath);
+
+      // Responsive variants - every template that renders an uploaded image
+      // (product-detail.njk, category cards, etc.) builds a srcset by
+      // replacing ".webp" with "-400w.webp"/"-700w.webp" on this same path,
+      // assuming those always exist (true for the original static-build
+      // images this convention was built around). Without generating them
+      // here too, the <img> just fails to render - browsers don't fall back
+      // to a working srcset candidate when the one they picked 404s.
+      for (const width of [400, 700]) {
+        await source.clone()
+          .resize({ width, withoutEnlargement: true, fit: 'inside' })
+          .webp({ quality, effort: 4 })
+          .toFile(path.join(UPLOADS_DIR, `${base}-${unique}-${width}w.webp`));
+      }
 
       return `images/uploads/${outputFilename}`;
     } catch (err) {
