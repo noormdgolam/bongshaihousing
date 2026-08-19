@@ -65,33 +65,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// SEO cron webhook. Originally at /seo-cron/generate as its own mounted
-// router - 404'd consistently on the public domain while every other
-// route worked, even after inlining it as the very first route in the
-// app. A direct 127.0.0.1:PORT curl (bypassing the public proxy) hit it
-// fine and returned 200, proving Express itself was never the problem -
-// something in front of Node (most likely Imunify/WAF, tightened after
-// this project's earlier malware incident) was silently 404ing any path
-// containing "cron"+"generate" together, a classic webshell-callback
-// naming pattern. Renamed to something that doesn't pattern-match that
-// heuristic; update the cron URL in cPanel if this was already set up
-// under the old path.
-app.get('/internal/seo-refresh', async (req, res) => {
-  try {
-    const dbModule = require('./lib/db');
-    const secretRow = await dbModule('seo_settings').where({ setting_key: 'cron_secret' }).first();
-    const secret = secretRow ? secretRow.setting_value : null;
-    if (!secret || req.query.token !== secret) {
-      return res.status(403).json({ success: false, error: 'Invalid or missing token' });
-    }
-    const { generateBatch } = require('./lib/seo/generate');
-    const result = await generateBatch(10);
-    res.json({ success: true, ...result });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
 // Security headers + gzip. In production, Apache already does this for
 // static assets (see .htaccess) - these cover the routes Node actually
 // serves (dynamic pages once they exist, and the form/counter APIs).

@@ -1849,17 +1849,12 @@ router.post('/admin/seo/settings', requireRole('admin', 'superadmin'), async (re
   const updates = { claude_model: claude_model || 'claude-haiku-4-5-20251001' };
   if (anthropic_api_key && anthropic_api_key.trim()) updates.anthropic_api_key = anthropic_api_key.trim();
   await saveSeoSettings(updates);
-  if (!(await db('seo_settings').where({ setting_key: 'cron_secret' }).first())) {
-    await db('seo_settings').insert({ setting_key: 'cron_secret', setting_value: crypto.randomBytes(24).toString('hex') });
-  }
   await logActivity(req, { action: 'update', entityType: 'seo_settings', summary: 'Updated SEO automation settings' });
   res.redirect('/admin/seo/settings?saved=1');
 });
 
 router.get('/admin/seo/cron-url', requireRole('admin', 'superadmin'), async (req, res) => {
-  const secretRow = await db('seo_settings').where({ setting_key: 'cron_secret' }).first();
-  const secret = secretRow ? secretRow.setting_value : null;
-  res.render('admin/seo/cron-url.njk', adminVars(req, { secret }));
+  res.render('admin/seo/cron-url.njk', adminVars(req, {}));
 });
 
 router.post('/admin/seo/audit/run', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {

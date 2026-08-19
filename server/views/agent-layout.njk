@@ -109,6 +109,15 @@
   .pill-quoted { background: #e0e7ff; color: #4338ca; }
   .pill-won { background: #dcfce7; color: var(--success); }
   .pill-lost { background: var(--grey-100); color: var(--grey-500); }
+
+  .signup-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .signup-step {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: var(--primary); color: white; font-weight: 800; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .signup-section-icon { font-size: 1.3rem; }
+  .signup-section-head h3 { margin: 0; font-size: 1rem; font-weight: 800; color: var(--grey-900); }
   @media (max-width: 800px) {
     .agent-grid { grid-template-columns: 1fr; }
     .agent-lead-form-card { position: static; }
