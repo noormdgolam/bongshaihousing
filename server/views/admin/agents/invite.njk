@@ -11,6 +11,11 @@
   <p style="margin:0; font-weight:700; color:var(--success);">Imported {{ imported }} new invitation(s).{% if duplicates and duplicates != '0' %} Skipped {{ duplicates }} already on the list.{% endif %}{% if skipped and skipped != '0' %} {{ skipped }} row(s) had no name or phone.{% endif %}</p>
 </div>
 {% endif %}
+{% if templateSaved %}
+<div class="card" style="border-left:4px solid var(--success);">
+  <p style="margin:0; font-weight:700; color:var(--success);">Email composer saved. New batches will use this wording.</p>
+</div>
+{% endif %}
 
 <div class="admin-grid-2col">
   <div>
@@ -57,6 +62,32 @@
   </div>
 
   <div>
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1rem;">Email Composer</h2>
+      <p style="font-size:0.85rem; color:var(--grey-500);">The header banner, "Apply for Distributorship" button, and footer address stay fixed - only the pitch text below is editable. Use <code>{{ '{{name}}' }}</code> anywhere you want the recipient's name inserted (falls back to "Sir/Madam" when a row has no name). Leave a blank line between paragraphs.</p>
+      <form method="post" action="/admin/agents/invite/template">
+        <div class="form-row">
+          <label for="from_address">From address</label>
+          <select id="from_address" name="from_address">
+            {% for opt in fromAddressOptions %}
+            <option value="{{ opt.value }}" {% if template.from_address == opt.value %}selected{% endif %}>{{ opt.label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" value="{{ template.subject }}" required>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label for="body">Body</label>
+          <textarea id="body" name="body" rows="8" required>{{ template.body }}</textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" style="width:100%;">Save Composer</button>
+        </div>
+      </form>
+    </div>
+
     <div class="card">
       <h2 style="margin-top:0; font-size:1rem;">Send Invitations</h2>
       <div style="display:flex; justify-content:space-around; text-align:center; margin-bottom:16px;">

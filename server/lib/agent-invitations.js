@@ -118,16 +118,80 @@ async function parseCsvBuffer(buffer) {
   return { rows, skipped };
 }
 
-function invitationEmailHtml(name) {
+// Mailboxes actually configured on this cPanel account (confirmed via the
+// host's mail/ directory) - the only valid From-address choices in the
+// composer. All authenticate through the same SMTP_USER login underneath;
+// this only changes the visible From/Reply-To header, which is safe since
+// SPF/DKIM are scoped to the whole bongshaihousing.com domain, not a
+// specific mailbox.
+const FROM_ADDRESS_OPTIONS = [
+  { value: 'no-reply@bongshaihousing.com', label: 'no-reply@bongshaihousing.com (default, unmonitored)' },
+  { value: 'info@bongshaihousing.com', label: 'info@bongshaihousing.com' },
+  { value: 'admin@bongshaihousing.com', label: 'admin@bongshaihousing.com' },
+];
+
+const DEFAULT_TEMPLATE = {
+  subject: 'Invitation: Become a Bongshai Housing Distributor',
+  body: [
+    'Dear {{name}},',
+    "Bongshai Housing & Real Estate, Bangladesh's premier pre-engineered steel building and prefab housing company, is inviting qualified businesses and individuals to become authorized distributors in their area.",
+    'As a Bongshai distributor, you would represent our full catalog of steel buildings, duplex villas, cottages, and industrial sheds directly to customers in your territory, with full sales, marketing, and after-sales support from our head office.',
+  ].join('\n\n'),
+  from_address: 'no-reply@bongshaihousing.com',
+};
+
+async function getInvitationTemplate() {
+  if (!db) return DEFAULT_TEMPLATE;
+  const hasTable = await db.schema.hasTable('agent_invitation_template');
+  if (!hasTable) return DEFAULT_TEMPLATE;
+  const row = await db('agent_invitation_template').where({ id: 1 }).first();
+  return row || DEFAULT_TEMPLATE;
+}
+
+async function saveInvitationTemplate({ subject, body, from_address }) {
+  if (!subject || !subject.trim()) throw new Error('Subject cannot be empty.');
+  if (!body || !body.trim()) throw new Error('Body cannot be empty.');
+  if (!FROM_ADDRESS_OPTIONS.some((o) => o.value === from_address)) {
+    throw new Error('Choose a valid From address.');
+  }
+  await db('agent_invitation_template')
+    .insert({ id: 1, subject: subject.trim(), body: body.trim(), from_address })
+    .onConflict('id')
+    .merge();
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Body is admin-entered plain text - blank line splits paragraphs, {{name}}
+// gets substituted. Escaped before insertion since it lands inside HTML,
+// even though only trusted admins can edit it (defense in depth, not just
+// trust).
+function renderBodyParagraphs(body, name) {
+  const withName = body.replace(/\{\{\s*name\s*\}\}/gi, name || 'Sir/Madam');
+  return withName
+    .split(/\n\s*\n/)
+    .map((para) => `<p>${escapeHtml(para.trim()).replace(/\n/g, '<br>')}</p>`)
+    .join('\n      ');
+}
+
+// Header banner, CTA button, and footer signature stay hardcoded (not part
+// of the editable template) - keeps a non-technical admin from breaking the
+// email's HTML structure while still giving full control over the pitch text.
+function invitationEmailHtml(name, template) {
   return `
   <div style="font-family: Arial, Helvetica, sans-serif; max-width: 560px; margin: 0 auto; color: #1e293b;">
     <div style="background: #1E40AF; padding: 24px 28px; border-radius: 10px 10px 0 0;">
       <h1 style="color: #fff; margin: 0; font-size: 1.3rem;">Bongshai Housing &amp; Real Estate</h1>
     </div>
     <div style="background: #f8fafc; padding: 28px; border-radius: 0 0 10px 10px; border: 1px solid #e2e8f0; border-top: none;">
-      <p>Dear ${name || 'Sir/Madam'},</p>
-      <p>Bongshai Housing &amp; Real Estate, Bangladesh's premier pre-engineered steel building and prefab housing company, is inviting qualified businesses and individuals to become <strong>authorized distributors</strong> in their area.</p>
-      <p>As a Bongshai distributor, you would represent our full catalog of steel buildings, duplex villas, cottages, and industrial sheds directly to customers in your territory, with full sales, marketing, and after-sales support from our head office.</p>
+      ${renderBodyParagraphs(template.body, name)}
       <p style="margin: 24px 0; text-align: center;">
         <a href="https://bongshaihousing.com/agent/signup.html" style="background: #D4AF37; color: #1a1300; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; display: inline-block;">Apply for Distributorship →</a>
       </p>
@@ -137,13 +201,21 @@ function invitationEmailHtml(name) {
   </div>`;
 }
 
-async function sendInvitation(invitation) {
+function invitationEmailText(name, template) {
+  const withName = template.body.replace(/\{\{\s*name\s*\}\}/gi, name || 'Sir/Madam');
+  return `${withName}\n\nApply at https://bongshaihousing.com/agent/signup.html\n\nBongshai Housing & Real Estate\nHouse #18, Road #18, Sector #10, Uttara, Dhaka\n01781-636613`;
+}
+
+async function sendInvitation(invitation, template) {
   if (!invitation.email) throw new Error('No email address on file for this invitation.');
+  const t = template || (await getInvitationTemplate());
   await sendMail({
     to: invitation.email,
-    subject: 'Invitation: Become a Bongshai Housing Distributor',
-    text: `Dear ${invitation.name || 'Sir/Madam'},\n\nBongshai Housing & Real Estate is inviting qualified businesses to become authorized distributors. Apply at https://bongshaihousing.com/agent/signup.html\n\nBongshai Housing & Real Estate\n01781-636613`,
-    html: invitationEmailHtml(invitation.name),
+    subject: t.subject,
+    text: invitationEmailText(invitation.name, t),
+    html: invitationEmailHtml(invitation.name, t),
+    from: t.from_address,
+    replyTo: t.from_address,
   });
 }
 
@@ -159,11 +231,13 @@ async function sendPendingBatch(limit = 20) {
     .orderBy('created_at', 'asc')
     .limit(limit);
 
+  const template = await getInvitationTemplate();
+
   let sent = 0;
   const errors = [];
   for (const inv of candidates) {
     try {
-      await sendInvitation(inv);
+      await sendInvitation(inv, template);
       await db('agent_invitations').where({ id: inv.id }).update({ status: 'sent', sent_at: db.fn.now(), error_message: null });
       sent += 1;
     } catch (e) {
@@ -175,4 +249,13 @@ async function sendPendingBatch(limit = 20) {
   return { processed: candidates.length, sent, errors };
 }
 
-module.exports = { parseExcelBuffer, parseCsvBuffer, sendInvitation, sendPendingBatch };
+module.exports = {
+  parseExcelBuffer,
+  parseCsvBuffer,
+  sendInvitation,
+  sendPendingBatch,
+  getInvitationTemplate,
+  saveInvitationTemplate,
+  invitationEmailHtml,
+  FROM_ADDRESS_OPTIONS,
+};

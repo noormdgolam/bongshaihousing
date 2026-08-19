@@ -30,12 +30,15 @@ function getTransporter() {
  * @param {string} opts.subject
  * @param {string} [opts.text]
  * @param {string} [opts.html]
+ * @param {string} [opts.from] - overrides MAIL_FROM; still authenticates as SMTP_USER underneath,
+ *   this only changes the visible From header. Safe as long as it's the same domain (bongshaihousing.com)
+ *   since SPF/DKIM are domain-scoped, not mailbox-scoped.
  * @param {string} [opts.replyTo]
  * @param {Array<{filename: string, content: Buffer, contentType: string}>} [opts.attachments]
  */
-async function sendMail({ to, subject, text, html, replyTo, attachments }) {
-  const from = process.env.MAIL_FROM || 'no-reply@bongshaihousing.com';
-  await getTransporter().sendMail({ from, to, subject, text, html, replyTo, attachments });
+async function sendMail({ to, subject, text, html, from, replyTo, attachments }) {
+  const fromAddress = from || process.env.MAIL_FROM || 'no-reply@bongshaihousing.com';
+  await getTransporter().sendMail({ from: fromAddress, to, subject, text, html, replyTo, attachments });
 }
 
 module.exports = { sendMail };

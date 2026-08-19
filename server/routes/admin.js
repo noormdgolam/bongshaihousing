@@ -16,7 +16,10 @@ const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch } = require('../lib/seo/generate');
 const { COUNTRY_MAP } = require('../lib/visitor-tracker');
 const { saveDocumentIn, documentPathIn } = require('../lib/document-uploader');
-const { parseExcelBuffer, parseCsvBuffer, sendPendingBatch } = require('../lib/agent-invitations');
+const {
+  parseExcelBuffer, parseCsvBuffer, sendPendingBatch,
+  getInvitationTemplate, saveInvitationTemplate, FROM_ADDRESS_OPTIONS,
+} = require('../lib/agent-invitations');
 
 const excelUpload = multer({
   storage: multer.memoryStorage(),
@@ -311,13 +314,32 @@ router.get('/admin/agents/invite', requireRole('admin', 'superadmin', 'editor'),
     sent: invitations.filter((i) => i.status === 'sent').length,
     failed: invitations.filter((i) => i.status === 'failed').length,
   };
+  const template = await getInvitationTemplate();
   res.render('admin/agents/invite.njk', adminVars(req, {
-    invitations, counts,
+    invitations, counts, template, fromAddressOptions: FROM_ADDRESS_OPTIONS,
     imported: req.query.imported || null,
     skipped: req.query.skipped || null,
     duplicates: req.query.duplicates || null,
     error: req.query.error || null,
+    templateSaved: req.query.templateSaved || null,
   }));
+});
+
+router.post('/admin/agents/invite/template', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  try {
+    await saveInvitationTemplate({
+      subject: req.body.subject,
+      body: req.body.body,
+      from_address: req.body.from_address,
+    });
+    await logActivity(req, { action: 'update', entityType: 'agent_invitation_template', summary: 'Updated the distributor invitation email composer' });
+    res.redirect('/admin/agents/invite?templateSaved=1');
+  } catch (e) {
+    res.redirect('/admin/agents/invite?error=' + encodeURIComponent(e.message));
+  }
 });
 
 router.post('/admin/agents/invite/import', requireRole('admin', 'superadmin', 'editor'), excelUpload.single('excel_file'), async (req, res) => {
