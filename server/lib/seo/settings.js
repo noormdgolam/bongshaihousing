@@ -5,8 +5,8 @@ const db = require('../db');
 // a plaintext file on the server tree is a real leak risk that a theme
 // color palette isn't; if the DB is unavailable, settings are simply
 // unavailable rather than silently reading from disk.
-const KEYS = ['anthropic_api_key', 'claude_model', 'automation_enabled'];
-const DEFAULTS = { anthropic_api_key: '', claude_model: 'claude-haiku-4-5-20251001', automation_enabled: 'false' };
+const KEYS = ['groq_api_key', 'groq_model', 'automation_enabled'];
+const DEFAULTS = { groq_api_key: '', groq_model: 'openai/gpt-oss-120b', automation_enabled: 'false' };
 
 async function getSeoSettings() {
   const hasTable = await db.schema.hasTable('seo_settings');

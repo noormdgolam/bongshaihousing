@@ -11,24 +11,22 @@
 {% endif %}
 
 <div class="card" style="max-width:520px;">
-  <h2 style="margin-top:0; font-size:1rem;">Anthropic API Key</h2>
+  <h2 style="margin-top:0; font-size:1rem;">Groq API Key</h2>
   {% if hasKey %}
   <p style="font-size:0.85rem; color:var(--grey-500);">Current key: <code>{{ maskedKey }}</code></p>
   {% else %}
-  <p style="font-size:0.85rem; color:var(--grey-500);">No key saved yet. Get one at <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>.</p>
+  <p style="font-size:0.85rem; color:var(--grey-500);">No key saved yet. Free tier available at <a href="https://console.groq.com/" target="_blank">console.groq.com</a>.</p>
   {% endif %}
   <form method="post" action="/admin/seo/settings">
     <div class="form-row">
-      <label for="anthropic_api_key">{% if hasKey %}Replace API Key{% else %}API Key{% endif %}</label>
-      <input type="password" id="anthropic_api_key" name="anthropic_api_key" placeholder="sk-ant-...">
+      <label for="groq_api_key">{% if hasKey %}Replace API Key{% else %}API Key{% endif %}</label>
+      <input type="password" id="groq_api_key" name="groq_api_key" placeholder="gsk_...">
       <p style="font-size:0.75rem; color:var(--grey-500); margin-top:4px;">Leave blank to keep the current key.</p>
     </div>
     <div class="form-row">
-      <label for="claude_model">Model</label>
-      <select id="claude_model" name="claude_model">
-        <option value="claude-haiku-4-5-20251001" {% if model == 'claude-haiku-4-5-20251001' %}selected{% endif %}>Claude Haiku 4.5 (fast, cheap - recommended for volume SEO copy)</option>
-        <option value="claude-sonnet-5" {% if model == 'claude-sonnet-5' %}selected{% endif %}>Claude Sonnet 5 (higher quality, more expensive)</option>
-      </select>
+      <label for="groq_model">Model ID</label>
+      <input type="text" id="groq_model" name="groq_model" value="{{ model or 'openai/gpt-oss-120b' }}" placeholder="openai/gpt-oss-120b">
+      <p style="font-size:0.75rem; color:var(--grey-500); margin-top:4px;">If generation fails with a "model decommissioned" error, Groq's lineup has changed - check the current list at <a href="https://console.groq.com/docs/models" target="_blank">console.groq.com/docs/models</a> and type the exact model id here.</p>
     </div>
     <div class="form-actions">
       <button type="submit" class="btn btn-primary" style="width:100%;">Save Settings</button>

@@ -1826,7 +1826,7 @@ router.get('/admin/seo', requireRole('admin', 'superadmin', 'editor'), async (re
     .select('issue_type').count({ count: '*' }).groupBy('issue_type');
   const recentSuggestions = await db('seo_suggestions').where({ status: 'pending' }).orderBy('created_at', 'desc').limit(6);
   res.render('admin/seo/dashboard.njk', adminVars(req, {
-    hasApiKey: Boolean(settings.anthropic_api_key),
+    hasApiKey: Boolean(settings.groq_api_key),
     openIssueCount: openIssues?.count || 0,
     pendingCount: pendingSuggestions?.count || 0,
     issuesByType,
@@ -1837,17 +1837,17 @@ router.get('/admin/seo', requireRole('admin', 'superadmin', 'editor'), async (re
 router.get('/admin/seo/settings', requireRole('admin', 'superadmin'), async (req, res) => {
   const settings = await getSeoSettings();
   res.render('admin/seo/settings.njk', adminVars(req, {
-    maskedKey: maskKey(settings.anthropic_api_key),
-    hasKey: Boolean(settings.anthropic_api_key),
-    model: settings.claude_model,
+    maskedKey: maskKey(settings.groq_api_key),
+    hasKey: Boolean(settings.groq_api_key),
+    model: settings.groq_model,
     saved: req.query.saved === '1',
   }));
 });
 
 router.post('/admin/seo/settings', requireRole('admin', 'superadmin'), async (req, res) => {
-  const { anthropic_api_key, claude_model } = req.body;
-  const updates = { claude_model: claude_model || 'claude-haiku-4-5-20251001' };
-  if (anthropic_api_key && anthropic_api_key.trim()) updates.anthropic_api_key = anthropic_api_key.trim();
+  const { groq_api_key, groq_model } = req.body;
+  const updates = { groq_model: groq_model || 'llama-3.3-70b-versatile' };
+  if (groq_api_key && groq_api_key.trim()) updates.groq_api_key = groq_api_key.trim();
   await saveSeoSettings(updates);
   await logActivity(req, { action: 'update', entityType: 'seo_settings', summary: 'Updated SEO automation settings' });
   res.redirect('/admin/seo/settings?saved=1');

@@ -1,5 +1,5 @@
 const db = require('../db');
-const { callClaude } = require('./claude-client');
+const { callAI } = require('./ai-client');
 
 const SYSTEM_PROMPT = `You are an SEO copywriter for Bongshai Housing, a real prefab steel building company in Bangladesh selling readymade steel houses, duplexes, cottages, and industrial sheds. You write factual, specific, non-generic SEO copy grounded ONLY in the data given to you - never invent prices, specs, or claims not present in the input. Write for a Bangladeshi audience; Taka pricing, district-level geography.
 
