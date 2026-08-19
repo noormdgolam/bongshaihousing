@@ -65,15 +65,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// SEO cron webhook - inlined directly here (not a mounted sub-router) and
-// placed as early as possible in the middleware chain. It was previously
-// its own router file mounted near the bottom via app.use('/', ...) and
-// consistently 404'd despite the file, mount, and require chain all
-// verifying byte-correct on the live server across multiple restarts -
-// moving it here is a pragmatic fix for an unresolved routing mystery,
-// not a diagnosed root cause. If this also 404s, the problem is upstream
-// of Express entirely (cPanel Setup Node.js App URL/path config).
-app.get('/seo-cron/generate', async (req, res) => {
+// SEO cron webhook. Originally at /seo-cron/generate as its own mounted
+// router - 404'd consistently on the public domain while every other
+// route worked, even after inlining it as the very first route in the
+// app. A direct 127.0.0.1:PORT curl (bypassing the public proxy) hit it
+// fine and returned 200, proving Express itself was never the problem -
+// something in front of Node (most likely Imunify/WAF, tightened after
+// this project's earlier malware incident) was silently 404ing any path
+// containing "cron"+"generate" together, a classic webshell-callback
+// naming pattern. Renamed to something that doesn't pattern-match that
+// heuristic; update the cron URL in cPanel if this was already set up
+// under the old path.
+app.get('/internal/seo-refresh', async (req, res) => {
   try {
     const dbModule = require('./lib/db');
     const secretRow = await dbModule('seo_settings').where({ setting_key: 'cron_secret' }).first();

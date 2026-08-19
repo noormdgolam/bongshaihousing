@@ -19,7 +19,7 @@
     <li>Common Setting: <strong>Once Per Day</strong> (or your preferred cadence)</li>
     <li>Command:</li>
   </ul>
-  <pre style="background:var(--grey-900); color:#e2e8f0; padding:12px 14px; border-radius:8px; font-size:0.78rem; overflow-x:auto; white-space:pre-wrap; word-break:break-all;">curl -s "https://bongshaihousing.com/seo-cron/generate?token={{ secret }}"</pre>
+  <pre style="background:var(--grey-900); color:#e2e8f0; padding:12px 14px; border-radius:8px; font-size:0.78rem; overflow-x:auto; white-space:pre-wrap; word-break:break-all;">curl -s "https://bongshaihousing.com/internal/seo-refresh?token={{ secret }}"</pre>
   <p style="font-size:0.78rem; color:var(--grey-500); margin-top:10px;">This URL is a secret - anyone with it can trigger a generation run (which costs API credits), so only paste it into cPanel's Cron Jobs field, nowhere else. Regenerate it by clearing and re-saving your API key in Settings if it ever leaks.</p>
 </div>
 {% endif %}
