@@ -612,7 +612,7 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published } = req.body;
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt } = req.body;
   try {
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
@@ -624,6 +624,9 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
       main_image: finalImage,
       image_2: finalImage2,
       image_3: finalImage3,
+      meta_title: meta_title || null,
+      meta_description: meta_description || null,
+      main_image_alt: main_image_alt || null,
       published: published === 'on' || published === true || published === 'true',
     });
     res.redirect(`/admin/products/${id}/edit`);
@@ -649,7 +652,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published } = req.body;
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt } = req.body;
   const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
   const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
   const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
@@ -660,6 +663,9 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     main_image: finalImage,
     image_2: finalImage2,
     image_3: finalImage3,
+    meta_title: meta_title || null,
+    meta_description: meta_description || null,
+    main_image_alt: main_image_alt || null,
     published: published === 'on' || published === true || published === 'true',
     updated_at: db.fn.now(),
   });

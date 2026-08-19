@@ -53,6 +53,20 @@
     </div>
   </div>
   <div class="form-row">
+    <label for="main_image_alt">Image Alt Text <span style="font-weight:400; color:var(--grey-500, #64748b);">(optional - falls back to Title if blank)</span></label>
+    <input type="text" id="main_image_alt" name="main_image_alt" value="{{ product.main_image_alt or '' }}" placeholder="e.g. BH-DV-201 duplex steel building exterior view" maxlength="255">
+  </div>
+  <h3 style="font-size:0.92rem; color:var(--primary); border-bottom:1px solid var(--grey-100, #f1f5f9); padding-bottom:6px; margin-top:22px;">🔍 SEO (Search Result Appearance)</h3>
+  <p style="font-size:0.78rem; color:var(--grey-500, #64748b); margin-top:-6px;">Leave blank to fall back to Title/Description above. The <a href="/admin/seo" target="_blank">SEO Dashboard</a> can also draft these with AI.</p>
+  <div class="form-row">
+    <label for="meta_title">SEO Title <span style="font-weight:400; color:var(--grey-500, #64748b);">(under 60 characters)</span></label>
+    <input type="text" id="meta_title" name="meta_title" value="{{ product.meta_title or '' }}" maxlength="255">
+  </div>
+  <div class="form-row">
+    <label for="meta_description">SEO Meta Description <span style="font-weight:400; color:var(--grey-500, #64748b);">(under 155 characters)</span></label>
+    <textarea id="meta_description" name="meta_description" maxlength="500" style="min-height:60px;">{{ product.meta_description or '' }}</textarea>
+  </div>
+  <div class="form-row">
     <label>Gallery Image 2 <span style="font-weight:400; color:var(--grey-500, #64748b);">(optional)</span></label>
     <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
       <div id="image2PreviewContainer" style="width:130px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
