@@ -5,6 +5,24 @@ const { documentPathIn } = require('../lib/document-uploader');
 
 const router = express.Router();
 
+// Uptime-monitor target (UptimeRobot etc.) - checks the DB connection, not
+// just "did the process respond to HTTP", since a hung/unreachable MySQL
+// connection is a real failure mode a plain 200-from-anything check would
+// miss. No auth. Deliberately placed in an already-mounted router file
+// rather than as a fresh top-level app.get() in server.js - a brand-new
+// route added directly in server.js has 404'd on restart twice tonight
+// (the seo-cron saga) while every addition to an already-required router
+// file (this one, admin.js) has reliably taken effect after every deploy.
+router.get('/health', async (req, res) => {
+  if (!db) return res.status(503).json({ status: 'error', db: 'unavailable' });
+  try {
+    await db.raw('SELECT 1');
+    res.json({ status: 'ok', db: 'connected', time: new Date().toISOString() });
+  } catch (e) {
+    res.status(503).json({ status: 'error', db: 'unreachable', message: e.message });
+  }
+});
+
 router.get('/my-project', requireCustomer, async (req, res) => {
   const milestones = await db('order_milestones')
     .where({ order_id: req.order.id })

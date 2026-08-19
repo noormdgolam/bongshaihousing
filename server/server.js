@@ -91,22 +91,6 @@ app.use(session({
   },
 }));
 
-// Uptime-monitor target (UptimeRobot etc.) - checks the DB connection, not
-// just "did the process respond to HTTP", since a hung/unreachable MySQL
-// connection is a real failure mode that a plain 200-from-anything check
-// would miss entirely. No auth, no session - kept as cheap and early in
-// the middleware chain as possible so it stays fast even if something
-// downstream is struggling.
-app.get('/health', async (req, res) => {
-  if (!db) return res.status(503).json({ status: 'error', db: 'unavailable' });
-  try {
-    await db.raw('SELECT 1');
-    res.json({ status: 'ok', db: 'connected', time: new Date().toISOString() });
-  } catch (e) {
-    res.status(503).json({ status: 'error', db: 'unreachable', message: e.message });
-  }
-});
-
 const nunjucksEnv = nunjucks.configure(path.join(__dirname, 'views'), {
   autoescape: true,
   express: app,
