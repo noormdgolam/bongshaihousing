@@ -31,6 +31,7 @@
   .filter-input { flex: 1; min-width: 180px; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(15,23,42,0.15); background: rgba(255,255,255,0.8); font-size: 0.88rem; }
   .filter-select { padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(15,23,42,0.15); background: rgba(255,255,255,0.8); font-size: 0.88rem; }
   .page-link-pill { display: inline-block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--primary); }
+  .page-link-pill.unknown-path { color: var(--grey-500); cursor: default; text-decoration: line-through; }
 
   @media (max-width: 900px) {
     .an-grid-2col { grid-template-columns: 1fr; }
@@ -235,9 +236,15 @@
             </div>
           </td>
           <td>
+            {% if v.isKnownPath %}
             <a href="{{ v.path }}" target="_blank" class="page-link-pill" title="{{ v.path }}">
               {{ v.path }}
             </a>
+            {% else %}
+            <span class="page-link-pill unknown-path" title="{{ v.path }} — probed by a bot/scanner, not a real page on this site">
+              {{ v.path }}
+            </span>
+            {% endif %}
           </td>
           <td>
             {% if v.device_type == 'Mobile' %}

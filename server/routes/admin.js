@@ -1937,6 +1937,13 @@ router.get('/admin/analytics', async (req, res) => {
           second: '2-digit',
           hour12: true,
         }) : 'Recent',
+        // Every real route on this site is either "/", a customer-portal
+        // "/my-project..." path, or ends in ".html" (static pages, DB
+        // product/category/project slugs all store the .html suffix). Bare
+        // paths like "/products/2f4146d2342255" never map to a real page -
+        // they're bot/scanner probes - so don't render them as if they were
+        // a working link.
+        isKnownPath: (v.path || '') === '/' || /\.html$/i.test(v.path || '') || (v.path || '').startsWith('/my-project'),
       }));
     }
 
