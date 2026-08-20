@@ -262,8 +262,16 @@ for (const { file, dept } of TEAM_PAGES) {
 // /projects.html and category landing pages are already registered above with
 // dynamic handlers, so Express will match them first and never reach them here.
 for (const [urlPath, meta] of Object.entries(registry)) {
-  router.get(urlPath, (req, res) => {
-    res.render(meta.template, renderVars(meta));
+  router.get(urlPath, (req, res, next) => {
+    res.render(meta.template, renderVars(meta), (err, html) => {
+      if (err) {
+        if (err.message && err.message.includes('template not found')) {
+          return next();
+        }
+        return next(err);
+      }
+      res.send(html);
+    });
   });
 }
 
