@@ -156,9 +156,14 @@ if (registry['/faq.html']) {
   });
 }
 
-// ── Category landing pages — DB-driven hero / description override ──────────
-// Pulls hero image/description from the DB category row when present,
-// falling back to the template's static content if DB is empty or offline.
+// ── Category landing pages — DB-driven hero / description / card-image override
+// Pulls hero image/description from the DB category row when present, and
+// each product card's main_image from the products table (keyed by
+// model_number - see partials/product-card-image.njk), falling back to the
+// template's static content wherever DB is empty, offline, or a given
+// product simply isn't in it. This is what keeps a card in sync after an
+// admin edits that product's image in the dashboard - previously these
+// cards were 100% hardcoded HTML with no DB connection at all.
 const CATEGORY_LANDING_PAGES = [
   'apartment-building.html',
   'concrete-building.html',
@@ -180,6 +185,7 @@ for (const pageFile of CATEGORY_LANDING_PAGES) {
     const meta = registry[urlPath];
     router.get(urlPath, async (req, res) => {
       let dbCategory = null;
+      let dbProductsByModel = {};
       if (db) {
         try {
           const pageSlug = pageFile.replace(/\.html$/, '');
@@ -188,11 +194,29 @@ for (const pageFile of CATEGORY_LANDING_PAGES) {
             .orWhere({ slug: pageSlug })
             .orWhere({ landing_page_slug: pageSlug })
             .first();
+
+          if (dbCategory) {
+            const products = await db('products')
+              .where({ category_id: dbCategory.id, published: true })
+              .select('model_number', 'main_image');
+            dbProductsByModel = Object.fromEntries(products.map((p) => [
+              p.model_number,
+              {
+                main_image: p.main_image,
+                // Only claim a responsive srcset when the image is actually
+                // a .webp - a handful of legacy cards use raw external URLs
+                // or non-webp files with no -400w/-700w siblings to exist.
+                srcset: p.main_image && p.main_image.endsWith('.webp')
+                  ? `${p.main_image.replace('.webp', '-400w.webp')} 400w, ${p.main_image.replace('.webp', '-700w.webp')} 700w, ${p.main_image} 1024w`
+                  : null,
+              },
+            ]));
+          }
         } catch (err) {
           console.error(`category DB fetch failed for ${pageFile}, rendering static fallback:`, err.message);
         }
       }
-      res.render(meta.template, renderVars(meta, { dbCategory }));
+      res.render(meta.template, renderVars(meta, { dbCategory, dbProductsByModel }));
     });
   }
 }

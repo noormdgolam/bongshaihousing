@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% import "partials/product-card-image.njk" as productImg %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -158,7 +159,7 @@
 
 <div class="stagger product-grid">
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1101" loading="eager" fetchpriority="high" src="images/products/Model No-BH-WA-1101.webp" srcset="images/products/Model%20No-BH-WA-1101-400w.webp 400w, images/products/Model%20No-BH-WA-1101-700w.webp 700w, images/products/Model%20No-BH-WA-1101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1101" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1101', 'Bongshai Housing Model No-BH-WA-1101', 'images/products/Model No-BH-WA-1101.webp', 'images/products/Model%20No-BH-WA-1101-400w.webp 400w, images/products/Model%20No-BH-WA-1101-700w.webp 700w, images/products/Model%20No-BH-WA-1101.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1101</h2>
@@ -167,7 +168,7 @@
 <a class="btn btn-primary" href="bh-wa-1101.html" style="width:100%;justify-content:center;">View Details</a>
 </div></div>
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1102" loading="lazy" src="images/products/Model No-BH-WA-1102.webp" srcset="images/products/Model%20No-BH-WA-1102-400w.webp 400w, images/products/Model%20No-BH-WA-1102-700w.webp 700w, images/products/Model%20No-BH-WA-1102.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1102" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1102', 'Bongshai Housing Model No-BH-WA-1102', 'images/products/Model No-BH-WA-1102.webp', 'images/products/Model%20No-BH-WA-1102-400w.webp 400w, images/products/Model%20No-BH-WA-1102-700w.webp 700w, images/products/Model%20No-BH-WA-1102.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1102</h2>
@@ -177,7 +178,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1103" loading="lazy" src="images/products/Model No-BH-WA-1103.webp" srcset="images/products/Model%20No-BH-WA-1103-400w.webp 400w, images/products/Model%20No-BH-WA-1103-700w.webp 700w, images/products/Model%20No-BH-WA-1103.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1103" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1103', 'Bongshai Housing Model No-BH-WA-1103', 'images/products/Model No-BH-WA-1103.webp', 'images/products/Model%20No-BH-WA-1103-400w.webp 400w, images/products/Model%20No-BH-WA-1103-700w.webp 700w, images/products/Model%20No-BH-WA-1103.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1103</h2>
@@ -187,7 +188,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1104" loading="lazy" src="images/products/Model No-BH-WA-1104.webp" srcset="images/products/Model%20No-BH-WA-1104-400w.webp 400w, images/products/Model%20No-BH-WA-1104-700w.webp 700w, images/products/Model%20No-BH-WA-1104.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1104" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1104', 'Bongshai Housing Model No-BH-WA-1104', 'images/products/Model No-BH-WA-1104.webp', 'images/products/Model%20No-BH-WA-1104-400w.webp 400w, images/products/Model%20No-BH-WA-1104-700w.webp 700w, images/products/Model%20No-BH-WA-1104.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1104</h2>
@@ -197,7 +198,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1105" loading="lazy" src="images/products/Model No-BH-WA-1105.webp" srcset="images/products/Model%20No-BH-WA-1105-400w.webp 400w, images/products/Model%20No-BH-WA-1105-700w.webp 700w, images/products/Model%20No-BH-WA-1105.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1105" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1105', 'Bongshai Housing Model No-BH-WA-1105', 'images/products/Model No-BH-WA-1105.webp', 'images/products/Model%20No-BH-WA-1105-400w.webp 400w, images/products/Model%20No-BH-WA-1105-700w.webp 700w, images/products/Model%20No-BH-WA-1105.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1105</h2>
@@ -207,7 +208,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1106" loading="lazy" src="images/products/Model No-BH-WA-1106.webp" srcset="images/products/Model%20No-BH-WA-1106-400w.webp 400w, images/products/Model%20No-BH-WA-1106-700w.webp 700w, images/products/Model%20No-BH-WA-1106.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1106" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1106', 'Bongshai Housing Model No-BH-WA-1106', 'images/products/Model No-BH-WA-1106.webp', 'images/products/Model%20No-BH-WA-1106-400w.webp 400w, images/products/Model%20No-BH-WA-1106-700w.webp 700w, images/products/Model%20No-BH-WA-1106.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1106</h2>
@@ -217,7 +218,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1107" loading="lazy" src="images/products/Model No-BH-WA-1107.webp" srcset="images/products/Model%20No-BH-WA-1107-400w.webp 400w, images/products/Model%20No-BH-WA-1107-700w.webp 700w, images/products/Model%20No-BH-WA-1107.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1107" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1107', 'Bongshai Housing Model No-BH-WA-1107', 'images/products/Model No-BH-WA-1107.webp', 'images/products/Model%20No-BH-WA-1107-400w.webp 400w, images/products/Model%20No-BH-WA-1107-700w.webp 700w, images/products/Model%20No-BH-WA-1107.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1107</h2>
@@ -227,7 +228,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1108" loading="lazy" src="images/products/Model No-BH-WA-1108.webp" srcset="images/products/Model%20No-BH-WA-1108-400w.webp 400w, images/products/Model%20No-BH-WA-1108-700w.webp 700w, images/products/Model%20No-BH-WA-1108.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1108" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1108', 'Bongshai Housing Model No-BH-WA-1108', 'images/products/Model No-BH-WA-1108.webp', 'images/products/Model%20No-BH-WA-1108-400w.webp 400w, images/products/Model%20No-BH-WA-1108-700w.webp 700w, images/products/Model%20No-BH-WA-1108.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1108</h2>
@@ -237,7 +238,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1109" loading="lazy" src="images/products/Model No-BH-WA-1109.webp" srcset="images/products/Model%20No-BH-WA-1109-400w.webp 400w, images/products/Model%20No-BH-WA-1109-700w.webp 700w, images/products/Model%20No-BH-WA-1109.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1109" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1109', 'Bongshai Housing Model No-BH-WA-1109', 'images/products/Model No-BH-WA-1109.webp', 'images/products/Model%20No-BH-WA-1109-400w.webp 400w, images/products/Model%20No-BH-WA-1109-700w.webp 700w, images/products/Model%20No-BH-WA-1109.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1109</h2>
@@ -247,7 +248,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1110" loading="lazy" src="images/products/Model No-BH-WA-1110.webp" srcset="images/products/Model%20No-BH-WA-1110-400w.webp 400w, images/products/Model%20No-BH-WA-1110-700w.webp 700w, images/products/Model%20No-BH-WA-1110.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WA-1110" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1110', 'Bongshai Housing Model No-BH-WA-1110', 'images/products/Model No-BH-WA-1110.webp', 'images/products/Model%20No-BH-WA-1110-400w.webp 400w, images/products/Model%20No-BH-WA-1110-700w.webp 700w, images/products/Model%20No-BH-WA-1110.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1110</h2>
@@ -257,7 +258,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1111" loading="lazy" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&amp;fit=crop&amp;w=1024&amp;q=80" title="Bongshai Housing Model No-BH-WA-1111" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1111', 'Bongshai Housing Model No-BH-WA-1111', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1024&q=80', null, null, false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1111</h2>
@@ -267,7 +268,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WA-1112" loading="lazy" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&amp;fit=crop&amp;w=1024&amp;q=80" title="Bongshai Housing Model No-BH-WA-1112" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1112', 'Bongshai Housing Model No-BH-WA-1112', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1024&q=80', null, null, false) }}</div>
 <div class="property-card-body" data-aos="fade-up">
 <span class="property-type">Worker Camp</span>
 <h2 class="property-name">Model No-BH-WA-1112</h2>

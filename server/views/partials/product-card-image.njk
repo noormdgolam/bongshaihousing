@@ -1,0 +1,13 @@
+{#
+Renders a property-card's <img>, preferring the DB product's current
+main_image (kept in sync with admin dashboard uploads) over the static
+fallback baked into the page. Falls back cleanly when the product isn't
+in dbProductsByModel, has no main_image set, or its image isn't a .webp
+(a handful of pre-existing cards use raw external/non-webp images with
+no responsive srcset - srcset is only ever the DB-computed one, which
+routes/pages.js only sets when the image genuinely has -400w/-700w
+siblings, or the original static srcset/sizes).
+#}
+{% macro cardImage(dbProductsByModel, modelNumber, altText, fallbackSrc, fallbackSrcset, fallbackSizes, eager) -%}
+{% set dbp = dbProductsByModel[modelNumber] %}<img alt="{{ altText }}" {% if eager %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %} src="{{ dbp.main_image if (dbp and dbp.main_image) else fallbackSrc }}"{% if dbp and dbp.srcset %} srcset="{{ dbp.srcset }}" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% elif (not dbp or not dbp.main_image) and fallbackSrcset %} srcset="{{ fallbackSrcset }}" sizes="{{ fallbackSizes }}"{% endif %} title="{{ altText }}" width="1024" height="1024">
+{%- endmacro %}
