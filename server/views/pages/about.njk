@@ -174,15 +174,12 @@
 {% endblock %}
 
 {% block content %}
-{% if pageContent %}
-  {{ pageContent | safe }}
-{% else %}
 <!-- PAGE HERO -->
     <section class="page-hero" aria-labelledby="page-title">
       <div class="container page-hero-content">
         <span class="page-hero-label">About Us</span>
-        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Bangladesh's Most Trusted<br>Housing Company</h1>
-        <p class="page-hero-text">20+ years of building dreams with international quality, innovative prefab technology, and an unwavering commitment to excellence.</p>
+        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">{{ pc.hero_title | safe or "Bangladesh's Most Trusted<br>Housing Company" | safe }}</h1>
+        <p class="page-hero-text">{{ pc.hero_subtitle or "20+ years of building dreams with international quality, innovative prefab technology, and an unwavering commitment to excellence." }}</p>
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <a href="index.html">Home</a>
           <span aria-hidden="true">/</span>
@@ -194,7 +191,7 @@
     <!-- AEO: Answer-First Opening & Explicit Trust Signal -->
     <section class="section" style="padding: 2rem 0; background: var(--off-white);">
       <div class="container">
-        <p><strong>Bongshai Housing is a trusted pre-engineered steel building and EPC company in Bangladesh. We provide world-class, affordable, and rapid prefab construction solutions for residential, commercial, and industrial clients with over 20 years of excellence.</strong></p>
+        <p>{{ pc.trust_paragraph | safe or "<strong>Bongshai Housing is a trusted pre-engineered steel building and EPC company in Bangladesh. We provide world-class, affordable, and rapid prefab construction solutions for residential, commercial, and industrial clients with over 20 years of excellence.</strong>" | safe }}</p>
         <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
           By <strong>Bongshai Housing Engineering Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
         </div>
@@ -210,13 +207,13 @@
             <div class="section-label" data-aos="fade-up">Our Story</div>
             <h2 id="about-story-title">Who are we?</h2>
             <p style="margin-bottom:var(--space-4)">
-              <strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The company undertakes projects on the basis of <strong>Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C)</strong>.
+              {{ pc.story_p1 | safe or "<strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The company undertakes projects on the basis of <strong>Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C)</strong>." | safe }}
             </p>
             <p style="margin-bottom:var(--space-4)">
-              We have the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability. The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce.
+              {{ pc.story_p2 or "We have the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability. The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce." }}
             </p>
             <p>
-              BONGSHAI HOUSING will be responsible for the entire process of the project, ranging from design and materials supply to construction/installation and test operation. We maintain a great deal of experience in preparation, co-ordination, implementation, new-build, and maintenance works.
+              {{ pc.story_p3 or "BONGSHAI HOUSING will be responsible for the entire process of the project, ranging from design and materials supply to construction/installation and test operation. We maintain a great deal of experience in preparation, co-ordination, implementation, new-build, and maintenance works." }}
             </p>
           </div>
         </div>
@@ -234,12 +231,12 @@
           <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:0;text-align:left">
             <div class="why-icon" style="margin:0 0 var(--space-5)" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
             <h3 class="why-title">What is Our Mission?</h3>
-            <p class="why-text">To deliver world-class, affordable, and innovative housing solutions across Bangladesh — providing every family and business with access to quality construction built on the pillars of integrity, safety, and excellence. We aim to be the most trusted EPC housing company, creating lasting value for all stakeholders through innovation and commitment.</p>
+            <p class="why-text">{{ pc.mission_text or "To deliver world-class, affordable, and innovative housing solutions across Bangladesh — providing every family and business with access to quality construction built on the pillars of integrity, safety, and excellence. We aim to be the most trusted EPC housing company, creating lasting value for all stakeholders through innovation and commitment." }}</p>
           </div>
           <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:1;text-align:left">
             <div class="why-icon" style="margin:0 0 var(--space-5)" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></div>
             <h3 class="why-title">What is Our Vision?</h3>
-            <p class="why-text">To become South Asia's most respected prefab and real estate company — recognized globally for transforming the housing landscape with cutting-edge technology, sustainable construction practices, and an uncompromising dedication to client satisfaction. We envision a Bangladesh where quality housing is accessible to all.</p>
+            <p class="why-text">{{ pc.vision_text or "To become South Asia's most respected prefab and real estate company — recognized globally for transforming the housing landscape with cutting-edge technology, sustainable construction practices, and an uncompromising dedication to client satisfaction. We envision a Bangladesh where quality housing is accessible to all." }}</p>
           </div>
         </div>
       </div>
@@ -333,5 +330,4 @@
         </div>
       </div>
     </section>
-{% endif %}
 {% endblock %}

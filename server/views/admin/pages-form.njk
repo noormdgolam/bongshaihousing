@@ -19,11 +19,28 @@
     <input type="text" name="title" value="{{ page.title }}" class="form-control" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;" required>
   </div>
   
-  <div class="form-group" style="margin-bottom:20px;">
-    <label style="display:block; font-weight:600; margin-bottom:8px;">Page HTML Content</label>
-    <p style="font-size:0.85rem; color:var(--grey-500); margin-top:0;">You can use standard HTML markup here.</p>
-    <textarea name="content_html" class="form-control" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:4px; font-family:monospace; min-height:400px; resize:vertical;" required>{{ page.content_html }}</textarea>
-  </div>
+  {% if fields and fields.length > 0 %}
+    <hr style="margin:30px 0; border:0; border-top:1px solid #e2e8f0;">
+    <h2 style="font-size:1.2rem; margin-bottom:20px;">Page Content Fields</h2>
+    
+    {% for field in fields %}
+    <div class="form-group" style="margin-bottom:20px;">
+      <label style="display:block; font-weight:600; margin-bottom:8px;">{{ field.label }}</label>
+      
+      {% set val = contentJson[field.key] %}
+      
+      {% if field.type == 'textarea' %}
+      <textarea name="{{ field.key }}" class="form-control" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:4px; font-family:sans-serif; min-height:150px; resize:vertical;" required>{{ val if val !== undefined else '' }}</textarea>
+      {% else %}
+      <input type="text" name="{{ field.key }}" value="{{ val if val !== undefined else '' }}" class="form-control" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;" required>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-warning" style="margin-top:20px;">
+      No structured fields configured for this page in <code>page-content-registry.js</code>. Wait for engineering to migrate this page to the structured JSON format.
+    </div>
+  {% endif %}
   
   <div style="display:flex; justify-content:flex-end;">
     <button type="submit" class="btn btn-primary" style="padding:10px 24px; font-weight:bold;">Save Changes</button>

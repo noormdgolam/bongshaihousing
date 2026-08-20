@@ -1,8 +1,5 @@
 {% extends "layout.njk" %}
 {% block content %}
-{% if pageContent %}
-  {{ pageContent | safe }}
-{% else %}
 <section class="page-hero" style="min-height: 22vh; padding: 90px 0 30px;">
 <div class="container page-hero-content" style="text-align: center;">
 <span class="page-hero-label">{{ category.name }}</span>
@@ -268,5 +265,4 @@
   <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary">Get a Free Quote</a>
   <a href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." class="btn" style="background:#25D366; color:#fff; border:none;" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
 </div>
-{% endif %}
 {% endblock %}

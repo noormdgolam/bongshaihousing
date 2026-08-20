@@ -267,25 +267,24 @@ for (const { file, dept } of TEAM_PAGES) {
 for (const [urlPath, meta] of Object.entries(registry)) {
   router.get(urlPath, async (req, res, next) => {
     try {
-      let pageContent = null;
+      let pc = {};
       let pageTitle = meta.title;
 
       if (db) {
         try {
           const row = await db('page_content').where({ url_path: urlPath }).first();
           if (row) {
-            pageContent = row.content_html;
             if (row.title) pageTitle = row.title;
+            if (row.content_json) {
+              pc = typeof row.content_json === 'string' ? JSON.parse(row.content_json) : row.content_json;
+            }
           }
         } catch (dbErr) {
           // Ignore if table doesn't exist yet or local DB is offline
         }
       }
 
-      const vars = renderVars({ ...meta, title: pageTitle });
-      if (pageContent) {
-        vars.pageContent = pageContent;
-      }
+      const vars = renderVars({ ...meta, title: pageTitle, pc });
 
       res.render(meta.template, vars, (err, html) => {
         if (err) {

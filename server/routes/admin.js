@@ -2375,18 +2375,27 @@ router.get('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res)
     if (!page) {
       return res.redirect('/admin/pages?error=Page+not+found');
     }
-    res.render('admin/pages-form.njk', adminVars(req, { page }));
+    
+    const contentRegistry = require('../lib/page-content-registry');
+    const fields = contentRegistry[urlPath] || [];
+    
+    let contentJson = {};
+    if (page.content_json) {
+      contentJson = typeof page.content_json === 'string' ? JSON.parse(page.content_json) : page.content_json;
+    }
+    
+    res.render('admin/pages-form.njk', adminVars(req, { page, fields, contentJson }));
   } catch (err) {
     res.redirect('/admin/pages?error=Database+error');
   }
 });
 
 router.post('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res) => {
-  const { url_path, title, content_html } = req.body;
+  const { url_path, title, ...contentFields } = req.body;
   try {
     await db('page_content').where({ url_path }).update({
       title: (title || '').trim(),
-      content_html: (content_html || '').trim(),
+      content_json: JSON.stringify(contentFields),
       updated_at: db.fn.now()
     });
     // cache invalidation is handled by the middleware!

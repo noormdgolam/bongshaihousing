@@ -159,9 +159,6 @@
 {% endblock %}
 
 {% block content %}
-{% if pageContent %}
-  {{ pageContent | safe }}
-{% else %}
 <!-- ======================================================
          HERO SECTION
     ====================================================== -->
@@ -174,15 +171,15 @@
       <div class="hero-content container">
         <div class="hero-badge" aria-label="Company status">
           <span class="dot"></span>
-          Dhaka's Premier Housing Developer
+          {{ pc.hero_badge or "Dhaka's Premier Housing Developer" }}
         </div>
 
         <h1 class="hero-title" data-aos="fade-up" id="hero-title" style="font-size: clamp(1.75rem, 3.5vw, 3rem); line-height: 1.15; letter-spacing: -0.02em;">
-          Top Steel Building Company in <span class="highlight">Dhaka</span>
+          {{ pc.hero_title | safe or 'Top Steel Building Company in <span class="highlight">Dhaka</span>' | safe }}
         </h1>
 
         <p class="hero-subtitle">
-          From affordable prefab cottages to luxurious villas — we deliver world-class construction with EPC commitment, international quality, and unmatched value.
+          {{ pc.hero_subtitle or "From affordable prefab cottages to luxurious villas — we deliver world-class construction with EPC commitment, international quality, and unmatched value." }}
         </p>
 
         <div class="hero-actions">
@@ -234,10 +231,10 @@
             <div class="section-label">Who We Are</div>
             <h2 class="section-title" data-aos="fade-up" id="about-title">Bangladesh's Most Trusted Housing Company</h2>
             <p style="margin-bottom:var(--space-4)">
-              <strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The Company undertakes projects on the basis of Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C), with the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability.
+              {{ pc.about_p1 | safe or "<strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The Company undertakes projects on the basis of Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C), with the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability." | safe }}
             </p>
             <p>
-              The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce — responsible for the entire process from design and materials supply to construction and test operation.
+              {{ pc.about_p2 or "The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce — responsible for the entire process from design and materials supply to construction and test operation." }}
             </p>
 
             <div class="about-features">
@@ -556,7 +553,6 @@
         </div>
       </div>
     </section>
-{% endif %}
 {% endblock %}
 
 {% block content_after %}

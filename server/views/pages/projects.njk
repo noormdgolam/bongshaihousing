@@ -63,9 +63,6 @@
 {% endblock %}
 
 {% block content %}
-{% if pageContent %}
-  {{ pageContent | safe }}
-{% else %}
 <section class="page-hero" aria-labelledby="page-title">
       <div class="container page-hero-content">
         <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Our Projects</h1>
@@ -342,5 +339,4 @@
       </a>
     </div>
   </section>
-{% endif %}
 {% endblock %}

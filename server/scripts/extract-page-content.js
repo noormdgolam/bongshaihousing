@@ -1,51 +1,78 @@
-// server/scripts/extract-page-content.js
-require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const db = require('../lib/db');
-const registryPath = path.join(__dirname, '../page-registry.json');
-const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const registry = require('../page-registry.json');
+const contentRegistry = require('../lib/page-content-registry');
+let db;
+try {
+  db = require('../lib/db');
+} catch (e) {
+  console.error('Failed to load database. Are BONGSHAI_DB_* environment variables set?');
+  process.exit(1);
+}
 
-async function extract() {
+const VIEWS_DIR = path.join(__dirname, '..', 'views', 'pages');
+
+async function extractContent() {
   const hasTable = await db.schema.hasTable('page_content');
   if (!hasTable) {
-    console.error('page_content table does not exist. Run create-page-content-table.js first.');
+    console.error('Table page_content does not exist. Run create-page-content-table.js first.');
     process.exit(1);
   }
 
-  let count = 0;
-  for (const [urlPath, meta] of Object.entries(registry)) {
-    const templatePath = path.join(__dirname, '../views', meta.template);
-    if (fs.existsSync(templatePath)) {
-      const content = fs.readFileSync(templatePath, 'utf8');
-      const match = content.match(/{% block content %}([\s\S]*?){% endblock %}/);
-      if (match && match[1]) {
-        const extractedHtml = match[1].trim();
-        
-        // Ensure we don't insert the fallback block if we're running this multiple times
-        if (extractedHtml.includes('{{ pageContent | safe }}')) {
-          console.log(`Skipping ${urlPath} as it already contains the dynamic fallback wrapper.`);
-          continue;
-        }
+  let extractedCount = 0;
 
-        await db('page_content')
-          .insert({
-            url_path: urlPath,
-            title: meta.title,
-            content_html: extractedHtml
-          })
-          .onConflict('url_path')
-          .merge();
-        count++;
-        console.log(`Extracted content for ${urlPath}`);
+  for (const [urlPath, meta] of Object.entries(registry)) {
+    const templatePath = path.join(VIEWS_DIR, meta.template);
+    if (!fs.existsSync(templatePath)) continue;
+
+    const fileContent = fs.readFileSync(templatePath, 'utf8');
+    
+    // Look up the structured fields for this URL
+    const fields = contentRegistry[urlPath] || [];
+    
+    // If there are no fields defined yet, skip
+    if (fields.length === 0) continue;
+
+    const pageData = {};
+
+    for (const field of fields) {
+      // Regex to find: {{ pc.KEY | safe or "FALLBACK" | safe }}
+      // Note: Supports both single and double quotes around the fallback, and optional | safe filters
+      const regex = new RegExp(`\\{\\{\\s*pc\\.${field.key}\\s*(?:\\|\\s*safe\\s*)?or\\s*(['"])([\\s\\S]*?)\\1\\s*(?:\\|\\s*safe\\s*)?\\}\\}`);
+      const match = fileContent.match(regex);
+      
+      if (match) {
+        pageData[field.key] = match[2];
+      } else {
+        pageData[field.key] = ''; // Empty string if we couldn't extract a fallback
       }
     }
+
+    const title = meta.title || '';
+
+    // Upsert into database
+    await db('page_content').insert({
+      url_path: urlPath,
+      title: title,
+      content_json: JSON.stringify(pageData),
+      updated_at: db.fn.now()
+    }).onConflict('url_path').merge({
+      title: title,
+      // Only merge content_json if you want to overwrite existing DB edits with template fallbacks.
+      // In a real app, you might NOT want to overwrite if it already exists, but for this migration script we will.
+      content_json: JSON.stringify(pageData),
+      updated_at: db.fn.now()
+    });
+
+    console.log(`Extracted JSON content for ${urlPath}`);
+    extractedCount++;
   }
-  console.log(`Successfully extracted ${count} pages into the database.`);
+
+  console.log(`Extraction complete. Updated ${extractedCount} pages.`);
   process.exit(0);
 }
 
-extract().catch((err) => {
-  console.error(err);
+extractContent().catch(err => {
+  console.error('Extraction failed:', err);
   process.exit(1);
 });

@@ -6,9 +6,9 @@ async function main() {
   const hasTable = await db.schema.hasTable('page_content');
   if (!hasTable) {
     await db.schema.createTable('page_content', (table) => {
-      table.string('url_path', 191).primary();
-      table.string('title', 255);
-      table.text('content_html', 'longtext');
+      table.string('url_path', 255).primary().notNullable();
+      table.string('title', 255).nullable();
+      table.json('content_json').nullable();
       table.timestamp('updated_at').defaultTo(db.fn.now());
     });
     console.log('Created page_content table.');
