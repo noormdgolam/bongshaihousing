@@ -3,7 +3,7 @@
     "name": "SMA AWAL",
     "role": "Chief Engineer & Project Director",
     "bio": "20+ years of EPC construction leadership in Bangladesh, heading pre-engineered building (PEB) design, structural safety, and high-precision execution.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "senior-management",
     "sort_order": 0,
     "published": true
@@ -12,7 +12,7 @@
     "name": "Farjana Maria",
     "role": "Principal Architect",
     "bio": "Specializes in modern steel-composite residential designs, eco-resort villas, and high-efficiency industrial floor layouts.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "senior-management",
     "sort_order": 1,
     "published": true
@@ -21,7 +21,7 @@
     "name": "MD Golam Noor",
     "role": "IT Lead & Automation Director",
     "bio": "Drives digital transformation, BIM workflow integrations, and automated project tracking across all nationwide construction sites.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "senior-management",
     "sort_order": 2,
     "published": true
@@ -30,7 +30,7 @@
     "name": "SMA AWAL",
     "role": "Chief Engineer",
     "bio": "Oversees civil, structural, and PEB engineering calculations, earthquake resistance compliance, and site execution protocols.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "engineering",
     "sort_order": 0,
     "published": true
@@ -39,7 +39,7 @@
     "name": "Engr. Tanvir Ahmed",
     "role": "Senior Site Engineer (Civil & Structural)",
     "bio": "Expert in RC precast foundation tie beams, steel column erection, and on-site alignment verification.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "engineering",
     "sort_order": 1,
     "published": true
@@ -48,7 +48,7 @@
     "name": "Engr. Kazi M. Rahman",
     "role": "Tender Executive & Structural Cost Estimator",
     "bio": "Specializes in BOQ preparations, structural load calculations, and itemized transparent cost estimates.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "engineering",
     "sort_order": 2,
     "published": true
@@ -57,7 +57,7 @@
     "name": "Rafiqul Islam",
     "role": "Head of Client Solutions & Marketing",
     "bio": "Guides residential homeowners and industrial clients through package selection, land feasibility, and budget planning.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "marketing-sales",
     "sort_order": 0,
     "published": true
@@ -66,7 +66,7 @@
     "name": "Nusrat Jahan",
     "role": "Senior Sales Executive (Prefab Housing)",
     "bio": "Provides direct consultation, 3D model walk-throughs, and financing documentation support for duplex and cottage projects.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "marketing-sales",
     "sort_order": 1,
     "published": true
@@ -75,7 +75,7 @@
     "name": "Engr. Zahidul Karim",
     "role": "Lead QC Inspector (ISO 9001:2015)",
     "bio": "Conducts non-destructive steel testing, concrete compressive strength validation, and OHSAS safety compliance audits.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "quality-control",
     "sort_order": 0,
     "published": true
@@ -84,7 +84,7 @@
     "name": "Mohammad Shahin",
     "role": "Material Testing & Quality Assurance Officer",
     "bio": "Performs laboratory batch tests on raw MS steel, precast wall panels, and corrosion-resistant coatings.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "quality-control",
     "sort_order": 1,
     "published": true
@@ -93,7 +93,7 @@
     "name": "Abdul Malek",
     "role": "Chief Fabrication Foreman",
     "bio": "Directs factory-floor fabrication, cold-formed section precision cuts, and off-site modular assembly.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "skilled-workers",
     "sort_order": 0,
     "published": true
@@ -102,7 +102,7 @@
     "name": "Kabir Hossain",
     "role": "Master Erector & High-Tensile Welding Lead",
     "bio": "Oversees certified steel framing erection, anchor bolt securing, and weather-tight roof panel fitting on site.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "skilled-workers",
     "sort_order": 1,
     "published": true
@@ -111,7 +111,7 @@
     "name": "Sharmin Sultana",
     "role": "Customer Support & Post-Handover Lead",
     "bio": "Ensures prompt responses from Saturday to Thursday, coordinates maintenance requests, and ensures complete client satisfaction.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "client-service",
     "sort_order": 0,
     "published": true
@@ -120,7 +120,7 @@
     "name": "Imran Hossain",
     "role": "Project Consultation & Site Visit Coordinator",
     "bio": "Coordinates field engineer visits across all 64 districts and manages customer inquiry intake.",
-    "photo": "images/about-team.webp",
+    "photo": null,
     "department": "client-service",
     "sort_order": 1,
     "published": true

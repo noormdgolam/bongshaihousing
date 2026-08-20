@@ -1515,7 +1515,7 @@ router.get('/admin/team-members', async (req, res) => {
 
 router.get('/admin/team-members/new', (req, res) => {
   res.render('admin/team-members/form.njk', adminVars(req, {
-    member: { published: true, sort_order: 0, photo: 'images/about-team.webp', department: 'senior-management' },
+    member: { published: true, sort_order: 0, photo: '', department: 'senior-management' },
     departments: TEAM_DEPARTMENTS,
     error: null,
   }));
@@ -1530,7 +1530,7 @@ router.post('/admin/team-members', upload.single('photo_file'), async (req, res)
     if (!name || !name.trim()) throw new Error('Full Name is required');
     if (!role || !role.trim()) throw new Error('Role / Designation is required');
 
-    let photoPath = photo ? photo.trim().replace(/^\/+/, '') : 'images/about-team.webp';
+    let photoPath = photo ? photo.trim().replace(/^\/+/, '') : null;
     if (req.file) {
       photoPath = await processAndSaveImage(req.file.buffer, req.file.originalname, { maxWidth: 800 });
     }
@@ -1587,7 +1587,7 @@ router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, 
     if (!name || !name.trim()) throw new Error('Full Name is required');
     if (!role || !role.trim()) throw new Error('Role / Designation is required');
 
-    let photoPath = photo ? photo.trim().replace(/^\/+/, '') : 'images/about-team.webp';
+    let photoPath = photo ? photo.trim().replace(/^\/+/, '') : null;
     if (req.file) {
       photoPath = await processAndSaveImage(req.file.buffer, req.file.originalname, { maxWidth: 800 });
     }

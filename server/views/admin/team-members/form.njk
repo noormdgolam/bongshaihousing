@@ -46,12 +46,13 @@
       <label style="font-weight:700; color:var(--grey-900); margin-bottom:8px; display:block;">Profile Photo</label>
       <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
         <div style="width:72px; height:72px; border-radius:10px; overflow:hidden; background:var(--grey-200); border:1px solid var(--grey-300); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <img id="photo_preview" src="/{{ member.photo or 'images/about-team.webp' }}" alt="Preview" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='/images/about-team.webp';">
+          <img id="photo_preview" src="/{{ member.photo }}" alt="Preview" style="width:100%; height:100%; object-fit:cover; {% if not member.photo %}display:none;{% endif %}" onerror="this.style.display='none'; document.getElementById('photo_preview_placeholder').style.display='block';">
+          <span id="photo_preview_placeholder" style="font-size:1.6rem; {% if member.photo %}display:none;{% endif %}" aria-hidden="true">👤</span>
         </div>
         <div style="flex:1; min-width:240px;">
-          <input type="file" name="photo_file" accept="image/*" onchange="const f=this.files[0];if(f){const r=new FileReader();r.onload=e=>document.getElementById('photo_preview').src=e.target.result;r.readAsDataURL(f);}">
-          <div style="font-size:0.8rem; color:var(--grey-500); margin-top:6px;">Upload image (JPG, PNG, WebP). Or provide existing relative path below:</div>
-          <input type="text" id="photo" name="photo" value="{{ member.photo or 'images/about-team.webp' }}" placeholder="e.g. images/about-team.webp" style="margin-top:6px; font-size:0.85rem;" oninput="document.getElementById('photo_preview').src='/' + this.value.replace(/^\/+/,'');">
+          <input type="file" name="photo_file" accept="image/*" onchange="const f=this.files[0];if(f){const r=new FileReader();r.onload=e=>{const img=document.getElementById('photo_preview');img.src=e.target.result;img.style.display='block';document.getElementById('photo_preview_placeholder').style.display='none';};r.readAsDataURL(f);}">
+          <div style="font-size:0.8rem; color:var(--grey-500); margin-top:6px;">Upload a real photo of this person (JPG, PNG, WebP). No photo yet? Leave blank - the site shows their initials instead of a stock image.</div>
+          <input type="text" id="photo" name="photo" value="{{ member.photo or '' }}" placeholder="e.g. images/team/jane-doe.webp" style="margin-top:6px; font-size:0.85rem;" oninput="const img=document.getElementById('photo_preview'); const path='/' + this.value.replace(/^\/+/,''); if (this.value) { img.src=path; img.style.display='block'; document.getElementById('photo_preview_placeholder').style.display='none'; } else { img.style.display='none'; document.getElementById('photo_preview_placeholder').style.display='block'; }">
         </div>
       </div>
     </div>

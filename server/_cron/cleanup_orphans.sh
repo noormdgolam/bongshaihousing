@@ -9,8 +9,19 @@
 #        -d force dry run even if -f is also passed
 #        -v also echo log lines to stdout (for interactive/SSH runs)
 
-APP_PATTERN="lsnode:/home/abongsha/bongshai-node-app"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Derived from this script's own deployed location (not hardcoded) so the
+# same file works correctly for both bongshai-node-app and
+# bongshai-node-app-prod without per-environment edits. "bongshai-node-app"
+# is a string-prefix of "bongshai-node-app-prod" though, so a plain `pgrep
+# -f` substring match on the shorter (staging) pattern would also catch the
+# longer (prod) app's processes, pooling both apps' workers together and
+# letting one cron pass kill the other app's only live process. The
+# post-filter below requires the match be followed by "/" or end-of-string,
+# not another path-name character, to keep the two apps' process pools
+# genuinely separate.
+APP_DIR="$(dirname "$SCRIPT_DIR")"
+APP_PATTERN="lsnode:${APP_DIR}"
 LOG_FILE="$SCRIPT_DIR/cleanup_orphans.log"
 FORCE=0
 VERBOSE=0
@@ -30,8 +41,17 @@ log() {
 
 log "cleanup_orphans.sh invoked (pid $$, args: $*)"
 
-# oldest-first PID list for matching processes, keyed by process start time
+# oldest-first PID list for matching processes, keyed by process start time.
+# Re-checks each pgrep hit's full command line to reject a same-prefix
+# collision from a sibling app (see comment above APP_PATTERN) before
+# counting it as one of ours.
 PIDS=$(pgrep -f "$APP_PATTERN" | while read -r pid; do
+  cmd=$(ps -o args= -p "$pid" 2>/dev/null)
+  case "$cmd" in
+    *"${APP_PATTERN}/"*) ;;
+    *"${APP_PATTERN}") ;;
+    *) continue ;;
+  esac
   etime=$(ps -o lstart= -p "$pid" 2>/dev/null)
   [ -n "$etime" ] && echo "$(date -d "$etime" +%s 2>/dev/null) $pid"
 done | sort -n | awk '{print $2}')

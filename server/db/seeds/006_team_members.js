@@ -12,7 +12,7 @@ exports.seed = async function (knex) {
         name: m.name,
         role: m.role,
         bio: m.bio || '',
-        photo: m.photo || 'images/about-team.webp',
+        photo: m.photo || null,
         department: m.department || 'senior-management',
         sort_order: typeof m.sort_order === 'number' ? m.sort_order : i,
         published: typeof m.published === 'boolean' ? m.published : true,

@@ -239,9 +239,16 @@ for (const { file, dept } of TEAM_PAGES) {
       let dbTeamMembers = [];
       if (db) {
         try {
-          dbTeamMembers = await db('team_members')
+          const rows = await db('team_members')
             .where({ department: dept, published: true })
             .orderBy('sort_order', 'asc');
+          // No stock "team photo" fallback - an unset photo renders as an
+          // initials avatar instead, since a fake photo on a real named
+          // person misrepresents who they are.
+          dbTeamMembers = rows.map((m) => ({
+            ...m,
+            initials: m.name.split(' ').filter(Boolean).map((w) => w[0]).join('').slice(0, 2).toUpperCase(),
+          }));
         } catch (err) {
           console.error(`team_members DB fetch failed for ${dept}, rendering static fallback:`, err.message);
         }
