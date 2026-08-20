@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const { cacheMiddleware } = require('../lib/pageCache');
-const db = require('../lib/db');
 
 router.use(cacheMiddleware);
 
