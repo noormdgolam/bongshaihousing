@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const { cacheMiddleware } = require('../lib/pageCache');
+const db = require('../lib/db');
 
 router.use(cacheMiddleware);
 
@@ -265,16 +266,40 @@ for (const { file, dept } of TEAM_PAGES) {
 // /projects.html and category landing pages are already registered above with
 // dynamic handlers, so Express will match them first and never reach them here.
 for (const [urlPath, meta] of Object.entries(registry)) {
-  router.get(urlPath, (req, res, next) => {
-    res.render(meta.template, renderVars(meta), (err, html) => {
-      if (err) {
-        if (err.message && err.message.includes('template not found')) {
-          return next();
+  router.get(urlPath, async (req, res, next) => {
+    try {
+      let pageContent = null;
+      let pageTitle = meta.title;
+
+      if (db) {
+        try {
+          const row = await db('page_content').where({ url_path: urlPath }).first();
+          if (row) {
+            pageContent = row.content_html;
+            if (row.title) pageTitle = row.title;
+          }
+        } catch (dbErr) {
+          // Ignore if table doesn't exist yet or local DB is offline
         }
-        return next(err);
       }
-      res.send(html);
-    });
+
+      const vars = renderVars({ ...meta, title: pageTitle });
+      if (pageContent) {
+        vars.pageContent = pageContent;
+      }
+
+      res.render(meta.template, vars, (err, html) => {
+        if (err) {
+          if (err.message && err.message.includes('template not found')) {
+            return next();
+          }
+          return next(err);
+        }
+        res.send(html);
+      });
+    } catch (err) {
+      next(err);
+    }
   });
 }
 

@@ -2358,4 +2358,43 @@ router.post('/admin/seo/generate', requireRole('admin', 'superadmin', 'editor'),
   }
 });
 
+// --- MARKETING PAGES CMS ---
+router.get('/admin/pages', requireRole('admin', 'editor'), async (req, res) => {
+  try {
+    const pages = await db('page_content').orderBy('title');
+    res.render('admin/pages-list.njk', adminVars(req, { pages }));
+  } catch (err) {
+    res.render('admin/pages-list.njk', adminVars(req, { pages: [], error: 'Table not initialized. Please run the extraction script on the server.' }));
+  }
+});
+
+router.get('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res) => {
+  const urlPath = req.query.url;
+  try {
+    const page = await db('page_content').where({ url_path: urlPath }).first();
+    if (!page) {
+      return res.redirect('/admin/pages?error=Page+not+found');
+    }
+    res.render('admin/pages-form.njk', adminVars(req, { page }));
+  } catch (err) {
+    res.redirect('/admin/pages?error=Database+error');
+  }
+});
+
+router.post('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res) => {
+  const { url_path, title, content_html } = req.body;
+  try {
+    await db('page_content').where({ url_path }).update({
+      title: (title || '').trim(),
+      content_html: (content_html || '').trim(),
+      updated_at: db.fn.now()
+    });
+    // cache invalidation is handled by the middleware!
+    res.redirect('/admin/pages?success=1');
+  } catch (err) {
+    console.error('Error updating page:', err);
+    res.redirect(`/admin/pages/edit?url=${encodeURIComponent(url_path)}&error=Update+failed`);
+  }
+});
+
 module.exports = router;

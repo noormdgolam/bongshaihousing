@@ -82,6 +82,9 @@
 {% endblock %}
 
 {% block content %}
+{% if pageContent %}
+  {{ pageContent | safe }}
+{% else %}
 <section class="page-hero" aria-labelledby="gallery-page-title">
       <div class="container page-hero-content">
         <span class="page-hero-label">Our Portfolio</span>
@@ -258,6 +261,7 @@
         </div>
       </div>
     </section>
+{% endif %}
 {% endblock %}
 
 {% block content_after %}

@@ -1,0 +1,32 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Edit {{ page.title }}{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <h1 style="margin:0; font-size:1.4rem; color:var(--grey-900);">Edit Page: {{ page.url_path }}</h1>
+  <a href="/admin/pages" class="btn">Back to List</a>
+</div>
+
+{% if req.query.error %}
+<div class="alert alert-danger" style="margin-bottom:20px;">{{ req.query.error }}</div>
+{% endif %}
+
+<form action="/admin/pages/edit" method="POST" class="card" style="padding:24px;">
+  <input type="hidden" name="url_path" value="{{ page.url_path }}">
+  
+  <div class="form-group" style="margin-bottom:20px;">
+    <label style="display:block; font-weight:600; margin-bottom:8px;">Page Title</label>
+    <input type="text" name="title" value="{{ page.title }}" class="form-control" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;" required>
+  </div>
+  
+  <div class="form-group" style="margin-bottom:20px;">
+    <label style="display:block; font-weight:600; margin-bottom:8px;">Page HTML Content</label>
+    <p style="font-size:0.85rem; color:var(--grey-500); margin-top:0;">You can use standard HTML markup here.</p>
+    <textarea name="content_html" class="form-control" style="width:100%; padding:12px; border:1px solid #ccc; border-radius:4px; font-family:monospace; min-height:400px; resize:vertical;" required>{{ page.content_html }}</textarea>
+  </div>
+  
+  <div style="display:flex; justify-content:flex-end;">
+    <button type="submit" class="btn btn-primary" style="padding:10px 24px; font-weight:bold;">Save Changes</button>
+  </div>
+</form>
+{% endblock %}

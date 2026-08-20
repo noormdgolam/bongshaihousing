@@ -62,6 +62,9 @@
 {% endblock %}
 
 {% block content %}
+{% if pageContent %}
+  {{ pageContent | safe }}
+{% else %}
 <!-- PAGE HERO -->
     <section class="page-hero" aria-labelledby="solutions-page-title">
       <div class="container page-hero-content">
@@ -258,6 +261,7 @@
         </div>
       </div>
     </section>
+{% endif %}
 {% endblock %}
 
 {% block content_after %}

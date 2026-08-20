@@ -44,6 +44,9 @@
 {% endblock %}
 
 {% block content %}
+{% if pageContent %}
+  {{ pageContent | safe }}
+{% else %}
 <!-- PAGE HERO -->
 <section aria-labelledby="villa-page-title" class="page-hero">
 <div class="container page-hero-content">
@@ -221,4 +224,5 @@
         </div>
       </div>
     </section>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,48 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Marketing Pages CMS{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <h1 style="margin:0; font-size:1.4rem; color:var(--grey-900);">Marketing Pages</h1>
+</div>
+
+{% if error %}
+<div class="alert alert-danger" style="margin-bottom:20px;">{{ error }}</div>
+{% endif %}
+
+{% if req.query.success %}
+<div class="alert alert-success" style="margin-bottom:20px;">Page updated successfully.</div>
+{% endif %}
+
+<div class="card" style="padding:0; overflow-x:auto;">
+  <table class="table" style="width:100%; border-collapse:collapse; text-align:left;">
+    <thead>
+      <tr style="border-bottom:1px solid #e2e8f0; background:#f8fafc;">
+        <th style="padding:12px 16px; font-weight:600; color:var(--grey-500); font-size:0.85rem;">Title</th>
+        <th style="padding:12px 16px; font-weight:600; color:var(--grey-500); font-size:0.85rem;">URL Path</th>
+        <th style="padding:12px 16px; font-weight:600; color:var(--grey-500); font-size:0.85rem;">Last Updated</th>
+        <th style="padding:12px 16px; font-weight:600; color:var(--grey-500); font-size:0.85rem; width:100px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for page in pages %}
+      <tr style="border-bottom:1px solid #e2e8f0;">
+        <td style="padding:12px 16px; font-weight:500;">{{ page.title }}</td>
+        <td style="padding:12px 16px; color:var(--grey-500);"><a href="{{ page.url_path }}" target="_blank" style="color:var(--primary); text-decoration:none;">{{ page.url_path }}</a></td>
+        <td style="padding:12px 16px; font-size:0.85rem; color:var(--grey-500);">
+          {{ page.updated_at.toLocaleDateString() if page.updated_at else 'Unknown' }}
+        </td>
+        <td style="padding:12px 16px;">
+          <a href="/admin/pages/edit?url={{ page.url_path | urlencode }}" class="btn btn-sm btn-primary">Edit</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4" style="padding:24px; text-align:center; color:var(--grey-500);">
+          No pages extracted yet. Run the extraction script.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

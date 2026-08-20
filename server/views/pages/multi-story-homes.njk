@@ -53,6 +53,9 @@
 {% endblock %}
 
 {% block content %}
+{% if pageContent %}
+  {{ pageContent | safe }}
+{% else %}
 <section aria-labelledby="page-title" class="page-hero">
 <div class="container page-hero-content">
 <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Multi-Story Homes</h1>
@@ -154,4 +157,5 @@
         </div>
       </div>
     </section>
+{% endif %}
 {% endblock %}

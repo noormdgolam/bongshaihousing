@@ -87,6 +87,9 @@
 {% endblock %}
 
 {% block content %}
+{% if pageContent %}
+  {{ pageContent | safe }}
+{% else %}
 <section class="page-hero" style="background: linear-gradient(135deg, #004d7a, #008793);" aria-labelledby="page-title">
       <div class="container page-hero-content">
         <div style="font-size:4rem; margin-bottom:10px;">🏆</div>
@@ -130,4 +133,5 @@
         
       </div>
     </section>
+{% endif %}
 {% endblock %}

@@ -102,6 +102,9 @@
 {% endblock %}
 
 {% block content %}
+{% if pageContent %}
+  {{ pageContent | safe }}
+{% else %}
 <section aria-labelledby="ssb-page-title" class="page-hero"{% if dbCategory and dbCategory.hero_image %} style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.85)), url('/{{ dbCategory.hero_image | replace('^/', '') }}') center/cover no-repeat;"{% endif %}>
 <div class="container page-hero-content">
 <span class="page-hero-label">Composite Construction</span>
@@ -761,4 +764,5 @@
 </div>
 </div>
 </div>
+{% endif %}
 {% endblock %}
