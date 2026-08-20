@@ -28,14 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', (e) => {
       const targetUrl = link.getAttribute('href');
       
-      // Don't intercept external links, anchors, or target="_blank"
+      // Don't intercept external links, anchors, target="_blank", or links
+      // that already handle their own click (e.g. the product gallery
+      // lightbox trigger). Without this exclusion this listener still fires
+      // alongside the link's own handler - our own e.preventDefault() only
+      // blocks the browser's native navigation, not this script's separate
+      // window.location.href call 400ms later, so a lightbox/modal trigger
+      // would open correctly and then get yanked into a real navigation to
+      // its href a moment after, regardless of what its own script did.
       if (
         targetUrl.startsWith('http') ||
         targetUrl.startsWith('mailto:') ||
         targetUrl.startsWith('tel:') ||
         targetUrl.startsWith('#') ||
         link.getAttribute('target') === '_blank' ||
-        e.ctrlKey || 
+        link.hasAttribute('data-no-transition') ||
+        link.hasAttribute('data-pd-lightbox') ||
+        e.ctrlKey ||
         e.metaKey
       ) {
         return;
