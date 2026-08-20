@@ -186,6 +186,10 @@
     <span class="pill pill-success">Live Tracking Active</span>
   </div>
 
+  {% if ipExcluded %}
+  <p style="margin:0 0 12px; padding:8px 12px; background:rgba(16,185,129,0.1); border-left:3px solid var(--success); font-size:0.85rem; border-radius:4px;">IP excluded from real-traffic views.</p>
+  {% endif %}
+
   <!-- Search & Filter Controls -->
   <form method="GET" action="/admin/analytics" class="filter-bar">
     <input type="text" name="q" placeholder="Search by IP, Path, City, or Referrer..." value="{{ activeFilter.q }}" class="filter-input" />
@@ -196,11 +200,21 @@
       <option value="Tablet" {% if activeFilter.device == 'Tablet' %}selected{% endif %}>Tablet</option>
       <option value="Bot / Crawler" {% if activeFilter.device == 'Bot / Crawler' %}selected{% endif %}>Bot / Crawler</option>
     </select>
+    <select name="source" class="filter-select">
+      <option value="">All Traffic Sources</option>
+      {% for s in sourceOptions %}
+      <option value="{{ s }}" {% if activeFilter.source == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+    <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; color:var(--grey-700); white-space:nowrap;">
+      <input type="checkbox" name="exclude_bots" value="1" {% if activeFilter.excludeBots %}checked{% endif %}> Real traffic only
+    </label>
     <button type="submit" class="btn btn-primary">Filter</button>
-    {% if activeFilter.q or activeFilter.device or activeFilter.country %}
+    {% if activeFilter.q or activeFilter.device or activeFilter.source or activeFilter.excludeBots or activeFilter.country %}
     <a href="/admin/analytics" class="btn">Reset</a>
     {% endif %}
   </form>
+  <p style="font-size:0.78rem; color:var(--grey-500); margin:6px 0 0;">"Real traffic only" hides known bots/crawlers, IPs you've excluded below, and any IP that's hit the site more than 15 times in the last 10 minutes (a rate no real visitor browses at).</p>
 
   <div style="overflow-x:auto;">
     <table class="visitor-table">
@@ -213,11 +227,12 @@
           <th>Device &amp; OS</th>
           <th>Browser</th>
           <th>Traffic Source</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {% for v in recentVisitors %}
-        <tr>
+        <tr{% if v.isBot or v.isRateFlagged or v.isExcluded %} style="opacity:0.6;"{% endif %}>
           <td style="white-space:nowrap; color:var(--grey-700); font-size:0.82rem;">
             🕒 {{ v.formattedTime }}
           </td>
@@ -225,6 +240,8 @@
             <span class="ip-badge {% if v.country_code == 'LOC' %}badge-dev{% endif %}">
               {{ v.ip or '127.0.0.1' }}
             </span>
+            {% if v.isRateFlagged %}<span class="pill pill-danger" style="font-size:0.68rem; padding:2px 6px;" title="Hit the site more than 15 times in the last 10 minutes">⚡ Rapid</span>{% endif %}
+            {% if v.isExcluded %}<span class="pill pill-muted" style="font-size:0.68rem; padding:2px 6px;">Excluded</span>{% endif %}
           </td>
           <td>
             <div style="display:flex; align-items:center; gap:6px;">
@@ -266,10 +283,18 @@
           <td>
             <span style="font-size:0.8rem; color:var(--grey-600);">{{ v.referrer or 'Direct Traffic' }}</span>
           </td>
+          <td>
+            {% if not v.isExcluded and v.ip %}
+            <form method="post" action="/admin/analytics/exclude-ip" style="margin:0;" onsubmit="return confirm('Exclude {{ v.ip }} from real-traffic views? (e.g. your own testing IP)');">
+              <input type="hidden" name="ip" value="{{ v.ip }}">
+              <button type="submit" class="btn" style="padding:3px 8px; font-size:0.72rem;">Exclude IP</button>
+            </form>
+            {% endif %}
+          </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="7" class="an-empty">
+          <td colspan="8" class="an-empty">
             No visitor logs match your search or filter. Visit any page on the site to see hits appear here in real time.
           </td>
         </tr>
@@ -277,6 +302,37 @@
       </tbody>
     </table>
   </div>
+</div>
+
+<div class="card" style="margin-top:20px;">
+  <h3 style="margin-top:0;">🚫 Excluded IPs</h3>
+  <p style="font-size:0.85rem; color:var(--grey-500); margin-top:-4px;">Hits from these IPs are hidden whenever "Real traffic only" is checked above - use this for your own office/testing IP or anything else you know isn't a real customer.</p>
+  <form method="post" action="/admin/analytics/exclude-ip" style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+    <input type="text" name="ip" placeholder="IP address" required class="filter-input" style="max-width:220px;">
+    <input type="text" name="label" placeholder="Label (optional, e.g. \"Office\")" class="filter-input" style="max-width:220px;">
+    <button type="submit" class="btn">Add</button>
+  </form>
+  {% if excludedIpsList.length %}
+  <table>
+    <thead><tr><th>IP</th><th>Label</th><th>Added</th><th></th></tr></thead>
+    <tbody>
+      {% for e in excludedIpsList %}
+      <tr>
+        <td>{{ e.ip }}</td>
+        <td>{{ e.label or '—' }}</td>
+        <td>{{ e.created_at | date }}</td>
+        <td>
+          <form method="post" action="/admin/analytics/exclude-ip/{{ e.id }}/delete" style="margin:0;" onsubmit="return confirm('Stop excluding {{ e.ip }}?');">
+            <button type="submit" class="btn btn-danger" style="padding:3px 10px; font-size:0.75rem;">Remove</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color:var(--grey-500); font-size:0.85rem;">No IPs excluded yet.</p>
+  {% endif %}
 </div>
 
 <!-- Inquiries & Funnel Analytics -->

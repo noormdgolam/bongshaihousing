@@ -1955,7 +1955,7 @@ router.get('/admin/analytics', async (req, res) => {
     leadFunnel: [], leadTrend: [], topModels: [], leadSources: [],
     topPages: [], trafficTrend: [], totalViews30d: 0, totalLeads30d: 0,
     recentVisitors: [], countryBreakdown: [], deviceBreakdown: [], browserBreakdown: [],
-    uniqueVisitors30d: 0, activeFilter: {},
+    uniqueVisitors30d: 0, sourceOptions: [], excludedIpsList: [], ipExcluded: null, activeFilter: {},
   };
   if (!db) return res.render('admin/analytics.njk', adminVars(req, empty));
 
@@ -1992,11 +1992,40 @@ router.get('/admin/analytics', async (req, res) => {
     let deviceBreakdown = [];
     let browserBreakdown = [];
     let uniqueVisitors30d = 0;
+    let sourceOptions = [];
+
+    let excludedIpsList = [];
+    let botRateThresholdHit = [];
 
     if (hasViews) {
       const filterCountry = (req.query.country || '').trim();
       const filterDevice = (req.query.device || '').trim();
+      const filterSource = (req.query.source || '').trim();
+      const excludeBots = req.query.exclude_bots === '1';
       const searchQuery = (req.query.q || '').trim();
+
+      const hasExcludedIps = await db.schema.hasTable('excluded_traffic_ips');
+      excludedIpsList = hasExcludedIps ? await db('excluded_traffic_ips').orderBy('created_at', 'desc') : [];
+      const excludedIpSet = new Set(excludedIpsList.map((r) => r.ip));
+
+      // Rate-based bot detection - UA-string matching (visitor-tracker.js's
+      // device_type classifier) only catches bots that self-identify; a
+      // scanner or headless browser using a real Chrome UA sails right
+      // through it. An IP hammering the site well past normal human
+      // browsing speed is the same "sudden spike from a single source"
+      // signal every bot-traffic guide leads with, and doesn't need the UA
+      // string's cooperation to catch.
+      const BOT_RATE_WINDOW_MINUTES = 10;
+      const BOT_RATE_THRESHOLD = 15;
+      const rateFlagged = await db('page_views')
+        .where('created_at', '>=', db.raw(`DATE_SUB(NOW(), INTERVAL ${BOT_RATE_WINDOW_MINUTES} MINUTE)`))
+        .whereNotNull('ip')
+        .select('ip')
+        .count({ count: '*' })
+        .groupBy('ip')
+        .having(db.raw('count(*)'), '>', BOT_RATE_THRESHOLD);
+      botRateThresholdHit = rateFlagged.map((r) => r.ip);
+      const rateFlaggedSet = new Set(botRateThresholdHit);
 
       let visitorQuery = db('page_views').orderBy('id', 'desc').limit(60);
 
@@ -2006,6 +2035,9 @@ router.get('/admin/analytics', async (req, res) => {
       if (filterDevice) {
         visitorQuery = visitorQuery.where('device_type', filterDevice);
       }
+      if (filterSource) {
+        visitorQuery = visitorQuery.where('referrer', filterSource);
+      }
       if (searchQuery) {
         visitorQuery = visitorQuery.where((builder) => {
           builder.where('ip', 'like', `%${searchQuery}%`)
@@ -2013,6 +2045,13 @@ router.get('/admin/analytics', async (req, res) => {
             .orWhere('country', 'like', `%${searchQuery}%`)
             .orWhere('city', 'like', `%${searchQuery}%`)
             .orWhere('referrer', 'like', `%${searchQuery}%`);
+        });
+      }
+      if (excludeBots) {
+        visitorQuery = visitorQuery.where((builder) => {
+          builder.whereNot('device_type', 'Bot / Crawler');
+          if (excludedIpsList.length) builder.whereNotIn('ip', [...excludedIpSet]);
+          if (botRateThresholdHit.length) builder.whereNotIn('ip', [...rateFlaggedSet]);
         });
       }
 
@@ -2024,6 +2063,7 @@ router.get('/admin/analytics', async (req, res) => {
         devices,
         browsers,
         uniqueRes,
+        sourceRows,
       ] = await Promise.all([
         db('page_views').where('created_at', '>=', db.raw('DATE_SUB(NOW(), INTERVAL 30 DAY)'))
           .select('path').count({ count: '*' }).groupBy('path').orderBy('count', 'desc').limit(10),
@@ -2051,6 +2091,12 @@ router.get('/admin/analytics', async (req, res) => {
           .whereNotNull('ip')
           .countDistinct({ count: 'ip' })
           .first(),
+        db('page_views').whereNotNull('referrer').where('referrer', '!=', '')
+          .select('referrer')
+          .count({ count: '*' })
+          .groupBy('referrer')
+          .orderBy('count', 'desc')
+          .limit(15),
       ]);
 
       topPages = tp;
@@ -2064,6 +2110,7 @@ router.get('/admin/analytics', async (req, res) => {
 
       deviceBreakdown = devices;
       browserBreakdown = browsers;
+      sourceOptions = sourceRows.map((r) => r.referrer);
 
       recentVisitors = visitors.map((v) => ({
         ...v,
@@ -2084,6 +2131,9 @@ router.get('/admin/analytics', async (req, res) => {
         // they're bot/scanner probes - so don't render them as if they were
         // a working link.
         isKnownPath: (v.path || '') === '/' || /\.html$/i.test(v.path || '') || (v.path || '').startsWith('/my-project'),
+        isBot: v.device_type === 'Bot / Crawler',
+        isRateFlagged: rateFlaggedSet.has(v.ip),
+        isExcluded: excludedIpSet.has(v.ip),
       }));
     }
 
@@ -2094,9 +2144,13 @@ router.get('/admin/analytics', async (req, res) => {
       leadFunnel, leadTrend, topModels, leadSources, topPages, trafficTrend,
       totalViews30d, totalLeads30d, uniqueVisitors30d,
       recentVisitors, countryBreakdown, deviceBreakdown, browserBreakdown,
+      sourceOptions, excludedIpsList,
+      ipExcluded: req.query.ipExcluded || null,
       activeFilter: {
         country: (req.query.country || '').trim(),
         device: (req.query.device || '').trim(),
+        source: (req.query.source || '').trim(),
+        excludeBots: req.query.exclude_bots === '1',
         q: (req.query.q || '').trim(),
       },
     }));
@@ -2104,6 +2158,23 @@ router.get('/admin/analytics', async (req, res) => {
     console.error('Analytics query error:', err.message);
     res.render('admin/analytics.njk', adminVars(req, empty));
   }
+});
+
+router.post('/admin/analytics/exclude-ip', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  const ip = (req.body.ip || '').trim();
+  if (ip) {
+    await db('excluded_traffic_ips').insert({ ip, label: (req.body.label || '').trim() || null }).onConflict('ip').merge();
+    await logActivity(req, { action: 'create', entityType: 'excluded_traffic_ip', summary: `Excluded IP ${ip} from real-traffic views` });
+  }
+  res.redirect('/admin/analytics?ipExcluded=1');
+});
+
+router.post('/admin/analytics/exclude-ip/:id/delete', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  await db('excluded_traffic_ips').where({ id: req.params.id }).del();
+  res.redirect('/admin/analytics');
 });
 
 // ---- SEO Automation ----
