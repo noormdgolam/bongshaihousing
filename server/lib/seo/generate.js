@@ -1,9 +1,34 @@
 const db = require('../db');
 const { callAI } = require('./ai-client');
 
-const SYSTEM_PROMPT = `You are an SEO copywriter for Bongshai Housing, a real prefab steel building company in Bangladesh selling readymade steel houses, duplexes, cottages, and industrial sheds. You write factual, specific, non-generic SEO copy grounded ONLY in the data given to you - never invent prices, specs, or claims not present in the input. Write for a Bangladeshi audience; Taka pricing, district-level geography.
+const SYSTEM_PROMPT = `You are an SEO copywriter for Bongshai Housing, a real prefab steel building company in Bangladesh selling readymade steel houses, duplexes, cottages, and industrial sheds. You write factual, specific, non-generic SEO copy grounded ONLY in the data given to you - never invent prices, specs, or claims not present in the input. Write for a Bangladeshi audience; Taka pricing, district-level geography.`;
 
-Respond with strict JSON only, no markdown fences, no commentary: an array of objects, each with "field" (string), "value" (string), and "reasoning" (one short sentence).`;
+// Groq's structured-outputs mode (see ai-client.js) guarantees a response
+// matching this schema exactly - the field enum also does double duty as
+// input validation, since FIELD_MAP below only recognizes these four names.
+const RESPONSE_SCHEMA = {
+  name: 'seo_suggestions',
+  schema: {
+    type: 'object',
+    properties: {
+      suggestions: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            field: { type: 'string', enum: ['meta_title', 'meta_description', 'alt_text', 'content_copy'] },
+            value: { type: 'string' },
+            reasoning: { type: 'string' },
+          },
+          required: ['field', 'value', 'reasoning'],
+          additionalProperties: false,
+        },
+      },
+    },
+    required: ['suggestions'],
+    additionalProperties: false,
+  },
+};
 
 function buildProductPrompt(product) {
   return `Product: ${product.title} (model ${product.model_number})
@@ -20,7 +45,7 @@ Generate, grounded strictly in the facts above:
 3. field "alt_text": descriptive alt text for the main product image, under 125 characters.
 4. field "content_copy": ONLY if the current description is missing or under 80 characters - a factual 2-3 sentence product description using nothing but the facts given above. Skip this field entirely if a real description already exists; do not rewrite copy that already reads fine.
 
-Only include fields that are missing or clearly weak - skip any that are already good. Return JSON array as instructed.`;
+Only include fields that are missing or clearly weak - skip any that are already good. If everything already reads fine, return an empty suggestions list.`;
 }
 
 async function generateForProduct(productId) {
@@ -31,18 +56,11 @@ async function generateForProduct(productId) {
     .first();
   if (!product) throw new Error('Product not found');
 
-  const raw = await callAI(SYSTEM_PROMPT, buildProductPrompt(product), { maxTokens: 800 });
-  // Models frequently wrap JSON in a ```json fence despite being told not
-  // to - strip one if present rather than let every single generation
-  // fail on a formatting quirk that has nothing to do with the content.
-  const cleaned = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
-  let items;
-  try {
-    items = JSON.parse(cleaned);
-  } catch (e) {
-    throw new Error(`Claude response was not valid JSON: ${raw.slice(0, 200)}`);
-  }
-  if (!Array.isArray(items)) throw new Error('Claude response was not a JSON array');
+  const raw = await callAI(SYSTEM_PROMPT, buildProductPrompt(product), { maxTokens: 800, responseSchema: RESPONSE_SCHEMA });
+  // Structured-outputs mode guarantees this parses and matches the schema -
+  // no fence-stripping or shape-checking needed, Groq's constrained decoding
+  // can't produce anything else.
+  const items = JSON.parse(raw).suggestions;
 
   const FIELD_MAP = {
     meta_title: { suggestionType: 'meta_title', current: product.meta_title },
