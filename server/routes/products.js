@@ -80,7 +80,9 @@ function roomIcon(section) {
   return '🏠';
 }
 
-router.get('/:slug.html', async (req, res, next) => {
+const { cacheMiddleware } = require('../lib/pageCache');
+
+router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
   const slug = `${req.params.slug}.html`;
   if (!PRODUCT_SLUG_PATTERN.test(slug)) return next();
 

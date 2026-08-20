@@ -64,6 +64,35 @@ const documentUpload = multer({
 });
 
 const router = express.Router();
+const { invalidatePageCache, getCacheSize } = require('../lib/pageCache');
+
+// Auto-invalidate page cache on successful content mutations
+router.use('/admin', (req, res, next) => {
+  if (req.method === 'POST') {
+    const isContentRoute = /^\/admin\/(products|categories|projects|service-areas|faqs|team-members|testimonials|theme-editor|themes)/.test(req.originalUrl);
+    if (isContentRoute) {
+      const originalRedirect = res.redirect;
+      res.redirect = function (...args) {
+        invalidatePageCache();
+        return originalRedirect.apply(this, args);
+      };
+      const originalJson = res.json;
+      res.json = function (body) {
+        if (body && (body.success || body.status === 'success')) {
+          invalidatePageCache();
+        }
+        return originalJson.call(this, body);
+      };
+    }
+  }
+  next();
+});
+
+router.post('/admin/cache/clear', requireRole('admin', 'superadmin', 'editor'), (req, res) => {
+  invalidatePageCache();
+  res.redirect('/admin?cacheCleared=1');
+});
+
 router.use('/admin', requireAdmin);
 
 // Content-management sections are off-limits to the 'sales' role (scoped
@@ -261,6 +290,8 @@ router.get('/admin', async (req, res) => {
       env: process.env.NODE_ENV || 'production',
       serverTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
     },
+    cacheSize: getCacheSize(),
+    cacheCleared: req.query.cacheCleared === '1'
   }));
 });
 

@@ -2,6 +2,9 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const router = express.Router();
+const { cacheMiddleware } = require('../lib/pageCache');
+
+router.use(cacheMiddleware);
 
 // Data-driven page rendering: server/scripts/convert-pages.js extracts each
 // static page's head metadata + <main id="main-content"> body into a .njk
