@@ -14,12 +14,24 @@
   </div>
 </div>
 
+
 {% if suggestions.length %}
+<form method="post" action="/admin/seo/suggestions/bulk-approve" id="bulk-approve-form">
+  <div style="margin-bottom:15px; display:flex; gap:10px; align-items:center;">
+    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600; font-size:0.9rem;">
+      <input type="checkbox" id="select-all" onclick="toggleAllSuggestions(this)"> Select All Pending
+    </label>
+    <button type="submit" class="btn btn-primary" style="background:var(--success); border-color:var(--success); padding:6px 12px; font-size:0.85rem;" onclick="return confirmBulkApprove()">Bulk Approve Selected</button>
+  </div>
 {% for s in suggestions %}
 <div class="card">
   <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-    <div>
-      <strong style="font-size:0.95rem;">{{ s.target_label }}</strong>
+    <div style="display:flex; align-items:center; gap:10px;">
+      {% if s.status == 'pending' %}
+      <input type="checkbox" name="ids" value="{{ s.id }}" class="suggestion-checkbox">
+      {% endif %}
+      <div>
+        <strong style="font-size:0.95rem;">{{ s.target_label }}</strong>
       <span class="pill pill-muted" style="margin-left:6px;">{{ s.suggestion_type | replace('_', ' ') }}</span>
     </div>
     <span class="pill {% if s.status == 'approved' %}pill-success{% elif s.status == 'rejected' %}pill-muted{% endif %}">{{ s.status }}</span>
@@ -42,17 +54,64 @@
 
   {% if s.status == 'pending' %}
   <div style="display:flex; gap:8px; margin-top:14px;">
-    <form method="post" action="/admin/seo/suggestions/{{ s.id }}/approve" style="flex:1; margin:0;">
-      <button type="submit" class="btn btn-primary" style="width:100%; background:var(--success); border-color:var(--success);">{{ icons.icon('check-circle', 16) }} Approve &amp; Publish</button>
-    </form>
-    <form method="post" action="/admin/seo/suggestions/{{ s.id }}/reject" style="flex:1; margin:0;">
-      <button type="submit" class="btn btn-danger" style="width:100%;">{{ icons.icon('x-circle', 16) }} Reject</button>
-    </form>
+    <button type="button" onclick="submitSingleApprove('{{ s.id }}')" class="btn btn-primary" style="flex:1; background:var(--success); border-color:var(--success);">{{ icons.icon('check-circle', 16) }} Approve &amp; Publish</button>
+    <button type="button" onclick="submitSingleReject('{{ s.id }}')" class="btn btn-danger" style="flex:1;">{{ icons.icon('x-circle', 16) }} Reject</button>
   </div>
   {% endif %}
 </div>
 {% endfor %}
+</form>
 {% else %}
 <div class="card"><p style="color:var(--grey-500); margin:0;">No {{ statusFilter }} suggestions. Generate some from the SEO dashboard.</p></div>
 {% endif %}
+
+<script>
+function toggleAllSuggestions(source) {
+  const checkboxes = document.querySelectorAll('.suggestion-checkbox');
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+
+function confirmBulkApprove() {
+  const checkboxes = document.querySelectorAll('.suggestion-checkbox:checked');
+  if (checkboxes.length === 0) {
+    alert('Please select at least one suggestion to approve.');
+    return false;
+  }
+  return confirm(`Approve ${checkboxes.length} selected suggestions? This will instantly update live product data.`);
+}
+
+function submitSingleApprove(id) {
+  const form = document.createElement('form');
+  form.method = 'post';
+  form.action = `/admin/seo/suggestions/${id}/approve`;
+  const token = document.querySelector('meta[name="csrf-token"]');
+  if (token) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = '_csrf';
+    input.value = token.content;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+
+function submitSingleReject(id) {
+  const form = document.createElement('form');
+  form.method = 'post';
+  form.action = `/admin/seo/suggestions/${id}/reject`;
+  const token = document.querySelector('meta[name="csrf-token"]');
+  if (token) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = '_csrf';
+    input.value = token.content;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+</script>
 {% endblock %}

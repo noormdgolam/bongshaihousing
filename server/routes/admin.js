@@ -2352,6 +2352,44 @@ router.post('/admin/seo/suggestions/:id/approve', requireRole('admin', 'superadm
   res.redirect(req.get('Referer') || '/admin/seo/suggestions');
 });
 
+router.post('/admin/seo/suggestions/bulk-approve', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  let ids = req.body.ids;
+  if (!ids) return res.redirect('/admin/seo/suggestions');
+  if (!Array.isArray(ids)) ids = [ids]; // Handle single checkbox submission
+
+  let approvedCount = 0;
+  
+  try {
+    await db.transaction(async trx => {
+      for (const id of ids) {
+        const s = await trx('seo_suggestions').where({ id }).first();
+        if (!s || s.status !== 'pending') continue;
+
+        if (s.target_type === 'product' && s.target_id) {
+          const COLUMN_MAP = { meta_title: 'meta_title', meta_description: 'meta_description', alt_text: 'main_image_alt', content_copy: 'description' };
+          const column = COLUMN_MAP[s.suggestion_type];
+          if (column) {
+            await trx('products').where({ id: s.target_id }).update({ [column]: s.suggested_value, updated_at: db.fn.now() });
+          }
+        }
+        await trx('seo_suggestions').where({ id: s.id }).update({
+          status: 'approved', reviewed_at: db.fn.now(), reviewed_by: req.session.adminUserId,
+        });
+        approvedCount++;
+      }
+    });
+    if (approvedCount > 0) {
+      await logActivity(req, { action: 'update', entityType: 'seo_suggestion', summary: `Bulk approved ${approvedCount} SEO suggestion(s)` });
+    }
+  } catch (e) {
+    console.error('SEO bulk approve error:', e.message);
+  }
+  res.redirect(req.get('Referer') || '/admin/seo/suggestions');
+});
+
 router.post('/admin/seo/suggestions/:id/reject', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   await db('seo_suggestions').where({ id: req.params.id }).update({
     status: 'rejected', reviewed_at: db.fn.now(), reviewed_by: req.session.adminUserId,
