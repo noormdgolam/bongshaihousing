@@ -113,10 +113,16 @@
   </div>
 
   <script>
-    // List pages that are in the cache
+    // List pages that are in the cache. The cache name is versioned
+    // (bongshai-cache-vNN, bumped in sw.js whenever cached assets change) -
+    // look it up dynamically instead of hardcoding a version here, which
+    // silently drifts out of sync and leaves this list empty forever.
     if ('caches' in window) {
-      caches.open('bongshai-cache-v5').then(cache => {
-        cache.keys().then(requests => {
+      caches.keys().then(names => {
+        const cacheName = names.find(n => n.startsWith('bongshai-cache-'));
+        if (!cacheName) return;
+        return caches.open(cacheName).then(cache => {
+          cache.keys().then(requests => {
           const list = document.getElementById('cachedList');
           const container = document.getElementById('cachedPagesContainer');
           let hasPages = false;
@@ -141,6 +147,7 @@
           if (hasPages) {
             container.style.display = 'block';
           }
+          });
         });
       });
     }
