@@ -36,9 +36,9 @@ async function extractContent() {
     const pageData = {};
 
     for (const field of fields) {
-      // Regex to find: {{ pc.KEY | safe or "FALLBACK" | safe }}
-      // Note: Supports both single and double quotes around the fallback, and optional | safe filters
-      const regex = new RegExp(`\\{\\{\\s*pc\\.${field.key}\\s*(?:\\|\\s*safe\\s*)?or\\s*(['"])([\\s\\S]*?)\\1\\s*(?:\\|\\s*safe\\s*)?\\}\\}`);
+      // Regex to find: {{ pc.KEY or "FALLBACK" }} or {{ (pc.KEY or "FALLBACK") | safe }}
+      // Note: Supports both single and double quotes around the fallback, and optional () | safe wrappers
+      const regex = new RegExp(`\\{\\{\\s*(?:\\(\\s*)?pc\\.${field.key}\\s*or\\s*(['"])([\\s\\S]*?)\\1\\s*(?:\\)\\s*\\|\\s*safe)?\\s*\\}\\}`);
       const match = fileContent.match(regex);
       
       if (match) {

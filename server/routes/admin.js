@@ -1074,14 +1074,25 @@ router.post('/admin/categories', upload.single('hero_image_file'), async (req, r
 
   const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
+  
+  const isAjax = req.xhr || (req.headers.accept && req.headers.accept.includes('application/json')) || req.query.ajax;
+  
   try {
     const [id] = await db('categories').insert({
       slug, name, landing_page_slug: landing_page_slug || null,
       description: description || null, hero_image: finalImage,
       sort_order: sort_order || 0
     });
+    
+    if (isAjax) {
+      return res.json({ id, name, slug });
+    }
+    
     res.redirect(`/admin/categories/${id}/edit`);
   } catch (err) {
+    if (isAjax) {
+      return res.status(400).json({ error: err.message });
+    }
     res.status(400).render('admin/categories/form.njk', adminVars(req, { category: req.body, error: err.message }));
   }
 });

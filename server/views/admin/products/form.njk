@@ -7,10 +7,31 @@
 <form method="post" enctype="multipart/form-data" action="{% if product.id %}/admin/products/{{ product.id }}{% else %}/admin/products{% endif %}">
   <div class="form-row">
     <label for="category_id">Category</label>
-    <select id="category_id" name="category_id" required>
+    <select id="category_id" name="category_id" required onchange="toggleNewCategoryForm()">
       {% for c in categories %}<option value="{{ c.id }}" {% if product.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+      <option value="__new__" style="font-weight:bold; color:var(--primary);">+ Add New Category</option>
     </select>
   </div>
+  
+  <div id="inline-category-form" style="display:none; background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:12px; margin-bottom:15px; margin-top:-10px;">
+    <div style="font-size:0.85rem; font-weight:600; margin-bottom:8px; color:var(--grey-700);">Create New Category</div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+      <div style="flex:1; min-width:150px;">
+        <label for="new_category_name" style="font-size:0.75rem; display:block; margin-bottom:4px;">Name</label>
+        <input type="text" id="new_category_name" style="width:100%; padding:6px; font-size:0.85rem;" placeholder="e.g. Villas" oninput="document.getElementById('new_category_slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')">
+      </div>
+      <div style="flex:1; min-width:150px;">
+        <label for="new_category_slug" style="font-size:0.75rem; display:block; margin-bottom:4px;">Slug</label>
+        <input type="text" id="new_category_slug" style="width:100%; padding:6px; font-size:0.85rem;" placeholder="e.g. villas">
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" style="padding:6px 12px; font-size:0.85rem;" onclick="submitNewCategory()">Create</button>
+        <button type="button" class="btn" style="padding:6px 12px; font-size:0.85rem;" onclick="cancelNewCategory()">Cancel</button>
+      </div>
+    </div>
+    <div id="inline-category-error" style="color:var(--danger); font-size:0.8rem; margin-top:8px; display:none;"></div>
+  </div>
+
   <div class="form-row">
     <label for="model_number">Model Number</label>
     <input type="text" id="model_number" name="model_number" value="{{ product.model_number or '' }}" required>
@@ -257,6 +278,83 @@ function previewUrl(val, imgId, placeholderId) {
       img.style.display = 'block';
     }
     if (placeholder) placeholder.style.display = 'none';
+  }
+}
+function toggleNewCategoryForm() {
+  const select = document.getElementById('category_id');
+  const panel = document.getElementById('inline-category-form');
+  if (select.value === '__new__') {
+    panel.style.display = 'block';
+    document.getElementById('new_category_name').focus();
+  } else {
+    panel.style.display = 'none';
+  }
+}
+function cancelNewCategory() {
+  const select = document.getElementById('category_id');
+  const panel = document.getElementById('inline-category-form');
+  panel.style.display = 'none';
+  document.getElementById('new_category_name').value = '';
+  document.getElementById('new_category_slug').value = '';
+  document.getElementById('inline-category-error').style.display = 'none';
+  // Reset select to first available non-__new__ option
+  for (let i = 0; i < select.options.length; i++) {
+    if (select.options[i].value !== '__new__') {
+      select.selectedIndex = i;
+      break;
+    }
+  }
+}
+async function submitNewCategory() {
+  const name = document.getElementById('new_category_name').value;
+  const slug = document.getElementById('new_category_slug').value;
+  const errorDiv = document.getElementById('inline-category-error');
+  
+  if (!name || !slug) {
+    errorDiv.textContent = 'Name and slug are required.';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  errorDiv.style.display = 'none';
+  
+  const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+  const csrfToken = csrfMeta ? csrfMeta.content : '';
+  
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('slug', slug);
+    if (csrfToken) formData.append('_csrf', csrfToken);
+    
+    const res = await fetch('/admin/categories', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+    
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to create category');
+    }
+    
+    // Add to select and choose it
+    const select = document.getElementById('category_id');
+    const option = document.createElement('option');
+    option.value = data.id;
+    option.textContent = data.name;
+    // Insert before the "+ Add New Category" option
+    select.insertBefore(option, select.options[select.options.length - 1]);
+    select.value = data.id;
+    
+    // Cleanup
+    document.getElementById('inline-category-form').style.display = 'none';
+    document.getElementById('new_category_name').value = '';
+    document.getElementById('new_category_slug').value = '';
+    
+  } catch (err) {
+    errorDiv.textContent = err.message;
+    errorDiv.style.display = 'block';
   }
 }
 </script>

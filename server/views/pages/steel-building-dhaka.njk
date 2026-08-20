@@ -175,7 +175,7 @@
         </div>
 
         <h1 class="hero-title" data-aos="fade-up" id="hero-title" style="font-size: clamp(1.75rem, 3.5vw, 3rem); line-height: 1.15; letter-spacing: -0.02em;">
-          {{ pc.hero_title | safe or 'Top Steel Building Company in <span class="highlight">Dhaka</span>' | safe }}
+          {{ (pc.hero_title or 'Top Steel Building Company in <span class="highlight">Dhaka</span>') | safe }}
         </h1>
 
         <p class="hero-subtitle">
@@ -231,7 +231,7 @@
             <div class="section-label">Who We Are</div>
             <h2 class="section-title" data-aos="fade-up" id="about-title">Bangladesh's Most Trusted Housing Company</h2>
             <p style="margin-bottom:var(--space-4)">
-              {{ pc.about_p1 | safe or "<strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The Company undertakes projects on the basis of Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C), with the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability." | safe }}
+              {{ (pc.about_p1 or "<strong>BONGSHAI HOUSING</strong> is a Bangladesh-based Real Estate and Housing Company. The Company undertakes projects on the basis of Engineering-Procurement-Construction &amp; Commissioning (EPC&amp;C), with the experience and resources to execute complex projects on time with international standards of quality, safety, and reliability.") | safe }}
             </p>
             <p>
               {{ pc.about_p2 or "The company always gears up to excel stakeholders' expectations with its modern technology and sophisticated, experienced professional workforce — responsible for the entire process from design and materials supply to construction and test operation." }}
