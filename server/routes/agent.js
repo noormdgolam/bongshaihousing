@@ -118,4 +118,42 @@ Notes: ${notes || 'N/A'}
   res.redirect('/agent/dashboard.html');
 });
 
+router.post('/agent/leads/:id/status', requireAgent, async (req, res) => {
+  const { status } = req.body;
+  const allowed = ['new', 'contacted', 'quoted', 'won', 'lost'];
+  if (!allowed.includes(status)) {
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    return res.redirect('/agent/dashboard.html');
+  }
+
+  // CRITICAL: Scoped to req.agent.id so one agent cannot modify another agent's lead
+  const updated = await db('agent_leads')
+    .where({ id: req.params.id, agent_id: req.agent.id })
+    .update({ status, updated_at: db.fn.now() });
+
+  if (!updated) {
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.status(404).json({ error: 'Lead not found or unauthorized' });
+    }
+    const result = await leadStats(req.agent.id, req.query);
+    return res.status(404).render('agent/dashboard.njk', {
+      agent: req.agent,
+      leads: result.leads,
+      stats: result.stats,
+      pagination: result.pagination,
+      filters: result.filters,
+      error: 'Lead not found or unauthorized.'
+    });
+  }
+
+  if (req.headers.accept && req.headers.accept.includes('application/json')) {
+    return res.json({ success: true, status });
+  }
+
+  const returnTo = req.body.return_to || '/agent/dashboard.html';
+  res.redirect(returnTo);
+});
+
 module.exports = router;

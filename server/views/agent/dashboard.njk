@@ -110,7 +110,16 @@
         <div class="agent-lead-row">
           <div class="agent-lead-main">
             <span class="agent-lead-name">{{ lead.customer_name }}</span>
-            <span class="pill pill-{{ lead.status }}">{{ lead.status }}</span>
+            <form method="post" action="/agent/leads/{{ lead.id }}/status" style="margin:0; display:inline-flex; align-items:center;">
+              <input type="hidden" name="return_to" value="/agent/dashboard.html?page={{ pagination.page or 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}">
+              <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 8px; border-radius:12px; border:1px solid rgba(15,23,42,0.15); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">
+                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
+                <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                <option value="quoted" {% if lead.status == 'quoted' %}selected{% endif %}>Quoted</option>
+                <option value="won" {% if lead.status == 'won' %}selected{% endif %}>Won</option>
+                <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
+              </select>
+            </form>
           </div>
           <div class="agent-lead-details">
             <span>{{ icons.icon('phone', 14) }} {{ lead.customer_phone }}</span>
