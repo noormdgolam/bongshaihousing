@@ -141,15 +141,17 @@
       <a href="/admin/users">{{ icons.icon('users', 18) }} Users</a>
       <a href="/admin/activity">{{ icons.icon('clock', 18) }} Activity Log</a>
       {% endif %}
+      <a href="/admin/security/2fa">{{ icons.icon('lock', 18) }} 2FA Security</a>
     </nav>
   </aside>
   <div class="admin-main">
     <div class="admin-topbar">
       <div>{% block header %}{% endblock %}</div>
-      <div>
-        {{ adminName }} ({{ adminRole }})
-        <form method="post" action="/admin/logout" style="display:inline">
-          <button type="submit" class="btn" style="margin-left:10px;">Log out</button>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="/admin/security/2fa" class="btn" style="padding:4px 10px; font-size:0.8rem;">🔐 2FA Security</a>
+        <span>{{ adminName }} ({{ adminRole }})</span>
+        <form method="post" action="/admin/logout" style="display:inline; margin:0;">
+          <button type="submit" class="btn" style="margin-left:4px;">Log out</button>
         </form>
       </div>
     </div>

@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('../lib/db');
+const { verifyTotp } = require('../lib/totp');
 
 const router = express.Router();
 
@@ -53,17 +54,64 @@ router.post('/admin/login', async (req, res) => {
   }
 
   loginAttempts.delete(ip);
+
+  // If 2FA is active on the account, intercept with 2FA challenge before creating full session
+  if (user.two_factor_enabled && user.two_factor_secret) {
+    req.session.pending2faUserId = user.id;
+    return req.session.save((err) => {
+      if (err) console.error('Session save failed:', err.message);
+      res.redirect('/admin/2fa-verify');
+    });
+  }
+
   await db('admin_users').where({ id: user.id }).update({ last_login_at: db.fn.now() });
 
-  // Regenerate the session ID on login (not just set new data on the
-  // existing one) - otherwise the cookie a visitor already had before
-  // authenticating stays valid after, the classic session-fixation
-  // pattern. Cheap to close even without a known way to force a session
-  // ID onto a victim's browser today.
   req.session.regenerate((err) => {
     if (err) {
       console.error('Session regenerate failed:', err.message);
       return res.status(500).render('admin/login.njk', { error: 'Login failed, please try again.' });
+    }
+    req.session.adminUserId = user.id;
+    req.session.adminName = user.name;
+    req.session.adminRole = user.role;
+    req.session.save((saveErr) => {
+      if (saveErr) console.error('Session save failed:', saveErr.message);
+      res.redirect('/admin');
+    });
+  });
+});
+
+router.get('/admin/2fa-verify', (req, res) => {
+  if (req.session && req.session.adminUserId) return res.redirect('/admin');
+  if (!req.session || !req.session.pending2faUserId) return res.redirect('/admin/login');
+  res.render('admin/2fa-verify.njk', { error: null });
+});
+
+router.post('/admin/2fa-verify', async (req, res) => {
+  if (!req.session || !req.session.pending2faUserId) return res.redirect('/admin/login');
+
+  const userId = req.session.pending2faUserId;
+  const user = await db('admin_users').where({ id: userId }).first();
+
+  if (!user || !user.two_factor_secret) {
+    delete req.session.pending2faUserId;
+    return res.redirect('/admin/login');
+  }
+
+  const { code } = req.body;
+  const isValid = verifyTotp(code, user.two_factor_secret);
+
+  if (!isValid) {
+    return res.status(401).render('admin/2fa-verify.njk', { error: 'Invalid 6-digit authentication code. Please try again.' });
+  }
+
+  delete req.session.pending2faUserId;
+  await db('admin_users').where({ id: user.id }).update({ last_login_at: db.fn.now() });
+
+  req.session.regenerate((err) => {
+    if (err) {
+      console.error('Session regenerate failed:', err.message);
+      return res.status(500).render('admin/2fa-verify.njk', { error: 'Login failed, please try again.' });
     }
     req.session.adminUserId = user.id;
     req.session.adminName = user.name;
@@ -80,3 +128,4 @@ router.post('/admin/logout', (req, res) => {
 });
 
 module.exports = router;
+

@@ -20,6 +20,8 @@ const {
   parseExcelBuffer, parseCsvBuffer, sendPendingBatch,
   getInvitationTemplate, saveInvitationTemplate, FROM_ADDRESS_OPTIONS,
 } = require('../lib/agent-invitations');
+const { generateSecret, verifyTotp, generateOtpAuthUri } = require('../lib/totp');
+const { createQrSvg } = require('../lib/qr');
 
 const excelUpload = multer({
   storage: multer.memoryStorage(),
@@ -2634,6 +2636,84 @@ router.post('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res
     console.error('Error updating page:', err);
     res.redirect(`/admin/pages/edit?url=${encodeURIComponent(url_path)}&error=Update+failed`);
   }
+});
+
+// ---- 2FA Security Management ----
+
+router.get('/admin/security/2fa', async (req, res) => {
+  const user = await db('admin_users').where({ id: req.session.adminUserId }).first();
+  if (!user) return res.redirect('/admin/login');
+
+  const isEnabled = Boolean(user.two_factor_enabled && user.two_factor_secret);
+  let secret = '';
+  let qrApiUrl = '';
+
+  if (!isEnabled) {
+    secret = generateSecret();
+    const uri = generateOtpAuthUri({ secret, accountName: user.email, issuer: 'Bongshai Housing' });
+    const qrData = createQrSvg(uri, { size: 200 });
+    qrApiUrl = qrData.qrApiUrl;
+  }
+
+  res.render('admin/security-2fa.njk', adminVars(req, {
+    isEnabled,
+    secret,
+    qrApiUrl,
+    enabled: req.query.enabled === '1',
+    disabled: req.query.disabled === '1',
+    error: req.query.error || null,
+  }));
+});
+
+router.post('/admin/security/2fa/enable', async (req, res) => {
+  const { secret, code } = req.body;
+  if (!secret || !code) {
+    return res.redirect('/admin/security/2fa?error=' + encodeURIComponent('Secret and 6-digit code are required.'));
+  }
+
+  const isValid = verifyTotp(code, secret);
+  if (!isValid) {
+    return res.redirect('/admin/security/2fa?error=' + encodeURIComponent('Invalid 6-digit code. Please verify the code in your Authenticator app and try again.'));
+  }
+
+  await db('admin_users').where({ id: req.session.adminUserId }).update({
+    two_factor_enabled: true,
+    two_factor_secret: secret.trim(),
+    updated_at: db.fn.now(),
+  });
+
+  await logActivity(req, {
+    action: 'update',
+    entityType: 'admin_security',
+    summary: `Admin user #${req.session.adminUserId} enabled Two-Factor Authentication (2FA)`,
+  });
+
+  res.redirect('/admin/security/2fa?enabled=1');
+});
+
+router.post('/admin/security/2fa/disable', async (req, res) => {
+  const { password } = req.body;
+  const user = await db('admin_users').where({ id: req.session.adminUserId }).first();
+  if (!user) return res.redirect('/admin/login');
+
+  const valid = await bcrypt.compare(password || '', user.password_hash);
+  if (!valid) {
+    return res.redirect('/admin/security/2fa?error=' + encodeURIComponent('Incorrect password. 2FA was not disabled.'));
+  }
+
+  await db('admin_users').where({ id: req.session.adminUserId }).update({
+    two_factor_enabled: false,
+    two_factor_secret: null,
+    updated_at: db.fn.now(),
+  });
+
+  await logActivity(req, {
+    action: 'update',
+    entityType: 'admin_security',
+    summary: `Admin user #${req.session.adminUserId} disabled Two-Factor Authentication (2FA)`,
+  });
+
+  res.redirect('/admin/security/2fa?disabled=1');
 });
 
 module.exports = router;

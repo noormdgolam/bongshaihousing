@@ -1,0 +1,80 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Two-Factor Authentication (2FA){% endblock %}
+{% block header %}
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+  <h1 style="margin:0; font-size:1.25rem;">🔐 Two-Factor Authentication (2FA)</h1>
+  <a href="/admin" class="btn">← Dashboard</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:680px; margin:0 auto;">
+  {% if enabled %}
+  <div style="background:rgba(220,252,231,0.9); border:1px solid #86efac; color:#166534; padding:12px 16px; border-radius:12px; margin-bottom:18px; font-weight:600; font-size:0.9rem;">
+    ✓ Two-Factor Authentication is now enabled on your account.
+  </div>
+  {% endif %}
+
+  {% if disabled %}
+  <div style="background:rgba(254,243,199,0.9); border:1px solid #fde68a; color:#92400e; padding:12px 16px; border-radius:12px; margin-bottom:18px; font-weight:600; font-size:0.9rem;">
+    Two-Factor Authentication has been disabled for your account.
+  </div>
+  {% endif %}
+
+  {% if error %}
+  <div class="error-box" style="margin-bottom:18px;">{{ error }}</div>
+  {% endif %}
+
+  <div class="card" style="padding:24px;">
+    {% if isEnabled %}
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <span class="pill pill-success" style="font-size:0.85rem; font-weight:700;">● 2FA Enabled &amp; Active</span>
+    </div>
+    <p style="font-size:0.9rem; color:var(--grey-700); line-height:1.5;">
+      Your admin account is protected with TOTP Two-Factor Authentication. A 6-digit verification code from your authenticator app (Google Authenticator, Microsoft Authenticator, 1Password, or Authy) will be required upon signing in.
+    </p>
+
+    <div style="margin-top:24px; padding-top:18px; border-top:1px solid var(--grey-100);">
+      <h3 style="font-size:0.95rem; font-weight:700; color:var(--danger); margin-top:0;">Disable Two-Factor Authentication</h3>
+      <p style="font-size:0.85rem; color:var(--grey-500);">Enter your password below to confirm disabling 2FA.</p>
+      <form method="post" action="/admin/security/2fa/disable" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <input type="password" name="password" placeholder="Confirm your password" required style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; flex:1; min-width:200px;">
+        <button type="submit" class="btn" style="color:var(--danger); border-color:var(--danger); padding:8px 14px;">Disable 2FA</button>
+      </form>
+    </div>
+
+    {% else %}
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <span class="pill pill-muted" style="font-size:0.85rem; font-weight:700;">○ 2FA Not Configured</span>
+    </div>
+    <h2 style="font-size:1.1rem; font-weight:800; margin-top:0; color:var(--grey-900);">Set Up Two-Factor Authentication</h2>
+    <p style="font-size:0.88rem; color:var(--grey-700); line-height:1.5;">
+      Enhance your account security against credential stuffing and brute-force attacks by linking an Authenticator app (such as Google Authenticator, Microsoft Authenticator, or Bitwarden).
+    </p>
+
+    <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:12px; padding:18px; margin:20px 0; text-align:center;">
+      <div style="font-size:0.82rem; font-weight:700; color:var(--grey-700); text-transform:uppercase; margin-bottom:12px;">Step 1: Scan QR Code with Authenticator App</div>
+      {% if qrApiUrl %}
+      <div style="margin:12px auto; display:inline-block; padding:10px; background:white; border:1px solid var(--grey-200); border-radius:8px;">
+        <img src="{{ qrApiUrl }}" alt="2FA QR Code" width="180" height="180" style="display:block;">
+      </div>
+      {% endif %}
+      <div style="margin-top:8px; font-size:0.82rem; color:var(--grey-500);">Or enter secret key manually:</div>
+      <div style="margin-top:4px; font-family:monospace; font-size:1rem; font-weight:800; letter-spacing:0.1em; color:var(--primary); background:white; display:inline-block; padding:6px 12px; border-radius:6px; border:1px dashed var(--primary);">
+        {{ secret }}
+      </div>
+    </div>
+
+    <form method="post" action="/admin/security/2fa/enable">
+      <input type="hidden" name="secret" value="{{ secret }}">
+      <div class="form-row" style="margin-bottom:16px;">
+        <label for="code" style="font-weight:700;">Step 2: Enter 6-digit Code to Confirm</label>
+        <input type="text" id="code" name="code" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required style="padding:10px 12px; font-size:1.1rem; letter-spacing:0.15em; font-family:monospace; max-width:200px;">
+      </div>
+      <button type="submit" class="btn btn-primary" style="padding:10px 20px; font-weight:700;">Activate Two-Factor Authentication</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
