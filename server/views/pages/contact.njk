@@ -227,15 +227,31 @@
               </div>
 
               <div class="form-row">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label" for="division">Division *</label>
+                  <select id="division" name="division" class="form-control" onchange="updateDistrictOptions(this.value)" required="">
+                    <option value="">Select Division</option>
+                    <option value="Barishal Division">Barishal Division</option>
+                    <option value="Chattogram Division">Chattogram Division</option>
+                    <option value="Dhaka Division">Dhaka Division</option>
+                    <option value="Khulna Division">Khulna Division</option>
+                    <option value="Mymensingh Division">Mymensingh Division</option>
+                    <option value="Rajshahi Division">Rajshahi Division</option>
+                    <option value="Rangpur Division">Rangpur Division</option>
+                    <option value="Sylhet Division">Sylhet Division</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label class="form-label" for="district">District *</label>
-                  <select id="district" name="district" class="form-control" required="" data-mcp-param="district">
+                  <select id="district" name="district" class="form-control" onchange="updateUpazilaOptions(this.value)" required="" data-mcp-param="district" disabled>
                     <option value="">Select District</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="upazila">Police Station / Thana *</label>
-                  <input type="text" id="upazila" name="upazila" class="form-control" placeholder="e.g., Uttara, Gulshan" required="" data-mcp-param="upazila">
+                  <select id="upazila" name="upazila" class="form-control" required="" data-mcp-param="upazila" disabled>
+                    <option value="">Select Police Station / Thana</option>
+                  </select>
                 </div>
               </div>
 
@@ -545,6 +561,46 @@
         });
       }
     });
+
+    function updateDistrictOptions(divisionValue) {
+      const districtSelect = document.getElementById('district');
+      const upazilaSelect = document.getElementById('upazila');
+      
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      districtSelect.disabled = !divisionValue;
+      
+      upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+      upazilaSelect.disabled = true;
+
+      if (!divisionValue || typeof bdGeoData === 'undefined') return;
+
+      const districts = bdGeoData.filter(d => d.division === divisionValue).sort((a, b) => a.district.localeCompare(b.district));
+      districts.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.district;
+        opt.textContent = d.district;
+        districtSelect.appendChild(opt);
+      });
+    }
+
+    function updateUpazilaOptions(districtValue) {
+      const upazilaSelect = document.getElementById('upazila');
+      
+      upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+      upazilaSelect.disabled = !districtValue;
+
+      if (!districtValue || typeof bdGeoData === 'undefined') return;
+
+      const distData = bdGeoData.find(d => d.district === districtValue);
+      if (distData && distData.upazillas) {
+        distData.upazillas.sort().forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u;
+          opt.textContent = u;
+          upazilaSelect.appendChild(opt);
+        });
+      }
+    }
   </script>
 
           </div>
@@ -570,6 +626,7 @@
 {% endblock %}
 
 {% block scripts_extra %}
+<script src="/js/bd-geo-data.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');

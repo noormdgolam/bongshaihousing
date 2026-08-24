@@ -20,7 +20,8 @@ const bdGeoData = [
       "Titas",
       "Burichang",
       "Lalmai"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Feni",
@@ -32,7 +33,8 @@ const bdGeoData = [
       "Fulgazi",
       "Parshuram",
       "Daganbhuiyan"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Brahmanbaria",
@@ -47,7 +49,8 @@ const bdGeoData = [
       "Nabinagar",
       "Bancharampur",
       "Bijoynagar"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Rangamati",
@@ -63,7 +66,8 @@ const bdGeoData = [
       "Belaichari",
       "Juraichari",
       "Naniarchar"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Noakhali",
@@ -78,7 +82,8 @@ const bdGeoData = [
       "Senbug",
       "Chatkhil",
       "Sonaimori"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Chandpur",
@@ -92,7 +97,8 @@ const bdGeoData = [
       "Hajiganj",
       "Matlab North",
       "Faridgonj"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Lakshmipur",
@@ -103,7 +109,8 @@ const bdGeoData = [
       "Raipur",
       "Ramgati",
       "Ramganj"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Chattogram",
@@ -124,7 +131,8 @@ const bdGeoData = [
       "Fatikchhari",
       "Raozan",
       "Karnafuli"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Coxsbazar",
@@ -139,7 +147,8 @@ const bdGeoData = [
       "Ramu",
       "Teknaf",
       "Eidgaon"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Khagrachhari",
@@ -154,7 +163,8 @@ const bdGeoData = [
       "Ramgarh",
       "Matiranga",
       "Guimara"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Bandarban",
@@ -167,7 +177,8 @@ const bdGeoData = [
       "Lama",
       "Ruma",
       "Thanchi"
-    ]
+    ],
+    "division": "Chattogram Division"
   },
   {
     "district": "Sirajganj",
@@ -182,7 +193,8 @@ const bdGeoData = [
       "Sirajganj Sadar",
       "Tarash",
       "Ullapara"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Pabna",
@@ -197,7 +209,8 @@ const bdGeoData = [
       "Chatmohar",
       "Santhia",
       "Faridpur"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Bogura",
@@ -215,7 +228,8 @@ const bdGeoData = [
       "Gabtali",
       "Sherpur",
       "Shibganj"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Rajshahi",
@@ -230,7 +244,8 @@ const bdGeoData = [
       "Godagari",
       "Tanore",
       "Bagmara"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Natore",
@@ -243,7 +258,8 @@ const bdGeoData = [
       "Lalpur",
       "Gurudaspur",
       "Naldanga"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Joypurhat",
@@ -254,7 +270,8 @@ const bdGeoData = [
       "Khetlal",
       "Panchbibi",
       "Joypurhat Sadar"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Chapainawabganj",
@@ -265,7 +282,8 @@ const bdGeoData = [
       "Nachol",
       "Bholahat",
       "Shibganj"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Naogaon",
@@ -282,7 +300,8 @@ const bdGeoData = [
       "Naogaon Sadar",
       "Porsha",
       "Sapahar"
-    ]
+    ],
+    "division": "Rajshahi Division"
   },
   {
     "district": "Jashore",
@@ -296,7 +315,8 @@ const bdGeoData = [
       "Keshabpur",
       "Jessore Sadar",
       "Sharsha"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Satkhira",
@@ -309,7 +329,8 @@ const bdGeoData = [
       "Shyamnagar",
       "Tala",
       "Kaliganj"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Meherpur",
@@ -318,7 +339,8 @@ const bdGeoData = [
       "Mujibnagar",
       "Meherpur Sadar",
       "Gangni"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Narail",
@@ -327,7 +349,8 @@ const bdGeoData = [
       "Narail Sadar",
       "Lohagara",
       "Kalia"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Chuadanga",
@@ -337,7 +360,8 @@ const bdGeoData = [
       "Alamdanga",
       "Damurhuda",
       "Jibannagar"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Kushtia",
@@ -349,7 +373,8 @@ const bdGeoData = [
       "Mirpur",
       "Daulatpur",
       "Bheramara"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Magura",
@@ -359,7 +384,8 @@ const bdGeoData = [
       "Sreepur",
       "Magura Sadar",
       "Mohammadpur"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Khulna",
@@ -374,7 +400,8 @@ const bdGeoData = [
       "Botiaghata",
       "Dakop",
       "Koyra"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Bagerhat",
@@ -389,7 +416,8 @@ const bdGeoData = [
       "Kachua",
       "Mongla",
       "Chitalmari"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Jhenaidah",
@@ -401,7 +429,8 @@ const bdGeoData = [
       "Kaliganj",
       "Kotchandpur",
       "Moheshpur"
-    ]
+    ],
+    "division": "Khulna Division"
   },
   {
     "district": "Jhalakathi",
@@ -411,7 +440,8 @@ const bdGeoData = [
       "Kathalia",
       "Nalchity",
       "Rajapur"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Patuakhali",
@@ -425,7 +455,8 @@ const bdGeoData = [
       "Mirzaganj",
       "Galachipa",
       "Rangabali"
-    ]
+    ],
+    "division": "Barishal Division"
   },
   {
     "district": "Pirojpur",
@@ -438,7 +469,8 @@ const bdGeoData = [
       "Bhandaria",
       "Mathbaria",
       "Nesarabad"
-    ]
+    ],
+    "division": "Barishal Division"
   },
   {
     "district": "Barisal",
@@ -454,7 +486,8 @@ const bdGeoData = [
       "Mehendiganj",
       "Muladi",
       "Hizla"
-    ]
+    ],
+    "division": "Barishal Division"
   },
   {
     "district": "Bhola",
@@ -467,7 +500,8 @@ const bdGeoData = [
       "Monpura",
       "Tazumuddin",
       "Lalmohan"
-    ]
+    ],
+    "division": "Barishal Division"
   },
   {
     "district": "Barguna",
@@ -479,7 +513,8 @@ const bdGeoData = [
       "Bamna",
       "Pathorghata",
       "Taltali"
-    ]
+    ],
+    "division": "Barishal Division"
   },
   {
     "district": "Sylhet",
@@ -498,7 +533,8 @@ const bdGeoData = [
       "Zakiganj",
       "Dakshinsurma",
       "Osmaninagar"
-    ]
+    ],
+    "division": "Sylhet Division"
   },
   {
     "district": "Moulvibazar",
@@ -511,7 +547,8 @@ const bdGeoData = [
       "Rajnagar",
       "Sreemangal",
       "Juri"
-    ]
+    ],
+    "division": "Sylhet Division"
   },
   {
     "district": "Habiganj",
@@ -525,7 +562,8 @@ const bdGeoData = [
       "Chunarughat",
       "Habiganj Sadar",
       "Madhabpur"
-    ]
+    ],
+    "division": "Sylhet Division"
   },
   {
     "district": "Sunamganj",
@@ -543,7 +581,8 @@ const bdGeoData = [
       "Shalla",
       "Derai",
       "Madhyanagar"
-    ]
+    ],
+    "division": "Sylhet Division"
   },
   {
     "district": "Narsingdi",
@@ -555,7 +594,8 @@ const bdGeoData = [
       "Palash",
       "Raipura",
       "Shibpur"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Gazipur",
@@ -566,7 +606,8 @@ const bdGeoData = [
       "Kapasia",
       "Gazipur Sadar",
       "Sreepur"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Shariatpur",
@@ -578,7 +619,8 @@ const bdGeoData = [
       "Gosairhat",
       "Bhedarganj",
       "Damudya"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Narayanganj",
@@ -589,7 +631,8 @@ const bdGeoData = [
       "Narayanganj Sadar",
       "Rupganj",
       "Sonargaon"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Tangail",
@@ -607,7 +650,8 @@ const bdGeoData = [
       "Tangail Sadar",
       "Kalihati",
       "Dhanbari"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Kishoreganj",
@@ -626,7 +670,8 @@ const bdGeoData = [
       "Austagram",
       "Mithamoin",
       "Nikli"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Manikganj",
@@ -639,7 +684,8 @@ const bdGeoData = [
       "Shibaloy",
       "Doulatpur",
       "Singiar"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Dhaka",
@@ -650,7 +696,8 @@ const bdGeoData = [
       "Keraniganj",
       "Nawabganj",
       "Dohar"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Munshiganj",
@@ -662,7 +709,8 @@ const bdGeoData = [
       "Louhajanj",
       "Gajaria",
       "Tongibari"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Rajbari",
@@ -673,7 +721,8 @@ const bdGeoData = [
       "Pangsa",
       "Baliakandi",
       "Kalukhali"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Madaripur",
@@ -684,7 +733,8 @@ const bdGeoData = [
       "Kalkini",
       "Rajoir",
       "Dasar"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Gopalganj",
@@ -695,7 +745,8 @@ const bdGeoData = [
       "Tungipara",
       "Kotalipara",
       "Muksudpur"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Faridpur",
@@ -710,7 +761,8 @@ const bdGeoData = [
       "Charbhadrasan",
       "Madhukhali",
       "Saltha"
-    ]
+    ],
+    "division": "Dhaka Division"
   },
   {
     "district": "Panchagarh",
@@ -721,7 +773,8 @@ const bdGeoData = [
       "Boda",
       "Atwari",
       "Tetulia"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Dinajpur",
@@ -740,7 +793,8 @@ const bdGeoData = [
       "Khansama",
       "Birol",
       "Chirirbandar"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Lalmonirhat",
@@ -751,7 +805,8 @@ const bdGeoData = [
       "Hatibandha",
       "Patgram",
       "Aditmari"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Nilphamari",
@@ -763,7 +818,8 @@ const bdGeoData = [
       "Jaldhaka",
       "Kishorganj",
       "Nilphamari Sadar"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Gaibandha",
@@ -776,7 +832,8 @@ const bdGeoData = [
       "Gobindaganj",
       "Sundarganj",
       "Phulchari"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Thakurgaon",
@@ -787,7 +844,8 @@ const bdGeoData = [
       "Ranisankail",
       "Haripur",
       "Baliadangi"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Rangpur",
@@ -801,7 +859,8 @@ const bdGeoData = [
       "Pirgonj",
       "Kaunia",
       "Pirgacha"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Kurigram",
@@ -816,7 +875,8 @@ const bdGeoData = [
       "Chilmari",
       "Rowmari",
       "Charrajibpur"
-    ]
+    ],
+    "division": "Rangpur Division"
   },
   {
     "district": "Sherpur",
@@ -827,7 +887,8 @@ const bdGeoData = [
       "Sreebordi",
       "Nokla",
       "Jhenaigati"
-    ]
+    ],
+    "division": "Mymensingh Division"
   },
   {
     "district": "Mymensingh",
@@ -846,7 +907,8 @@ const bdGeoData = [
       "Iswarganj",
       "Nandail",
       "Tarakanda"
-    ]
+    ],
+    "division": "Mymensingh Division"
   },
   {
     "district": "Jamalpur",
@@ -859,7 +921,8 @@ const bdGeoData = [
       "Sarishabari",
       "Madarganj",
       "Bokshiganj"
-    ]
+    ],
+    "division": "Mymensingh Division"
   },
   {
     "district": "Netrokona",
@@ -875,6 +938,7 @@ const bdGeoData = [
       "Mohongonj",
       "Purbadhala",
       "Netrokona Sadar"
-    ]
+    ],
+    "division": "Mymensingh Division"
   }
 ];
