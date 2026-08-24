@@ -108,7 +108,7 @@ const CONTENT_SECTIONS = [
   '/admin/themes', '/admin/api/upload',
 ];
 for (const section of CONTENT_SECTIONS) {
-  router.use(section, requireRole('admin', 'editor'));
+  router.use(section, requireRole('admin', 'superadmin', 'editor'));
 }
 
 function adminVars(req, extra) {
@@ -2717,7 +2717,7 @@ router.post('/admin/seo/generate', requireRole('admin', 'superadmin', 'editor'),
 });
 
 // --- MARKETING PAGES CMS ---
-router.get('/admin/pages', requireRole('admin', 'editor'), async (req, res) => {
+router.get('/admin/pages', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   try {
     const pages = await db('page_content').orderBy('title');
     res.render('admin/pages-list.njk', adminVars(req, { pages }));
@@ -2726,7 +2726,7 @@ router.get('/admin/pages', requireRole('admin', 'editor'), async (req, res) => {
   }
 });
 
-router.get('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res) => {
+router.get('/admin/pages/edit', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   const urlPath = req.query.url;
   try {
     const page = await db('page_content').where({ url_path: urlPath }).first();
@@ -2748,7 +2748,7 @@ router.get('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res)
   }
 });
 
-router.post('/admin/pages/edit', requireRole('admin', 'editor'), async (req, res) => {
+router.post('/admin/pages/edit', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   const { url_path, title, ...contentFields } = req.body;
   try {
     await db('page_content').where({ url_path }).update({
