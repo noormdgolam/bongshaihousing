@@ -38,6 +38,10 @@ async function leadStats(agentId, filters = {}) {
   const offset = (page - 1) * limit;
 
   const leads = await query.offset(offset).limit(limit);
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  for (const l of leads) {
+    l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+  }
 
   return {
     leads,

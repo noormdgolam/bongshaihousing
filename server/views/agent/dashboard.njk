@@ -109,7 +109,10 @@
         {% for lead in leads %}
         <div class="agent-lead-row">
           <div class="agent-lead-main">
-            <span class="agent-lead-name">{{ lead.customer_name }}</span>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span class="agent-lead-name">{{ lead.customer_name }}</span>
+              {% if lead.is_overdue %}<span class="pill pill-danger" style="font-size:0.68rem; font-weight:700;">⚠️ &gt;24h Untouched</span>{% endif %}
+            </div>
             <form method="post" action="/agent/leads/{{ lead.id }}/status" style="margin:0; display:inline-flex; align-items:center;">
               <input type="hidden" name="return_to" value="/agent/dashboard.html?page={{ pagination.page or 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}">
               <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 8px; border-radius:12px; border:1px solid rgba(15,23,42,0.15); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">

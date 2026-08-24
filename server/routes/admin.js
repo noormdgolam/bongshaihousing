@@ -172,6 +172,8 @@ router.get('/admin', async (req, res) => {
   let activeAgentCount = { count: 0 };
   let agentLeadCount = { count: 0 };
   let newAgentLeadCount = { count: 0 };
+  let overdueLeadCount = { count: 0 };
+  let overdueAgentLeadCount = { count: 0 };
   let activeOrderCount = { count: 0 };
   let seoIssuesCount = { count: 0 };
   let seoSuggestionsCount = { count: 0 };
@@ -208,12 +210,18 @@ router.get('/admin', async (req, res) => {
       }
 
       const hasLeads = await db.schema.hasTable('leads');
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
       if (hasLeads) {
         [leadCount] = await db('leads').count({ count: '*' });
         [newLeadCount] = await db('leads').where({ status: 'new' }).count({ count: '*' });
+        [overdueLeadCount] = await db('leads').where({ status: 'new' }).where('created_at', '<', oneDayAgo).count({ count: '*' });
         [contactedLeadCount] = await db('leads').where({ status: 'contacted' }).count({ count: '*' });
         [convertedLeadCount] = await db('leads').where({ status: 'converted' }).count({ count: '*' });
         recentLeads = await db('leads').orderBy('created_at', 'desc').limit(8);
+        for (const l of recentLeads) {
+          l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+        }
       }
 
       const hasActivity = await db.schema.hasTable('activity_log');
@@ -231,6 +239,7 @@ router.get('/admin', async (req, res) => {
       if (hasAgentLeads) {
         [agentLeadCount] = await db('agent_leads').count({ count: '*' });
         [newAgentLeadCount] = await db('agent_leads').where({ status: 'new' }).count({ count: '*' });
+        [overdueAgentLeadCount] = await db('agent_leads').where({ status: 'new' }).where('created_at', '<', oneDayAgo).count({ count: '*' });
       }
 
       const hasOrders = await db.schema.hasTable('orders');
@@ -309,6 +318,8 @@ router.get('/admin', async (req, res) => {
       activeAgents: activeAgentCount?.count || 0,
       agentLeads: agentLeadCount?.count || 0,
       newAgentLeads: newAgentLeadCount?.count || 0,
+      overdueLeads: overdueLeadCount?.count || 0,
+      overdueAgentLeads: overdueAgentLeadCount?.count || 0,
       activeOrders: activeOrderCount?.count || 0,
     },
     recentLeads,
@@ -599,6 +610,8 @@ router.get('/admin/agent-leads', async (req, res) => {
     });
   }
   const leads = await query;
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  for (const l of leads) l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
   const agentsForFilter = await db('agents').where({ status: 'active' }).orderBy('name').select('id', 'name', 'business_name');
   res.render('admin/agents/leads.njk', adminVars(req, { leads, statusFilter, agentFilter, search, agentsForFilter }));
 });
@@ -655,6 +668,8 @@ router.get('/admin/leads', async (req, res) => {
           });
         }
         leads = await query;
+        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        for (const l of leads) l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
       }
     } catch (e) {
       console.error('Admin leads list error:', e.message);

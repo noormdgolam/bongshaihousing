@@ -67,7 +67,9 @@
       <div class="kpi-icon">{{ icons.icon('inbox', 22) }}</div>
     </div>
     <div style="margin-top:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-      {% if counts.newLeads > 0 %}
+      {% if counts.overdueLeads > 0 %}
+      <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">⚠️ {{ counts.overdueLeads }} Overdue (&gt;24h)</span>
+      {% elif counts.newLeads > 0 %}
       <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">{{ counts.newLeads }} Action Needed</span>
       {% else %}
       <span class="pill pill-success" style="font-size:0.75rem;">All Caught Up</span>
@@ -137,6 +139,9 @@
       <div class="kpi-icon">{{ icons.icon('handshake', 22) }}</div>
     </div>
     <div style="margin-top:14px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      {% if counts.overdueAgentLeads > 0 %}
+      <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">⚠️ {{ counts.overdueAgentLeads }} Leads &gt;24h</span>
+      {% endif %}
       {% if counts.pendingAgents > 0 %}
       <span class="pill pill-danger" style="font-weight:700; font-size:0.75rem;">{{ counts.pendingAgents }} Application{{ 's' if counts.pendingAgents != 1 }} Pending</span>
       {% else %}
@@ -336,6 +341,7 @@
           </td>
           <td style="padding:10px 12px;">
             <strong style="color:var(--grey-900); font-size:0.88rem;">{{ lead.name }}</strong>
+            {% if lead.is_overdue %}<span class="pill pill-danger" style="font-size:0.7rem; font-weight:700; margin-left:6px;">⚠️ &gt;24h Untouched</span>{% endif %}
             {% if lead.email %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ lead.email }}</div>{% endif %}
           </td>
           <td style="padding:10px 12px; white-space:nowrap;">
