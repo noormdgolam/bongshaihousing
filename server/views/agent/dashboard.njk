@@ -5,9 +5,12 @@
 <div class="agent-hero">
   <div class="agent-hero-top">
     <div class="agent-hero-brand">{{ icons.icon('handshake', 20) }} Bongshai Agent Portal</div>
-    <form method="post" action="/agent/logout">
-      <button type="submit" class="btn btn-ghost">Log out</button>
-    </form>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="/agent/profile.html" class="btn btn-ghost">{{ icons.icon('user', 16) }} My Profile</a>
+      <form method="post" action="/agent/logout" style="margin:0;">
+        <button type="submit" class="btn btn-ghost">Log out</button>
+      </form>
+    </div>
   </div>
   <div class="agent-hero-profile">
     <div>

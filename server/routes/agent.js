@@ -1,10 +1,24 @@
 const express = require('express');
+const multer = require('multer');
 const db = require('../lib/db');
 const requireAgent = require('../middleware/requireAgent');
 const { sendMail } = require('../lib/mailer');
 const { sendTelegramAlert } = require('../lib/telegram');
+const { saveDocument, documentPath } = require('../lib/document-uploader');
 
 const router = express.Router();
+
+const DOCUMENT_FIELDS = ['doc_application_letter', 'doc_passport_photo', 'doc_trade_license', 'doc_tin_certificate', 'doc_nid_copy'];
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const ok = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'].includes(file.mimetype);
+    cb(ok ? null : new Error('Only JPG, PNG, WebP, or PDF files are accepted.'), ok);
+  },
+});
+const documentUpload = upload.fields(DOCUMENT_FIELDS.map((name) => ({ name, maxCount: 1 })));
 
 async function leadStats(agentId, filters = {}) {
   const allLeads = await db('agent_leads').where({ agent_id: agentId }).select('id', 'status', 'created_at');
@@ -165,6 +179,64 @@ router.post('/agent/leads/:id/status', requireAgent, async (req, res) => {
 
   const returnTo = req.body.return_to || '/agent/dashboard.html';
   res.redirect(returnTo);
+});
+
+router.get(['/agent/profile', '/agent/profile.html'], requireAgent, async (req, res) => {
+  res.render('agent/profile.njk', {
+    agent: req.agent,
+    saved: req.query.saved === '1',
+    error: req.query.error || null,
+  });
+});
+
+router.post('/agent/profile', requireAgent, function (req, res, next) {
+  documentUpload(req, res, (err) => {
+    if (err) {
+      return res.redirect('/agent/profile.html?error=' + encodeURIComponent(err.message));
+    }
+    next();
+  });
+}, async (req, res) => {
+  try {
+    const { contact_address, landline_phone, email, current_business_address, permanent_address, trade_license_number, tin_number } = req.body;
+    
+    const updateData = {
+      updated_at: db.fn.now(),
+    };
+
+    if (typeof contact_address === 'string') updateData.contact_address = contact_address.trim() || null;
+    if (typeof landline_phone === 'string') updateData.landline_phone = landline_phone.trim() || null;
+    if (typeof email === 'string' && email.trim()) updateData.email = email.trim();
+    if (typeof current_business_address === 'string') updateData.current_business_address = current_business_address.trim() || null;
+    if (typeof permanent_address === 'string') updateData.permanent_address = permanent_address.trim() || null;
+    if (typeof trade_license_number === 'string') updateData.trade_license_number = trade_license_number.trim() || null;
+    if (typeof tin_number === 'string') updateData.tin_number = tin_number.trim() || null;
+
+    if (req.files) {
+      for (const field of DOCUMENT_FIELDS) {
+        if (req.files[field] && req.files[field][0]) {
+          const file = req.files[field][0];
+          const savedName = saveDocument(file.buffer, file.mimetype);
+          updateData[field] = savedName;
+        }
+      }
+    }
+
+    await db('agents').where({ id: req.agent.id }).update(updateData);
+    res.redirect('/agent/profile.html?saved=1');
+  } catch (err) {
+    console.error('Agent profile update error:', err);
+    res.redirect('/agent/profile.html?error=' + encodeURIComponent(err.message));
+  }
+});
+
+router.get('/agent/document/:field', requireAgent, async (req, res) => {
+  if (!DOCUMENT_FIELDS.includes(req.params.field)) return res.status(400).send('Invalid document field');
+  const filename = req.agent[req.params.field];
+  if (!filename) return res.status(404).send('Document not found');
+  res.sendFile(documentPath(filename), (err) => {
+    if (err) res.status(404).send('Document file not found');
+  });
 });
 
 module.exports = router;

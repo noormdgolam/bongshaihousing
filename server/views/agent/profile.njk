@@ -1,0 +1,155 @@
+{% extends "agent-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}My Profile{% endblock %}
+{% block body %}
+<div class="agent-hero">
+  <div class="agent-hero-top">
+    <div class="agent-hero-brand">{{ icons.icon('handshake', 20) }} Bongshai Agent Portal</div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="/agent/dashboard.html" class="btn btn-ghost">← Dashboard</a>
+      <form method="post" action="/agent/logout" style="margin:0;">
+        <button type="submit" class="btn btn-ghost">Log out</button>
+      </form>
+    </div>
+  </div>
+  <div class="agent-hero-profile">
+    <div>
+      <div class="agent-hero-name">{{ agent.business_name or agent.name }}</div>
+      <div class="agent-hero-meta">{{ icons.icon('user', 15) }} {{ agent.name }} &nbsp;·&nbsp; {{ icons.icon('map-pin', 15) }} {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+    </div>
+    <span class="pill pill-won">● Active Agent</span>
+  </div>
+</div>
+
+<div class="agent-content">
+  {% if saved %}
+  <div style="background:rgba(220,252,231,0.9); border:1px solid #86efac; color:#166534; padding:12px 16px; border-radius:12px; margin-bottom:18px; font-weight:600; font-size:0.9rem;">
+    ✓ Profile and documents updated successfully.
+  </div>
+  {% endif %}
+
+  {% if error %}
+  <div class="error-box" style="margin-bottom:18px;">{{ error }}</div>
+  {% endif %}
+
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1.15rem; border-bottom:1px solid rgba(15,23,42,0.08); padding-bottom:10px; margin-bottom:18px;">
+      {{ icons.icon('user', 20) }} Business &amp; Contact Profile
+    </h2>
+
+    <form method="post" action="/agent/profile" enctype="multipart/form-data">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="form-row">
+          <label>Agent / Owner Name</label>
+          <input type="text" value="{{ agent.name }}" disabled style="opacity:0.7; cursor:not-allowed;">
+          <small style="color:var(--grey-500); font-size:0.75rem;">Official name cannot be changed directly.</small>
+        </div>
+
+        <div class="form-row">
+          <label>Business Name</label>
+          <input type="text" value="{{ agent.business_name }}" disabled style="opacity:0.7; cursor:not-allowed;">
+          <small style="color:var(--grey-500); font-size:0.75rem;">Registered company name.</small>
+        </div>
+
+        <div class="form-row">
+          <label>Primary Phone</label>
+          <input type="tel" value="{{ agent.phone }}" disabled style="opacity:0.7; cursor:not-allowed;">
+          <small style="color:var(--grey-500); font-size:0.75rem;">Used for login authentication.</small>
+        </div>
+
+        <div class="form-row">
+          <label for="landline_phone">Landline / Alternate Phone</label>
+          <input type="tel" id="landline_phone" name="landline_phone" value="{{ agent.landline_phone or '' }}" placeholder="02-XXXXXXX or 01XXXXXXXXX">
+        </div>
+
+        <div class="form-row" style="grid-column: 1 / -1;">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="{{ agent.email or '' }}" required>
+        </div>
+
+        <div class="form-row" style="grid-column: 1 / -1;">
+          <label for="contact_address">Mailing / Contact Address</label>
+          <textarea id="contact_address" name="contact_address" rows="2">{{ agent.contact_address or '' }}</textarea>
+        </div>
+
+        <div class="form-row" style="grid-column: 1 / -1;">
+          <label for="current_business_address">Business Showroom / Office Address</label>
+          <textarea id="current_business_address" name="current_business_address" rows="2">{{ agent.current_business_address or '' }}</textarea>
+        </div>
+
+        <div class="form-row">
+          <label for="trade_license_number">Trade License Number</label>
+          <input type="text" id="trade_license_number" name="trade_license_number" value="{{ agent.trade_license_number or '' }}">
+        </div>
+
+        <div class="form-row">
+          <label for="tin_number">e-TIN / Tax Identification Number</label>
+          <input type="text" id="tin_number" name="tin_number" value="{{ agent.tin_number or '' }}">
+        </div>
+      </div>
+
+      <h3 style="margin-top:24px; font-size:1.05rem; border-bottom:1px solid rgba(15,23,42,0.08); padding-bottom:8px; margin-bottom:16px;">
+        {{ icons.icon('clipboard-list', 18) }} Verification Documents &amp; Certifications
+      </h3>
+      <p style="font-size:0.85rem; color:var(--grey-700); margin-top:0; margin-bottom:16px;">
+        Upload updated or replacement files below. Accepted formats: JPG, PNG, WebP, PDF (max 10MB each).
+      </p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="form-row" style="background:rgba(255,255,255,0.4); padding:12px; border-radius:10px; border:1px solid rgba(15,23,42,0.08);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label for="doc_passport_photo" style="margin:0; font-weight:700;">Passport-size Photo</label>
+            {% if agent.doc_passport_photo %}
+            <a href="/agent/document/doc_passport_photo" target="_blank" class="pill pill-won" style="font-size:0.7rem;">View Current</a>
+            {% else %}
+            <span class="pill pill-lost" style="font-size:0.7rem;">Missing</span>
+            {% endif %}
+          </div>
+          <input type="file" id="doc_passport_photo" name="doc_passport_photo" accept="image/*,application/pdf" style="font-size:0.85rem;">
+        </div>
+
+        <div class="form-row" style="background:rgba(255,255,255,0.4); padding:12px; border-radius:10px; border:1px solid rgba(15,23,42,0.08);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label for="doc_trade_license" style="margin:0; font-weight:700;">Trade License</label>
+            {% if agent.doc_trade_license %}
+            <a href="/agent/document/doc_trade_license" target="_blank" class="pill pill-won" style="font-size:0.7rem;">View Current</a>
+            {% else %}
+            <span class="pill pill-lost" style="font-size:0.7rem;">Missing</span>
+            {% endif %}
+          </div>
+          <input type="file" id="doc_trade_license" name="doc_trade_license" accept="image/*,application/pdf" style="font-size:0.85rem;">
+        </div>
+
+        <div class="form-row" style="background:rgba(255,255,255,0.4); padding:12px; border-radius:10px; border:1px solid rgba(15,23,42,0.08);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label for="doc_tin_certificate" style="margin:0; font-weight:700;">TIN Certificate</label>
+            {% if agent.doc_tin_certificate %}
+            <a href="/agent/document/doc_tin_certificate" target="_blank" class="pill pill-won" style="font-size:0.7rem;">View Current</a>
+            {% else %}
+            <span class="pill pill-lost" style="font-size:0.7rem;">Missing</span>
+            {% endif %}
+          </div>
+          <input type="file" id="doc_tin_certificate" name="doc_tin_certificate" accept="image/*,application/pdf" style="font-size:0.85rem;">
+        </div>
+
+        <div class="form-row" style="background:rgba(255,255,255,0.4); padding:12px; border-radius:10px; border:1px solid rgba(15,23,42,0.08);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label for="doc_nid_copy" style="margin:0; font-weight:700;">NID / National ID</label>
+            {% if agent.doc_nid_copy %}
+            <a href="/agent/document/doc_nid_copy" target="_blank" class="pill pill-won" style="font-size:0.7rem;">View Current</a>
+            {% else %}
+            <span class="pill pill-lost" style="font-size:0.7rem;">Missing</span>
+            {% endif %}
+          </div>
+          <input type="file" id="doc_nid_copy" name="doc_nid_copy" accept="image/*,application/pdf" style="font-size:0.85rem;">
+        </div>
+      </div>
+
+      <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px; align-items:center;">
+        <a href="/agent/dashboard.html" class="btn">Cancel</a>
+        <button type="submit" class="btn btn-accent" style="padding:10px 24px; font-weight:700;">Save Profile Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
