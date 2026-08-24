@@ -20,8 +20,7 @@ const {
   parseExcelBuffer, parseCsvBuffer, sendPendingBatch,
   getInvitationTemplate, saveInvitationTemplate, FROM_ADDRESS_OPTIONS,
 } = require('../lib/agent-invitations');
-const { generateSecret, verifyTotp, generateOtpAuthUri } = require('../lib/totp');
-const { createQrSvg } = require('../lib/qr');
+const { generateSecret, verifyTotp } = require('../lib/totp');
 const { getDynamicPermissionMatrix } = require('../lib/permission-matrix');
 
 const excelUpload = multer({
@@ -2750,19 +2749,14 @@ router.get('/admin/security/2fa', async (req, res) => {
 
   const isEnabled = Boolean(user.two_factor_enabled && user.two_factor_secret);
   let secret = '';
-  let qrApiUrl = '';
 
   if (!isEnabled) {
     secret = generateSecret();
-    const uri = generateOtpAuthUri({ secret, accountName: user.email, issuer: 'Bongshai Housing' });
-    const qrData = createQrSvg(uri, { size: 200 });
-    qrApiUrl = qrData.qrApiUrl;
   }
 
   res.render('admin/security-2fa.njk', adminVars(req, {
     isEnabled,
     secret,
-    qrApiUrl,
     enabled: req.query.enabled === '1',
     disabled: req.query.disabled === '1',
     error: req.query.error || null,

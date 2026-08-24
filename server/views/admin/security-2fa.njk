@@ -54,13 +54,8 @@
     </p>
 
     <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:12px; padding:18px; margin:20px 0; text-align:center;">
-      <div style="font-size:0.82rem; font-weight:700; color:var(--grey-700); text-transform:uppercase; margin-bottom:12px;">Step 1: Scan QR Code with Authenticator App</div>
-      {% if qrApiUrl %}
-      <div style="margin:12px auto; display:inline-block; padding:10px; background:white; border:1px solid var(--grey-200); border-radius:8px;">
-        <img src="{{ qrApiUrl }}" alt="2FA QR Code" width="180" height="180" style="display:block;">
-      </div>
-      {% endif %}
-      <div style="margin-top:8px; font-size:0.82rem; color:var(--grey-500);">Or enter secret key manually:</div>
+      <div style="font-size:0.82rem; font-weight:700; color:var(--grey-700); text-transform:uppercase; margin-bottom:12px;">Step 1: Enter This Key in Your Authenticator App</div>
+      <div style="margin-top:8px; font-size:0.82rem; color:var(--grey-500);">Add a new account manually using this secret key:</div>
       <div style="margin-top:4px; font-family:monospace; font-size:1rem; font-weight:800; letter-spacing:0.1em; color:var(--primary); background:white; display:inline-block; padding:6px 12px; border-radius:6px; border:1px dashed var(--primary);">
         {{ secret }}
       </div>
