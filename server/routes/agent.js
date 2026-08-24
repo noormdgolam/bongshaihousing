@@ -8,8 +8,15 @@ const router = express.Router();
 
 async function leadStats(agentId, filters = {}) {
   const allLeads = await db('agent_leads').where({ agent_id: agentId }).select('id', 'status', 'created_at');
-  const stats = { total: allLeads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0 };
-  for (const l of allLeads) stats[l.status] = (stats[l.status] || 0) + 1;
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const stats = { total: allLeads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0, wonThisMonth: 0 };
+  for (const l of allLeads) {
+    stats[l.status] = (stats[l.status] || 0) + 1;
+    if (l.status === 'won' && new Date(l.created_at) >= startOfMonth) {
+      stats.wonThisMonth += 1;
+    }
+  }
 
   let query = db('agent_leads').where({ agent_id: agentId }).orderBy('created_at', 'desc');
   
