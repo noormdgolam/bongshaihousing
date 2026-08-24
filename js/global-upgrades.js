@@ -141,69 +141,69 @@ if ('serviceWorker' in navigator) {
 
 
 
-    const cursor = document.createElement('div');
-    cursor.classList.add('magnetic-cursor');
-    document.body.appendChild(cursor);
+    if (!window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const cursor = document.createElement('div');
+        cursor.classList.add('magnetic-cursor');
+        document.body.appendChild(cursor);
 
-    const follower = document.createElement('div');
-    follower.classList.add('magnetic-cursor-follower');
-    document.body.appendChild(follower);
+        const follower = document.createElement('div');
+        follower.classList.add('magnetic-cursor-follower');
+        document.body.appendChild(follower);
 
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    let followerX = 0, followerY = 0;
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
 
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    const render = () => {
-        // Fast follow for dot
-        cursorX += (mouseX - cursorX) * 0.5;
-        cursorY += (mouseY - cursorY) * 0.5;
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-
-        // Smooth follow for ring
-        followerX += (mouseX - followerX) * 0.15;
-        followerY += (mouseY - followerY) * 0.15;
-        follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
-
-        requestAnimationFrame(render);
-    };
-    requestAnimationFrame(render);
-
-    // Hover effect
-    const addHoverLinks = () => {
-        const hoverElements = document.querySelectorAll('a, button, input[type="submit"], input[type="button"], .cat-item, .clickable, label, .gallery-item');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.classList.add('hovering');
-                follower.classList.add('hovering');
-            });
-            el.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hovering');
-                follower.classList.remove('hovering');
-            });
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
-    };
-    
-    addHoverLinks();
-    
-    // Re-bind on mutation (for dynamic content like loaded galleries)
-    const hoverObserver = new MutationObserver((mutations) => {
-        let shouldRebind = false;
-        mutations.forEach(mut => {
-            if (mut.addedNodes.length > 0) shouldRebind = true;
 
-        if (shouldRebind) {
-            // Very basic rebind - in a robust system you'd only bind new elements
-            // For now this works for our simple SPA and dynamic galleries
-            addHoverLinks();
-        }
-    });
-    hoverObserver.observe(document.body, { childList: true, subtree: true });
-});
+        const render = () => {
+            cursorX += (mouseX - cursorX) * 0.5;
+            cursorY += (mouseY - cursorY) * 0.5;
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            followerX += (mouseX - followerX) * 0.15;
+            followerY += (mouseY - followerY) * 0.15;
+            follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
+            requestAnimationFrame(render);
+        };
+        requestAnimationFrame(render);
+
+        const addHoverLinks = () => {
+            const hoverElements = document.querySelectorAll('a, button, input[type="submit"], input[type="button"], .cat-item, .clickable, label, .gallery-item');
+            hoverElements.forEach(el => {
+                if (el.hasAttribute('data-cursor-bound')) return;
+                el.setAttribute('data-cursor-bound', 'true');
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hovering');
+                    follower.classList.add('hovering');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hovering');
+                    follower.classList.remove('hovering');
+                });
+            });
+        };
+        
+        addHoverLinks();
+        
+        let debounceTimer = null;
+        const hoverObserver = new MutationObserver((mutations) => {
+            let shouldRebind = false;
+            mutations.forEach(mut => {
+                if (mut.addedNodes.length > 0) shouldRebind = true;
+            });
+
+            if (shouldRebind) {
+                if (debounceTimer) clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    addHoverLinks();
+                }, 150);
+            }
+        });
+        hoverObserver.observe(document.body, { childList: true, subtree: true });
+    }
 // Page fade-transition (page-loaded/page-exit + link interception) lived
 // here too, duplicating js/page-transition.js verbatim - both attached a
 // click listener to every a[href] on the page, doubling every internal
@@ -221,14 +221,11 @@ if ('serviceWorker' in navigator) {
 document.addEventListener('DOMContentLoaded', () => {
     const hero = document.querySelector('.hero');
     if (!hero) return; // Only on pages with a hero section
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     
     // Create canvas
     const canvas = document.createElement('canvas');
     canvas.id = 'hero-particles';
-    // Stacking is z-index driven (see #hero-particles in style.css), not DOM-order
-    // driven, so a plain prepend is enough - and unlike insertBefore() against a
-    // querySelector('.hero-content') result, it can't throw if that element ever
-    // ends up nested (e.g. inside a slider) instead of a direct child of .hero.
     hero.prepend(canvas);
     
     const ctx = canvas.getContext('2d');
@@ -236,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let particles = [];
     
     // Configuration
-    const particleCount = window.innerWidth > 768 ? 60 : 30;
+    const particleCount = window.innerWidth > 768 ? 40 : 15;
     const maxDistance = 150;
     
     function resize() {
@@ -292,6 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
+                if (Math.abs(dx) > maxDistance || Math.abs(dy) > maxDistance) continue;
+                
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance < maxDistance) {
@@ -305,15 +304,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
     }
+    
+    let animationFrameId = null;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (!animationFrameId) {
+                    animate();
+                }
+            } else {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+            }
+        });
+    });
     
     window.addEventListener('resize', () => {
         resize();
     });
     
     init();
-    animate();
+    observer.observe(hero);
 });
 
 // ==========================================================================
@@ -559,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     if(window.matchMedia("(pointer: coarse)").matches) return; // Skip mobile
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     
     const glow = document.createElement('div');
     glow.className = 'ambient-glow';
@@ -632,11 +648,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (x > rect.width) x = rect.width;
             
             const percent = (x / rect.width) * 100;
-            afterImg.style.width = percent + '%';
+            const p = percent / 100;
+            
+            // Using CSS transforms for GPU acceleration and no reflow
+            afterImg.style.transform = `scaleX(${p})`;
             handle.style.left = percent + '%';
             
             // Adjust the inner image width inversely so it doesn't stretch
-            innerImg.style.width = (100 / (percent / 100)) + '%';
+            const inverseP = p > 0.001 ? 1 / p : 1000;
+            innerImg.style.transform = `scaleX(${inverseP})`;
         };
         
         // Mouse Events
