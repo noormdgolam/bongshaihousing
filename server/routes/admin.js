@@ -13,7 +13,7 @@ const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAUL
 const { seedDefaultMilestones } = require('../lib/order-milestones');
 const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/settings');
 const { runTechnicalAudit } = require('../lib/seo/audit');
-const { generateBatch } = require('../lib/seo/generate');
+const { generateBatch, generateForProduct } = require('../lib/seo/generate');
 const { COUNTRY_MAP } = require('../lib/visitor-tracker');
 const { saveDocumentIn, documentPathIn } = require('../lib/document-uploader');
 const {
@@ -907,11 +907,12 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt } = req.body;
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
   try {
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
     const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
+    const isPublished = published === 'on' || published === true || published === 'true';
     const [id] = await db('products').insert({
       category_id, model_number, slug, title, description,
       price_per_sqft: price_per_sqft || null,
@@ -922,9 +923,20 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
       meta_title: meta_title || null,
       meta_description: meta_description || null,
       main_image_alt: main_image_alt || null,
-      published: published === 'on' || published === true || published === 'true',
+      published: isPublished,
     });
-    res.redirect(`/admin/products/${id}/edit`);
+    
+    let seoMsg = '';
+    if (isPublished && auto_seo === 'on') {
+      try {
+        await generateForProduct(id);
+        seoMsg = '?seo_generated=1';
+      } catch (seoErr) {
+        console.error('Auto SEO generation failed on publish:', seoErr);
+      }
+    }
+
+    res.redirect(`/admin/products/${id}/edit${seoMsg}`);
   } catch (err) {
     const categories = await db('categories').orderBy('sort_order');
     res.status(400).render('admin/products/form.njk', adminVars(req, { product: req.body, categories, error: err.message }));
@@ -940,17 +952,21 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   for (const v of variants) {
     v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
   }
-  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null }));
+  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null, seoGenerated: req.query.seo_generated === '1' }));
 });
 
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt } = req.body;
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
   const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
   const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
   const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
+  
+  const existingProduct = await db('products').where({ id: req.params.id }).first();
+  const isPublished = published === 'on' || published === true || published === 'true';
+
   await db('products').where({ id: req.params.id }).update({
     category_id, model_number, slug, title, description,
     price_per_sqft: price_per_sqft || null,
@@ -961,10 +977,21 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     meta_title: meta_title || null,
     meta_description: meta_description || null,
     main_image_alt: main_image_alt || null,
-    published: published === 'on' || published === true || published === 'true',
+    published: isPublished,
     updated_at: db.fn.now(),
   });
-  res.redirect(`/admin/products/${req.params.id}/edit`);
+  
+  let seoMsg = '';
+  if (isPublished && existingProduct && !existingProduct.published && auto_seo === 'on') {
+    try {
+      await generateForProduct(req.params.id);
+      seoMsg = '?seo_generated=1';
+    } catch (seoErr) {
+      console.error('Auto SEO generation failed on publish:', seoErr);
+    }
+  }
+
+  res.redirect(`/admin/products/${req.params.id}/edit${seoMsg}`);
 });
 
 router.post('/admin/products/:id/delete', async (req, res) => {

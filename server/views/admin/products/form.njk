@@ -3,6 +3,12 @@
 {% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if product.id %}Edit {{ product.model_number }}{% else %}New Product{% endif %}</h1>{% endblock %}
 {% block content %}
 {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+{% if seoGenerated %}
+<div style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 12px; border-radius: 6px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+  <span>🤖 SEO suggestions were auto-generated in the background!</span>
+  <a href="/admin/seo/suggestions" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 4px;">Review in Queue</a>
+</div>
+{% endif %}
 <div class="card">
 <form method="post" enctype="multipart/form-data" action="{% if product.id %}/admin/products/{{ product.id }}{% else %}/admin/products{% endif %}">
   <div class="form-row">
@@ -147,8 +153,9 @@
       <input type="text" id="price_currency" name="price_currency" value="{{ product.price_currency or 'BDT' }}">
     </div>
   </div>
-  <div class="form-row">
+  <div class="form-row" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
     <label><input type="checkbox" name="published" {% if product.published or not product.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label>
+    <label><input type="checkbox" id="auto_seo" name="auto_seo" checked style="width:auto; display:inline-block; margin-right:6px;"> 🤖 Auto-generate SEO suggestions when publishing</label>
   </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">{% if product.id %}Save Changes{% else %}Create Product{% endif %}</button>
