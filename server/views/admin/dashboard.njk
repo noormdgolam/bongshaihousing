@@ -156,8 +156,30 @@
       <div class="kpi-icon">{{ icons.icon('building-2', 22) }}</div>
     </div>
     <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
-      <span style="font-size:0.8rem; color:var(--grey-600, #475569);">Under construction, tracked in the customer portal</span>
+      <span style="font-size:0.8rem; color:var(--grey-600, #475569);">Awaiting milestone completion</span>
       <a href="/admin/orders" style="font-size:0.78rem; font-weight:700; color:#059669;">View →</a>
+    </div>
+  </div>
+
+  <!-- KPI 7: SEO Optimization -->
+  <div class="card" style="padding:18px; border-left:4px solid #EC4899; display:flex; flex-direction:column; justify-content:space-between; margin:0;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div style="font-size:0.78rem; font-weight:700; color:var(--grey-500); text-transform:uppercase; letter-spacing:0.04em;">SEO Optimization</div>
+        <div style="font-size:1.8rem; font-weight:800; color:var(--grey-900); margin-top:4px; line-height:1;">{{ counts.seoSuggestions + counts.seoIssues }} <span style="font-size:0.9rem; font-weight:600; color:var(--grey-500);">Tasks</span></div>
+      </div>
+      <div class="kpi-icon">{{ icons.icon('search', 22) }}</div>
+    </div>
+    <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; gap:6px;">
+        <a href="/admin/seo/suggestions" class="pill {{ 'pill-danger' if counts.seoSuggestions > 0 else 'pill-success' }}" style="font-size:0.75rem;">
+          {{ counts.seoSuggestions }} Suggestions
+        </a>
+        <a href="/admin/seo/audit" class="pill {{ 'pill-danger' if counts.seoIssues > 0 else 'pill-success' }}" style="font-size:0.75rem;">
+          {{ counts.seoIssues }} Issues
+        </a>
+      </div>
+      <a href="/admin/seo" style="font-size:0.78rem; font-weight:700; color:#EC4899;">Manage →</a>
     </div>
   </div>
 
@@ -234,7 +256,7 @@
         <span class="op-tile-label">64 Districts</span>
       </a>
       <a href="/admin/media" class="op-tile">
-        <span><span class="op-tile-label">Media</span><br><span class="op-tile-sub">{{ counts.mediaCount }} files</span></span>
+        <span><span class="op-tile-label">Media Library</span><br><span class="op-tile-sub">{{ counts.mediaCount }} files {% if counts.mediaSizeBytes > 0 %}({{ (counts.mediaSizeBytes / (1024*1024)) | round(1) }} MB){% endif %}</span></span>
       </a>
     </div>
   </div>
@@ -264,6 +286,12 @@
       <a href="/admin/theme-editor" class="op-tile is-primary">
         <span class="op-tile-label">Studio Pro</span>
       </a>
+      <a href="/admin/pages" class="op-tile">
+        <span><span class="op-tile-label">Marketing Pages</span><br><span class="op-tile-sub">{{ counts.pageContent }} pages</span></span>
+      </a>
+      <a href="/admin/users" class="op-tile">
+        <span><span class="op-tile-label">Admin Users</span><br><span class="op-tile-sub">Manage Access</span></span>
+      </a>
     </div>
   </div>
 
@@ -281,6 +309,7 @@
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
       <a href="/admin/leads/export/csv" class="btn" style="font-size:0.8rem; padding:6px 12px;">Export CSV</a>
+      <a href="/admin/leads/new" class="btn" style="font-size:0.8rem; padding:6px 12px;">+ Add Lead</a>
       <a href="/admin/leads" class="btn btn-primary" style="font-size:0.8rem; padding:6px 12px;">View All {{ counts.leads }} Leads →</a>
     </div>
   </div>

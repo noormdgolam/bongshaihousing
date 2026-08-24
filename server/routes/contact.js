@@ -2,6 +2,7 @@ const express = require('express');
 const { stripTags, singleLine, sanitizeEmail, safeFilenamePart } = require('../lib/sanitize');
 const { buildQuotePdf } = require('../lib/pdf');
 const { sendMail } = require('../lib/mailer');
+const { sendTelegramAlert } = require('../lib/telegram');
 const { formatTakaAscii } = require('../lib/format');
 let db;
 try {
@@ -101,6 +102,10 @@ router.post('/send_email.php', async (req, res) => {
       console.error('Failed to save lead to database:', dbErr.message);
     }
   }
+
+  sendTelegramAlert(
+    `🔔 New Lead: ${name}\n📞 ${phone}\n📍 ${district}, ${upazila}\n🏠 ${model}\n💬 ${message}`
+  );
 
   // Ballpark estimate for the sales rep's reference, not a customer-facing
   // quote - only computed when the form's free-text model/floor-area

@@ -26,7 +26,8 @@
       <a href="/admin/leads" class="btn">Clear</a>
       {% endif %}
     </div>
-    <div>
+    <div style="display:flex; gap:8px;">
+      <a href="/admin/leads/new" class="btn" style="font-weight:600;">+ Add Lead</a>
       <a href="/admin/leads/export/csv{% if status and status != 'all' %}?status={{ status }}{% endif %}{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn" style="font-weight:600;">📥 Export CSV</a>
     </div>
   </form>

@@ -173,6 +173,10 @@ router.get('/admin', async (req, res) => {
   let agentLeadCount = { count: 0 };
   let newAgentLeadCount = { count: 0 };
   let activeOrderCount = { count: 0 };
+  let seoIssuesCount = { count: 0 };
+  let seoSuggestionsCount = { count: 0 };
+  let pageContentCount = { count: 0 };
+  let mediaSizeBytes = 0;
 
   if (db) {
     try {
@@ -231,7 +235,25 @@ router.get('/admin', async (req, res) => {
 
       const hasOrders = await db.schema.hasTable('orders');
       if (hasOrders) {
-        [activeOrderCount] = await db('orders').where({ status: 'active' }).count({ count: '*' });
+        // Change from 'active' status count to a more meaningful 'needs attention' metric 
+        // Note: we just pull a general count since 'awaiting milestone' depends on exact milestone structures, 
+        // we'll count active orders for now, or check specific statuses. 
+        [activeOrderCount] = await db('orders').whereNot({ status: 'completed' }).whereNot({ status: 'cancelled' }).count({ count: '*' });
+      }
+
+      const hasSeoAudit = await db.schema.hasTable('seo_audit_issues');
+      if (hasSeoAudit) {
+        [seoIssuesCount] = await db('seo_audit_issues').where({ status: 'open' }).count({ count: '*' });
+      }
+
+      const hasSeoSuggestions = await db.schema.hasTable('seo_suggestions');
+      if (hasSeoSuggestions) {
+        [seoSuggestionsCount] = await db('seo_suggestions').where({ status: 'pending' }).count({ count: '*' });
+      }
+
+      const hasPageContent = await db.schema.hasTable('page_content');
+      if (hasPageContent) {
+        [pageContentCount] = await db('page_content').count({ count: '*' });
       }
     } catch (e) {
       console.error('Admin dashboard query error:', e.message);
@@ -241,7 +263,11 @@ router.get('/admin', async (req, res) => {
   // Media files count
   try {
     if (fs.existsSync(UPLOADS_DIR)) {
-      mediaCount = fs.readdirSync(UPLOADS_DIR).filter(f => !f.startsWith('.')).length;
+      const files = fs.readdirSync(UPLOADS_DIR).filter(f => !f.startsWith('.'));
+      mediaCount = files.length;
+      for (const f of files) {
+        mediaSizeBytes += fs.statSync(path.join(UPLOADS_DIR, f)).size;
+      }
     }
   } catch (err) {}
 
@@ -275,6 +301,10 @@ router.get('/admin', async (req, res) => {
       teamMembers: teamMemberCount?.count || 14,
       testimonials: testimonialCount?.count || 3,
       mediaCount,
+      mediaSizeBytes,
+      seoIssues: seoIssuesCount.count || 0,
+      seoSuggestions: seoSuggestionsCount.count || 0,
+      pageContent: pageContentCount.count || 0,
       pendingAgents: pendingAgentCount?.count || 0,
       activeAgents: activeAgentCount?.count || 0,
       agentLeads: agentLeadCount?.count || 0,
@@ -675,6 +705,29 @@ router.get('/admin/leads/export/csv', async (req, res) => {
     res.send('\uFEFF' + csvContent);
   } catch (e) {
     res.status(500).send('Export error: ' + e.message);
+  }
+});
+
+router.get('/admin/leads/new', async (req, res) => {
+  res.render('admin/leads/form.njk', adminVars(req, { lead: {} }));
+});
+
+router.post('/admin/leads', async (req, res) => {
+  try {
+    const { name, email, phone, district, upazila, model, floor_area, bedrooms, message, status } = req.body;
+    
+    await db('leads').insert({
+      name, email, phone, district, upazila, model, floor_area, bedrooms, message,
+      status: status || 'new',
+      source: 'manual_entry',
+      created_at: db.fn.now(),
+      updated_at: db.fn.now()
+    });
+    
+    res.redirect('/admin/leads?success=Lead added manually');
+  } catch (err) {
+    console.error('Error adding manual lead:', err);
+    res.redirect('/admin/leads?error=' + encodeURIComponent(err.message));
   }
 });
 

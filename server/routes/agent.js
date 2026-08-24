@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('../lib/db');
 const requireAgent = require('../middleware/requireAgent');
 const { sendMail } = require('../lib/mailer');
+const { sendTelegramAlert } = require('../lib/telegram');
 
 const router = express.Router();
 
@@ -58,6 +59,10 @@ Notes: ${notes || 'N/A'}
   } catch (err) {
     console.error('Failed to send agent lead notification email:', err);
   }
+
+  sendTelegramAlert(
+    `🔔 New Agent Lead from ${req.agent.business_name || req.agent.name}:\n👤 ${customer_name}\n📞 ${customer_phone}\n📍 ${customer_district || 'N/A'}\n🏠 ${product_interest || 'N/A'}`
+  );
 
   res.redirect('/agent/dashboard.html');
 });
