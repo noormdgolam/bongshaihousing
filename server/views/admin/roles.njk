@@ -1,0 +1,106 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Roles &amp; Permissions Matrix{% endblock %}
+{% block header %}
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+  <h1 style="margin:0; font-size:1.25rem;">🛡️ Roles &amp; Permissions Audit</h1>
+  <div style="display:flex; gap:8px;">
+    <a href="/admin/users" class="btn">Manage Users →</a>
+    <a href="/admin" class="btn">← Dashboard</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:1100px; margin:0 auto;">
+  
+  <!-- Role Overview Cards -->
+  <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
+    <div class="card" style="margin:0; padding:18px; border-top:4px solid #ef4444;">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--grey-500); text-transform:uppercase;">Super Admin</div>
+      <div style="font-size:1.4rem; font-weight:800; color:#ef4444; margin-top:4px;">Unrestricted</div>
+      <p style="font-size:0.8rem; color:var(--grey-600); margin:8px 0 0;">Complete system ownership, API keys, SEO config, DB migrations, user administration.</p>
+    </div>
+
+    <div class="card" style="margin:0; padding:18px; border-top:4px solid #3b82f6;">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--grey-500); text-transform:uppercase;">Administrator</div>
+      <div style="font-size:1.4rem; font-weight:800; color:#3b82f6; margin-top:4px;">Full CMS &amp; CRM</div>
+      <p style="font-size:0.8rem; color:var(--grey-600); margin:8px 0 0;">Full content publishing, lead management, agent onboarding, user accounts.</p>
+    </div>
+
+    <div class="card" style="margin:0; padding:18px; border-top:4px solid #10b981;">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--grey-500); text-transform:uppercase;">Editor</div>
+      <div style="font-size:1.4rem; font-weight:800; color:#10b981; margin-top:4px;">Content Only</div>
+      <p style="font-size:0.8rem; color:var(--grey-600); margin:8px 0 0;">Manages catalog, projects, service areas, media, themes, FAQs, and marketing copy.</p>
+    </div>
+
+    <div class="card" style="margin:0; padding:18px; border-top:4px solid #f59e0b;">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--grey-500); text-transform:uppercase;">Sales / CRM</div>
+      <div style="font-size:1.4rem; font-weight:800; color:#f59e0b; margin-top:4px;">Leads &amp; Orders</div>
+      <p style="font-size:0.8rem; color:var(--grey-600); margin:8px 0 0;">Scoped to customer quote inquiries, orders, and agent leads. Content edits blocked.</p>
+    </div>
+  </div>
+
+  <!-- Permission Matrix Table -->
+  <div class="card" style="padding:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="margin:0; font-size:1.05rem; font-weight:800; color:var(--grey-900);">Module Permission Matrix</h2>
+      <span style="font-size:0.8rem; color:var(--grey-500);">Enforced via <code>requireRole()</code> middleware</span>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%;">
+        <thead>
+          <tr>
+            <th style="padding:10px 14px;">System Module</th>
+            <th style="padding:10px 14px;">Route Path</th>
+            <th style="padding:10px 14px; text-align:center;">Super Admin</th>
+            <th style="padding:10px 14px; text-align:center;">Admin</th>
+            <th style="padding:10px 14px; text-align:center;">Editor</th>
+            <th style="padding:10px 14px; text-align:center;">Sales</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in matrix %}
+          <tr>
+            <td style="padding:10px 14px; font-weight:600; color:var(--grey-900);">
+              {{ row.module }}
+              {% if row.description %}<div style="font-size:0.75rem; color:var(--grey-500); font-weight:400;">{{ row.description }}</div>{% endif %}
+            </td>
+            <td style="padding:10px 14px; font-family:monospace; font-size:0.82rem; color:var(--primary);">{{ row.path }}</td>
+            <td style="padding:10px 14px; text-align:center;">
+              {% if row.roles.includes('superadmin') or row.roles.includes('all') %}
+              <span style="color:#16a34a; font-weight:800; font-size:1.1rem;">✓</span>
+              {% else %}
+              <span style="color:#dc2626; font-weight:800; font-size:1.1rem;">✕</span>
+              {% endif %}
+            </td>
+            <td style="padding:10px 14px; text-align:center;">
+              {% if row.roles.includes('admin') or row.roles.includes('all') %}
+              <span style="color:#16a34a; font-weight:800; font-size:1.1rem;">✓</span>
+              {% else %}
+              <span style="color:#dc2626; font-weight:800; font-size:1.1rem;">✕</span>
+              {% endif %}
+            </td>
+            <td style="padding:10px 14px; text-align:center;">
+              {% if row.roles.includes('editor') or row.roles.includes('all') %}
+              <span style="color:#16a34a; font-weight:800; font-size:1.1rem;">✓</span>
+              {% else %}
+              <span style="color:#dc2626; font-weight:800; font-size:1.1rem;">✕</span>
+              {% endif %}
+            </td>
+            <td style="padding:10px 14px; text-align:center;">
+              {% if row.roles.includes('sales') or row.roles.includes('all') %}
+              <span style="color:#16a34a; font-weight:800; font-size:1.1rem;">✓</span>
+              {% else %}
+              <span style="color:#dc2626; font-weight:800; font-size:1.1rem;">✕</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

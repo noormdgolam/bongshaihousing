@@ -139,6 +139,7 @@
       {% endif %}
       {% if adminRole == 'admin' or adminRole == 'superadmin' %}
       <a href="/admin/users">{{ icons.icon('users', 18) }} Users</a>
+      <a href="/admin/roles">{{ icons.icon('shield-check', 18) }} Roles &amp; Permissions</a>
       <a href="/admin/activity">{{ icons.icon('clock', 18) }} Activity Log</a>
       {% endif %}
       <a href="/admin/security/2fa">{{ icons.icon('lock', 18) }} 2FA Security</a>
