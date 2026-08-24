@@ -79,7 +79,31 @@
     </div>
 
     <div class="card agent-leads-card">
-      <h2 style="margin-top:0; font-size:1.05rem;">{{ icons.icon('clipboard-list', 18) }} My Leads <span style="color:var(--grey-500); font-weight:400;">({{ leads.length }})</span></h2>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        <h2 style="margin:0; font-size:1.05rem;">{{ icons.icon('clipboard-list', 18) }} My Leads <span style="color:var(--grey-500); font-weight:400;">({{ pagination.totalCount if pagination else leads.length }})</span></h2>
+        {% if filters.q or (filters.status and filters.status != 'all') %}
+        <a href="/agent/dashboard.html" style="font-size:0.8rem; color:var(--grey-500);">Clear Filters</a>
+        {% endif %}
+      </div>
+
+      <!-- Search and Status Filter Bar -->
+      <form method="get" action="/agent/dashboard.html" style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:140px;">
+          <input type="text" name="q" value="{{ filters.q or '' }}" placeholder="Search name, phone, district…" style="width:100%; padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+        </div>
+        <div>
+          <select name="status" onchange="this.form.submit()" style="padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+            <option value="all" {% if not filters.status or filters.status == 'all' %}selected{% endif %}>All Statuses</option>
+            <option value="new" {% if filters.status == 'new' %}selected{% endif %}>New</option>
+            <option value="contacted" {% if filters.status == 'contacted' %}selected{% endif %}>Contacted</option>
+            <option value="quoted" {% if filters.status == 'quoted' %}selected{% endif %}>Quoted</option>
+            <option value="won" {% if filters.status == 'won' %}selected{% endif %}>Won</option>
+            <option value="lost" {% if filters.status == 'lost' %}selected{% endif %}>Lost</option>
+          </select>
+        </div>
+        <button type="submit" class="btn" style="padding:7px 12px; font-size:0.85rem;">Filter</button>
+      </form>
+
       {% if leads.length %}
       <div class="agent-lead-list">
         {% for lead in leads %}
@@ -97,8 +121,32 @@
         </div>
         {% endfor %}
       </div>
+
+      <!-- Pagination Controls -->
+      {% if pagination and pagination.totalPages > 1 %}
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid rgba(15,23,42,0.06); font-size:0.85rem;">
+        <div>
+          {% if pagination.hasPrev %}
+          <a href="?page={{ pagination.page - 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">← Previous</a>
+          {% endif %}
+        </div>
+        <span style="color:var(--grey-500);">Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
+        <div>
+          {% if pagination.hasNext %}
+          <a href="?page={{ pagination.page + 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">Next →</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
       {% else %}
-      <p style="color:var(--grey-500); font-size:0.9rem;">No leads submitted yet — use the form to add your first one.</p>
+      <p style="color:var(--grey-500); font-size:0.9rem; margin-top:10px;">
+        {% if filters.q or (filters.status and filters.status != 'all') %}
+        No leads match your filter criteria.
+        {% else %}
+        No leads submitted yet — use the form to add your first one.
+        {% endif %}
+      </p>
       {% endif %}
     </div>
   </div>

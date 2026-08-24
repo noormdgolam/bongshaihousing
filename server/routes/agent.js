@@ -6,16 +6,67 @@ const { sendTelegramAlert } = require('../lib/telegram');
 
 const router = express.Router();
 
-async function leadStats(agentId) {
-  const leads = await db('agent_leads').where({ agent_id: agentId }).orderBy('created_at', 'desc');
-  const stats = { total: leads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0 };
-  for (const l of leads) stats[l.status] = (stats[l.status] || 0) + 1;
-  return { leads, stats };
+async function leadStats(agentId, filters = {}) {
+  const allLeads = await db('agent_leads').where({ agent_id: agentId }).select('id', 'status', 'created_at');
+  const stats = { total: allLeads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0 };
+  for (const l of allLeads) stats[l.status] = (stats[l.status] || 0) + 1;
+
+  let query = db('agent_leads').where({ agent_id: agentId }).orderBy('created_at', 'desc');
+  
+  const statusFilter = filters.status || 'all';
+  if (statusFilter && statusFilter !== 'all') {
+    query = query.where({ status: statusFilter });
+  }
+
+  const search = (filters.q || '').trim();
+  if (search) {
+    query = query.where((builder) => {
+      builder.where('customer_name', 'like', `%${search}%`)
+        .orWhere('customer_phone', 'like', `%${search}%`)
+        .orWhere('customer_district', 'like', `%${search}%`)
+        .orWhere('product_interest', 'like', `%${search}%`);
+    });
+  }
+
+  const countQuery = query.clone().clearSelect().clearOrder().count({ count: '*' }).first();
+  const totalCountResult = await countQuery;
+  const filteredTotal = totalCountResult ? Number(totalCountResult.count) : 0;
+
+  const page = Math.max(1, parseInt(filters.page, 10) || 1);
+  const limit = Math.max(1, Math.min(100, parseInt(filters.limit, 10) || 10));
+  const totalPages = Math.ceil(filteredTotal / limit) || 1;
+  const offset = (page - 1) * limit;
+
+  const leads = await query.offset(offset).limit(limit);
+
+  return {
+    leads,
+    stats,
+    pagination: {
+      page,
+      limit,
+      totalCount: filteredTotal,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    },
+    filters: {
+      status: statusFilter,
+      q: search,
+    }
+  };
 }
 
-router.get('/agent/dashboard.html', requireAgent, async (req, res) => {
-  const { leads, stats } = await leadStats(req.agent.id);
-  res.render('agent/dashboard.njk', { agent: req.agent, leads, stats, error: null });
+router.get(['/agent/dashboard', '/agent/dashboard.html'], requireAgent, async (req, res) => {
+  const result = await leadStats(req.agent.id, req.query);
+  res.render('agent/dashboard.njk', {
+    agent: req.agent,
+    leads: result.leads,
+    stats: result.stats,
+    pagination: result.pagination,
+    filters: result.filters,
+    error: null
+  });
 });
 
 router.post('/agent/leads', requireAgent, async (req, res) => {
