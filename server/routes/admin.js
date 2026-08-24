@@ -467,7 +467,7 @@ router.post('/admin/agents/invite/template', requireRole('admin', 'superadmin', 
       body: req.body.body,
       from_address: req.body.from_address,
     });
-    await logActivity(req, { action: 'update', entityType: 'agent_invitation_template', summary: 'Updated the distributor invitation email composer' });
+    await logActivity(req, { action: 'update', entityType: 'agent_invitation_template', summary: 'Updated the agent invitation email composer' });
     res.redirect('/admin/agents/invite?templateSaved=1');
   } catch (e) {
     res.redirect('/admin/agents/invite?error=' + encodeURIComponent(e.message));
@@ -506,7 +506,7 @@ router.post('/admin/agents/invite/import', requireRole('admin', 'superadmin', 'e
 router.post('/admin/agents/invite/send', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   try {
     const result = await sendPendingBatch(20);
-    await logActivity(req, { action: 'update', entityType: 'agent_invitation', summary: `Sent ${result.sent}/${result.processed} distributor invitation email(s)${result.errors.length ? `, ${result.errors.length} failed` : ''}` });
+    await logActivity(req, { action: 'update', entityType: 'agent_invitation', summary: `Sent ${result.sent}/${result.processed} agent invitation email(s)${result.errors.length ? `, ${result.errors.length} failed` : ''}` });
   } catch (e) {
     console.error('Invitation send error:', e.message);
   }

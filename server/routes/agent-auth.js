@@ -51,22 +51,54 @@ const BANGLADESH_DISTRICTS = [
   'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon',
 ];
 
+const BUSINESS_TYPE_OPTIONS = [
+  'Construction Contractor',
+  'Real Estate Developer / Dealer',
+  'Building Materials Supplier',
+  'Hardware & Sanitary Store',
+  'Steel / Fabrication Workshop',
+  'General Trading',
+];
+
 router.get('/agent/signup.html', (req, res) => {
   if (req.session && req.session.agentId) return res.redirect('/agent/dashboard.html');
-  res.render('agent/signup.njk', { error: null, districts: BANGLADESH_DISTRICTS, values: {} });
+  res.render('agent/signup.njk', {
+    error: null,
+    districts: BANGLADESH_DISTRICTS,
+    businessTypeOptions: BUSINESS_TYPE_OPTIONS,
+    values: {},
+  });
 });
 
 router.post('/agent/signup', function (req, res, next) {
   documentUpload(req, res, (err) => {
     if (err) {
-      return res.status(400).render('agent/signup.njk', { error: err.message, districts: BANGLADESH_DISTRICTS, values: req.body || {} });
+      return res.status(400).render('agent/signup.njk', {
+        error: err.message,
+        districts: BANGLADESH_DISTRICTS,
+        businessTypeOptions: BUSINESS_TYPE_OPTIONS,
+        values: req.body || {},
+      });
     }
     next();
   });
 }, async (req, res) => {
   const b = req.body;
   const values = { ...b };
-  const fail = (error) => res.status(400).render('agent/signup.njk', { error, districts: BANGLADESH_DISTRICTS, values });
+  const fail = (error) => {
+    let typesArr = [];
+    if (Array.isArray(b.business_types)) {
+      typesArr = b.business_types;
+    } else if (typeof b.business_types === 'string' && b.business_types.trim()) {
+      typesArr = [b.business_types.trim()];
+    }
+    return res.status(400).render('agent/signup.njk', {
+      error,
+      districts: BANGLADESH_DISTRICTS,
+      businessTypeOptions: BUSINESS_TYPE_OPTIONS,
+      values: { ...values, business_types: typesArr },
+    });
+  };
 
   // multipart bodies skip the global CSRF middleware's check (req.body
   // isn't parsed yet at that point) - verified here instead, now that
@@ -78,18 +110,48 @@ router.post('/agent/signup', function (req, res, next) {
     'Business/establishment name': b.business_name,
     'Owner/applicant name': b.name,
     'Contact address': b.contact_address,
+    'Landline / alternate phone': b.landline_phone,
     'Mobile number': b.phone,
+    'Email address': b.email,
     'National ID (NID) number': b.nid_number,
+    'Current business address': b.current_business_address,
     'Permanent address': b.permanent_address,
     'District': b.district,
     'Thana': b.thana,
     'TIN number': b.tin_number,
     'Trade license number': b.trade_license_number,
+    'Own fund details': b.funding_own_fund,
+    'Bank fund details': b.funding_bank,
     'Password': b.password,
   };
   for (const [label, val] of Object.entries(required)) {
     if (!val || !String(val).trim()) return fail(`${label} is required.`);
   }
+
+  let rawTypes = [];
+  if (Array.isArray(b.business_types)) {
+    rawTypes = b.business_types;
+  } else if (typeof b.business_types === 'string' && b.business_types.trim()) {
+    rawTypes = [b.business_types.trim()];
+  }
+
+  const selectedTypes = [];
+  for (const t of rawTypes) {
+    if (t === 'Other') {
+      const otherVal = (b.business_type_other || '').trim();
+      if (!otherVal) return fail('Please specify your other business type.');
+      selectedTypes.push(`Other (${otherVal})`);
+    } else if (t && t.trim()) {
+      selectedTypes.push(t.trim());
+    }
+  }
+
+  if (selectedTypes.length === 0) {
+    return fail('At least one current business type is required.');
+  }
+
+  const businessTypes = selectedTypes.join(', ');
+
   if (b.password.length < 8) return fail('Password must be at least 8 characters.');
   if (b.password !== b.confirm_password) return fail('Passwords do not match.');
   if (b.certification_agreed !== 'on') return fail('You must certify that the information provided is correct.');
@@ -116,29 +178,26 @@ router.post('/agent/signup', function (req, res, next) {
     return fail(docErr.message);
   }
 
-  const businessTypes = [b.business_type_1, b.business_type_2, b.business_type_3]
-    .map((t) => (t || '').trim()).filter(Boolean).join(', ') || null;
-
   const password_hash = await bcrypt.hash(b.password, 10);
   await db('agents').insert({
-    name: b.name,
-    phone: b.phone,
-    email: b.email || null,
-    district: b.district,
-    thana: b.thana,
+    name: b.name.trim(),
+    phone: b.phone.trim(),
+    email: b.email.trim(),
+    district: b.district.trim(),
+    thana: b.thana.trim(),
     password_hash,
     status: 'pending',
-    business_name: b.business_name,
-    contact_address: b.contact_address,
-    landline_phone: b.landline_phone || null,
-    nid_number: b.nid_number,
+    business_name: b.business_name.trim(),
+    contact_address: b.contact_address.trim(),
+    landline_phone: b.landline_phone.trim(),
+    nid_number: b.nid_number.trim(),
     current_business_types: businessTypes,
-    current_business_address: b.current_business_address || null,
-    permanent_address: b.permanent_address,
-    tin_number: b.tin_number || null,
-    trade_license_number: b.trade_license_number || null,
-    funding_own_fund: b.funding_own_fund || null,
-    funding_bank: b.funding_bank || null,
+    current_business_address: b.current_business_address.trim(),
+    permanent_address: b.permanent_address.trim(),
+    tin_number: b.tin_number.trim(),
+    trade_license_number: b.trade_license_number.trim(),
+    funding_own_fund: b.funding_own_fund.trim(),
+    funding_bank: b.funding_bank.trim(),
     doc_application_letter: docPaths.doc_application_letter,
     doc_passport_photo: docPaths.doc_passport_photo,
     doc_trade_license: docPaths.doc_trade_license,

@@ -1,13 +1,13 @@
 {% extends "agent-layout.njk" %}
 {% import "partials/icons.njk" as icons %}
-{% block title %}Distributor Application{% endblock %}
+{% block title %}Agent Application{% endblock %}
 {% block body %}
 <div style="min-height:100vh; padding:32px 16px;">
   <div style="max-width: 640px; margin: 0 auto;">
 
     <div style="text-align:center; margin-bottom:22px; color:white;">
       <div style="margin-bottom:6px;">{{ icons.icon('handshake', 40) }}</div>
-      <h1 style="font-size:1.5rem; font-weight:800; margin:0;">Bongshai Housing Distributorship Application</h1>
+      <h1 style="font-size:1.5rem; font-weight:800; margin:0;">Bongshai Housing Agent Application</h1>
       <p style="opacity:0.85; font-size:0.85rem; margin-top:6px;">Apply to represent Bongshai Housing &amp; Real Estate in your area. Reviewed by our team before your account is activated.</p>
     </div>
 
@@ -33,8 +33,8 @@
         </div>
         <div class="form-row" style="display:flex; gap:12px;">
           <div style="flex:1;">
-            <label for="landline_phone">Phone (landline, optional)</label>
-            <input type="text" id="landline_phone" name="landline_phone" value="{{ values.landline_phone or '' }}">
+            <label for="landline_phone">Landline / Alternate Phone</label>
+            <input type="text" id="landline_phone" name="landline_phone" value="{{ values.landline_phone or '' }}" required>
           </div>
           <div style="flex:1;">
             <label for="phone">Mobile Number</label>
@@ -42,8 +42,8 @@
           </div>
         </div>
         <div class="form-row">
-          <label for="email">Email Address <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <input type="email" id="email" name="email" value="{{ values.email or '' }}">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="{{ values.email or '' }}" required>
         </div>
         <div class="form-row" style="margin-bottom:0;">
           <label for="nid_number">Applicant's National ID (NID) Number</label>
@@ -54,16 +54,26 @@
       <div class="card">
         <div class="signup-section-head"><span class="signup-step">2</span><span class="signup-section-icon">{{ icons.icon('clipboard-list', 22) }}</span><h3>Business Details</h3></div>
         <div class="form-row">
-          <label>Current Business Type(s) <span style="font-weight:400; color:var(--grey-500);">(up to 3, optional)</span></label>
-          <div style="display:flex; gap:8px;">
-            <input type="text" name="business_type_1" placeholder="1)" value="{{ values.business_type_1 or '' }}">
-            <input type="text" name="business_type_2" placeholder="2)" value="{{ values.business_type_2 or '' }}">
-            <input type="text" name="business_type_3" placeholder="3)" value="{{ values.business_type_3 or '' }}">
+          <label>Current Business Type(s) <span style="font-size:0.8rem; color:var(--grey-500); font-weight:400;">(Select at least one)</span></label>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:8px 16px; margin-top:6px;">
+            {% for type in businessTypeOptions %}
+            <label style="display:flex; align-items:center; gap:8px; font-weight:400; font-size:0.9rem; cursor:pointer;">
+              <input type="checkbox" name="business_types" value="{{ type }}" class="business-type-cb" {% if values.business_types and (type in values.business_types) %}checked{% endif %}>
+              <span>{{ type }}</span>
+            </label>
+            {% endfor %}
+            <label style="display:flex; align-items:center; gap:8px; font-weight:400; font-size:0.9rem; cursor:pointer;">
+              <input type="checkbox" name="business_types" value="Other" id="business_type_other_cb" class="business-type-cb" {% if values.business_types and ('Other' in values.business_types or values.business_type_other) %}checked{% endif %}>
+              <span>Other</span>
+            </label>
+          </div>
+          <div id="other_business_type_container" style="margin-top:10px; display:{% if values.business_types and ('Other' in values.business_types or values.business_type_other) %}block{% else %}none{% endif %};">
+            <input type="text" id="business_type_other" name="business_type_other" placeholder="Please specify your business type" value="{{ values.business_type_other or '' }}" style="font-size:0.88rem;">
           </div>
         </div>
         <div class="form-row">
-          <label for="current_business_address">Current Business Address <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <textarea id="current_business_address" name="current_business_address">{{ values.current_business_address or '' }}</textarea>
+          <label for="current_business_address">Current Business Address</label>
+          <textarea id="current_business_address" name="current_business_address" required>{{ values.current_business_address or '' }}</textarea>
         </div>
         <div class="form-row" style="margin-bottom:0;">
           <label for="permanent_address">Permanent Address</label>
@@ -103,10 +113,10 @@
           </div>
         </div>
         <div class="form-row" style="margin-bottom:0;">
-          <label>Funding Status for Distributorship <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <label>Funding Status</label>
           <div style="display:flex; gap:12px;">
-            <input type="text" name="funding_own_fund" placeholder="Own fund (amount/details)" style="flex:1;">
-            <input type="text" name="funding_bank" placeholder="From bank (amount/details)" style="flex:1;">
+            <input type="text" id="funding_own_fund" name="funding_own_fund" placeholder="Own fund (amount/details)" value="{{ values.funding_own_fund or '' }}" style="flex:1;" required>
+            <input type="text" id="funding_bank" name="funding_bank" placeholder="From bank (amount/details)" value="{{ values.funding_bank or '' }}" style="flex:1;" required>
           </div>
         </div>
       </div>
@@ -153,7 +163,7 @@
       <div class="card">
         <label style="display:flex; align-items:flex-start; gap:10px; font-weight:400; cursor:pointer;">
           <input type="checkbox" name="certification_agreed" required style="margin-top:3px;">
-          <span style="font-size:0.85rem; color:var(--grey-700);">I certify that the information provided above is correct in all respects. I understand that any false statement may result in cancellation of my distributorship.</span>
+          <span style="font-size:0.85rem; color:var(--grey-700);">I certify that the information provided above is correct in all respects. I understand that any false statement may result in cancellation of my agent status.</span>
         </label>
         <button type="submit" class="btn btn-accent" style="width:100%; padding:13px; font-size:0.95rem; margin-top:16px;">Submit Application →</button>
       </div>
@@ -167,4 +177,38 @@
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const otherCb = document.getElementById('business_type_other_cb');
+  const otherCont = document.getElementById('other_business_type_container');
+  const otherInput = document.getElementById('business_type_other');
+  if (otherCb && otherCont) {
+    otherCb.addEventListener('change', function() {
+      otherCont.style.display = this.checked ? 'block' : 'none';
+      if (this.checked && otherInput) otherInput.focus();
+    });
+  }
+
+  const form = document.querySelector('form[action="/agent/signup"]');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const checked = form.querySelectorAll('.business-type-cb:checked');
+      if (checked.length === 0) {
+        e.preventDefault();
+        alert('Please select at least one business type.');
+        const firstCb = form.querySelector('.business-type-cb');
+        if (firstCb) firstCb.focus();
+        return false;
+      }
+      if (otherCb && otherCb.checked && (!otherInput.value || !otherInput.value.trim())) {
+        e.preventDefault();
+        alert('Please specify your other business type.');
+        otherInput.focus();
+        return false;
+      }
+    });
+  }
+});
+</script>
 {% endblock %}

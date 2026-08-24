@@ -131,11 +131,11 @@ const FROM_ADDRESS_OPTIONS = [
 ];
 
 const DEFAULT_TEMPLATE = {
-  subject: 'Invitation: Become a Bongshai Housing Distributor',
+  subject: 'Invitation: Become a Bongshai Housing Agent',
   body: [
     'Dear {{name}},',
-    "Bongshai Housing & Real Estate, Bangladesh's premier pre-engineered steel building and prefab housing company, is inviting qualified businesses and individuals to become authorized distributors in their area.",
-    'As a Bongshai distributor, you would represent our full catalog of steel buildings, duplex villas, cottages, and industrial sheds directly to customers in your territory, with full sales, marketing, and after-sales support from our head office.',
+    "Bongshai Housing & Real Estate, Bangladesh's premier pre-engineered steel building and prefab housing company, is inviting qualified businesses and individuals to become authorized agents in their area.",
+    'As a Bongshai agent, you would represent our full catalog of steel buildings, duplex villas, cottages, and industrial sheds directly to customers in your territory, with full sales, marketing, and after-sales support from our head office.',
   ].join('\n\n'),
   from_address: 'no-reply@bongshaihousing.com',
 };
@@ -193,7 +193,7 @@ function invitationEmailHtml(name, template) {
     <div style="background: #f8fafc; padding: 28px; border-radius: 0 0 10px 10px; border: 1px solid #e2e8f0; border-top: none;">
       ${renderBodyParagraphs(template.body, name)}
       <p style="margin: 24px 0; text-align: center;">
-        <a href="https://bongshaihousing.com/agent/signup.html" style="background: #D4AF37; color: #1a1300; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; display: inline-block;">Apply for Distributorship →</a>
+        <a href="https://bongshaihousing.com/agent/signup.html" style="background: #D4AF37; color: #1a1300; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; display: inline-block;">Apply to Become an Agent →</a>
       </p>
       <p style="font-size: 0.85rem; color: #64748b;">The application takes about 10 minutes and requires basic business details and identification documents. Our team reviews every application personally.</p>
       <p>Warm regards,<br><strong>Bongshai Housing &amp; Real Estate</strong><br>House #18, Road #18, Sector #10, Uttara, Dhaka<br>01781-636613</p>

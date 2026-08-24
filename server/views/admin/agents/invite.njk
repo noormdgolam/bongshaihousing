@@ -1,7 +1,7 @@
 {% extends "admin-layout.njk" %}
 {% import "partials/icons.njk" as icons %}
 {% block title %}Invite Agents{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('plus', 20) }} Invite Distributors</h1>{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('plus', 20) }} Invite Agents</h1>{% endblock %}
 {% block content %}
 <div style="margin-bottom:16px;"><a href="/admin/agents" class="btn">← Back to Agents</a></div>
 
@@ -24,7 +24,7 @@
 
 <div class="card">
   <h2 style="margin-top:0; font-size:1rem;">Email Composer</h2>
-  <p style="font-size:0.85rem; color:var(--grey-500);">The header banner, "Apply for Distributorship" button, and footer address stay fixed — only the pitch text below is editable. Use <code>{{ '{{name}}' }}</code> anywhere you want the recipient's name inserted (falls back to "Sir/Madam" when a row has no name). Leave a blank line between paragraphs.</p>
+  <p style="font-size:0.85rem; color:var(--grey-500);">The header banner, "Apply to Become an Agent" button, and footer address stay fixed — only the pitch text below is editable. Use <code>{{ '{{name}}' }}</code> anywhere you want the recipient's name inserted (falls back to "Sir/Madam" when a row has no name). Leave a blank line between paragraphs.</p>
   <form method="post" action="/admin/agents/invite/template">
     <div style="display:grid; grid-template-columns:260px 1fr; gap:16px;">
       <div class="form-row" style="margin-bottom:0;">
