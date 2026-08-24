@@ -974,6 +974,92 @@ router.post('/admin/products/:id/delete', async (req, res) => {
   res.redirect('/admin/products');
 });
 
+router.post('/admin/products/:id/duplicate', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  try {
+    const newId = await db.transaction(async (trx) => {
+      // 1. Fetch original product
+      const originalProduct = await trx('products').where({ id: req.params.id }).first();
+      if (!originalProduct) throw new Error('Source product not found');
+
+      // 2. Insert new product
+      const shortSuffix = crypto.randomBytes(3).toString('hex');
+      const newModelNumber = `${originalProduct.model_number}-COPY-${shortSuffix}`;
+      const newSlug = `${originalProduct.slug}-copy-${shortSuffix}`;
+      
+      const [insertedId] = await trx('products').insert({
+        category_id: originalProduct.category_id,
+        model_number: newModelNumber,
+        slug: newSlug,
+        title: `${originalProduct.title} (Copy)`,
+        description: originalProduct.description,
+        price_per_sqft: originalProduct.price_per_sqft,
+        price_currency: originalProduct.price_currency,
+        main_image: originalProduct.main_image,
+        image_2: originalProduct.image_2,
+        image_3: originalProduct.image_3,
+        meta_title: originalProduct.meta_title,
+        meta_description: originalProduct.meta_description,
+        main_image_alt: originalProduct.main_image_alt,
+        published: false
+      });
+
+      // 3. Clone specs
+      const specs = await trx('product_specs').where({ product_id: originalProduct.id }).orderBy('sort_order');
+      if (specs.length > 0) {
+        const newSpecs = specs.map(s => ({
+          product_id: insertedId,
+          spec_key: s.spec_key,
+          spec_value: s.spec_value,
+          sort_order: s.sort_order
+        }));
+        await trx('product_specs').insert(newSpecs);
+      }
+
+      // 4. Clone variants and their rooms
+      const variants = await trx('product_variants').where({ product_id: originalProduct.id }).orderBy('sort_order');
+      for (const v of variants) {
+        const [newVariantId] = await trx('product_variants').insert({
+          product_id: insertedId,
+          area_sqft: v.area_sqft,
+          area_label: v.area_label,
+          bed: v.bed,
+          bath: v.bath,
+          kitchen: v.kitchen,
+          living: v.living,
+          drawing: v.drawing,
+          dining: v.dining,
+          sort_order: v.sort_order
+        });
+
+        const rooms = await trx('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
+        if (rooms.length > 0) {
+          const newRooms = rooms.map(r => ({
+            product_variant_id: newVariantId,
+            floor_label: r.floor_label,
+            section: r.section,
+            area_sqft: r.area_sqft,
+            length_ft: r.length_ft,
+            width_ft: r.width_ft,
+            is_total_row: r.is_total_row,
+            sort_order: r.sort_order
+          }));
+          await trx('product_rooms').insert(newRooms);
+        }
+      }
+
+      return insertedId;
+    });
+
+    await logActivity(req, { action: 'create', entityType: 'product', entityId: newId, summary: `Duplicated product #${req.params.id} as #${newId}` });
+    res.redirect(`/admin/products/${newId}/edit`);
+  } catch (err) {
+    res.status(500).send('Duplicate error: ' + err.message);
+  }
+});
+
 // ---- Product Specs (Building Specifications key/value rows) ----
 
 router.post('/admin/products/:id/specs', async (req, res) => {

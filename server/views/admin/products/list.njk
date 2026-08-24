@@ -61,11 +61,18 @@
             {% if p.published %}
             <span class="pill pill-success">Published</span>
             {% else %}
-            <span class="pill pill-muted">Draft</span>
+              {% if "-COPY-" in p.model_number %}
+              <span class="pill pill-warning" style="background:var(--warning-light, #fef3c7); color:var(--warning-dark, #b45309);">Draft Copy</span>
+              {% else %}
+              <span class="pill pill-muted">Draft</span>
+              {% endif %}
             {% endif %}
           </td>
           <td style="white-space:nowrap;">
             <a href="/admin/products/{{ p.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+            <form method="post" action="/admin/products/{{ p.id }}/duplicate" style="display:inline;" onsubmit="return confirm('Duplicate this product? This will create an unpublished copy with all specs, variants, and rooms.');">
+              <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Duplicate</button>
+            </form>
             <a href="/{{ p.slug }}" target="_blank" class="btn" style="padding:4px 8px; font-size:0.8rem;" title="View Live Page">↗</a>
           </td>
         </tr>
