@@ -593,6 +593,42 @@ router.post('/admin/agents/:id/status', async (req, res) => {
   res.redirect('/admin/agents?status=' + encodeURIComponent(req.query.status || 'pending'));
 });
 
+router.post('/admin/agents/bulk-action', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  let { agent_ids, action, redirect_status } = req.body;
+  if (!agent_ids) return res.redirect('/admin/agents' + (redirect_status ? `?status=${redirect_status}` : ''));
+  if (!Array.isArray(agent_ids)) agent_ids = [agent_ids];
+  agent_ids = agent_ids.map(Number).filter(Boolean);
+  if (!agent_ids.length) return res.redirect('/admin/agents' + (redirect_status ? `?status=${redirect_status}` : ''));
+
+  if (action === 'approve') {
+    await db('agents').whereIn('id', agent_ids).update({
+      status: 'active',
+      reviewed_by: req.session.adminName || 'Admin',
+      reviewed_at: db.fn.now(),
+      updated_at: db.fn.now(),
+    });
+    await logActivity(req, {
+      action: 'bulk_approve',
+      entityType: 'agent',
+      summary: `Bulk approved ${agent_ids.length} agent application(s) (#${agent_ids.join(', #')})`,
+    });
+  } else if (action === 'reject') {
+    await db('agents').whereIn('id', agent_ids).update({
+      status: 'rejected',
+      reviewed_by: req.session.adminName || 'Admin',
+      reviewed_at: db.fn.now(),
+      updated_at: db.fn.now(),
+    });
+    await logActivity(req, {
+      action: 'bulk_reject',
+      entityType: 'agent',
+      summary: `Bulk rejected ${agent_ids.length} agent application(s) (#${agent_ids.join(', #')})`,
+    });
+  }
+
+  res.redirect('/admin/agents' + (redirect_status ? `?status=${redirect_status}` : ''));
+});
+
 router.get('/admin/agent-leads', async (req, res) => {
   const statusFilter = req.query.status || 'all';
   const agentFilter = req.query.agent_id || '';
@@ -723,6 +759,35 @@ router.get('/admin/leads/export/csv', async (req, res) => {
   } catch (e) {
     res.status(500).send('Export error: ' + e.message);
   }
+});
+
+router.post('/admin/leads/bulk-action', async (req, res) => {
+  let { lead_ids, action, status, redirect_query } = req.body;
+  if (!lead_ids) return res.redirect('/admin/leads' + (redirect_query ? `?${redirect_query}` : ''));
+  if (!Array.isArray(lead_ids)) lead_ids = [lead_ids];
+  lead_ids = lead_ids.map(Number).filter(Boolean);
+  if (!lead_ids.length) return res.redirect('/admin/leads' + (redirect_query ? `?${redirect_query}` : ''));
+
+  if (action === 'status') {
+    const allowed = ['new', 'contacted', 'in_negotiation', 'closed'];
+    if (allowed.includes(status)) {
+      await db('leads').whereIn('id', lead_ids).update({ status, updated_at: db.fn.now() });
+      await logActivity(req, {
+        action: 'bulk_update',
+        entityType: 'lead',
+        summary: `Updated status to "${status}" on ${lead_ids.length} lead(s) (#${lead_ids.join(', #')})`,
+      });
+    }
+  } else if (action === 'delete') {
+    await db('leads').whereIn('id', lead_ids).del();
+    await logActivity(req, {
+      action: 'bulk_delete',
+      entityType: 'lead',
+      summary: `Bulk deleted ${lead_ids.length} lead(s) (#${lead_ids.join(', #')})`,
+    });
+  }
+
+  res.redirect('/admin/leads' + (redirect_query ? `?${redirect_query}` : ''));
 });
 
 router.get('/admin/leads/new', async (req, res) => {
@@ -950,6 +1015,39 @@ router.get('/admin/products', async (req, res) => {
   const products = await query;
   const categories = await db('categories').orderBy('sort_order');
   res.render('admin/products/list.njk', adminVars(req, { products, categories, categoryId, search }));
+});
+
+router.post('/admin/products/bulk-action', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  let { product_ids, action } = req.body;
+  if (!product_ids) return res.redirect('/admin/products');
+  if (!Array.isArray(product_ids)) product_ids = [product_ids];
+  product_ids = product_ids.map(Number).filter(Boolean);
+  if (!product_ids.length) return res.redirect('/admin/products');
+
+  if (action === 'publish') {
+    await db('products').whereIn('id', product_ids).update({ published: true, updated_at: db.fn.now() });
+    await logActivity(req, {
+      action: 'bulk_publish',
+      entityType: 'product',
+      summary: `Bulk published ${product_ids.length} product model(s) (#${product_ids.join(', #')})`,
+    });
+  } else if (action === 'unpublish') {
+    await db('products').whereIn('id', product_ids).update({ published: false, updated_at: db.fn.now() });
+    await logActivity(req, {
+      action: 'bulk_unpublish',
+      entityType: 'product',
+      summary: `Bulk unpublished ${product_ids.length} product model(s) (#${product_ids.join(', #')})`,
+    });
+  } else if (action === 'delete') {
+    await db('products').whereIn('id', product_ids).del();
+    await logActivity(req, {
+      action: 'bulk_delete',
+      entityType: 'product',
+      summary: `Bulk deleted ${product_ids.length} product model(s) (#${product_ids.join(', #')})`,
+    });
+  }
+
+  res.redirect('/admin/products');
 });
 
 router.get('/admin/products/new', async (req, res) => {

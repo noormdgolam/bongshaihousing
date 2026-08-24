@@ -27,40 +27,59 @@
 </div>
 
 {% if agents.length %}
-<table>
-  <thead>
-    <tr><th>Business</th><th>Owner</th><th>Phone</th><th>Territory</th><th>Status</th><th>Applied</th><th>Actions</th></tr>
-  </thead>
-  <tbody>
-    {% for a in agents %}
-    <tr>
-      <td>{{ a.business_name or '—' }}</td>
-      <td>{{ a.name }}</td>
-      <td>{{ a.phone }}</td>
-      <td>{{ a.district }}{% if a.thana %}, {{ a.thana }}{% endif %}</td>
-      <td>
-        <span class="pill {% if a.status == 'active' %}pill-success{% elif a.status == 'rejected' %}pill-muted{% endif %}">{{ a.status }}</span>
-      </td>
-      <td>{{ a.created_at | date }}</td>
-      <td>
-        <a href="/admin/agents/{{ a.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">View</a>
-        {% if a.status != 'active' %}
-        <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
-          <input type="hidden" name="status" value="active">
-          <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Approve</button>
-        </form>
-        {% endif %}
-        {% if a.status != 'rejected' %}
-        <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
-          <input type="hidden" name="status" value="rejected">
-          <button type="submit" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;">Reject</button>
-        </form>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<form method="post" action="/admin/agents/bulk-action" id="bulkAgentsForm">
+  <input type="hidden" name="redirect_status" value="{{ statusFilter }}">
+  
+  <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:0.85rem;">
+    <span style="font-weight:700; color:var(--grey-700);">Bulk Actions:</span>
+    <select name="action" id="bulkAgentAction" style="padding:5px 10px; border-radius:6px; border:1px solid var(--grey-200); font-size:0.85rem;">
+      <option value="approve">Approve Selected</option>
+      <option value="reject">Reject Selected</option>
+    </select>
+    <button type="submit" class="btn btn-primary" style="padding:5px 12px; font-size:0.85rem;" onclick="return confirm('Apply bulk status update to selected agent applications?');">Apply to Selected</button>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:36px; text-align:center;"><input type="checkbox" id="selectAllAgents" onclick="document.querySelectorAll('.agent-checkbox').forEach(cb => cb.checked = this.checked);" title="Select All"></th>
+          <th>Business</th><th>Owner</th><th>Phone</th><th>Territory</th><th>Status</th><th>Applied</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in agents %}
+        <tr>
+          <td style="text-align:center;"><input type="checkbox" name="agent_ids" value="{{ a.id }}" class="agent-checkbox"></td>
+          <td>{{ a.business_name or '—' }}</td>
+          <td>{{ a.name }}</td>
+          <td>{{ a.phone }}</td>
+          <td>{{ a.district }}{% if a.thana %}, {{ a.thana }}{% endif %}</td>
+          <td>
+            <span class="pill {% if a.status == 'active' %}pill-success{% elif a.status == 'rejected' %}pill-muted{% endif %}">{{ a.status }}</span>
+          </td>
+          <td>{{ a.created_at | date }}</td>
+          <td>
+            <a href="/admin/agents/{{ a.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">View</a>
+            {% if a.status != 'active' %}
+            <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
+              <input type="hidden" name="status" value="active">
+              <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Approve</button>
+            </form>
+            {% endif %}
+            {% if a.status != 'rejected' %}
+            <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
+              <input type="hidden" name="status" value="rejected">
+              <button type="submit" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;">Reject</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</form>
 {% else %}
 <div class="card"><p style="color:var(--grey-500); margin:0;">No agents in this category.</p></div>
 {% endif %}
