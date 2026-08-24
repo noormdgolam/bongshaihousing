@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../lib/db');
 const requireAgent = require('../middleware/requireAgent');
+const { sendMail } = require('../lib/mailer');
 
 const router = express.Router();
 
@@ -32,6 +33,31 @@ router.post('/agent/leads', requireAgent, async (req, res) => {
     product_interest: product_interest || null,
     notes: notes || null,
   });
+
+  try {
+    const text = `New Lead Submitted by Agent:
+Name: ${req.agent.name || 'N/A'}
+Business: ${req.agent.business_name || 'N/A'}
+Phone: ${req.agent.phone || 'N/A'}
+Email: ${req.agent.email || 'N/A'}
+District: ${req.agent.district || 'N/A'}
+
+Customer Details:
+Name: ${customer_name}
+Phone: ${customer_phone}
+District: ${customer_district || 'N/A'}
+Interest: ${product_interest || 'N/A'}
+Notes: ${notes || 'N/A'}
+`;
+    await sendMail({
+      to: process.env.MAIL_TO_SALES || 'sales@bongshai.com',
+      subject: `New Agent Lead from ${req.agent.business_name || req.agent.name || 'Agent'}`,
+      replyTo: req.agent.email || undefined,
+      text
+    });
+  } catch (err) {
+    console.error('Failed to send agent lead notification email:', err);
+  }
 
   res.redirect('/agent/dashboard.html');
 });
