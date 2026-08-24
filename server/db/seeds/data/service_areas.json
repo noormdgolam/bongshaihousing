@@ -121,7 +121,7 @@
   },
   {
     "district": "Chapainawabganj",
-    "division": "Dhaka Division",
+    "division": "Rajshahi Division",
     "has_dedicated_page": false,
     "page_slug": null,
     "coordinates": "24.5965034, 88.2775122",
@@ -161,7 +161,7 @@
   },
   {
     "district": "Jhalakathi",
-    "division": "Dhaka Division",
+    "division": "Barishal Division",
     "has_dedicated_page": false,
     "page_slug": null,
     "coordinates": "22.6422689, 90.2003932",
@@ -169,7 +169,7 @@
   },
   {
     "district": "Khagrachhari",
-    "division": "Dhaka Division",
+    "division": "Chattogram Division",
     "has_dedicated_page": false,
     "page_slug": null,
     "coordinates": "23.119285, 91.984663",

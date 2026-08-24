@@ -133,13 +133,14 @@ html, body {
 
 html {
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-y: auto;
   font-size: 16px;
 }
 body {
   width: 100%;
-  overflow: visible !important;
+  max-width: 100%;
+  overflow-x: clip;
   font-family: var(--font-body);
   color: var(--dark);
   background: var(--white);
@@ -208,10 +209,12 @@ img {
 
 .section {
   padding: var(--space-24) 0;
+  overflow-x: clip;
 }
 
 .section-sm {
   padding: var(--space-16) 0;
+  overflow-x: clip;
 }
 
 .section-header {
@@ -641,7 +644,6 @@ img {
 
 /* Mobile Drawer */
 .mobile-drawer {
-  display: none;
   position: fixed;
   top: var(--nav-height);
   left: 0;
@@ -652,22 +654,15 @@ img {
   overflow-y: auto;
   padding: var(--space-6);
   transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
 }
 
-/* .open only ever toggled `transform` (for the slide-in animation), never
-   `display` - so the drawer stayed display:none, transform or not, and
-   clicking the hamburger silently did nothing. A separate rule further
-   down forces display:block back on within a max-width:768px media query,
-   which masked this for narrow phones, but left a real gap between that
-   and the hamburger's own max-width:1024px breakpoint (a resized desktop
-   window, tablet landscape, small laptop) where the hamburger was clickable
-   but the drawer it's supposed to open never appeared. Setting display
-   here directly, with no media-query dependency, fixes it at every width
-   the hamburger itself can show. */
 .mobile-drawer.open {
-  display: block;
   transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-nav-link {
@@ -1952,32 +1947,57 @@ textarea.form-control {
   background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 50%, var(--accent-light) 100%);
   position: relative;
   overflow: hidden;
+  overflow-x: clip;
+  contain: paint;
+  clip-path: inset(0);
   text-align: center;
   clear: both;
   width: 100%;
+  max-width: 100%;
   display: block;
 }
 
 .cta-section::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -10%;
+  top: -40px;
+  left: -40px;
   width: 400px;
+  max-width: 80vw;
   height: 400px;
+  max-height: 80vw;
   background: rgba(255,255,255,0.06);
   border-radius: 50%;
+  pointer-events: none;
 }
 
 .cta-section::after {
   content: '';
   position: absolute;
-  bottom: -40%;
-  right: -5%;
+  bottom: -40px;
+  right: 0;
   width: 300px;
+  max-width: 60vw;
   height: 300px;
+  max-height: 60vw;
   background: rgba(255,255,255,0.04);
   border-radius: 50%;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .cta-section::before {
+    width: 160px;
+    height: 160px;
+    top: -20px;
+    left: -20px;
+  }
+  .cta-section::after {
+    width: 120px;
+    height: 120px;
+    bottom: -20px;
+    right: 0;
+  }
 }
 
 .cta-inner { position: relative; z-index: 1; }
@@ -2553,7 +2573,6 @@ textarea.form-control {
   .nav-cta   { display: none; }
   .nav-phone { display: none; }
   .hamburger { display: flex; }
-  .mobile-drawer { display: block; }
 
   /* Slightly smaller brand name on mobile */
   .brand-name    { font-size: var(--fs-base); }

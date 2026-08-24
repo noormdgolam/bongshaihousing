@@ -164,7 +164,7 @@ const bdGeoData = [
       "Matiranga",
       "Guimara"
     ],
-    "division": "Dhaka Division"
+    "division": "Chattogram Division"
   },
   {
     "district": "Bandarban",
@@ -283,7 +283,7 @@ const bdGeoData = [
       "Bholahat",
       "Shibganj"
     ],
-    "division": "Dhaka Division"
+    "division": "Rajshahi Division"
   },
   {
     "district": "Naogaon",
@@ -441,7 +441,7 @@ const bdGeoData = [
       "Nalchity",
       "Rajapur"
     ],
-    "division": "Dhaka Division"
+    "division": "Barishal Division"
   },
   {
     "district": "Patuakhali",

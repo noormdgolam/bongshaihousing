@@ -79,6 +79,7 @@
   }
 }
 </script>
+<script src="js/bd-geo-data.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -552,6 +553,101 @@
       note.textContent = '';
     }
 
+    function getGeoData() {
+      if (typeof bdGeoData !== 'undefined' && Array.isArray(bdGeoData) && bdGeoData.length > 0) {
+        return Promise.resolve(bdGeoData);
+      }
+      return new Promise((resolve) => {
+        let attempts = 0;
+        const interval = setInterval(() => {
+          attempts++;
+          if (typeof bdGeoData !== 'undefined' && Array.isArray(bdGeoData) && bdGeoData.length > 0) {
+            clearInterval(interval);
+            resolve(bdGeoData);
+          } else if (attempts >= 40) { // 2s timeout
+            clearInterval(interval);
+            resolve(window.bdGeoData || []);
+          }
+        }, 50);
+      });
+    }
+
+    function updateDistrictOptions(divisionValue, preselectedDistrict) {
+      const districtSelect = document.getElementById('district');
+      const upazilaSelect = document.getElementById('upazila');
+      if (!districtSelect) return;
+      
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      districtSelect.disabled = !divisionValue;
+      
+      if (upazilaSelect) {
+        upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+        upazilaSelect.disabled = true;
+      }
+
+      if (!divisionValue) return;
+
+      getGeoData().then((data) => {
+        if (!data || !data.length) return;
+        const currentDivision = document.getElementById('division')?.value;
+        if (currentDivision !== divisionValue) return;
+
+        districtSelect.innerHTML = '<option value="">Select District</option>';
+        const districts = data
+          .filter(d => d.division === divisionValue)
+          .slice()
+          .sort((a, b) => a.district.localeCompare(b.district));
+
+        districts.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.district;
+          opt.textContent = d.district;
+          if (preselectedDistrict && d.district === preselectedDistrict) {
+            opt.selected = true;
+          }
+          districtSelect.appendChild(opt);
+        });
+
+        districtSelect.disabled = false;
+
+        if (preselectedDistrict) {
+          updateUpazilaOptions(preselectedDistrict);
+        }
+      });
+    }
+
+    function updateUpazilaOptions(districtValue, preselectedUpazila) {
+      const upazilaSelect = document.getElementById('upazila');
+      if (!upazilaSelect) return;
+      
+      upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+      upazilaSelect.disabled = !districtValue;
+
+      if (!districtValue) return;
+
+      getGeoData().then((data) => {
+        if (!data || !data.length) return;
+        const currentDistrict = document.getElementById('district')?.value;
+        if (currentDistrict && currentDistrict !== districtValue) return;
+
+        upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+        const distData = data.find(d => d.district === districtValue);
+        if (distData && distData.upazillas && distData.upazillas.length > 0) {
+          const upazilas = distData.upazillas.slice().sort((a, b) => a.localeCompare(b));
+          upazilas.forEach(u => {
+            const opt = document.createElement('option');
+            opt.value = u;
+            opt.textContent = u;
+            if (preselectedUpazila && u === preselectedUpazila) {
+              opt.selected = true;
+            }
+            upazilaSelect.appendChild(opt);
+          });
+          upazilaSelect.disabled = false;
+        }
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const modelSelect = document.getElementById('model');
       if (modelSelect) {
@@ -560,47 +656,20 @@
           updateAreaOptions(this.value);
         });
       }
-    });
 
-    function updateDistrictOptions(divisionValue) {
-      const districtSelect = document.getElementById('district');
-      const upazilaSelect = document.getElementById('upazila');
-      
-      districtSelect.innerHTML = '<option value="">Select District</option>';
-      districtSelect.disabled = !divisionValue;
-      
-      upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
-      upazilaSelect.disabled = true;
-
-      if (!divisionValue || typeof bdGeoData === 'undefined') return;
-
-      const districts = bdGeoData.filter(d => d.division === divisionValue).sort((a, b) => a.district.localeCompare(b.district));
-      districts.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.district;
-        opt.textContent = d.district;
-        districtSelect.appendChild(opt);
-      });
-    }
-
-    function updateUpazilaOptions(districtValue) {
-      const upazilaSelect = document.getElementById('upazila');
-      
-      upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
-      upazilaSelect.disabled = !districtValue;
-
-      if (!districtValue || typeof bdGeoData === 'undefined') return;
-
-      const distData = bdGeoData.find(d => d.district === districtValue);
-      if (distData && distData.upazillas) {
-        distData.upazillas.sort().forEach(u => {
-          const opt = document.createElement('option');
-          opt.value = u;
-          opt.textContent = u;
-          upazilaSelect.appendChild(opt);
+      const divSelect = document.getElementById('division');
+      const distSelect = document.getElementById('district');
+      if (divSelect) {
+        divSelect.addEventListener('change', function() {
+          updateDistrictOptions(this.value);
         });
       }
-    }
+      if (distSelect) {
+        distSelect.addEventListener('change', function() {
+          updateUpazilaOptions(this.value);
+        });
+      }
+    });
   </script>
 
           </div>
