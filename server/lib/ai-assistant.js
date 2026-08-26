@@ -53,28 +53,56 @@ SALES GUIDANCE & TONE:
 - End recommendations by encouraging the user to request a detailed free architectural consultation or connect on WhatsApp (+8801781636613).
 `;
 
+const { formatTaka } = require('./format');
+const fs = require('fs');
+const path = require('path');
+
 /**
- * Fetch dynamic product and project highlights from the database
+ * Fetch dynamic product and project highlights from the database or seed JSON
  */
 async function getDynamicCatalogContext() {
-  if (!db) return '';
-  try {
-    const products = await db('products')
-      .where({ published: true })
-      .select('model_number', 'title', 'price_per_sqft', 'price_currency', 'slug')
-      .limit(20);
-
-    if (!products || products.length === 0) return '';
-
-    let catalogText = '\nLIVE IN-STOCK PRODUCT CATALOG:\n';
-    products.forEach(p => {
-      catalogText += `- Model ${p.model_number}: "${p.title}" | Price: ${p.price_per_sqft ? p.price_per_sqft + ' ' + p.price_currency + '/sq.ft.' : 'Contact for Quote'} | Page: /${p.slug}\n`;
-    });
-    return catalogText;
-  } catch (err) {
-    console.error('Dynamic catalog context query failed:', err.message);
-    return '';
+  let products = [];
+  if (db) {
+    try {
+      products = await db('products')
+        .where({ published: true })
+        .select('model_number', 'title', 'fixed_price', 'total_floor_area', 'price_per_sqft', 'price_currency', 'slug')
+        .limit(30);
+    } catch (err) {
+      console.warn('Dynamic catalog query failed, using products.json:', err.message);
+      products = [];
+    }
   }
+
+  if (!products || products.length === 0) {
+    try {
+      const pPath = path.join(__dirname, '..', 'db', 'seeds', 'data', 'products.json');
+      if (fs.existsSync(pPath)) {
+        const allJson = JSON.parse(fs.readFileSync(pPath, 'utf8'));
+        products = allJson.slice(0, 30).map(p => ({
+          model_number: p.modelNumber,
+          title: p.title,
+          fixed_price: p.fixedPrice,
+          total_floor_area: p.totalFloorArea,
+          price_per_sqft: p.pricePerSqft,
+          price_currency: p.priceCurrency || 'BDT',
+          slug: p.filename
+        }));
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  if (!products || products.length === 0) return '';
+
+  let catalogText = '\nLIVE OFFICIAL PRODUCT CATALOG (Fixed Prices & Floor Areas from Official Spec Sheet):\n';
+  products.forEach(p => {
+    const priceStr = p.fixed_price ? formatTaka(p.fixed_price) : (p.price_per_sqft ? p.price_per_sqft + ' ' + p.price_currency + '/sq.ft.' : 'Contact for Quote');
+    const areaStr = p.total_floor_area ? `${p.total_floor_area} sq.ft` : 'Custom size';
+    catalogText += `- Model ${p.model_number}: "${p.title}" | Floor Area: ${areaStr} | Fixed Price: ${priceStr} | Page: /${p.slug}\n`;
+  });
+  return catalogText;
 }
 
 /**

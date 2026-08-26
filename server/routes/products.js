@@ -82,93 +82,181 @@ function roomIcon(section) {
 
 const { cacheMiddleware } = require('../lib/pageCache');
 
+const fs = require('fs');
+const path = require('path');
+
+const PRODUCTS_JSON_PATH = path.join(__dirname, '..', 'db', 'seeds', 'data', 'products.json');
+let cachedProductsJson = null;
+function getProductsFromJson() {
+  if (!cachedProductsJson && fs.existsSync(PRODUCTS_JSON_PATH)) {
+    try {
+      cachedProductsJson = JSON.parse(fs.readFileSync(PRODUCTS_JSON_PATH, 'utf8'));
+    } catch (e) {
+      console.error('Failed to read products.json fallback:', e.message);
+    }
+  }
+  return cachedProductsJson || [];
+}
+
 router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
   const slug = `${req.params.slug}.html`;
   if (!PRODUCT_SLUG_PATTERN.test(slug)) return next();
 
   try {
-    const product = await db('products').where({ slug }).first();
-    if (!product) return next();
+    let product = null;
+    let category = null;
+    let specs = [];
+    let variants = [];
 
-    const category = await db('categories').where({ id: product.category_id }).first();
-    const specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
-    const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
+    if (db) {
+      try {
+        product = await db('products').where({ slug }).first();
+        if (product) {
+          category = await db('categories').where({ id: product.category_id }).first();
+          specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
+          variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
 
-    // One batched query instead of one per variant (some models have 3+
-    // tiers) - a real difference under this host's small connection pool
-    // (see [[project-node-hosting-quirks]]).
-    if (variants.length) {
-      const allRooms = await db('product_rooms')
-        .whereIn('product_variant_id', variants.map((v) => v.id))
-        .orderBy('sort_order');
-      const roomsByVariant = new Map();
-      for (const room of allRooms) {
-        if (!roomsByVariant.has(room.product_variant_id)) roomsByVariant.set(room.product_variant_id, []);
-        roomsByVariant.get(room.product_variant_id).push(room);
-      }
-      for (const v of variants) {
-        v.rooms = roomsByVariant.get(v.id) || [];
-        const { groups, buildingTotal } = groupRoomsByFloor(v.rooms);
-        v.roomGroups = groups.map((g) => ({
-          label: g.label,
-          total: g.total,
-          rows: g.rows.map((r) => ({
-            ...r,
-            icon: roomIcon(r.section),
-            barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
-          })),
-        }));
-        v.roomGroupsBuildingTotal = buildingTotal;
-        // v.area_sqft is the tier key, which for 2-floor families (Ground
-        // Floor + First floor) is the PER-FLOOR area, not the whole
-        // building - using it directly would price a duplex at half its
-        // real size. The seed data already computes the true total into a
-        // "Total Building Area" row for those families; single-floor
-        // families don't have that row, so v.area_sqft is already correct
-        // for them.
-        const totalRow = v.rooms.find((r) => r.section && /total building area/i.test(r.section));
-        v.totalArea = (totalRow && totalRow.area_sqft) || v.area_sqft;
-        v.estimatedPrice = product.price_per_sqft ? Math.round(v.totalArea * product.price_per_sqft) : null;
-        v.estimatedPriceFormatted = v.estimatedPrice ? formatTaka(v.estimatedPrice) : null;
+          if (variants.length) {
+            const allRooms = await db('product_rooms')
+              .whereIn('product_variant_id', variants.map((v) => v.id))
+              .orderBy('sort_order');
+            const roomsByVariant = new Map();
+            for (const room of allRooms) {
+              if (!roomsByVariant.has(room.product_variant_id)) roomsByVariant.set(room.product_variant_id, []);
+              roomsByVariant.get(room.product_variant_id).push(room);
+            }
+            for (const v of variants) {
+              v.rooms = roomsByVariant.get(v.id) || [];
+              const { groups, buildingTotal } = groupRoomsByFloor(v.rooms);
+              v.roomGroups = groups.map((g) => ({
+                label: g.label,
+                total: g.total,
+                rows: g.rows.map((r) => ({
+                  ...r,
+                  icon: roomIcon(r.section),
+                  barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
+                })),
+              }));
+              v.roomGroupsBuildingTotal = buildingTotal;
+              const totalRow = v.rooms.find((r) => r.section && /total building area/i.test(r.section));
+              v.totalArea = (totalRow && totalRow.area_sqft) || v.area_sqft;
+              v.estimatedPrice = product.fixed_price || (product.price_per_sqft ? Math.round(v.totalArea * product.price_per_sqft) : null);
+              v.estimatedPriceFormatted = v.estimatedPrice ? formatTaka(v.estimatedPrice) : null;
+            }
+          }
+        }
+      } catch (dbErr) {
+        console.warn(`Database query failed for ${slug}, checking products.json fallback:`, dbErr.message);
+        product = null;
       }
     }
 
-    const relatedProducts = await db('products')
-      .where({ category_id: product.category_id, published: true })
-      .whereNot({ id: product.id })
-      .orderBy('sort_order')
-      .limit(4);
+    // JSON fallback if DB returned null or is unavailable
+    if (!product) {
+      const allJsonProducts = getProductsFromJson();
+      const pData = allJsonProducts.find((p) => p.filename === slug || p.slug === slug);
+      if (!pData) return next();
 
-    // Cheapest variant's true total area per related product, so their
-    // cards can show a real "From ৳X" price instead of the same static
-    // "Contact for Quote" this page just stopped showing for the main
-    // product - keeping the two inconsistent would look like a bug. Uses
-    // the same "Total Building Area" room-row logic as the main product
-    // above: a naive area_sqft (the per-floor tier key) would understate
-    // 2-floor families by roughly half, the same bug already fixed there.
-    if (relatedProducts.length) {
-      const relatedIds = relatedProducts.map((p) => p.id);
-      const relatedVariants = await db('product_variants').whereIn('product_id', relatedIds);
-      if (relatedVariants.length) {
-        const relatedRooms = await db('product_rooms')
-          .whereIn('product_variant_id', relatedVariants.map((v) => v.id))
-          .where('section', 'like', '%Total Building Area%');
-        const totalRowByVariant = new Map(relatedRooms.map((r) => [r.product_variant_id, r.area_sqft]));
-        const minTotalAreaByProduct = new Map();
-        for (const v of relatedVariants) {
-          const totalArea = totalRowByVariant.get(v.id) || v.area_sqft;
-          const current = minTotalAreaByProduct.get(v.product_id);
-          if (current === undefined || totalArea < current) {
-            minTotalAreaByProduct.set(v.product_id, totalArea);
-          }
-        }
-        for (const rp of relatedProducts) {
-          const minTotalArea = minTotalAreaByProduct.get(rp.id);
-          rp.fromPriceFormatted = (minTotalArea && rp.price_per_sqft)
-            ? formatTaka(minTotalArea * rp.price_per_sqft)
-            : null;
-        }
+      product = {
+        id: pData.modelNumber,
+        model_number: pData.modelNumber,
+        slug: pData.filename,
+        title: pData.title,
+        description: pData.description,
+        fixed_price: pData.fixedPrice || null,
+        total_floor_area: pData.totalFloorArea || null,
+        price_per_sqft: pData.pricePerSqft || null,
+        price_currency: pData.priceCurrency || 'BDT',
+        main_image: pData.mainImage || null,
+      };
+
+      category = {
+        name: pData.categoryName || 'Bongshai Housing',
+        slug: pData.categorySlug || '',
+      };
+
+      specs = (pData.buildingSpecs || []).map((s, i) => ({
+        spec_key: s.spec_key,
+        spec_value: s.spec_value,
+        sort_order: i,
+      }));
+
+      if (pData.floorData && !pData.floorData.__error) {
+        variants = Object.entries(pData.floorData).map(([areaKey, tier], vIdx) => {
+          const areaSqft = parseInt(areaKey, 10) || pData.totalFloorArea || 0;
+          const rooms = (tier.rooms || []).map((r, rIdx) => ({
+            product_variant_id: vIdx,
+            section: (r.section || '').replace(/<[^>]*>/g, ''),
+            area_sqft: typeof r.area === 'number' ? r.area : (parseFloat(String(r.area || '').replace(/<[^>]*>/g, '')) || null),
+            length_ft: r.length || null,
+            width_ft: r.width || null,
+            is_total_row: /total/i.test(r.section || '') || /<b>/i.test(r.section || ''),
+            sort_order: rIdx,
+          }));
+
+          const { groups, buildingTotal } = groupRoomsByFloor(rooms);
+          const roomGroups = groups.map((g) => ({
+            label: g.label,
+            total: g.total,
+            rows: g.rows.map((r) => ({
+              ...r,
+              icon: roomIcon(r.section),
+              barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
+            })),
+          }));
+
+          const price = pData.fixedPrice || (pData.pricePerSqft ? Math.round(areaSqft * pData.pricePerSqft) : null);
+
+          return {
+            id: vIdx + 1,
+            area_sqft: areaSqft,
+            area_label: areaKey,
+            bed: tier.bed ? parseInt(tier.bed, 10) || null : null,
+            bath: tier.bath ? parseInt(tier.bath, 10) || null : null,
+            kitchen: tier.kitchen ? parseInt(tier.kitchen, 10) || null : null,
+            living: tier.living ? parseInt(tier.living, 10) || null : null,
+            drawing: tier.drawing || null,
+            dining: tier.dining || null,
+            rooms,
+            roomGroups,
+            roomGroupsBuildingTotal: buildingTotal || areaSqft,
+            totalArea: pData.totalFloorArea || areaSqft,
+            estimatedPrice: price,
+            estimatedPriceFormatted: price ? formatTaka(price) : null,
+          };
+        });
       }
+    }
+
+    if (product.fixed_price) {
+      product.fixedPriceFormatted = formatTaka(product.fixed_price);
+    }
+
+    let relatedProducts = [];
+    if (db) {
+      try {
+        relatedProducts = await db('products')
+          .where({ category_id: product.category_id, published: true })
+          .whereNot({ id: product.id })
+          .orderBy('sort_order')
+          .limit(4);
+      } catch (e) {
+        relatedProducts = [];
+      }
+    }
+
+    if (!relatedProducts.length) {
+      const allJson = getProductsFromJson();
+      relatedProducts = allJson
+        .filter((p) => (p.categorySlug === category.slug || p.categoryName === category.name) && p.filename !== product.slug)
+        .slice(0, 4)
+        .map((rp) => ({
+          model_number: rp.modelNumber,
+          slug: rp.filename,
+          main_image: rp.mainImage,
+          fixed_price: rp.fixedPrice || null,
+          fromPriceFormatted: rp.fixedPrice ? formatTaka(rp.fixedPrice) : (rp.pricePerSqft && rp.totalFloorArea ? formatTaka(rp.pricePerSqft * rp.totalFloorArea) : null),
+        }));
     }
 
     res.render('pages/product-detail.njk', {
@@ -185,9 +273,7 @@ router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
       relatedProducts,
     });
   } catch (err) {
-    // DB hiccup: fall through to the static registry-driven page rather
-    // than error the request - stale content beats no content.
-    console.error(`DB product lookup failed for ${slug}, falling back to static page:`, err.message);
+    console.error(`Product route execution failed for ${slug}:`, err.message);
     next();
   }
 });

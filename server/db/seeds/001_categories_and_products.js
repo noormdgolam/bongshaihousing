@@ -85,6 +85,8 @@ async function seedInto(knex, products) {
       slug: p.filename,
       title: p.title,
       description: p.description,
+      fixed_price: p.fixedPrice || null,
+      total_floor_area: p.totalFloorArea || null,
       price_per_sqft: p.pricePerSqft,
       price_currency: p.priceCurrency || 'BDT',
       main_image: p.mainImage,

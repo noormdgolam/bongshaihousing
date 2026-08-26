@@ -101,10 +101,10 @@
     <div style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">MOST POPULAR</div>
     <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">Model No-{{ product.model_number }}</h2>
     <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;" aria-live="polite">
-      <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{% if variants.length and variants[0].estimatedPriceFormatted %}Estimated Price{% else %}Pricing{% endif %}</span>
-      <span class="bh-variant-price" style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">{% if variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
+      <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">{% if product.fixed_price or (variants.length and variants[0].estimatedPriceFormatted) %}Fixed Price{% else %}Pricing{% endif %}</span>
+      <span class="bh-variant-price" style="font-size: 1.6rem; font-weight: 800; color: var(--primary);">{% if product.fixedPriceFormatted %}{{ product.fixedPriceFormatted }}{% elseif variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
     </div>
-    <p class="bh-variant-price-note" style="font-size: 0.78rem; color: var(--grey-500); margin: 0 0 var(--space-5); min-height: 1em;" aria-live="polite">{% if variants.length and variants[0].estimatedPriceFormatted %}Based on {{ variants[0].totalArea }} sq.ft total{% if variants.length > 1 %} at this size — select another size below to recalculate{% endif %}. Final quotation depends on land, finish, and customization.{% endif %}</p>
+    <p class="bh-variant-price-note" style="font-size: 0.82rem; color: var(--grey-600); margin: 0 0 var(--space-5); min-height: 1em;" aria-live="polite">{% if product.total_floor_area or (variants.length and variants[0].totalArea) %}Official Designated Floor Area: <strong>{{ product.total_floor_area or variants[0].totalArea }} sq.ft</strong> turnkey design.{% if variants.length > 1 %} Select another size below to recalculate.{% endif %}{% endif %}</p>
 
     <div class="pd-trust-strip">
       <span>⚡ 45–60 day build</span>
@@ -114,21 +114,26 @@
 
     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--grey-100);">
       <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
-      <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700;" target="_blank">💬 WhatsApp Now</a>
+      <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}%20({{ product.fixedPriceFormatted or 'Pricing' }})." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700;" target="_blank">💬 WhatsApp Now</a>
     </div>
 
     {% if variants.length %}
     <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-100);">
+      {% if variants.length > 1 %}
       <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Select Floor Area</span>
       <div class="bh-variant-picker" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
         {% for v in variants %}
         <button type="button" class="btn bh-variant-btn{% if loop.first %} active{% endif %}" data-variant-index="{{ loop.index0 }}" style="padding: 6px 14px; font-size: 0.85rem;">{{ v.area_label or v.area_sqft }} Sq.Ft</button>
         {% endfor %}
       </div>
-      <div class="bh-variant-summary" style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.88rem; color: var(--grey-700);" aria-live="polite">
-        <span>🛏️ <strong class="bh-variant-bed">{{ variants[0].bed }} Bedrooms</strong></span>
-        <span>🚿 <strong class="bh-variant-bath">{{ variants[0].bath }} Bathroom{% if variants[0].bath != 1 %}s{% endif %}</strong></span>
-        <span>🍳 <strong>1 Kitchen</strong></span>
+      {% else %}
+      <span style="font-size: 0.8rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Floor Plan Specification</span>
+      <div style="margin-top: 6px; font-size: 1.1rem; font-weight: 700; color: var(--primary);">{{ variants[0].area_label or variants[0].area_sqft }} Sq.Ft Total Area</div>
+      {% endif %}
+      <div class="bh-variant-summary" style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; font-size: 0.88rem; color: var(--grey-700);" aria-live="polite">
+        <span>🛏️ <strong class="bh-variant-bed">{{ variants[0].bed }}</strong></span>
+        <span>🚿 <strong class="bh-variant-bath">{{ variants[0].bath }}</strong></span>
+        <span>🍳 <strong>{{ variants[0].kitchen or '1 Kitchen' }}</strong></span>
       </div>
     </div>
     {% endif %}
@@ -138,12 +143,12 @@
 {% if variants.length %}
 <section class="section" aria-labelledby="variants-title">
   <div class="section-header reveal">
-    <h2 class="section-title" id="variants-title">Available Sizes</h2>
-    <p class="section-subtitle">Room breakdown for each floor-area option.</p>
+    <h2 class="section-title" id="variants-title">Floor Plan & Room Breakdown</h2>
+    <p class="section-subtitle">Official layout dimensions and area specifications for Model No-{{ product.model_number }}.</p>
   </div>
   {% for v in variants %}
   <div class="card bh-variant-panel{% if not loop.first %} bh-variant-hidden{% endif %}" data-variant-index="{{ loop.index0 }}" style="margin-bottom: 24px; background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
-    <h3 style="margin-top:0;">{{ v.area_label or v.area_sqft }} sqft{% if v.bed %} — {{ v.bed }} Bed{% endif %}{% if v.bath %}, {{ v.bath }} Bath{% endif %}</h3>
+    <h3 style="margin-top:0; font-size: 1.25rem; color: var(--primary);">{{ v.area_label or v.area_sqft }} sqft Layout Plan{% if v.bed %} — {{ v.bed }}{% endif %}{% if v.bath %}, {{ v.bath }}{% endif %}</h3>
     {% if v.roomGroups.length %}
     <div class="pd-room-breakdown">
       {% for g in v.roomGroups %}
@@ -177,6 +182,7 @@
   {% endfor %}
 </section>
 <style>.bh-variant-hidden { display: none; } .bh-variant-btn.active { background: var(--primary); color: white; border-color: var(--primary); }</style>
+{% if variants.length > 1 %}
 <script>
 (function () {
   var variantData = {{ variants | dump | safe }};
@@ -192,12 +198,12 @@
       buttons.forEach(function (b) { b.classList.toggle('active', b === btn); });
       panels.forEach(function (p) { p.classList.toggle('bh-variant-hidden', p.getAttribute('data-variant-index') !== idx); });
       var v = variantData[idx];
-      if (v && bedEl) bedEl.textContent = v.bed + ' Bedrooms';
-      if (v && bathEl) bathEl.textContent = v.bath + ' Bathroom' + (v.bath !== 1 ? 's' : '');
+      if (v && bedEl) bedEl.textContent = v.bed;
+      if (v && bathEl) bathEl.textContent = v.bath;
       if (v && priceEl) {
         if (v.estimatedPriceFormatted) {
           priceEl.textContent = v.estimatedPriceFormatted;
-          if (priceNoteEl) priceNoteEl.textContent = 'Based on ' + v.totalArea + ' sq.ft total at this size. Final quotation depends on land, finish, and customization.';
+          if (priceNoteEl) priceNoteEl.textContent = 'Designated Floor Area: ' + v.totalArea + ' sq.ft.';
         } else {
           priceEl.textContent = 'Contact for Quote';
           if (priceNoteEl) priceNoteEl.textContent = '';
@@ -207,6 +213,7 @@
   });
 })();
 </script>
+{% endif %}
 {% endif %}
 
 {% if specs.length %}
