@@ -32,3 +32,7 @@ Welcome! This file provides guidelines and context for autonomous agents interac
 
 ## 7. Scope Exclusions
 - **No Career / Job Application System:** The career portal, job application forms, resumes, career listings seed, and admin career routes have been permanently removed per final user decision. Do not recreate or suggest reintroducing `/career.html`, `career_listings`, or career-related endpoints.
+
+## 8. Mandatory Claude Opus 5 Pair-Programming
+- **Always Consult Claude:** For every coding task, template edit, migration, or deployment plan, the agent must proactively consult Claude Opus 5 using `python e:\Softwares\ask_opus.py "<prompt>"` before applying changes and deploying to cPanel.
+
