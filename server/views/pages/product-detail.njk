@@ -101,42 +101,36 @@
     <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 10px;">MOST POPULAR</div>
     <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.1;">Model No-{{ product.model_number }}</h2>
 
-    {% if variants.length and variants[0].rooms.length %}
-    <div style="margin-bottom: var(--space-4);">
-      <h3 style="font-family: Arial, sans-serif; font-size: 1.15rem; color: #000; margin-bottom: 8px; font-weight: 600;">Overview (Area Details)</h3>
-      <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
-        <table class="bh-overview-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 0.92rem; color: #000;">
-          <thead>
-            <tr style="background-color: #d9e2f3;">
-              <th scope="col" style="border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; font-weight: 600;">Section</th>
-              <th scope="col" style="border: 1px solid #cbd5e1; padding: 6px 10px; text-align: center; font-weight: 600;">Area (sqft)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for r in variants[0].rooms %}
-            {% if not r.is_total_row %}
-            <tr>
-              <td style="border: 1px solid #e2e8f0; padding: 5px 10px;">{{ r.section }}</td>
-              <td style="border: 1px solid #e2e8f0; padding: 5px 10px; text-align: center;">{{ r.area_sqft }}</td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            <tr style="background: #d9e2f3; font-weight: 700;">
-              <td style="border: 1px solid #cbd5e1; padding: 6px 10px;">Total Area</td>
-              <td style="border: 1px solid #cbd5e1; padding: 6px 10px; text-align: center;">{{ product.total_floor_area or variants[0].totalArea or variants[0].area_sqft }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Quick Specs Chips -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-4);">
+      {% if product.total_floor_area or (variants.length and variants[0].area_sqft) %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary);">
+        <span>📐</span> {{ product.total_floor_area or variants[0].area_sqft }} sqft
       </div>
+      {% endif %}
+      {% if variants.length and variants[0].bed %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+        <span>🛏️</span> {{ variants[0].bed }}
+      </div>
+      {% endif %}
+      {% if variants.length and variants[0].bath %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+        <span>🚿</span> {{ variants[0].bath }}
+      </div>
+      {% endif %}
+      {% if variants.length and variants[0].kitchen %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+        <span>🍳</span> {{ variants[0].kitchen }}
+      </div>
+      {% endif %}
     </div>
-    {% endif %}
 
-    <div style="background: var(--off-white); border-radius: 12px; padding: 12px 18px; margin-bottom: 14px;">
-      <span style="display: block; font-size: 0.75rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Price</span>
-      <span class="bh-variant-price" style="font-size: 1.7rem; font-weight: 800; color: var(--primary);">{% if product.fixedPriceFormatted %}{{ product.fixedPriceFormatted }}{% elseif variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
+    <div style="background: var(--off-white); border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;">
+      <span style="display: block; font-size: 0.75rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Fixed Package Price</span>
+      <span class="bh-variant-price" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">{% if product.fixedPriceFormatted %}{{ product.fixedPriceFormatted }}{% elseif variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
     </div>
 
-    <div class="pd-trust-strip" style="margin-bottom: 14px;">
+    <div class="pd-trust-strip" style="margin-bottom: 16px;">
       <span>⚡ 45–60 day build</span>
       <span>🛡️ Earthquake resistant</span>
       <span>🌪️ 200+ km/h wind rated</span>
@@ -149,81 +143,105 @@
   </div>
 </div>
 
-{% if variants.length %}
-<section class="section" aria-labelledby="variants-title">
+{% if variants.length and (variants[0].roomGroups.length or variants[0].rooms.length) %}
+<section class="section" aria-labelledby="overview-title">
   <div class="section-header reveal">
-    <h2 class="section-title" id="variants-title">Floor Plan & Room Breakdown</h2>
-    <p class="section-subtitle">Official layout dimensions and area specifications for Model No-{{ product.model_number }}.</p>
+    <h2 class="section-title" id="overview-title">Overview (Area Details)</h2>
+    <p class="section-subtitle">Official floor-wise layout dimensions and area specifications for Model No-{{ product.model_number }}.</p>
   </div>
-  {% for v in variants %}
-  <div class="card bh-variant-panel{% if not loop.first %} bh-variant-hidden{% endif %}" data-variant-index="{{ loop.index0 }}" style="margin-bottom: 24px; background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
-    <h3 style="margin-top:0; font-size: 1.25rem; color: var(--primary);">{{ v.area_label or v.area_sqft }} sqft Layout Plan{% if v.bed %} — {{ v.bed }}{% endif %}{% if v.bath %}, {{ v.bath }}{% endif %}</h3>
-    {% if v.roomGroups.length %}
-    <div class="pd-room-breakdown">
-      {% for g in v.roomGroups %}
-      <div class="pd-room-group">
+
+  <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+    {% if variants[0].roomGroups.length %}
+      {% for g in variants[0].roomGroups %}
+      <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
         {% if g.label %}
-        <div class="pd-room-group-header">
-          <span>{{ g.label }}</span>
-          {% if g.total %}<span class="pd-room-group-total">{{ g.total }} sqft total</span>{% endif %}
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--grey-100); padding-bottom: 12px; margin-bottom: 16px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>🏢</span> {{ g.label }}
+          </h3>
+          {% if g.total %}
+          <span style="background: #eef4ff; color: var(--primary); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">
+            {{ g.total }} sqft
+          </span>
+          {% endif %}
         </div>
         {% endif %}
-        {% for r in g.rows %}
-        <div class="pd-room-row">
-          <span class="pd-room-icon" aria-hidden="true">{{ r.icon }}</span>
-          <span class="pd-room-name">{{ r.section }}</span>
-          <span class="pd-room-bar"><span class="pd-room-bar-fill" style="width: {{ r.barPct }}%;"></span></span>
-          <span class="pd-room-area">{{ r.area_sqft or '' }}{% if r.area_sqft %} sqft{% endif %}</span>
-          <span class="pd-room-dims">{% if r.length_ft and r.width_ft %}{{ r.length_ft }}' × {{ r.width_ft }}'{% endif %}</span>
+
+        <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+          <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+            <thead>
+              <tr style="background: var(--off-white);">
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Dimensions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in g.rows %}
+              <tr style="border-bottom: 1px solid var(--grey-100);">
+                <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);">
+                  {% if r.icon %}<span style="margin-right: 6px;">{{ r.icon }}</span>{% endif %}{{ r.section }}
+                </td>
+                <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">{{ r.area_sqft or '—' }}</td>
+                <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">
+                  {% if r.length_ft and r.width_ft %}{{ r.length_ft }}' × {{ r.width_ft }}'{% else %}—{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% if g.total %}
+            <tfoot>
+              <tr style="background: #f8fafc; font-weight: 700;">
+                <td style="padding: 12px 16px; color: var(--grey-900);">{{ g.label or 'Floor' }} Subtotal</td>
+                <td style="padding: 12px 16px; color: var(--primary); text-align: center;">{{ g.total }} sqft</td>
+                <td></td>
+              </tr>
+            </tfoot>
+            {% endif %}
+          </table>
         </div>
-        {% endfor %}
       </div>
       {% endfor %}
-      {% if v.roomGroupsBuildingTotal %}
-      <div class="pd-room-building-total">
-        <span>Total Building Area</span>
-        <span>{{ v.roomGroupsBuildingTotal }} sqft</span>
+    {% else %}
+      <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
+        <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+          <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+            <thead>
+              <tr style="background: var(--off-white);">
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in variants[0].rooms %}
+              {% if not r.is_total_row %}
+              <tr style="border-bottom: 1px solid var(--grey-100);">
+                <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);">{{ r.section }}</td>
+                <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">{{ r.area_sqft }}</td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
-      {% endif %}
-    </div>
     {% endif %}
+
+    <!-- Overall Total Building Area Card -->
+    <div class="card reveal" style="background: linear-gradient(135deg, #21409a 0%, #172c68 100%); color: white; border-radius: 16px; padding: 18px var(--space-6); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md);">
+      <div>
+        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Total Covered Area</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">Full Building Structure</div>
+      </div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #fde68a;">
+        {{ product.total_floor_area or variants[0].roomGroupsBuildingTotal or variants[0].totalArea or variants[0].area_sqft }} sqft
+      </div>
+    </div>
   </div>
-  {% endfor %}
 </section>
-<style>.bh-variant-hidden { display: none; } .bh-variant-btn.active { background: var(--primary); color: white; border-color: var(--primary); }</style>
-{% if variants.length > 1 %}
-<script>
-(function () {
-  var variantData = {{ variants | dump | safe }};
-  var buttons = document.querySelectorAll('.bh-variant-btn');
-  var panels = document.querySelectorAll('.bh-variant-panel');
-  var bedEl = document.querySelector('.bh-variant-bed');
-  var bathEl = document.querySelector('.bh-variant-bath');
-  var priceEl = document.querySelector('.bh-variant-price');
-  var priceNoteEl = document.querySelector('.bh-variant-price-note');
-  buttons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var idx = btn.getAttribute('data-variant-index');
-      buttons.forEach(function (b) { b.classList.toggle('active', b === btn); });
-      panels.forEach(function (p) { p.classList.toggle('bh-variant-hidden', p.getAttribute('data-variant-index') !== idx); });
-      var v = variantData[idx];
-      if (v && bedEl) bedEl.textContent = v.bed;
-      if (v && bathEl) bathEl.textContent = v.bath;
-      if (v && priceEl) {
-        if (v.estimatedPriceFormatted) {
-          priceEl.textContent = v.estimatedPriceFormatted;
-          if (priceNoteEl) priceNoteEl.textContent = 'Designated Floor Area: ' + v.totalArea + ' sq.ft.';
-        } else {
-          priceEl.textContent = 'Contact for Quote';
-          if (priceNoteEl) priceNoteEl.textContent = '';
-        }
-      }
-    });
-  });
-})();
-</script>
 {% endif %}
-{% endif %}
+
+
 
 {% if specs.length %}
 <section class="section" aria-labelledby="specs-title">
