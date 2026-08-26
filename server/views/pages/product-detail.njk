@@ -103,29 +103,31 @@
 
     {% if variants.length and variants[0].rooms.length %}
     <div style="margin-bottom: var(--space-4);">
-      <h3 style="font-family: Arial, sans-serif; font-size: 1.15rem; color: #000; margin-bottom: 6px; font-weight: normal;">Overview (Area Details)</h3>
-      <table class="bh-overview-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 0.92rem; color: #000;">
-        <thead>
-          <tr style="background-color: #d9e2f3;">
-            <th style="border: 1px solid #000; padding: 4px 10px; text-align: left; font-weight: normal;">Section</th>
-            <th style="border: 1px solid #000; padding: 4px 10px; text-align: center; font-weight: normal;">Area (sqft)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for r in variants[0].rooms %}
-          {% if not r.is_total_row %}
-          <tr>
-            <td style="border: 1px solid #000; padding: 4px 10px;">{{ r.section }}</td>
-            <td style="border: 1px solid #000; padding: 4px 10px; text-align: center;">{{ r.area_sqft }}</td>
-          </tr>
-          {% endif %}
-          {% endfor %}
-          <tr style="background: #d9e2f3; font-weight: 700;">
-            <td style="border: 1px solid #000; padding: 4px 10px;">Total</td>
-            <td style="border: 1px solid #000; padding: 4px 10px; text-align: center;">{{ product.total_floor_area or variants[0].totalArea or variants[0].area_sqft }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <h3 style="font-family: Arial, sans-serif; font-size: 1.15rem; color: #000; margin-bottom: 8px; font-weight: 600;">Overview (Area Details)</h3>
+      <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+        <table class="bh-overview-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 0.92rem; color: #000;">
+          <thead>
+            <tr style="background-color: #d9e2f3;">
+              <th scope="col" style="border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; font-weight: 600;">Section</th>
+              <th scope="col" style="border: 1px solid #cbd5e1; padding: 6px 10px; text-align: center; font-weight: 600;">Area (sqft)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in variants[0].rooms %}
+            {% if not r.is_total_row %}
+            <tr>
+              <td style="border: 1px solid #e2e8f0; padding: 5px 10px;">{{ r.section }}</td>
+              <td style="border: 1px solid #e2e8f0; padding: 5px 10px; text-align: center;">{{ r.area_sqft }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr style="background: #d9e2f3; font-weight: 700;">
+              <td style="border: 1px solid #cbd5e1; padding: 6px 10px;">Total Area</td>
+              <td style="border: 1px solid #cbd5e1; padding: 6px 10px; text-align: center;">{{ product.total_floor_area or variants[0].totalArea or variants[0].area_sqft }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     {% endif %}
 
@@ -142,7 +144,7 @@
 
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
-      <a class="btn btn-lg" href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}%20({{ product.fixedPriceFormatted or 'Pricing' }})." rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
+      <a class="btn btn-lg" href="{{ product.whatsAppUrl or ('https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20' ~ product.model_number) }}" rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
     </div>
   </div>
 </div>

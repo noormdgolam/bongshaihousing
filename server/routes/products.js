@@ -231,6 +231,9 @@ router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
     if (product.fixed_price) {
       product.fixedPriceFormatted = formatTaka(product.fixed_price);
     }
+    const waPriceText = product.fixedPriceFormatted ? ` (${product.fixedPriceFormatted})` : '';
+    const waMsg = `Hello, I am interested in Model ${product.model_number || ''}${waPriceText}.`;
+    product.whatsAppUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(waMsg)}`;
 
     let relatedProducts = [];
     if (db) {
