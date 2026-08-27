@@ -28,12 +28,12 @@ function getAttemptState(ip) {
   return state || null;
 }
 
-router.get('/admin/login', (req, res) => {
+router.get(['/admin/login', '/admin/login.html'], (req, res) => {
   if (req.session && req.session.adminUserId) return res.redirect('/admin');
   res.render('admin/login.njk', { error: null });
 });
 
-router.post('/admin/login', async (req, res) => {
+router.post(['/admin/login', '/admin/login.html'], async (req, res) => {
   const ip = req.ip;
   const existing = getAttemptState(ip);
   if (existing && existing.count >= MAX_ATTEMPTS) {

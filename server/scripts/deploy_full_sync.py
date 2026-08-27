@@ -10,12 +10,24 @@ FTP_PASS = os.environ.get('BONGSHAI_FTP_PASS', '@No.hacking_9361#')
 USER_PASS = f"{FTP_USER}:{FTP_PASS}"
 
 def get_changed_files():
-    out = subprocess.check_output(
-        ['git', 'diff', '--name-only', '19e2fd01', 'HEAD'],
+    out1 = subprocess.check_output(
+        ['git', 'diff', '--name-only', '18fbb404', 'HEAD'],
         text=True
     )
-    files = [f.strip() for f in out.strip().splitlines() if f.strip()]
-    return files
+    out2 = subprocess.check_output(
+        ['git', 'status', '--porcelain'],
+        text=True
+    )
+    files = set()
+    for line in out1.strip().splitlines():
+        if line.strip():
+            files.add(line.strip())
+    for line in out2.strip().splitlines():
+        if line.strip():
+            f = line.strip().split()[-1]
+            files.add(f)
+    files.add('.htaccess')
+    return sorted(list(files))
 
 def upload_file(local_path, remote_path):
     target_url = f"ftp://{FTP_HOST}/{remote_path}"

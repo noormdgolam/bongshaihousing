@@ -198,7 +198,7 @@ async function logActivity(req, actionOrObj, entityType, entityId, summary) {
   }
 }
 
-router.get('/admin', async (req, res) => {
+router.get(['/admin', '/admin/dashboard', '/admin/dashboard.html'], async (req, res) => {
   let productCount = { count: 0 };
   let publishedProductCount = { count: 0 };
   let categoryCount = { count: 0 };

@@ -1,5 +1,21 @@
 {
   "exact": {
+    "/index.html": {
+      "to": "/",
+      "permanent": true
+    },
+    "/u8-2": {
+      "to": "/",
+      "permanent": true
+    },
+    "/two-story-building.html": {
+      "to": "/apartment-building.html",
+      "permanent": true
+    },
+    "/duplex-villa.html": {
+      "to": "/duplex-steel-building.html",
+      "permanent": true
+    },
     "/bh-ch-501.html": {
       "to": "/bh-ct-501.html",
       "permanent": true
@@ -48,27 +64,6 @@
       "to": "/bh-ct-512.html",
       "permanent": true
     },
-
-    "/index.html": {
-      "to": "/",
-      "permanent": true
-    },
-    "/u8-2": {
-      "to": "/",
-      "permanent": true
-    },
-    "/two-story-building.html": {
-      "to": "/apartment-building.html",
-      "permanent": true
-    },
-    "/duplex-villa.html": {
-      "to": "/duplex-steel-building.html",
-      "permanent": true
-    },
-    "/single-story-building.html": {
-      "to": "/simplex-steel-building.html",
-      "permanent": true
-    },
     "/container-house": {
       "to": "/container-house.html",
       "permanent": true
@@ -78,7 +73,7 @@
       "permanent": true
     },
     "/career": {
-      "to": "/contact.html",
+      "to": "/career.html",
       "permanent": true
     },
     "/two-story-building": {
@@ -121,12 +116,8 @@
       "to": "/bh-dv-206.html",
       "permanent": true
     },
-    "/single-story-building": {
-      "to": "/simplex-steel-building.html",
-      "permanent": true
-    },
     "/career-apply-now": {
-      "to": "/contact.html",
+      "to": "/career.html",
       "permanent": true
     },
     "/login": {
@@ -166,8 +157,8 @@
       "permanent": true
     },
     "/agents": {
-      "to": "/",
-      "permanent": true
+      "to": "/agent/signup.html",
+      "permanent": false
     },
     "/bh-m-01": {
       "to": "/products-and-solutions.html",
@@ -186,19 +177,19 @@
       "permanent": true
     },
     "/architect": {
-      "to": "/contact.html",
+      "to": "/career.html",
       "permanent": true
     },
     "/deputy-general-managerdgm": {
-      "to": "/contact.html",
+      "to": "/career.html",
       "permanent": true
     },
     "/project-manager": {
-      "to": "/contact.html",
+      "to": "/career.html",
       "permanent": true
     },
     "/foreman-civil-construction": {
-      "to": "/contact.html",
+      "to": "/career.html",
       "permanent": true
     },
     "/project": {
@@ -247,6 +238,10 @@
     }
   },
   "prefix": {
+    "api/": {
+      "to": "/api/$1",
+      "permanent": false
+    },
     "wp-content": {
       "to": "/",
       "permanent": true

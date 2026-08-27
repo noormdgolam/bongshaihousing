@@ -15,6 +15,12 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
 
+# 3b. Dynamic Node App routes (Admin, Agent Portal, Customer Tracking, APIs)
+RewriteRule ^admin(/.*)?$ https://test.bongshaihousing.com/admin$1 [R=302,L]
+RewriteRule ^agent(/.*)?$ https://test.bongshaihousing.com/agent$1 [R=302,L]
+RewriteRule ^my-project(/.*)?$ https://test.bongshaihousing.com/my-project$1 [R=302,L]
+RewriteRule ^api/(.*)$ https://test.bongshaihousing.com/api/$1 [R=302,L]
+
 # 4. Redirect specific old or broken URLs to homepage
 RewriteRule ^u8-2/?$ https://bongshaihousing.com/ [R=301,L]
 
@@ -70,7 +76,7 @@ RewriteRule ^terms-and-conditions/?$ https://bongshaihousing.com/terms.html [R=3
 RewriteRule ^gallery/?$ https://bongshaihousing.com/gallery.html [R=301,L]
 RewriteRule ^bn/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^en/?$ https://bongshaihousing.com/ [R=301,L]
-RewriteRule ^agents/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^agents/?$ https://test.bongshaihousing.com/agent/signup.html [R=302,L]
 RewriteRule ^bh-m-01/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 RewriteRule ^about-us/?$ https://bongshaihousing.com/about.html [R=301,L]
 RewriteRule ^contact-us/?$ https://bongshaihousing.com/contact.html [R=301,L]

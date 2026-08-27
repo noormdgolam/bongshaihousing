@@ -5,7 +5,7 @@ const { documentPathIn } = require('../lib/document-uploader');
 
 const router = express.Router();
 
-router.get('/my-project', requireCustomer, async (req, res) => {
+router.get(['/my-project', '/my-project/dashboard', '/my-project/dashboard.html'], requireCustomer, async (req, res) => {
   const milestones = await db('order_milestones')
     .where({ order_id: req.order.id })
     .orderBy('sort_order', 'asc');
