@@ -17,6 +17,20 @@ const categoryPages = [
   'multi-story-homes.njk', 'other-residential.njk', 'products-and-solutions.njk'
 ];
 
+// Individual model links (bh-xx-###.html, dv-###.html, lcv-###.html) are NOT in
+// page-registry.json - most of them are DB-driven products served through
+// routes/products.js's generic '/:slug.html' catch-all + product-detail.njk,
+// with no static file or per-model .njk template of their own (e.g. the 5
+// Cottage models BH-CH-413..417). So a model link is only really broken if its
+// slug is neither a registry page, a real static file, nor a DB product.
+const REPO_ROOT = path.join(SERVER_DIR, '..');
+const productsSeedPath = path.join(SERVER_DIR, 'db', 'seeds', 'data', 'products.json');
+const dbProductSlugs = new Set(
+  fs.existsSync(productsSeedPath)
+    ? JSON.parse(fs.readFileSync(productsSeedPath, 'utf8')).map((p) => p.slug).filter(Boolean)
+    : []
+);
+
 const brokenModelLinks = [];
 for (const cp of categoryPages) {
   const html = env.render('pages/' + cp, {
@@ -27,7 +41,8 @@ for (const cp of categoryPages) {
   for (const m of modelLinkMatches) {
     const slug = m.replace(/href=["']/i, '').replace(/["']/, '');
     const url = '/' + slug;
-    if (!registry[url]) {
+    const existsAsStaticFile = fs.existsSync(path.join(REPO_ROOT, slug));
+    if (!registry[url] && !dbProductSlugs.has(slug) && !existsAsStaticFile) {
       brokenModelLinks.push({ page: cp, brokenModelUrl: url });
     }
   }
