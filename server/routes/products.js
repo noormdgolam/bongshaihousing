@@ -262,11 +262,30 @@ router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
         }));
     }
 
+function formatProductTitle(product, category) {
+  const model = product.model_number || '';
+  const catName = (category && category.name) ? category.name : '';
+
+  let raw = (product.meta_title || product.title || '').trim();
+  if (raw) {
+    if (raw.startsWith('Bongshai Housing')) return raw;
+    const parts = raw.split('|').map(s => s.trim()).filter(s => !/^Bongshai\s+Housing$/i.test(s));
+    return `Bongshai Housing | ${parts.join(' | ')}`;
+  }
+
+  if (model && catName) {
+    return `Bongshai Housing | ${model} | ${catName}`;
+  }
+  return `Bongshai Housing | ${model || 'Steel Building'}`;
+}
+
+    const pageTitle = formatProductTitle(product, category);
+
     res.render('pages/product-detail.njk', {
-      title: product.meta_title || product.title,
+      title: pageTitle,
       description: product.meta_description || product.description,
       canonical: `https://bongshaihousing.com/${product.slug}`,
-      ogTitle: product.meta_title || product.title,
+      ogTitle: pageTitle,
       ogDescription: product.meta_description || product.description,
       ogImage: product.main_image ? `https://bongshaihousing.com/${product.main_image}` : undefined,
       category: category || { name: '' },

@@ -117,6 +117,24 @@ nunjucksEnv.addFilter('date', (value) => {
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 });
 
+// Bangladeshi Taka currency format filter (e.g. 2500000 -> ৳25,00,000)
+const { formatTaka, formatTakaAscii } = require('./lib/format');
+nunjucksEnv.addFilter('taka', (value) => {
+  if (value === null || value === undefined || value === '') return 'N/A';
+  const n = Number(value);
+  return Number.isFinite(n) ? formatTaka(n) : String(value);
+});
+nunjucksEnv.addFilter('formatTaka', (value) => {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? formatTaka(n) : String(value);
+});
+nunjucksEnv.addFilter('formatTakaAscii', (value) => {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? formatTakaAscii(n) : String(value);
+});
+
 // Footer copyright year - was a client-side <span id="year"> filled by JS
 // after page load; server-rendering it removes the dependency on that
 // script actually running (an earlier JS error elsewhere on the page, or

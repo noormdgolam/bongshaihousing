@@ -42,6 +42,7 @@
             <th>Title</th>
             <th>Category</th>
             <th>Price / sqft</th>
+            <th>Fixed Price</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -59,6 +60,7 @@
             </td>
             <td>
               <strong style="color:var(--primary);">{{ p.model_number }}</strong>
+              {% if p.total_floor_area %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ p.total_floor_area }} Sq.Ft</div>{% endif %}
             </td>
             <td>
               <div style="font-weight:600;">{{ p.title }}</div>
@@ -70,6 +72,15 @@
               <strong style="color:var(--grey-900);">{{ p.price_per_sqft }}</strong> <span style="font-size:0.8rem; color:var(--grey-500);">{{ p.price_currency }}</span>
               {% else %}
               <span style="color:var(--grey-500);">Quote Basis</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if p.fixed_price %}
+              <strong style="color:var(--primary);">{{ p.fixed_price | taka }}</strong>
+              {% elif p.price_per_sqft and p.total_floor_area %}
+              <span style="font-weight:600; color:var(--grey-800);">{{ (p.price_per_sqft * p.total_floor_area) | taka }}</span> <span class="pill pill-muted" style="font-size:0.65rem;">Calc</span>
+              {% else %}
+              <span style="color:var(--grey-400);">Quote Basis</span>
               {% endif %}
             </td>
             <td>

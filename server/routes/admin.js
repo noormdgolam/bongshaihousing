@@ -22,6 +22,53 @@ const {
 } = require('../lib/agent-invitations');
 const { generateSecret, verifyTotp } = require('../lib/totp');
 const { getDynamicPermissionMatrix } = require('../lib/permission-matrix');
+const { formatTaka, formatTakaAscii } = require('../lib/format');
+
+async function getProductPricingMap(database) {
+  if (!database) return new Map();
+  try {
+    const products = await database('products').select('id', 'model_number', 'slug', 'title', 'price_per_sqft', 'price_currency', 'fixed_price', 'total_floor_area');
+    const map = new Map();
+    for (const p of products) {
+      if (p.model_number) map.set(p.model_number.trim().toLowerCase(), p);
+      if (p.slug) map.set(p.slug.trim().toLowerCase(), p);
+      if (p.title) map.set(p.title.trim().toLowerCase(), p);
+      const cleanSlug = (p.slug || '').replace(/\.html$/, '').trim().toLowerCase();
+      if (cleanSlug) map.set(cleanSlug, p);
+    }
+    return map;
+  } catch (err) {
+    return new Map();
+  }
+}
+
+function calculateLeadPrice(lead, productMap) {
+  if (!lead) return { price: null, formatted: null, isFixed: false, product: null };
+  const modelRaw = (lead.model || '').trim();
+  const modelKey = modelRaw.toLowerCase();
+  const prod = productMap ? productMap.get(modelKey) : null;
+  const numericArea = parseFloat(lead.floor_area) || (prod ? prod.total_floor_area : null);
+
+  let estPrice = null;
+  let isFixed = false;
+  if (prod && prod.fixed_price) {
+    estPrice = Number(prod.fixed_price);
+    isFixed = true;
+  } else if (prod && prod.price_per_sqft && numericArea && Number.isFinite(numericArea) && numericArea > 0) {
+    estPrice = Math.round(numericArea * Number(prod.price_per_sqft));
+    isFixed = false;
+  } else if (numericArea && Number.isFinite(numericArea) && numericArea > 0) {
+    estPrice = Math.round(numericArea * 1850);
+    isFixed = false;
+  }
+
+  return {
+    price: estPrice,
+    formatted: estPrice ? formatTaka(estPrice) : null,
+    isFixed,
+    product: prod,
+  };
+}
 
 const excelUpload = multer({
   storage: multer.memoryStorage(),
@@ -181,6 +228,7 @@ router.get('/admin', async (req, res) => {
   let seoSuggestionsCount = { count: 0 };
   let pageContentCount = { count: 0 };
   let mediaSizeBytes = 0;
+  let pipelineTotalValue = 0;
 
   if (db) {
     try {
@@ -214,6 +262,8 @@ router.get('/admin', async (req, res) => {
       const hasLeads = await db.schema.hasTable('leads');
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
+      const pricingMap = await getProductPricingMap(db);
+
       if (hasLeads) {
         [leadCount] = await db('leads').count({ count: '*' });
         [newLeadCount] = await db('leads').where({ status: 'new' }).count({ count: '*' });
@@ -223,6 +273,23 @@ router.get('/admin', async (req, res) => {
         recentLeads = await db('leads').orderBy('created_at', 'desc').limit(8);
         for (const l of recentLeads) {
           l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+          const calc = calculateLeadPrice(l, pricingMap);
+          l.estimated_price = calc.price;
+          l.estimated_price_formatted = calc.formatted;
+          l.is_fixed_price = calc.isFixed;
+        }
+
+        // Calculate active pipeline valuation from all open leads
+        try {
+          const activeLeads = await db('leads').whereNot({ status: 'closed' }).whereNot({ status: 'converted' });
+          let pipelineSum = 0;
+          for (const al of activeLeads) {
+            const c = calculateLeadPrice(al, pricingMap);
+            if (c && c.price) pipelineSum += c.price;
+          }
+          pipelineTotalValue = pipelineSum;
+        } catch (pipeErr) {
+          pipelineTotalValue = 0;
         }
       }
 
@@ -306,6 +373,8 @@ router.get('/admin', async (req, res) => {
       contactedLeads: contactedLeadCount?.count || 0,
       convertedLeads: converted,
       conversionRate,
+      pipelineValue: pipelineTotalValue || 0,
+      pipelineValueFormatted: pipelineTotalValue ? formatTaka(pipelineTotalValue) : '৳0',
       serviceAreas: serviceAreaCount?.count || 64,
       dedicatedServiceAreas: dedicatedAreaCount?.count || 18,
       faqs: faqCount?.count || 22,
@@ -707,7 +776,14 @@ router.get('/admin/leads', async (req, res) => {
         }
         leads = await query;
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        for (const l of leads) l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+        const pricingMap = await getProductPricingMap(db);
+        for (const l of leads) {
+          l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+          const calc = calculateLeadPrice(l, pricingMap);
+          l.estimated_price = calc.price;
+          l.estimated_price_formatted = calc.formatted;
+          l.is_fixed_price = calc.isFixed;
+        }
       }
     } catch (e) {
       console.error('Admin leads list error:', e.message);
@@ -818,6 +894,11 @@ router.get('/admin/leads/:id', async (req, res) => {
   try {
     const lead = await db('leads').where({ id: req.params.id }).first();
     if (!lead) return res.status(404).send('Lead not found');
+    const pricingMap = await getProductPricingMap(db);
+    const calc = calculateLeadPrice(lead, pricingMap);
+    lead.estimated_price = calc.price;
+    lead.estimated_price_formatted = calc.formatted;
+    lead.is_fixed_price = calc.isFixed;
     res.render('admin/leads/detail.njk', adminVars(req, { lead }));
   } catch (e) {
     res.status(500).send('Database error: ' + e.message);
@@ -1075,16 +1156,26 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
   try {
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
     const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
     const isPublished = published === 'on' || published === true || published === 'true';
+
+    const cleanPriceSqft = price_per_sqft !== '' && price_per_sqft !== undefined && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null;
+    const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
+    let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
+    if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
+      cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
+    }
+
     const [id] = await db('products').insert({
       category_id, model_number, slug, title, description,
-      price_per_sqft: price_per_sqft || null,
+      price_per_sqft: cleanPriceSqft,
       price_currency: price_currency || 'BDT',
+      fixed_price: cleanFixedPrice,
+      total_floor_area: cleanFloorArea,
       main_image: finalImage,
       image_2: finalImage2,
       image_3: finalImage3,
@@ -1127,7 +1218,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
+  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
   const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
   const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
   const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
@@ -1135,10 +1226,19 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   const existingProduct = await db('products').where({ id: req.params.id }).first();
   const isPublished = published === 'on' || published === true || published === 'true';
 
+  const cleanPriceSqft = price_per_sqft !== '' && price_per_sqft !== undefined && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null;
+  const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
+  let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
+  if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
+    cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
+  }
+
   await db('products').where({ id: req.params.id }).update({
     category_id, model_number, slug, title, description,
-    price_per_sqft: price_per_sqft || null,
+    price_per_sqft: cleanPriceSqft,
     price_currency: price_currency || 'BDT',
+    fixed_price: cleanFixedPrice,
+    total_floor_area: cleanFloorArea,
     main_image: finalImage,
     image_2: finalImage2,
     image_3: finalImage3,
@@ -1192,6 +1292,8 @@ router.post('/admin/products/:id/duplicate', async (req, res) => {
         description: originalProduct.description,
         price_per_sqft: originalProduct.price_per_sqft,
         price_currency: originalProduct.price_currency,
+        fixed_price: originalProduct.fixed_price,
+        total_floor_area: originalProduct.total_floor_area,
         main_image: originalProduct.main_image,
         image_2: originalProduct.image_2,
         image_3: originalProduct.image_3,

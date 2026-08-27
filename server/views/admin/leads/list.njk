@@ -97,6 +97,16 @@
               {% if lead.model %}<span class="pill pill-muted" style="font-weight:700;">{{ lead.model }}</span>{% endif %}
               {% if lead.floor_area %}<div style="font-size:0.8rem; color:var(--grey-700); margin-top:2px;">Area: {{ lead.floor_area }} Sq.Ft</div>{% endif %}
               {% if lead.bedrooms %}<div style="font-size:0.8rem; color:var(--grey-500);">Bedrooms: {{ lead.bedrooms }}</div>{% endif %}
+              {% if lead.estimated_price_formatted %}
+              <div style="margin-top:4px; font-size:0.82rem; font-weight:750; color:var(--primary); display:flex; align-items:center; gap:4px;">
+                <span>{{ lead.estimated_price_formatted }}</span>
+                {% if lead.is_fixed_price %}
+                <span class="pill pill-success" style="font-size:0.62rem; padding:1px 4px;">Fixed</span>
+                {% else %}
+                <span class="pill pill-muted" style="font-size:0.62rem; padding:1px 4px;">Calc</span>
+                {% endif %}
+              </div>
+              {% endif %}
             </td>
             <td>
               {% if lead.status == 'new' %}

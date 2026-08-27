@@ -62,6 +62,19 @@
           <span style="font-size:0.8rem; color:var(--grey-500); display:block;">Bedrooms</span>
           <strong>{{ lead.bedrooms or 'N/A' }}</strong>
         </div>
+        {% if lead.estimated_price_formatted %}
+        <div style="grid-column: 1 / -1; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span style="font-size:0.75rem; color:#1e40af; display:block; font-weight:700; text-transform:uppercase;">Estimated Model Valuation</span>
+            <strong style="font-size:1.15rem; color:var(--primary);">{{ lead.estimated_price_formatted }}</strong>
+          </div>
+          {% if lead.is_fixed_price %}
+          <span class="pill pill-success" style="font-size:0.75rem; font-weight:700;">Fixed Model Price</span>
+          {% else %}
+          <span class="pill pill-muted" style="font-size:0.75rem; font-weight:600;">Calculated from Area × Rate</span>
+          {% endif %}
+        </div>
+        {% endif %}
       </div>
 
       <div>
