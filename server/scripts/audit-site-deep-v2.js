@@ -49,8 +49,10 @@ for (const [url, meta] of Object.entries(registry)) {
 
   const rawTemplate = fs.readFileSync(tmplFile, 'utf8');
 
-  // Check for unresolved placeholders like TODO, FIXME, PLACEHOLDER, lorem ipsum, dummy text
-  if (/lorem ipsum|placeholder|todo:|fixme:|dummy text/i.test(rawTemplate) && !url.includes('test')) {
+  // Check for unresolved placeholders like TODO, FIXME, PLACEHOLDER, lorem ipsum, dummy text.
+  // Excludes legitimate HTML placeholder="..." input-hint attributes (word must not be
+  // immediately followed by '=' or preceded by an identifier char, e.g. "data-placeholder").
+  if (/lorem ipsum|(?<![\w-])placeholder(?!\s*=)|todo:|fixme:|dummy text/i.test(rawTemplate) && !url.includes('test')) {
     findings.unhandledTemplatePlaceholders.push({ page: url, template: meta.template });
   }
 
@@ -120,7 +122,7 @@ for (const [url, meta] of Object.entries(registry)) {
     if (srcMatch) {
       const src = srcMatch[1];
       if (!src.startsWith('http') && !src.startsWith('data:') && !src.startsWith('//') && !src.includes('{')) {
-        const cleanSrc = src.split('?')[0].split('#')[0];
+        const cleanSrc = decodeURIComponent(src.split('?')[0].split('#')[0]);
         const filePath = path.join(REPO_ROOT, cleanSrc.startsWith('/') ? cleanSrc.slice(1) : cleanSrc);
         if (!fs.existsSync(filePath)) {
           findings.brokenImageVariants.push({ page: url, image: src, expectedPath: filePath });
@@ -135,7 +137,7 @@ for (const [url, meta] of Object.entries(registry)) {
       for (const item of items) {
         const part = item.trim().split(/\s+/)[0];
         if (part && !part.startsWith('http') && !part.startsWith('data:') && !part.includes('{')) {
-          const cleanPart = part.split('?')[0].split('#')[0];
+          const cleanPart = decodeURIComponent(part.split('?')[0].split('#')[0]);
           const filePath = path.join(REPO_ROOT, cleanPart.startsWith('/') ? cleanPart.slice(1) : cleanPart);
           if (!fs.existsSync(filePath)) {
             findings.brokenImageVariants.push({ page: url, srcsetPart: part, expectedPath: filePath });
