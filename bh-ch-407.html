@@ -588,8 +588,8 @@
       const data = floorData407[sqft];
       if(!data) return;
 
-      document.getElementById("spec-bed-407").innerText = data.bed;
-      document.getElementById("spec-bath-407").innerText = data.bath;
+      var specBedEl407 = document.getElementById("spec-bed-407"); if (specBedEl407) { specBedEl407.innerText = data.bed; }
+      var specBathEl407 = document.getElementById("spec-bath-407"); if (specBathEl407) { specBathEl407.innerText = data.bath; }
         const priceEl407 = document.getElementById("spec-price-407"); if (priceEl407) { priceEl407.innerText = "Contact for Quote"; }
 
       const tbody = document.getElementById("room-sizes-table-body-407");
@@ -607,12 +607,12 @@
       }
 
 
-      document.getElementById("space-allocation-407").innerHTML = `
+      var spaceAllocEl407 = document.getElementById("space-allocation-407"); if (spaceAllocEl407) { spaceAllocEl407.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>
         <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">1 Kitchen</span></div>
-      `;
+      `; }
     }
   </script>
   <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs407 === "function") { updateSpecs407("400"); } });</script>

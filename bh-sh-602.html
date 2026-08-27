@@ -639,8 +639,8 @@
       const data = floorData602[sqft];
       if(!data) return;
 
-      document.getElementById("spec-bed-602").innerText = data.bed;
-      document.getElementById("spec-bath-602").innerText = data.bath;
+      var specBedEl602 = document.getElementById("spec-bed-602"); if (specBedEl602) { specBedEl602.innerText = data.bed; }
+      var specBathEl602 = document.getElementById("spec-bath-602"); if (specBathEl602) { specBathEl602.innerText = data.bath; }
       const priceEl = document.getElementById("spec-price-602"); 
       if (priceEl) { priceEl.innerText = "Contact for Quote"; }
       
