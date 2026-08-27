@@ -47,6 +47,21 @@ for (const pf of allPageFiles) {
   knownRoutes.add(pf.replace('.njk', '.html'));
 }
 
+// Add DB-driven product routes (routes/products.js serves /:slug.html for any
+// product in the DB, e.g. the 5 Cottage models BH-CH-413..417 which have no
+// static .html file or .njk template of their own - product-detail.njk renders
+// all of them from DB data via that one catch-all route).
+const productsSeedPath = path.join(SERVER_DIR, 'db', 'seeds', 'data', 'products.json');
+if (fs.existsSync(productsSeedPath)) {
+  const productsSeed = JSON.parse(fs.readFileSync(productsSeedPath, 'utf8'));
+  for (const p of productsSeed) {
+    if (p.slug) {
+      knownRoutes.add(p.slug);
+      knownRoutes.add('/' + p.slug);
+    }
+  }
+}
+
 const errors = [];
 const linkErrors = [];
 const unclosedTagErrors = [];
@@ -86,10 +101,14 @@ for (const [url, meta] of Object.entries(registry)) {
       }
     }
 
-    // 2. Check internal anchor links
+    // 2. Check internal anchor links (strip <script> blocks first - several partials
+    // build anchor HTML at runtime via JS string/template-literal concatenation, e.g.
+    // `<a href="$1">` inside a .replace() callback or `href="/${page...}"` in a
+    // template literal, which the naive href regex below would otherwise also match)
+    const htmlWithoutScripts = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
     const linkRegex = /href=["']([^"']+)["']/gi;
     let match;
-    while ((match = linkRegex.exec(html)) !== null) {
+    while ((match = linkRegex.exec(htmlWithoutScripts)) !== null) {
       let href = match[1].trim();
       if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:') || href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//') || href.startsWith('data:')) {
         continue;
