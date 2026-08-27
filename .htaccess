@@ -19,8 +19,20 @@ RewriteRule ^u8-2/?$ https://bongshaihousing.com/ [R=301,L]
 # 4b. Category pages renamed — redirect old URLs to the new pages
 RewriteRule ^two-story-building\.html$ https://bongshaihousing.com/apartment-building.html [R=301,L]
 RewriteRule ^duplex-villa\.html$ https://bongshaihousing.com/duplex-steel-building.html [R=301,L]
-RewriteRule ^single-story-building\.html$ https://bongshaihousing.com/simplex-steel-building.html [R=301,L]
+# 4b-2. Container House model prefix rename (BH-CH-5xx -> BH-CT-5xx)
 
+RewriteRule ^bh-ch-501\.html/?$ https://bongshaihousing.com/bh-ct-501.html [R=301,L]
+RewriteRule ^bh-ch-502\.html/?$ https://bongshaihousing.com/bh-ct-502.html [R=301,L]
+RewriteRule ^bh-ch-503\.html/?$ https://bongshaihousing.com/bh-ct-503.html [R=301,L]
+RewriteRule ^bh-ch-504\.html/?$ https://bongshaihousing.com/bh-ct-504.html [R=301,L]
+RewriteRule ^bh-ch-505\.html/?$ https://bongshaihousing.com/bh-ct-505.html [R=301,L]
+RewriteRule ^bh-ch-506\.html/?$ https://bongshaihousing.com/bh-ct-506.html [R=301,L]
+RewriteRule ^bh-ch-507\.html/?$ https://bongshaihousing.com/bh-ct-507.html [R=301,L]
+RewriteRule ^bh-ch-508\.html/?$ https://bongshaihousing.com/bh-ct-508.html [R=301,L]
+RewriteRule ^bh-ch-509\.html/?$ https://bongshaihousing.com/bh-ct-509.html [R=301,L]
+RewriteRule ^bh-ch-510\.html/?$ https://bongshaihousing.com/bh-ct-510.html [R=301,L]
+RewriteRule ^bh-ch-511\.html/?$ https://bongshaihousing.com/bh-ct-511.html [R=301,L]
+RewriteRule ^bh-ch-512\.html/?$ https://bongshaihousing.com/bh-ct-512.html [R=301,L]
 # 4c. Google Search Console 404 Fixes (2026-08-08)
 # WordPress leftovers
 RewriteRule ^wp-(content|includes|login\.php|admin)(.*)$ https://bongshaihousing.com/ [R=301,L]
@@ -45,7 +57,7 @@ RewriteRule ^bh-dv-105\.html$ https://bongshaihousing.com/bh-dv-205.html [R=301,
 RewriteRule ^bh-dv-106\.html$ https://bongshaihousing.com/bh-dv-206.html [R=301,L]
 
 # 4d. GSC "Page with redirect" — slug-style URLs missing rules (2026-08-08)
-RewriteRule ^single-story-building/?$ https://bongshaihousing.com/simplex-steel-building.html [R=301,L]
+
 RewriteRule ^career-apply-now/?$ https://bongshaihousing.com/career.html [R=301,L]
 RewriteRule ^login/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^logout/?$ https://bongshaihousing.com/ [R=301,L]

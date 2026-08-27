@@ -3330,16 +3330,16 @@
     "bathrooms": "2 Bathrooms"
   },
   {
-    "filename": "bh-ch-501.html",
-    "modelNumber": "BH-CH-501",
+    "filename": "bh-ct-501.html",
+    "modelNumber": "BH-CT-501",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-501.html",
-    "title": "Bongshai Housing | BH-CH-501 | Container House",
-    "description": "Engineered as a Container House, BH-CH-501 fits a 2-bedroom, 1-bath layout into 400 sq.ft. Fixed package price ৳5,00,000.",
+    "slug": "bh-ct-501.html",
+    "title": "Bongshai Housing | BH-CT-501 | Container House",
+    "description": "Engineered as a Container House, BH-CT-501 fits a 2-bedroom, 1-bath layout into 400 sq.ft. Fixed package price ৳5,00,000.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-501.webp",
+    "mainImage": "images/products/bh-ct-501.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -3458,16 +3458,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-502.html",
-    "modelNumber": "BH-CH-502",
+    "filename": "bh-ct-502.html",
+    "modelNumber": "BH-CT-502",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-502.html",
-    "title": "Bongshai Housing | BH-CH-502 | Container House",
-    "description": "Engineered as a Container House, BH-CH-502 fits a 2-bedroom, 1-bath layout into 400 sq.ft. Fixed package price ৳6,20,000.",
+    "slug": "bh-ct-502.html",
+    "title": "Bongshai Housing | BH-CT-502 | Container House",
+    "description": "Engineered as a Container House, BH-CT-502 fits a 2-bedroom, 1-bath layout into 400 sq.ft. Fixed package price ৳6,20,000.",
     "pricePerSqft": 2480,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-502.webp",
+    "mainImage": "images/products/bh-ct-502.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -3586,16 +3586,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-503.html",
-    "modelNumber": "BH-CH-503",
+    "filename": "bh-ct-503.html",
+    "modelNumber": "BH-CT-503",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-503.html",
-    "title": "Bongshai Housing | BH-CH-503 | Container House",
-    "description": "BH-CH-503, a Container House from Bongshai Housing, offers a 2-bedroom, 1-bath layout in 400 sq.ft. Fixed package price ৳9,00,000.",
+    "slug": "bh-ct-503.html",
+    "title": "Bongshai Housing | BH-CT-503 | Container House",
+    "description": "BH-CT-503, a Container House from Bongshai Housing, offers a 2-bedroom, 1-bath layout in 400 sq.ft. Fixed package price ৳9,00,000.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-503.webp",
+    "mainImage": "images/products/bh-ct-503.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -3714,16 +3714,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-504.html",
-    "modelNumber": "BH-CH-504",
+    "filename": "bh-ct-504.html",
+    "modelNumber": "BH-CT-504",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-504.html",
-    "title": "Bongshai Housing | BH-CH-504 | Container House",
-    "description": "BH-CH-504, a Container House from Bongshai Housing, offers a 2-bedroom, 1-bath layout in 400 sq.ft. Fixed package price ৳10,00,000.",
+    "slug": "bh-ct-504.html",
+    "title": "Bongshai Housing | BH-CT-504 | Container House",
+    "description": "BH-CT-504, a Container House from Bongshai Housing, offers a 2-bedroom, 1-bath layout in 400 sq.ft. Fixed package price ৳10,00,000.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-504.webp",
+    "mainImage": "images/products/bh-ct-504.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -3842,16 +3842,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-505.html",
-    "modelNumber": "BH-CH-505",
+    "filename": "bh-ct-505.html",
+    "modelNumber": "BH-CT-505",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-505.html",
-    "title": "Bongshai Housing | BH-CH-505 | Container House",
-    "description": "BH-CH-505 is a 400 sq.ft Container House with a 2-bedroom, 1-bath layout. Fixed package price ৳12,50,000, steel-composite framing delivered to all 64 districts.",
+    "slug": "bh-ct-505.html",
+    "title": "Bongshai Housing | BH-CT-505 | Container House",
+    "description": "BH-CT-505 is a 400 sq.ft Container House with a 2-bedroom, 1-bath layout. Fixed package price ৳12,50,000, steel-composite framing delivered to all 64 districts.",
     "pricePerSqft": 2777.78,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-505.webp",
+    "mainImage": "images/products/bh-ct-505.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -3970,16 +3970,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-506.html",
-    "modelNumber": "BH-CH-506",
+    "filename": "bh-ct-506.html",
+    "modelNumber": "BH-CT-506",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-506.html",
-    "title": "Bongshai Housing | BH-CH-506 | Container House",
-    "description": "BH-CH-506 is a 600 sq.ft Container House with a 1-bedroom, 1-bath layout. Fixed package price ৳16,00,000; pre-engineered steel, built fast nationwide.",
+    "slug": "bh-ct-506.html",
+    "title": "Bongshai Housing | BH-CT-506 | Container House",
+    "description": "BH-CT-506 is a 600 sq.ft Container House with a 1-bedroom, 1-bath layout. Fixed package price ৳16,00,000; pre-engineered steel, built fast nationwide.",
     "pricePerSqft": 2424.24,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-506.webp",
+    "mainImage": "images/products/bh-ct-506.webp",
     "floorData": {
       "600": {
         "bed": "1 Bedroom",
@@ -4098,16 +4098,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-507.html",
-    "modelNumber": "BH-CH-507",
+    "filename": "bh-ct-507.html",
+    "modelNumber": "BH-CT-507",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-507.html",
-    "title": "Bongshai Housing | BH-CH-507 | Container House",
-    "description": "Engineered as a Container House, BH-CH-507 fits a 1-bedroom, 1-bath layout into 320 sq.ft. Fixed package price ৳7,50,000.",
+    "slug": "bh-ct-507.html",
+    "title": "Bongshai Housing | BH-CT-507 | Container House",
+    "description": "Engineered as a Container House, BH-CT-507 fits a 1-bedroom, 1-bath layout into 320 sq.ft. Fixed package price ৳7,50,000.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-507.webp",
+    "mainImage": "images/products/bh-ct-507.webp",
     "floorData": {
       "320": {
         "bed": "1 Bedroom",
@@ -4226,16 +4226,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-508.html",
-    "modelNumber": "BH-CH-508",
+    "filename": "bh-ct-508.html",
+    "modelNumber": "BH-CT-508",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-508.html",
-    "title": "Bongshai Housing | BH-CH-508 | Container House",
-    "description": "Engineered as a Container House, BH-CH-508 fits a 2-bedroom, 1-bath layout into 400 sq.ft. Fixed package price ৳11,50,000.",
+    "slug": "bh-ct-508.html",
+    "title": "Bongshai Housing | BH-CT-508 | Container House",
+    "description": "Engineered as a Container House, BH-CT-508 fits a 2-bedroom, 1-bath layout into 400 sq.ft. Fixed package price ৳11,50,000.",
     "pricePerSqft": 2395.83,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-508.webp",
+    "mainImage": "images/products/bh-ct-508.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -4354,16 +4354,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-509.html",
-    "modelNumber": "BH-CH-509",
+    "filename": "bh-ct-509.html",
+    "modelNumber": "BH-CT-509",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-509.html",
-    "title": "Bongshai Housing | BH-CH-509 | Container House",
-    "description": "BH-CH-509, a Container House from Bongshai Housing, offers a 4-bedroom, 2-bath layout in 1200 sq.ft. Fixed package price ৳37,50,000.",
+    "slug": "bh-ct-509.html",
+    "title": "Bongshai Housing | BH-CT-509 | Container House",
+    "description": "BH-CT-509, a Container House from Bongshai Housing, offers a 4-bedroom, 2-bath layout in 1200 sq.ft. Fixed package price ৳37,50,000.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-509.webp",
+    "mainImage": "images/products/bh-ct-509.webp",
     "floorData": {
       "1200": {
         "bed": "4 Bedrooms",
@@ -4506,16 +4506,16 @@
     "bathrooms": "2 Bathrooms"
   },
   {
-    "filename": "bh-ch-510.html",
-    "modelNumber": "BH-CH-510",
+    "filename": "bh-ct-510.html",
+    "modelNumber": "BH-CT-510",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-510.html",
-    "title": "Bongshai Housing | BH-CH-510 | Container House",
-    "description": "BH-CH-510, a Container House from Bongshai Housing, offers a 4-bedroom, 2-bath layout in 1200 sq.ft. Fixed package price ৳40,00,000.",
+    "slug": "bh-ct-510.html",
+    "title": "Bongshai Housing | BH-CT-510 | Container House",
+    "description": "BH-CT-510, a Container House from Bongshai Housing, offers a 4-bedroom, 2-bath layout in 1200 sq.ft. Fixed package price ৳40,00,000.",
     "pricePerSqft": 2000,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-510.webp",
+    "mainImage": "images/products/bh-ct-510.webp",
     "floorData": {
       "1200": {
         "bed": "4 Bedrooms",
@@ -4658,16 +4658,16 @@
     "bathrooms": "2 Bathrooms"
   },
   {
-    "filename": "bh-ch-511.html",
-    "modelNumber": "BH-CH-511",
+    "filename": "bh-ct-511.html",
+    "modelNumber": "BH-CT-511",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-511.html",
-    "title": "Bongshai Housing | BH-CH-511 | Container House",
-    "description": "Engineered as a Container House, BH-CH-511 fits a 2-bedroom, 1-bath layout into 400 sq.ft. From ৳10,00,000; steel-composite framing, all 64 districts.",
+    "slug": "bh-ct-511.html",
+    "title": "Bongshai Housing | BH-CT-511 | Container House",
+    "description": "Engineered as a Container House, BH-CT-511 fits a 2-bedroom, 1-bath layout into 400 sq.ft. From ৳10,00,000; steel-composite framing, all 64 districts.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-511.webp",
+    "mainImage": "images/products/bh-ct-511.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",
@@ -4785,16 +4785,16 @@
     "bathrooms": "1 Bathroom"
   },
   {
-    "filename": "bh-ch-512.html",
-    "modelNumber": "BH-CH-512",
+    "filename": "bh-ct-512.html",
+    "modelNumber": "BH-CT-512",
     "categoryName": "Container House",
     "categorySlug": "container-house",
-    "slug": "bh-ch-512.html",
-    "title": "Bongshai Housing | BH-CH-512 | Container House",
-    "description": "BH-CH-512 is a 400 sq.ft Container House with a 2-bedroom, 1-bath layout. From ৳10,00,000, pre-engineered steel for fast, durable assembly nationwide.",
+    "slug": "bh-ct-512.html",
+    "title": "Bongshai Housing | BH-CT-512 | Container House",
+    "description": "BH-CT-512 is a 400 sq.ft Container House with a 2-bedroom, 1-bath layout. From ৳10,00,000, pre-engineered steel for fast, durable assembly nationwide.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
-    "mainImage": "images/products/bh-ch-512.webp",
+    "mainImage": "images/products/bh-ct-512.webp",
     "floorData": {
       "400": {
         "bed": "2 Bedrooms",

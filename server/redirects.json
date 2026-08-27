@@ -1,5 +1,54 @@
 {
   "exact": {
+    "/bh-ch-501.html": {
+      "to": "/bh-ct-501.html",
+      "permanent": true
+    },
+    "/bh-ch-502.html": {
+      "to": "/bh-ct-502.html",
+      "permanent": true
+    },
+    "/bh-ch-503.html": {
+      "to": "/bh-ct-503.html",
+      "permanent": true
+    },
+    "/bh-ch-504.html": {
+      "to": "/bh-ct-504.html",
+      "permanent": true
+    },
+    "/bh-ch-505.html": {
+      "to": "/bh-ct-505.html",
+      "permanent": true
+    },
+    "/bh-ch-506.html": {
+      "to": "/bh-ct-506.html",
+      "permanent": true
+    },
+    "/bh-ch-507.html": {
+      "to": "/bh-ct-507.html",
+      "permanent": true
+    },
+    "/bh-ch-508.html": {
+      "to": "/bh-ct-508.html",
+      "permanent": true
+    },
+    "/bh-ch-509.html": {
+      "to": "/bh-ct-509.html",
+      "permanent": true
+    },
+    "/bh-ch-510.html": {
+      "to": "/bh-ct-510.html",
+      "permanent": true
+    },
+    "/bh-ch-511.html": {
+      "to": "/bh-ct-511.html",
+      "permanent": true
+    },
+    "/bh-ch-512.html": {
+      "to": "/bh-ct-512.html",
+      "permanent": true
+    },
+
     "/index.html": {
       "to": "/",
       "permanent": true

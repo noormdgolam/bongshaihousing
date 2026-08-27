@@ -9,7 +9,7 @@
  * [[project-node-conversion-plan]]): the <title> tag's middle segment
  * ("BH-SB-301 | Simplex Steel Building | Bongshai Housing") for the
  * category name - NOT JSON-LD's `name`/`isVariantOf`, which has real
- * copy-paste errors on some pages (e.g. bh-ch-501 mislabeling itself as
+ * copy-paste errors on some pages (e.g. bh-ct-501 mislabeling itself as
  * "Cottage House" under a title that correctly says "Container House").
  * The per-tier bed/bath/room breakdown lives in an inline
  * `const floorData<N> = {...}` object literal (not JSON - unquoted keys),

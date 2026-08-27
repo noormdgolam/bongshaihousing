@@ -20,7 +20,7 @@ const server = app.listen(3099, async () => {
     '/bh-sb-301.html',
     '/bh-dv-201.html',
     '/bh-tsb-101.html',
-    '/bh-ch-501.html',
+    '/bh-ct-501.html',
     '/bh-cb-901.html'
   ];
 

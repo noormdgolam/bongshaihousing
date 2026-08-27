@@ -23,7 +23,7 @@
 exports.up = async function (knex) {
   await knex.schema.createTable('categories', (table) => {
     table.increments('id').primary();
-    // Filename prefix (bh-sb, bh-cb, bh-ch-4, bh-ch-5, dv-legacy, lcv, ...)
+    // Filename prefix (bh-sb, bh-cb, bh-ch-4, bh-ct-5, dv-legacy, lcv, ...)
     // rather than anything scraped from JSON-LD, since that's what's
     // actually reliable across the family.
     table.string('slug', 50).notNullable().unique();
