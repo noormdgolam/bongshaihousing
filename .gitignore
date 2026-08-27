@@ -6,7 +6,12 @@ node_modules/
 server/.env
 
 # Python artifacts
+# NOTE: bare `*.py` used to ignore ALL Python source, silently excluding
+# project-owned tooling under server/scripts/ (e.g. the floor-area
+# reconciliation audit, which encodes the authoritative room-dimension
+# templates). Vendored skill scripts under .agents/ stay ignored.
 *.py
+!server/scripts/*.py
 __pycache__/
 venv/
 
