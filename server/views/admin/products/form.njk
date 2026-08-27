@@ -1,0 +1,468 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if product.id %}Edit Product{% else %}New Product{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if product.id %}Edit {{ product.model_number }}{% else %}New Product{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+{% if seoGenerated %}
+<div style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 12px; border-radius: 6px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+  <span>🤖 SEO suggestions were auto-generated in the background!</span>
+  <a href="/admin/seo/suggestions" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 4px;">Review in Queue</a>
+</div>
+{% endif %}
+<div class="card">
+<form method="post" enctype="multipart/form-data" action="{% if product.id %}/admin/products/{{ product.id }}{% else %}/admin/products{% endif %}">
+  <div class="form-row">
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id" required onchange="toggleNewCategoryForm()">
+      {% for c in categories %}<option value="{{ c.id }}" {% if product.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+      <option value="__new__" style="font-weight:bold; color:var(--primary);">+ Add New Category</option>
+    </select>
+  </div>
+  
+  <div id="inline-category-form" style="display:none; background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:12px; margin-bottom:15px; margin-top:-10px;">
+    <div style="font-size:0.85rem; font-weight:600; margin-bottom:8px; color:var(--grey-700);">Create New Category</div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+      <div style="flex:1; min-width:150px;">
+        <label for="new_category_name" style="font-size:0.75rem; display:block; margin-bottom:4px;">Name</label>
+        <input type="text" id="new_category_name" style="width:100%; padding:6px; font-size:0.85rem;" placeholder="e.g. Villas" oninput="document.getElementById('new_category_slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')">
+      </div>
+      <div style="flex:1; min-width:150px;">
+        <label for="new_category_slug" style="font-size:0.75rem; display:block; margin-bottom:4px;">Slug</label>
+        <input type="text" id="new_category_slug" style="width:100%; padding:6px; font-size:0.85rem;" placeholder="e.g. villas">
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" style="padding:6px 12px; font-size:0.85rem;" onclick="submitNewCategory()">Create</button>
+        <button type="button" class="btn" style="padding:6px 12px; font-size:0.85rem;" onclick="cancelNewCategory()">Cancel</button>
+      </div>
+    </div>
+    <div id="inline-category-error" style="color:var(--danger); font-size:0.8rem; margin-top:8px; display:none;"></div>
+  </div>
+
+  <div class="form-row">
+    <label for="model_number">Model Number</label>
+    <input type="text" id="model_number" name="model_number" value="{{ product.model_number or '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="slug">Slug (URL / filename)</label>
+    <input type="text" id="slug" name="slug" value="{{ product.slug or '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" value="{{ product.title or '' }}" required>
+  </div>
+  <div class="form-row">
+    <label for="description">Description</label>
+    <textarea id="description" name="description">{{ product.description or '' }}</textarea>
+  </div>
+  <div class="form-row">
+    <label>Main Product Image</label>
+    <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
+      <div id="imagePreviewContainer" style="width:130px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
+        {% if product.main_image %}
+          <img id="imagePreviewImg" src="/{{ product.main_image | replace('^/', '') }}" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+          <span id="imagePreviewPlaceholder" style="display:none; font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% else %}
+          <img id="imagePreviewImg" src="" alt="Preview" style="display:none; width:100%; height:100%; object-fit:cover;">
+          <span id="imagePreviewPlaceholder" style="font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% endif %}
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:10px;">
+          <label for="main_image_file" style="font-size:0.8rem; font-weight:600; color:var(--grey-700, #334155); margin-bottom:4px; display:block;">📁 Upload Image File</label>
+          <input type="file" id="main_image_file" name="main_image_file" accept="image/*" style="font-size:0.85rem;" onchange="previewFile(this, 'imagePreviewImg', 'imagePreviewPlaceholder')">
+          <span style="font-size:0.72rem; color:var(--grey-500, #64748b); display:block; margin-top:2px;">PNG, JPG, WebP, SVG up to 10MB (saved to images/uploads/)</span>
+        </div>
+        <div>
+          <label for="main_image" style="font-size:0.75rem; color:var(--grey-500, #64748b); margin-bottom:2px; display:block;">Or Manual Path / URL (Fallback)</label>
+          <input type="text" id="main_image" name="main_image" value="{{ product.main_image or '' }}" placeholder="e.g. images/products/bh-sb-301.webp" style="font-size:0.85rem;" oninput="previewUrl(this.value, 'imagePreviewImg', 'imagePreviewPlaceholder')">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="main_image_alt">Image Alt Text <span style="font-weight:400; color:var(--grey-500, #64748b);">(optional - falls back to Title if blank)</span></label>
+    <input type="text" id="main_image_alt" name="main_image_alt" value="{{ product.main_image_alt or '' }}" placeholder="e.g. BH-DV-201 duplex steel building exterior view" maxlength="255">
+  </div>
+  <h3 style="font-size:0.92rem; color:var(--primary); border-bottom:1px solid var(--grey-100, #f1f5f9); padding-bottom:6px; margin-top:22px;">🔍 SEO (Search Result Appearance)</h3>
+  <p style="font-size:0.78rem; color:var(--grey-500, #64748b); margin-top:-6px;">Leave blank to fall back to Title/Description above. The <a href="/admin/seo" target="_blank">SEO Dashboard</a> can also draft these with AI.</p>
+  <div class="form-row">
+    <label for="meta_title">SEO Title <span style="font-weight:400; color:var(--grey-500, #64748b);">(under 60 characters)</span></label>
+    <input type="text" id="meta_title" name="meta_title" value="{{ product.meta_title or '' }}" maxlength="255">
+  </div>
+  <div class="form-row">
+    <label for="meta_description">SEO Meta Description <span style="font-weight:400; color:var(--grey-500, #64748b);">(under 155 characters)</span></label>
+    <textarea id="meta_description" name="meta_description" maxlength="500" style="min-height:60px;">{{ product.meta_description or '' }}</textarea>
+  </div>
+  <div class="form-row">
+    <label>Gallery Image 2 <span style="font-weight:400; color:var(--grey-500, #64748b);">(optional)</span></label>
+    <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
+      <div id="image2PreviewContainer" style="width:130px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
+        {% if product.image_2 %}
+          <img id="image2PreviewImg" src="/{{ product.image_2 | replace('^/', '') }}" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+          <span id="image2PreviewPlaceholder" style="display:none; font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% else %}
+          <img id="image2PreviewImg" src="" alt="Preview" style="display:none; width:100%; height:100%; object-fit:cover;">
+          <span id="image2PreviewPlaceholder" style="font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% endif %}
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:10px;">
+          <label for="image_2_file" style="font-size:0.8rem; font-weight:600; color:var(--grey-700, #334155); margin-bottom:4px; display:block;">📁 Upload Image File</label>
+          <input type="file" id="image_2_file" name="image_2_file" accept="image/*" style="font-size:0.85rem;" onchange="previewFile(this, 'image2PreviewImg', 'image2PreviewPlaceholder')">
+          <span style="font-size:0.72rem; color:var(--grey-500, #64748b); display:block; margin-top:2px;">PNG, JPG, WebP, SVG up to 10MB (saved to images/uploads/)</span>
+        </div>
+        <div>
+          <label for="image_2" style="font-size:0.75rem; color:var(--grey-500, #64748b); margin-bottom:2px; display:block;">Or Manual Path / URL (Fallback)</label>
+          <input type="text" id="image_2" name="image_2" value="{{ product.image_2 or '' }}" placeholder="e.g. images/products/bh-sb-301-2.webp" style="font-size:0.85rem;" oninput="previewUrl(this.value, 'image2PreviewImg', 'image2PreviewPlaceholder')">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <label>Gallery Image 3 <span style="font-weight:400; color:var(--grey-500, #64748b);">(optional)</span></label>
+    <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
+      <div id="image3PreviewContainer" style="width:130px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
+        {% if product.image_3 %}
+          <img id="image3PreviewImg" src="/{{ product.image_3 | replace('^/', '') }}" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+          <span id="image3PreviewPlaceholder" style="display:none; font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% else %}
+          <img id="image3PreviewImg" src="" alt="Preview" style="display:none; width:100%; height:100%; object-fit:cover;">
+          <span id="image3PreviewPlaceholder" style="font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% endif %}
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:10px;">
+          <label for="image_3_file" style="font-size:0.8rem; font-weight:600; color:var(--grey-700, #334155); margin-bottom:4px; display:block;">📁 Upload Image File</label>
+          <input type="file" id="image_3_file" name="image_3_file" accept="image/*" style="font-size:0.85rem;" onchange="previewFile(this, 'image3PreviewImg', 'image3PreviewPlaceholder')">
+          <span style="font-size:0.72rem; color:var(--grey-500, #64748b); display:block; margin-top:2px;">PNG, JPG, WebP, SVG up to 10MB (saved to images/uploads/)</span>
+        </div>
+        <div>
+          <label for="image_3" style="font-size:0.75rem; color:var(--grey-500, #64748b); margin-bottom:2px; display:block;">Or Manual Path / URL (Fallback)</label>
+          <input type="text" id="image_3" name="image_3" value="{{ product.image_3 or '' }}" placeholder="e.g. images/products/bh-sb-301-3.webp" style="font-size:0.85rem;" oninput="previewUrl(this.value, 'image3PreviewImg', 'image3PreviewPlaceholder')">
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Pricing & Floor Area Architecture -->
+  <div style="background:var(--grey-50, #f8fafc); border:1px solid var(--grey-200, #e2e8f0); border-radius:10px; padding:16px; margin-bottom:16px;">
+    <h3 style="font-size:0.95rem; font-weight:700; margin:0 0 12px 0; color:var(--grey-900);">💰 Model Pricing &amp; Floor Area Calculation</h3>
+    
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">
+      <div class="form-row" style="margin:0;">
+        <label for="total_floor_area">Standard Floor Area (Sq.Ft)</label>
+        <input type="number" id="total_floor_area" name="total_floor_area" value="{{ product.total_floor_area or '' }}" placeholder="e.g. 1200" oninput="updateLivePriceCalculation()">
+      </div>
+
+      <div class="form-row" style="margin:0;">
+        <label for="price_per_sqft">Price per sqft (BDT)</label>
+        <input type="number" step="0.01" id="price_per_sqft" name="price_per_sqft" value="{{ product.price_per_sqft or '' }}" placeholder="e.g. 1850" oninput="updateLivePriceCalculation()">
+      </div>
+
+      <div class="form-row" style="margin:0;">
+        <label for="price_currency">Currency</label>
+        <input type="text" id="price_currency" name="price_currency" value="{{ product.price_currency or 'BDT' }}">
+      </div>
+    </div>
+
+    <!-- Live Calculation & Fixed Price Input Row -->
+    <div style="margin-top:14px; padding-top:12px; border-top:1px dashed var(--grey-200, #cbd5e1); display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+      <div class="form-row" style="flex:1; min-width:240px; margin:0;">
+        <label for="fixed_price" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Fixed Total Price (BDT)</span>
+          <span id="calcIndicator" style="font-size:0.75rem; color:var(--primary); font-weight:600;"></span>
+        </label>
+        <div style="display:flex; gap:8px;">
+          <input type="number" step="1" id="fixed_price" name="fixed_price" value="{{ product.fixed_price or '' }}" placeholder="e.g. 2220000" style="flex:1;">
+          <button type="button" class="btn" style="padding:6px 12px; font-size:0.8rem; white-space:nowrap; background:#eff6ff; color:var(--primary); border-color:#bfdbfe;" onclick="applyCalculatedPrice()" title="Compute (Rate × Area) and set as Fixed Price">
+            ⚡ Calculate &amp; Apply
+          </button>
+        </div>
+      </div>
+      <div style="flex:1; min-width:200px; font-size:0.8rem; color:var(--grey-600); background:rgba(255,255,255,0.7); padding:10px 14px; border-radius:8px; border:1px solid rgba(15,23,42,0.08);">
+        <div style="font-weight:700; color:var(--grey-800); margin-bottom:2px;">Calculated Estimate:</div>
+        <div id="liveCalcDisplay" style="font-size:1.1rem; font-weight:800; color:var(--primary);">
+          {% if product.fixed_price %}
+            {{ product.fixed_price | taka }} <span style="font-size:0.75rem; color:var(--grey-500); font-weight:500;">(Saved Fixed Price)</span>
+          {% elif product.price_per_sqft and product.total_floor_area %}
+            {{ (product.price_per_sqft * product.total_floor_area) | taka }} <span style="font-size:0.75rem; color:var(--grey-500); font-weight:500;">(Rate × Area)</span>
+          {% else %}
+            <span style="font-size:0.85rem; color:var(--grey-400);">Enter Area &amp; Rate above</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+    <label><input type="checkbox" name="published" {% if product.published or not product.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label>
+    <label><input type="checkbox" id="auto_seo" name="auto_seo" checked style="width:auto; display:inline-block; margin-right:6px;"> 🤖 Auto-generate SEO suggestions when publishing</label>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if product.id %}Save Changes{% else %}Create Product{% endif %}</button>
+    <a href="/admin/products" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+
+{% if product.id %}
+<div class="card">
+  <h2 style="font-size:1rem;">Building Specifications ({{ specs.length }})</h2>
+  <table>
+    <thead><tr><th>Item</th><th>Materials</th><th></th></tr></thead>
+    <tbody>
+      {% for s in specs %}
+      <tr>
+        <form method="post" action="/admin/products/{{ product.id }}/specs/{{ s.id }}" style="display:contents;">
+          <td><input type="text" name="spec_key" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td style="white-space:nowrap;">
+            <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Save</button>
+            <button type="submit" formaction="/admin/products/{{ product.id }}/specs/{{ s.id }}/delete" formnovalidate class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;" onclick="return confirm('Delete this spec row?');">Del</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+      <tr>
+        <form method="post" action="/admin/products/{{ product.id }}/specs" style="display:contents;">
+          <td><input type="text" name="spec_key" placeholder="e.g. WALL" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" placeholder="e.g. 2.5'' RC precast concrete panel" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><button type="submit" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;">+ Add</button></td>
+        </form>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2 style="font-size:1rem;">Floor-Area Variants ({{ variants.length }})</h2>
+  {% for v in variants %}
+  <div style="border:1px solid var(--grey-200); border-radius:8px; padding:14px; margin-bottom:14px;">
+    <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}" style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:10px;">
+      <div><label style="font-size:0.75rem; display:block;">Area (sqft)</label><input type="text" name="area_sqft" value="{{ v.area_sqft or '' }}" style="width:80px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Label</label><input type="text" name="area_label" value="{{ v.area_label or '' }}" style="width:100px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Bed</label><input type="number" name="bed" value="{{ v.bed or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Bath</label><input type="number" name="bath" value="{{ v.bath or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Kitchen</label><input type="number" name="kitchen" value="{{ v.kitchen or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block;">Living</label><input type="number" name="living" value="{{ v.living or '' }}" style="width:60px; padding:4px 6px;"></div>
+      <button type="submit" class="btn" style="padding:5px 12px; font-size:0.8rem;">Save</button>
+    </form>
+    <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/delete" style="display:inline;" onsubmit="return confirm('Delete this variant and all its rooms?');">
+      <button type="submit" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-bottom:10px;">Delete Variant</button>
+    </form>
+
+    <table style="margin-top:8px;">
+      <thead><tr><th>Floor</th><th>Section</th><th>Area</th><th>Length</th><th>Width</th><th></th></tr></thead>
+      <tbody>
+        {% for r in v.rooms %}
+        <tr>
+          <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms/{{ r.id }}" style="display:contents;">
+            <td><input type="text" name="floor_label" value="{{ r.floor_label or '' }}" style="width:80px; padding:3px 5px;"></td>
+            <td><input type="text" name="section" value="{{ r.section }}" style="width:140px; padding:3px 5px;"></td>
+            <td><input type="text" name="area_sqft" value="{{ r.area_sqft or '' }}" style="width:60px; padding:3px 5px;"></td>
+            <td><input type="text" name="length_ft" value="{{ r.length_ft or '' }}" style="width:50px; padding:3px 5px;"></td>
+            <td><input type="text" name="width_ft" value="{{ r.width_ft or '' }}" style="width:50px; padding:3px 5px;"></td>
+            <td style="white-space:nowrap;">
+              <button type="submit" class="btn" style="padding:3px 8px; font-size:0.75rem;">Save</button>
+              <button type="submit" formaction="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms/{{ r.id }}/delete" formnovalidate class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;">Del</button>
+            </td>
+          </form>
+        </tr>
+        {% endfor %}
+        <tr>
+          <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms" style="display:contents;">
+            <td><input type="text" name="floor_label" placeholder="optional" style="width:80px; padding:3px 5px;"></td>
+            <td><input type="text" name="section" placeholder="e.g. Master bed" style="width:140px; padding:3px 5px;"></td>
+            <td><input type="text" name="area_sqft" style="width:60px; padding:3px 5px;"></td>
+            <td><input type="text" name="length_ft" style="width:50px; padding:3px 5px;"></td>
+            <td><input type="text" name="width_ft" style="width:50px; padding:3px 5px;"></td>
+            <td><button type="submit" class="btn btn-primary" style="padding:3px 8px; font-size:0.75rem;">+ Add</button></td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  <form method="post" action="/admin/products/{{ product.id }}/variants" style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; padding-top:8px; border-top:1px dashed var(--grey-200);">
+    <div><label style="font-size:0.75rem; display:block;">Area (sqft)</label><input type="text" name="area_sqft" required style="width:80px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Bed</label><input type="number" name="bed" style="width:60px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Bath</label><input type="number" name="bath" style="width:60px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Kitchen</label><input type="number" name="kitchen" style="width:60px; padding:4px 6px;"></div>
+    <div><label style="font-size:0.75rem; display:block;">Living</label><input type="number" name="living" style="width:60px; padding:4px 6px;"></div>
+    <button type="submit" class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;">+ Add New Variant</button>
+  </form>
+</div>
+
+<div style="display:flex; gap:10px;">
+  <form method="post" action="/admin/products/{{ product.id }}/duplicate" onsubmit="return confirm('Duplicate this product? This will create an unpublished copy with all specs, variants, and rooms.');">
+    <button type="submit" class="btn" style="background:var(--grey-100); border-color:var(--grey-200);">Duplicate Product</button>
+  </form>
+  <form method="post" action="/admin/products/{{ product.id }}/delete" onsubmit="return confirm('Delete this product? This also removes its specs and variants.');">
+    <button type="submit" class="btn btn-danger">Delete Product</button>
+  </form>
+</div>
+{% endif %}
+
+<script>
+function previewFile(input, imgId, placeholderId) {
+  const file = input.files && input.files[0];
+  const img = document.getElementById(imgId);
+  const placeholder = document.getElementById(placeholderId);
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      if (img) {
+        img.src = e.target.result;
+        img.style.display = 'block';
+      }
+      if (placeholder) placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+function previewUrl(val, imgId, placeholderId) {
+  const img = document.getElementById(imgId);
+  const placeholder = document.getElementById(placeholderId);
+  if (val && val.trim()) {
+    const clean = val.trim().startsWith('http') || val.trim().startsWith('/') ? val.trim() : '/' + val.trim();
+    if (img) {
+      img.src = clean;
+      img.style.display = 'block';
+    }
+    if (placeholder) placeholder.style.display = 'none';
+  }
+}
+function toggleNewCategoryForm() {
+  const select = document.getElementById('category_id');
+  const panel = document.getElementById('inline-category-form');
+  if (select.value === '__new__') {
+    panel.style.display = 'block';
+    document.getElementById('new_category_name').focus();
+  } else {
+    panel.style.display = 'none';
+  }
+}
+function cancelNewCategory() {
+  const select = document.getElementById('category_id');
+  const panel = document.getElementById('inline-category-form');
+  panel.style.display = 'none';
+  document.getElementById('new_category_name').value = '';
+  document.getElementById('new_category_slug').value = '';
+  document.getElementById('inline-category-error').style.display = 'none';
+  // Reset select to first available non-__new__ option
+  for (let i = 0; i < select.options.length; i++) {
+    if (select.options[i].value !== '__new__') {
+      select.selectedIndex = i;
+      break;
+    }
+  }
+}
+async function submitNewCategory() {
+  const name = document.getElementById('new_category_name').value;
+  const slug = document.getElementById('new_category_slug').value;
+  const errorDiv = document.getElementById('inline-category-error');
+  
+  if (!name || !slug) {
+    errorDiv.textContent = 'Name and slug are required.';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  errorDiv.style.display = 'none';
+  
+  const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+  const csrfToken = csrfMeta ? csrfMeta.content : '';
+  
+  try {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('slug', slug);
+    if (csrfToken) formData.append('_csrf', csrfToken);
+    
+    const res = await fetch('/admin/categories', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+    
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to create category');
+    }
+    
+    // Add to select and choose it
+    const select = document.getElementById('category_id');
+    const option = document.createElement('option');
+    option.value = data.id;
+    option.textContent = data.name;
+    // Insert before the "+ Add New Category" option
+    select.insertBefore(option, select.options[select.options.length - 1]);
+    select.value = data.id;
+    
+    // Cleanup
+    document.getElementById('inline-category-form').style.display = 'none';
+    document.getElementById('new_category_name').value = '';
+    document.getElementById('new_category_slug').value = '';
+    
+  } catch (err) {
+    errorDiv.textContent = err.message;
+    errorDiv.style.display = 'block';
+  }
+}
+
+function formatClientTaka(num) {
+  if (!num || isNaN(num)) return '৳0';
+  let s = Math.round(num).toString();
+  const last3 = s.slice(-3);
+  let rest = s.slice(0, -3);
+  if (rest !== '') {
+    rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+    s = rest + ',' + last3;
+  } else {
+    s = last3;
+  }
+  return '৳' + s;
+}
+
+function updateLivePriceCalculation() {
+  const areaInput = document.getElementById('total_floor_area');
+  const rateInput = document.getElementById('price_per_sqft');
+  const display = document.getElementById('liveCalcDisplay');
+  const indicator = document.getElementById('calcIndicator');
+  
+  const area = parseFloat(areaInput ? areaInput.value : 0);
+  const rate = parseFloat(rateInput ? rateInput.value : 0);
+
+  if (area > 0 && rate > 0) {
+    const calc = Math.round(area * rate);
+    if (display) display.innerHTML = `${formatClientTaka(calc)} <span style="font-size:0.75rem; color:var(--grey-500); font-weight:500;">(${area} sq.ft × ৳${rate})</span>`;
+    if (indicator) indicator.textContent = `⚡ Computed: ${formatClientTaka(calc)}`;
+  } else {
+    if (indicator) indicator.textContent = '';
+  }
+}
+
+function applyCalculatedPrice() {
+  const areaInput = document.getElementById('total_floor_area');
+  const rateInput = document.getElementById('price_per_sqft');
+  const fixedPriceInput = document.getElementById('fixed_price');
+  
+  const area = parseFloat(areaInput ? areaInput.value : 0);
+  const rate = parseFloat(rateInput ? rateInput.value : 0);
+
+  if (area > 0 && rate > 0) {
+    const calc = Math.round(area * rate);
+    if (fixedPriceInput) {
+      fixedPriceInput.value = calc;
+      fixedPriceInput.focus();
+    }
+    const display = document.getElementById('liveCalcDisplay');
+    if (display) display.innerHTML = `${formatClientTaka(calc)} <span style="font-size:0.75rem; color:#10b981; font-weight:700;">✓ Applied to Fixed Price</span>`;
+  } else {
+    alert('Please enter both Standard Floor Area and Price per sqft to calculate.');
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,453 @@
+{% extends "layout.njk" %}
+{% import "partials/product-card-image.njk" as productImg %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+    "name": "Bongshai Housing Ltd.",
+    "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+    "url": "https://bongshaihousing.com",
+    "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+    "telephone": ["+8801781636613"],
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+      "areaServed": [{"@type": "State", "name": "Bagerhat"}, {"@type": "State", "name": "Bandarban"}, {"@type": "State", "name": "Barguna"}, {"@type": "State", "name": "Barishal"}, {"@type": "State", "name": "Bhola"}, {"@type": "State", "name": "Bogura"}, {"@type": "State", "name": "Brahmanbaria"}, {"@type": "State", "name": "Chandpur"}, {"@type": "State", "name": "Chapai Nawabganj"}, {"@type": "State", "name": "Chattogram"}, {"@type": "State", "name": "Chuadanga"}, {"@type": "State", "name": "Cox's Bazar"}, {"@type": "State", "name": "Cumilla"}, {"@type": "State", "name": "Dhaka"}, {"@type": "State", "name": "Dinajpur"}, {"@type": "State", "name": "Faridpur"}, {"@type": "State", "name": "Feni"}, {"@type": "State", "name": "Gaibandha"}, {"@type": "State", "name": "Gazipur"}, {"@type": "State", "name": "Gopalganj"}, {"@type": "State", "name": "Habiganj"}, {"@type": "State", "name": "Jamalpur"}, {"@type": "State", "name": "Jashore"}, {"@type": "State", "name": "Jhalokati"}, {"@type": "State", "name": "Jhenaidah"}, {"@type": "State", "name": "Joypurhat"}, {"@type": "State", "name": "Khagrachari"}, {"@type": "State", "name": "Khulna"}, {"@type": "State", "name": "Kishoreganj"}, {"@type": "State", "name": "Kurigram"}, {"@type": "State", "name": "Kushtia"}, {"@type": "State", "name": "Lakshmipur"}, {"@type": "State", "name": "Lalmonirhat"}, {"@type": "State", "name": "Madaripur"}, {"@type": "State", "name": "Magura"}, {"@type": "State", "name": "Manikganj"}, {"@type": "State", "name": "Meherpur"}, {"@type": "State", "name": "Moulvibazar"}, {"@type": "State", "name": "Munshiganj"}, {"@type": "State", "name": "Mymensingh"}, {"@type": "State", "name": "Naogaon"}, {"@type": "State", "name": "Narail"}, {"@type": "State", "name": "Narayanganj"}, {"@type": "State", "name": "Narsingdi"}, {"@type": "State", "name": "Natore"}, {"@type": "State", "name": "Netrokona"}, {"@type": "State", "name": "Nilphamari"}, {"@type": "State", "name": "Noakhali"}, {"@type": "State", "name": "Pabna"}, {"@type": "State", "name": "Panchagarh"}, {"@type": "State", "name": "Patuakhali"}, {"@type": "State", "name": "Pirojpur"}, {"@type": "State", "name": "Rajbari"}, {"@type": "State", "name": "Rajshahi"}, {"@type": "State", "name": "Rangamati"}, {"@type": "State", "name": "Rangpur"}, {"@type": "State", "name": "Satkhira"}, {"@type": "State", "name": "Shariatpur"}, {"@type": "State", "name": "Sherpur"}, {"@type": "State", "name": "Sirajganj"}, {"@type": "State", "name": "Sunamganj"}, {"@type": "State", "name": "Sylhet"}, {"@type": "State", "name": "Tangail"}, {"@type": "State", "name": "Thakurgaon"}],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.8728",
+      "longitude": "90.3984"
+    }
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Concrete Building",
+      "item": "https://bongshaihousing.com/concrete-building.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Concrete Building",
+  "description": "Traditional reinforced concrete composite building by Bongshai Housing. ISO 9001:2015 certified quality. Tk 2,500-2,750 per sqft.",
+  "image": "https://bongshaihousing.com/images/products/concrete.webp",
+  "brand": {"@type": "Brand", "name": "Bongshai Housing Ltd.", "url": "https://bongshaihousing.com"},
+  "manufacturer": {"@type": "Organization", "name": "Bongshai Housing Ltd.", "@id": "https://bongshaihousing.com/#organization", "foundingDate": "2008"},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "BDT",
+    "price": "2500",
+    "availability": "https://schema.org/InStock",
+    "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
+  },
+  "category": "Pre-Engineered Steel Building",
+  "countryOfOrigin": {"@type": "Country", "name": "Bangladesh"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "dateModified": "2026-08-08",
+  "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".faq-answer"]},
+  "author": {
+    "@type": "Person",
+    "name": "SMA AWAL",
+    "jobTitle": "Chief Engineer",
+    "worksFor": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does a concrete building cost from Bongshai Housing?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Bongshai Housing's Concrete Building line costs Tk 2,500-2,750 per sqft using traditional reinforced concrete (RCC) construction where clients prefer it over steel composite."}
+    }
+    ,
+    {
+      "@type": "Question",
+      "name": "Why would I choose a concrete building over a steel building?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Concrete offers inherent fire resistance, excellent thermal mass, and is preferred for multi-storey high-rise structures, fire-critical facilities, or sites with very heavy floor loads. Bongshai Housing helps clients select the best structural system."}
+    }
+    ,
+    {
+      "@type": "Question",
+      "name": "Is Bongshai Housing's concrete construction ISO certified?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Yes. All Bongshai Housing construction, including concrete buildings, is delivered under ISO 9001:2015 Quality Management certification with in-house material testing laboratory oversight."}
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section aria-labelledby="ssb-page-title" class="page-hero"{% if dbCategory and dbCategory.hero_image %} style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.85)), url('/{{ dbCategory.hero_image | replace('^/', '') }}') center/cover no-repeat;"{% endif %}>
+<div class="container page-hero-content">
+<span class="page-hero-label">Composite Construction</span>
+<h1 class="page-hero-title" data-aos="fade-up" id="ssb-page-title">{{ dbCategory.name if (dbCategory and dbCategory.name) else 'Concrete Building' }}</h1>
+<p class="page-hero-text">{{ dbCategory.description if (dbCategory and dbCategory.description) else 'Steel-reinforced concrete structures built for maximum durability and load-bearing strength — from compact starter homes to expandable family residences.' }}</p>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+<a href="index.html">Home</a><span>/</span><a href="products-and-solutions.html">Products</a><span>/</span><span aria-current="page">{{ dbCategory.name if (dbCategory and dbCategory.name) else 'Concrete Building' }}</span>
+</nav>
+</div>
+</section>
+
+<!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+<section class="section" style="padding: 2rem 0; background: var(--off-white);">
+  <div class="container">
+    <p><strong>Bongshai Housing constructs robust, steel-reinforced concrete buildings engineered for maximum durability and load-bearing strength. Combining traditional concrete resilience with advanced steel-frame methodology, these composite structures offer superior longevity and safety across Bangladesh.</strong></p>
+    <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+      By <strong>Bongshai Housing Engineering Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+    </div>
+  </div>
+</section>
+
+<div class="container" style="margin-top: 40px; margin-bottom: 80px;"><div class="page-with-sidebar"><aside aria-label="Product categories" class="cat-sidebar" data-tilt="">
+<!-- Mobile toggle -->
+<button aria-controls="catSidebarBody" aria-expanded="false" class="cat-sidebar-toggle" id="catSidebarToggle">
+<span>All Products</span>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<!-- Desktop header -->
+<div class="cat-sidebar-header">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="3" y="14"></rect><rect height="7" width="7" x="14" y="14"></rect></svg>
+            All Products
+          </div>
+<div class="cat-sidebar-body" id="catSidebarBody">
+<div class="cat-group-label">Residential Prefab</div>
+          <a class="cat-item" href="apartment-building.html">Apartment building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="duplex-steel-building.html">Duplex steel building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="simplex-steel-building.html">Simplex Steel Building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="cottage-house.html">Cottage House<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="container-house.html">Container house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="steel-house.html">Steel house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="tiny-house.html">Tiny house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="wooden-house.html">Wooden House<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item active" href="concrete-building.html">Concrete building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <div class="cat-group-label">Commercial &amp; Industrial</div>
+<a class="cat-item" href="industrial-sheds.html">Industrial Steel Sheds<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<a class="cat-item" href="worker-accommodation.html">Worker Accommodation<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<div class="cat-group-label">Interactive Tools</div>
+<a class="cat-item" href="solutions.html">Get Quote<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<div class="cat-sidebar-cta">
+<a href="contact.html">📞 Get a Free Quote</a>
+</div>
+</div>
+</aside><div class="page-sidebar-content"><div style="margin-bottom: 60px;">
+
+<div class="stagger product-grid">
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-901', 'Bongshai Housing Model No-BH-CB-901', 'images/products/bh-cb-901.webp', 'images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-901</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>200 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A highly durable concrete building designed for maximum strength and modern aesthetics.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳3,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-901.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-902', 'Bongshai Housing Model No-BH-CB-902', 'images/products/bh-cb-902.webp', 'images/products/bh-cb-902-400w.webp 400w, images/products/bh-cb-902-700w.webp 700w, images/products/bh-cb-902.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-902</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>250 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Concrete construction engineered for long-term structural reliability.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳3,75,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-902.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-903', 'Bongshai Housing Model No-BH-CB-903', 'images/products/bh-cb-903.webp', 'images/products/bh-cb-903-400w.webp 400w, images/products/bh-cb-903-700w.webp 700w, images/products/bh-cb-903.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-903</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>300 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A robust concrete home built to withstand Bangladesh's climate extremes.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳4,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-903.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-904', 'Bongshai Housing Model No-BH-CB-904', 'images/products/bh-cb-904.webp', 'images/products/bh-cb-904-400w.webp 400w, images/products/bh-cb-904-700w.webp 700w, images/products/bh-cb-904.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-904</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>400 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Concrete building design combining modern style with heavyweight durability.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳6,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-904.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-905', 'Bongshai Housing Model No-BH-CB-905', 'images/products/bh-cb-905.webp', 'images/products/bh-cb-905-400w.webp 400w, images/products/bh-cb-905-700w.webp 700w, images/products/bh-cb-905.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-905</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>500 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A concrete structure engineered for superior fire and weather resistance.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳7,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-905.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-906', 'Bongshai Housing Model No-BH-CB-906', 'images/products/bh-cb-906.webp', 'images/products/bh-cb-906-400w.webp 400w, images/products/bh-cb-906-700w.webp 700w, images/products/bh-cb-906.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-906</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>550 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Concrete housing built for families who prioritize long-term structural strength.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳8,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-906.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-907', 'Bongshai Housing Model No-BH-CB-907', 'images/products/bh-cb-907.webp', 'images/products/bh-cb-907-400w.webp 400w, images/products/bh-cb-907-700w.webp 700w, images/products/bh-cb-907.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-907</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>600 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A reinforced concrete home offering decades of low-maintenance living.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳9,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-907.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-908', 'Bongshai Housing Model No-BH-CB-908', 'images/products/bh-cb-908.webp', 'images/products/bh-cb-908-400w.webp 400w, images/products/bh-cb-908-700w.webp 700w, images/products/bh-cb-908.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-908</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>750 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Concrete architecture designed for both residential and light commercial use.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳10,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-908.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-909', 'Bongshai Housing Model No-BH-CB-909', 'images/products/bh-cb-909.webp', 'images/products/bh-cb-909-400w.webp 400w, images/products/bh-cb-909-700w.webp 700w, images/products/bh-cb-909.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-909</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>900 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>3 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A concrete building solution engineered for seismic and wind resilience.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-909.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-910', 'Bongshai Housing Model No-BH-CB-910', 'images/products/bh-cb-910.webp', 'images/products/bh-cb-910-400w.webp 400w, images/products/bh-cb-910-700w.webp 700w, images/products/bh-cb-910.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-910</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>300 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Heavy-duty concrete construction with a clean, contemporary facade.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳5,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-910.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-911', 'Bongshai Housing Model No-BH-CB-911', 'images/products/bh-cb-911.webp', 'images/products/bh-cb-911-400w.webp 400w, images/products/bh-cb-911-700w.webp 700w, images/products/bh-cb-911.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-911</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>400 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A concrete home built for maximum durability in high-density areas.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳6,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-911.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-CB-912', 'Bongshai Housing Model No-BH-CB-912', 'images/products/bh-cb-912.webp', 'images/products/bh-cb-912-400w.webp 400w, images/products/bh-cb-912-700w.webp 700w, images/products/bh-cb-912.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-CB-912</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>500 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Concrete building design balancing structural mass with modern livability.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳7,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-cb-912.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+</div>
+<!-- OVERVIEW -->
+<!-- PACKAGES -->
+<!-- COMPOSITE ELEMENTS -->
+
+    <!-- ======================================================
+         ADVANTAGES OF STEEL-RC BUILDING
+    ====================================================== -->
+    <section class="section process-bg" id="advantages" aria-labelledby="advantages-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Our Technology</div>
+          <h2 class="section-title" data-aos="fade-up" id="advantages-title">What are the Advantages of Steel-RC Building?</h2>
+          <p class="section-subtitle">Why steel-reinforced concrete delivers maximum durability and load-bearing strength.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4); max-width: 900px; margin: 0 auto;" class="reveal">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Cost-effective and Eco-friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> High strength, inflexibility and high load bearing capacity</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Pre-fabricated, easy to install and dismantle</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Lightness, easy to transport and re-located</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Low maintenance cost</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Using several times and recycling</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Increase area efficiency by 10%--20%</li>
+          </ul>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Environment friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Weather-resistant with proper coating and maintenance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for strong seismic performance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for high wind-load resistance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Energy saving with good thermal insulation system</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> 50~60 years’ life span</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}SEO Automation{% endblock %}
+{% block header %}
+<div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+  <h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('search', 20) }} SEO Automation</h1>
+  <a href="/admin/seo/settings" class="btn">{{ icons.icon('cog', 16) }} Settings</a>
+</div>
+{% endblock %}
+{% block content %}
+
+{% if not hasApiKey %}
+<div class="card" style="border-left:4px solid #F59E0B;">
+  <h3 style="margin-top:0; color:#92400e;">No API key configured</h3>
+  <p style="font-size:0.85rem; color:var(--grey-500);">Add a Groq API key (free tier) in Settings before AI suggestions can be generated. The technical audit works without one.</p>
+  <a href="/admin/seo/settings" class="btn btn-primary" style="margin-top:6px;">Add API Key →</a>
+</div>
+{% endif %}
+
+<div class="stat-grid" style="margin-bottom:24px;">
+  <div class="stat-card">
+    <div class="num">{{ openIssueCount }}</div>
+    <div class="label">Open Technical Issues</div>
+    <a href="/admin/seo/audit" style="font-size:0.8rem; font-weight:700;">View →</a>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ pendingCount }}</div>
+    <div class="label">Suggestions Awaiting Review</div>
+    <a href="/admin/seo/suggestions" style="font-size:0.8rem; font-weight:700;">Review →</a>
+  </div>
+</div>
+
+<div class="admin-grid-2col">
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1rem;">Issues by Type</h2>
+    {% if issuesByType.length %}
+    {% for i in issuesByType %}
+    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--grey-100); font-size:0.88rem;">
+      <span>{{ i.issue_type | replace('_', ' ') | capitalize }}</span>
+      <strong>{{ i.count }}</strong>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p style="color:var(--grey-500); font-size:0.85rem;">No open issues, or the audit hasn't run yet.</p>
+    {% endif %}
+    <form method="post" action="/admin/seo/audit/run" style="margin-top:14px;">
+      <button type="submit" class="btn btn-primary" style="width:100%;">Run Technical Audit Now</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1rem;">Generate AI Suggestions</h2>
+    <p style="font-size:0.85rem; color:var(--grey-500);">Drafts up to 10 products' worth of meta titles, descriptions, alt text, and thin-content rewrites - grounded in live product data. Nothing publishes until you approve it below.</p>
+    <form method="post" action="/admin/seo/generate">
+      <button type="submit" class="btn btn-accent" style="width:100%;" {% if not hasApiKey %}disabled{% endif %}>{{ icons.icon('sparkles', 16) }} Generate Now</button>
+    </form>
+    <a href="/admin/seo/cron-url" style="font-size:0.8rem; display:block; margin-top:10px;">Set up continuous automation via cron →</a>
+  </div>
+</div>
+
+{% if recentSuggestions.length %}
+<div class="card">
+  <h2 style="margin-top:0; font-size:1rem;">Latest Pending Suggestions</h2>
+  {% for s in recentSuggestions %}
+  <div style="padding:8px 0; border-bottom:1px solid var(--grey-100); font-size:0.85rem;">
+    <strong>{{ s.target_label }}</strong> — <span class="pill pill-muted">{{ s.suggestion_type | replace('_', ' ') }}</span>
+  </div>
+  {% endfor %}
+  <a href="/admin/seo/suggestions" class="btn btn-primary" style="margin-top:12px;">Review All →</a>
+</div>
+{% endif %}
+
+{% endblock %}

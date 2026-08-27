@@ -1,0 +1,33 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if user.id %}Edit User{% else %}New User{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if user.id %}Edit {{ user.name }}{% else %}New User{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" action="{% if user.id %}/admin/users/{{ user.id }}{% else %}/admin/users{% endif %}">
+  <div class="form-row"><label for="name">Name</label><input type="text" id="name" name="name" value="{{ user.name or '' }}" required></div>
+  <div class="form-row"><label for="email">Email</label><input type="email" id="email" name="email" value="{{ user.email or '' }}" required></div>
+  <div class="form-row">
+    <label for="role">Role</label>
+    <select id="role" name="role">
+      <option value="sales" {% if user.role == 'sales' %}selected{% endif %}>Sales (leads/CRM only)</option>
+      <option value="editor" {% if user.role == 'editor' %}selected{% endif %}>Editor (content, no users/leads restriction)</option>
+      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin (full access incl. user management)</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="password">{% if user.id %}New Password (leave blank to keep current){% else %}Password{% endif %}</label>
+    <input type="password" id="password" name="password" {% if not user.id %}required{% endif %} minlength="8">
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if user.id %}Save Changes{% else %}Create User{% endif %}</button>
+    <a href="/admin/users" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+{% if user.id %}
+<form method="post" action="/admin/users/{{ user.id }}/delete" onsubmit="return confirm('Delete this user? This cannot be undone.');">
+  <button type="submit" class="btn btn-danger">Delete User</button>
+</form>
+{% endif %}
+{% endblock %}

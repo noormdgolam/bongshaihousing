@@ -1,0 +1,121 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Bongshai Housing",
+    "description": "BONGSHAI HOUSING is Bangladesh base Real Estate and Housing Company undertaking EPC projects with international standards.",
+    "url": "https://bongshaihousing.com/about-us/",
+    "isPartOf": {"@type": "WebSite", "url": "https://bongshaihousing.com"}
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About Us",
+      "item": "https://bongshaihousing.com/about.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Marketing & Sales",
+      "item": "https://bongshaihousing.com/team-marketing-sales.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Bongshai Housing Marketing & Sales Team",
+  "description": "Marketing and sales professionals at Bongshai Housing Ltd. serving clients across all 64 districts of Bangladesh.",
+  "url": "https://bongshaihousing.com/team-marketing-sales.html",
+  "dateModified": "2026-08-08",
+  "about": {
+    "@type": "Organization",
+    "@id": "https://bongshaihousing.com/#organization",
+    "name": "Bongshai Housing Ltd.",
+    "foundingDate": "2008",
+    "employee": [
+      {"@type": "Person", "name": "SMA AWAL", "jobTitle": "Chief Engineer"},
+      {"@type": "Person", "name": "Farjana Maria", "jobTitle": "Architect"},
+      {"@type": "Person", "name": "MD Golam Noor", "jobTitle": "IT Lead"}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="page-hero" aria-labelledby="page-title">
+      <div class="container page-hero-content">
+        <span class="page-hero-label">Our Team</span>
+        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Marketing &amp; Sales</h1>
+        <p class="page-hero-text">Ensuring seamless client communication, transparent pricing, and lasting relationships.</p>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="about.html">About Us</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Marketing &amp; Sales</span>
+        </nav>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="team-detail-title">
+      <div class="container">
+        <div class="about-grid" style="grid-template-columns: 1fr;">
+          <div class="about-content reveal visible">
+            <div class="section-label">📊 Expertise</div>
+            <h2 id="team-detail-title">Marketing &amp; Sales Details</h2>
+            <p style="margin-bottom:var(--space-4)">Our Marketing &amp; Sales Executives are dedicated to helping clients navigate the complex process of purchasing and building property.</p>
+            <p style="margin-bottom:var(--space-4)">We believe in complete transparency. Our team ensures that you receive accurate pricing, detailed project scope information, and regular updates.</p>
+            <p style="margin-bottom:var(--space-4)">Their goal is to build lasting relationships with our clients by understanding their unique needs and matching them with the perfect housing or commercial solutions.</p>
+
+            {% if dbTeamMembers and dbTeamMembers.length %}
+            <div class="team-roster-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:var(--space-6); margin-bottom:var(--space-6);">
+              {% for m in dbTeamMembers %}
+              <div class="glass-card reveal" style="padding:20px; border-radius:12px; border:1px solid var(--grey-200); background:white; display:flex; flex-direction:column; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                <div style="display:flex; gap:14px; align-items:center; margin-bottom:12px;">
+                  <div style="width:56px; height:56px; border-radius:50%; overflow:hidden; background:var(--primary); border:2px solid var(--primary); flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                    {% if m.photo %}
+                    <img src="/{{ m.photo }}" alt="{{ m.name }}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                    {% else %}
+                    <span style="color:var(--white); font-family:var(--font-heading); font-weight:700; font-size:1.1rem;" aria-hidden="true">{{ m.initials }}</span>
+                    {% endif %}
+                  </div>
+                  <div>
+                    <h3 style="margin:0; font-size:1.05rem; color:var(--primary-dark); font-family:var(--font-heading);">{{ m.name }}</h3>
+                    <div style="font-size:0.85rem; color:var(--primary); font-weight:600; margin-top:2px;">{{ m.role }}</div>
+                  </div>
+                </div>
+                {% if m.bio %}
+                <p style="font-size:0.88rem; color:var(--grey-600); line-height:1.5; margin:0; flex:1;">{{ m.bio }}</p>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div style="margin-top:var(--space-8)">
+              <a href="about.html" class="btn btn-outline">← Back to About Us</a>
+              <a href="contact.html" class="btn btn-primary" style="margin-left:var(--space-3)">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

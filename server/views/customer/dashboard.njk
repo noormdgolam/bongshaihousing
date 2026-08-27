@@ -1,0 +1,76 @@
+{% extends "customer-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}My Project{% endblock %}
+{% block body %}
+<div class="customer-hero">
+  <div class="customer-hero-top">
+    <div class="customer-hero-brand">{{ icons.icon('crane', 20) }} Bongshai Housing</div>
+    <form method="post" action="/my-project/logout">
+      <button type="submit" class="btn btn-ghost">Log out</button>
+    </form>
+  </div>
+  <div class="customer-hero-profile">
+    <div>
+      <div class="customer-hero-name">{{ order.customer_name }}</div>
+      <div class="customer-hero-meta">
+        {% if order.model_number %}🏠 {{ order.model_number }}{% endif %}
+        {% if order.floor_area %}&nbsp;·&nbsp;{{ order.floor_area }} sqft{% endif %}
+        {% if order.customer_district %}&nbsp;·&nbsp;📍 {{ order.customer_district }}{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="customer-content">
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;">
+      <h2 style="margin:0; font-size:1.05rem;">Construction Progress</h2>
+      <span style="font-weight:800; font-size:1.1rem; color:var(--primary);">{{ progress }}%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:{{ progress }}%;"></div>
+    </div>
+    {% if order.status == 'completed' %}
+    <p style="margin:12px 0 0; font-size:0.85rem; color:var(--success); font-weight:700;">✓ Project completed and handed over.</p>
+    {% elif order.status == 'cancelled' %}
+    <p style="margin:12px 0 0; font-size:0.85rem; color:var(--danger); font-weight:700;">This order has been cancelled. Contact your representative for details.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1.05rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('clipboard-list', 19) }} Build Timeline</h2>
+    <div class="milestone-list">
+      {% for m in milestones %}
+      <div class="milestone-item {{ m.status }}">
+        <div class="milestone-dot">
+          {% if m.status == 'done' %}✓{% elif m.status == 'in_progress' %}⚡{% else %}{{ loop.index }}{% endif %}
+        </div>
+        <div>
+          <div class="milestone-title">{{ m.title }}</div>
+          {% if m.note %}<div class="milestone-note">{{ m.note }}</div>{% endif %}
+          {% if m.status == 'done' and m.completed_at %}<div class="milestone-date">Completed {{ m.completed_at | date }}</div>{% endif %}
+          {% if m.status == 'in_progress' %}<div class="milestone-date" style="color:#b45309; font-weight:600;">In progress</div>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if documents.length %}
+  <div class="card">
+    <h2 style="margin-top:0; font-size:1.05rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('document-text', 19) }} Design Documents</h2>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      {% for d in documents %}
+      <a href="/my-project/documents/{{ d.id }}" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(255,255,255,0.5); border-radius:10px; border:1px solid rgba(255,255,255,0.4); font-weight:600; font-size:0.9rem;">
+        {{ icons.icon('document-text', 17) }} {{ d.title }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <p style="text-align:center; font-size:0.8rem; color:rgba(255,255,255,0.75);">
+    Questions about your project? Contact your Bongshai representative directly.
+  </p>
+</div>
+{% endblock %}

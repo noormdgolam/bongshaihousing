@@ -1,0 +1,53 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Categories Management{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Product Categories Management</h1>{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="toolbar">
+    <div></div>
+    <a href="/admin/categories/new" class="btn btn-primary">➕ New Category</a>
+  </div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Hero Image</th>
+          <th>Category Name</th>
+          <th>Prefix / Slug</th>
+          <th>Landing Page</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+        <tr>
+          <td style="width:60px; padding:6px 10px;">
+            {% if c.hero_image %}
+            <img src="/{{ c.hero_image | replace('^/', '') }}" alt="{{ c.name }}" style="width:50px; height:34px; object-fit:cover; border-radius:4px; border:1px solid var(--grey-200);">
+            {% else %}
+            <div style="width:50px; height:34px; background:var(--grey-100); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:var(--grey-500);">📁</div>
+            {% endif %}
+          </td>
+          <td><strong style="color:var(--grey-900);">{{ c.name }}</strong></td>
+          <td><span class="pill pill-muted"><code>{{ c.slug }}</code></span></td>
+          <td>
+            {% if c.landing_page_slug %}
+            <a href="/{{ c.landing_page_slug }}" target="_blank" style="color:var(--primary);">/{{ c.landing_page_slug }} ↗</a>
+            {% else %}
+            <span style="color:var(--grey-500);">—</span>
+            {% endif %}
+          </td>
+          <td style="white-space:nowrap;">
+            <a href="/admin/categories/{{ c.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center; padding:30px; color:var(--grey-500);">No categories found in database.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+

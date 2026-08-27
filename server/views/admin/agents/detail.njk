@@ -1,0 +1,146 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Agent Application{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">🤝 {{ agent.business_name or agent.name }}</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <a href="/admin/agents" class="btn">← Back to Agents</a>
+  <div>
+    <span class="pill {% if agent.status == 'active' %}pill-success{% elif agent.status == 'rejected' %}pill-muted{% endif %}">{{ agent.status }}</span>
+  </div>
+</div>
+
+{% if territoryConflicts.length %}
+<div class="card" style="border-left:4px solid var(--danger);">
+  <h3 style="margin-top:0; color:var(--danger);">⚠ Territory Conflict</h3>
+  <p style="font-size:0.85rem; margin-bottom:8px;">{{ territoryConflicts.length }} other active agent(s) already cover {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}:</p>
+  <ul style="margin:0; padding-left:20px; font-size:0.88rem;">
+    {% for c in territoryConflicts %}
+    <li><a href="/admin/agents/{{ c.id }}">{{ c.business_name or c.name }}</a>{% if c.thana %} — {{ c.thana }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="admin-grid-2col">
+  <div>
+    <div class="card">
+      <h3 style="margin-top:0;">Business Information</h3>
+      <table>
+        <tr><th style="width:220px;">Business Name</th><td>{{ agent.business_name or '—' }}</td></tr>
+        <tr><th>Owner / Applicant</th><td>{{ agent.name }}</td></tr>
+        <tr><th>Contact Address</th><td>{{ agent.contact_address or '—' }}</td></tr>
+        <tr><th>Mobile</th><td>{{ agent.phone }}</td></tr>
+        <tr><th>Landline</th><td>{{ agent.landline_phone or '—' }}</td></tr>
+        <tr><th>Email</th><td>{{ agent.email or '—' }}</td></tr>
+        <tr><th>NID Number</th><td>{{ agent.nid_number or '—' }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Business Details</h3>
+      <table>
+        <tr><th style="width:220px;">Current Business Type(s)</th><td>{{ agent.current_business_types or '—' }}</td></tr>
+        <tr><th>Current Business Address</th><td>{{ agent.current_business_address or '—' }}</td></tr>
+        <tr><th>Permanent Address</th><td>{{ agent.permanent_address or '—' }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Proposed Territory</h3>
+      <table>
+        <tr><th style="width:220px;">District</th><td>{{ agent.district }}</td></tr>
+        <tr><th>Thana / Upazila</th><td>{{ agent.thana or '—' }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Registration &amp; Financials</h3>
+      <table>
+        <tr><th style="width:220px;">TIN Number</th><td>{{ agent.tin_number or '—' }}</td></tr>
+        <tr><th>Trade License Number</th><td>{{ agent.trade_license_number or '—' }}</td></tr>
+        <tr><th>Own Fund</th><td>{{ agent.funding_own_fund or '—' }}</td></tr>
+        <tr><th>Bank Funding</th><td>{{ agent.funding_bank or '—' }}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h3 style="margin-top:0;">Supporting Documents</h3>
+      {% set docLabels = {
+        doc_application_letter: '📄 Application Letter',
+        doc_passport_photo: '🖼️ Passport Photo',
+        doc_trade_license: '📋 Trade License',
+        doc_tin_certificate: '🧾 TIN Certificate',
+        doc_nid_copy: '🪪 NID Copy'
+      } %}
+      {% set providedCount = 0 %}
+      {% for field in documentFields %}{% if agent[field] %}{% set providedCount = providedCount + 1 %}{% endif %}{% endfor %}
+      <p style="font-size:0.8rem; color:{% if providedCount == documentFields.length %}var(--success){% else %}var(--danger){% endif %}; margin-top:-6px;">{{ providedCount }} of {{ documentFields.length }} documents provided</p>
+      {% for field in documentFields %}
+      <div style="padding:8px 0; border-bottom:1px solid var(--grey-100); display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.9rem;">{{ docLabels[field] }}</span>
+        {% if agent[field] %}
+        <a href="/admin/agents/{{ agent.id }}/document/{{ field }}" target="_blank" class="btn" style="padding:4px 10px; font-size:0.78rem;">View</a>
+        {% else %}
+        <span style="font-size:0.78rem; color:var(--grey-500);">Not provided</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0; display:flex; align-items:center; justify-content:space-between;">Referral Pipeline
+        <a href="/admin/agent-leads?agent_id={{ agent.id }}" style="font-size:0.78rem; font-weight:500;">View all →</a>
+      </h3>
+      <div style="display:flex; justify-content:space-around; text-align:center; margin-bottom:12px;">
+        <div><div style="font-size:1.2rem; font-weight:800;">{{ referralStats.total }}</div><div style="font-size:0.68rem; color:var(--grey-500); text-transform:uppercase;">Total</div></div>
+        <div><div style="font-size:1.2rem; font-weight:800; color:var(--success);">{{ referralStats.won }}</div><div style="font-size:0.68rem; color:var(--grey-500); text-transform:uppercase;">Won</div></div>
+        <div><div style="font-size:1.2rem; font-weight:800; color:var(--danger);">{{ referralStats.lost }}</div><div style="font-size:0.68rem; color:var(--grey-500); text-transform:uppercase;">Lost</div></div>
+      </div>
+      {% if referralLeads.length %}
+      {% for l in referralLeads %}
+      <div style="padding:6px 0; border-bottom:1px solid var(--grey-100); font-size:0.82rem; display:flex; justify-content:space-between;">
+        <span>{{ l.customer_name }}</span>
+        <span class="pill {% if l.status == 'won' %}pill-success{% elif l.status == 'lost' %}pill-muted{% endif %}">{{ l.status }}</span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p style="font-size:0.82rem; color:var(--grey-500); margin-bottom:0;">This agent hasn't submitted any referrals yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Review</h3>
+      <p style="font-size:0.85rem; color:var(--grey-500);">Applied {{ agent.created_at | date }}</p>
+      {% if agent.reviewed_by %}
+      <p style="font-size:0.8rem; color:var(--grey-500);">Last reviewed by <strong>{{ agent.reviewed_by }}</strong> on {{ agent.reviewed_at | date }}</p>
+      {% endif %}
+      {% if agent.status != 'active' %}
+      <form method="post" action="/admin/agents/{{ agent.id }}/status" style="margin-bottom:8px;">
+        <input type="hidden" name="status" value="active">
+        <input type="hidden" name="redirect_to" value="detail">
+        <button type="submit" class="btn btn-primary" style="width:100%;">Approve Application</button>
+      </form>
+      {% endif %}
+      {% if agent.status != 'rejected' %}
+      <form method="post" action="/admin/agents/{{ agent.id }}/status">
+        <input type="hidden" name="status" value="rejected">
+        <input type="hidden" name="redirect_to" value="detail">
+        <button type="submit" class="btn btn-danger" style="width:100%;">Reject Application</button>
+      </form>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Internal Notes</h3>
+      <form method="post" action="/admin/agents/{{ agent.id }}/notes">
+        <div class="form-row" style="margin-bottom:8px;">
+          <textarea name="admin_notes" rows="4" placeholder="Notes on this application - reasons for approval/rejection, follow-up needed, verification calls made...">{{ agent.admin_notes }}</textarea>
+        </div>
+        <button type="submit" class="btn" style="width:100%;">Save Notes</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

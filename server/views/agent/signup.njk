@@ -1,0 +1,214 @@
+{% extends "agent-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Agent Application{% endblock %}
+{% block body %}
+<div style="min-height:100vh; padding:32px 16px;">
+  <div style="max-width: 640px; margin: 0 auto;">
+
+    <div style="text-align:center; margin-bottom:22px; color:white;">
+      <div style="margin-bottom:6px;">{{ icons.icon('handshake', 40) }}</div>
+      <h1 style="font-size:1.5rem; font-weight:800; margin:0;">Bongshai Housing Agent Application</h1>
+      <p style="opacity:0.85; font-size:0.85rem; margin-top:6px;">Apply to represent Bongshai Housing &amp; Real Estate in your area. Reviewed by our team before your account is activated.</p>
+    </div>
+
+    {% if error %}
+    <div class="card" style="padding:16px 18px;"><div class="error-box" style="margin:0;">{{ error }}</div></div>
+    {% endif %}
+
+    <form method="post" action="/agent/signup" enctype="multipart/form-data">
+
+      <div class="card">
+        <div class="signup-section-head"><span class="signup-step">1</span><span class="signup-section-icon">{{ icons.icon('building', 22) }}</span><h3>Business Information</h3></div>
+        <div class="form-row">
+          <label for="business_name">Business/Establishment Name</label>
+          <input type="text" id="business_name" name="business_name" value="{{ values.business_name or '' }}" required>
+        </div>
+        <div class="form-row">
+          <label for="name">Business Owner / Applicant Name</label>
+          <input type="text" id="name" name="name" value="{{ values.name or '' }}" required>
+        </div>
+        <div class="form-row">
+          <label for="contact_address">Contact Address</label>
+          <input type="text" id="contact_address" name="contact_address" value="{{ values.contact_address or '' }}" required>
+        </div>
+        <div class="form-row" style="display:flex; gap:12px;">
+          <div style="flex:1;">
+            <label for="landline_phone">Landline / Alternate Phone</label>
+            <input type="text" id="landline_phone" name="landline_phone" value="{{ values.landline_phone or '' }}" required>
+          </div>
+          <div style="flex:1;">
+            <label for="phone">Mobile Number</label>
+            <input type="tel" id="phone" name="phone" value="{{ values.phone or '' }}" placeholder="01XXXXXXXXX" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="{{ values.email or '' }}" required>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label for="nid_number">Applicant's National ID (NID) Number</label>
+          <input type="text" id="nid_number" name="nid_number" value="{{ values.nid_number or '' }}" required>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="signup-section-head"><span class="signup-step">2</span><span class="signup-section-icon">{{ icons.icon('clipboard-list', 22) }}</span><h3>Business Details</h3></div>
+        <div class="form-row">
+          <label>Current Business Type(s) <span style="font-size:0.8rem; color:var(--grey-500); font-weight:400;">(Select at least one)</span></label>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:8px 16px; margin-top:6px;">
+            {% for type in businessTypeOptions %}
+            <label style="display:flex; align-items:center; gap:8px; font-weight:400; font-size:0.9rem; cursor:pointer;">
+              <input type="checkbox" name="business_types" value="{{ type }}" class="business-type-cb" {% if values.business_types and (type in values.business_types) %}checked{% endif %}>
+              <span>{{ type }}</span>
+            </label>
+            {% endfor %}
+            <label style="display:flex; align-items:center; gap:8px; font-weight:400; font-size:0.9rem; cursor:pointer;">
+              <input type="checkbox" name="business_types" value="Other" id="business_type_other_cb" class="business-type-cb" {% if values.business_types and ('Other' in values.business_types or values.business_type_other) %}checked{% endif %}>
+              <span>Other</span>
+            </label>
+          </div>
+          <div id="other_business_type_container" style="margin-top:10px; display:{% if values.business_types and ('Other' in values.business_types or values.business_type_other) %}block{% else %}none{% endif %};">
+            <input type="text" id="business_type_other" name="business_type_other" placeholder="Please specify your business type" value="{{ values.business_type_other or '' }}" style="font-size:0.88rem;">
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="current_business_address">Current Business Address</label>
+          <textarea id="current_business_address" name="current_business_address" required>{{ values.current_business_address or '' }}</textarea>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label for="permanent_address">Permanent Address</label>
+          <textarea id="permanent_address" name="permanent_address" required>{{ values.permanent_address or '' }}</textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="signup-section-head"><span class="signup-step">3</span><span class="signup-section-icon">{{ icons.icon('map-pin', 22) }}</span><h3>Proposed Territory</h3></div>
+        <div class="form-row" style="display:flex; gap:12px; margin-bottom:0;">
+          <div style="flex:1;">
+            <label for="district">District</label>
+            <select id="district" name="district" required>
+              <option value="" disabled {% if not values.district %}selected{% endif %}>Select district</option>
+              {% for d in districts %}
+              <option value="{{ d }}" {% if values.district == d %}selected{% endif %}>{{ d }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div style="flex:1;">
+            <label for="thana">Thana / Upazila</label>
+            <input type="text" id="thana" name="thana" value="{{ values.thana or '' }}" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="signup-section-head"><span class="signup-step">4</span><span class="signup-section-icon">{{ icons.icon('banknotes', 22) }}</span><h3>Registration &amp; Financials</h3></div>
+        <div class="form-row" style="display:flex; gap:12px;">
+          <div style="flex:1;">
+            <label for="tin_number">TIN Number</label>
+            <input type="text" id="tin_number" name="tin_number" value="{{ values.tin_number or '' }}" required>
+          </div>
+          <div style="flex:1;">
+            <label for="trade_license_number">Trade License Number</label>
+            <input type="text" id="trade_license_number" name="trade_license_number" value="{{ values.trade_license_number or '' }}" required>
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label>Funding Status</label>
+          <div style="display:flex; gap:12px;">
+            <input type="text" id="funding_own_fund" name="funding_own_fund" placeholder="Own fund (amount/details)" value="{{ values.funding_own_fund or '' }}" style="flex:1;" required>
+            <input type="text" id="funding_bank" name="funding_bank" placeholder="From bank (amount/details)" value="{{ values.funding_bank or '' }}" style="flex:1;" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="signup-section-head"><span class="signup-step">5</span><span class="signup-section-icon">{{ icons.icon('paper-clip', 22) }}</span><h3>Supporting Documents</h3></div>
+        <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-4px;">JPG, PNG, or PDF, up to 10MB each. All five are required with your application.</p>
+        <div class="form-row">
+          <label for="doc_application_letter">Application Letter (on company letterhead)</label>
+          <input type="file" id="doc_application_letter" name="doc_application_letter" accept="image/*,application/pdf" required>
+        </div>
+        <div class="form-row">
+          <label for="doc_passport_photo">Passport-size Photo</label>
+          <input type="file" id="doc_passport_photo" name="doc_passport_photo" accept="image/*" required>
+        </div>
+        <div class="form-row">
+          <label for="doc_trade_license">Trade License</label>
+          <input type="file" id="doc_trade_license" name="doc_trade_license" accept="image/*,application/pdf" required>
+        </div>
+        <div class="form-row">
+          <label for="doc_tin_certificate">TIN Certificate</label>
+          <input type="file" id="doc_tin_certificate" name="doc_tin_certificate" accept="image/*,application/pdf" required>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <label for="doc_nid_copy">NID Photocopy</label>
+          <input type="file" id="doc_nid_copy" name="doc_nid_copy" accept="image/*,application/pdf" required>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="signup-section-head"><span class="signup-step">6</span><span class="signup-section-icon">{{ icons.icon('lock', 22) }}</span><h3>Account Password</h3></div>
+        <div class="form-row" style="display:flex; gap:12px; margin-bottom:0;">
+          <div style="flex:1;">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="At least 8 characters" required minlength="8">
+          </div>
+          <div style="flex:1;">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required minlength="8">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <label style="display:flex; align-items:flex-start; gap:10px; font-weight:400; cursor:pointer;">
+          <input type="checkbox" name="certification_agreed" required style="margin-top:3px;">
+          <span style="font-size:0.85rem; color:var(--grey-700);">I certify that the information provided above is correct in all respects. I understand that any false statement may result in cancellation of my agent status.</span>
+        </label>
+        <button type="submit" class="btn btn-accent" style="width:100%; padding:13px; font-size:0.95rem; margin-top:16px;">Submit Application →</button>
+      </div>
+    </form>
+
+    <p style="margin-top:16px; text-align:center; font-size:0.85rem; color:rgba(255,255,255,0.8);">
+      Already have an account? <a href="/agent/login.html" style="color:white; font-weight:700;">Log in</a>
+    </p>
+    <div style="margin-top:8px; text-align:center;">
+      <a href="/" style="font-size:0.8rem; color:rgba(255,255,255,0.7);">← Return to Bongshai Housing</a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const otherCb = document.getElementById('business_type_other_cb');
+  const otherCont = document.getElementById('other_business_type_container');
+  const otherInput = document.getElementById('business_type_other');
+  if (otherCb && otherCont) {
+    otherCb.addEventListener('change', function() {
+      otherCont.style.display = this.checked ? 'block' : 'none';
+      if (this.checked && otherInput) otherInput.focus();
+    });
+  }
+
+  const form = document.querySelector('form[action="/agent/signup"]');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const checked = form.querySelectorAll('.business-type-cb:checked');
+      if (checked.length === 0) {
+        e.preventDefault();
+        alert('Please select at least one business type.');
+        const firstCb = form.querySelector('.business-type-cb');
+        if (firstCb) firstCb.focus();
+        return false;
+      }
+      if (otherCb && otherCb.checked && (!otherInput.value || !otherInput.value.trim())) {
+        e.preventDefault();
+        alert('Please specify your other business type.');
+        otherInput.focus();
+        return false;
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

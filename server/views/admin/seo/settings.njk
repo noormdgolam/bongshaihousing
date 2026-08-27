@@ -1,0 +1,46 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}SEO Settings{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('cog', 20) }} SEO Automation Settings</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/seo" class="btn">← Back to SEO Dashboard</a></div>
+
+{% if saved %}
+<div class="card" style="border-left:4px solid var(--success);">
+  <p style="margin:0; color:var(--success); font-weight:700; display:flex; align-items:center; gap:6px;">{{ icons.icon('check-circle', 16) }} Settings saved.</p>
+</div>
+{% endif %}
+
+<div class="card" style="max-width:520px;">
+  <h2 style="margin-top:0; font-size:1rem;">Groq API Key</h2>
+  {% if hasKey %}
+  <p style="font-size:0.85rem; color:var(--grey-500);">Current key: <code>{{ maskedKey }}</code></p>
+  {% else %}
+  <p style="font-size:0.85rem; color:var(--grey-500);">No key saved yet. Free tier available at <a href="https://console.groq.com/" target="_blank">console.groq.com</a>.</p>
+  {% endif %}
+  <form method="post" action="/admin/seo/settings">
+    <div class="form-row">
+      <label for="groq_api_key">{% if hasKey %}Replace API Key{% else %}API Key{% endif %}</label>
+      <input type="password" id="groq_api_key" name="groq_api_key" placeholder="gsk_...">
+      <p style="font-size:0.75rem; color:var(--grey-500); margin-top:4px;">Leave blank to keep the current key.</p>
+    </div>
+    <div class="form-row">
+      <label for="groq_model">Model ID</label>
+      <input type="text" id="groq_model" name="groq_model" value="{{ model or 'openai/gpt-oss-120b' }}" placeholder="openai/gpt-oss-120b">
+      <p style="font-size:0.75rem; color:var(--grey-500); margin-top:4px;">If generation fails with a "model decommissioned" error, Groq's lineup has changed - check the current list at <a href="https://console.groq.com/docs/models" target="_blank">console.groq.com/docs/models</a> and type the exact model id here.</p>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" style="width:100%;">Save Settings</button>
+    </div>
+  </form>
+</div>
+
+<div class="card" style="max-width:520px;">
+  <h3 style="margin-top:0; font-size:0.9rem;">How this works</h3>
+  <ul style="font-size:0.85rem; color:var(--grey-700); padding-left:20px; margin-bottom:0;">
+    <li>The key is stored in the database only, never in a file on disk.</li>
+    <li>AI never edits a live page directly - every suggestion lands in a review queue for you to approve or reject.</li>
+    <li>Suggestions are grounded only in your actual product data at generation time - the AI can't invent prices or specs.</li>
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "admin-layout.njk" %}
+{% block content_bare %}
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); padding:20px;">
+  <div class="card" style="width: 100%; max-width: 380px; padding:32px 28px;">
+    <div style="text-align:center; margin-bottom:24px;">
+      <div style="font-size:2rem; margin-bottom:4px;">🔐</div>
+      <h1 style="font-size:1.35rem; font-weight:800; margin:0; color:var(--grey-900);">Two-Factor Verification</h1>
+      <p style="color: var(--grey-500); font-size: 0.85rem; margin-top:4px;">Enter the 6-digit code from your Authenticator app.</p>
+    </div>
+
+    {% if error %}
+    <div class="error-box" style="margin-bottom:16px;">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/admin/2fa-verify">
+      <div class="form-row" style="margin-bottom:20px;">
+        <label for="code" style="text-align:center; display:block;">Authentication Code</label>
+        <input type="text" id="code" name="code" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required autofocus style="padding:12px; font-size:1.4rem; letter-spacing:0.25em; text-align:center; font-weight:700; font-family:monospace;">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:10px; font-weight:700; font-size:0.95rem;">Verify &amp; Enter Dashboard →</button>
+    </form>
+
+    <div style="margin-top:20px; text-align:center;">
+      <a href="/admin/login" style="font-size:0.8rem; color:var(--grey-500);">← Back to Login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

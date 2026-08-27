@@ -1,0 +1,341 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+{% if faqJsonLd %}
+<script type="application/ld+json">
+{{ faqJsonLd | dump(2) | safe }}
+</script>
+{% else %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "dateModified": "2026-08-08",
+    "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".faq-answer", ".faq-question"]},
+    "author": {
+      "@type": "Person",
+      "name": "SMA AWAL",
+      "jobTitle": "Chief Engineer",
+      "worksFor": {"@type": "Organization", "name": "Bongshai Housing Ltd.", "foundingDate": "2008", "url": "https://bongshaihousing.com"}
+    },
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Bongshai Housing?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building company and EPC (Engineering, Procurement, Construction) contractor with 20+ years of experience, delivering prefab housing, cottages, container houses, and industrial steel structures from our office in Uttara, Dhaka." }
+      },
+      {
+        "@type": "Question",
+        "name": "What areas of Bangladesh does Bongshai Housing serve?",
+        "acceptedAnswer": { "@type": "Answer", "text": "We serve all 64 districts of Bangladesh, with dedicated project teams based in Dhaka, Chattogram, and Cumilla. See our full district-by-district service area list for details on your region." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Bongshai Housing a certified company?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Bongshai Housing is ISO 9001:2015 certified for Quality Management and follows OHSAS 18001 / ISO 45001 occupational health and safety standards, with in-house material testing on every steel, concrete, and panel component before use." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a pre-engineered steel building?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A pre-engineered steel building is designed and fabricated off-site to precise specifications, then assembled on your land - resulting in faster construction, tighter quality control, and lower material waste compared to fully on-site conventional construction." }
+      },
+      {
+        "@type": "Question",
+        "name": "How does steel construction compare to traditional concrete?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Steel-composite construction is typically faster and 10-30% cheaper for low-rise homes, with better earthquake performance when properly engineered, while concrete has a natural advantage in fire resistance and thermal mass. See our full steel vs concrete comparison for a detailed breakdown." }
+      },
+      {
+        "@type": "Question",
+        "name": "What types of prefab and steel buildings does Bongshai Housing offer?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Our residential range includes Apartment Buildings, Duplex Steel Buildings, Simplex Steel Buildings, Cottage Houses, Container Houses, Steel Houses, Tiny Houses, Wooden Houses, and Concrete Buildings. Commercially, we build Industrial Steel Sheds and Worker Accommodation." }
+      },
+      {
+        "@type": "Question",
+        "name": "What floor plans and room configurations are available?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Most residential models offer three tiers: 400 and 600 Sq.Ft (2 bedrooms, 1 bathroom, 1 living room), 750 and 900 Sq.Ft (3 bedrooms, 2 bathrooms), and 1050 and 1200 Sq.Ft (4 bedrooms, 3 bathrooms). Tiny Houses run 250-350 Sq.Ft (1 bedroom, 1 bathroom). Duplex Steel Buildings and Apartment Buildings offer 600 Sq.Ft per floor (3 bedrooms, 2 bathrooms) or 850 Sq.Ft per floor (5 bedrooms, 4 bathrooms), across two floors. Steel House is also a two-floor design, offered at 650, 750, 950, or 1200 Sq.Ft per floor (4 to 8 bedrooms)." }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the difference between a Duplex Steel Building and an Apartment Building?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Both are two-floor steel structures with the same floor-area tiers, but they're finished and laid out differently - the Duplex line emphasizes a private single-family multi-level home, while the Apartment Building line is designed for multi-family or rental-style living. Compare individual models on each category page for exact specifications." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a container house, and is it durable for Bangladesh's climate?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A container house uses modified steel shipping containers as the core structure, finished with insulation, flooring, and interior fit-out for full residential comfort. As an all-steel structure, it holds up well to Bangladesh's monsoon and humid climate with proper maintenance." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a Tiny House, and who is it suitable for?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Our Tiny House line (250-350 Sq.Ft, 1 bedroom, 1 bathroom) is a compact, budget-friendly prefab home - ideal for single occupants, small families, weekend homes, or as a starter structure on a smaller plot." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you build industrial steel sheds and warehouses?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Our Industrial Steel Sheds use PEB (pre-engineered building) steel-frame construction for factories, warehouses, and storage facilities, with clear-height and clear-span options sized to your operational needs." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Worker Accommodation, and can it be customized for large labor camps?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Worker Accommodation is our safe, scalable staff-housing line, built for factories, industrial sites, and labor camps. Layouts and unit counts can be scaled up for large workforces - contact us with your headcount for a custom layout." }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does a prefab steel building cost in Bangladesh?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Quotes are customized based on building model, total floor area, land setback, and finish level. You can request a custom itemized quote online for your exact specifications." }
+      },
+      {
+        "@type": "Question",
+        "name": "What factors affect the final quote of a steel building?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Quotes depend primarily on floor area, number of floors, product category, structural load requirements, and finish level (standard vs. luxury finishing)." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I request a custom building quote?",
+        "acceptedAnswer": { "@type": "Answer", "text": "You can request an official custom quote by filling out our online quote form or contacting our engineering team directly via phone or WhatsApp." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I get bank financing assistance for my project?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Bongshai Housing assists clients with property documentation and engineering blueprints required for bank home loan approvals in Bangladesh." }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the construction process work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Every project follows four steps: Consultation, Design & Planning, Construction, and Handover, with payment released in stages as work progresses rather than all upfront." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I request a site visit before starting construction?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Share your preferred date, time, and location with our team through the contact form or WhatsApp, and we'll confirm a site visit before finalizing your design." }
+      },
+      {
+        "@type": "Question",
+        "name": "What materials are used in construction?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Materials vary by model: precast RC footing and tie beams, MS steel-grade structural frames, RC precast concrete wall and floor panels, tiled flooring, and weather-coat paint finishing are used across our steel and concrete lines; our Wooden House and Cottage lines use timber-frame construction instead." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a warranty on construction?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Bongshai Housing stands behind the quality of every build with ISO-certified quality management and material testing on every project. Contact our team for the specific warranty terms that apply to your model and contract." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I get a quote?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Fill out the quote request form on our Contact page, message us on WhatsApp, or call 01781-636613. Include your preferred model, land size, and location for the fastest response." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I customize a model to fit my land size?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The floor-area tiers on each model page are starting points - share your land dimensions and requirements with our team, and we'll adapt the layout to fit." }
+      }
+    ]
+  }
+</script>
+{% endif %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "FAQ",
+      "item": "https://bongshaihousing.com/faq.html"
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="page-hero" aria-labelledby="page-title">
+      <div class="container page-hero-content">
+        <h1 class="page-hero-title" data-aos="fade-up" id="page-title">Frequently Asked Questions</h1>
+        <p class="page-hero-text">Everything you need to know about prefab and steel building construction in Bangladesh.</p>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">FAQ</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+    <section class="section" style="padding: 2rem 0; background: var(--off-white);">
+      <div class="container">
+        <p><strong>Bongshai Housing is a leading EPC contractor in Bangladesh, specializing in prefabricated steel structures, composite buildings, and container housing. We provide end-to-end solutions from architectural design to final construction.</strong></p>
+        <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+          By <strong>Bongshai Housing Customer Support</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="content-title">
+      <div class="container" style="max-width: 900px;">
+        <h2 id="content-title" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Frequently Asked Questions</h2>
+
+        {% if faqCategories and faqCategories.length %}
+        {% for cat in faqCategories %}
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">{{ cat.name }}</h2>
+
+          {% for f in cat.items %}
+          <details class="faq-item">
+            <summary>{{ f.question }}</summary>
+            <div class="faq-answer">{{ f.answer | safe }}</div>
+          </details>
+          {% endfor %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- 100% Static Fallback when DB is unpopulated or offline -->
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">What are the General questions?</h2>
+
+          <details class="faq-item">
+            <summary>What is Bongshai Housing?</summary>
+            <div class="faq-answer">Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building company and EPC (Engineering, Procurement, Construction) contractor with 20+ years of experience, delivering prefab housing, cottages, container houses, and industrial steel structures from our office in Uttara, Dhaka.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What areas of Bangladesh does Bongshai Housing serve?</summary>
+            <div class="faq-answer">We serve all 64 districts of Bangladesh, with dedicated project teams based in Dhaka, Chattogram, and Cumilla. See our <a href="service-areas.html">full district-by-district service area list</a> for details on your region.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is Bongshai Housing a certified company?</summary>
+            <div class="faq-answer">Yes. Bongshai Housing is <a href="iso-9001-certification.html">ISO 9001:2015 certified</a> for Quality Management and follows <a href="ohsas-safety-certification.html">OHSAS 18001 / ISO 45001</a> occupational health and safety standards, with <a href="material-testing-certification.html">in-house material testing</a> on every steel, concrete, and panel component before use.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What is a pre-engineered steel building?</summary>
+            <div class="faq-answer">A pre-engineered steel building is designed and fabricated off-site to precise specifications, then assembled on your land - resulting in faster construction, tighter quality control, and lower material waste compared to fully on-site conventional construction.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How does steel construction compare to traditional concrete?</summary>
+            <div class="faq-answer">Steel-composite construction is typically faster and 10-30% cheaper for low-rise homes, with better earthquake performance when properly engineered, while concrete has a natural advantage in fire resistance and thermal mass. See our <a href="steel-vs-concrete-comparison.html">full steel vs concrete comparison</a> for a detailed breakdown.</div>
+          </details>
+        </div>
+
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">What are the Products &amp; Models questions?</h2>
+
+          <details class="faq-item">
+            <summary>What types of prefab and steel buildings does Bongshai Housing offer?</summary>
+            <div class="faq-answer">Our residential range includes <a href="apartment-building.html">Apartment Buildings</a>, <a href="duplex-steel-building.html">Duplex Steel Buildings</a>, <a href="simplex-steel-building.html">Simplex Steel Buildings</a>, <a href="cottage-house.html">Cottage Houses</a>, <a href="container-house.html">Container Houses</a>, <a href="steel-house.html">Steel Houses</a>, <a href="tiny-house.html">Tiny Houses</a>, <a href="wooden-house.html">Wooden Houses</a>, and <a href="concrete-building.html">Concrete Buildings</a>. Commercially, we build <a href="industrial-sheds.html">Industrial Steel Sheds</a> and <a href="worker-accommodation.html">Worker Accommodation</a>.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What floor plans and room configurations are available?</summary>
+            <div class="faq-answer">Most residential models offer three tiers: 400 and 600 Sq.Ft (2 bedrooms, 1 bathroom, 1 living room), 750 and 900 Sq.Ft (3 bedrooms, 2 bathrooms), and 1050 and 1200 Sq.Ft (4 bedrooms, 3 bathrooms). Tiny Houses run 250-350 Sq.Ft (1 bedroom, 1 bathroom). Duplex Steel Buildings and Apartment Buildings offer 600 Sq.Ft per floor (3 bedrooms, 2 bathrooms) or 850 Sq.Ft per floor (5 bedrooms, 4 bathrooms), across two floors. Steel House is also a two-floor design, offered at 650, 750, 950, or 1200 Sq.Ft per floor (4 to 8 bedrooms).</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What's the difference between a Duplex Steel Building and an Apartment Building?</summary>
+            <div class="faq-answer">Both are two-floor steel structures with the same floor-area tiers, but they're finished and laid out differently - the Duplex line emphasizes a private single-family multi-level home, while the Apartment Building line is designed for multi-family or rental-style living. Compare individual models on each category page for exact specifications.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What is a container house, and is it durable for Bangladesh's climate?</summary>
+            <div class="faq-answer">A <a href="container-house.html">container house</a> uses modified steel shipping containers as the core structure, finished with insulation, flooring, and interior fit-out for full residential comfort. As an all-steel structure, it holds up well to Bangladesh's monsoon and humid climate with proper maintenance.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What is a Tiny House, and who is it suitable for?</summary>
+            <div class="faq-answer">Our <a href="tiny-house.html">Tiny House</a> line (250-350 Sq.Ft, 1 bedroom, 1 bathroom) is a compact, budget-friendly prefab home - ideal for single occupants, small families, weekend homes, or as a starter structure on a smaller plot.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do you build industrial steel sheds and warehouses?</summary>
+            <div class="faq-answer">Yes. Our <a href="industrial-sheds.html">Industrial Steel Sheds</a> use PEB (pre-engineered building) steel-frame construction for factories, warehouses, and storage facilities, with clear-height and clear-span options sized to your operational needs.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What is Worker Accommodation, and can it be customized for large labor camps?</summary>
+            <div class="faq-answer">Worker Accommodation is our safe, scalable staff-housing line, built for factories, industrial sites, and labor camps. Layouts and unit counts can be scaled up for large workforces - <a href="contact.html">contact us</a> with your headcount for a custom layout.</div>
+          </details>
+        </div>
+
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">What are the Pricing &amp; Financing questions?</h2>
+
+          <details class="faq-item">
+            <summary>How much does a prefab steel building cost in Bangladesh?</summary>
+            <div class="faq-answer">Quotes are customized based on building model, total floor area, land setback, and finish level. Request a <a href="solutions.html">custom quote</a> for your project parameters.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What factors affect the final quote of a steel building?</summary>
+            <div class="faq-answer">Quotes depend primarily on floor area, number of floors, product category, structural load specifications, and finish level (standard vs. luxury finishing).</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I request a custom building quote?</summary>
+            <div class="faq-answer">You can submit your land dimensions and model preferences using our <a href="solutions.html">custom quote request form</a> or speak directly with our engineering team via phone or WhatsApp.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I get bank financing assistance for my project?</summary>
+            <div class="faq-answer">Bongshai Housing assists clients with property documentation and engineering blueprints required for bank home loan approvals in Bangladesh.</div>
+          </details>
+        </div>
+
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">What is the Construction Process?</h2>
+
+          <details class="faq-item">
+            <summary>How does the construction process work?</summary>
+            <div class="faq-answer">Every project follows four steps: Consultation, Design &amp; Planning, Construction, and Handover, with payment released in stages as work progresses rather than all upfront.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I request a site visit before starting construction?</summary>
+            <div class="faq-answer">Yes. Share your preferred date, time, and location with our team through the <a href="contact.html">contact form</a> or WhatsApp, and we'll confirm a site visit before finalizing your design.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What materials are used in construction?</summary>
+            <div class="faq-answer">Materials vary by model: precast RC footing and tie beams, MS steel-grade structural frames, RC precast concrete wall and floor panels, tiled flooring, and weather-coat paint finishing are used across our steel and concrete lines; our Wooden House and Cottage lines use timber-frame construction instead.</div>
+          </details>
+        </div>
+
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">How do we ensure Quality &amp; Getting Started?</h2>
+
+          <details class="faq-item">
+            <summary>Is there a warranty on construction?</summary>
+            <div class="faq-answer">Bongshai Housing stands behind the quality of every build with ISO-certified quality management and material testing on every project. <a href="contact.html">Contact our team</a> for the specific warranty terms that apply to your model and contract.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I get a quote?</summary>
+            <div class="faq-answer">Fill out the quote request form on our <a href="contact.html">Contact page</a>, message us on <a href="https://wa.me/8801781636613" rel="noopener noreferrer" target="_blank">WhatsApp</a>, or call <a href="tel:+8801781636613">01781-636613</a>. Include your preferred model, land size, and location for the fastest response.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I customize a model to fit my land size?</summary>
+            <div class="faq-answer">Yes. The floor-area tiers on each model page are starting points - share your land dimensions and requirements with our team, and we'll adapt the layout to fit.</div>
+          </details>
+        </div>
+        {% endif %}
+
+        <div class="reveal" style="text-align:center; margin-top: var(--space-10); padding: var(--space-8); background: var(--off-white); border-radius: 16px;">
+          <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--primary-dark); margin-bottom: var(--space-3);">Do you Still have questions?</h2>
+          <p style="color: var(--grey-600); margin-bottom: var(--space-5);">Our team is ready to help with your specific project.</p>
+          <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <a href="contact.html" class="btn btn-primary btn-lg">Get a Free Quote</a>
+            <a href="https://wa.me/8801781636613" rel="noopener noreferrer" target="_blank" class="btn btn-lg" style="background: #25D366; color: white; border: none; font-weight: 700;">💬 WhatsApp Us</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+{% endblock %}

@@ -1,10 +1,32 @@
 {
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "verify-redirects": "node server/scripts/verify-redirects.js",
+    "check-templates": "node server/scripts/check-template-integrity.js",
+    "smoke-test": "node server/scripts/smoke-test.js",
+    "smoke-test:staging": "node server/scripts/smoke-test.js https://test.bongshaihousing.com"
+  },
   "dependencies": {
-    "jsdom": "^29.1.1"
+    "bcryptjs": "^3.0.3",
+    "compression": "^1.7.4",
+    "connect-session-knex": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.19.0",
+    "helmet": "^7.1.0",
+    "jsdom": "^29.1.1",
+    "knex": "^3.3.0",
+    "multer": "^2.2.0",
+    "mysql2": "^3.23.3",
+    "nodemailer": "^9.0.5",
+    "nunjucks": "^3.2.4",
+    "pdfkit": "^0.15.0"
   },
   "devDependencies": {
     "acorn": "^8.18.0",
     "esbuild": "^0.28.1",
+    "playwright": "^1.62.1",
     "sharp": "^0.35.3",
     "swiper": "^14.0.7"
   }

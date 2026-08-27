@@ -1,8 +1,17 @@
 # Dependencies
 node_modules/
 
+# Node app secrets (see server/.env.example)
+.env
+server/.env
+
 # Python artifacts
+# NOTE: bare `*.py` used to ignore ALL Python source, silently excluding
+# project-owned tooling under server/scripts/ (e.g. the floor-area
+# reconciliation audit, which encodes the authoritative room-dimension
+# templates). Vendored skill scripts under .agents/ stay ignored.
 *.py
+!server/scripts/*.py
 __pycache__/
 venv/
 
@@ -14,6 +23,14 @@ venv/
 !package.json
 !package-lock.json
 !search-index.json
+!server/page-registry.json
+!server/redirects.json
+!server/db/seeds/data/products.json
+!server/db/seeds/data/projects.json
+!server/db/seeds/data/service_areas.json
+!server/db/seeds/data/faqs.json
+!server/db/seeds/data/team_members.json
+!server/theme-settings.json
 !f446c3814965a067992e82231bb56211.txt
 
 # OS / Editor

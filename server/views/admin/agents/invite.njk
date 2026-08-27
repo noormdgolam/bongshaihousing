@@ -1,0 +1,134 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Invite Agents{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('plus', 20) }} Invite Agents</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/agents" class="btn">← Back to Agents</a></div>
+
+{% if error %}<div class="card"><div class="error-box" style="margin:0;">{{ error }}</div></div>{% endif %}
+{% if imported %}
+<div class="card" style="border-left:4px solid var(--success);">
+  <p style="margin:0; font-weight:700; color:var(--success);">Imported {{ imported }} new invitation(s).{% if duplicates and duplicates != '0' %} Skipped {{ duplicates }} already on the list.{% endif %}{% if skipped and skipped != '0' %} {{ skipped }} row(s) had no name or phone.{% endif %}</p>
+</div>
+{% endif %}
+{% if templateSaved %}
+<div class="card" style="border-left:4px solid var(--success);">
+  <p style="margin:0; font-weight:700; color:var(--success);">Email composer saved. New batches will use this wording.</p>
+</div>
+{% endif %}
+{% if resent %}
+<div class="card" style="border-left:4px solid var(--success);">
+  <p style="margin:0; font-weight:700; color:var(--success);">Reset {{ resent }} failed invitation(s) back to pending - they'll go out in the next batch.</p>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2 style="margin-top:0; font-size:1rem;">Email Composer</h2>
+  <p style="font-size:0.85rem; color:var(--grey-500);">The header banner, "Apply to Become an Agent" button, and footer address stay fixed — only the pitch text below is editable. Use <code>{{ '{{name}}' }}</code> anywhere you want the recipient's name inserted (falls back to "Sir/Madam" when a row has no name). Leave a blank line between paragraphs.</p>
+  <form method="post" action="/admin/agents/invite/template">
+    <div style="display:grid; grid-template-columns:260px 1fr; gap:16px;">
+      <div class="form-row" style="margin-bottom:0;">
+        <label for="from_address">From address</label>
+        <select id="from_address" name="from_address" style="width:100%;">
+          {% for opt in fromAddressOptions %}
+          <option value="{{ opt.value }}" {% if template.from_address == opt.value %}selected{% endif %}>{{ opt.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row" style="margin-bottom:0;">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" value="{{ template.subject }}" style="width:100%;" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin:16px 0 0;">
+      <label for="body">Body</label>
+      <textarea id="body" name="body" rows="12" style="width:100%; font-family:inherit; font-size:0.9rem; line-height:1.5;" required>{{ template.body }}</textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Composer</button>
+    </div>
+  </form>
+</div>
+
+<div class="admin-grid-2col">
+  <div>
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1rem;">Import List</h2>
+      <p style="font-size:0.85rem; color:var(--grey-500);">Upload a .xlsx, .xls, or .csv file with columns like Name, Phone, Email, District (any reasonable header names work). Rows matching an existing invitation or agent phone number are skipped automatically.</p>
+      <form method="post" action="/admin/agents/invite/import" enctype="multipart/form-data">
+        <div class="form-row" style="margin-bottom:0;">
+          <input type="file" name="excel_file" accept=".xlsx,.xls,.csv" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" style="width:100%;">Import List</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1rem;">Invitation List ({{ totalMatching }})</h2>
+      <form method="get" action="/admin/agents/invite" style="display:flex; gap:8px; margin-bottom:12px;">
+        <input type="text" name="q" value="{{ search }}" placeholder="Search by name, phone, email..." style="flex:1; padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search %}<a href="/admin/agents/invite" class="btn">Clear</a>{% endif %}
+      </form>
+      {% if invitations.length %}
+      <table>
+        <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          {% for i in invitations %}
+          <tr>
+            <td>{{ i.name }}</td>
+            <td>{{ i.phone or '—' }}</td>
+            <td>{{ i.email or '—' }}</td>
+            <td>
+              <span class="pill {% if i.status == 'sent' %}pill-success{% elif i.status == 'failed' %}pill-muted{% endif %}" title="{{ i.error_message }}">{{ i.status }}</span>
+            </td>
+            <td>
+              <form method="post" action="/admin/agents/invite/{{ i.id }}/delete" style="margin:0;" onsubmit="return confirm('Remove this invitation?');">
+                <button type="submit" class="btn btn-danger" style="padding:3px 10px; font-size:0.75rem;">Remove</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if totalPages > 1 %}
+      <div style="display:flex; justify-content:center; gap:6px; margin-top:14px;">
+        {% for p in range(1, totalPages + 1) %}
+        <a href="?page={{ p }}{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if p == page %}btn-primary{% endif %}" style="padding:4px 10px; font-size:0.8rem;">{{ p }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% else %}
+      <p style="color:var(--grey-500); font-size:0.85rem;">{% if search %}No invitations match "{{ search }}".{% else %}No invitations yet - import a list to get started.{% endif %}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1rem;">Send Invitations</h2>
+      <div style="display:flex; justify-content:space-around; text-align:center; margin-bottom:16px;">
+        <div><div style="font-size:1.4rem; font-weight:800;">{{ counts.pending }}</div><div style="font-size:0.72rem; color:var(--grey-500); text-transform:uppercase;">Pending</div></div>
+        <div><div style="font-size:1.4rem; font-weight:800; color:var(--success);">{{ counts.sent }}</div><div style="font-size:0.72rem; color:var(--grey-500); text-transform:uppercase;">Sent</div></div>
+        <div><div style="font-size:1.4rem; font-weight:800; color:var(--danger);">{{ counts.failed }}</div><div style="font-size:0.72rem; color:var(--grey-500); text-transform:uppercase;">Failed</div></div>
+      </div>
+      <form method="post" action="/admin/agents/invite/send">
+        <button type="submit" class="btn btn-primary" style="width:100%;" {% if counts.pending == 0 %}disabled{% endif %}>Send Next 20 Emails</button>
+      </form>
+      <p style="font-size:0.78rem; color:var(--grey-500); margin-top:10px; margin-bottom:12px;">Sends in batches of 20 with a short pause between each, so it doesn't look like a spam burst to email providers. Click again to send the next batch.</p>
+      {% if counts.failed and counts.failed != '0' %}
+      <form method="post" action="/admin/agents/invite/resend-failed" onsubmit="return confirm('Reset all {{ counts.failed }} failed invitations back to pending?');">
+        <button type="submit" class="btn" style="width:100%;">Resend {{ counts.failed }} Failed</button>
+      </form>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:0.9rem; font-weight:700; margin-top:0;">Only email for now</h3>
+      <p style="font-size:0.82rem; color:var(--grey-500);">WhatsApp invitations to people who haven't opted in would risk Meta suspending your WhatsApp Business number - including the one customers already use to reach you. Email doesn't carry that restriction. Once someone applies (or replies), you're free to switch to WhatsApp for that person specifically.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

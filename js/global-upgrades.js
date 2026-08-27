@@ -141,69 +141,69 @@ if ('serviceWorker' in navigator) {
 
 
 
-    const cursor = document.createElement('div');
-    cursor.classList.add('magnetic-cursor');
-    document.body.appendChild(cursor);
+    if (!window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const cursor = document.createElement('div');
+        cursor.classList.add('magnetic-cursor');
+        document.body.appendChild(cursor);
 
-    const follower = document.createElement('div');
-    follower.classList.add('magnetic-cursor-follower');
-    document.body.appendChild(follower);
+        const follower = document.createElement('div');
+        follower.classList.add('magnetic-cursor-follower');
+        document.body.appendChild(follower);
 
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    let followerX = 0, followerY = 0;
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
 
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    const render = () => {
-        // Fast follow for dot
-        cursorX += (mouseX - cursorX) * 0.5;
-        cursorY += (mouseY - cursorY) * 0.5;
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-
-        // Smooth follow for ring
-        followerX += (mouseX - followerX) * 0.15;
-        followerY += (mouseY - followerY) * 0.15;
-        follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
-
-        requestAnimationFrame(render);
-    };
-    requestAnimationFrame(render);
-
-    // Hover effect
-    const addHoverLinks = () => {
-        const hoverElements = document.querySelectorAll('a, button, input[type="submit"], input[type="button"], .cat-item, .clickable, label, .gallery-item');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.classList.add('hovering');
-                follower.classList.add('hovering');
-            });
-            el.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hovering');
-                follower.classList.remove('hovering');
-            });
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
-    };
-    
-    addHoverLinks();
-    
-    // Re-bind on mutation (for dynamic content like loaded galleries)
-    const hoverObserver = new MutationObserver((mutations) => {
-        let shouldRebind = false;
-        mutations.forEach(mut => {
-            if (mut.addedNodes.length > 0) shouldRebind = true;
 
-        if (shouldRebind) {
-            // Very basic rebind - in a robust system you'd only bind new elements
-            // For now this works for our simple SPA and dynamic galleries
-            addHoverLinks();
-        }
-    });
-    hoverObserver.observe(document.body, { childList: true, subtree: true });
-});
+        const render = () => {
+            cursorX += (mouseX - cursorX) * 0.5;
+            cursorY += (mouseY - cursorY) * 0.5;
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            followerX += (mouseX - followerX) * 0.15;
+            followerY += (mouseY - followerY) * 0.15;
+            follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
+            requestAnimationFrame(render);
+        };
+        requestAnimationFrame(render);
+
+        const addHoverLinks = () => {
+            const hoverElements = document.querySelectorAll('a, button, input[type="submit"], input[type="button"], .cat-item, .clickable, label, .gallery-item');
+            hoverElements.forEach(el => {
+                if (el.hasAttribute('data-cursor-bound')) return;
+                el.setAttribute('data-cursor-bound', 'true');
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hovering');
+                    follower.classList.add('hovering');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hovering');
+                    follower.classList.remove('hovering');
+                });
+            });
+        };
+        
+        addHoverLinks();
+        
+        let debounceTimer = null;
+        const hoverObserver = new MutationObserver((mutations) => {
+            let shouldRebind = false;
+            mutations.forEach(mut => {
+                if (mut.addedNodes.length > 0) shouldRebind = true;
+            });
+
+            if (shouldRebind) {
+                if (debounceTimer) clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    addHoverLinks();
+                }, 150);
+            }
+        });
+        hoverObserver.observe(document.body, { childList: true, subtree: true });
+    }
 // Page fade-transition (page-loaded/page-exit + link interception) lived
 // here too, duplicating js/page-transition.js verbatim - both attached a
 // click listener to every a[href] on the page, doubling every internal
@@ -221,14 +221,11 @@ if ('serviceWorker' in navigator) {
 document.addEventListener('DOMContentLoaded', () => {
     const hero = document.querySelector('.hero');
     if (!hero) return; // Only on pages with a hero section
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     
     // Create canvas
     const canvas = document.createElement('canvas');
     canvas.id = 'hero-particles';
-    // Stacking is z-index driven (see #hero-particles in style.css), not DOM-order
-    // driven, so a plain prepend is enough - and unlike insertBefore() against a
-    // querySelector('.hero-content') result, it can't throw if that element ever
-    // ends up nested (e.g. inside a slider) instead of a direct child of .hero.
     hero.prepend(canvas);
     
     const ctx = canvas.getContext('2d');
@@ -236,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let particles = [];
     
     // Configuration
-    const particleCount = window.innerWidth > 768 ? 60 : 30;
+    const particleCount = window.innerWidth > 768 ? 40 : 15;
     const maxDistance = 150;
     
     function resize() {
@@ -292,6 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
+                if (Math.abs(dx) > maxDistance || Math.abs(dy) > maxDistance) continue;
+                
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance < maxDistance) {
@@ -305,15 +304,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
     }
+    
+    let animationFrameId = null;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (!animationFrameId) {
+                    animate();
+                }
+            } else {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+            }
+        });
+    });
     
     window.addEventListener('resize', () => {
         resize();
     });
     
     init();
-    animate();
+    observer.observe(hero);
 });
 
 // ==========================================================================
@@ -372,431 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // data-tilt, so both scripts were rotating it independently on every
 // mousemove). js/3d-tilt.js is the single tilt implementation now.
 
-// ==========================================================================
-// Phase 2: Floating FAQ Chatbot (scripted, no AI/API — keyword-matched
-// free-text replies + button menu + human handoff via WhatsApp/Call/Email)
-// ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    const oldWhatsapp = document.querySelector('.whatsapp-float');
-    if(oldWhatsapp) oldWhatsapp.style.display = 'none';
-
-    const CATEGORIES = {
-        apartment: { label: 'Apartment Building', labelBn: 'অ্যাপার্টমেন্ট বিল্ডিং', hub: 'apartment-building.html', prefix: 'bh-tsb', start: 101, end: 112, kw: ['apartment', 'flat', 'flats', 'অ্যাপার্টমেন্ট', 'ফ্ল্যাট'] },
-        duplex: { label: 'Duplex Steel Building', labelBn: 'ডুপ্লেক্স স্টিল বিল্ডিং', hub: 'duplex-steel-building.html', prefix: 'bh-dv', start: 201, end: 212, kw: ['duplex', 'ডুপ্লেক্স'] },
-        simplex: { label: 'Simplex Steel Building', labelBn: 'সিমপ্লেক্স স্টিল বিল্ডিং', hub: 'simplex-steel-building.html', prefix: 'bh-sb', start: 301, end: 312, kw: ['simplex', 'সিমপ্লেক্স'] },
-        cottage: { label: 'Cottage House', labelBn: 'কটেজ হাউস', hub: 'cottage-house.html', prefix: 'bh-ch', start: 401, end: 412, kw: ['cottage', 'কটেজ'] },
-        container: { label: 'Container House', labelBn: 'কনটেইনার হাউস', hub: 'container-house.html', prefix: 'bh-ch', start: 501, end: 512, kw: ['container', 'কনটেইনার'] },
-        steel: { label: 'Steel House', labelBn: 'স্টিল হাউস', hub: 'steel-house.html', prefix: 'bh-sh', start: 601, end: 612, kw: ['steel house', 'steel home', 'স্টিল হাউস'] },
-        tiny: { label: 'Tiny House', labelBn: 'টাইনি হাউস', hub: 'tiny-house.html', prefix: 'bh-th', start: 701, end: 712, kw: ['tiny house', 'tiny home', 'টাইনি হাউস', 'ছোট বাড়ি'] },
-        wooden: { label: 'Wooden House', labelBn: 'কাঠের বাড়ি', hub: 'wooden-house.html', prefix: 'bh-wh', start: 801, end: 812, kw: ['wooden house', 'wood house', 'কাঠের বাড়ি'] },
-        concrete: { label: 'Concrete Building', labelBn: 'কংক্রিট বিল্ডিং', hub: 'concrete-building.html', prefix: 'bh-cb', start: 901, end: 912, kw: ['concrete', 'কংক্রিট'] },
-        industrial: { label: 'Industrial Steel Sheds', labelBn: 'ইন্ডাস্ট্রিয়াল স্টিল শেড', hub: 'industrial-sheds.html', prefix: 'bh-is', start: 1001, end: 1012, kw: ['industrial', 'shed', 'factory', 'warehouse', 'ইন্ডাস্ট্রিয়াল', 'শেড', 'কারখানা'] },
-        worker: { label: 'Worker Accommodation', labelBn: 'শ্রমিক আবাসন', hub: 'worker-accommodation.html', prefix: 'bh-wa', start: 1101, end: 1112, kw: ['worker accommodation', 'labor camp', 'labour camp', 'dormitory', 'শ্রমিক আবাসন', 'শ্রমিক'] }
-    };
-
-    const STR = {
-        en: {
-            headerTitle: 'Bongshai Assistant',
-            langToggleTitle: 'বাংলায় দেখুন',
-            welcome: '👋 Hi! I’m a scripted assistant, not a live agent — pick a topic below, or type your question and I’ll do my best to answer.',
-            inputPlaceholder: 'Type your question…',
-            send: 'Send',
-            backCategories: '🔙 Categories',
-            backMain: '🔙 Main Menu',
-            productsLabel: '🏢 Our Products',
-            pricingLabel: '💰 Pricing &amp; Packages',
-            areasLabel: '📍 Service Areas',
-            visitLabel: '🗓️ Book a Site Visit',
-            processLabel: '📋 How It Works',
-            certsLabel: '📜 Certifications',
-            humanLabel: '📞 Talk to a Human',
-            customLabel: '✍️ Ask Your Own Question',
-            customPrompt: 'Sure — type your question in the box below and I’ll search our site for the best answer.',
-            searchIntro: 'Here’s what I found on our site:',
-            productsIntro: 'Sure — pick a category to see its models:',
-            pricingReply: 'Pricing depends on floor area, floors, and finish level. Try our instant cost calculator, or contact us for a custom quote.',
-            pricingLinkText: 'Open cost calculator →',
-            areasReply: 'We serve all 64 districts across Bangladesh, with dedicated teams in Dhaka, Chattogram, and Cumilla.',
-            areasLinkText: 'See all service areas →',
-            visitReply: 'Happy to set that up — share your preferred date, time, and location with our team and we’ll confirm it:',
-            processReply: 'Every project follows 4 steps — Consultation, Design &amp; Planning, Construction, and Handover — with payment released in stages as work progresses.',
-            processLinkText: 'See the full process →',
-            certsReply: 'Bongshai Housing is ISO 9001 and OHSAS 18001 / ISO 45001 certified, with in-house material testing.',
-            certsLinkText: 'View certifications →',
-            humanReply: 'Reach our team directly:',
-            whatsappLabel: '📲 WhatsApp',
-            callLabel: '📞 Call Us',
-            emailLabel: '✉️ Email Us',
-            greeting: 'Hello! 👋 How can I help — products, pricing, service areas, or booking a site visit?',
-            thanks: 'You’re welcome! Anything else I can help with?',
-            fallback: 'I’m not totally sure I understood that — here’s what I can help with, or tap “Talk to a Human” for a real answer:',
-            categoryIntro: (label, hub) => 'Here are the ' + label + ' models — pick one, or <a href="' + hub + '">view them all →</a>',
-            modelReply: (code, href) => 'Here’s the ' + code + ' page: <a href="' + href + '">View ' + code + ' →</a>'
-        },
-        bn: {
-            headerTitle: 'বংশাই সহকারী',
-            langToggleTitle: 'View in English',
-            welcome: '👋 হাই! আমি একটি স্ক্রিপ্টেড সহকারী, সরাসরি এজেন্ট নই — নিচে থেকে একটি বিষয় বেছে নিন, অথবা আপনার প্রশ্ন টাইপ করুন।',
-            inputPlaceholder: 'আপনার প্রশ্ন লিখুন…',
-            send: 'পাঠান',
-            backCategories: '🔙 ক্যাটাগরি',
-            backMain: '🔙 প্রধান মেনু',
-            productsLabel: '🏢 আমাদের পণ্য',
-            pricingLabel: '💰 মূল্য ও প্যাকেজ',
-            areasLabel: '📍 সেবা এলাকা',
-            visitLabel: '🗓️ সাইট ভিজিট বুক করুন',
-            processLabel: '📋 কার্যপ্রণালী',
-            certsLabel: '📜 সার্টিফিকেশন',
-            humanLabel: '📞 মানুষের সাথে কথা বলুন',
-            customLabel: '✍️ নিজের প্রশ্ন করুন',
-            customPrompt: 'নিশ্চয়ই — নিচের বক্সে আপনার প্রশ্ন লিখুন, আমি আমাদের সাইটে সবচেয়ে ভালো উত্তর খুঁজে দেব।',
-            searchIntro: 'আমাদের সাইটে এইগুলো পেলাম:',
-            productsIntro: 'নিশ্চয়ই — একটি ক্যাটাগরি বেছে নিন এর মডেলগুলো দেখতে:',
-            pricingReply: 'মূল্য নির্ভর করে জায়গার আয়তন, ফ্লোর সংখ্যা এবং ফিনিশিংয়ের মানের উপর। তাৎক্ষণিক খরচ ক্যালকুলেটর ব্যবহার করুন, অথবা কাস্টম কোটেশনের জন্য যোগাযোগ করুন।',
-            pricingLinkText: 'খরচ ক্যালকুলেটর খুলুন →',
-            areasReply: 'আমরা বাংলাদেশের ৬৪টি জেলায় সেবা প্রদান করি, ঢাকা, চট্টগ্রাম এবং কুমিল্লায় বিশেষায়িত টিম রয়েছে।',
-            areasLinkText: 'সব সেবা এলাকা দেখুন →',
-            visitReply: 'নিশ্চয়ই — আপনার পছন্দের তারিখ, সময় ও স্থান জানান, আমরা তা নিশ্চিত করব:',
-            processReply: 'প্রতিটি প্রকল্প ৪টি ধাপে সম্পন্ন হয় — পরামর্শ, ডিজাইন ও পরিকল্পনা, নির্মাণ এবং হস্তান্তর — এবং কাজের অগ্রগতি অনুযায়ী ধাপে ধাপে পেমেন্ট নেওয়া হয়।',
-            processLinkText: 'সম্পূর্ণ প্রক্রিয়া দেখুন →',
-            certsReply: 'বংশাই হাউজিং আইএসও ৯০০১ এবং OHSAS ১৮০০১ / আইএসও ৪৫০০১ সনদপ্রাপ্ত, এবং নিজস্ব উপকরণ পরীক্ষার ব্যবস্থা রয়েছে।',
-            certsLinkText: 'সার্টিফিকেশন দেখুন →',
-            humanReply: 'সরাসরি আমাদের টিমের সাথে যোগাযোগ করুন:',
-            whatsappLabel: '📲 হোয়াটসঅ্যাপ',
-            callLabel: '📞 কল করুন',
-            emailLabel: '✉️ ইমেইল করুন',
-            greeting: 'হ্যালো! 👋 আমি কীভাবে সাহায্য করতে পারি — পণ্য, মূল্য, সেবা এলাকা, নাকি ভিজিট বুকিং?',
-            thanks: 'স্বাগতম! আর কিছু জানতে চান?',
-            fallback: 'দুঃখিত, ঠিক বুঝতে পারিনি — নিচে কিছু বিষয় দেখুন, অথবা সরাসরি মানুষের সাথে কথা বলতে ট্যাপ করুন:',
-            categoryIntro: (label, hub) => 'এই ' + label + ' মডেলগুলো দেখুন — একটি বেছে নিন, অথবা <a href="' + hub + '">সবগুলো দেখুন →</a>',
-            modelReply: (code, href) => code + ' পৃষ্ঠাটি এখানে: <a href="' + href + '">' + code + ' দেখুন →</a>'
-        }
-    };
-
-    const INTENTS = [
-        { key: 'greeting', re: /\b(hi|hello|hey|salam|assalamu|আসসালামু|হ্যালো|হাই)\b/i },
-        { key: 'thanks', re: /\b(thanks|thank you|dhonnobad|ধন্যবাদ)\b/i },
-        { key: 'pricing', re: /price|cost|budget|taka|৳|package|দাম|মূল্য|বাজেট|কত টাকা/i },
-        { key: 'areas', re: /\b(area|areas|location|district|dhaka|chittagong|chattogram|cumilla)\b|কোথায়|এলাকা|জেলা/i },
-        { key: 'visit', re: /\bvisit\b|appointment|book a|meet up|দেখা করতে|ভিজিট|অ্যাপয়েন্টমেন্ট/i },
-        { key: 'process', re: /process|payment plan|installment|instalment|handover|how it works|registration|রেজিস্ট্রেশন|প্রক্রিয়া|পেমেন্ট|কিস্তি|হস্তান্তর/i },
-        { key: 'certs', re: /certificat|\biso\b|legit|trust|genuine|আসল|বিশ্বাস|সনদ/i },
-        { key: 'human', re: /\bhuman\b|\bagent\b|talk to (someone|a person)|call me|manush|মানুষ|কথা বলতে/i },
-        { key: 'products', re: /product|model|building|house|package|পণ্য|মডেল|বাড়ি/i }
-    ];
-
-    const widget = document.createElement('div');
-    widget.className = 'floating-widget';
-
-    const mainBtn = document.createElement('div');
-    mainBtn.className = 'floating-main-btn';
-    mainBtn.innerHTML = '💬';
-    mainBtn.setAttribute('role', 'button');
-    mainBtn.setAttribute('tabindex', '0');
-    mainBtn.setAttribute('aria-label', 'Open chat');
-
-    const panel = document.createElement('div');
-    panel.className = 'chat-panel';
-    panel.innerHTML = '<div class="chat-panel-header"><span class="chat-header-title"></span><div class="chat-header-actions"><button type="button" class="chat-lang-toggle">EN/বাং</button><button type="button" class="chat-close" aria-label="Close chat">&times;</button></div></div><div class="chat-panel-body"><div class="chat-quick-replies"></div></div><form class="chat-input-row"><div class="chat-input-wrap"><input type="text" class="chat-input" autocomplete="off" aria-label="Type your question"><button type="submit" class="chat-send" aria-label="Send message">➤</button></div></form>';
-
-    const body = panel.querySelector('.chat-panel-body');
-    const quickReplies = panel.querySelector('.chat-quick-replies');
-    const headerTitle = panel.querySelector('.chat-header-title');
-    const langBtn = panel.querySelector('.chat-lang-toggle');
-    const form = panel.querySelector('.chat-input-row');
-    const input = panel.querySelector('.chat-input');
-    const sendBtn = panel.querySelector('.chat-send');
-
-    let view = 'root';
-    let lang = 'en';
-    let welcomed = false;
-
-    // Site-only search fallback: reuses the same /search-index.json the header
-    // search modal fetches, so free-text answers only ever cite real pages on
-    // this site — no external AI/API involved (matches the file header note).
-    let siteSearchIndex = null;
-    fetch('/search-index.json').then((r) => r.json()).then((d) => { siteSearchIndex = d; }).catch(() => {});
-
-    // Short/common words (are, you, the, how...) match almost every page and
-    // drown out the real signal, so only words longer than 3 chars count.
-    const SEARCH_STOPWORDS = new Set(['what', 'when', 'where', 'which', 'does', 'have', 'this', 'that', 'with', 'your', 'about', 'from', 'into', 'will']);
-    const searchSite = (query) => {
-        if (!siteSearchIndex) return [];
-        const q = query.toLowerCase();
-        const words = q.split(/\s+/).filter((w) => w.length > 3 && !SEARCH_STOPWORDS.has(w));
-        if (!words.length) return [];
-        const scored = siteSearchIndex.map((item) => {
-            const hay = (item.title + ' ' + item.desc).toLowerCase();
-            let score = 0;
-            if (hay.includes(q)) score += 10;
-            words.forEach((w) => { if (hay.includes(w)) score += 1; });
-            return { item, score };
-        // Require the full phrase or at least two distinct word hits (or every
-        // word, if the query only has one) — a single coincidental word match
-        // is more likely noise than a real answer.
-        }).filter((x) => x.score >= 10 || x.score >= Math.min(2, words.length));
-        scored.sort((a, b) => b.score - a.score);
-        return scored.slice(0, 3).map((x) => x.item);
-    };
-
-    const t = () => STR[lang];
-
-    const addMsg = (html, cls) => {
-        const msg = document.createElement('div');
-        msg.className = 'chat-msg ' + cls;
-        msg.innerHTML = html;
-        body.insertBefore(msg, quickReplies);
-        body.scrollTop = body.scrollHeight;
-        return msg;
-    };
-
-    const addQuickReply = (label, onClick) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'chat-quick-reply';
-        btn.innerHTML = label;
-        btn.addEventListener('click', onClick);
-        quickReplies.appendChild(btn);
-    };
-
-    const showTyping = (then) => {
-        const typing = document.createElement('div');
-        typing.className = 'chat-msg bot chat-typing';
-        typing.innerHTML = '<span></span><span></span><span></span>';
-        body.insertBefore(typing, quickReplies);
-        body.scrollTop = body.scrollHeight;
-        setTimeout(() => {
-            typing.remove();
-            then();
-        }, 500);
-    };
-
-    const applyStrings = () => {
-        headerTitle.textContent = t().headerTitle;
-        langBtn.title = t().langToggleTitle;
-        input.placeholder = t().inputPlaceholder;
-        sendBtn.setAttribute('aria-label', t().send);
-    };
-
-    const render = () => {
-        quickReplies.innerHTML = '';
-
-        if (view === 'root') {
-            addQuickReply(t().productsLabel, () => selectTopic('products'));
-            addQuickReply(t().pricingLabel, () => selectTopic('pricing'));
-            addQuickReply(t().areasLabel, () => selectTopic('areas'));
-            addQuickReply(t().visitLabel, () => selectTopic('visit'));
-            addQuickReply(t().processLabel, () => selectTopic('process'));
-            addQuickReply(t().certsLabel, () => selectTopic('certs'));
-            addQuickReply(t().humanLabel, () => selectTopic('human'));
-            addQuickReply(t().customLabel, () => {
-                addMsg(t().customLabel, 'user');
-                showTyping(() => { addMsg(t().customPrompt, 'bot'); input.focus(); });
-            });
-            return;
-        }
-
-        if (view === 'categories') {
-            Object.entries(CATEGORIES).forEach(([key, c]) => {
-                addQuickReply(lang === 'bn' ? c.labelBn : c.label, () => selectCategory(key));
-            });
-            addQuickReply(t().backMain, () => { view = 'root'; render(); });
-            return;
-        }
-
-        const cat = CATEGORIES[view];
-        for (let n = cat.start; n <= cat.end; n++) {
-            const code = cat.prefix.toUpperCase() + '-' + n;
-            addQuickReply(code, () => selectModel(view, n));
-        }
-        addQuickReply(t().backCategories, () => { view = 'categories'; render(); });
-        addQuickReply(t().backMain, () => { view = 'root'; render(); });
-    };
-
-    const replyForTopic = (key) => {
-        if (key === 'human') {
-            return t().humanReply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">' + t().whatsappLabel + '</a><a href="tel:+8801781636613">' + t().callLabel + '</a><a href="mailto:sales@bongshai.com">' + t().emailLabel + '</a></div>';
-        }
-        if (key === 'visit') {
-            return t().visitReply + '<div class="chat-human-links"><a href="https://wa.me/8801781636613" target="_blank" rel="noopener">' + t().whatsappLabel + '</a><a href="tel:+8801781636613">' + t().callLabel + '</a><a href="contact.html">' + (lang === 'bn' ? 'যোগাযোগ ফর্ম →' : 'Contact form →') + '</a></div>';
-        }
-        if (key === 'process') {
-            return t().processReply + ' <a href="index.html#process">' + t().processLinkText + '</a>';
-        }
-        if (key === 'pricing') {
-            return t().pricingReply + ' <a href="solutions.html">' + t().pricingLinkText + '</a>';
-        }
-        if (key === 'areas') {
-            return t().areasReply + ' <a href="service-areas.html">' + t().areasLinkText + '</a>';
-        }
-        if (key === 'certs') {
-            return t().certsReply + ' <a href="certifications.html">' + t().certsLinkText + '</a>';
-        }
-        return null;
-    };
-
-    const selectTopic = (key) => {
-        const labelKey = key + 'Label';
-        addMsg(t()[labelKey], 'user');
-
-        if (key === 'products') {
-            showTyping(() => {
-                addMsg(t().productsIntro, 'bot');
-                view = 'categories';
-                render();
-            });
-            return;
-        }
-
-        showTyping(() => addMsg(replyForTopic(key), 'bot'));
-    };
-
-    const selectCategory = (key) => {
-        const cat = CATEGORIES[key];
-        const label = lang === 'bn' ? cat.labelBn : cat.label;
-        addMsg(label, 'user');
-        showTyping(() => {
-            addMsg(t().categoryIntro(label, cat.hub), 'bot');
-            view = key;
-            render();
-        });
-    };
-
-    const selectModel = (catKey, n) => {
-        const cat = CATEGORIES[catKey];
-        const code = cat.prefix.toUpperCase() + '-' + n;
-        const href = cat.prefix + '-' + n + '.html';
-        addMsg(code, 'user');
-        showTyping(() => addMsg(t().modelReply(code, href), 'bot'));
-    };
-
-    const findModelByNumber = (n) => {
-        for (const key in CATEGORIES) {
-            const cat = CATEGORIES[key];
-            if (n >= cat.start && n <= cat.end) return key;
-        }
-        return null;
-    };
-
-    const findCategoryByKeyword = (text) => {
-        for (const key in CATEGORIES) {
-            const cat = CATEGORIES[key];
-            if (cat.kw.some((k) => text.indexOf(k) !== -1)) return key;
-        }
-        return null;
-    };
-
-    const handleFreeText = (raw) => {
-        const text = raw.trim();
-        if (!text) return;
-        addMsg(text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'), 'user');
-        input.value = '';
-
-        const lower = text.toLowerCase();
-
-        // 1) A model number anywhere in the text (e.g. "BH-CB-901", "cb 901", "901")
-        const numMatch = lower.match(/\d{3,4}/);
-        if (numMatch) {
-            const n = parseInt(numMatch[0], 10);
-            const catKey = findModelByNumber(n);
-            if (catKey) {
-                const cat = CATEGORIES[catKey];
-                const code = cat.prefix.toUpperCase() + '-' + n;
-                const href = cat.prefix + '-' + n + '.html';
-                showTyping(() => addMsg(t().modelReply(code, href), 'bot'));
-                return;
-            }
-        }
-
-        // 2) A category name/keyword (e.g. "duplex", "industrial shed")
-        const catKey = findCategoryByKeyword(lower);
-        if (catKey) {
-            showTyping(() => {
-                const cat = CATEGORIES[catKey];
-                const label = lang === 'bn' ? cat.labelBn : cat.label;
-                addMsg(t().categoryIntro(label, cat.hub), 'bot');
-                view = catKey;
-                render();
-            });
-            return;
-        }
-
-        // 3) Everything else: match against the keyword intents in order
-        for (let i = 0; i < INTENTS.length; i++) {
-            if (INTENTS[i].re.test(lower)) {
-                const key = INTENTS[i].key;
-                if (key === 'greeting') { showTyping(() => addMsg(t().greeting, 'bot')); return; }
-                if (key === 'thanks') { showTyping(() => addMsg(t().thanks, 'bot')); return; }
-                if (key === 'products') {
-                    showTyping(() => { addMsg(t().productsIntro, 'bot'); view = 'categories'; render(); });
-                    return;
-                }
-                showTyping(() => addMsg(replyForTopic(key), 'bot'));
-                return;
-            }
-        }
-
-        // 4) Search the site's own content (title + description) for a best-effort answer
-        const hits = searchSite(text);
-        if (hits.length) {
-            showTyping(() => {
-                const list = hits.map((h) => '<div><a href="' + h.url + '">' + h.title + '</a><br><span style="font-size:12px;opacity:.8;">' + h.desc.slice(0, 90) + '…</span></div>').join('');
-                addMsg(t().searchIntro + '<div class="chat-human-links">' + list + '</div>', 'bot');
-            });
-            return;
-        }
-
-        // 5) Fallback
-        showTyping(() => { addMsg(t().fallback, 'bot'); view = 'root'; render(); });
-    };
-
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        handleFreeText(input.value);
-    });
-
-    langBtn.addEventListener('click', () => {
-        lang = lang === 'en' ? 'bn' : 'en';
-        applyStrings();
-        render();
-    });
-
-    applyStrings();
-    if (!welcomed) {
-        addMsg(t().welcome, 'bot');
-        welcomed = true;
-    }
-    render();
-    widget.appendChild(mainBtn);
-    widget.appendChild(panel);
-    document.body.appendChild(widget);
-
-    const openPanel = () => {
-        widget.classList.add('active');
-        mainBtn.innerHTML = '✕';
-        mainBtn.setAttribute('aria-label', 'Close chat');
-    };
-    const closePanel = () => {
-        widget.classList.remove('active');
-        mainBtn.innerHTML = '💬';
-        mainBtn.setAttribute('aria-label', 'Open chat');
-    };
-
-    mainBtn.addEventListener('click', () => {
-        widget.classList.contains('active') ? closePanel() : openPanel();
-    });
-    mainBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            widget.classList.contains('active') ? closePanel() : openPanel();
-        }
-    });
-    panel.querySelector('.chat-close').addEventListener('click', closePanel);
-
-    document.addEventListener('click', (e) => {
-        if (!widget.contains(e.target) && widget.classList.contains('active')) closePanel();
-    });
-});
 
 // Phase 3: Text Scramble Reveal Effect
 // ==========================================================================
@@ -984,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     if(window.matchMedia("(pointer: coarse)").matches) return; // Skip mobile
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     
     const glow = document.createElement('div');
     glow.className = 'ambient-glow';
@@ -1057,11 +648,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (x > rect.width) x = rect.width;
             
             const percent = (x / rect.width) * 100;
-            afterImg.style.width = percent + '%';
+            const p = percent / 100;
+            
+            // Using CSS transforms for GPU acceleration and no reflow
+            afterImg.style.transform = `scaleX(${p})`;
             handle.style.left = percent + '%';
             
             // Adjust the inner image width inversely so it doesn't stretch
-            innerImg.style.width = (100 / (percent / 100)) + '%';
+            const inverseP = p > 0.001 ? 1 / p : 1000;
+            innerImg.style.transform = `scaleX(${inverseP})`;
         };
         
         // Mouse Events

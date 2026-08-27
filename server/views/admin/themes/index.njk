@@ -1,0 +1,543 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Themes — Bongshai Housing{% endblock %}
+
+{% block header %}
+<div class="wp-themes-header">
+  <div style="display:flex; align-items:center; gap:16px;">
+    <h1 style="font-size:1.4rem; font-weight:700; margin:0; color:#1d2327;">Themes</h1>
+    <a href="/admin/theme-editor" class="btn-wp-add">Add Theme</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- WordPress Banner Notice -->
+<div class="wp-notice" id="wpNotice">
+  <div style="display:flex; align-items:center; gap:12px;">
+    <span style="font-size:1.3rem;">⭐</span>
+    <span style="font-size:0.88rem; color:#1d2327;">
+      <strong>AI Studio Just Landed:</strong> Elementor Pro-grade visual theme customizer with real-time 0ms WYSIWYG preview! 
+      <a href="/admin/theme-editor" style="color:#2271b1; text-decoration:underline; font-weight:600; margin-left:4px;">Open Studio Pro →</a>
+    </span>
+  </div>
+  <button type="button" class="wp-notice-dismiss" onclick="document.getElementById('wpNotice').style.display='none';" title="Dismiss notice">✕</button>
+</div>
+
+{% if activated %}
+<div class="card" style="background:#ecfdf5; border-color:#a7f3d0; padding:12px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; border-radius:4px;">
+  <div style="display:flex; align-items:center; gap:10px; color:#065f46; font-weight:700; font-size:0.88rem;">
+    <span style="font-size:1.2rem;">✅</span>
+    <span>Theme "<strong>{{ activatedThemeName or 'Selected Theme' }}</strong>" successfully activated and published live!</span>
+  </div>
+  <a href="/" target="_blank" class="btn" style="background:#059669; color:white; font-size:0.78rem; padding:4px 10px; border-radius:3px;">View Live Site ↗</a>
+</div>
+{% endif %}
+
+<!-- Top Filter & Search Bar (WordPress Style) -->
+<div class="wp-toolbar">
+  <div class="wp-filter-links">
+    <button type="button" class="wp-filter-link active" data-filter="all">All <span class="count">(24)</span></button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="light">☀️ Light <span class="count">(12)</span></button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="dark">🌙 Dark <span class="count">(12)</span></button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="catalog-first">📦 Catalog-First</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="trust-first">🛡️ Trust-First</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="story-process">🔨 Story-Process</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="broken-grid">✨ Broken-Grid</button>
+    <span class="sep">|</span>
+    <button type="button" class="wp-filter-link" data-filter="stats-minimal">📊 Stats-Led</button>
+  </div>
+
+  <div class="wp-search-box">
+    <label for="themeSearch" style="font-size:0.85rem; color:#50575e; margin-right:8px;">Search installed themes</label>
+    <input type="search" id="themeSearch" class="wp-search-input" placeholder="">
+  </div>
+</div>
+
+<!-- WordPress Themes Grid -->
+<div class="wp-themes-grid" id="wpThemesGrid">
+
+  {% for slug, t in presets %}
+  {% set isActive = (currentTheme.name == t.name) or (currentTheme.primary == t.primary and currentTheme.bg_color == t.bg_color) %}
+  
+  <div class="wp-theme-card {% if isActive %}is-active-theme{% endif %}"
+       data-slug="{{ slug }}"
+       data-name="{{ t.name | lower }}"
+       data-mode="{{ t.mode or ('dark' if t.is_dark else 'light') }}"
+       data-archetype="{{ t.archetype or 'catalog-first' }}"
+       data-desc="{{ t.description | lower }}">
+    
+    <!-- Screenshot / Preview Frame -->
+    <div class="wp-theme-screenshot" style="background:{{ t.bg_color or '#ffffff' }}; color:{{ t.text_color or '#0f172a' }};">
+      
+      <!-- Top mini header bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-bottom:1px solid {% if t.is_dark %}rgba(255,255,255,0.08){% else %}rgba(0,0,0,0.06){% endif %};">
+        <span style="font-size:0.65rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.primary }};">BONGSHAI</span>
+        <div style="display:flex; gap:6px; font-size:0.5rem; color:{{ t.text_muted }};">
+          <span>Home</span>
+          <span>Models</span>
+          <span>Projects</span>
+          <span>Contact</span>
+        </div>
+      </div>
+
+      <!-- Hero & Archetype Showcase Area -->
+      <div style="padding:14px 12px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+        
+        {% if t.archetype == 'broken-grid' %}
+        <!-- Broken Grid Asymmetric Layout -->
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="flex:1.2;">
+            <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; line-height:1.2; color:{{ t.text_color }};">
+              {{ t.name }}
+            </div>
+            <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:4px; line-height:1.3;">
+              Asymmetric broken-grid editorial architecture.
+            </div>
+            <span style="display:inline-block; margin-top:6px; background:{{ t.primary }}; color:white; font-size:0.5rem; font-weight:700; padding:2px 6px; border-radius:3px;">Explore</span>
+          </div>
+          <div style="flex:0.8; height:60px; background:linear-gradient(135deg, {{ t.primary }}, {{ t.accent }}); border-radius:4px; opacity:0.85; display:flex; align-items:center; justify-content:center; color:white; font-size:0.55rem; font-weight:700; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+            Project Frame
+          </div>
+        </div>
+
+        {% elif t.archetype == 'trust-first' %}
+        <!-- Trust First Layout -->
+        <div>
+          <div style="text-align:center;">
+            <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }};">
+              {{ t.name }}
+            </div>
+            <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:2px;">
+              ISO 9001:2015 &bull; BNBC 2020 Seismic Certified
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:8px;">
+            <div style="background:rgba(234,179,8,0.15); border:1px solid {{ t.accent }}; border-radius:3px; padding:3px; font-size:0.48rem; text-align:center; font-weight:700; color:{{ t.accent }};">BNBC 2020</div>
+            <div style="background:rgba(30,64,175,0.15); border:1px solid {{ t.primary }}; border-radius:3px; padding:3px; font-size:0.48rem; text-align:center; font-weight:700; color:{{ t.primary }};">500+ Builds</div>
+            <div style="background:rgba(16,185,129,0.15); border:1px solid #10B981; border-radius:3px; padding:3px; font-size:0.48rem; text-align:center; font-weight:700; color:#10B981;">★★★★★ 5.0</div>
+          </div>
+        </div>
+
+        {% elif t.archetype == 'story-process' %}
+        <!-- Story Process Layout -->
+        <div>
+          <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }};">
+            {{ t.name }}
+          </div>
+          <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:2px;">4-Stage 45-60 Day Turnkey Build Timeline</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; background:{{ t.surface_color }}; padding:6px 8px; border-radius:4px; margin-top:8px; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %};">
+            <span style="font-size:0.52rem; font-weight:800; background:{{ t.primary }}; color:white; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">1</span>
+            <span style="height:2px; flex:1; background:{{ t.primary }}; margin:0 3px;"></span>
+            <span style="font-size:0.52rem; font-weight:800; background:{{ t.primary }}; color:white; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">2</span>
+            <span style="height:2px; flex:1; background:{{ t.accent }}; margin:0 3px;"></span>
+            <span style="font-size:0.52rem; font-weight:800; background:{{ t.accent }}; color:black; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">3</span>
+            <span style="height:2px; flex:1; background:#10B981; margin:0 3px;"></span>
+            <span style="font-size:0.52rem; font-weight:800; background:#10B981; color:white; width:15px; height:15px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;">✓</span>
+          </div>
+        </div>
+
+        {% elif t.archetype == 'stats-minimal' %}
+        <!-- Stats Minimal Layout -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }}; text-transform:uppercase;">{{ t.name }}</span>
+            <span style="font-size:0.48rem; color:{{ t.primary }}; font-weight:700;">HEAVY METALLURGY</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:3px; margin-top:8px;">
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.text_color }};">64</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Districts</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.text_color }};">500+</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Builds</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.primary }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.text_color }};">20+</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Years</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {{ t.accent }}; border-radius:2px; padding:3px; text-align:center;"><div style="font-size:0.6rem; font-weight:800; color:{{ t.accent }};">45d</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">Turnkey</div></div>
+          </div>
+        </div>
+
+        {% else %}
+        <!-- Catalog First Layout -->
+        <div>
+          <div style="font-size:0.85rem; font-weight:800; font-family:{{ t.font_heading }}; color:{{ t.text_color }};">
+            {{ t.name }}
+          </div>
+          <div style="font-size:0.55rem; color:{{ t.text_muted }}; margin-top:2px;">Steel Models &amp; Floor Area Matrix</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:8px;">
+            <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:4px; text-align:center;"><div style="font-size:0.52rem; font-weight:700; color:{{ t.primary }};">BH-SB</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">1,400 sqft</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:4px; text-align:center;"><div style="font-size:0.52rem; font-weight:700; color:{{ t.primary }};">BH-DX</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">2,400 sqft</div></div>
+            <div style="background:{{ t.surface_color }}; border:1px solid {% if t.is_dark %}rgba(255,255,255,0.1){% else %}rgba(0,0,0,0.06){% endif %}; border-radius:3px; padding:4px; text-align:center;"><div style="font-size:0.52rem; font-weight:700; color:{{ t.primary }};">PEB-SHED</div><div style="font-size:0.42rem; color:{{ t.text_muted }};">10k sqft</div></div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <!-- Color swatch dots footer -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 12px; border-top:1px solid {% if t.is_dark %}rgba(255,255,255,0.08){% else %}rgba(0,0,0,0.06){% endif %}; background:{{ t.surface_color }};">
+        <div style="display:flex; gap:5px;">
+          <span style="width:10px; height:10px; border-radius:50%; background:{{ t.primary }};" title="Primary: {{ t.primary }}"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:{{ t.accent }};" title="Accent: {{ t.accent }}"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:{{ t.bg_color }}; border:1px solid #888;" title="Canvas: {{ t.bg_color }}"></span>
+        </div>
+        <span style="font-size:0.6rem; color:{{ t.text_muted }}; font-weight:600;">{{ t.font_heading }}</span>
+      </div>
+
+    </div>
+
+    <!-- Active vs Inactive Bottom Footer -->
+    {% if isActive %}
+    <!-- Active Theme Blue Bar (Exact WordPress Layout) -->
+    <div class="wp-active-footer">
+      <span class="wp-active-label">Active: {{ t.name }}</span>
+      <a href="/admin/theme-editor" class="wp-btn-customize">Customize</a>
+    </div>
+    {% else %}
+    <!-- Inactive Theme Standard Footer -->
+    <div class="wp-inactive-footer">
+      <span class="wp-theme-title">{{ t.name }}</span>
+    </div>
+
+    <!-- Hover Actions Overlay -->
+    <div class="wp-theme-overlay">
+      <form method="post" action="/admin/themes/activate/{{ slug }}" style="margin:0;">
+        <button type="submit" class="wp-btn-activate">⚡ Activate</button>
+      </form>
+      <a href="/admin/theme-editor?preset={{ slug }}" class="wp-btn-preview">🎨 Live Preview</a>
+    </div>
+    {% endif %}
+
+  </div>
+  {% endfor %}
+
+  <!-- WordPress "Add Theme" Dashed Card -->
+  <a href="/admin/theme-editor" class="wp-add-theme-card" title="Create New Custom Theme in Studio Pro">
+    <div class="wp-add-theme-circle">+</div>
+    <span class="wp-add-theme-text">Add Theme</span>
+  </a>
+
+</div>
+
+<style>
+  /* ─── WordPress Themes Page Core Styles ─────────────────── */
+  .wp-themes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .btn-wp-add {
+    background: #f6f7f7;
+    color: #2271b1;
+    border: 1px solid #2271b1;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-wp-add:hover {
+    background: #2271b1;
+    color: white;
+  }
+
+  /* WordPress Banner Notice */
+  .wp-notice {
+    background: white;
+    border-left: 4px solid #72aee6;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 2px;
+  }
+  .wp-notice-dismiss {
+    background: none;
+    border: none;
+    color: #787c82;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+  }
+  .wp-notice-dismiss:hover { color: #d63638; }
+
+  /* Toolbar (Filter links & Search) */
+  .wp-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dcdcde;
+  }
+  .wp-filter-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .wp-filter-link {
+    background: none;
+    border: none;
+    color: #2271b1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+  .wp-filter-link:hover { color: #135e96; text-decoration: underline; }
+  .wp-filter-link.active { color: #000000; font-weight: 700; text-decoration: none; cursor: default; }
+  .wp-filter-link .count { color: #646970; font-weight: 400; }
+  .wp-filter-links .sep { color: #c3c4c7; }
+
+  .wp-search-box {
+    display: flex;
+    align-items: center;
+  }
+  .wp-search-input {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 0.85rem;
+    width: 220px;
+    background: white;
+    outline: none;
+  }
+  .wp-search-input:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+  }
+
+  /* Themes Grid */
+  .wp-themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 24px;
+  }
+
+  /* Theme Card */
+  .wp-theme-card {
+    background: white;
+    border: 1px solid #dcdcde;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 290px;
+    transition: all 0.2s ease;
+  }
+  .wp-theme-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Theme Screenshot Frame */
+  .wp-theme-screenshot {
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid #dcdcde;
+  }
+
+  /* Active Theme Footer (Royal Blue Bar) */
+  .wp-active-footer {
+    background: #2271b1;
+    color: white;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+  .wp-active-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wp-btn-customize {
+    background: white;
+    color: #2271b1;
+    border: 1px solid white;
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .wp-btn-customize:hover {
+    background: #f0f0f1;
+    color: #135e96;
+  }
+
+  /* Inactive Theme Footer */
+  .wp-inactive-footer {
+    padding: 12px 14px;
+    background: white;
+    margin-top: auto;
+  }
+  .wp-theme-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1d2327;
+  }
+
+  /* Hover Actions Overlay */
+  .wp-theme-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .wp-theme-card:not(.is-active-theme):hover .wp-theme-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .wp-btn-activate {
+    background: #2271b1;
+    color: white;
+    border: 1px solid #2271b1;
+    padding: 7px 16px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .wp-btn-activate:hover {
+    background: #135e96;
+    border-color: #135e96;
+  }
+
+  .wp-btn-preview {
+    background: #f6f7f7;
+    color: #2271b1;
+    border: 1px solid #c3c4c7;
+    padding: 7px 14px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .wp-btn-preview:hover {
+    background: #ffffff;
+    border-color: #2271b1;
+  }
+
+  /* "Add Theme" Dashed Card */
+  .wp-add-theme-card {
+    border: 2px dashed #c3c4c7;
+    background: transparent;
+    border-radius: 3px;
+    min-height: 290px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .wp-add-theme-card:hover {
+    border-color: #2271b1;
+    background: rgba(34, 113, 177, 0.02);
+  }
+  .wp-add-theme-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #787c82;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+  }
+  .wp-add-theme-card:hover .wp-add-theme-circle {
+    background: #2271b1;
+    color: white;
+  }
+  .wp-add-theme-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #50575e;
+  }
+  .wp-add-theme-card:hover .wp-add-theme-text {
+    color: #2271b1;
+  }
+</style>
+
+<script>
+(function() {
+  const filterLinks = document.querySelectorAll('.wp-filter-link');
+  const searchInput = document.getElementById('themeSearch');
+  const cards = document.querySelectorAll('.wp-theme-card');
+
+  function filterThemes() {
+    const activeLink = document.querySelector('.wp-filter-link.active');
+    const filter = activeLink ? activeLink.getAttribute('data-filter') : 'all';
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+
+    cards.forEach(card => {
+      const mode = card.getAttribute('data-mode') || 'light';
+      const archetype = card.getAttribute('data-archetype') || 'catalog-first';
+      const name = card.getAttribute('data-name') || '';
+      const desc = card.getAttribute('data-desc') || '';
+
+      let matchesFilter = true;
+      if (filter === 'light') matchesFilter = (mode === 'light');
+      else if (filter === 'dark') matchesFilter = (mode === 'dark');
+      else if (filter === 'catalog-first' || filter === 'trust-first' || filter === 'story-process' || filter === 'broken-grid' || filter === 'stats-minimal' || filter === 'mobile-priority') {
+        matchesFilter = (archetype === filter);
+      }
+
+      const matchesSearch = !query || name.includes(query) || desc.includes(query) || archetype.includes(query);
+
+      if (matchesFilter && matchesSearch) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  filterLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      filterLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      filterThemes();
+    });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterThemes);
+  }
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if project.id %}Edit Project{% else %}New Project{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">{% if project.id %}Edit {{ project.title }}{% else %}New Project{% endif %}</h1>{% endblock %}
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+<div class="card">
+<form method="post" enctype="multipart/form-data" action="{% if project.id %}/admin/projects/{{ project.id }}{% else %}/admin/projects{% endif %}">
+  <div class="form-row"><label for="title">Title</label><input type="text" id="title" name="title" value="{{ project.title or '' }}" required></div>
+  <div class="form-row"><label for="slug">Slug</label><input type="text" id="slug" name="slug" value="{{ project.slug or '' }}" required></div>
+  <div class="form-row"><label for="location">Location</label><input type="text" id="location" name="location" value="{{ project.location or '' }}" placeholder="e.g. Gazipur, Dhaka"></div>
+  <div class="form-row"><label for="description">Description</label><textarea id="description" name="description" rows="3">{{ project.description or '' }}</textarea></div>
+  
+  <div class="form-row">
+    <label>Project Featured Image</label>
+    <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
+      <div id="projectPreviewContainer" style="width:130px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
+        {% if project.image %}
+          <img id="projectPreviewImg" src="/{{ project.image | replace('^/', '') }}" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+          <span id="projectPreviewPlaceholder" style="display:none; font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% else %}
+          <img id="projectPreviewImg" src="" alt="Preview" style="display:none; width:100%; height:100%; object-fit:cover;">
+          <span id="projectPreviewPlaceholder" style="font-size:0.75rem; color:var(--grey-400, #94a3b8);">No image</span>
+        {% endif %}
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:10px;">
+          <label for="image_file" style="font-size:0.8rem; font-weight:600; color:var(--grey-700, #334155); margin-bottom:4px; display:block;">📁 Upload Project Image</label>
+          <input type="file" id="image_file" name="image_file" accept="image/*" style="font-size:0.85rem;" onchange="previewProjectFile(this)">
+          <span style="font-size:0.72rem; color:var(--grey-500, #64748b); display:block; margin-top:2px;">PNG, JPG, WebP, SVG up to 10MB (saved to images/uploads/)</span>
+        </div>
+        <div>
+          <label for="image" style="font-size:0.75rem; color:var(--grey-500, #64748b); margin-bottom:2px; display:block;">Or Manual Path / URL (Fallback)</label>
+          <input type="text" id="image" name="image" value="{{ project.image or '' }}" placeholder="e.g. images/projects/project-bodorgonj.webp" style="font-size:0.85rem;" oninput="previewProjectUrl(this.value)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row"><label for="status_label">Status Label</label><input type="text" id="status_label" name="status_label" value="{{ project.status_label or 'Completed Project' }}"></div>
+  <div class="form-row"><label for="sort_order">Sort Order</label><input type="number" id="sort_order" name="sort_order" value="{{ project.sort_order or 0 }}"></div>
+  <div class="form-row"><label><input type="checkbox" name="published" {% if project.published or not project.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label></div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if project.id %}Save Changes{% else %}Create Project{% endif %}</button>
+    <a href="/admin/projects" class="btn">Cancel</a>
+  </div>
+</form>
+</div>
+{% if project.id %}
+<form method="post" action="/admin/projects/{{ project.id }}/delete" onsubmit="return confirm('Delete this project?');">
+  <button type="submit" class="btn btn-danger">Delete Project</button>
+</form>
+{% endif %}
+
+<script>
+function previewProjectFile(input) {
+  const file = input.files && input.files[0];
+  const img = document.getElementById('projectPreviewImg');
+  const placeholder = document.getElementById('projectPreviewPlaceholder');
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      if (img) {
+        img.src = e.target.result;
+        img.style.display = 'block';
+      }
+      if (placeholder) placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+function previewProjectUrl(val) {
+  const img = document.getElementById('projectPreviewImg');
+  const placeholder = document.getElementById('projectPreviewPlaceholder');
+  if (val && val.trim()) {
+    const clean = val.trim().startsWith('http') || val.trim().startsWith('/') ? val.trim() : '/' + val.trim();
+    if (img) {
+      img.src = clean;
+      img.style.display = 'block';
+    }
+    if (placeholder) placeholder.style.display = 'none';
+  }
+}
+</script>
+{% endblock %}

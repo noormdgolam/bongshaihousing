@@ -1,0 +1,115 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Products Management{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Product Catalog Management</h1>{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="toolbar">
+    <form method="get" action="/admin/products" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+      <input type="text" name="q" value="{{ search }}" placeholder="Search by model or title..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:220px;">
+      <select name="category" onchange="this.form.submit()" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+        <option value="">All Categories</option>
+        {% for c in categories %}<option value="{{ c.id }}" {% if categoryId == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">Search</button>
+      {% if search or categoryId %}
+      <a href="/admin/products" class="btn">Clear</a>
+      {% endif %}
+    </form>
+    <a href="/admin/products/new" class="btn btn-primary">➕ New Product Model</a>
+  </div>
+
+  <!-- Products Table with Bulk Actions -->
+  {% if products and products.length %}
+  <form method="post" action="/admin/products/bulk-action" id="bulkProductsForm">
+    <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:0.85rem;">
+      <span style="font-weight:700; color:var(--grey-700);">Bulk Actions:</span>
+      <select name="action" id="bulkProductAction" style="padding:5px 10px; border-radius:6px; border:1px solid var(--grey-200); font-size:0.85rem;">
+        <option value="publish">Publish Selected</option>
+        <option value="unpublish">Unpublish (Set to Draft)</option>
+        <option value="delete">Delete Selected</option>
+      </select>
+      <button type="submit" class="btn btn-primary" style="padding:5px 12px; font-size:0.85rem;" onclick="if(document.getElementById('bulkProductAction').value === 'delete') return confirm('Are you sure you want to permanently delete the selected products?');">Apply to Selected</button>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px; text-align:center;"><input type="checkbox" id="selectAllProducts" onclick="document.querySelectorAll('.product-checkbox').forEach(cb => cb.checked = this.checked);" title="Select All"></th>
+            <th>Preview</th>
+            <th>Model</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price / sqft</th>
+            <th>Fixed Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td style="text-align:center;"><input type="checkbox" name="product_ids" value="{{ p.id }}" class="product-checkbox"></td>
+            <td style="width:50px; padding:6px 10px;">
+              {% if p.main_image %}
+              <img src="/{{ p.main_image | replace('^/', '') }}" alt="{{ p.model_number }}" style="width:44px; height:32px; object-fit:cover; border-radius:4px; border:1px solid var(--grey-200);">
+              {% else %}
+              <div style="width:44px; height:32px; background:var(--grey-100); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:var(--grey-500);">🏠</div>
+              {% endif %}
+            </td>
+            <td>
+              <strong style="color:var(--primary);">{{ p.model_number }}</strong>
+              {% if p.total_floor_area %}<div style="font-size:0.75rem; color:var(--grey-500);">{{ p.total_floor_area }} Sq.Ft</div>{% endif %}
+            </td>
+            <td>
+              <div style="font-weight:600;">{{ p.title }}</div>
+              <div style="font-size:0.8rem; color:var(--grey-500);">/{{ p.slug }}</div>
+            </td>
+            <td>{{ p.category_name }}</td>
+            <td>
+              {% if p.price_per_sqft %}
+              <strong style="color:var(--grey-900);">{{ p.price_per_sqft }}</strong> <span style="font-size:0.8rem; color:var(--grey-500);">{{ p.price_currency }}</span>
+              {% else %}
+              <span style="color:var(--grey-500);">Quote Basis</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if p.fixed_price %}
+              <strong style="color:var(--primary);">{{ p.fixed_price | taka }}</strong>
+              {% elif p.price_per_sqft and p.total_floor_area %}
+              <span style="font-weight:600; color:var(--grey-800);">{{ (p.price_per_sqft * p.total_floor_area) | taka }}</span> <span class="pill pill-muted" style="font-size:0.65rem;">Calc</span>
+              {% else %}
+              <span style="color:var(--grey-400);">Quote Basis</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if p.published %}
+              <span class="pill pill-success">Published</span>
+              {% else %}
+                {% if "-COPY-" in p.model_number %}
+                <span class="pill pill-warning" style="background:var(--warning-light, #fef3c7); color:var(--warning-dark, #b45309);">Draft Copy</span>
+                {% else %}
+                <span class="pill pill-muted">Draft</span>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td style="white-space:nowrap;">
+              <a href="/admin/products/{{ p.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+              <form method="post" action="/admin/products/{{ p.id }}/duplicate" style="display:inline;" onsubmit="return confirm('Duplicate this product? This will create an unpublished copy with all specs, variants, and rooms.');">
+                <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Duplicate</button>
+              </form>
+              <a href="/{{ p.slug }}" target="_blank" class="btn" style="padding:4px 8px; font-size:0.8rem;" title="View Live Page">↗</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+  {% else %}
+  <div style="text-align:center; padding:30px; color:var(--grey-500);">No products found.</div>
+  {% endif %}
+</div>
+{% endblock %}
+

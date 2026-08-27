@@ -1,0 +1,44 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Orders{% endblock %}
+{% block header %}
+<div style="display:flex; align-items:center; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+  <h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('building-2', 20) }} Orders &amp; Project Tracking</h1>
+  <a href="/admin/orders/new" class="btn btn-primary">+ New Order</a>
+</div>
+{% endblock %}
+{% block content %}
+{% if orders.length %}
+<table>
+  <thead>
+    <tr><th>Customer</th><th>Phone</th><th>Model</th><th>Progress</th><th>Status</th><th>Started</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+    <tr>
+      <td><strong>{{ o.customer_name }}</strong></td>
+      <td>{{ o.customer_phone }}</td>
+      <td>{{ o.model_number or '—' }}</td>
+      <td>
+        {% set p = progressByOrder[o.id] %}
+        {% set pct = (p.done / p.total * 100) | round if p.total else 0 %}
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:80px; height:8px; background:rgba(15,23,42,0.08); border-radius:10px; overflow:hidden;">
+            <div style="width:{{ pct }}%; height:100%; background:var(--primary); border-radius:10px;"></div>
+          </div>
+          <span style="font-size:0.78rem; color:var(--grey-500);">{{ p.done }}/{{ p.total }}</span>
+        </div>
+      </td>
+      <td>
+        <span class="pill {% if o.status == 'completed' %}pill-success{% elif o.status == 'cancelled' %}pill-muted{% endif %}">{{ o.status }}</span>
+      </td>
+      <td>{{ o.created_at | date }}</td>
+      <td><a href="/admin/orders/{{ o.id }}" class="btn" style="padding:3px 10px; font-size:0.8rem;">View →</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card"><p style="color:var(--grey-500); margin:0;">No orders yet. Convert a qualified lead, or create one manually.</p></div>
+{% endif %}
+{% endblock %}

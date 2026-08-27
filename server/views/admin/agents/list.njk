@@ -1,0 +1,86 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Agents{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('handshake', 20) }} Field Agents</h1>{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <div>
+    <a href="?status=pending{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'pending' %}btn-primary{% endif %}">Pending ({{ counts.pending }})</a>
+    <a href="?status=active{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'active' %}btn-primary{% endif %}">Active ({{ counts.active }})</a>
+    <a href="?status=rejected{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'rejected' %}btn-primary{% endif %}">Rejected ({{ counts.rejected }})</a>
+    <a href="?status=all{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn {% if statusFilter == 'all' %}btn-primary{% endif %}">All</a>
+  </div>
+  <div style="display:flex; gap:8px;">
+    <a href="/admin/agents/invite" class="btn btn-primary">{{ icons.icon('plus', 16) }} Invite Agents</a>
+    <a href="/admin/agent-leads" class="btn">{{ icons.icon('inbox', 16) }} View All Agent Leads</a>
+  </div>
+</div>
+
+<div class="card" style="padding:12px 16px;">
+  <form method="get" action="/admin/agents" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+    <input type="hidden" name="status" value="{{ statusFilter }}">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search by business, owner, phone, email, district..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:280px; flex:1;">
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if search %}<a href="?status={{ statusFilter }}" class="btn">Clear</a>{% endif %}
+    <a href="/admin/agents/export/csv?status={{ statusFilter }}{% if search %}&q={{ search | urlencode }}{% endif %}" class="btn" style="font-weight:600;">📥 Export CSV</a>
+  </form>
+</div>
+
+{% if agents.length %}
+<form method="post" action="/admin/agents/bulk-action" id="bulkAgentsForm">
+  <input type="hidden" name="redirect_status" value="{{ statusFilter }}">
+  
+  <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:0.85rem;">
+    <span style="font-weight:700; color:var(--grey-700);">Bulk Actions:</span>
+    <select name="action" id="bulkAgentAction" style="padding:5px 10px; border-radius:6px; border:1px solid var(--grey-200); font-size:0.85rem;">
+      <option value="approve">Approve Selected</option>
+      <option value="reject">Reject Selected</option>
+    </select>
+    <button type="submit" class="btn btn-primary" style="padding:5px 12px; font-size:0.85rem;" onclick="return confirm('Apply bulk status update to selected agent applications?');">Apply to Selected</button>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:36px; text-align:center;"><input type="checkbox" id="selectAllAgents" onclick="document.querySelectorAll('.agent-checkbox').forEach(cb => cb.checked = this.checked);" title="Select All"></th>
+          <th>Business</th><th>Owner</th><th>Phone</th><th>Territory</th><th>Status</th><th>Applied</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in agents %}
+        <tr>
+          <td style="text-align:center;"><input type="checkbox" name="agent_ids" value="{{ a.id }}" class="agent-checkbox"></td>
+          <td>{{ a.business_name or '—' }}</td>
+          <td>{{ a.name }}</td>
+          <td>{{ a.phone }}</td>
+          <td>{{ a.district }}{% if a.thana %}, {{ a.thana }}{% endif %}</td>
+          <td>
+            <span class="pill {% if a.status == 'active' %}pill-success{% elif a.status == 'rejected' %}pill-muted{% endif %}">{{ a.status }}</span>
+          </td>
+          <td>{{ a.created_at | date }}</td>
+          <td>
+            <a href="/admin/agents/{{ a.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">View</a>
+            {% if a.status != 'active' %}
+            <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
+              <input type="hidden" name="status" value="active">
+              <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Approve</button>
+            </form>
+            {% endif %}
+            {% if a.status != 'rejected' %}
+            <form method="post" action="/admin/agents/{{ a.id }}/status?status={{ statusFilter }}" style="display:inline;">
+              <input type="hidden" name="status" value="rejected">
+              <button type="submit" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;">Reject</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</form>
+{% else %}
+<div class="card"><p style="color:var(--grey-500); margin:0;">No agents in this category.</p></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Continuous SEO Automation{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">{{ icons.icon('refresh', 20) }} Continuous Automation</h1>{% endblock %}
+{% block content %}
+<div style="margin-bottom:16px;"><a href="/admin/seo" class="btn">← Back to SEO Dashboard</a></div>
+
+<div class="card" style="max-width:640px;">
+  <h2 style="margin-top:0; font-size:1rem;">Set up a daily generation run</h2>
+  <p style="font-size:0.85rem; color:var(--grey-500);">
+    This does NOT publish anything by itself - it only drafts new suggestions into the review queue on a schedule, so you always have fresh drafts waiting without having to click "Generate" yourself. You still approve or reject everything from <a href="/admin/seo/suggestions">Suggestions</a>.
+  </p>
+  <p style="font-size:0.85rem; margin-top:14px;">In cPanel → <strong>Cron Jobs</strong>, add a new job:</p>
+  <ul style="font-size:0.85rem; color:var(--grey-700);">
+    <li>Common Setting: <strong>Once Per Day</strong> (or your preferred cadence)</li>
+    <li>Command (repeat once per app - prod shown, swap the path for the other):</li>
+  </ul>
+  <pre style="background:var(--grey-900); color:#e2e8f0; padding:12px 14px; border-radius:8px; font-size:0.78rem; overflow-x:auto; white-space:pre-wrap; word-break:break-all;">source /home/abongsha/nodevenv/bongshai-node-app-prod/22/bin/activate && node /home/abongsha/bongshai-node-app-prod/scripts/seo-cron-generate.js && deactivate</pre>
+  <p style="font-size:0.78rem; color:var(--grey-500); margin-top:10px;">Runs directly via cron, not over the web - no public URL, no token to protect, nothing internet-facing that could trigger paid API calls if it leaked. Make sure your API key is saved in <a href="/admin/seo/settings">Settings</a> first.</p>
+</div>
+{% endblock %}

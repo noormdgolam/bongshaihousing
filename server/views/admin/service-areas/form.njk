@@ -1,0 +1,54 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if area.id %}Edit {{ area.district }}{% else %}New Service Area{% endif %}{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">{% if area.id %}Edit Service Area: {{ area.district }}{% else %}New Service Area District{% endif %}</h1>{% endblock %}
+
+{% block content %}
+{% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+
+<div class="card" style="max-width:700px;">
+  <form method="post" action="{% if area.id %}/admin/service-areas/{{ area.id }}{% else %}/admin/service-areas{% endif %}">
+    <div class="form-row">
+      <label for="district">District Name <span style="color:var(--danger);">*</span></label>
+      <input type="text" id="district" name="district" value="{{ area.district or '' }}" placeholder="e.g. Dhaka, Gazipur, Cumilla, Sylhet..." required>
+    </div>
+
+    <div class="form-row">
+      <label for="division">Administrative Division <span style="color:var(--danger);">*</span></label>
+      <select id="division" name="division" required>
+        {% for d in divisions %}
+        <option value="{{ d }}" {% if area.division == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-row" style="background:var(--grey-50); padding:14px; border-radius:6px; border:1px solid var(--grey-200); margin-top:16px;">
+      <label style="display:flex; align-items:center; cursor:pointer; margin-bottom:8px;">
+        <input type="checkbox" id="has_dedicated_page" name="has_dedicated_page" {% if area.has_dedicated_page or area.page_slug %}checked{% endif %} style="width:auto; margin-right:8px;">
+        <span style="font-weight:700; color:var(--grey-900);">Has Dedicated Landing Page (SEO / Targeted District Page)</span>
+      </label>
+      <div style="font-size:0.8rem; color:var(--grey-500); margin-bottom:10px;">
+        Check this if this district has a dedicated static or dynamic promotional page.
+      </div>
+      <div>
+        <label for="page_slug" style="font-size:0.85rem; font-weight:600;">Dedicated Page Filename / Slug</label>
+        <input type="text" id="page_slug" name="page_slug" value="{{ area.page_slug or '' }}" placeholder="e.g. steel-building-dhaka.html or prefab-housing-cumilla.html" style="background:#fff;">
+      </div>
+    </div>
+
+    <div class="form-actions" style="margin-top:24px;">
+      <button type="submit" class="btn btn-primary">{% if area.id %}Save Changes{% else %}Create Service Area{% endif %}</button>
+      <a href="/admin/service-areas" class="btn">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% if area.id %}
+<div class="card" style="max-width:700px; border-top:3px solid var(--danger); margin-top:20px;">
+  <h3 style="font-size:0.9rem; font-weight:700; color:var(--danger); margin-top:0;">Delete Service Area</h3>
+  <p style="font-size:0.8rem; color:var(--grey-500); margin-bottom:12px;">Remove {{ area.district }} from the active service areas list.</p>
+  <form method="post" action="/admin/service-areas/{{ area.id }}/delete" onsubmit="return confirm('Are you sure you want to delete this service area?');">
+    <button type="submit" class="btn btn-danger">Delete Service Area</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

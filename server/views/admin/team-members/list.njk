@@ -1,0 +1,123 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Team Members Management{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Team Members &amp; Department Leadership</h1>{% endblock %}
+
+{% block content %}
+<!-- Quick Stats Cards -->
+<div class="stat-grid" style="margin-bottom:20px;">
+  <div class="stat-card" style="border-left: 4px solid var(--primary);">
+    <div class="num">{{ totalCount }}</div>
+    <div class="label">Total Members</div>
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #10B981;">
+    <div class="num">{{ publishedCount }}</div>
+    <div class="label">Published Live</div>
+  </div>
+  <div class="stat-card" style="border-left: 4px solid #8B5CF6;">
+    <div class="num">{{ departments.length }}</div>
+    <div class="label">Departments</div>
+  </div>
+</div>
+
+<div class="card">
+  <!-- Toolbar with Filters -->
+  <form method="get" action="/admin/team-members" class="toolbar">
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <input 
+        type="text" 
+        name="q" 
+        value="{{ search }}" 
+        placeholder="Search by name, role, bio..." 
+        style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:240px;"
+      />
+      <select name="dept" onchange="this.form.submit()" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+        <option value="all" {% if deptFilter == 'all' or not deptFilter %}selected{% endif %}>All Departments</option>
+        {% for d in departments %}
+        <option value="{{ d.slug }}" {% if deptFilter == d.slug %}selected{% endif %}>{{ d.label }}</option>
+        {% endfor %}
+      </select>
+      <select name="status" onchange="this.form.submit()" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+        <option value="all" {% if statusFilter == 'all' or not statusFilter %}selected{% endif %}>All Status</option>
+        <option value="published" {% if statusFilter == 'published' %}selected{% endif %}>Published Only</option>
+        <option value="draft" {% if statusFilter == 'draft' %}selected{% endif %}>Hidden / Draft</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Filter</button>
+      {% if search or (deptFilter and deptFilter != 'all') or (statusFilter and statusFilter != 'all') %}
+      <a href="/admin/team-members" class="btn">Clear</a>
+      {% endif %}
+    </div>
+    <div style="display:flex; gap:8px;">
+      <a href="/admin/team-members/new" class="btn btn-primary">➕ Add Team Member</a>
+      <a href="/about.html" target="_blank" class="btn">🌐 About Us Page ↗</a>
+    </div>
+  </form>
+
+  <!-- Members Table -->
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:70px;">Photo</th>
+          <th>Name &amp; Role</th>
+          <th style="width:180px;">Department</th>
+          <th style="width:70px;">Order</th>
+          <th style="width:100px;">Status</th>
+          <th style="width:100px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr>
+          <td>
+            <div style="width:48px; height:48px; border-radius:8px; overflow:hidden; background:var(--grey-100); border:1px solid var(--grey-200); display:flex; align-items:center; justify-content:center;">
+              {% if m.photo %}
+              <img src="/{{ m.photo }}" alt="{{ m.name }}" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.parentElement.innerHTML='👤';">
+              {% else %}
+              <span style="font-size:1.4rem;">👤</span>
+              {% endif %}
+            </div>
+          </td>
+          <td>
+            <strong style="font-size:0.95rem; color:var(--grey-900); display:block;">{{ m.name }}</strong>
+            <span style="font-size:0.85rem; color:var(--primary); font-weight:600; display:block;">{{ m.role }}</span>
+            {% if m.bio %}
+            <div style="font-size:0.8rem; color:var(--grey-500); margin-top:2px; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;">
+              {{ m.bio }}
+            </div>
+            {% endif %}
+          </td>
+          <td>
+            {% for d in departments %}
+              {% if d.slug == m.department %}
+              <a href="/{{ d.page }}" target="_blank" class="pill pill-muted" style="font-weight:600; font-size:0.8rem; text-decoration:none;" title="View public team page">
+                {{ d.label }} ↗
+              </a>
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            <span style="font-family:monospace; color:var(--grey-500); font-weight:600;">#{{ m.sort_order }}</span>
+          </td>
+          <td>
+            {% if m.published %}
+            <span class="pill pill-success" style="font-size:0.75rem;">🟢 Live</span>
+            {% else %}
+            <span class="pill pill-danger" style="font-size:0.75rem;">⚪ Hidden</span>
+            {% endif %}
+          </td>
+          <td style="white-space:nowrap;">
+            <a href="/admin/team-members/{{ m.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" style="text-align:center; padding:30px; color:var(--grey-500);">
+            No team members found matching your search. Click "Add Team Member" to create one.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

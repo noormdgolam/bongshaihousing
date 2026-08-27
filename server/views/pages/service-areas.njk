@@ -1,0 +1,194 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+    "name": "Bongshai Housing Ltd.", "foundingDate": "2008",
+    "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+    "url": "https://bongshaihousing.com",
+    "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+    "telephone": ["+8801781636613"],
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+      "areaServed": [{"@type": "State", "name": "Bagerhat"}, {"@type": "State", "name": "Bandarban"}, {"@type": "State", "name": "Barguna"}, {"@type": "State", "name": "Barishal"}, {"@type": "State", "name": "Bhola"}, {"@type": "State", "name": "Bogura"}, {"@type": "State", "name": "Brahmanbaria"}, {"@type": "State", "name": "Chandpur"}, {"@type": "State", "name": "Chapai Nawabganj"}, {"@type": "State", "name": "Chattogram"}, {"@type": "State", "name": "Chuadanga"}, {"@type": "State", "name": "Cox's Bazar"}, {"@type": "State", "name": "Cumilla"}, {"@type": "State", "name": "Dhaka"}, {"@type": "State", "name": "Dinajpur"}, {"@type": "State", "name": "Faridpur"}, {"@type": "State", "name": "Feni"}, {"@type": "State", "name": "Gaibandha"}, {"@type": "State", "name": "Gazipur"}, {"@type": "State", "name": "Gopalganj"}, {"@type": "State", "name": "Habiganj"}, {"@type": "State", "name": "Jamalpur"}, {"@type": "State", "name": "Jashore"}, {"@type": "State", "name": "Jhalokati"}, {"@type": "State", "name": "Jhenaidah"}, {"@type": "State", "name": "Joypurhat"}, {"@type": "State", "name": "Khagrachari"}, {"@type": "State", "name": "Khulna"}, {"@type": "State", "name": "Kishoreganj"}, {"@type": "State", "name": "Kurigram"}, {"@type": "State", "name": "Kushtia"}, {"@type": "State", "name": "Lakshmipur"}, {"@type": "State", "name": "Lalmonirhat"}, {"@type": "State", "name": "Madaripur"}, {"@type": "State", "name": "Magura"}, {"@type": "State", "name": "Manikganj"}, {"@type": "State", "name": "Meherpur"}, {"@type": "State", "name": "Moulvibazar"}, {"@type": "State", "name": "Munshiganj"}, {"@type": "State", "name": "Mymensingh"}, {"@type": "State", "name": "Naogaon"}, {"@type": "State", "name": "Narail"}, {"@type": "State", "name": "Narayanganj"}, {"@type": "State", "name": "Narsingdi"}, {"@type": "State", "name": "Natore"}, {"@type": "State", "name": "Netrokona"}, {"@type": "State", "name": "Nilphamari"}, {"@type": "State", "name": "Noakhali"}, {"@type": "State", "name": "Pabna"}, {"@type": "State", "name": "Panchagarh"}, {"@type": "State", "name": "Patuakhali"}, {"@type": "State", "name": "Pirojpur"}, {"@type": "State", "name": "Rajbari"}, {"@type": "State", "name": "Rajshahi"}, {"@type": "State", "name": "Rangamati"}, {"@type": "State", "name": "Rangpur"}, {"@type": "State", "name": "Satkhira"}, {"@type": "State", "name": "Shariatpur"}, {"@type": "State", "name": "Sherpur"}, {"@type": "State", "name": "Sirajganj"}, {"@type": "State", "name": "Sunamganj"}, {"@type": "State", "name": "Sylhet"}, {"@type": "State", "name": "Tangail"}, {"@type": "State", "name": "Thakurgaon"}],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.8728",
+      "longitude": "90.3984"
+    }
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Service Areas",
+      "item": "https://bongshaihousing.com/service-areas.html"
+    }
+  ]
+}
+</script>
+<script src="js/bd-geo-data.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="page-hero" style="background: linear-gradient(rgba(15,23,42,0.8), rgba(15,23,42,0.9)), url('images/products/industrial-hero.jpg') center/cover no-repeat; min-height: 40vh; padding: 120px 0 60px;">
+  <div class="container page-hero-content" style="text-align: center;">
+    <span class="page-hero-label" style="background: var(--accent); color: var(--dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; margin-bottom: 16px; display: inline-block;">Locations</span>
+    <h1 class="page-hero-title" data-aos="fade-up" style="font-size: clamp(2.5rem, 5vw, 4rem); color: white;">Areas We Serve</h1>
+    <p class="page-hero-text" style="max-width: 800px; margin: 0 auto 24px; color: var(--grey-200);">Bongshai Housing proudly operates across all 64 districts and thanas in Bangladesh, delivering premium steel buildings and real estate solutions nationwide.</p>
+  </div>
+</section>
+
+<!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+<section class="section" style="padding: 2rem 0; background: var(--off-white);">
+  <div class="container">
+    <p><strong>Bongshai Housing provides prefab steel building construction and EPC services across all 64 districts of Bangladesh. We deliver turnkey structural solutions for residential, commercial, and industrial sectors nationwide.</strong></p>
+    <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+      By <strong>Bongshai Housing Logistics Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 80px 0; background: var(--grey-50);">
+  <div class="container">
+    <div style="max-width: 600px; margin: 0 auto 40px;">
+      <input type="text" id="districtSearch" placeholder="Search for your district or thana..." style="width: 100%; padding: 15px 20px; font-size: 1.1rem; border: 2px solid var(--grey-200); border-radius: 8px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--grey-200)'">
+    </div>
+    
+    <div id="districtsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+      <!-- Districts will be injected here via JavaScript -->
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('districtsGrid');
+    const searchInput = document.getElementById('districtSearch');
+    
+    // DB Service Areas passed from server
+    const serverAreas = {% if dbServiceAreas and dbServiceAreas.length %}{{ dbServiceAreas | dump | safe }}{% else %}null{% endif %};
+    
+    // Build lookup map from DB
+    const dbPageMap = {};
+    if (serverAreas && Array.isArray(serverAreas)) {
+        serverAreas.forEach(function(a) {
+            if (a.has_dedicated_page && a.page_slug) {
+                dbPageMap[a.district.toLowerCase()] = a.page_slug;
+            }
+        });
+    }
+
+    const defaultDistrictPages = {
+        "dhaka": "steel-building-dhaka.html",
+        "chattogram": "steel-building-chotrogram.html",
+        "gazipur": "steel-building-gazipur.html",
+        "comilla": "prefab-housing-cumilla.html",
+        "cumilla": "prefab-housing-cumilla.html",
+        "bogura": "prefab-cottage-bogra-rangpur.html",
+        "bogra": "prefab-cottage-bogra-rangpur.html",
+        "rangpur": "prefab-cottage-bogra-rangpur.html",
+        "faridpur": "steel-building-faridpur.html",
+        "sylhet": "steel-building-sylhet.html",
+        "khulna": "steel-building-khulna.html",
+        "rajshahi": "steel-building-rajshahi.html",
+        "barisal": "steel-building-barisal.html",
+        "barishal": "steel-building-barisal.html",
+        "mymensingh": "steel-building-mymensingh.html",
+        "narayanganj": "steel-building-narayanganj.html",
+        "coxsbazar": "steel-building-coxsbazar.html",
+        "cox's bazar": "steel-building-coxsbazar.html",
+        "jashore": "steel-building-jashore.html",
+        "narsingdi": "steel-building-narsingdi.html",
+        "tangail": "steel-building-tangail.html",
+        "manikganj": "steel-building-manikganj.html"
+    };
+
+    function getDistrictPage(districtName) {
+        // DB-marked pages take priority, but a district present in the DB
+        // without has_dedicated_page set (or no DB rows at all) should still
+        // fall through to the static list - previously this branched on
+        // whether serverAreas was merely present, which meant any DB result
+        // with zero has_dedicated_page rows returned null for every single
+        // district and silently dropped all 21 dedicated-page links.
+        if (!districtName) return null;
+        const key = districtName.toLowerCase();
+        return dbPageMap[key] || defaultDistrictPages[key] || null;
+    }
+    
+    function renderDistricts(data) {
+        grid.innerHTML = '';
+        if(data.length === 0) {
+            grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--grey-500);">No locations found.</p>';
+            return;
+        }
+
+        data.forEach(function(d) {
+            const card = document.createElement('div');
+            card.style.background = '#fff';
+            card.style.borderRadius = '8px';
+            card.style.padding = '20px';
+            card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+            card.style.border = '1px solid var(--grey-100)';
+
+            let upazilasHtml = '';
+            if(d.upazillas && d.upazillas.length > 0) {
+                upazilasHtml = '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 6px;">' +
+                    d.upazillas.map(function(u) { return `<span style="background: var(--grey-50); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; color: var(--grey-600); border: 1px solid var(--grey-200);">${u}</span>`; }).join('') +
+                    '</div>';
+            }
+
+            const page = getDistrictPage(d.district);
+            const linkHtml = page ? `<a href="/${page.replace(/^\//, '')}" style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-decoration: none;">View details →</a>` : '';
+
+            card.innerHTML = `
+                <h2 style="margin-bottom: 5px; font-size: 1.1rem; color: var(--primary); display: flex; align-items: center; justify-content: space-between;">
+                    Do we serve ${d.district}?
+                </h2>
+                <p style="font-size: 0.85rem; color: var(--grey-400); margin: 0;">📍 ${d.coordinates || 'Bangladesh'}</p>
+                ${upazilasHtml}
+                ${linkHtml ? `<div style="margin-top: 12px;">${linkHtml}</div>` : ''}
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Initial render
+    if(typeof bdGeoData !== 'undefined') {
+        bdGeoData.sort(function(a, b) { return a.district.localeCompare(b.district); });
+        renderDistricts(bdGeoData);
+    }
+    
+    // Search functionality
+    searchInput.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase();
+        if(typeof bdGeoData !== 'undefined') {
+            const filtered = bdGeoData.filter(function(d) {
+                return d.district.toLowerCase().includes(term) ||
+                       (d.upazillas && d.upazillas.some(function(u) { return u.toLowerCase().includes(term); }));
+            });
+            renderDistricts(filtered);
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% import "partials/icons.njk" as icons %}
+<title>{% block title %}Admin{% endblock %} — Bongshai Housing</title>
+<meta name="robots" content="noindex, nofollow" />
+{% if csrfToken %}<meta name="csrf-token" content="{{ csrfToken }}">{% endif %}
+<style>
+  :root { --primary: #1E40AF; --primary-dark: #1e3a8a; --grey-50: #f8fafc; --grey-100: #f1f5f9; --grey-200: #e2e8f0; --grey-500: #64748b; --grey-700: #334155; --grey-900: #0f172a; --danger: #dc2626; --success: #16a34a; --glass: rgba(255,255,255,0.72); --glass-border: rgba(255,255,255,0.5); }
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; color: var(--grey-900);
+    background:
+      radial-gradient(circle at 10% 15%, rgba(212,175,55,0.28), transparent 42%),
+      radial-gradient(circle at 90% 10%, rgba(110,168,255,0.35), transparent 45%),
+      radial-gradient(circle at 50% 100%, rgba(124,58,237,0.22), transparent 55%),
+      linear-gradient(165deg, #0b1f4d 0%, #123071 38%, #1E40AF 72%, #2f57d1 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .admin-shell { display: flex; min-height: 100vh; }
+  .admin-sidebar {
+    width: 220px; flex-shrink: 0; padding: 20px 0; color: white;
+    background: rgba(8,15,35,0.55);
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
+  .admin-sidebar .brand { padding: 0 20px 20px; font-weight: 800; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.14); margin-bottom: 12px; }
+  .admin-sidebar nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #cbd5e1; border-radius: 8px; margin: 2px 8px; }
+  .admin-sidebar nav a svg { opacity: 0.75; }
+  .admin-sidebar nav a:hover svg, .admin-sidebar nav a.active svg { opacity: 1; }
+  .admin-sidebar nav a:hover, .admin-sidebar nav a.active { background: rgba(255,255,255,0.12); color: white; text-decoration: none; }
+  .admin-main { flex: 1; min-width: 0; }
+  .admin-topbar {
+    display: flex; justify-content: space-between; align-items: center; padding: 14px 24px;
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-bottom: 1px solid rgba(255,255,255,0.35);
+  }
+  .admin-content { padding: 24px; max-width: 1100px; }
+  .btn { display: inline-block; padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(15,23,42,0.12); background: rgba(255,255,255,0.6); backdrop-filter: blur(6px); color: var(--grey-900); cursor: pointer; font-size: 0.9rem; }
+  .btn:hover { background: rgba(255,255,255,0.85); text-decoration: none; }
+  .btn-primary { background: var(--primary); border-color: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-danger { color: var(--danger); border-color: var(--danger); }
+  .btn-danger:hover { background: #fef2f2; }
+  table { width: 100%; border-collapse: collapse; background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(15,23,42,0.14); }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid rgba(15,23,42,0.06); font-size: 0.9rem; }
+  th { background: rgba(255,255,255,0.35); color: var(--grey-500); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; }
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.14), inset 0 1px 0 rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(15,23,42,0.18), inset 0 1px 0 rgba(255,255,255,0.6); }
+  .kpi-icon {
+    width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.5);
+  }
+  .form-row { margin-bottom: 14px; }
+  .form-row label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: var(--grey-700); }
+  .form-row input[type=text], .form-row input[type=number], .form-row input[type=email], .form-row input[type=password], .form-row textarea, .form-row select {
+    width: 100%; padding: 8px 10px; border: 1px solid rgba(15,23,42,0.15); border-radius: 6px; font-size: 0.9rem; font-family: inherit; background: rgba(255,255,255,0.65);
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { outline: 2px solid var(--primary); outline-offset: 1px; background: rgba(255,255,255,0.92); }
+  .form-row textarea { min-height: 90px; }
+  .form-actions { display: flex; gap: 8px; margin-top: 20px; }
+  .error-box { background: rgba(254,242,242,0.85); color: var(--danger); border: 1px solid rgba(220,38,38,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 0.9rem; backdrop-filter: blur(8px); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+  .stat-card {
+    background: var(--glass);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.14), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(15,23,42,0.18), inset 0 1px 0 rgba(255,255,255,0.6); }
+  .stat-card .num { font-size: 2rem; font-weight: 800; color: var(--primary); }
+  .stat-card .label { color: var(--grey-500); font-size: 0.85rem; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+  .pill-success { background: #dcfce7; color: var(--success); }
+  .pill-muted { background: var(--grey-100); color: var(--grey-500); }
+  .pill-danger { background: #fee2e2; color: #b91c1c; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+  .admin-grid-2col { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  .admin-grid-3col { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  @media (max-width: 768px) {
+    .admin-shell { flex-direction: column; }
+    .admin-sidebar { width: 100%; padding: 12px 0; }
+    .admin-sidebar .brand { padding: 0 16px 10px; margin-bottom: 6px; font-size: 1rem; }
+    .admin-sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 10px; }
+    .admin-sidebar nav a { padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; }
+    .admin-topbar { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+    .admin-content { padding: 14px; }
+    .admin-grid-2col { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+{% if adminName %}
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand">Bongshai CMS</div>
+    <nav>
+      <a href="/admin">{{ icons.icon('chart-bar', 18) }} Dashboard</a>
+      <a href="/admin/analytics">{{ icons.icon('trending-up', 18) }} Analytics</a>
+      <a href="/admin/seo">{{ icons.icon('search', 18) }} SEO</a>
+      <a href="/admin/leads">{{ icons.icon('inbox', 18) }} Inquiries / Leads</a>
+      <a href="/admin/orders">{{ icons.icon('building-2', 18) }} Orders</a>
+      <a href="/admin/agents">{{ icons.icon('handshake', 18) }} Agents</a>
+      <a href="/admin/agent-leads">{{ icons.icon('inbox', 18) }} Agent Leads</a>
+      {% if adminRole != 'sales' %}
+      <a href="/admin/themes">{{ icons.icon('sparkles', 18) }} Themes Directory</a>
+      <a href="/admin/theme-editor">{{ icons.icon('cog', 18) }} Theme Studio Pro</a>
+      <a href="/admin/products">{{ icons.icon('clipboard-list', 18) }} Products</a>
+      <a href="/admin/categories">{{ icons.icon('folder', 18) }} Categories</a>
+      <a href="/admin/projects">{{ icons.icon('building', 18) }} Projects</a>
+      <a href="/admin/pages">{{ icons.icon('document-text', 18) }} Marketing Pages</a>
+      <a href="/admin/service-areas">{{ icons.icon('map-pin', 18) }} Service Areas</a>
+      <a href="/admin/faqs">{{ icons.icon('question', 18) }} FAQs</a>
+      <a href="/admin/team-members">{{ icons.icon('users', 18) }} Team Members</a>
+      <a href="/admin/media">{{ icons.icon('photo', 18) }} Media Library</a>
+      <a href="/admin/testimonials">{{ icons.icon('chat', 18) }} Testimonials</a>
+      {% endif %}
+      {% if adminRole == 'admin' or adminRole == 'superadmin' %}
+      <a href="/admin/users">{{ icons.icon('users', 18) }} Users</a>
+      <a href="/admin/roles">{{ icons.icon('shield-check', 18) }} Roles &amp; Permissions</a>
+      <a href="/admin/activity">{{ icons.icon('clock', 18) }} Activity Log</a>
+      {% endif %}
+      <a href="/admin/security/2fa">{{ icons.icon('lock', 18) }} 2FA Security</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>{% block header %}{% endblock %}</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="/admin/security/2fa" class="btn" style="padding:4px 10px; font-size:0.8rem;">🔐 2FA Security</a>
+        <span>{{ adminName }} ({{ adminRole }})</span>
+        <form method="post" action="/admin/logout" style="display:inline; margin:0;">
+          <button type="submit" class="btn" style="margin-left:4px;">Log out</button>
+        </form>
+      </div>
+    </div>
+    <div class="admin-content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% else %}
+{% block content_bare %}{% endblock %}
+{% endif %}
+<script>
+(function () {
+  var meta = document.querySelector('meta[name="csrf-token"]');
+  var token = meta ? meta.content : '';
+  if (!token) return;
+  document.querySelectorAll('form').forEach(function (form) {
+    var method = (form.getAttribute('method') || 'get').toLowerCase();
+    if (method !== 'post' || form.querySelector('input[name="_csrf"]')) return;
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = '_csrf';
+    input.value = token;
+    form.appendChild(input);
+  });
+})();
+</script>
+</body>
+</html>

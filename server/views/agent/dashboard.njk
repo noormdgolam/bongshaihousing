@@ -1,0 +1,177 @@
+{% extends "agent-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}My Dashboard{% endblock %}
+{% block body %}
+<div class="agent-hero">
+  <div class="agent-hero-top">
+    <div class="agent-hero-brand">{{ icons.icon('handshake', 20) }} Bongshai Agent Portal</div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="/agent/profile.html" class="btn btn-ghost">{{ icons.icon('user', 16) }} My Profile</a>
+      <form method="post" action="/agent/logout" style="margin:0;">
+        <button type="submit" class="btn btn-ghost">Log out</button>
+      </form>
+    </div>
+  </div>
+  <div class="agent-hero-profile">
+    <div>
+      <div class="agent-hero-name">{{ agent.business_name or agent.name }}</div>
+      <div class="agent-hero-meta">{{ icons.icon('user', 15) }} {{ agent.name }} &nbsp;·&nbsp; {{ icons.icon('map-pin', 15) }} {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+    </div>
+    <span class="pill pill-won">● Active Agent</span>
+  </div>
+</div>
+
+<div class="agent-content">
+  {% if error %}
+  <div class="error-box">{{ error }}</div>
+  {% endif %}
+
+  <div class="agent-stats-row">
+    <div class="agent-stat">
+      <span class="agent-stat-icon">{{ icons.icon('chart-bar', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:var(--primary);">{{ stats.total }}</div><div class="agent-stat-label">Total</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">{{ icons.icon('sparkles', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:#1e40af;">{{ stats.new }}</div><div class="agent-stat-label">New</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">{{ icons.icon('phone', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:#92400e;">{{ stats.contacted }}</div><div class="agent-stat-label">Contacted</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">{{ icons.icon('chat', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:#4338ca;">{{ stats.quoted }}</div><div class="agent-stat-label">Quoted</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">{{ icons.icon('check-circle', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:var(--success);">{{ stats.won }}</div><div class="agent-stat-label">Won</div></div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon">{{ icons.icon('x-circle', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:var(--grey-500);">{{ stats.lost }}</div><div class="agent-stat-label">Lost</div></div>
+    </div>
+    <div class="agent-stat" style="background:rgba(254,243,199,0.75); border-color:rgba(217,119,6,0.3);">
+      <span class="agent-stat-icon">{{ icons.icon('sparkles', 24) }}</span>
+      <div><div class="agent-stat-num" style="color:#b45309;">{{ stats.wonThisMonth or 0 }}</div><div class="agent-stat-label" style="color:#92400e;">Won This Month</div></div>
+    </div>
+  </div>
+
+  <div style="background:rgba(255,255,255,0.2); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.3); border-radius:10px; padding:8px 14px; margin-bottom:18px; font-size:0.82rem; color:white; display:flex; align-items:center; gap:8px;">
+    <span>💼 <strong>Won leads this month: {{ stats.wonThisMonth or 0 }}</strong> &bull; Contact the office to confirm your payout for these.</span>
+  </div>
+
+  <div class="agent-grid">
+    <div class="card agent-lead-form-card">
+      <h2 style="margin-top:0; font-size:1.05rem;">{{ icons.icon('plus', 18) }} Submit a New Lead</h2>
+      <form method="post" action="/agent/leads">
+        <div class="form-row">
+          <label for="customer_name">Customer Name</label>
+          <input type="text" id="customer_name" name="customer_name" required>
+        </div>
+        <div class="form-row">
+          <label for="customer_phone">Customer Phone</label>
+          <input type="tel" id="customer_phone" name="customer_phone" placeholder="01XXXXXXXXX" required>
+        </div>
+        <div class="form-row">
+          <label for="customer_district">Customer District <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <input type="text" id="customer_district" name="customer_district">
+        </div>
+        <div class="form-row">
+          <label for="product_interest">Product Interest <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <input type="text" id="product_interest" name="product_interest" placeholder="e.g. Simplex Steel Building">
+        </div>
+        <div class="form-row">
+          <label for="notes">Notes <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
+          <textarea id="notes" name="notes" placeholder="Land size, budget, timeline, anything useful for follow-up"></textarea>
+        </div>
+        <button type="submit" class="btn btn-accent" style="width:100%;">Submit Lead</button>
+      </form>
+    </div>
+
+    <div class="card agent-leads-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        <h2 style="margin:0; font-size:1.05rem;">{{ icons.icon('clipboard-list', 18) }} My Leads <span style="color:var(--grey-500); font-weight:400;">({{ pagination.totalCount if pagination else leads.length }})</span></h2>
+        {% if filters.q or (filters.status and filters.status != 'all') %}
+        <a href="/agent/dashboard.html" style="font-size:0.8rem; color:var(--grey-500);">Clear Filters</a>
+        {% endif %}
+      </div>
+
+      <!-- Search and Status Filter Bar -->
+      <form method="get" action="/agent/dashboard.html" style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:140px;">
+          <input type="text" name="q" value="{{ filters.q or '' }}" placeholder="Search name, phone, district…" style="width:100%; padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+        </div>
+        <div>
+          <select name="status" onchange="this.form.submit()" style="padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+            <option value="all" {% if not filters.status or filters.status == 'all' %}selected{% endif %}>All Statuses</option>
+            <option value="new" {% if filters.status == 'new' %}selected{% endif %}>New</option>
+            <option value="contacted" {% if filters.status == 'contacted' %}selected{% endif %}>Contacted</option>
+            <option value="quoted" {% if filters.status == 'quoted' %}selected{% endif %}>Quoted</option>
+            <option value="won" {% if filters.status == 'won' %}selected{% endif %}>Won</option>
+            <option value="lost" {% if filters.status == 'lost' %}selected{% endif %}>Lost</option>
+          </select>
+        </div>
+        <button type="submit" class="btn" style="padding:7px 12px; font-size:0.85rem;">Filter</button>
+      </form>
+
+      {% if leads.length %}
+      <div class="agent-lead-list">
+        {% for lead in leads %}
+        <div class="agent-lead-row">
+          <div class="agent-lead-main">
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <span class="agent-lead-name">{{ lead.customer_name }}</span>
+              {% if lead.is_overdue %}<span class="pill pill-danger" style="font-size:0.68rem; font-weight:700;">⚠️ &gt;24h Untouched</span>{% endif %}
+            </div>
+            <form method="post" action="/agent/leads/{{ lead.id }}/status" style="margin:0; display:inline-flex; align-items:center;">
+              <input type="hidden" name="return_to" value="/agent/dashboard.html?page={{ pagination.page or 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}">
+              <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 8px; border-radius:12px; border:1px solid rgba(15,23,42,0.15); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">
+                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
+                <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                <option value="quoted" {% if lead.status == 'quoted' %}selected{% endif %}>Quoted</option>
+                <option value="won" {% if lead.status == 'won' %}selected{% endif %}>Won</option>
+                <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
+              </select>
+            </form>
+          </div>
+          <div class="agent-lead-details">
+            <span>{{ icons.icon('phone', 14) }} {{ lead.customer_phone }}</span>
+            {% if lead.customer_district %}<span>{{ icons.icon('map-pin', 14) }} {{ lead.customer_district }}</span>{% endif %}
+            {% if lead.product_interest %}<span>{{ icons.icon('home', 14) }} {{ lead.product_interest }}</span>{% endif %}
+            <span class="agent-lead-date">{{ lead.created_at | date }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination Controls -->
+      {% if pagination and pagination.totalPages > 1 %}
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid rgba(15,23,42,0.06); font-size:0.85rem;">
+        <div>
+          {% if pagination.hasPrev %}
+          <a href="?page={{ pagination.page - 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">← Previous</a>
+          {% endif %}
+        </div>
+        <span style="color:var(--grey-500);">Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
+        <div>
+          {% if pagination.hasNext %}
+          <a href="?page={{ pagination.page + 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">Next →</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% else %}
+      <p style="color:var(--grey-500); font-size:0.9rem; margin-top:10px;">
+        {% if filters.q or (filters.status and filters.status != 'all') %}
+        No leads match your filter criteria.
+        {% else %}
+        No leads submitted yet — use the form to add your first one.
+        {% endif %}
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

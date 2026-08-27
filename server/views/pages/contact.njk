@@ -1,0 +1,731 @@
+{% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Bongshai Housing",
+    "url": "https://bongshaihousing.com/contact-us/",
+    "description": "Contact details and inquiry form for Bongshai Housing",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Bongshai Housing Ltd.", "foundingDate": "2008",
+      "telephone": "+8801781636613",
+      "email": "sales@bongshai.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "House #18, Road #18, Sector #10",
+        "addressLocality": "Uttara",
+        "addressRegion": "Dhaka",
+        "postalCode": "1230",
+        "addressCountry": "BD"
+      },
+      "sameAs": [
+        "https://www.facebook.com/bongshaihousing",
+        "https://wa.me/8801781636613",
+        "https://share.google/o4qfoSNEk5eRdxzvv"
+      ]
+    }
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Contact",
+      "item": "https://bongshaihousing.com/contact.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact Bongshai Housing - Steel Building Enquiry Bangladesh",
+  "description": "Contact Bongshai Housing Ltd. for a free steel building consultation. Call +880 1781-636613 or WhatsApp. Office: House 18, Road 18, Sector 10, Uttara, Dhaka 1230. Open Sat-Thu 9AM-7PM.",
+  "url": "https://bongshaihousing.com/contact.html",
+  "dateModified": "2026-08-08",
+  "mainEntity": {
+    "@type": "HomeAndConstructionBusiness",
+    "@id": "https://bongshaihousing.com/#organization",
+    "name": "Bongshai Housing Ltd.",
+    "telephone": "+8801781636613",
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday"],
+      "opens": "09:00",
+      "closes": "19:00"
+    }
+  }
+}
+</script>
+<script src="js/bd-geo-data.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- PAGE HERO -->
+    <section class="page-hero" aria-labelledby="contact-page-title">
+      <div class="container page-hero-content">
+        <span class="page-hero-label">Get In Touch</span>
+        <h1 class="page-hero-title" data-aos="fade-up" id="contact-page-title">Contact Bongshai Housing</h1>
+        <p class="page-hero-text">Ready to start your housing project? Reach out for a free consultation. Our team is ready to help Saturday to Thursday, 9 AM – 7 PM.</p>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Contact Us</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+    <section class="section" style="padding: 2rem 0; background: var(--off-white);">
+      <div class="container">
+        <p><strong>Bongshai Housing provides dedicated support and consultation for all your prefab and steel building needs across Bangladesh. Contact us today for a free quote, structural assessment, or general inquiries.</strong></p>
+        <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+          By <strong>Bongshai Housing Client Service Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="section" aria-labelledby="contact-section-title">
+      <div class="container">
+        <div class="contact-grid">
+
+          <!-- Contact Form -->
+          <div class="contact-form-wrap reveal-left">
+            <div class="section-label">Send a Message</div>
+            <h2 class="form-title" style="margin-bottom:var(--space-2)">How can you Request a Free Quote?</h2>
+            <p class="form-subtitle" style="color:var(--grey-600);margin-bottom:var(--space-6)">Fill in the form and our team will get back to you within 24 hours.</p>
+
+            <form id="contactForm" novalidate="" aria-label="Contact form" data-mcp-action="submit_contact">
+                <!-- Anti-spam Honeypot -->
+                <div style="display:none; visibility:hidden;" aria-hidden="true">
+                  <label for="website_url">Leave this field blank</label>
+                  <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" data-mcp-param="website_url">
+                </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="fname">Full Name *</label>
+                  <input type="text" id="fname" name="name" class="form-control" placeholder="Your full name" required="" autocomplete="name" data-mcp-param="name">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="email">Email Address *</label>
+                  <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required="" autocomplete="email" data-mcp-param="email">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label" for="phone">Phone / WhatsApp *</label>
+                  <div style="display:flex; gap:0.5rem;">
+                    <select name="country_code" class="form-control" style="width: auto; flex-shrink: 0;" aria-label="Country Code">
+                      <option value="+880">Bangladesh (+880)</option>
+                      <option value="+91">India (+91)</option>
+                      <option value="+1">USA/Canada (+1)</option>
+                      <option value="+44">UK (+44)</option>
+                      <option value="+971">UAE (+971)</option>
+                      <option value="+966">Saudi Arabia (+966)</option>
+                      <option value="+60">Malaysia (+60)</option>
+                      <option value="+65">Singapore (+65)</option>
+                    </select>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="1XXXXXXXXX" required="" autocomplete="tel" data-mcp-param="phone" style="flex-grow: 1;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label" for="division">Division *</label>
+                  <select id="division" name="division" class="form-control" onchange="updateDistrictOptions(this.value)" required="">
+                    <option value="">Select Division</option>
+                    <option value="Barishal Division">Barishal Division</option>
+                    <option value="Chattogram Division">Chattogram Division</option>
+                    <option value="Dhaka Division">Dhaka Division</option>
+                    <option value="Khulna Division">Khulna Division</option>
+                    <option value="Mymensingh Division">Mymensingh Division</option>
+                    <option value="Rajshahi Division">Rajshahi Division</option>
+                    <option value="Rangpur Division">Rangpur Division</option>
+                    <option value="Sylhet Division">Sylhet Division</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="district">District *</label>
+                  <select id="district" name="district" class="form-control" onchange="updateUpazilaOptions(this.value)" required="" data-mcp-param="district" disabled>
+                    <option value="">Select District</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="upazila">Police Station / Thana *</label>
+                  <select id="upazila" name="upazila" class="form-control" required="" data-mcp-param="upazila" disabled>
+                    <option value="">Select Police Station / Thana</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="model">Model of Interest</label>
+                  <select id="model" name="model" class="form-control" onchange="updateAreaOptions(this.value)" data-mcp-param="model">
+                    <option value="General Inquiry">General Inquiry / Custom Project</option>
+                    
+                    <optgroup label="🏢 Apartment Building (BH-TSB)">
+                      <option value="BH-TSB-101">Model No-BH-TSB-101</option>
+                      <option value="BH-TSB-102">Model No-BH-TSB-102</option>
+                      <option value="BH-TSB-103">Model No-BH-TSB-103</option>
+                      <option value="BH-TSB-104">Model No-BH-TSB-104</option>
+                      <option value="BH-TSB-105">Model No-BH-TSB-105</option>
+                      <option value="BH-TSB-106">Model No-BH-TSB-106</option>
+                      <option value="BH-TSB-107">Model No-BH-TSB-107</option>
+                      <option value="BH-TSB-108">Model No-BH-TSB-108</option>
+                      <option value="BH-TSB-109">Model No-BH-TSB-109</option>
+                      <option value="BH-TSB-110">Model No-BH-TSB-110</option>
+                      <option value="BH-TSB-111">Model No-BH-TSB-111</option>
+                      <option value="BH-TSB-112">Model No-BH-TSB-112</option>
+                    </optgroup>
+
+                    <optgroup label="🏘️ Duplex Steel Building (BH-DV)">
+                      <option value="BH-DV-201">Model No-BH-DV-201</option>
+                      <option value="BH-DV-202">Model No-BH-DV-202</option>
+                      <option value="BH-DV-203">Model No-BH-DV-203</option>
+                      <option value="BH-DV-204">Model No-BH-DV-204</option>
+                      <option value="BH-DV-205">Model No-BH-DV-205</option>
+                      <option value="BH-DV-206">Model No-BH-DV-206</option>
+                      <option value="BH-DV-207">Model No-BH-DV-207</option>
+                      <option value="BH-DV-208">Model No-BH-DV-208</option>
+                      <option value="BH-DV-209">Model No-BH-DV-209</option>
+                      <option value="BH-DV-210">Model No-BH-DV-210</option>
+                      <option value="BH-DV-211">Model No-BH-DV-211</option>
+                      <option value="BH-DV-212">Model No-BH-DV-212</option>
+                    </optgroup>
+
+                    <optgroup label="🏡 Low-Cost Villa / Other Options (LCV)">
+                      <option value="LCV-101">Model LCV-101</option>
+                      <option value="LCV-102">Model LCV-102</option>
+                      <option value="LCV-103">Model LCV-103</option>
+                      <option value="LCV-104">Model LCV-104</option>
+                      <option value="LCV-105">Model LCV-105</option>
+                      <option value="LCV-106">Model LCV-106</option>
+                      <option value="LCV-107">Model LCV-107</option>
+                      <option value="LCV-108">Model LCV-108</option>
+                      <option value="LCV-109">Model LCV-109</option>
+                    </optgroup>
+
+                    <optgroup label="🏠 Simplex Steel Building (BH-SB)">
+                      <option value="BH-SB-301">Model No-BH-SB-301</option>
+                      <option value="BH-SB-302">Model No-BH-SB-302</option>
+                      <option value="BH-SB-303">Model No-BH-SB-303</option>
+                      <option value="BH-SB-304">Model No-BH-SB-304</option>
+                      <option value="BH-SB-305">Model No-BH-SB-305</option>
+                      <option value="BH-SB-306">Model No-BH-SB-306</option>
+                      <option value="BH-SB-307">Model No-BH-SB-307</option>
+                      <option value="BH-SB-308">Model No-BH-SB-308</option>
+                      <option value="BH-SB-309">Model No-BH-SB-309</option>
+                      <option value="BH-SB-310">Model No-BH-SB-310</option>
+                      <option value="BH-SB-311">Model No-BH-SB-311</option>
+                      <option value="BH-SB-312">Model No-BH-SB-312</option>
+                    </optgroup>
+
+                    <optgroup label="🏡 Cottage House (BH-CH)">
+                      <option value="BH-CH-401">Model No-BH-CH-401</option>
+                      <option value="BH-CH-402">Model No-BH-CH-402</option>
+                      <option value="BH-CH-403">Model No-BH-CH-403</option>
+                      <option value="BH-CH-404">Model No-BH-CH-404</option>
+                      <option value="BH-CH-405">Model No-BH-CH-405</option>
+                      <option value="BH-CH-406">Model No-BH-CH-406</option>
+                      <option value="BH-CH-407">Model No-BH-CH-407</option>
+                      <option value="BH-CH-408">Model No-BH-CH-408</option>
+                      <option value="BH-CH-409">Model No-BH-CH-409</option>
+                      <option value="BH-CH-410">Model No-BH-CH-410</option>
+                      <option value="BH-CH-411">Model No-BH-CH-411</option>
+                      <option value="BH-CH-412">Model No-BH-CH-412</option>
+                      <option value="BH-CH-413">Model No-BH-CH-413</option>
+                      <option value="BH-CH-414">Model No-BH-CH-414</option>
+                      <option value="BH-CH-415">Model No-BH-CH-415</option>
+                      <option value="BH-CH-416">Model No-BH-CH-416</option>
+                      <option value="BH-CH-417">Model No-BH-CH-417</option>
+                      <option value="BH-CH-501">Model No-BH-CH-501</option>
+                      <option value="BH-CH-502">Model No-BH-CH-502</option>
+                      <option value="BH-CH-503">Model No-BH-CH-503</option>
+                      <option value="BH-CH-504">Model No-BH-CH-504</option>
+                      <option value="BH-CH-505">Model No-BH-CH-505</option>
+                      <option value="BH-CH-506">Model No-BH-CH-506</option>
+                      <option value="BH-CH-507">Model No-BH-CH-507</option>
+                      <option value="BH-CH-508">Model No-BH-CH-508</option>
+                      <option value="BH-CH-509">Model No-BH-CH-509</option>
+                      <option value="BH-CH-510">Model No-BH-CH-510</option>
+                      <option value="BH-CH-511">Model No-BH-CH-511</option>
+                      <option value="BH-CH-512">Model No-BH-CH-512</option>
+                    </optgroup>
+
+                    <optgroup label="🏗️ Steel House (BH-SH)">
+                      <option value="BH-SH-601">Model No-BH-SH-601</option>
+                      <option value="BH-SH-602">Model No-BH-SH-602</option>
+                      <option value="BH-SH-603">Model No-BH-SH-603</option>
+                      <option value="BH-SH-604">Model No-BH-SH-604</option>
+                      <option value="BH-SH-605">Model No-BH-SH-605</option>
+                      <option value="BH-SH-606">Model No-BH-SH-606</option>
+                      <option value="BH-SH-607">Model No-BH-SH-607</option>
+                      <option value="BH-SH-608">Model No-BH-SH-608</option>
+                      <option value="BH-SH-609">Model No-BH-SH-609</option>
+                      <option value="BH-SH-610">Model No-BH-SH-610</option>
+                      <option value="BH-SH-611">Model No-BH-SH-611</option>
+                      <option value="BH-SH-612">Model No-BH-SH-612</option>
+                    </optgroup>
+
+                    <optgroup label="🏠 Tiny House (BH-TH)">
+                      <option value="BH-TH-701">Model No-BH-TH-701</option>
+                      <option value="BH-TH-702">Model No-BH-TH-702</option>
+                      <option value="BH-TH-703">Model No-BH-TH-703</option>
+                      <option value="BH-TH-704">Model No-BH-TH-704</option>
+                      <option value="BH-TH-705">Model No-BH-TH-705</option>
+                      <option value="BH-TH-706">Model No-BH-TH-706</option>
+                      <option value="BH-TH-707">Model No-BH-TH-707</option>
+                      <option value="BH-TH-708">Model No-BH-TH-708</option>
+                      <option value="BH-TH-709">Model No-BH-TH-709</option>
+                      <option value="BH-TH-710">Model No-BH-TH-710</option>
+                      <option value="BH-TH-711">Model No-BH-TH-711</option>
+                      <option value="BH-TH-712">Model No-BH-TH-712</option>
+                    </optgroup>
+
+                    <optgroup label="🌲 Wooden House (BH-WH)">
+                      <option value="BH-WH-801">Model No-BH-WH-801</option>
+                      <option value="BH-WH-802">Model No-BH-WH-802</option>
+                      <option value="BH-WH-803">Model No-BH-WH-803</option>
+                      <option value="BH-WH-804">Model No-BH-WH-804</option>
+                      <option value="BH-WH-805">Model No-BH-WH-805</option>
+                      <option value="BH-WH-806">Model No-BH-WH-806</option>
+                      <option value="BH-WH-807">Model No-BH-WH-807</option>
+                      <option value="BH-WH-808">Model No-BH-WH-808</option>
+                      <option value="BH-WH-809">Model No-BH-WH-809</option>
+                      <option value="BH-WH-810">Model No-BH-WH-810</option>
+                      <option value="BH-WH-811">Model No-BH-WH-811</option>
+                      <option value="BH-WH-812">Model No-BH-WH-812</option>
+                    </optgroup>
+
+                    <optgroup label="🏢 Concrete Building (BH-CB)">
+                      <option value="BH-CB-901">Model No-BH-CB-901</option>
+                      <option value="BH-CB-902">Model No-BH-CB-902</option>
+                      <option value="BH-CB-903">Model No-BH-CB-903</option>
+                      <option value="BH-CB-904">Model No-BH-CB-904</option>
+                      <option value="BH-CB-905">Model No-BH-CB-905</option>
+                      <option value="BH-CB-906">Model No-BH-CB-906</option>
+                      <option value="BH-CB-907">Model No-BH-CB-907</option>
+                      <option value="BH-CB-908">Model No-BH-CB-908</option>
+                      <option value="BH-CB-909">Model No-BH-CB-909</option>
+                      <option value="BH-CB-910">Model No-BH-CB-910</option>
+                      <option value="BH-CB-911">Model No-BH-CB-911</option>
+                      <option value="BH-CB-912">Model No-BH-CB-912</option>
+                    </optgroup>
+
+                    <optgroup label="🏭 Industrial Sheds (BH-IS)">
+                      <option value="BH-IS-1001">Model No-BH-IS-1001</option>
+                      <option value="BH-IS-1002">Model No-BH-IS-1002</option>
+                      <option value="BH-IS-1003">Model No-BH-IS-1003</option>
+                      <option value="BH-IS-1004">Model No-BH-IS-1004</option>
+                      <option value="BH-IS-1005">Model No-BH-IS-1005</option>
+                      <option value="BH-IS-1006">Model No-BH-IS-1006</option>
+                      <option value="BH-IS-1007">Model No-BH-IS-1007</option>
+                      <option value="BH-IS-1008">Model No-BH-IS-1008</option>
+                      <option value="BH-IS-1009">Model No-BH-IS-1009</option>
+                      <option value="BH-IS-1010">Model No-BH-IS-1010</option>
+                      <option value="BH-IS-1011">Model No-BH-IS-1011</option>
+                      <option value="BH-IS-1012">Model No-BH-IS-1012</option>
+                    </optgroup>
+
+                    <optgroup label="🛌 Worker Accommodation (BH-WA)">
+                      <option value="BH-WA-1101">Model No-BH-WA-1101</option>
+                      <option value="BH-WA-1102">Model No-BH-WA-1102</option>
+                      <option value="BH-WA-1103">Model No-BH-WA-1103</option>
+                      <option value="BH-WA-1104">Model No-BH-WA-1104</option>
+                      <option value="BH-WA-1105">Model No-BH-WA-1105</option>
+                      <option value="BH-WA-1106">Model No-BH-WA-1106</option>
+                      <option value="BH-WA-1107">Model No-BH-WA-1107</option>
+                      <option value="BH-WA-1108">Model No-BH-WA-1108</option>
+                      <option value="BH-WA-1109">Model No-BH-WA-1109</option>
+                      <option value="BH-WA-1110">Model No-BH-WA-1110</option>
+                      <option value="BH-WA-1111">Model No-BH-WA-1111</option>
+                      <option value="BH-WA-1112">Model No-BH-WA-1112</option>
+                    </optgroup>
+                  </select>
+                  <div id="model-rate-note" style="font-size:0.8rem;color:var(--grey-500);margin-top:6px;"></div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="floor_area">Floor Area (Optional)</label>
+                  <select id="floor_area" name="floor_area" class="form-control" data-mcp-param="floor_area">
+                    <option value="N/A">Not Applicable</option>
+                    <option value="440">440 Sq.Ft</option>
+                    <option value="550">550 Sq.Ft</option>
+                    <option value="750">750 Sq.Ft</option>
+                    <option value="950">950 Sq.Ft</option>
+                    <option value="1200">1200 Sq.Ft</option>
+                    <option value="1500">1500 Sq.Ft</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="bedrooms">Bedrooms (Optional)</label>
+                  <select id="bedrooms" name="bedrooms" class="form-control" data-mcp-param="bedrooms">
+                    <option value="N/A">Not Applicable</option>
+                    <option value="2">2 Bedrooms</option>
+                    <option value="3">3 Bedrooms</option>
+                    <option value="4">4 Bedrooms</option>
+                    <option value="5">5 Bedrooms</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message">Message / Requirements (Optional)</label>
+                <textarea id="message" name="message" class="form-control" placeholder="Tell us about your land size, location, special requests…" rows="4" data-mcp-param="message"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;" id="contact-submit-btn">
+                Send Quote Request
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </form>
+
+  <script>
+    // Floor-area tiers verified against each model's own product page
+    const areaMapping = {
+      'DEFAULT': ['Select Floor Area'],
+      'TH': ['250-350 Sq.Ft'],
+      'WH': ['400 Sq.Ft', '600 Sq.Ft', '750 Sq.Ft', '900 Sq.Ft', '1050 Sq.Ft', '1200 Sq.Ft'],
+      'TSB': ['600 Sq.Ft', '850 Sq.Ft'],
+      'DV': ['600 Sq.Ft', '850 Sq.Ft'],
+      'DVP': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
+      'LCV': ['440 Sq.Ft', '550 Sq.Ft', '750 Sq.Ft', '950 Sq.Ft', '1200 Sq.Ft', '1500 Sq.Ft'],
+      'SB': ['400 Sq.Ft', '600 Sq.Ft', '750 Sq.Ft', '900 Sq.Ft', '1050 Sq.Ft', '1200 Sq.Ft'],
+      'CH': ['400 Sq.Ft', '600 Sq.Ft', '750 Sq.Ft', '900 Sq.Ft', '1050 Sq.Ft', '1200 Sq.Ft'],
+      'SH': ['650x2 Sq.Ft', '750x2 Sq.Ft', '950x2 Sq.Ft', '1200x2 Sq.Ft'],
+      'CB': ['400 Sq.Ft', '600 Sq.Ft', '750 Sq.Ft', '900 Sq.Ft', '1050 Sq.Ft', '1200 Sq.Ft'],
+      'IS': ['2000 Sq.Ft', '3000 Sq.Ft', '4000 Sq.Ft', 'Custom'],
+      'WA': ['400 Sq.Ft', '600 Sq.Ft', '750 Sq.Ft', '900 Sq.Ft', '1050 Sq.Ft', '1200 Sq.Ft']
+    };
+
+    function updateAreaOptions(modelValue) {
+      const areaSelect = document.getElementById('floor_area');
+      if (!areaSelect) return;
+
+      let key = 'DEFAULT';
+      if (modelValue.includes('BH-TH')) key = 'TH';
+      else if (modelValue.includes('BH-WH')) key = 'WH';
+      else if (modelValue.includes('BH-TSB')) key = 'TSB';
+      else if (/^DV-\d+$/.test(modelValue)) key = 'DVP';
+      else if (modelValue.includes('BH-DV')) key = 'DV';
+      else if (modelValue.includes('LCV')) key = 'LCV';
+      else if (modelValue.includes('BH-SB')) key = 'SB';
+      else if (modelValue.includes('BH-CH')) key = 'CH';
+      else if (modelValue.includes('BH-SH')) key = 'SH';
+      else if (modelValue.includes('BH-CB')) key = 'CB';
+      else if (modelValue.includes('BH-IS')) key = 'IS';
+      else if (modelValue.includes('BH-WA')) key = 'WA';
+
+      const optionsList = areaMapping[key] || areaMapping['DEFAULT'];
+      areaSelect.innerHTML = '';
+      optionsList.forEach(optVal => {
+        const opt = document.createElement('option');
+        opt.value = optVal;
+        opt.textContent = optVal;
+        areaSelect.appendChild(opt);
+      });
+
+      updateRateNote(modelValue);
+    }
+
+    // Per-sqft construction rates (Tk), matching the rates shown on each model's product page
+    function rateForModel(modelValue) {
+      if (modelValue === 'General Inquiry') return null;
+      if (modelValue.startsWith('LCV')) return 1950;
+      const m = modelValue.match(/BH-([A-Z]+)-(\d+)/);
+      if (!m) return null;
+      const prefix = m[1], num = parseInt(m[2], 10);
+      if (prefix === 'CB') return 2750;
+      if (prefix === 'CH') return (num >= 500) ? 2500 : 1900; // 5xx = Container House, 4xx = Cottage House
+      if (prefix === 'SB') return 2500;
+      if (prefix === 'SH') return 2000;
+      if (prefix === 'TH') return 2500;
+      if (prefix === 'WH') return 2500;
+      if (prefix === 'DV') return 2250;
+      if (prefix === 'TSB') return 3200;
+      if (prefix === 'IS') return 810;
+      if (prefix === 'WA') return 810;
+      return null;
+    }
+
+    function updateRateNote(modelValue) {
+      const note = document.getElementById('model-rate-note');
+      if (!note) return;
+      const rate = rateForModel(modelValue);
+      note.textContent = '';
+    }
+
+    function getGeoData() {
+      if (typeof bdGeoData !== 'undefined' && Array.isArray(bdGeoData) && bdGeoData.length > 0) {
+        return Promise.resolve(bdGeoData);
+      }
+      return new Promise((resolve) => {
+        let attempts = 0;
+        const interval = setInterval(() => {
+          attempts++;
+          if (typeof bdGeoData !== 'undefined' && Array.isArray(bdGeoData) && bdGeoData.length > 0) {
+            clearInterval(interval);
+            resolve(bdGeoData);
+          } else if (attempts >= 40) { // 2s timeout
+            clearInterval(interval);
+            resolve(window.bdGeoData || []);
+          }
+        }, 50);
+      });
+    }
+
+    function updateDistrictOptions(divisionValue, preselectedDistrict) {
+      const districtSelect = document.getElementById('district');
+      const upazilaSelect = document.getElementById('upazila');
+      if (!districtSelect) return;
+      
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      districtSelect.disabled = !divisionValue;
+      
+      if (upazilaSelect) {
+        upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+        upazilaSelect.disabled = true;
+      }
+
+      if (!divisionValue) return;
+
+      getGeoData().then((data) => {
+        if (!data || !data.length) return;
+        const currentDivision = document.getElementById('division')?.value;
+        if (currentDivision !== divisionValue) return;
+
+        districtSelect.innerHTML = '<option value="">Select District</option>';
+        const districts = data
+          .filter(d => d.division === divisionValue)
+          .slice()
+          .sort((a, b) => a.district.localeCompare(b.district));
+
+        districts.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.district;
+          opt.textContent = d.district;
+          if (preselectedDistrict && d.district === preselectedDistrict) {
+            opt.selected = true;
+          }
+          districtSelect.appendChild(opt);
+        });
+
+        districtSelect.disabled = false;
+
+        if (preselectedDistrict) {
+          updateUpazilaOptions(preselectedDistrict);
+        }
+      });
+    }
+
+    function updateUpazilaOptions(districtValue, preselectedUpazila) {
+      const upazilaSelect = document.getElementById('upazila');
+      if (!upazilaSelect) return;
+      
+      upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+      upazilaSelect.disabled = !districtValue;
+
+      if (!districtValue) return;
+
+      getGeoData().then((data) => {
+        if (!data || !data.length) return;
+        const currentDistrict = document.getElementById('district')?.value;
+        if (currentDistrict && currentDistrict !== districtValue) return;
+
+        upazilaSelect.innerHTML = '<option value="">Select Police Station / Thana</option>';
+        const distData = data.find(d => d.district === districtValue);
+        if (distData && distData.upazillas && distData.upazillas.length > 0) {
+          const upazilas = distData.upazillas.slice().sort((a, b) => a.localeCompare(b));
+          upazilas.forEach(u => {
+            const opt = document.createElement('option');
+            opt.value = u;
+            opt.textContent = u;
+            if (preselectedUpazila && u === preselectedUpazila) {
+              opt.selected = true;
+            }
+            upazilaSelect.appendChild(opt);
+          });
+          upazilaSelect.disabled = false;
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const modelSelect = document.getElementById('model');
+      if (modelSelect) {
+        updateAreaOptions(modelSelect.value);
+        modelSelect.addEventListener('change', function() {
+          updateAreaOptions(this.value);
+        });
+      }
+
+      const divSelect = document.getElementById('division');
+      const distSelect = document.getElementById('district');
+      if (divSelect) {
+        divSelect.addEventListener('change', function() {
+          updateDistrictOptions(this.value);
+        });
+      }
+      if (distSelect) {
+        distSelect.addEventListener('change', function() {
+          updateUpazilaOptions(this.value);
+        });
+      }
+    });
+  </script>
+
+          <!-- Contact Info -->
+          <div class="contact-info reveal-right">
+            <div class="section-label">Contact Details</div>
+            <h2 class="contact-info-title" id="contact-section-title">How can we help you?</h2>
+            <p style="margin-bottom:var(--space-8);color:var(--grey-600)">Have a question about our housing packages or want to discuss your project? Reach us through any of the channels below.</p>
+
+            <div class="contact-detail-items">
+              <div class="contact-detail-item">
+                <div class="contact-detail-icon" aria-hidden="true">📍</div>
+                <div>
+                  <span class="contact-detail-label">Office Address</span>
+                  <span class="contact-detail-value">House #18, Road #18, Sector #10<br>Uttara C/A, Dhaka – 1230</span>
+                </div>
+              </div>
+              <div class="contact-detail-item">
+                <div class="contact-detail-icon" aria-hidden="true">📞</div>
+                <div>
+                  <span class="contact-detail-label">Phone</span>
+                  <span class="contact-detail-value">
+                    <a href="tel:+8801781636613" itemprop="telephone" style="color:var(--primary);font-weight:500">01781-636613</a><br>
+                    <a href="tel:+8801714104940" style="color:var(--primary);font-weight:500">01714-104940</a>
+                  </span>
+                </div>
+              </div>
+              <div class="contact-detail-item">
+                <div class="contact-detail-icon" aria-hidden="true">💬</div>
+                <div>
+                  <span class="contact-detail-label">WhatsApp</span>
+                  <span class="contact-detail-value">
+                    <a href="https://wa.me/8801781636613" style="color:var(--primary);font-weight:500" target="_blank" rel="noopener noreferrer">01781-636613</a>
+                  </span>
+                </div>
+              </div>
+              <div class="contact-detail-item">
+                <div class="contact-detail-icon" aria-hidden="true">✉️</div>
+                <div>
+                  <span class="contact-detail-label">Email</span>
+                  <span class="contact-detail-value">
+                    <a href="mailto:sales@bongshai.com" itemprop="email" style="color:var(--primary);font-weight:500">sales@bongshai.com</a>
+                  </span>
+                </div>
+              </div>
+              <div class="contact-detail-item">
+                <div class="contact-detail-icon" aria-hidden="true">🌐</div>
+                <div>
+                  <span class="contact-detail-label">Website</span>
+                  <span class="contact-detail-value">
+                    <a href="https://www.bongshaihousing.com" style="color:var(--primary);font-weight:500" target="_blank" rel="noopener noreferrer">www.bongshaihousing.com</a>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Office Hours -->
+            <div class="contact-hours" aria-label="Office hours">
+              <h3 class="contact-hours-title">🕘 What are our Office Hours?</h3>
+              <div class="hours-row">
+                <span class="hours-day">Saturday – Thursday</span>
+                <span class="hours-time">9:00 AM – 7:00 PM</span>
+              </div>
+              <div class="hours-row">
+                <span class="hours-day">Friday</span>
+                <span class="hours-time">Closed</span>
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-6)">
+              <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more%20about%20your%20housing%20packages." class="btn btn-primary" id="contact-wa-btn" target="_blank" rel="noopener noreferrer">
+                💬 WhatsApp Us
+              </a>
+              <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-secondary" id="contact-call-btn">📞 Call Now</a>
+            </div>
+          </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- MAP SECTION -->
+    <section class="section-sm" style="background:var(--off-white)" aria-labelledby="map-title">
+      <div class="container">
+        <div class="section-header reveal" style="margin-bottom:var(--space-8)">
+          <div class="section-label">Find Us</div>
+          <h2 class="section-title" data-aos="fade-up" id="map-title">Where is Our Location in Uttara, Dhaka?</h2>
+          <p class="section-subtitle">Visit us at our office in Uttara Commercial Area, Dhaka-1230</p>
+        </div>
+        <div style="border-radius:var(--radius-2xl);overflow:hidden;box-shadow:var(--shadow-lg);height:420px" class="reveal">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.152!2d90.3984!3d23.8728!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sBongshai%20Housing%20-%20Uttara%20Dhaka!5e0!3m2!1sen!2sbd!4v1620000000000!5m2!1sen!2sbd" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Bongshai Housing Office Location – Uttara, Dhaka">
+          </iframe>
+        </div>
+      </div>
+    </section>
+{% endblock %}
+
+{% block scripts_extra %}
+<script src="/js/bd-geo-data.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    
+    // Time-based anti-spam
+    const formLoadTime = Date.now();
+    
+    form.addEventListener('submit', (e) => {
+        // 1. Honeypot check
+        const honeypot = document.getElementById('website_url');
+        if (honeypot && honeypot.value !== '') {
+            e.preventDefault();
+            console.warn('Spam bot detected (Honeypot filled).');
+            alert('Form submission blocked due to spam detection.');
+            return false;
+        }
+        
+        // 2. Time check (must take at least 3 seconds to fill out)
+        const submitTime = Date.now();
+        const timeDiff = submitTime - formLoadTime;
+        if (timeDiff < 3000) {
+            e.preventDefault();
+            console.warn('Spam bot detected (Form submitted too quickly).');
+            alert('Form submission blocked due to spam detection.');
+            return false;
+        }
+        
+        // If passing both checks, allow submission
+    });
+});
+</script>
+{% endblock %}

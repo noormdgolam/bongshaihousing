@@ -1,0 +1,26 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Activity Log{% endblock %}
+{% block header %}<h1 style="font-size:1.1rem; margin:0;">Activity Log</h1>{% endblock %}
+{% block content %}
+<p style="color:var(--grey-500); font-size:0.85rem; margin-top:0;">Last {{ entries.length }} consequential actions (deletes, status changes, user/role changes) across the admin panel.</p>
+<table>
+  <thead><tr><th>When</th><th>Who</th><th>Action</th><th>What</th></tr></thead>
+  <tbody>
+    {% for e in entries %}
+    <tr>
+      <td style="white-space:nowrap; font-size:0.8rem; color:var(--grey-500);">{{ e.created_at }}</td>
+      <td>{{ e.admin_name or 'Unknown' }}</td>
+      <td>
+        {% if e.action == 'delete' %}<span class="pill" style="background:#fef2f2; color:var(--danger);">Delete</span>
+        {% elif e.action == 'create' %}<span class="pill pill-success">Create</span>
+        {% elif e.action == 'status_change' %}<span class="pill" style="background:#dbeafe; color:#1e40af;">Status</span>
+        {% else %}<span class="pill pill-muted">{{ e.action }}</span>{% endif %}
+      </td>
+      <td>{{ e.summary }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" style="text-align:center; color:var(--grey-500);">No activity logged yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

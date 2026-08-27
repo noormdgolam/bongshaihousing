@@ -1,0 +1,302 @@
+{% extends "layout.njk" %}
+{% block content %}
+<section class="page-hero" style="min-height: 22vh; padding: 90px 0 30px;">
+<div class="container page-hero-content" style="text-align: center;">
+<span class="page-hero-label">{{ category.name }}</span>
+<h1 class="page-hero-title" data-aos="fade-up">Model No-{{ product.model_number }}</h1>
+<nav class="breadcrumb" style="justify-content: center;">
+<a href="index.html">Home</a> <span aria-hidden="true">/</span>
+{% if category.landing_page_slug %}<a href="{{ category.landing_page_slug }}">{{ category.name }}</a>{% else %}<a href="products-and-solutions.html">Products</a>{% endif %} <span aria-hidden="true">/</span>
+<span aria-current="page">Model No-{{ product.model_number }}</span>
+</nav>
+</div>
+</section>
+
+<div class="container" style="padding: 40px 0;">
+<div style="display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start;">
+
+  <div class="pd-gallery">
+    {% if product.main_image %}
+    {% set gallery_images = [product.main_image, product.image_2, product.image_3] %}
+    <a href="{{ product.main_image }}" class="pd-gallery-link" data-pd-lightbox aria-label="View full-size image of {{ product.title }}">
+      <img
+        id="pdMainImage"
+        src="{{ product.main_image }}"
+        srcset="{{ product.main_image | replace('.webp', '-400w.webp') }} 400w, {{ product.main_image | replace('.webp', '-700w.webp') }} 700w, {{ product.main_image }} 1024w"
+        sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"
+        alt="{{ product.main_image_alt or product.title }}" width="1024" height="1024" style="width: 100%; height: auto; display: block;" loading="eager" fetchpriority="high">
+      <span class="pd-gallery-zoom" aria-hidden="true">🔍 Tap to enlarge</span>
+    </a>
+    <div class="pd-gallery-thumbs">
+      {% for img in gallery_images %}
+      {% if img %}
+      <button type="button" class="pd-gallery-thumb{% if loop.first %} active{% endif %}" data-full="{{ img }}" aria-label="View image {{ loop.index }} of {{ product.title }}">
+        <img src="{{ img }}" alt="" loading="lazy">
+      </button>
+      {% else %}
+      <div class="pd-gallery-thumb pd-gallery-thumb-empty" aria-hidden="true">📷</div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="pd-lightbox" id="pdLightbox" hidden>
+    <button type="button" class="pd-lightbox-close" aria-label="Close">✕</button>
+    <img src="" alt="">
+  </div>
+  <script>
+  (function () {
+    var trigger = document.querySelector('[data-pd-lightbox]');
+    var lightbox = document.getElementById('pdLightbox');
+    var mainImg = document.getElementById('pdMainImage');
+    var thumbs = document.querySelectorAll('.pd-gallery-thumb:not(.pd-gallery-thumb-empty)');
+    if (!lightbox) return;
+    var lbImg = lightbox.querySelector('img');
+    var closeBtn = lightbox.querySelector('.pd-lightbox-close');
+
+    function openLightbox(src, alt) {
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lightbox.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      lightbox.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+    if (trigger) {
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        openLightbox(mainImg ? mainImg.src : trigger.getAttribute('href'), mainImg ? mainImg.alt : '');
+      });
+    }
+    // Thumbnails only ever swap which image is shown in the main box - zoom
+    // is exclusively a main-box action (the "Tap to enlarge" affordance lives
+    // there, not on the thumbnails). mainImg has a srcset with width
+    // descriptors, which the browser uses in place of src once present -
+    // just setting mainImg.src on click silently does nothing visually since
+    // srcset still points at the old image. Clearing srcset (and sizes, its
+    // required pair) forces the browser to actually use the new src.
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        if (thumb.classList.contains('active')) return;
+        var full = thumb.getAttribute('data-full');
+        thumbs.forEach(function (t) { t.classList.toggle('active', t === thumb); });
+        if (mainImg) {
+          mainImg.removeAttribute('srcset');
+          mainImg.removeAttribute('sizes');
+          mainImg.src = full;
+        }
+        if (trigger) trigger.setAttribute('href', full);
+      });
+    });
+    closeBtn.addEventListener('click', close);
+    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  })();
+  </script>
+
+  <div style="flex: 1 1 400px; background: white; padding: 18px var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
+    <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 10px;">MOST POPULAR</div>
+    <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.1;">Model No-{{ product.model_number }}</h2>
+
+    <!-- Quick Specs Chips -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-4);">
+      {% if product.total_floor_area or (variants.length and variants[0].area_sqft) %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary);">
+        <span>📐</span> {{ product.total_floor_area or variants[0].area_sqft }} sqft
+      </div>
+      {% endif %}
+      {% if variants.length and variants[0].bed %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+        <span>🛏️</span> {{ variants[0].bed }}
+      </div>
+      {% endif %}
+      {% if variants.length and variants[0].bath %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+        <span>🚿</span> {{ variants[0].bath }}
+      </div>
+      {% endif %}
+      {% if variants.length and variants[0].kitchen %}
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+        <span>🍳</span> {{ variants[0].kitchen }}
+      </div>
+      {% endif %}
+    </div>
+
+    <div style="background: var(--off-white); border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;">
+      <span style="display: block; font-size: 0.75rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Fixed Package Price</span>
+      <span class="bh-variant-price" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">{% if product.fixedPriceFormatted %}{{ product.fixedPriceFormatted }}{% elseif variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
+    </div>
+
+    <div class="pd-trust-strip" style="margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
+      <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.86rem; font-weight: 600; color: #334155; cursor: default;" title="Precision prefabricated steel modules cut construction time by up to 67% (about one-third the schedule) compared to conventional brick/masonry.">⚡ 3× Faster Than Traditional Brick</span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.86rem; font-weight: 600; color: #334155; cursor: default;" title="Engineered with seismic damping and aerodynamic structural steel for extreme weather resilience.">🛡️ 200+ km/h Cyclone & Quake Proof</span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.86rem; font-weight: 600; color: #334155; cursor: default;" title="100% compliant with structural and safety standards of the Bangladesh National Building Code.">📐 100% BNBC Code Certified</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
+      <a class="btn btn-lg" href="{{ product.whatsAppUrl or ('https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20' ~ product.model_number) }}" rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
+    </div>
+  </div>
+</div>
+
+{% if variants.length and (variants[0].roomGroups.length or variants[0].rooms.length) %}
+<section class="section" aria-labelledby="overview-title">
+  <div class="section-header reveal">
+    <h2 class="section-title" id="overview-title">Overview (Area Details)</h2>
+    <p class="section-subtitle">Official floor-wise layout dimensions and area specifications for Model No-{{ product.model_number }}.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+    {% if variants[0].roomGroups.length %}
+      {% for g in variants[0].roomGroups %}
+      <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
+        {% if g.label %}
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--grey-100); padding-bottom: 12px; margin-bottom: 16px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>🏢</span> {{ g.label }}
+          </h3>
+          {% if g.total %}
+          <span style="background: #eef4ff; color: var(--primary); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">
+            {{ g.total }} sqft
+          </span>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+          <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+            <thead>
+              <tr style="background: var(--off-white);">
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Dimensions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in g.rows %}
+              <tr style="border-bottom: 1px solid var(--grey-100);">
+                <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);">
+                  {% if r.icon %}<span style="margin-right: 6px;">{{ r.icon }}</span>{% endif %}{{ r.section }}
+                </td>
+                <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">{{ r.area_sqft or '—' }}</td>
+                <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">
+                  {% if r.length_ft and r.width_ft %}{{ r.length_ft }}' × {{ r.width_ft }}'{% else %}—{% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% if g.total %}
+            <tfoot>
+              <tr style="background: #f8fafc; font-weight: 700;">
+                <td style="padding: 12px 16px; color: var(--grey-900);">{{ g.label or 'Floor' }} Subtotal</td>
+                <td style="padding: 12px 16px; color: var(--primary); text-align: center;">{{ g.total }} sqft</td>
+                <td></td>
+              </tr>
+            </tfoot>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
+        <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+          <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+            <thead>
+              <tr style="background: var(--off-white);">
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
+                <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in variants[0].rooms %}
+              {% if not r.is_total_row %}
+              <tr style="border-bottom: 1px solid var(--grey-100);">
+                <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);">{{ r.section }}</td>
+                <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">{{ r.area_sqft }}</td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Overall Total Building Area Card -->
+    <div class="card reveal" style="background: linear-gradient(135deg, #21409a 0%, #172c68 100%); color: white; border-radius: 16px; padding: 18px var(--space-6); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md);">
+      <div>
+        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Total Covered Area</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">Full Building Structure</div>
+      </div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #fde68a;">
+        {{ product.total_floor_area or variants[0].roomGroupsBuildingTotal or variants[0].totalArea or variants[0].area_sqft }} sqft
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+
+{% if specs.length %}
+<section class="section" aria-labelledby="specs-title">
+  <div class="section-header reveal">
+    <h2 class="section-title" id="specs-title">Building Specifications</h2>
+  </div>
+  <table class="modern-table">
+    <thead><tr><th>Item</th><th>Materials</th></tr></thead>
+    <tbody>
+      {% for s in specs %}<tr><td>{{ s.spec_key }}</td><td>{{ s.spec_value }}</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% include "partials/steel-advantages.njk" %}
+
+{% include "partials/most-viewed.njk" %}
+
+{% if relatedProducts.length %}
+<section class="section" aria-labelledby="related-title">
+  <div class="section-header reveal">
+    <h2 class="section-title" id="related-title">More in {{ category.name }}</h2>
+    <p class="section-subtitle">Other models in the same category you might like.</p>
+  </div>
+  <div class="stagger product-grid">
+    {% for rp in relatedProducts %}
+    <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+      <div class="property-img-wrap">
+        {% if rp.main_image %}
+        <img
+          alt="Bongshai Housing Model No-{{ rp.model_number }}"
+          loading="lazy"
+          src="{{ rp.main_image }}"
+          srcset="{{ rp.main_image | replace('.webp', '-400w.webp') }} 400w, {{ rp.main_image | replace('.webp', '-700w.webp') }} 700w, {{ rp.main_image }} 1024w"
+          sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"
+          title="Bongshai Housing Model No-{{ rp.model_number }}" width="1024" height="1024">
+        {% endif %}
+      </div>
+      <div class="property-card-body" data-aos="fade-up">
+        <span class="property-type">{{ category.name }}</span>
+        <h2 class="property-name">Model No-{{ rp.model_number }}</h2>
+        <div class="property-price"><span class="property-price-label">{% if rp.fromPriceFormatted %}From{% else %}Pricing{% endif %}</span><span class="property-price-value" style="font-size:0.95rem;">{{ rp.fromPriceFormatted or 'Contact for Quote' }}</span></div>
+        <a class="btn btn-primary" href="{{ rp.slug }}" style="width:100%;justify-content:center;">View Details</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+</div>
+
+<div class="pd-sticky-cta" aria-hidden="false">
+  <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary">Get a Free Quote</a>
+  <a href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." class="btn" style="background:#25D366; color:#fff; border:none;" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+</div>
+{% endblock %}

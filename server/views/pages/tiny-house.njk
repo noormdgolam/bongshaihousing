@@ -1,0 +1,453 @@
+{% extends "layout.njk" %}
+{% import "partials/product-card-image.njk" as productImg %}
+{% block head_extra %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["RealEstateAgent", "GeneralContractor", "HomeAndConstructionBusiness"],
+    "name": "Bongshai Housing Ltd.",
+    "alternateName": ["BongshaiHousing", "Bongshai Steel Building Company", "Bongshai Housing Bangladesh"],
+    "url": "https://bongshaihousing.com",
+    "description": "Bangladesh's #1 steel building company and EPC real estate developer. Specializing in steel composite buildings, prefab cottages, luxury villas, and single-story steel structures in Dhaka.",
+    "telephone": ["+8801781636613"],
+    "email": "sales@bongshai.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "House #18, Road #18, Sector #10",
+      "addressLocality": "Uttara",
+      "addressRegion": "Dhaka",
+      "postalCode": "1230",
+      "addressCountry": "BD"
+    },
+      "areaServed": [{"@type": "State", "name": "Bagerhat"}, {"@type": "State", "name": "Bandarban"}, {"@type": "State", "name": "Barguna"}, {"@type": "State", "name": "Barishal"}, {"@type": "State", "name": "Bhola"}, {"@type": "State", "name": "Bogura"}, {"@type": "State", "name": "Brahmanbaria"}, {"@type": "State", "name": "Chandpur"}, {"@type": "State", "name": "Chapai Nawabganj"}, {"@type": "State", "name": "Chattogram"}, {"@type": "State", "name": "Chuadanga"}, {"@type": "State", "name": "Cox's Bazar"}, {"@type": "State", "name": "Cumilla"}, {"@type": "State", "name": "Dhaka"}, {"@type": "State", "name": "Dinajpur"}, {"@type": "State", "name": "Faridpur"}, {"@type": "State", "name": "Feni"}, {"@type": "State", "name": "Gaibandha"}, {"@type": "State", "name": "Gazipur"}, {"@type": "State", "name": "Gopalganj"}, {"@type": "State", "name": "Habiganj"}, {"@type": "State", "name": "Jamalpur"}, {"@type": "State", "name": "Jashore"}, {"@type": "State", "name": "Jhalokati"}, {"@type": "State", "name": "Jhenaidah"}, {"@type": "State", "name": "Joypurhat"}, {"@type": "State", "name": "Khagrachari"}, {"@type": "State", "name": "Khulna"}, {"@type": "State", "name": "Kishoreganj"}, {"@type": "State", "name": "Kurigram"}, {"@type": "State", "name": "Kushtia"}, {"@type": "State", "name": "Lakshmipur"}, {"@type": "State", "name": "Lalmonirhat"}, {"@type": "State", "name": "Madaripur"}, {"@type": "State", "name": "Magura"}, {"@type": "State", "name": "Manikganj"}, {"@type": "State", "name": "Meherpur"}, {"@type": "State", "name": "Moulvibazar"}, {"@type": "State", "name": "Munshiganj"}, {"@type": "State", "name": "Mymensingh"}, {"@type": "State", "name": "Naogaon"}, {"@type": "State", "name": "Narail"}, {"@type": "State", "name": "Narayanganj"}, {"@type": "State", "name": "Narsingdi"}, {"@type": "State", "name": "Natore"}, {"@type": "State", "name": "Netrokona"}, {"@type": "State", "name": "Nilphamari"}, {"@type": "State", "name": "Noakhali"}, {"@type": "State", "name": "Pabna"}, {"@type": "State", "name": "Panchagarh"}, {"@type": "State", "name": "Patuakhali"}, {"@type": "State", "name": "Pirojpur"}, {"@type": "State", "name": "Rajbari"}, {"@type": "State", "name": "Rajshahi"}, {"@type": "State", "name": "Rangamati"}, {"@type": "State", "name": "Rangpur"}, {"@type": "State", "name": "Satkhira"}, {"@type": "State", "name": "Shariatpur"}, {"@type": "State", "name": "Sherpur"}, {"@type": "State", "name": "Sirajganj"}, {"@type": "State", "name": "Sunamganj"}, {"@type": "State", "name": "Sylhet"}, {"@type": "State", "name": "Tangail"}, {"@type": "State", "name": "Thakurgaon"}],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "23.8728",
+      "longitude": "90.3984"
+    }
+  }
+  </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tiny House",
+      "item": "https://bongshaihousing.com/tiny-house.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Tiny House",
+  "description": "Minimalist prefab tiny house, 250-350 sqft. 1 bedroom, 1 bathroom. Ideal for single occupants or starter homes. Tk 1,500 per sqft.",
+  "image": "https://bongshaihousing.com/images/products/tiny-house.webp",
+  "brand": {"@type": "Brand", "name": "Bongshai Housing Ltd.", "url": "https://bongshaihousing.com"},
+  "manufacturer": {"@type": "Organization", "name": "Bongshai Housing Ltd.", "@id": "https://bongshaihousing.com/#organization", "foundingDate": "2008"},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "BDT",
+    "price": "1500",
+    "availability": "https://schema.org/InStock",
+    "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
+  },
+  "category": "Pre-Engineered Steel Building",
+  "countryOfOrigin": {"@type": "Country", "name": "Bangladesh"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "dateModified": "2026-08-08",
+  "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".faq-answer"]},
+  "author": {
+    "@type": "Person",
+    "name": "SMA AWAL",
+    "jobTitle": "Chief Engineer",
+    "worksFor": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does a tiny house cost in Bangladesh?",
+      "acceptedAnswer": {"@type": "Answer", "text": "A prefab tiny house by Bongshai Housing costs Tk 1,500 per sqft. Standard size is 250-350 sqft (1 bedroom, 1 bathroom), making it the most affordable complete residential structure available."}
+    }
+    ,
+    {
+      "@type": "Question",
+      "name": "What is a tiny house?",
+      "acceptedAnswer": {"@type": "Answer", "text": "A tiny house is a compact prefabricated home, typically 250-400 sqft, designed for minimalist efficient living. Bongshai Housing builds them as starter homes, weekend cabins, or additional units on a plot."}
+    }
+    ,
+    {
+      "@type": "Question",
+      "name": "Can a tiny house be built on a small plot in Dhaka?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Yes. Tiny houses require minimal land footprint and are ideal for plots where space is limited. Contact Bongshai Housing with your plot dimensions for a custom design."}
+    }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section aria-labelledby="ssb-page-title" class="page-hero"{% if dbCategory and dbCategory.hero_image %} style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.85)), url('/{{ dbCategory.hero_image | replace('^/', '') }}') center/cover no-repeat;"{% endif %}>
+<div class="container page-hero-content">
+<span class="page-hero-label">Composite Construction</span>
+<h1 class="page-hero-title" data-aos="fade-up" id="ssb-page-title">{{ dbCategory.name if (dbCategory and dbCategory.name) else 'Tiny House' }}</h1>
+<p class="page-hero-text">{{ dbCategory.description if (dbCategory and dbCategory.description) else 'Compact, budget-friendly prefab homes built for single occupants, small families, and starter plots — without compromising on durability.' }}</p>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+<a href="index.html">Home</a><span>/</span><a href="products-and-solutions.html">Products</a><span>/</span><span aria-current="page">{{ dbCategory.name if (dbCategory and dbCategory.name) else 'Tiny House' }}</span>
+</nav>
+</div>
+</section>
+
+<!-- AEO: Answer-First Opening & Explicit Trust Signal -->
+<section class="section" style="padding: 2rem 0; background: var(--off-white);">
+  <div class="container">
+    <p><strong>Bongshai Housing engineers highly efficient, minimalist steel-frame tiny houses in Bangladesh. Designed for maximum space utilization and affordability, our tiny homes deliver the structural integrity of pre-engineered steel in a compact, rapid-assembly footprint.</strong></p>
+    <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
+      By <strong>Bongshai Housing Engineering Team</strong> | Expert EPC Contractors | Last Updated: <time datetime="2026-08-08">August 8, 2026</time>
+    </div>
+  </div>
+</section>
+
+<div class="container" style="margin-top: 40px; margin-bottom: 80px;"><div class="page-with-sidebar"><aside aria-label="Product categories" class="cat-sidebar" data-tilt="">
+<!-- Mobile toggle -->
+<button aria-controls="catSidebarBody" aria-expanded="false" class="cat-sidebar-toggle" id="catSidebarToggle">
+<span>All Products</span>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<!-- Desktop header -->
+<div class="cat-sidebar-header">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="3" y="14"></rect><rect height="7" width="7" x="14" y="14"></rect></svg>
+            All Products
+          </div>
+<div class="cat-sidebar-body" id="catSidebarBody">
+<div class="cat-group-label">Residential Prefab</div>
+          <a class="cat-item" href="apartment-building.html">Apartment building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="duplex-steel-building.html">Duplex steel building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="simplex-steel-building.html">Simplex Steel Building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="cottage-house.html">Cottage House<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="container-house.html">Container house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="steel-house.html">Steel house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item active" href="tiny-house.html">Tiny house<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="wooden-house.html">Wooden House<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <a class="cat-item" href="concrete-building.html">Concrete building<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+          <div class="cat-group-label">Commercial &amp; Industrial</div>
+<a class="cat-item" href="industrial-sheds.html">Industrial Steel Sheds<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<a class="cat-item" href="worker-accommodation.html">Worker Accommodation<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<div class="cat-group-label">Interactive Tools</div>
+<a class="cat-item" href="solutions.html">Get Quote<svg class="cat-chevron" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+<div class="cat-sidebar-cta">
+<a href="contact.html">📞 Get a Free Quote</a>
+</div>
+</div>
+</aside><div class="page-sidebar-content"><div style="margin-bottom: 60px;">
+
+<div class="stagger product-grid">
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-701', 'Bongshai Housing Model No-BH-TH-701', 'images/products/Model No-BH-TH-701.webp', 'images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-701</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>200 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">An efficiently designed tiny house maximizing comfort and functionality in a compact space.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳5,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-701.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-702', 'Bongshai Housing Model No-BH-TH-702', 'images/products/Model No-BH-TH-702.webp', 'images/products/Model%20No-BH-TH-702-400w.webp 400w, images/products/Model%20No-BH-TH-702-700w.webp 700w, images/products/Model%20No-BH-TH-702.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-702</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>300 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A compact tiny house ideal for singles, couples, or minimalist living.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳7,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-702.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-703', 'Bongshai Housing Model No-BH-TH-703', 'images/products/Model No-BH-TH-703.webp', 'images/products/Model%20No-BH-TH-703-400w.webp 400w, images/products/Model%20No-BH-TH-703-700w.webp 700w, images/products/Model%20No-BH-TH-703.webp 961w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-703</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>400 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Tiny house design built for smart storage and efficient daily living.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳9,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-703.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-704', 'Bongshai Housing Model No-BH-TH-704', 'images/products/Model No-BH-TH-704.webp', 'images/products/Model%20No-BH-TH-704-400w.webp 400w, images/products/Model%20No-BH-TH-704-700w.webp 700w, images/products/Model%20No-BH-TH-704.webp 720w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-704</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>500 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A budget-friendly tiny home without compromising on build quality.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-704.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-705', 'Bongshai Housing Model No-BH-TH-705', 'images/products/Model No-BH-TH-705.webp', 'images/products/Model%20No-BH-TH-705-400w.webp 400w, images/products/Model%20No-BH-TH-705-700w.webp 700w, images/products/Model%20No-BH-TH-705.webp 1080w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-705</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>200 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Tiny house architecture engineered for quick, low-cost assembly.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳5,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-705.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-706', 'Bongshai Housing Model No-BH-TH-706', 'images/products/Model No-BH-TH-706.webp', 'images/products/Model%20No-BH-TH-706-400w.webp 400w, images/products/Model%20No-BH-TH-706-700w.webp 700w, images/products/Model%20No-BH-TH-706.webp 1170w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-706</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>300 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A space-smart tiny home perfect for small plots or backyard builds.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳7,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-706.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-707', 'Bongshai Housing Model No-BH-TH-707', 'images/products/Model No-BH-TH-707.webp', 'images/products/Model%20No-BH-TH-707-400w.webp 400w, images/products/Model%20No-BH-TH-707-700w.webp 700w, images/products/Model%20No-BH-TH-707.webp 846w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-707</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>400 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Tiny house living designed for low-maintenance, sustainable comfort.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳9,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-707.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-708', 'Bongshai Housing Model No-BH-TH-708', 'images/products/Model No-BH-TH-708.webp', 'images/products/Model%20No-BH-TH-708-400w.webp 400w, images/products/Model%20No-BH-TH-708.webp 674w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-708</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>500 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A compact home solution ideal for rental units or guest housing.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-708.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-709', 'Bongshai Housing Model No-BH-TH-709', 'images/products/Model No-BH-TH-709.webp', 'images/products/Model%20No-BH-TH-709-400w.webp 400w, images/products/Model%20No-BH-TH-709-700w.webp 700w, images/products/Model%20No-BH-TH-709.webp 736w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-709</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>200 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Tiny house construction built for durability despite its small footprint.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳5,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-709.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-710', 'Bongshai Housing Model No-BH-TH-710', 'images/products/Model No-BH-TH-710.webp', 'images/products/Model%20No-BH-TH-710-400w.webp 400w, images/products/Model%20No-BH-TH-710-700w.webp 700w, images/products/Model%20No-BH-TH-710.webp 1200w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-710</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>300 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>1 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A minimalist tiny home with a surprisingly functional interior layout.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳7,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-710.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-711', 'Bongshai Housing Model No-BH-TH-711', 'images/products/Model No-BH-TH-711.webp', 'images/products/Model%20No-BH-TH-711-400w.webp 400w, images/products/Model%20No-BH-TH-711.webp 600w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-711</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>400 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Tiny house design suited for young professionals or retirees.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳9,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-711.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+
+<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
+<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-TH-712', 'Bongshai Housing Model No-BH-TH-712', 'images/products/Model No-BH-TH-712.webp', 'images/products/Model%20No-BH-TH-712-400w.webp 400w, images/products/Model%20No-BH-TH-712-700w.webp 700w, images/products/Model%20No-BH-TH-712.webp 1125w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
+<div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Tiny House</span>
+    <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">⚡ Turnkey</span>
+  </div>
+  <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-TH-712</h2>
+  <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>500 sqft</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>2 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+  </div>
+  <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A cost-effective tiny home offering full comfort in a smaller footprint.</p>
+  <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+    <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+  </div>
+  <a class="btn btn-primary" href="bh-th-712.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
+</div></div>
+</div>
+<!-- OVERVIEW -->
+<!-- PACKAGES -->
+<!-- COMPOSITE ELEMENTS -->
+
+    <!-- ======================================================
+         ADVANTAGES OF STEEL-RC BUILDING
+    ====================================================== -->
+    <section class="section process-bg" id="advantages" aria-labelledby="advantages-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Our Technology</div>
+          <h2 class="section-title" data-aos="fade-up" id="advantages-title">What are the Advantages of Steel-RC Building?</h2>
+          <p class="section-subtitle">Why a compact prefab structure is a durable, budget-friendly choice.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-4); max-width: 900px; margin: 0 auto;" class="reveal">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Cost-effective and Eco-friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> High strength, inflexibility and high load bearing capacity</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Pre-fabricated, easy to install and dismantle</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Lightness, easy to transport and re-located</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Low maintenance cost</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Using several times and recycling</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Increase area efficiency by 10%--20%</li>
+          </ul>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Environment friendly</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Weather-resistant with proper coating and maintenance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for strong seismic performance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Engineered for high wind-load resistance</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> Energy saving with good thermal insulation system</li>
+            <li style="margin-bottom: var(--space-3); display: flex; align-items: flex-start; gap: var(--space-2);"><span style="color:var(--primary);">✔️</span> 50~60 years’ life span</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
