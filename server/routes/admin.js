@@ -1149,6 +1149,34 @@ async function resolveImage(files, fieldName, manualValue) {
   return file ? await processAndSaveImage(file.buffer, file.originalname) : (manualValue || null);
 }
 
+async function ensureProductColumns() {
+  if (!db) return;
+  try {
+    const hasFixedPrice = await db.schema.hasColumn('products', 'fixed_price').catch(() => true);
+    if (!hasFixedPrice) {
+      await db.schema.alterTable('products', (t) => t.decimal('fixed_price', 12, 2).nullable()).catch(() => {});
+    }
+    const hasTotalFloorArea = await db.schema.hasColumn('products', 'total_floor_area').catch(() => true);
+    if (!hasTotalFloorArea) {
+      await db.schema.alterTable('products', (t) => t.integer('total_floor_area').nullable()).catch(() => {});
+    }
+    const hasMetaTitle = await db.schema.hasColumn('products', 'meta_title').catch(() => true);
+    if (!hasMetaTitle) {
+      await db.schema.alterTable('products', (t) => t.string('meta_title', 255).nullable()).catch(() => {});
+    }
+    const hasMetaDescription = await db.schema.hasColumn('products', 'meta_description').catch(() => true);
+    if (!hasMetaDescription) {
+      await db.schema.alterTable('products', (t) => t.text('meta_description').nullable()).catch(() => {});
+    }
+    const hasMainImageAlt = await db.schema.hasColumn('products', 'main_image_alt').catch(() => true);
+    if (!hasMainImageAlt) {
+      await db.schema.alterTable('products', (t) => t.string('main_image_alt', 255).nullable()).catch(() => {});
+    }
+  } catch (err) {
+    // Ignore schema check error
+  }
+}
+
 router.post('/admin/products', galleryUpload, async (req, res) => {
   // multipart bodies skip the global CSRF middleware's check (req.body
   // isn't parsed until multer runs, inside this route) - verified here
@@ -1158,6 +1186,7 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
 
   const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
   try {
+    await ensureProductColumns();
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
     const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
@@ -1217,6 +1246,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
   try {
+    await ensureProductColumns();
     const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);

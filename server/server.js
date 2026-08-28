@@ -25,6 +25,19 @@ const customerAuthRouter = require('./routes/customer-auth');
 const customerRouter = require('./routes/customer');
 const { extractVisitorInfo } = require('./lib/visitor-tracker');
 
+// Auto-run pending database migrations on startup with graceful error handling
+if (db && db.migrate) {
+  db.migrate.latest()
+    .then(([batchNo, log]) => {
+      if (log && log.length > 0) {
+        console.log(`[DB Migration] Applied ${log.length} migration(s) (Batch ${batchNo}):`, log.join(', '));
+      }
+    })
+    .catch((migErr) => {
+      console.error('[DB Migration Warning]', migErr.message);
+    });
+}
+
 // The session store (and any other async DB init) can reject before
 // anything has a chance to .catch() it - without this, a single transient
 // MySQL hiccup crashes the entire Node process (public pages included,
