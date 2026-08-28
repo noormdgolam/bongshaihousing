@@ -163,6 +163,8 @@ router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
         slug: pData.filename,
         title: pData.title,
         description: pData.description,
+        meta_title: pData.metaTitle || null,
+        meta_description: pData.metaDescription || null,
         fixed_price: pData.fixedPrice || null,
         total_floor_area: pData.totalFloorArea || null,
         price_per_sqft: pData.pricePerSqft || null,
@@ -266,17 +268,18 @@ function formatProductTitle(product, category) {
   const model = product.model_number || '';
   const catName = (category && category.name) ? category.name : '';
 
-  let raw = (product.meta_title || product.title || '').trim();
-  if (raw) {
-    if (raw.startsWith('Bongshai Housing')) return raw;
-    const parts = raw.split('|').map(s => s.trim()).filter(s => !/^Bongshai\s+Housing$/i.test(s));
-    return `Bongshai Housing | ${parts.join(' | ')}`;
+  // If an admin has set a custom meta_title (via admin panel or seed), use it directly
+  if (product.meta_title && product.meta_title.trim()) {
+    return product.meta_title.trim();
   }
 
+  // Intent-first fallback: building type + location first, model number second.
+  // AEO best practice: lead with the query-intent keyword so AI crawlers
+  // can map this page to searches like "pre-engineered steel buildings Bangladesh".
   if (model && catName) {
-    return `Bongshai Housing | ${model} | ${catName}`;
+    return `${catName} in Bangladesh | ${model}`;
   }
-  return `Bongshai Housing | ${model || 'Steel Building'}`;
+  return `Pre-Engineered Steel Building Bangladesh | ${model || 'View Details'}`;
 }
 
     const pageTitle = formatProductTitle(product, category);
@@ -301,3 +304,4 @@ function formatProductTitle(product, category) {
 });
 
 module.exports = router;
+
