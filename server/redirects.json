@@ -238,10 +238,6 @@
     }
   },
   "prefix": {
-    "api/": {
-      "to": "/api/$1",
-      "permanent": false
-    },
     "wp-content": {
       "to": "/",
       "permanent": true

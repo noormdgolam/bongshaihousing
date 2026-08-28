@@ -1,3 +1,11 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/abongsha/bongshai-node-app-prod"
+PassengerBaseURI "/"
+PassengerNodejs "/home/abongsha/nodevenv/bongshai-node-app-prod/22/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
 DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
