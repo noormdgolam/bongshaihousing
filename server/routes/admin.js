@@ -1223,7 +1223,7 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
     }
 
     // Deploy the single product page to the live site in the background
-    setImmediate(() => {
+    setImmediate(async () => {
       invalidatePageCache(); // Clear the stale HTML so the curl fetches fresh DB data
       const { exec } = require('child_process');
       const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
@@ -1231,6 +1231,15 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
         if (err) console.error(`Live site sync failed for ${slug}:`, err.message);
         else console.log(`Live site sync succeeded for ${slug}:\n${stdout}`);
       });
+      try {
+        const cat = await db('categories').where({ id: req.body.category_id }).first();
+        if (cat && cat.landing_page_slug) {
+          exec(`python "${scriptPath}" ${cat.landing_page_slug}`, { env: process.env }, (err, stdout, stderr) => {
+            if (err) console.error(`Live site category sync failed for ${cat.landing_page_slug}:`, err.message);
+            else console.log(`Live site category sync succeeded for ${cat.landing_page_slug}:\n${stdout}`);
+          });
+        }
+      } catch (e) { console.error('Category sync error:', e.message); }
     });
 
     res.redirect(`/admin/products/${id}/edit${seoMsg}`);
@@ -1298,7 +1307,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     }
 
     // Deploy the single product page to the live site in the background
-    setImmediate(() => {
+    setImmediate(async () => {
       invalidatePageCache(); // Clear the stale HTML so the curl fetches fresh DB data
       const { exec } = require('child_process');
       const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
@@ -1306,6 +1315,15 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
         if (err) console.error(`Live site sync failed for ${slug}:`, err.message);
         else console.log(`Live site sync succeeded for ${slug}:\n${stdout}`);
       });
+      try {
+        const cat = await db('categories').where({ id: req.body.category_id }).first();
+        if (cat && cat.landing_page_slug) {
+          exec(`python "${scriptPath}" ${cat.landing_page_slug}`, { env: process.env }, (err, stdout, stderr) => {
+            if (err) console.error(`Live site category sync failed for ${cat.landing_page_slug}:`, err.message);
+            else console.log(`Live site category sync succeeded for ${cat.landing_page_slug}:\n${stdout}`);
+          });
+        }
+      } catch (e) { console.error('Category sync error:', e.message); }
     });
 
     res.redirect(`/admin/products/${req.params.id}/edit${seoMsg}`);
