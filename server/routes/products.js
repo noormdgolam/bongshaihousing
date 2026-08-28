@@ -284,6 +284,7 @@ function formatProductTitle(product, category) {
 
     const pageTitle = formatProductTitle(product, category);
 
+    res.set('Cache-Control', 'no-store');
     res.render('pages/product-detail.njk', {
       title: pageTitle,
       description: product.meta_description || product.description,

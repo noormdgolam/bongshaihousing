@@ -1,14 +1,22 @@
 // server/lib/pageCache.js
 const cache = new Map();
 const MAX_CACHE_SIZE = 500;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes — changes made in the admin panel
+                                     // are always visible within 5 min even if the
+                                     // explicit invalidation call is missed (e.g. crash).
 
 function getCached(key) {
   if (cache.has(key)) {
     const item = cache.get(key);
+    // Check TTL — purge and return null if expired
+    if (Date.now() - item.ts > CACHE_TTL_MS) {
+      cache.delete(key);
+      return null;
+    }
     // Refresh LRU position by deleting and re-inserting
     cache.delete(key);
     cache.set(key, item);
-    return item;
+    return item.html;
   }
   return null;
 }
@@ -19,7 +27,7 @@ function setCached(key, html) {
     const oldestKey = cache.keys().next().value;
     cache.delete(oldestKey);
   }
-  cache.set(key, html);
+  cache.set(key, { html, ts: Date.now() });
 }
 
 function invalidatePageCache() {
