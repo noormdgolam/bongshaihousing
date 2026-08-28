@@ -1,10 +1,13 @@
+<!-- Puter.js SDK for Free Unlimited Claude 3.5 Sonnet AI -->
+<script src="https://js.puter.com/v2/"></script>
+
 <!-- AI Sales Assistant Chat Widget for Bongshai Housing -->
 <div id="bhAiChatWidget" class="bh-ai-widget" data-mcp-action="ai-consultation">
   <!-- Trigger Button -->
   <button id="bhAiChatToggle" class="bh-ai-toggle-btn" type="button" aria-label="Open AI Sales Assistant" aria-expanded="false" aria-controls="bhAiChatBox">
     <span class="bh-ai-pulse" aria-hidden="true"></span>
     <span class="bh-ai-icon">🤖</span>
-    <span class="bh-ai-badge">AI Assistant</span>
+    <span class="bh-ai-badge">Claude 3.5 AI</span>
   </button>
 
   <!-- Chat Dialog Window -->
@@ -832,6 +835,35 @@
     }, 50);
   }
 
+  const BONGSHAI_SYSTEM_PROMPT = `You are Bongshai AI Advisor, the official senior civil engineer and sales consultant at Bongshai Housing (বঙ্গশai হাউজিং) in Bangladesh.
+
+COMPANY PROFILE:
+- Name: Bongshai Housing (বঙ্গশাই হাউজিং)
+- Industry: Pre-Engineered Steel Buildings (PEB), Steel Composite Buildings, Modular Prefab Housing, Container Homes, and EPC Turnkey Real Estate.
+- Headquarters: House #18, Road #18, Sector #10, Uttara, Dhaka-1230, Bangladesh.
+- Hotlines / WhatsApp: +880 1781-636613, +880 1714-104940
+- Email: sales@bongshai.com
+- Experience: 20+ years in Bangladesh (founded 2008), 500+ completed projects nationwide, service coverage across all 64 districts.
+
+CORE ADVANTAGES OVER RCC:
+1. Speed: Full construction in 45-60 days (vs 12-18 months for conventional RCC).
+2. Safety: High earthquake resistance (BNBC Zone 4 seismic codes).
+3. Weather: Wind load tolerance up to 200+ km/h.
+4. Longevity: 50+ years design life with anti-rust galvanized steel & premium sandwich PUF panels.
+5. Cost Efficiency: 20-30% overall savings with minimal foundation load.
+
+PRICING GUIDELINES (BDT per sq.ft):
+- Industrial Steel Sheds & Worker Accommodation: Tk 810-855 / sq.ft.
+- Tiny House & Wooden House: Tk 1,500 / sq.ft.
+- Cottage House: Tk 2,200 / sq.ft.
+- Apartment Building, Duplex Steel Building, Simplex Steel Building, Steel House, Concrete Building: Tk 2,500-2,750 / sq.ft.
+- Container House: Tk 3,000 / sq.ft.
+
+RULES FOR RESPONSES:
+- Answer-First: Give a clear, direct answer under 45 words first before expanding into technical specs or pricing.
+- In Bangla: Follow standard NCTB grammar rules. Use civil engineering terminology (floor = 'তলা', framing = 'ফেব্রিকেশন', 'প্রি-ইঞ্জিনিয়ার্ড স্টিল বিল্ডিং').
+- End with a helpful CTA connecting with Bongshai Housing engineers on WhatsApp (+8801781636613).`;
+
   async function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
@@ -850,37 +882,77 @@
     typingIndicator.removeAttribute('hidden');
     scrollBottom();
 
-    try {
-      const res = await fetch('/api/ai-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: conversation,
-          context: {
-            pageUrl: window.location.pathname,
-            pageTitle: document.title,
-            language: currentLang
-          }
-        })
-      });
+    let responseReceived = false;
 
-      const data = await res.json();
-      typingIndicator.setAttribute('hidden', '');
+    // 1. Try Puter.js Claude 3.5 Sonnet First (Free, Instant, Unlimited)
+    if (window.puter && window.puter.ai && typeof window.puter.ai.chat === 'function') {
+      try {
+        const puterMessages = [
+          { role: 'system', content: BONGSHAI_SYSTEM_PROMPT },
+          ...conversation.slice(-8).map(m => ({
+            role: m.role === 'assistant' ? 'assistant' : 'user',
+            content: m.content
+          }))
+        ];
 
-      if (data && data.message) {
-        appendMessage('assistant', data.message);
-      } else {
-        appendMessage('assistant', UI_STRINGS[currentLang].errFallback1);
+        const puterRes = await Promise.race([
+          window.puter.ai.chat(puterMessages, { model: 'claude-3-5-sonnet' }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Puter timeout')), 18000))
+        ]);
+
+        let replyText = '';
+        if (typeof puterRes === 'string') {
+          replyText = puterRes;
+        } else if (puterRes && puterRes.message && puterRes.message.content) {
+          replyText = puterRes.message.content;
+        } else if (puterRes && puterRes.text) {
+          replyText = puterRes.text;
+        }
+
+        if (replyText && replyText.trim()) {
+          typingIndicator.setAttribute('hidden', '');
+          appendMessage('assistant', replyText.trim());
+          responseReceived = true;
+        }
+      } catch (puterErr) {
+        console.warn('Puter.js Claude attempt failed, falling back to server API:', puterErr.message);
       }
-    } catch (err) {
-      typingIndicator.setAttribute('hidden', '');
-      appendMessage('assistant', UI_STRINGS[currentLang].errFallback2);
-    } finally {
-      input.disabled = false;
-      sendBtn.disabled = false;
-      input.focus();
-      scrollBottom();
     }
+
+    // 2. Server-side API Fallback (/api/ai-chat) if Puter did not respond
+    if (!responseReceived) {
+      try {
+        const res = await fetch('/api/ai-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: conversation,
+            context: {
+              pageUrl: window.location.pathname,
+              pageTitle: document.title,
+              language: currentLang
+            }
+          })
+        });
+
+        const data = await res.json();
+        typingIndicator.setAttribute('hidden', '');
+
+        if (data && data.message) {
+          appendMessage('assistant', data.message);
+        } else {
+          appendMessage('assistant', UI_STRINGS[currentLang].errFallback1);
+        }
+      } catch (err) {
+        typingIndicator.setAttribute('hidden', '');
+        appendMessage('assistant', UI_STRINGS[currentLang].errFallback2);
+      }
+    }
+
+    input.disabled = false;
+    sendBtn.disabled = false;
+    input.focus();
+    scrollBottom();
   }
 
 
