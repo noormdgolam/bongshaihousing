@@ -15,21 +15,6 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
 
-# 3b. Dynamic Node App routes (Admin, Agent Portal, Customer Tracking, APIs)
-RewriteRule ^admin(/.*)?$ https://test.bongshaihousing.com/admin$1 [R=302,L]
-RewriteRule ^agent(/.*)?$ https://test.bongshaihousing.com/agent$1 [R=302,L]
-RewriteRule ^my-project(/.*)?$ https://test.bongshaihousing.com/my-project$1 [R=302,L]
-RewriteRule ^api/(.*)$ https://test.bongshaihousing.com/api/$1 [R=302,L]
-
-# 3c. DB-driven product pages → redirect to the Node app so admin edits show live.
-# Uses [R=302,L] (visible redirect) because mod_proxy is not available on shared
-# cPanel hosting. bh-ch-* slugs are excluded — they have their own 301 rename rules.
-RewriteCond %{HTTP_HOST} !^test\. [NC]
-RewriteRule ^(bh-(?!ch-)[a-z0-9-]+\.html)$ https://test.bongshaihousing.com/$1 [R=302,L]
-RewriteCond %{HTTP_HOST} !^test\. [NC]
-RewriteRule ^(dv-[a-z0-9-]+\.html)$ https://test.bongshaihousing.com/$1 [R=302,L]
-RewriteCond %{HTTP_HOST} !^test\. [NC]
-RewriteRule ^(lcv-[a-z0-9-]+\.html)$ https://test.bongshaihousing.com/$1 [R=302,L]
 
 
 # 4. Redirect specific old or broken URLs to homepage

@@ -86,7 +86,7 @@ def main():
     start_time = time.time()
     results = []
 
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor(max_workers=2) as executor:
         futures = {executor.submit(upload_file, lp, rp): (lp, rp) for lp, rp in tasks}
         for future in as_completed(futures):
             res = future.result()
