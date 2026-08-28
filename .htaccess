@@ -13,6 +13,18 @@ RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
 
+# 3b. DB-driven product pages — proxy to the Node app so admin edits show live.
+# The [P] flag uses mod_proxy to transparently forward these requests to the
+# Node.js app. The visitor URL stays on bongshaihousing.com (no redirect),
+# so canonical URLs and SEO are preserved.
+# IMPORTANT: requires mod_proxy + mod_proxy_http to be enabled on the server.
+RewriteCond %{HTTP_HOST} ^(www\.)?bongshaihousing\.com$ [NC]
+RewriteRule ^(bh-[a-z0-9-]+\.html)$ https://test.bongshaihousing.com/$1 [P,L]
+RewriteCond %{HTTP_HOST} ^(www\.)?bongshaihousing\.com$ [NC]
+RewriteRule ^(dv-[a-z0-9-]+\.html)$ https://test.bongshaihousing.com/$1 [P,L]
+RewriteCond %{HTTP_HOST} ^(www\.)?bongshaihousing\.com$ [NC]
+RewriteRule ^(lcv-[a-z0-9-]+\.html)$ https://test.bongshaihousing.com/$1 [P,L]
+
 # 4. Redirect specific old or broken URLs to homepage
 RewriteRule ^u8-2/?$ https://bongshaihousing.com/ [R=301,L]
 
