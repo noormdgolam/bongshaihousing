@@ -1224,6 +1224,7 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
 
     // Deploy the single product page to the live site in the background
     setImmediate(() => {
+      invalidatePageCache(); // Clear the stale HTML so the curl fetches fresh DB data
       const { exec } = require('child_process');
       const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
       exec(`python "${scriptPath}" ${slug}`, { env: process.env }, (err, stdout, stderr) => {
@@ -1298,6 +1299,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
 
     // Deploy the single product page to the live site in the background
     setImmediate(() => {
+      invalidatePageCache(); // Clear the stale HTML so the curl fetches fresh DB data
       const { exec } = require('child_process');
       const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
       exec(`python "${scriptPath}" ${slug}`, { env: process.env }, (err, stdout, stderr) => {
