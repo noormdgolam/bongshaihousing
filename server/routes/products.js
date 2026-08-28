@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Cheap pre-filter so non-product pages never hit the DB unnecessarily
 // while supporting all standard and custom product slugs created in admin panel
-const PRODUCT_SLUG_PATTERN = /^(bh-[a-z0-9-]+|dv-[a-z0-9-]+|lcv-[a-z0-9-]+)\.html$/;
+const PRODUCT_SLUG_PATTERN = /^(bh-[a-z0-9-]+|dv-[a-z0-9-]+|lcv-[a-z0-9-]+)\.html$/i;
 
 // Groups a variant's flat product_rooms list into floor sections for
 // display. The seed data marks both bold floor-name headers ("Ground
@@ -86,16 +86,19 @@ const fs = require('fs');
 const path = require('path');
 
 const PRODUCTS_JSON_PATH = path.join(__dirname, '..', 'db', 'seeds', 'data', 'products.json');
-let cachedProductsJson = null;
+// NOTE: NOT cached permanently — reads fresh on every fallback call.
+// Previously this was cached in-memory forever: if a transient DB error
+// caused the first page load to fall through to JSON, ALL subsequent
+// requests used stale JSON data even after the DB recovered.
 function getProductsFromJson() {
-  if (!cachedProductsJson && fs.existsSync(PRODUCTS_JSON_PATH)) {
+  if (fs.existsSync(PRODUCTS_JSON_PATH)) {
     try {
-      cachedProductsJson = JSON.parse(fs.readFileSync(PRODUCTS_JSON_PATH, 'utf8'));
+      return JSON.parse(fs.readFileSync(PRODUCTS_JSON_PATH, 'utf8'));
     } catch (e) {
       console.error('Failed to read products.json fallback:', e.message);
     }
   }
-  return cachedProductsJson || [];
+  return [];
 }
 
 router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
@@ -146,12 +149,17 @@ router.get('/:slug.html', cacheMiddleware, async (req, res, next) => {
           }
         }
       } catch (dbErr) {
-        console.warn(`Database query failed for ${slug}, checking products.json fallback:`, dbErr.message);
+        console.error(`[products] DB ERROR for ${slug}: ${dbErr.message} — falling back to products.json`);
         product = null;
       }
     }
 
     // JSON fallback if DB returned null or is unavailable
+    if (product) {
+      console.log(`[products] SERVING FROM DB: ${slug} (id=${product.id})`);
+    } else {
+      console.warn(`[products] DB miss for ${slug} — using static products.json fallback (admin changes WON'T show here)`);
+    }
     if (!product) {
       const allJsonProducts = getProductsFromJson();
       const pData = allJsonProducts.find((p) => p.filename === slug || p.slug === slug);
@@ -304,5 +312,38 @@ function formatProductTitle(product, category) {
   }
 });
 
-module.exports = router;
+// ─── Diagnostic endpoint ─────────────────────────────────────────────────────
+// GET /debug/product-source/:slug  (e.g. /debug/product-source/bh-sb-101.html)
+// Returns JSON showing whether the product is served from DB or static JSON.
+// Quick way to confirm the DB connection is live without reading server logs.
+// No auth — safe to expose (read-only, no secrets, helps support debugging).
+router.get('/debug/product-source/:slug', async (req, res) => {
+  const slug = req.params.slug.endsWith('.html') ? req.params.slug : `${req.params.slug}.html`;
+  const result = { slug, source: null, db_connected: !!db, product_id: null, title: null, fixed_price: null, error: null };
+  if (db) {
+    try {
+      const row = await db('products').where({ slug }).select('id', 'title', 'fixed_price', 'price_per_sqft', 'published').first();
+      if (row) {
+        result.source = 'database';
+        result.product_id = row.id;
+        result.title = row.title;
+        result.fixed_price = row.fixed_price;
+        result.price_per_sqft = row.price_per_sqft;
+        result.published = row.published;
+      } else {
+        result.source = 'json_fallback';
+        result.note = 'Product slug not found in DB — will use static products.json. Admin changes WON\'T show.';
+      }
+    } catch (e) {
+      result.source = 'json_fallback';
+      result.db_connected = false;
+      result.error = e.message;
+    }
+  } else {
+    result.source = 'json_fallback';
+    result.note = 'DB module not loaded';
+  }
+  res.json(result);
+});
 
+module.exports = router;
