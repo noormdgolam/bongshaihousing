@@ -158,124 +158,35 @@
 </aside><div class="page-sidebar-content"><div style="margin-bottom: 60px;">
 
 <div class="stagger product-grid">
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1101', 'Bongshai Housing Model No-BH-WA-1101', 'images/products/Model No-BH-WA-1101.webp', 'images/products/Model%20No-BH-WA-1101-400w.webp 400w, images/products/Model%20No-BH-WA-1101-700w.webp 700w, images/products/Model%20No-BH-WA-1101.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1101</h2>
-<p class="property-desc">Comfortable, fast-build modular dormitories and camps.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1101.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1102', 'Bongshai Housing Model No-BH-WA-1102', 'images/products/Model No-BH-WA-1102.webp', 'images/products/Model%20No-BH-WA-1102-400w.webp 400w, images/products/Model%20No-BH-WA-1102-700w.webp 700w, images/products/Model%20No-BH-WA-1102.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1102</h2>
-<p class="property-desc">Modular worker housing engineered for fast, large-scale deployment.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1102.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
 
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1103', 'Bongshai Housing Model No-BH-WA-1103', 'images/products/Model No-BH-WA-1103.webp', 'images/products/Model%20No-BH-WA-1103-400w.webp 400w, images/products/Model%20No-BH-WA-1103-700w.webp 700w, images/products/Model%20No-BH-WA-1103.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1103</h2>
-<p class="property-desc">Dormitory-style accommodation built for construction and industrial sites.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1103.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
+{% if dbProductsByModel._list and dbProductsByModel._list.length > 0 %}
+  {% for product in dbProductsByModel._list %}
+  <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+    <div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, product.model_number, product.title, product.main_image, product.srcset, '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', loop.first) }}</div>
+    <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">{{ dbCategory.name }}</span>
+        <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">🔧 Turnkey</span>
+      </div>
+      <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">{{ product.title }}</h2>
+      <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+        {% for spec in product.specs %}
+        <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">{{ spec.icon | safe }} <strong>{{ spec.value }}</strong></span>
+        {% endfor %}
+      </div>
+      <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">{{ product.short_description }}</p>
+      <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+        <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+        <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳{{ (product.sale_price or product.base_price) | string | replace(r/\B(?=(\d{3})+(?!\d))/g, ",") }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+      </div>
+      <a class="btn btn-primary" href="{{ product.slug }}.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details ➔</a>
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <p>No models available for this category yet.</p>
+{% endif %}
 
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1104', 'Bongshai Housing Model No-BH-WA-1104', 'images/products/Model No-BH-WA-1104.webp', 'images/products/Model%20No-BH-WA-1104-400w.webp 400w, images/products/Model%20No-BH-WA-1104-700w.webp 700w, images/products/Model%20No-BH-WA-1104.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1104</h2>
-<p class="property-desc">Worker housing designed for comfort during long-term site assignments.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1104.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1105', 'Bongshai Housing Model No-BH-WA-1105', 'images/products/Model No-BH-WA-1105.webp', 'images/products/Model%20No-BH-WA-1105-400w.webp 400w, images/products/Model%20No-BH-WA-1105-700w.webp 700w, images/products/Model%20No-BH-WA-1105.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1105</h2>
-<p class="property-desc">Modular camp construction ideal for remote project locations.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1105.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1106', 'Bongshai Housing Model No-BH-WA-1106', 'images/products/Model No-BH-WA-1106.webp', 'images/products/Model%20No-BH-WA-1106-400w.webp 400w, images/products/Model%20No-BH-WA-1106-700w.webp 700w, images/products/Model%20No-BH-WA-1106.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1106</h2>
-<p class="property-desc">Fast-build dormitories engineered for large workforce housing needs.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1106.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1107', 'Bongshai Housing Model No-BH-WA-1107', 'images/products/Model No-BH-WA-1107.webp', 'images/products/Model%20No-BH-WA-1107-400w.webp 400w, images/products/Model%20No-BH-WA-1107-700w.webp 700w, images/products/Model%20No-BH-WA-1107.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1107</h2>
-<p class="property-desc">Worker accommodation built for durability across extended site use.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1107.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1108', 'Bongshai Housing Model No-BH-WA-1108', 'images/products/Model No-BH-WA-1108.webp', 'images/products/Model%20No-BH-WA-1108-400w.webp 400w, images/products/Model%20No-BH-WA-1108-700w.webp 700w, images/products/Model%20No-BH-WA-1108.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1108</h2>
-<p class="property-desc">Modular housing solutions designed for factory and plantation workforces.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1108.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1109', 'Bongshai Housing Model No-BH-WA-1109', 'images/products/Model No-BH-WA-1109.webp', 'images/products/Model%20No-BH-WA-1109-400w.webp 400w, images/products/Model%20No-BH-WA-1109-700w.webp 700w, images/products/Model%20No-BH-WA-1109.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1109</h2>
-<p class="property-desc">Dormitory construction engineered for efficient, high-density housing.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1109.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1110', 'Bongshai Housing Model No-BH-WA-1110', 'images/products/Model No-BH-WA-1110.webp', 'images/products/Model%20No-BH-WA-1110-400w.webp 400w, images/products/Model%20No-BH-WA-1110-700w.webp 700w, images/products/Model%20No-BH-WA-1110.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1110</h2>
-<p class="property-desc">Worker camp housing built for quick assembly on active project sites.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1110.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1111', 'Bongshai Housing Model No-BH-WA-1111', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1024&q=80', null, null, false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1111</h2>
-<p class="property-desc">Modular accommodation designed for both comfort and cost efficiency.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1111.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-WA-1112', 'Bongshai Housing Model No-BH-WA-1112', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1024&q=80', null, null, false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Worker Camp</span>
-<h2 class="property-name">Model No-BH-WA-1112</h2>
-<p class="property-desc">Fast-deploy worker housing engineered for remote or temporary sites.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-wa-1112.html" style="width:100%;justify-content:center;">View Details</a>
-</div></div>
 </div>
 <!-- OVERVIEW -->
 <!-- PACKAGES -->

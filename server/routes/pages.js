@@ -201,19 +201,35 @@ for (const pageFile of CATEGORY_LANDING_PAGES) {
           if (dbCategory) {
             const products = await db('products')
               .where({ category_id: dbCategory.id, published: true })
-              .select('model_number', 'main_image');
-            dbProductsByModel = Object.fromEntries(products.map((p) => [
-              p.model_number,
-              {
-                main_image: p.main_image,
-                // Only claim a responsive srcset when the image is actually
-                // a .webp - a handful of legacy cards use raw external URLs
-                // or non-webp files with no -400w/-700w siblings to exist.
-                srcset: p.main_image && p.main_image.endsWith('.webp')
-                  ? `${p.main_image.replace('.webp', '-400w.webp')} 400w, ${p.main_image.replace('.webp', '-700w.webp')} 700w, ${p.main_image} 1024w`
-                  : null,
-              },
-            ]));
+              .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'main_image')
+              .orderBy('sort_order', 'asc');
+            
+            const productIds = products.map(p => p.id);
+            let allSpecs = [];
+            
+            if (productIds.length > 0) {
+              allSpecs = await db('product_specs')
+                .whereIn('product_id', productIds)
+                .orderBy('sort_order', 'asc');
+            }
+            
+            // Map specs to products
+            const specsByProductId = {};
+            allSpecs.forEach(spec => {
+              if (!specsByProductId[spec.product_id]) {
+                specsByProductId[spec.product_id] = [];
+              }
+              specsByProductId[spec.product_id].push(spec);
+            });
+            
+            products.forEach(p => {
+              p.specs = specsByProductId[p.id] || [];
+              dbProductsByModel[p.model_number] = p;
+            });
+            
+            // Also provide a flat list of all products for the category to simplify iterating
+            dbProductsByModel._list = products;
+            
           }
         } catch (err) {
           console.error(`category DB fetch failed for ${pageFile}, rendering static fallback:`, err.message);

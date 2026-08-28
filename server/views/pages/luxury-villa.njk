@@ -142,58 +142,35 @@
 </aside><div class="page-sidebar-content"><div style="margin-bottom: 60px;">
 
 <div class="stagger product-grid">
-<!-- BH-LV-01 -->
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div style="height:240px;background:linear-gradient(135deg,var(--accent-dark),var(--accent-light));display:flex;align-items:center;justify-content:center;position:relative">
-<div style="text-align:center;color:white">
-<div style="font-size:4rem;margin-bottom:var(--space-3)">🏰</div>
-<div style="font-size:var(--fs-xl);font-weight:700;font-family:var(--font-heading)">Model BH-LV-01</div>
-</div>
-<div style="position:absolute;top:var(--space-4);left:var(--space-4)"><span class="badge badge-gold">Premium</span></div>
-</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Luxury Villa – Model 1</span>
-<h2 class="property-name">What is the Executive Villa Package?</h2>
-<p class="property-desc">Sophisticated interior decoration with premium finishes, open balcony, and smart home integration.</p>
-<div style="margin:var(--space-5) 0;padding:var(--space-4);background:var(--off-white);border-radius:var(--radius-xl)">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--primary);margin-bottom:var(--space-3)">Interior Decoration:</div>
-<div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--primary);color:white;border-radius:var(--radius-full)">🛏️ 2 Luxurious Bedrooms</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--primary);color:white;border-radius:var(--radius-full)">🚿 2 Comfortable Bathrooms</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--primary);color:white;border-radius:var(--radius-full)">🛋️ Aesthetic Living Room</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--accent);color:white;border-radius:var(--radius-full)">🍳 Sophisticated Kitchen</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--accent);color:white;border-radius:var(--radius-full)">🌿 Open Balcony</span>
-</div>
-</div>
-<a class="btn btn-primary" href="contact.html" id="lv01-inquiry-btn" style="width:100%;justify-content:center;">Inquire About Model BH-LV-01</a>
-</div>
-</div>
-<!-- BH-LV-02 -->
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
-<div style="height:240px;background:linear-gradient(135deg,var(--primary-dark),var(--primary-light));display:flex;align-items:center;justify-content:center;position:relative">
-<div style="text-align:center;color:white">
-<div style="font-size:4rem;margin-bottom:var(--space-3)">🏰</div>
-<div style="font-size:var(--fs-xl);font-weight:700;font-family:var(--font-heading)">Model BH-LV-02</div>
-</div>
-<div style="position:absolute;top:var(--space-4);left:var(--space-4)"><span class="badge badge-gold">Signature</span></div>
-</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Luxury Villa – Model 2</span>
-<h2 class="property-name">What is the Signature Villa Package?</h2>
-<p class="property-desc">Our most prestigious villa model — featuring expanded spaces, dual kitchens, and bespoke luxury finishes throughout every room.</p>
-<div style="margin:var(--space-5) 0;padding:var(--space-4);background:var(--off-white);border-radius:var(--radius-xl)">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--primary);margin-bottom:var(--space-3)">Interior Decoration:</div>
-<div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--primary);color:white;border-radius:var(--radius-full)">🛏️ 2+ Luxurious Bedrooms</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--primary);color:white;border-radius:var(--radius-full)">🚿 2 Bathrooms</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--primary);color:white;border-radius:var(--radius-full)">🛋️ Aesthetic Living Room</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--accent);color:white;border-radius:var(--radius-full)">🍳 1 Kitchen</span>
-<span style="font-size:var(--fs-xs);padding:4px 10px;background:var(--accent);color:white;border-radius:var(--radius-full)">🌿 Open Balcony</span>
-</div>
-</div>
-<a class="btn btn-primary" href="contact.html" id="lv02-inquiry-btn" style="width:100%;justify-content:center;">Inquire About Model BH-LV-02</a>
-</div>
-</div>
+
+{% if dbProductsByModel._list and dbProductsByModel._list.length > 0 %}
+  {% for product in dbProductsByModel._list %}
+  <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+    <div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, product.model_number, product.title, product.main_image, product.srcset, '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', loop.first) }}</div>
+    <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">{{ dbCategory.name }}</span>
+        <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">🔧 Turnkey</span>
+      </div>
+      <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">{{ product.title }}</h2>
+      <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+        {% for spec in product.specs %}
+        <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">{{ spec.icon | safe }} <strong>{{ spec.value }}</strong></span>
+        {% endfor %}
+      </div>
+      <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">{{ product.short_description }}</p>
+      <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+        <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+        <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳{{ (product.sale_price or product.base_price) | string | replace(r/\B(?=(\d{3})+(?!\d))/g, ",") }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+      </div>
+      <a class="btn btn-primary" href="{{ product.slug }}.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details ➔</a>
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <p>No models available for this category yet.</p>
+{% endif %}
+
 </div>
 </div></div></div></div>
 <!-- OVERVIEW -->

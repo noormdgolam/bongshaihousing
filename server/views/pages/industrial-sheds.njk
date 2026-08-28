@@ -164,136 +164,35 @@
 </aside><div class="page-sidebar-content"><div style="margin-bottom: 60px;">
 
 <div class="stagger product-grid">
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1001', 'Bongshai Housing Model No-BH-IS-1001', 'images/products/Model No-BH-IS-1001.webp', 'images/products/Model%20No-BH-IS-1001-400w.webp 400w, images/products/Model%20No-BH-IS-1001-700w.webp 700w, images/products/Model%20No-BH-IS-1001.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1001</h2>
-<p class="property-desc">Pre-Engineered Buildings for factories, warehouses, and logistics.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1001.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1002', 'Bongshai Housing Model No-BH-IS-1002', 'images/products/Model No-BH-IS-1002.webp', 'images/products/Model%20No-BH-IS-1002-400w.webp 400w, images/products/Model%20No-BH-IS-1002-700w.webp 700w, images/products/Model%20No-BH-IS-1002.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1002</h2>
-<p class="property-desc">Wide-span industrial sheds engineered for heavy equipment and storage.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1002.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
 
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1003', 'Bongshai Housing Model No-BH-IS-1003', 'images/products/Model No-BH-IS-1003.webp', 'images/products/Model%20No-BH-IS-1003-400w.webp 400w, images/products/Model%20No-BH-IS-1003-700w.webp 700w, images/products/Model%20No-BH-IS-1003.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1003</h2>
-<p class="property-desc">Pre-engineered steel sheds built for fast industrial deployment.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1003.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
+{% if dbProductsByModel._list and dbProductsByModel._list.length > 0 %}
+  {% for product in dbProductsByModel._list %}
+  <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+    <div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, product.model_number, product.title, product.main_image, product.srcset, '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', loop.first) }}</div>
+    <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">{{ dbCategory.name }}</span>
+        <span style="background: rgba(30, 64, 175, 0.08); color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.3px;">🔧 Turnkey</span>
+      </div>
+      <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">{{ product.title }}</h2>
+      <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
+        {% for spec in product.specs %}
+        <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">{{ spec.icon | safe }} <strong>{{ spec.value }}</strong></span>
+        {% endfor %}
+      </div>
+      <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">{{ product.short_description }}</p>
+      <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
+        <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
+        <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳{{ (product.sale_price or product.base_price) | string | replace(r/\B(?=(\d{3})+(?!\d))/g, ",") }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+      </div>
+      <a class="btn btn-primary" href="{{ product.slug }}.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details ➔</a>
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <p>No models available for this category yet.</p>
+{% endif %}
 
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1004', 'Bongshai Housing Model No-BH-IS-1004', 'images/products/Model No-BH-IS-1004.webp', 'images/products/Model%20No-BH-IS-1004-400w.webp 400w, images/products/Model%20No-BH-IS-1004-700w.webp 700w, images/products/Model%20No-BH-IS-1004.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1004</h2>
-<p class="property-desc">Industrial shed construction designed for factories and distribution centers.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1004.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1005', 'Bongshai Housing Model No-BH-IS-1005', 'images/products/Model No-BH-IS-1005.webp', 'images/products/Model%20No-BH-IS-1005-400w.webp 400w, images/products/Model%20No-BH-IS-1005-700w.webp 700w, images/products/Model%20No-BH-IS-1005.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1005</h2>
-<p class="property-desc">A high-clearance steel shed ideal for manufacturing operations.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1005.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1006', 'Bongshai Housing Model No-BH-IS-1006', 'images/products/Model No-BH-IS-1006.webp', 'images/products/Model%20No-BH-IS-1006-400w.webp 400w, images/products/Model%20No-BH-IS-1006-700w.webp 700w, images/products/Model%20No-BH-IS-1006.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1006</h2>
-<p class="property-desc">Pre-engineered buildings built for logistics hubs and cold storage.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1006.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1007', 'Bongshai Housing Model No-BH-IS-1007', 'images/products/Model No-BH-IS-1007.webp', 'images/products/Model%20No-BH-IS-1007-400w.webp 400w, images/products/Model%20No-BH-IS-1007-700w.webp 700w, images/products/Model%20No-BH-IS-1007.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1007</h2>
-<p class="property-desc">Industrial-grade steel sheds engineered for heavy structural loads.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1007.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1008', 'Bongshai Housing Model No-BH-IS-1008', 'images/products/Model No-BH-IS-1008.webp', 'images/products/Model%20No-BH-IS-1008-400w.webp 400w, images/products/Model%20No-BH-IS-1008-700w.webp 700w, images/products/Model%20No-BH-IS-1008.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1008</h2>
-<p class="property-desc">A wide-span shed solution ideal for warehousing and bulk storage.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1008.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1009', 'Bongshai Housing Model No-BH-IS-1009', 'images/products/Model No-BH-IS-1009.webp', 'images/products/Model%20No-BH-IS-1009-400w.webp 400w, images/products/Model%20No-BH-IS-1009-700w.webp 700w, images/products/Model%20No-BH-IS-1009.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1009</h2>
-<p class="property-desc">Pre-engineered steel construction built for rapid industrial scale-up.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1009.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1010', 'Bongshai Housing Model No-BH-IS-1010', 'images/products/Model No-BH-IS-1010.webp', 'images/products/Model%20No-BH-IS-1010-400w.webp 400w, images/products/Model%20No-BH-IS-1010-700w.webp 700w, images/products/Model%20No-BH-IS-1010.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1010</h2>
-<p class="property-desc">Industrial shed architecture designed for durability under continuous use.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1010.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1011', 'Bongshai Housing Model No-BH-IS-1011', 'images/products/Model No-BH-IS-1011.webp', 'images/products/Model%20No-BH-IS-1011-400w.webp 400w, images/products/Model%20No-BH-IS-1011-700w.webp 700w, images/products/Model%20No-BH-IS-1011.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1011</h2>
-<p class="property-desc">A steel shed solution engineered for factories with heavy machinery.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1011.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
-
-<div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
-<div class="property-img-wrap">{{ productImg.cardImage(dbProductsByModel, 'BH-IS-1012', 'Bongshai Housing Model No-BH-IS-1012', 'images/products/Model No-BH-IS-1012.webp', 'images/products/Model%20No-BH-IS-1012-400w.webp 400w, images/products/Model%20No-BH-IS-1012-700w.webp 700w, images/products/Model%20No-BH-IS-1012.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
-<div class="property-card-body" data-aos="fade-up">
-<span class="property-type">Industrial Shed</span>
-<h2 class="property-name">Model No-BH-IS-1012</h2>
-<p class="property-desc">Pre-engineered buildings offering fast turnaround for industrial projects.</p>
-<div class="property-price"><span class="property-price-label">Pricing</span><span class="property-price-value" style="font-size:0.95rem;">Quote on Request</span></div>
-<a class="btn btn-primary" href="bh-is-1012.html" style="width:100%;justify-content:center;">View Details</a>
-</div>
-</div>
 </div>
 <!-- OVERVIEW -->
 <!-- PACKAGES -->
