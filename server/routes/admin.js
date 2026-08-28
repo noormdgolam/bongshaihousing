@@ -1187,12 +1187,10 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
     
     let seoMsg = '';
     if (isPublished && auto_seo === 'on') {
-      try {
-        await generateForProduct(id);
-        seoMsg = '?seo_generated=1';
-      } catch (seoErr) {
-        console.error('Auto SEO generation failed on publish:', seoErr);
-      }
+      setImmediate(() => {
+        generateForProduct(id).catch((seoErr) => console.error('Auto SEO generation failed on create:', seoErr.message));
+      });
+      seoMsg = '?seo_generated=1';
     }
 
     res.redirect(`/admin/products/${id}/edit${seoMsg}`);
@@ -1218,48 +1216,55 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
-  const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
-  const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
-  const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
-  
-  const existingProduct = await db('products').where({ id: req.params.id }).first();
-  const isPublished = published === 'on' || published === true || published === 'true';
+  try {
+    const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
+    const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
+    const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
+    const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
+    
+    const existingProduct = await db('products').where({ id: req.params.id }).first();
+    const isPublished = published === 'on' || published === true || published === 'true';
 
-  const cleanPriceSqft = price_per_sqft !== '' && price_per_sqft !== undefined && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null;
-  const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
-  let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
-  if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
-    cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
-  }
-
-  await db('products').where({ id: req.params.id }).update({
-    category_id, model_number, slug, title, description,
-    price_per_sqft: cleanPriceSqft,
-    price_currency: price_currency || 'BDT',
-    fixed_price: cleanFixedPrice,
-    total_floor_area: cleanFloorArea,
-    main_image: finalImage,
-    image_2: finalImage2,
-    image_3: finalImage3,
-    meta_title: meta_title || null,
-    meta_description: meta_description || null,
-    main_image_alt: main_image_alt || null,
-    published: isPublished,
-    updated_at: db.fn.now(),
-  });
-  
-  let seoMsg = '';
-  if (isPublished && existingProduct && !existingProduct.published && auto_seo === 'on') {
-    try {
-      await generateForProduct(req.params.id);
-      seoMsg = '?seo_generated=1';
-    } catch (seoErr) {
-      console.error('Auto SEO generation failed on publish:', seoErr);
+    const cleanPriceSqft = price_per_sqft !== '' && price_per_sqft !== undefined && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null;
+    const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
+    let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
+    if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
+      cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
     }
-  }
 
-  res.redirect(`/admin/products/${req.params.id}/edit${seoMsg}`);
+    await db('products').where({ id: req.params.id }).update({
+      category_id, model_number, slug, title, description,
+      price_per_sqft: cleanPriceSqft,
+      price_currency: price_currency || 'BDT',
+      fixed_price: cleanFixedPrice,
+      total_floor_area: cleanFloorArea,
+      main_image: finalImage,
+      image_2: finalImage2,
+      image_3: finalImage3,
+      meta_title: meta_title || null,
+      meta_description: meta_description || null,
+      main_image_alt: main_image_alt || null,
+      published: isPublished,
+      updated_at: db.fn.now(),
+    });
+    
+    let seoMsg = '';
+    if (isPublished && existingProduct && !existingProduct.published && auto_seo === 'on') {
+      setImmediate(() => {
+        generateForProduct(req.params.id).catch((seoErr) => console.error('Auto SEO generation failed on publish:', seoErr.message));
+      });
+      seoMsg = '?seo_generated=1';
+    }
+
+    res.redirect(`/admin/products/${req.params.id}/edit${seoMsg}`);
+  } catch (err) {
+    console.error('Error updating product:', err);
+    const product = await db('products').where({ id: req.params.id }).first();
+    const categories = await db('categories').orderBy('sort_order');
+    const specs = await db('product_specs').where({ product_id: req.params.id }).orderBy('sort_order');
+    const variants = await db('product_variants').where({ product_id: req.params.id }).orderBy('sort_order');
+    res.status(400).render('admin/products/form.njk', adminVars(req, { product: { ...(product || {}), ...req.body, id: req.params.id }, categories, specs, variants, error: err.message }));
+  }
 });
 
 router.post('/admin/products/:id/delete', async (req, res) => {
