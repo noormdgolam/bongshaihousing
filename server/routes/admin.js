@@ -1224,21 +1224,12 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
 
     // Deploy the single product page to the live site in the background
     setImmediate(async () => {
-      invalidatePageCache(); // Clear the stale HTML so the curl fetches fresh DB data
-      const { exec } = require('child_process');
-      const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
-      exec(`python "${scriptPath}" ${slug}`, { env: process.env }, (err, stdout, stderr) => {
-        if (err) console.error(`Live site sync failed for ${slug}:`, err.message);
-        else console.log(`Live site sync succeeded for ${slug}:\n${stdout}`);
-      });
+      invalidatePageCache(); // Clear the stale HTML so the self-fetch sees fresh DB data
+      const { syncPageToLive } = require('../lib/liveSiteSync');
+      syncPageToLive(slug);
       try {
         const cat = await db('categories').where({ id: req.body.category_id }).first();
-        if (cat && cat.landing_page_slug) {
-          exec(`python "${scriptPath}" ${cat.landing_page_slug}`, { env: process.env }, (err, stdout, stderr) => {
-            if (err) console.error(`Live site category sync failed for ${cat.landing_page_slug}:`, err.message);
-            else console.log(`Live site category sync succeeded for ${cat.landing_page_slug}:\n${stdout}`);
-          });
-        }
+        if (cat && cat.landing_page_slug) syncPageToLive(cat.landing_page_slug);
       } catch (e) { console.error('Category sync error:', e.message); }
     });
 
@@ -1308,21 +1299,12 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
 
     // Deploy the single product page to the live site in the background
     setImmediate(async () => {
-      invalidatePageCache(); // Clear the stale HTML so the curl fetches fresh DB data
-      const { exec } = require('child_process');
-      const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
-      exec(`python "${scriptPath}" ${slug}`, { env: process.env }, (err, stdout, stderr) => {
-        if (err) console.error(`Live site sync failed for ${slug}:`, err.message);
-        else console.log(`Live site sync succeeded for ${slug}:\n${stdout}`);
-      });
+      invalidatePageCache(); // Clear the stale HTML so the self-fetch sees fresh DB data
+      const { syncPageToLive } = require('../lib/liveSiteSync');
+      syncPageToLive(slug);
       try {
         const cat = await db('categories').where({ id: req.body.category_id }).first();
-        if (cat && cat.landing_page_slug) {
-          exec(`python "${scriptPath}" ${cat.landing_page_slug}`, { env: process.env }, (err, stdout, stderr) => {
-            if (err) console.error(`Live site category sync failed for ${cat.landing_page_slug}:`, err.message);
-            else console.log(`Live site category sync succeeded for ${cat.landing_page_slug}:\n${stdout}`);
-          });
-        }
+        if (cat && cat.landing_page_slug) syncPageToLive(cat.landing_page_slug);
       } catch (e) { console.error('Category sync error:', e.message); }
     });
 
