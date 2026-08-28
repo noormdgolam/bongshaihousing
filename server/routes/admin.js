@@ -1222,6 +1222,16 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
       seoMsg = '?seo_generated=1';
     }
 
+    // Deploy the single product page to the live site in the background
+    setImmediate(() => {
+      const { exec } = require('child_process');
+      const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
+      exec(`python "${scriptPath}" ${slug}`, { env: process.env }, (err, stdout, stderr) => {
+        if (err) console.error(`Live site sync failed for ${slug}:`, err.message);
+        else console.log(`Live site sync succeeded for ${slug}:\n${stdout}`);
+      });
+    });
+
     res.redirect(`/admin/products/${id}/edit${seoMsg}`);
   } catch (err) {
     const categories = await db('categories').orderBy('sort_order');
@@ -1285,6 +1295,16 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       });
       seoMsg = '?seo_generated=1';
     }
+
+    // Deploy the single product page to the live site in the background
+    setImmediate(() => {
+      const { exec } = require('child_process');
+      const scriptPath = require('path').join(__dirname, '..', 'scripts', 'deploy_single_page.py');
+      exec(`python "${scriptPath}" ${slug}`, { env: process.env }, (err, stdout, stderr) => {
+        if (err) console.error(`Live site sync failed for ${slug}:`, err.message);
+        else console.log(`Live site sync succeeded for ${slug}:\n${stdout}`);
+      });
+    });
 
     res.redirect(`/admin/products/${req.params.id}/edit${seoMsg}`);
   } catch (err) {
