@@ -24,6 +24,8 @@ FILES = [
     ("server/views/admin/products/form.njk", "bongshai-node-app/views/admin/products/form.njk"),
     ("server/routes/products.js", "bongshai-node-app/routes/products.js"),
     ("server/lib/pageCache.js", "bongshai-node-app/lib/pageCache.js"),
+    ("server/routes/admin.js", "bongshai-node-app-prod/routes/admin.js"),
+    ("server/routes/admin.js", "bongshai-node-app/routes/admin.js"),
 ]
 
 def upload(local_path, remote_path):

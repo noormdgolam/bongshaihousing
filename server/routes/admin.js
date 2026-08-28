@@ -1249,7 +1249,12 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   for (const v of variants) {
     v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
   }
-  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null, seoGenerated: req.query.seo_generated === '1' }));
+  
+  let successMsg = null;
+  if (req.query.saved === '1') successMsg = 'Product saved successfully! The live site is syncing in the background.';
+  if (req.query.seo_generated === '1') successMsg = 'Product saved! Auto SEO generation started in the background.';
+  
+  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null, success: successMsg, seoGenerated: req.query.seo_generated === '1' }));
 });
 
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
@@ -1289,12 +1294,12 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       updated_at: db.fn.now(),
     });
     
-    let seoMsg = '';
+    let seoMsg = '?saved=1';
     if (isPublished && existingProduct && !existingProduct.published && auto_seo === 'on') {
       setImmediate(() => {
         generateForProduct(req.params.id).catch((seoErr) => console.error('Auto SEO generation failed on publish:', seoErr.message));
       });
-      seoMsg = '?seo_generated=1';
+      seoMsg = '?seo_generated=1&saved=1';
     }
 
     // Deploy the single product page to the live site in the background
