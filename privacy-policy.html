@@ -277,7 +277,7 @@
 <a aria-label="Call Bongshai Housing" class="nav-phone" href="tel:+8801781636613" itemprop="telephone">
           📞 +880 1781-636613
         </a>
-<a class="btn btn-primary btn-sm" href="contact.html" id="nav-get-quote-btn">Get Quote</a>
+<a class="btn btn-primary btn-sm" href="contact.html" id="nav-get-sales inquiry-btn">Contact Sales</a>
 </div>
 <!-- Hamburger (Mobile) -->
 <button aria-controls="mobileDrawer" aria-expanded="false" aria-label="Toggle menu" class="hamburger" id="hamburgerBtn">
@@ -318,7 +318,7 @@
           <a href="industrial-sheds.html" class="mobile-sub-link">Industrial Steel Sheds</a>
           <a href="worker-accommodation.html" class="mobile-sub-link">Worker Accommodation</a>
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Interactive Tools</div>
-          <a href="solutions.html" class="mobile-sub-link">Get Quote</a>
+          <a href="solutions.html" class="mobile-sub-link">Contact Sales</a>
         </div>
       </div>      <a href="projects.html" class="mobile-nav-link">Our Projects</a>
       <a href="gallery.html" class="mobile-nav-link">Image Gallery</a>
@@ -337,7 +337,7 @@
           
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
       <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-secondary" style="justify-content:center;">📞 +880 1781-636613</a>
-      <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-quote-btn">Get a Free Quote</a>
+      <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-sales inquiry-btn">Contact Sales</a>
     </div>
   </div>
 
@@ -365,7 +365,7 @@
           <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at <a href="mailto:sales@bongshai.com" itemprop="email" style="color:var(--accent); font-weight:600">sales@bongshai.com</a>.</p>
 
           <h3>1. Information We Collect</h3>
-          <p>Bongshai Housing collects information directly from you when you interact with our website, request quotes, or submit applications:</p>
+          <p>Bongshai Housing collects information directly from you when you interact with our website, request sales inquiries, or submit applications:</p>
           <ul>
             <li><strong>Contact Information:</strong> First name, last name, email address, phone/WhatsApp number.</li>
             <li><strong>Inquiry Details:</strong> Land size, project location, budget range, and specific requirements for steel composite packages.</li>
@@ -380,7 +380,7 @@
             <li>Improve, personalize, and expand website content and overall user experience.</li>
             <li>Understand and analyze how you use our website.</li>
             <li>Develop new products, services, features, and functionality.</li>
-            <li>Communicate with you to provide project quotes, structural consultation, and operational updates.</li>
+            <li>Communicate with you to provide project sales inquiries, structural consultation, and operational updates.</li>
             <li>Process job applications and coordinate recruitment.</li>
             <li>Send you marketing updates or technical notifications (with your consent).</li>
             <li>Find and prevent fraudulent activities.</li>
@@ -620,7 +620,7 @@
           <p><strong id="bhAiWelcomeTitle">স্বাগতম বঙ্গশাই হাউজিং-এ!</strong> 👋</p>
           <p id="bhAiWelcomeBody">আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা ইন্ডাস্ট্রিয়াল ফ্যাক্টরি শেড নিয়ে যেকোনো প্রশ্ন করতে পারেন।</p>
           <div class="bh-ai-bubble-actions">
-            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20a%20quote" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
+            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20to%20contact%20sales" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
               <span id="bhAiWelcomeCta">💬 WhatsApp-এ কথা বলুন</span>
             </a>
           </div>
@@ -1625,7 +1625,7 @@ RULES FOR RESPONSES:
     const low = tier.min * type.rate;
     const high = tier.max * type.rate;
     const rangeText = low === high ? formatTaka(low) : (formatTaka(low) + ' – ' + formatTaka(high));
-    const waText = encodeURIComponent('Hello Bongshai Housing, I want a quote for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
+    const waText = encodeURIComponent('Hello Bongshai Housing, I want a sales inquiry for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
 
     appendFlowMessage(`
       <p><strong>${type.label}</strong> (${tier.label}) নির্মাণের আনুমানিক খরচ: <strong>${rangeText}</strong></p>

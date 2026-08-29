@@ -197,7 +197,7 @@
           <p><strong id="bhAiWelcomeTitle">স্বাগতম বঙ্গশাই হাউজিং-এ!</strong> 👋</p>
           <p id="bhAiWelcomeBody">আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা ইন্ডাস্ট্রিয়াল ফ্যাক্টরি শেড নিয়ে যেকোনো প্রশ্ন করতে পারেন।</p>
           <div class="bh-ai-bubble-actions">
-            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20a%20quote" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
+            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20to%20contact%20sales" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
               <span id="bhAiWelcomeCta">💬 WhatsApp-এ কথা বলুন</span>
             </a>
           </div>
@@ -1202,7 +1202,7 @@ RULES FOR RESPONSES:
     const low = tier.min * type.rate;
     const high = tier.max * type.rate;
     const rangeText = low === high ? formatTaka(low) : (formatTaka(low) + ' – ' + formatTaka(high));
-    const waText = encodeURIComponent('Hello Bongshai Housing, I want a quote for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
+    const waText = encodeURIComponent('Hello Bongshai Housing, I want a sales inquiry for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
 
     appendFlowMessage(`
       <p><strong>${type.label}</strong> (${tier.label}) নির্মাণের আনুমানিক খরচ: <strong>${rangeText}</strong></p>

@@ -87,7 +87,7 @@
         "slogan": "Bangladesh's Premier Steel Building Company",
         "telephone": ["+8801781636613", "+8801714104940"],
         "email": "sales@bongshai.com",
-        "priceRange": "Contact for Quote",
+        "priceRange": "Contact Sales",
         "hasMap": "https://share.google/o4qfoSNEk5eRdxzvv",
         "address": {
           "@type": "PostalAddress",
@@ -339,7 +339,7 @@
 <a aria-label="Call Bongshai Housing" class="nav-phone" href="tel:+8801781636613" itemprop="telephone">
           📞 +880 1781-636613
         </a>
-<a class="btn btn-primary btn-sm" href="contact.html" id="nav-get-quote-btn">Get Quote</a>
+<a class="btn btn-primary btn-sm" href="contact.html" id="nav-get-sales inquiry-btn">Contact Sales</a>
 </div>
 <!-- Hamburger (Mobile) -->
 <button aria-controls="mobileDrawer" aria-expanded="false" aria-label="Toggle menu" class="hamburger" id="hamburgerBtn">
@@ -380,7 +380,7 @@
           <a href="industrial-sheds.html" class="mobile-sub-link">Industrial Steel Sheds</a>
           <a href="worker-accommodation.html" class="mobile-sub-link">Worker Accommodation</a>
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Interactive Tools</div>
-          <a href="solutions.html" class="mobile-sub-link">Get Quote</a>
+          <a href="solutions.html" class="mobile-sub-link">Contact Sales</a>
         </div>
       </div>      <a href="projects.html" class="mobile-nav-link">Our Projects</a>
       <a href="gallery.html" class="mobile-nav-link">Image Gallery</a>
@@ -399,7 +399,7 @@
           
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
       <a href="tel:+8801781636613" itemprop="telephone" class="btn btn-secondary" style="justify-content:center;">📞 +880 1781-636613</a>
-      <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-quote-btn">Get a Free Quote</a>
+      <a href="contact.html" class="btn btn-primary" style="justify-content:center;" id="mobile-sales inquiry-btn">Contact Sales</a>
     </div>
   </div>
 
@@ -1075,7 +1075,7 @@
           <p><strong id="bhAiWelcomeTitle">স্বাগতম বঙ্গশাই হাউজিং-এ!</strong> 👋</p>
           <p id="bhAiWelcomeBody">আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা ইন্ডাস্ট্রিয়াল ফ্যাক্টরি শেড নিয়ে যেকোনো প্রশ্ন করতে পারেন।</p>
           <div class="bh-ai-bubble-actions">
-            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20a%20quote" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
+            <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20to%20contact%20sales" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
               <span id="bhAiWelcomeCta">💬 WhatsApp-এ কথা বলুন</span>
             </a>
           </div>
@@ -2080,7 +2080,7 @@ RULES FOR RESPONSES:
     const low = tier.min * type.rate;
     const high = tier.max * type.rate;
     const rangeText = low === high ? formatTaka(low) : (formatTaka(low) + ' – ' + formatTaka(high));
-    const waText = encodeURIComponent('Hello Bongshai Housing, I want a quote for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
+    const waText = encodeURIComponent('Hello Bongshai Housing, I want a sales inquiry for ' + type.label.replace(/[^\x00-\x7F]/g, '').trim() + ' (' + tier.label.replace(/[^\x00-\x7F0-9,.\s]/g, '').trim() + ')');
 
     appendFlowMessage(`
       <p><strong>${type.label}</strong> (${tier.label}) নির্মাণের আনুমানিক খরচ: <strong>${rangeText}</strong></p>
