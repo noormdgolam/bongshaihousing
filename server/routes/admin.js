@@ -1240,6 +1240,61 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
   }
 });
 
+router.post('/admin/products/sync-meta-descriptions', async (req, res) => {
+  try {
+    const jsonPath = path.join(__dirname, '..', 'db', 'seeds', 'data', 'products.json');
+    if (!fs.existsSync(jsonPath)) {
+      return res.status(404).json({ error: 'products.json not found' });
+    }
+
+    await ensureProductColumns();
+    const raw = fs.readFileSync(jsonPath, 'utf8');
+    const seedProducts = JSON.parse(raw);
+    const updated = [];
+    const unchanged = [];
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    const syncFiles = req.body.sync_files === true || req.body.sync_files === 'true' || req.query.sync_files === '1';
+
+    for (const p of seedProducts) {
+      if (!p.modelNumber || !p.description) continue;
+      const targetDesc = p.description.trim();
+      const row = await db('products').where({ model_number: p.modelNumber }).first();
+      if (!row) continue;
+
+      const isDiff = (row.meta_description || '').trim() !== targetDesc;
+      if (isDiff) {
+        await db('products').where({ id: row.id }).update({
+          meta_description: targetDesc
+        });
+        updated.push({
+          id: row.id,
+          model_number: row.model_number,
+          slug: row.slug,
+          before: (row.meta_description || '').substring(0, 80),
+          after: targetDesc.substring(0, 80)
+        });
+      } else {
+        unchanged.push(row.model_number);
+      }
+
+      if (syncFiles && row.slug) {
+        await syncPageToLive(row.slug);
+      }
+    }
+
+    res.json({
+      success: true,
+      totalCount: seedProducts.length,
+      updatedCount: updated.length,
+      unchangedCount: unchanged.length,
+      filesSynced: syncFiles,
+      updatedProducts: updated
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/admin/products/:id/edit', async (req, res) => {
   const product = await db('products').where({ id: req.params.id }).first();
   if (!product) return res.status(404).send('Not found');
