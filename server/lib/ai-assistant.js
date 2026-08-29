@@ -7,7 +7,7 @@ try {
 }
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL_NAME = 'openai/gpt-oss-120b';
+const MODEL_NAME = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
 /**
  * Knowledge Base for Bongshai Housing

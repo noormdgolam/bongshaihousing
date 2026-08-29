@@ -3,48 +3,266 @@
 // those ahead of the Node app - see project docs) actually reflect an
 // edit without a full site deploy.
 //
-// Pure in-process HTTP + local filesystem write. No Python, no curl, no
-// FTP, no dependency on test.bongshaihousing.com or any second app - the
-// Node app and the static docroot are sibling directories on the same
-// server, under the same account, so this just self-fetches the page it
-// already knows how to render and writes the result next door.
+// Pure in-process Nunjucks template rendering + local filesystem write.
+// No Python, no curl, no external HTTP socket dependencies, no FTP,
+// no dependency on test.bongshaihousing.com.
 //
-// Replaces the old server/scripts/deploy_single_page.py, which shelled
-// out to a literal `python` binary (not present on this host's PATH) and
-// a literal `curl.exe` (a Windows binary name, wrong on this Linux
-// server), and fetched from test.bongshaihousing.com instead of
-// rendering locally - three independent ways it could never have worked
-// here, on top of the staging dependency this was meant to remove.
+// Direct in-process rendering queries the active MySQL database and renders
+// the exact Nunjucks templates directly, then atomically writes the output
+// to the sibling static docroot directory (bongshaihousing.com/).
 
 const fs = require('fs');
 const path = require('path');
 const fsp = fs.promises;
+const nunjucks = require('nunjucks');
 
-// bongshai-node-app-prod/ (this app, deployed flat - this file lands at
-// .../bongshai-node-app-prod/lib/liveSiteSync.js) and bongshaihousing.com/
-// (the static docroot) are sibling directories under the same cPanel
-// account home. Override via env if a setup ever differs.
+let db;
+try {
+  db = require('./db');
+} catch (e) {
+  db = null;
+}
+
+const { formatTaka, formatTakaAscii } = require('./format');
+const { getThemeSettings, generateCssVariables } = require('./theme');
+
 const DOCROOT = process.env.STATIC_DOCROOT || path.join(__dirname, '..', '..', 'bongshaihousing.com');
+const VIEWS_DIR = path.join(__dirname, '..', 'views');
 
+// Configure dedicated Nunjucks environment for offline / background page generation
+const nunjucksEnv = nunjucks.configure(VIEWS_DIR, {
+  autoescape: true,
+  noCache: true,
+});
+
+// Register standard template filters & globals
+nunjucksEnv.addFilter('initials', (name) => {
+  if (!name) return '';
+  const words = String(name).trim().split(/\s+/);
+  const first = words[0] ? words[0][0] : '';
+  const last = words.length > 1 ? words[words.length - 1][0] : '';
+  return (first + last).toUpperCase();
+});
+
+nunjucksEnv.addFilter('date', (value) => {
+  if (!value) return '';
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+});
+
+nunjucksEnv.addFilter('taka', (value) => {
+  if (value === null || value === undefined || value === '') return 'N/A';
+  const n = Number(value);
+  return Number.isFinite(n) ? formatTaka(n) : String(value);
+});
+
+nunjucksEnv.addFilter('formatTaka', (value) => {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? formatTaka(n) : String(value);
+});
+
+nunjucksEnv.addFilter('formatTakaAscii', (value) => {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? formatTakaAscii(n) : String(value);
+});
+
+nunjucksEnv.addGlobal('currentYear', new Date().getFullYear());
+
+function groupRoomsByFloor(rooms) {
+  const groups = [];
+  let current = { label: null, rows: [], total: null };
+  let explicitBuildingTotal = null;
+  for (const r of rooms) {
+    const text = (r.section || '').trim();
+    const hasArea = r.area_sqft !== null && r.area_sqft !== undefined && r.area_sqft !== '';
+    if (r.is_total_row && !hasArea) {
+      if (current.label !== null || current.rows.length) groups.push(current);
+      current = { label: text, rows: [], total: null };
+    } else if (r.is_total_row && hasArea && /building/i.test(text)) {
+      explicitBuildingTotal = r.area_sqft;
+    } else if (r.is_total_row && hasArea) {
+      current.total = r.area_sqft;
+    } else {
+      current.rows.push(r);
+    }
+  }
+  groups.push(current);
+  for (const g of groups) {
+    if (g.total == null) {
+      const sum = g.rows.reduce((s, r) => s + (Number(r.area_sqft) || 0), 0);
+      g.total = sum || null;
+    }
+  }
+  const buildingTotal = explicitBuildingTotal != null
+    ? explicitBuildingTotal
+    : groups.length > 1
+      ? groups.reduce((s, g) => s + (Number(g.total) || 0), 0)
+      : (groups[0] && groups[0].total) || null;
+  return { groups, buildingTotal };
+}
+
+function roomIcon(section) {
+  const s = (section || '').toLowerCase();
+  if (/wall|stair/.test(s)) return '';
+  if (/bath|toilet|washroom/.test(s)) return '🚿';
+  if (/kitchen/.test(s)) return '🍳';
+  if (/bed/.test(s)) return '🛏️';
+  if (/living|drawing|dining|family/.test(s)) return '🛋️';
+  if (/veranda|varanda|porch|balcony/.test(s)) return '🌤️';
+  if (/store|storage/.test(s)) return '📦';
+  if (/garage|parking/.test(s)) return '🚗';
+  return '🏠';
+}
+
+function formatProductTitle(product, category) {
+  const model = product.model_number || '';
+  const catName = (category && category.name) ? category.name : '';
+  if (product.meta_title && product.meta_title.trim()) {
+    return product.meta_title.trim();
+  }
+  if (model && catName) {
+    return `${catName} in Bangladesh | ${model}`;
+  }
+  return `Pre-Engineered Steel Building Bangladesh | ${model || 'View Details'}`;
+}
+
+/**
+ * Directly renders a product detail page to HTML string using Nunjucks & DB
+ */
+async function renderProductToHtml(slug) {
+  if (!db) throw new Error('Database connection not available');
+
+  const product = await db('products').where({ slug }).first();
+  if (!product) return null;
+
+  const category = await db('categories').where({ id: product.category_id }).first();
+  const specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
+  const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
+
+  if (variants.length) {
+    const allRooms = await db('product_rooms')
+      .whereIn('product_variant_id', variants.map((v) => v.id))
+      .orderBy('sort_order');
+    const roomsByVariant = new Map();
+    for (const room of allRooms) {
+      if (!roomsByVariant.has(room.product_variant_id)) roomsByVariant.set(room.product_variant_id, []);
+      roomsByVariant.get(room.product_variant_id).push(room);
+    }
+    for (const v of variants) {
+      v.rooms = roomsByVariant.get(v.id) || [];
+      const { groups, buildingTotal } = groupRoomsByFloor(v.rooms);
+      v.roomGroups = groups.map((g) => ({
+        label: g.label,
+        total: g.total,
+        rows: g.rows.map((r) => ({
+          ...r,
+          icon: roomIcon(r.section),
+          barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
+        })),
+      }));
+      v.roomGroupsBuildingTotal = buildingTotal;
+      const totalRow = v.rooms.find((r) => r.section && /total building area/i.test(r.section));
+      v.totalArea = (totalRow && totalRow.area_sqft) || v.area_sqft;
+      v.estimatedPrice = product.fixed_price || (product.price_per_sqft ? Math.round(v.totalArea * product.price_per_sqft) : null);
+      v.estimatedPriceFormatted = v.estimatedPrice ? formatTaka(v.estimatedPrice) : null;
+    }
+  }
+
+  if (product.fixed_price) {
+    product.fixedPriceFormatted = formatTaka(product.fixed_price);
+  }
+  const waPriceText = product.fixedPriceFormatted ? ` (${product.fixedPriceFormatted})` : '';
+  const waMsg = `Hello, I am interested in Model ${product.model_number || ''}${waPriceText}.`;
+  product.whatsAppUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(waMsg)}`;
+
+  let relatedProducts = [];
+  try {
+    relatedProducts = await db('products')
+      .where({ category_id: product.category_id, published: true })
+      .whereNot({ id: product.id })
+      .orderBy('sort_order')
+      .limit(4);
+  } catch (e) {
+    relatedProducts = [];
+  }
+
+  const pageTitle = formatProductTitle(product, category);
+
+  let theme = {};
+  let themeCssVars = '';
+  try {
+    theme = await getThemeSettings();
+    themeCssVars = generateCssVariables(theme);
+  } catch (e) {
+    theme = {};
+    themeCssVars = '';
+  }
+
+  const renderData = {
+    title: pageTitle,
+    description: product.meta_description || product.description,
+    canonical: `https://bongshaihousing.com/${product.slug}`,
+    ogTitle: pageTitle,
+    ogDescription: product.meta_description || product.description,
+    ogImage: product.main_image ? `https://bongshaihousing.com/${product.main_image}` : undefined,
+    category: category || { name: '' },
+    product,
+    specs,
+    variants,
+    relatedProducts,
+    theme,
+    themeCssVars,
+  };
+
+  return nunjucksEnv.render('pages/product-detail.njk', renderData);
+}
+
+/**
+ * Regenerates and writes the static HTML file directly to DOCROOT
+ */
 async function syncPageToLive(slug) {
   if (!slug) return false;
   const file = slug.endsWith('.html') ? slug : `${slug}.html`;
-  const port = process.env.PORT || 3000;
-  const url = `http://127.0.0.1:${port}/${file}`;
+
   try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      console.error(`Live site sync failed for ${file}: self-fetch returned HTTP ${res.status}`);
+    // 1. Direct in-process Nunjucks template rendering
+    let html = null;
+    try {
+      html = await renderProductToHtml(file);
+    } catch (renderErr) {
+      console.warn(`[liveSiteSync] In-process product render missed for ${file}:`, renderErr.message);
+    }
+
+    // 2. If in-process product render didn't match, attempt loopback self-fetch
+    if (!html) {
+      const port = process.env.PORT || 3000;
+      try {
+        const res = await fetch(`http://127.0.0.1:${port}/${file}`);
+        if (res.ok) {
+          html = await res.text();
+        }
+      } catch (fetchErr) {
+        // Socket/port not available under Passenger
+      }
+    }
+
+    if (!html) {
+      console.error(`[liveSiteSync] Failed to render HTML for ${file}`);
       return false;
     }
-    const html = await res.text();
-    await fsp.writeFile(path.join(DOCROOT, file), html, 'utf8');
-    console.log(`Live site sync succeeded for ${file}`);
+
+    // Write generated HTML to sibling static docroot
+    const targetPath = path.join(DOCROOT, file);
+    await fsp.writeFile(targetPath, html, 'utf8');
+    console.log(`[liveSiteSync] Succeeded for ${file} -> wrote ${html.length} bytes to ${targetPath}`);
     return true;
   } catch (err) {
-    console.error(`Live site sync failed for ${file}:`, err.message);
+    console.error(`[liveSiteSync] Error syncing ${file}:`, err.message);
     return false;
   }
 }
 
-module.exports = { syncPageToLive };
+module.exports = { syncPageToLive, renderProductToHtml };
