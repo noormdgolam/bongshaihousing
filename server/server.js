@@ -25,6 +25,19 @@ const customerAuthRouter = require('./routes/customer-auth');
 const customerRouter = require('./routes/customer');
 const { extractVisitorInfo } = require('./lib/visitor-tracker');
 
+// Auto-run pending database migrations on startup with graceful error handling
+if (db && db.migrate) {
+  db.migrate.latest()
+    .then(([batchNo, log]) => {
+      if (log && log.length > 0) {
+        console.log(`[DB Migration] Applied ${log.length} migration(s) (Batch ${batchNo}):`, log.join(', '));
+      }
+    })
+    .catch((migErr) => {
+      console.error('[DB Migration Warning]', migErr.message);
+    });
+}
+
 // The session store (and any other async DB init) can reject before
 // anything has a chance to .catch() it - without this, a single transient
 // MySQL hiccup crashes the entire Node process (public pages included,
@@ -185,6 +198,11 @@ const redirectsPath = path.join(__dirname, 'redirects.json');
 const redirects = fs.existsSync(redirectsPath) ? JSON.parse(fs.readFileSync(redirectsPath, 'utf8')) : { exact: {}, prefix: {} };
 const redirectPrefixes = Object.entries(redirects.prefix || {});
 app.use((req, res, next) => {
+  // Never redirect API, Admin, Agent, or Customer portal paths
+  if (req.path.startsWith('/api/') || req.path.startsWith('/admin') || req.path.startsWith('/agent') || req.path.startsWith('/my-project')) {
+    return next();
+  }
+
   // Apache's original rules matched trailing slashes optionally
   // (^login/?$) - the JSON map only stores the no-slash form, so strip
   // one trailing slash before the exact-match lookup (root "/" excluded,
@@ -270,7 +288,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error(err);
   if (!res.headersSent) {
-    res.status(500).json({ status: 'error', message: 'Internal server error.' });
+    res.status(500).json({ status: 'error', message: 'Internal server error.', details: err.message });
   }
 });
 

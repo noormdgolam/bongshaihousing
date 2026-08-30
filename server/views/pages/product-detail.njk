@@ -127,17 +127,11 @@
 
     <div style="background: var(--off-white); border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;">
       <span style="display: block; font-size: 0.75rem; color: var(--grey-500); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Fixed Package Price</span>
-      <span class="bh-variant-price" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">{% if product.fixedPriceFormatted %}{{ product.fixedPriceFormatted }}{% elseif variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact for Quote{% endif %}</span>
-    </div>
-
-    <div class="pd-trust-strip" style="margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-      <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.86rem; font-weight: 600; color: #334155; cursor: default;" title="Precision prefabricated steel modules cut construction time by up to 67% (about one-third the schedule) compared to conventional brick/masonry.">⚡ 3× Faster Than Traditional Brick</span>
-      <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.86rem; font-weight: 600; color: #334155; cursor: default;" title="Engineered with seismic damping and aerodynamic structural steel for extreme weather resilience.">🛡️ 200+ km/h Cyclone & Quake Proof</span>
-      <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.86rem; font-weight: 600; color: #334155; cursor: default;" title="100% compliant with structural and safety standards of the Bangladesh National Building Code.">📐 100% BNBC Code Certified</span>
+      <span class="bh-variant-price" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">{% if product.fixedPriceFormatted %}{{ product.fixedPriceFormatted }}{% elseif variants.length and variants[0].estimatedPriceFormatted %}{{ variants[0].estimatedPriceFormatted }}{% else %}Contact Sales{% endif %}</span>
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 12px;">
-      <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Get a Free Quote</a>
+      <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Contact Sales</a>
       <a class="btn btn-lg" href="{{ product.whatsAppUrl or ('https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20' ~ product.model_number) }}" rel="noopener noreferrer" style="width: 100%; justify-content: center; background: #25D366; color: white; border: none; font-weight: 700; box-shadow: 0 4px 15px rgba(37,211,102,0.3);" target="_blank">💬 WhatsApp Now</a>
     </div>
   </div>
@@ -284,7 +278,7 @@
       <div class="property-card-body" data-aos="fade-up">
         <span class="property-type">{{ category.name }}</span>
         <h2 class="property-name">Model No-{{ rp.model_number }}</h2>
-        <div class="property-price"><span class="property-price-label">{% if rp.fromPriceFormatted %}From{% else %}Pricing{% endif %}</span><span class="property-price-value" style="font-size:0.95rem;">{{ rp.fromPriceFormatted or 'Contact for Quote' }}</span></div>
+        <div class="property-price"><span class="property-price-label">{% if rp.fromPriceFormatted %}From{% else %}Pricing{% endif %}</span><span class="property-price-value" style="font-size:0.95rem;">{{ rp.fromPriceFormatted or 'Contact Sales' }}</span></div>
         <a class="btn btn-primary" href="{{ rp.slug }}" style="width:100%;justify-content:center;">View Details</a>
       </div>
     </div>
@@ -296,7 +290,7 @@
 </div>
 
 <div class="pd-sticky-cta" aria-hidden="false">
-  <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary">Get a Free Quote</a>
+  <a href="contact.html?model={{ product.model_number }}" class="btn btn-primary">Contact Sales</a>
   <a href="https://wa.me/8801781636613?text=Hello%2C%20I%20am%20interested%20in%20Model%20{{ product.model_number }}." class="btn" style="background:#25D366; color:#fff; border:none;" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
 </div>
 {% endblock %}

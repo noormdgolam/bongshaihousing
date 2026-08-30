@@ -99,7 +99,7 @@
               <form method="post" action="/admin/products/{{ p.id }}/duplicate" style="display:inline;" onsubmit="return confirm('Duplicate this product? This will create an unpublished copy with all specs, variants, and rooms.');">
                 <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Duplicate</button>
               </form>
-              <a href="/{{ p.slug }}" target="_blank" class="btn" style="padding:4px 8px; font-size:0.8rem;" title="View Live Page">↗</a>
+              <a href="https://bongshaihousing.com/{{ p.slug }}" target="_blank" class="btn" style="padding:4px 8px; font-size:0.8rem;" title="View Live Page on bongshaihousing.com">↗</a>
             </td>
           </tr>
           {% endfor %}

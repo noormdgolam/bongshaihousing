@@ -34,6 +34,7 @@
         <strong style="font-size:0.95rem;">{{ s.target_label }}</strong>
       <span class="pill pill-muted" style="margin-left:6px;">{{ s.suggestion_type | replace('_', ' ') }}</span>
     </div>
+    </div>
     <span class="pill {% if s.status == 'approved' %}pill-success{% elif s.status == 'rejected' %}pill-muted{% endif %}">{{ s.status }}</span>
   </div>
 

@@ -60,7 +60,7 @@ const BUSINESS_TYPE_OPTIONS = [
   'General Trading',
 ];
 
-router.get('/agent/signup.html', (req, res) => {
+router.get(['/agent', '/agent/signup', '/agent/signup.html'], (req, res) => {
   if (req.session && req.session.agentId) return res.redirect('/agent/dashboard.html');
   res.render('agent/signup.njk', {
     error: null,
@@ -70,7 +70,7 @@ router.get('/agent/signup.html', (req, res) => {
   });
 });
 
-router.post('/agent/signup', function (req, res, next) {
+router.post(['/agent/signup', '/agent/signup.html'], function (req, res, next) {
   documentUpload(req, res, (err) => {
     if (err) {
       return res.status(400).render('agent/signup.njk', {
@@ -209,12 +209,12 @@ router.post('/agent/signup', function (req, res, next) {
   res.render('agent/signup-pending.njk', { name: b.name });
 });
 
-router.get('/agent/login.html', (req, res) => {
+router.get(['/agent/login', '/agent/login.html'], (req, res) => {
   if (req.session && req.session.agentId) return res.redirect('/agent/dashboard.html');
   res.render('agent/login.njk', { error: null });
 });
 
-router.post('/agent/login', async (req, res) => {
+router.post(['/agent/login', '/agent/login.html'], async (req, res) => {
   const ip = req.ip;
   const existing = getAttemptState(ip);
   if (existing && existing.count >= MAX_ATTEMPTS) {
@@ -260,7 +260,7 @@ router.post('/agent/login', async (req, res) => {
   });
 });
 
-router.post('/agent/logout', (req, res) => {
+router.post(['/agent/logout', '/agent/logout.html'], (req, res) => {
   req.session.destroy(() => res.redirect('/agent/login.html'));
 });
 

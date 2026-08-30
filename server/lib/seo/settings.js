@@ -9,12 +9,19 @@ const KEYS = ['groq_api_key', 'groq_model', 'automation_enabled'];
 const DEFAULTS = { groq_api_key: '', groq_model: 'openai/gpt-oss-120b', automation_enabled: 'false' };
 
 async function getSeoSettings() {
-  const hasTable = await db.schema.hasTable('seo_settings');
-  if (!hasTable) return { ...DEFAULTS };
-  const rows = await db('seo_settings').select('setting_key', 'setting_value');
-  const settings = { ...DEFAULTS };
-  for (const r of rows) settings[r.setting_key] = r.setting_value;
-  return settings;
+  try {
+    const hasTable = db && (await db.schema.hasTable('seo_settings').catch(() => false));
+    if (!hasTable) return { ...DEFAULTS, groq_api_key: process.env.GROQ_API_KEY || '' };
+    const rows = await db('seo_settings').select('setting_key', 'setting_value').catch(() => []);
+    const settings = { ...DEFAULTS, groq_api_key: process.env.GROQ_API_KEY || '' };
+    for (const r of rows) settings[r.setting_key] = r.setting_value;
+    if (!settings.groq_api_key && process.env.GROQ_API_KEY) {
+      settings.groq_api_key = process.env.GROQ_API_KEY;
+    }
+    return settings;
+  } catch (err) {
+    return { ...DEFAULTS, groq_api_key: process.env.GROQ_API_KEY || '' };
+  }
 }
 
 async function saveSeoSettings(updates) {

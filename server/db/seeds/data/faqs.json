@@ -85,21 +85,21 @@
   },
   {
     "question": "How much does a prefab steel building cost in Bangladesh?",
-    "answer": "Quotes are customized based on building model, total floor area, land setback, and finish level. Request a <a href=\"solutions.html\">custom quote</a> for your project parameters.",
+    "answer": "Prices are customized based on building model, total floor area, land setback, and finish level. Request a <a href=\"solutions.html\">sales inquiry</a> for your project parameters.",
     "category": "Pricing & Financing",
     "published": true,
     "sort_order": 12
   },
   {
-    "question": "What factors affect the final quote of a steel building?",
-    "answer": "Quotes depend primarily on floor area, number of floors, product category, structural load specifications, and finish level (standard vs. luxury finishing).",
+    "question": "What factors affect the final price of a steel building?",
+    "answer": "Prices depend primarily on floor area, number of floors, product category, structural load specifications, and finish level (standard vs. luxury finishing).",
     "category": "Pricing & Financing",
     "published": true,
     "sort_order": 13
   },
   {
     "question": "How do I request a custom building quote?",
-    "answer": "You can submit your land dimensions and model preferences using our <a href=\"solutions.html\">custom quote request form</a> or speak directly with our engineering team via phone or WhatsApp.",
+    "answer": "You can submit your land dimensions and model preferences using our <a href=\"solutions.html\">custom Sales Inquiry form</a> or speak directly with our engineering team via phone or WhatsApp.",
     "category": "Pricing & Financing",
     "published": true,
     "sort_order": 14
@@ -140,8 +140,8 @@
     "sort_order": 19
   },
   {
-    "question": "How do I get a quote?",
-    "answer": "Fill out the quote request form on our <a href=\"contact.html\">Contact page</a>, message us on <a href=\"https://wa.me/8801781636613\" rel=\"noopener noreferrer\" target=\"_blank\">WhatsApp</a>, or call <a href=\"tel:+8801781636613\">01781-636613</a>. Include your preferred model, land size, and location for the fastest response.",
+    "question": "How do I Contact Sales?",
+    "answer": "Fill out the Sales Inquiry form on our <a href=\"contact.html\">Contact page</a>, message us on <a href=\"https://wa.me/8801781636613\" rel=\"noopener noreferrer\" target=\"_blank\">WhatsApp</a>, or call <a href=\"tel:+8801781636613\">01781-636613</a>. Include your preferred model, land size, and location for the fastest response.",
     "category": "Quality & Getting Started",
     "published": true,
     "sort_order": 20

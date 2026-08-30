@@ -4782,7 +4782,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 1000000
   },
   {
     "filename": "bh-ch-512.html",
@@ -4909,7 +4910,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 1000000
   },
   {
     "filename": "bh-dv-201.html",
@@ -7501,7 +7503,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1002.html",
@@ -7633,7 +7636,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1003.html",
@@ -7765,7 +7769,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1004.html",
@@ -7897,7 +7902,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1005.html",
@@ -8029,7 +8035,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1006.html",
@@ -8161,7 +8168,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1007.html",
@@ -8293,7 +8301,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1008.html",
@@ -8425,7 +8434,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1009.html",
@@ -8557,7 +8567,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1010.html",
@@ -8689,7 +8700,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1011.html",
@@ -8821,7 +8833,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-is-1012.html",
@@ -8953,7 +8966,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 324000
   },
   {
     "filename": "bh-sb-301.html",
@@ -12608,51 +12622,39 @@
     "categorySlug": "tiny-house",
     "slug": "bh-th-701.html",
     "title": "Bongshai Housing | BH-TH-701 | Tiny House",
-    "description": "BH-TH-701, a Tiny House from Bongshai Housing, offers a 2-bedroom, 1-bath layout in 400 sq.ft. Fixed package price ৳5,00,000.",
+    "description": "BH-TH-701, a Tiny House from Bongshai Housing, offers a 2-bedroom, 1-bath layout in 240 sq.ft. Fixed package price ৳5,00,000.",
     "pricePerSqft": 2500,
     "priceCurrency": "BDT",
     "mainImage": "images/products/Model No-BH-TH-701.webp",
     "floorData": {
-      "400": {
+      "240": {
         "bed": "2 Bedrooms",
         "bath": "1 Bathroom",
         "kitchen": "1 Kitchen",
         "rooms": [
           {
             "section": "Bed room 1",
-            "length": 10,
-            "width": 10,
-            "area": 100
+            "area": 60
           },
           {
             "section": "Bed room 2",
-            "length": 10,
-            "width": 10,
-            "area": 100
+            "area": 60
           },
           {
             "section": "Living room",
-            "length": 12,
-            "width": 10,
-            "area": 120
+            "area": 70
           },
           {
             "section": "Kitchen",
-            "length": 6,
-            "width": 5,
-            "area": 30
-          },
-          {
-            "section": "Bath 1",
-            "length": 5,
-            "width": 4,
             "area": 20
           },
           {
+            "section": "Bath 1",
+            "area": 15
+          },
+          {
             "section": "Walls & Circulation",
-            "length": null,
-            "width": null,
-            "area": 30
+            "area": 15
           }
         ]
       }
@@ -12730,7 +12732,7 @@
       }
     ],
     "fixedPrice": 500000,
-    "totalFloorArea": 400,
+    "totalFloorArea": 240,
     "bedrooms": "2 Bedrooms",
     "bathrooms": "1 Bathroom"
   },
@@ -17033,7 +17035,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1102.html",
@@ -17219,7 +17222,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1103.html",
@@ -17405,7 +17409,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1104.html",
@@ -17591,7 +17596,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1105.html",
@@ -17777,7 +17783,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1106.html",
@@ -17963,7 +17970,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1107.html",
@@ -18149,7 +18157,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1108.html",
@@ -18335,7 +18344,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1109.html",
@@ -18521,7 +18531,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1110.html",
@@ -18707,7 +18718,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1111.html",
@@ -18893,7 +18905,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wa-1112.html",
@@ -19079,7 +19092,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 972000
   },
   {
     "filename": "bh-wh-801.html",
@@ -20915,7 +20929,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-102.html",
@@ -21101,7 +21116,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-103.html",
@@ -21287,7 +21303,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-104.html",
@@ -21473,7 +21490,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-105.html",
@@ -21659,7 +21677,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-106.html",
@@ -21845,7 +21864,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-107.html",
@@ -22031,7 +22051,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-108.html",
@@ -22217,7 +22238,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "lcv-109.html",
@@ -22403,7 +22425,8 @@
     ],
     "totalFloorArea": 1200,
     "bedrooms": "3 Bedrooms",
-    "bathrooms": "2 Bathrooms"
+    "bathrooms": "2 Bathrooms",
+    "fixedPrice": 3000000
   },
   {
     "filename": "bh-ch-413.html",
@@ -22950,7 +22973,8 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 760000
   },
   {
     "filename": "bh-ch-417.html",
@@ -23077,6 +23101,7 @@
     ],
     "totalFloorArea": 400,
     "bedrooms": "2 Bedrooms",
-    "bathrooms": "1 Bathroom"
+    "bathrooms": "1 Bathroom",
+    "fixedPrice": 760000
   }
 ]

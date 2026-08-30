@@ -24,12 +24,12 @@ function getAttemptState(key) {
   return state || null;
 }
 
-router.get('/my-project/login.html', (req, res) => {
+router.get(['/my-project/login', '/my-project/login.html'], (req, res) => {
   if (req.session && req.session.orderId) return res.redirect('/my-project');
   res.render('customer/login.njk', { error: null });
 });
 
-router.post('/my-project/login', async (req, res) => {
+router.post(['/my-project/login', '/my-project/login.html'], async (req, res) => {
   const ip = req.ip;
   const existing = getAttemptState(ip);
   if (existing && existing.count >= MAX_ATTEMPTS) {
@@ -64,7 +64,7 @@ router.post('/my-project/login', async (req, res) => {
   });
 });
 
-router.post('/my-project/logout', (req, res) => {
+router.post(['/my-project/logout', '/my-project/logout.html'], (req, res) => {
   req.session.destroy(() => res.redirect('/my-project/login.html'));
 });
 

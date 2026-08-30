@@ -85,6 +85,8 @@ async function seedInto(knex, products) {
       slug: p.filename,
       title: p.title,
       description: p.description,
+      meta_title: (p.metaTitle || `${p.categoryName} in Bangladesh | ${p.modelNumber || p.filename}`),
+      meta_description: p.metaDescription || p.description,
       fixed_price: p.fixedPrice || null,
       total_floor_area: p.totalFloorArea || null,
       price_per_sqft: p.pricePerSqft,

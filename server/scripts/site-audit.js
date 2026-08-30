@@ -35,6 +35,15 @@ const PAGES = [
   { path: '/service-areas.html', label: 'service-areas' },
   { path: '/projects.html', label: 'projects' },
   { path: '/team-senior-management.html', label: 'team-page' },
+  // Re-verify tonight's two div-balance fixes (commits 12298816, 48e825c2,
+  // 7cb473f4) actually render correctly across all three viewports. Note:
+  // this hits the LIVE site, which reflects whatever was last deployed via
+  // the separate FTP/cPanel deploy process, not necessarily this repo's
+  // current git state - a clean result here does not by itself confirm
+  // tonight's local-repo fixes are live, and a failure here does not mean
+  // the local fix was wrong.
+  { path: '/simplex-steel-building.html', label: 'simplex-steel-building' },
+  { path: '/contact.html', label: 'contact-recheck' },
 ];
 
 async function checkPageAtViewport(browser, pageSpec, viewport) {
@@ -49,38 +58,142 @@ async function checkPageAtViewport(browser, pageSpec, viewport) {
     record(`${label}: loads`, res && res.ok(), `HTTP ${res ? res.status() : 'no response'}`);
     if (!res || !res.ok()) { await page.close(); return; }
 
+    // The site's service-worker registration self-reloads the page once on
+    // 'controllerchange' (js/global-upgrades.js) - on a fresh Playwright
+    // profile this can fire just after networkidle, destroying the execution
+    // context mid-evaluate() and crashing the rest of this page's checks with
+    // a misleading "Execution context was destroyed" error. Give it a beat to
+    // settle before running any evaluate()/interaction below.
+    await page.waitForLoadState('networkidle').catch(() => {});
+    await page.waitForTimeout(600);
+
     record(`${label}: no console errors`, consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | '));
 
     const overflow = await page.evaluate(() => document.body.scrollWidth - window.innerWidth);
     record(`${label}: no horizontal overflow`, overflow <= 4, `scrollWidth exceeds viewport by ${overflow}px`);
 
-    const brokenImages = await page.evaluate(() =>
-      Array.from(document.images).filter((img) => img.complete && img.naturalWidth === 0).map((img) => img.src)
-    );
-    record(`${label}: no broken <img>`, brokenImages.length === 0, brokenImages.slice(0, 3).join(', '));
+    // Scroll through the full page first so native loading="lazy" images below
+    // the fold actually get triggered - otherwise they read naturalWidth===0
+    // (never loaded, not broken) and produce false "broken image" positives.
+    await page.evaluate(async () => {
+      const step = window.innerHeight;
+      const max = document.body.scrollHeight;
+      for (let y = 0; y < max; y += step) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      window.scrollTo(0, 0);
+    });
+    await page.waitForTimeout(500);
+
+    const imageCheck = await page.evaluate(() => {
+      const all = Array.from(document.images);
+      // #imgLightboxImg (js/global-upgrades.js) is a deliberate empty-src
+      // placeholder - it only gets a real src when a gallery thumbnail is
+      // clicked to open the lightbox, and stays hidden (display:none) until
+      // then. Only flag an empty src on an image that's actually visible.
+      const isVisible = (img) => {
+        const r = img.getBoundingClientRect();
+        const style = getComputedStyle(img);
+        return r.width > 0 && r.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+      };
+      const emptySrc = all.filter((img) => !img.getAttribute('src') && isVisible(img)).map((img) => img.outerHTML.slice(0, 80));
+      const broken = all.filter((img) => img.getAttribute('src') && img.complete && img.naturalWidth === 0).map((img) => img.src);
+      return { broken, emptySrc };
+    });
+    record(`${label}: no broken <img>`, imageCheck.broken.length === 0, imageCheck.broken.slice(0, 3).join(', '));
+    if (imageCheck.emptySrc.length) {
+      record(`${label}: no <img> with empty src attribute`, false, imageCheck.emptySrc.slice(0, 2).join(' | '));
+    }
+
+    // Hero CTA buttons should be visible and big enough to tap/click - checks the
+    // first couple of .btn-primary/.btn-lg/.hero-actions buttons in the hero area.
+    const ctaCheck = await page.evaluate(() => {
+      const ctas = Array.from(document.querySelectorAll('.hero-actions a, .hero-actions button, .btn-lg')).slice(0, 4);
+      if (ctas.length === 0) return { found: false };
+      const bad = ctas
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          const style = getComputedStyle(el);
+          return { rect: r, visible: style.visibility !== 'hidden' && style.display !== 'none' && r.width > 0 && r.height > 0, text: (el.textContent || '').trim().slice(0, 30) };
+        })
+        .filter((c) => !c.visible || c.rect.height < 32);
+      return { found: true, total: ctas.length, bad };
+    });
+    if (ctaCheck.found) {
+      record(`${label}: hero CTA buttons visible & tappable (>=32px tall)`, ctaCheck.bad.length === 0,
+        ctaCheck.bad.map((b) => `"${b.text}" ${Math.round(b.rect.height)}px`).join(', '));
+    }
+
+    // Form fields shouldn't visually overlap each other (a common responsive-layout
+    // symptom of a broken flex/grid container or unbalanced div nesting).
+    const overlapCheck = await page.evaluate(() => {
+      const fields = Array.from(document.querySelectorAll('form input, form select, form textarea, form button'))
+        .filter((el) => el.offsetParent !== null);
+      const rects = fields.map((el) => ({ el, r: el.getBoundingClientRect() }));
+      const overlaps = [];
+      for (let i = 0; i < rects.length; i++) {
+        for (let j = i + 1; j < rects.length; j++) {
+          const a = rects[i].r;
+          const b = rects[j].r;
+          const ix = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left));
+          const iy = Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+          const overlapArea = ix * iy;
+          const smallerArea = Math.min(a.width * a.height, b.width * b.height);
+          if (smallerArea > 0 && overlapArea / smallerArea > 0.4) {
+            overlaps.push(`${rects[i].el.name || rects[i].el.id || rects[i].el.tagName} <-> ${rects[j].el.name || rects[j].el.id || rects[j].el.tagName}`);
+          }
+        }
+      }
+      return { fieldCount: fields.length, overlaps };
+    });
+    if (overlapCheck.fieldCount > 0) {
+      record(`${label}: form fields not overlapping/clipped`, overlapCheck.overlaps.length === 0, overlapCheck.overlaps.slice(0, 3).join(', '));
+    }
 
     if (viewport.name === 'mobile') {
-      const toggle = page.locator('.mobile-menu-toggle, .nav-toggle, [aria-label*="menu" i]').first();
+      // The real markup (server/views/layout.njk) is #hamburgerBtn toggling an
+      // 'open' class on #mobileDrawer - try that exact pair first (it's what's
+      // actually shipped sitewide), falling back to generic selectors for
+      // resilience if a page uses different markup.
+      const specificToggle = page.locator('#hamburgerBtn');
+      const specificDrawer = page.locator('#mobileDrawer');
+      const hasSpecific = (await specificToggle.count()) && (await specificDrawer.count());
+      const toggle = hasSpecific ? specificToggle : page.locator('.mobile-menu-toggle, .nav-toggle, [aria-label*="menu" i]').first();
+      const drawer = hasSpecific ? specificDrawer : page.locator('.mobile-nav, .nav-drawer, .mobile-drawer, [class*="mobile-menu"]').first();
       if (await toggle.count()) {
         await toggle.click().catch(() => {});
         await page.waitForTimeout(300);
-        const menuVisible = await page.locator('.mobile-nav, .nav-drawer, [class*="mobile-menu"]').first().isVisible().catch(() => false);
-        record(`${label}: mobile menu toggle opens nav`, menuVisible, menuVisible ? '' : 'toggle clicked but no nav drawer became visible');
+        const opened = hasSpecific
+          ? await drawer.evaluate((el) => el.classList.contains('open')).catch(() => false)
+          : await drawer.isVisible().catch(() => false);
+        record(`${label}: mobile menu toggle opens nav`, opened, opened ? '' : 'toggle clicked but drawer did not open (checked #mobileDrawer.open class)');
       } else {
-        record(`${label}: mobile menu toggle present`, false, 'no element matched common mobile-toggle selectors - selector may need adjusting, not necessarily a real bug');
+        record(`${label}: mobile menu toggle present`, false, 'no element matched #hamburgerBtn or common mobile-toggle selectors - selector may need adjusting, not necessarily a real bug');
       }
     }
   } catch (e) {
-    record(`${label} (crashed)`, false, e.message.split('\n')[0]);
+    const msg = e.message.split('\n')[0];
+    const isSwReloadRace = /Execution context was destroyed/.test(msg);
+    record(`${label} (crashed)`, false, isSwReloadRace
+      ? `${msg} - likely the site's service-worker self-reload race (see comment above), not a content bug; re-run to confirm`
+      : msg);
   }
   await page.close();
 }
 
-async function checkContactFormSubmission(browser) {
+// Deliberately does NOT click the submit button or call form.submit() anywhere
+// in this function - that would create a real lead/notification on a live
+// production site. This only verifies fields are present, fillable, and that
+// the division -> district -> thana cascade populates correctly via real
+// click/select events. A true end-to-end submission test needs the user
+// present to confirm the resulting lead/email and then delete the test data.
+async function checkContactFormFillableAndCascade(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   try {
     await page.goto(`${BASE_URL}/contact.html`, { waitUntil: 'networkidle' });
-    await page.fill('#name', 'SITE AUDIT TEST - please delete');
+    // The full-name field's id is "fname" (its name attribute is "name") - server/views/pages/contact.njk:131
+    await page.fill('#fname', 'SITE AUDIT TEST - please delete');
     await page.fill('#email', 'site-audit-test@example.com');
     const phoneInput = page.locator('input[name="phone"]');
     if (await phoneInput.count()) await phoneInput.fill('1700000099');
@@ -131,7 +244,7 @@ async function run() {
     }
   }
 
-  await checkContactFormSubmission(browser);
+  await checkContactFormFillableAndCascade(browser);
 
   await browser.close();
 

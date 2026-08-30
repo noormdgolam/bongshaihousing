@@ -38,7 +38,7 @@ function main() {
     // not a literal destination path - not representable as a static
     // source->destination map entry, and not applicable to this app's own
     // subdomain anyway.
-    if (destination.includes('%{') || destination.includes('%1') || pattern === '(.*)') continue;
+    if (destination.includes('%{') || destination.includes('%1') || destination.includes('$') || pattern === '(.*)') continue;
 
     const destUrl = new URL(destination);
     const destPath = destUrl.pathname === '/' ? '/' : destUrl.pathname;
