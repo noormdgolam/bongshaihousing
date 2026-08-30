@@ -174,6 +174,7 @@ const CATEGORY_LANDING_PAGES = [
   'cottage-house.html',
   'duplex-steel-building.html',
   'industrial-sheds.html',
+  'low-cost-house.html',
   'luxury-villa.html',
   'simplex-steel-building.html',
   'steel-house.html',
