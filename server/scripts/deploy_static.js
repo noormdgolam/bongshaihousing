@@ -11,8 +11,12 @@ const htmlFiles = lines
 console.log(`Found ${htmlFiles.length} changed HTML files.`);
 
 const FTP_HOST = 'ftp.bongshaixpress.com';
-const FTP_USER = 'aaa@bongshaihousing.com';
-const FTP_PASS = '@No.hacking_9361#';
+const FTP_USER = process.env.BONGSHAI_FTP_USER;
+const FTP_PASS = process.env.BONGSHAI_FTP_PASS;
+if (!FTP_USER || !FTP_PASS) {
+  console.error('Set BONGSHAI_FTP_USER and BONGSHAI_FTP_PASS env vars first.');
+  process.exit(1);
+}
 const USER_PASS = `${FTP_USER}:${FTP_PASS}`;
 const REMOTE_BASE = 'bongshaihousing.com'; // User said explicitly NOT public_html
 
