@@ -125,8 +125,20 @@ document.addEventListener('DOMContentLoaded', () => {
    ========================================================= */
 if ('serviceWorker' in navigator) {
   let swRefreshed = false;
+  // A new service worker taking control mid-visit used to force an
+  // immediate reload - silently wiping out anything a visitor was
+  // actively typing (worst case: the contact form, losing a real lead).
+  // Skip the reload while any form field on the page has a value or has
+  // focus; the newer cached assets just wait one more natural navigation
+  // instead of destroying in-progress input.
+  function hasActiveFormInput() {
+    const active = document.activeElement;
+    if (active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)) return true;
+    return Array.from(document.querySelectorAll('input, textarea')).some((el) => el.value && el.value.trim());
+  }
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (swRefreshed) return;
+    if (hasActiveFormInput()) return;
     swRefreshed = true;
     location.reload();
   });

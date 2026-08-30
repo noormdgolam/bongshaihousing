@@ -105,6 +105,9 @@ RewriteRule ^security-huts\.html$ https://bongshaihousing.com/products-and-solut
 RewriteRule ^modular-kiosks\.html$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 RewriteRule ^site-offices\.html$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 
+# Block direct access to internal template partials and underscore-prefixed files
+RewriteRule ^_.* - [F,L]
+
 </IfModule>
 
 # Broken/missing URLs get a real 404 response with the actual 404 page,

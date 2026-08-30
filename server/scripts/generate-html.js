@@ -9,6 +9,10 @@ Promise.all(Object.keys(registry).map(url => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
+        if (res.statusCode !== 200) {
+          console.warn(`warn: ${url} returned ${res.statusCode}, skipping`);
+          return resolve();
+        }
         fs.writeFileSync('.' + url, data);
         resolve();
       });
