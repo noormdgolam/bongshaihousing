@@ -4,6 +4,7 @@ const { buildQuotePdf } = require('../lib/pdf');
 const { sendMail } = require('../lib/mailer');
 const { sendTelegramAlert } = require('../lib/telegram');
 const { formatTakaAscii } = require('../lib/format');
+const { normalizePhone } = require('../lib/customer-identity');
 let db;
 try {
   db = require('../lib/db');
@@ -72,6 +73,7 @@ router.post('/send_email.php', async (req, res) => {
 
   // Save to database leads table if DB is available
   let leadId = null;
+  let portalCustomer = null; // set below if auto-provisioning succeeds
   if (db) {
     try {
       [leadId] = await db('leads').insert({
@@ -97,6 +99,39 @@ router.post('/send_email.php', async (req, res) => {
           entity_id: leadId || null,
           summary: `New quote inquiry from ${name} (${district}) for ${model}`,
         });
+      }
+
+      // Auto-provision a portal account for this phone number (or reuse
+      // the existing one for a repeat inquiry) and link this lead to it,
+      // so the visitor can immediately check status at /my-project
+      // without waiting for a sale to close. Best-effort - a failure
+      // here shouldn't block the inquiry itself from succeeding.
+      try {
+        const phoneKey = normalizePhone(phoneRaw);
+        if (phoneKey) {
+          portalCustomer = await db('customers').where({ phone_key: phoneKey }).first();
+          if (!portalCustomer) {
+            const [customerId] = await db('customers').insert({ name, phone_key: phoneKey, phone, email });
+            portalCustomer = { id: customerId, name, phone_key: phoneKey, phone, email, password_hash: null };
+          } else if (!portalCustomer.email && email) {
+            await db('customers').where({ id: portalCustomer.id }).update({ email });
+          }
+          await db('leads').where({ id: leadId }).update({ customer_id: portalCustomer.id });
+
+          // Log them straight into the portal - submitting the form from
+          // this browser is proof enough of ownership for a first look at
+          // their own inquiry; regenerate() first so a stale/anonymous
+          // session id isn't reused for a newly-identified visitor.
+          await new Promise((resolve) => {
+            req.session.regenerate((err) => {
+              if (err) { console.error('Session regenerate failed for auto-login:', err.message); return resolve(); }
+              req.session.customerId = portalCustomer.id;
+              req.session.save(resolve);
+            });
+          });
+        }
+      } catch (custErr) {
+        console.error('Failed to auto-provision customer portal account:', custErr.message);
       }
     } catch (dbErr) {
       console.error('Failed to save lead to database:', dbErr.message);
@@ -129,7 +164,15 @@ router.post('/send_email.php', async (req, res) => {
   try {
     pdfBuffer = await buildQuotePdf({ name, email, phone, district, upazila, model, floorArea, bedrooms, message, leadId, estimatedPrice });
   } catch (err) {
-    return res.status(500).json({ status: 'error', message: `Failed to generate PDF. Error: ${err.message}` });
+    // The lead itself (and portal account) is already saved above even
+    // though the PDF failed - still hand back dashboard access so the
+    // customer isn't left with no way to check on an inquiry that did
+    // go through.
+    return res.status(500).json({
+      status: 'error',
+      message: `Failed to generate PDF. Error: ${err.message}`,
+      dashboardUrl: portalCustomer ? '/my-project' : null,
+    });
   }
 
   try {
@@ -142,10 +185,19 @@ router.post('/send_email.php', async (req, res) => {
         `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nModel: ${model}\n`,
       attachments: [{ filename, content: pdfBuffer, contentType: 'application/pdf' }],
     });
-    return res.status(200).json({ status: 'success', message: 'Message sent successfully.' });
+    return res.status(200).json({
+      status: 'success',
+      message: 'Message sent successfully.',
+      dashboardUrl: portalCustomer ? '/my-project' : null,
+      hasPassword: portalCustomer ? !!portalCustomer.password_hash : null,
+    });
   } catch (err) {
     console.error('send_email.php mail failure:', err);
-    return res.status(500).json({ status: 'error', message: 'Message could not be sent. Please check your mail server configuration.' });
+    return res.status(500).json({
+      status: 'error',
+      message: 'Message could not be sent. Please check your mail server configuration.',
+      dashboardUrl: portalCustomer ? '/my-project' : null,
+    });
   }
 });
 

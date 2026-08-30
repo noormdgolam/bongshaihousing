@@ -11,6 +11,7 @@ const requireRole = require('../middleware/requireRole');
 const { processAndSaveImage, UPLOADS_DIR } = require('../lib/image-processor');
 const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
 const { seedDefaultMilestones } = require('../lib/order-milestones');
+const { normalizePhone } = require('../lib/customer-identity');
 const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/settings');
 const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch, generateForProduct } = require('../lib/seo/generate');
@@ -89,6 +90,43 @@ function generateOrderPassword() {
   const bytes = crypto.randomBytes(8);
   for (let i = 0; i < 8; i++) out += chars[bytes[i] % chars.length];
   return out;
+}
+
+// Resolves the `customers` portal account for a new order, reusing one
+// already created by the customer's own inquiry (see contact.js) instead
+// of always minting a fresh password. If they already set their own
+// password from the dashboard, that keeps working unchanged - handing
+// the admin a newly-generated password here would silently invalidate
+// it and hand out a login the customer never actually gets to use.
+// Returns { customerId, generatedPassword } - generatedPassword is null
+// when the customer already had a working password, so the "here's your
+// login" banner only shows up when there's actually something new to give.
+async function resolveOrderCustomer(db, { name, phone }) {
+  const phoneKey = normalizePhone(phone);
+  if (!phoneKey) {
+    // Can't link a portal account without a parseable phone number, but
+    // orders.password_hash is required regardless - still generate one
+    // so the order itself can be created; it just won't have a linked
+    // customer to auto-log-in with it.
+    const generatedPassword = generateOrderPassword();
+    const passwordHash = await bcrypt.hash(generatedPassword, 10);
+    return { customerId: null, generatedPassword, passwordHash };
+  }
+
+  let customer = await db('customers').where({ phone_key: phoneKey }).first();
+  if (customer && customer.password_hash) {
+    return { customerId: customer.id, generatedPassword: null, passwordHash: customer.password_hash };
+  }
+
+  const generatedPassword = generateOrderPassword();
+  const password_hash = await bcrypt.hash(generatedPassword, 10);
+  if (customer) {
+    await db('customers').where({ id: customer.id }).update({ password_hash });
+  } else {
+    const [customerId] = await db('customers').insert({ name, phone_key: phoneKey, phone, password_hash });
+    customer = { id: customerId };
+  }
+  return { customerId: customer.id, generatedPassword, passwordHash: password_hash };
 }
 
 const upload = multer({
@@ -940,21 +978,25 @@ router.post('/admin/leads/:id/convert-to-order', async (req, res) => {
     const lead = await db('leads').where({ id: req.params.id }).first();
     if (!lead) return res.status(404).send('Lead not found');
 
-    const plainPassword = generateOrderPassword();
-    const password_hash = await bcrypt.hash(plainPassword, 10);
+    // Reuse the portal account the customer's own inquiry may have already
+    // created (see contact.js) rather than always minting a fresh password -
+    // if they already set one, keep it working.
+    const { customerId, generatedPassword, passwordHash } = await resolveOrderCustomer(db, { name: lead.name, phone: lead.phone });
     const [orderId] = await db('orders').insert({
       lead_id: lead.id,
+      customer_id: customerId,
       customer_name: lead.name,
       customer_phone: lead.phone,
       customer_district: lead.district,
       model_number: lead.model,
       floor_area: lead.floor_area,
-      password_hash,
+      password_hash: passwordHash || null,
     });
     await seedDefaultMilestones(db, orderId);
     await logActivity(req, { action: 'create', entityType: 'order', entityId: orderId, summary: `Created order #${orderId} from lead #${lead.id} (${lead.name})` });
 
-    res.redirect(`/admin/orders/${orderId}?generated_password=${encodeURIComponent(plainPassword)}`);
+    const passwordParam = generatedPassword ? `?generated_password=${encodeURIComponent(generatedPassword)}` : '';
+    res.redirect(`/admin/orders/${orderId}${passwordParam}`);
   } catch (e) {
     res.status(400).send('Convert error: ' + e.message);
   }
@@ -987,20 +1029,21 @@ router.post('/admin/orders', async (req, res) => {
     return res.status(400).render('admin/orders/form.njk', adminVars(req, { error: 'Customer name and phone are required.', values: req.body }));
   }
   try {
-    const plainPassword = generateOrderPassword();
-    const password_hash = await bcrypt.hash(plainPassword, 10);
+    const { customerId, generatedPassword, passwordHash } = await resolveOrderCustomer(db, { name: customer_name, phone: customer_phone });
     const [orderId] = await db('orders').insert({
+      customer_id: customerId,
       customer_name,
       customer_phone,
       customer_district: customer_district || null,
       model_number: model_number || null,
       floor_area: floor_area || null,
       total_price: total_price || null,
-      password_hash,
+      password_hash: passwordHash,
     });
     await seedDefaultMilestones(db, orderId);
     await logActivity(req, { action: 'create', entityType: 'order', entityId: orderId, summary: `Created order #${orderId} for ${customer_name}` });
-    res.redirect(`/admin/orders/${orderId}?generated_password=${encodeURIComponent(plainPassword)}`);
+    const passwordParam = generatedPassword ? `?generated_password=${encodeURIComponent(generatedPassword)}` : '';
+    res.redirect(`/admin/orders/${orderId}${passwordParam}`);
   } catch (e) {
     res.status(400).render('admin/orders/form.njk', adminVars(req, { error: e.message, values: req.body }));
   }
