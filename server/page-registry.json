@@ -541,20 +541,20 @@
   },
   "/project-baunia-airport.html": {
     "urlPath": "/project-baunia-airport.html",
-    "title": "Cumilla | Bongshai Housing",
-    "description": "Explore our portfolio of completed steel buildings and prefab houses across Bangladesh, including Dhaka, Chotrogram, Cumilla, Rangpur, Bogra, Gazipur, and...",
-    "keywords": "Our Projects, steel building contractor Chotrogram, prefab housing Dhaka, Bongshai Housing, EPC contractor Bangladesh, pre-engineered steel buildings, container home Probachol, prefab house Gazipur, steel structure Rangpur",
+    "title": "Baunia, Airport Project | Bongshai Housing",
+    "description": "Completed residential steel building construction project by Bongshai Housing Ltd near Baunia, Airport.",
+    "keywords": "Baunia Airport Project, steel building contractor Dhaka, prefab housing Dhaka, Bongshai Housing, EPC contractor Bangladesh, pre-engineered steel buildings, prefab house",
     "category": "Steel Building Company, Real Estate, EPC Contractor Bangladesh",
-    "canonical": "https://bongshaihousing.com/project-cumilla.html",
+    "canonical": "https://bongshaihousing.com/project-baunia-airport.html",
     "ogType": "website",
-    "ogTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
-    "ogDescription": "Explore our portfolio of completed steel buildings and prefab houses across Bangladesh, including Dhaka, Chotrogram, Cumilla, Rangpur, Bogra, Gazipur, and Faridpur.",
-    "ogImage": "https://bongshaihousing.com/images/projects/completed/cumilla_1784362514071.webp",
+    "ogTitle": "Baunia, Airport Project | Bongshai Housing",
+    "ogDescription": "Completed residential steel building construction project by Bongshai Housing Ltd near Baunia, Airport.",
+    "ogImage": "https://bongshaihousing.com/images/projects/completed/baunia-airport.jpg",
     "ogImageWidth": "1000",
     "ogImageHeight": "750",
-    "twitterTitle": "Steel Building Projects in Dhaka, Chotrogram, Cumilla & Beyond | Bongshai Housing",
-    "twitterDescription": "Portfolio of pre-engineered buildings & prefab housing in Bangladesh.",
-    "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "twitterTitle": "Baunia, Airport Project | Bongshai Housing",
+    "twitterDescription": "Completed residential steel building construction project by Bongshai Housing Ltd near Baunia, Airport.",
+    "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20am%20interested%20in%20your%20projects.",
     "bodyClass": null,
     "showQuoteShortcut": true,
     "template": "pages/project-baunia-airport.njk"
@@ -4361,6 +4361,7 @@
   },
   "/low-cost-house.html": {
     "template": "pages/low-cost-house.njk",
+    "canonical": "https://bongshaihousing.com/low-cost-house.html",
     "title": "Low Cost House - Bongshai Housing",
     "description": "Premium Low Cost Houses by Bongshai Housing.",
     "keywords": "low cost house, prefab house",
@@ -4368,6 +4369,7 @@
   },
   "/bh-lch-1201.html": {
     "template": "pages/bh-lch-1201.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1201.html",
     "title": "Model No-BH-LCH-1201 - Bongshai Housing",
     "description": "Model No-BH-LCH-1201 details.",
     "keywords": "low cost house, prefab house",
@@ -4375,6 +4377,7 @@
   },
   "/bh-lch-1202.html": {
     "template": "pages/bh-lch-1202.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1202.html",
     "title": "Model No-BH-LCH-1202 - Bongshai Housing",
     "description": "Model No-BH-LCH-1202 details.",
     "keywords": "low cost house, prefab house",
@@ -4382,6 +4385,7 @@
   },
   "/bh-lch-1203.html": {
     "template": "pages/bh-lch-1203.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1203.html",
     "title": "Model No-BH-LCH-1203 - Bongshai Housing",
     "description": "Model No-BH-LCH-1203 details.",
     "keywords": "low cost house, prefab house",
@@ -4389,6 +4393,7 @@
   },
   "/bh-lch-1204.html": {
     "template": "pages/bh-lch-1204.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1204.html",
     "title": "Model No-BH-LCH-1204 - Bongshai Housing",
     "description": "Model No-BH-LCH-1204 details.",
     "keywords": "low cost house, prefab house",
@@ -4396,6 +4401,7 @@
   },
   "/bh-lch-1205.html": {
     "template": "pages/bh-lch-1205.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1205.html",
     "title": "Model No-BH-LCH-1205 - Bongshai Housing",
     "description": "Model No-BH-LCH-1205 details.",
     "keywords": "low cost house, prefab house",
@@ -4403,6 +4409,7 @@
   },
   "/bh-lch-1206.html": {
     "template": "pages/bh-lch-1206.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1206.html",
     "title": "Model No-BH-LCH-1206 - Bongshai Housing",
     "description": "Model No-BH-LCH-1206 details.",
     "keywords": "low cost house, prefab house",
@@ -4410,6 +4417,7 @@
   },
   "/bh-lch-1207.html": {
     "template": "pages/bh-lch-1207.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1207.html",
     "title": "Model No-BH-LCH-1207 - Bongshai Housing",
     "description": "Model No-BH-LCH-1207 details.",
     "keywords": "low cost house, prefab house",
@@ -4417,6 +4425,7 @@
   },
   "/bh-lch-1208.html": {
     "template": "pages/bh-lch-1208.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1208.html",
     "title": "Model No-BH-LCH-1208 - Bongshai Housing",
     "description": "Model No-BH-LCH-1208 details.",
     "keywords": "low cost house, prefab house",
@@ -4424,6 +4433,7 @@
   },
   "/bh-lch-1209.html": {
     "template": "pages/bh-lch-1209.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1209.html",
     "title": "Model No-BH-LCH-1209 - Bongshai Housing",
     "description": "Model No-BH-LCH-1209 details.",
     "keywords": "low cost house, prefab house",
@@ -4431,6 +4441,7 @@
   },
   "/bh-lch-1210.html": {
     "template": "pages/bh-lch-1210.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1210.html",
     "title": "Model No-BH-LCH-1210 - Bongshai Housing",
     "description": "Model No-BH-LCH-1210 details.",
     "keywords": "low cost house, prefab house",
@@ -4438,6 +4449,7 @@
   },
   "/bh-lch-1211.html": {
     "template": "pages/bh-lch-1211.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1211.html",
     "title": "Model No-BH-LCH-1211 - Bongshai Housing",
     "description": "Model No-BH-LCH-1211 details.",
     "keywords": "low cost house, prefab house",
@@ -4445,6 +4457,7 @@
   },
   "/bh-lch-1212.html": {
     "template": "pages/bh-lch-1212.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1212.html",
     "title": "Model No-BH-LCH-1212 - Bongshai Housing",
     "description": "Model No-BH-LCH-1212 details.",
     "keywords": "low cost house, prefab house",
@@ -4452,6 +4465,7 @@
   },
   "/bh-lch-1213.html": {
     "template": "pages/bh-lch-1213.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1213.html",
     "title": "Model No-BH-LCH-1213 - Bongshai Housing",
     "description": "Model No-BH-LCH-1213 details.",
     "keywords": "low cost house, prefab house",
@@ -4459,6 +4473,7 @@
   },
   "/bh-lch-1214.html": {
     "template": "pages/bh-lch-1214.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1214.html",
     "title": "Model No-BH-LCH-1214 - Bongshai Housing",
     "description": "Model No-BH-LCH-1214 details.",
     "keywords": "low cost house, prefab house",
@@ -4466,6 +4481,7 @@
   },
   "/bh-lch-1215.html": {
     "template": "pages/bh-lch-1215.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1215.html",
     "title": "Model No-BH-LCH-1215 - Bongshai Housing",
     "description": "Model No-BH-LCH-1215 details.",
     "keywords": "low cost house, prefab house",
@@ -4473,6 +4489,7 @@
   },
   "/bh-lch-1216.html": {
     "template": "pages/bh-lch-1216.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1216.html",
     "title": "Model No-BH-LCH-1216 - Bongshai Housing",
     "description": "Model No-BH-LCH-1216 details.",
     "keywords": "low cost house, prefab house",
@@ -4480,6 +4497,7 @@
   },
   "/bh-lch-1217.html": {
     "template": "pages/bh-lch-1217.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1217.html",
     "title": "Model No-BH-LCH-1217 - Bongshai Housing",
     "description": "Model No-BH-LCH-1217 details.",
     "keywords": "low cost house, prefab house",
@@ -4487,6 +4505,7 @@
   },
   "/bh-lch-1218.html": {
     "template": "pages/bh-lch-1218.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1218.html",
     "title": "Model No-BH-LCH-1218 - Bongshai Housing",
     "description": "Model No-BH-LCH-1218 details.",
     "keywords": "low cost house, prefab house",
@@ -4494,6 +4513,7 @@
   },
   "/bh-lch-1219.html": {
     "template": "pages/bh-lch-1219.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1219.html",
     "title": "Model No-BH-LCH-1219 - Bongshai Housing",
     "description": "Model No-BH-LCH-1219 details.",
     "keywords": "low cost house, prefab house",
@@ -4501,6 +4521,7 @@
   },
   "/bh-lch-1220.html": {
     "template": "pages/bh-lch-1220.njk",
+    "canonical": "https://bongshaihousing.com/bh-lch-1220.html",
     "title": "Model No-BH-LCH-1220 - Bongshai Housing",
     "description": "Model No-BH-LCH-1220 details.",
     "keywords": "low cost house, prefab house",
