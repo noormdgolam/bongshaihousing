@@ -34,12 +34,6 @@ Residential
 
 🏢 Concrete building
 
-Commercial
-
-🏭 Industrial Steel Sheds
-
-🛌 Worker Accommodation
-
 🏗️ Our Projects
 
 🖼️ Image Gallery
@@ -121,20 +115,6 @@ Premium factory-built residences.
 ## Multi-Story Homes
 
 Advanced steel-frame multi-level homes.
-
-🏭
-
-## Commercial &amp; Industrial
-
-Heavy-duty, large-scale structural solutions engineered for your business.
-
-## Industrial Steel Sheds
-
-Factories, warehouses, and storage.
-
-## Worker Accommodation
-
-Safe, scalable staff housing.
 
 🧮
 

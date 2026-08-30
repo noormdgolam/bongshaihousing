@@ -36,12 +36,6 @@ Residential
 
 🏢 Concrete building
 
-Commercial
-
-🏭 Industrial Steel Sheds
-
-🛌 Worker Accommodation
-
 Interactive Tools
 
 📋 Get Quote

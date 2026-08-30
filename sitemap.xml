@@ -97,12 +97,6 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://bongshaihousing.com/industrial-sheds.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
     <loc>https://bongshaihousing.com/luxury-villa.html</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -140,12 +134,6 @@
   </url>
   <url>
     <loc>https://bongshaihousing.com/wooden-house.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/worker-accommodation.html</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -667,78 +655,6 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://bongshaihousing.com/bh-is-1001.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1002.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1003.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1004.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1005.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1006.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1007.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1008.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1009.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1010.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1011.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-is-1012.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
     <loc>https://bongshaihousing.com/bh-sb-301.html</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
@@ -1022,78 +938,6 @@
   </url>
   <url>
     <loc>https://bongshaihousing.com/bh-tsb-112.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1101.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1102.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1103.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1104.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1105.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1106.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1107.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1108.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1109.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1110.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1111.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://bongshaihousing.com/bh-wa-1112.html</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>

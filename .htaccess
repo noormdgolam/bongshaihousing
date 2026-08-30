@@ -45,6 +45,13 @@ RewriteRule ^bh-ch-509\.html/?$ https://bongshaihousing.com/bh-ct-509.html [R=30
 RewriteRule ^bh-ch-510\.html/?$ https://bongshaihousing.com/bh-ct-510.html [R=301,L]
 RewriteRule ^bh-ch-511\.html/?$ https://bongshaihousing.com/bh-ct-511.html [R=301,L]
 RewriteRule ^bh-ch-512\.html/?$ https://bongshaihousing.com/bh-ct-512.html [R=301,L]
+# 4b-3. Commercial & Industrial line discontinued (2026-08-30) - category
+# hubs + all 24 models redirected to the products hub rather than left as
+# raw 404s, since both pages were indexed.
+RewriteRule ^industrial-sheds\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^worker-accommodation\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^bh-is-10(0[1-9]|1[0-2])\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^bh-wa-11(0[1-9]|1[0-2])\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 # 4c. Google Search Console 404 Fixes (2026-08-08)
 # WordPress leftovers
 RewriteRule ^wp-(content|includes|login\.php|admin)(.*)$ https://bongshaihousing.com/ [R=301,L]

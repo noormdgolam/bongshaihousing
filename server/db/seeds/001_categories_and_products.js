@@ -14,8 +14,7 @@ function numericFromMaybeHtml(value) {
 }
 
 // Landing-page slug doesn't always match the category name's own slugified
-// form - "Industrial Steel Sheds" -> industrial-sheds.html (no "steel" in
-// the filename), "Low-Cost Villa" -> luxury-villa.html (the lcv-10x family
+// form - "Low-Cost Villa" -> luxury-villa.html (the lcv-10x family
 // variants back to the luxury-villa landing page, not a page of its own -
 // see [[project-node-conversion-plan]]).
 const LANDING_PAGE_BY_CATEGORY_SLUG = {
@@ -23,12 +22,10 @@ const LANDING_PAGE_BY_CATEGORY_SLUG = {
   'cottage-house': 'cottage-house.html',
   'container-house': 'container-house.html',
   'duplex-steel-building': 'duplex-steel-building.html',
-  'industrial-steel-sheds': 'industrial-sheds.html',
   'simplex-steel-building': 'simplex-steel-building.html',
   'steel-house': 'steel-house.html',
   'tiny-house': 'tiny-house.html',
   'apartment-building': 'apartment-building.html',
-  'worker-accommodation': 'worker-accommodation.html',
   'wooden-house': 'wooden-house.html',
   'low-cost-villa': 'luxury-villa.html',
 };

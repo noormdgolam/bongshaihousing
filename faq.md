@@ -34,12 +34,6 @@ Residential
 
 🏢 Concrete building
 
-Commercial
-
-🏭 Industrial Steel Sheds
-
-🛌 Worker Accommodation
-
 Interactive Tools
 
 📋 Get Quote
@@ -86,7 +80,7 @@ Steel-composite construction is typically faster and 10-30% cheaper for low-rise
 
 What types of prefab and steel buildings does Bongshai Housing offer?
 
-Our residential range includes Apartment Buildings , Duplex Steel Buildings , Simplex Steel Buildings , Cottage Houses , Container Houses , Steel Houses , Tiny Houses , Wooden Houses , and Concrete Buildings . Commercially, we build Industrial Steel Sheds and Worker Accommodation .
+Our range includes Apartment Buildings , Duplex Steel Buildings , Simplex Steel Buildings , Cottage Houses , Container Houses , Steel Houses , Tiny Houses , Wooden Houses , and Concrete Buildings .
 
 What floor plans and room configurations are available?
 
@@ -104,19 +98,11 @@ What is a Tiny House, and who is it suitable for?
 
 Our Tiny House line (250-350 Sq.Ft, 1 bedroom, 1 bathroom) is a compact, budget-friendly prefab home - ideal for single occupants, small families, weekend homes, or as a starter structure on a smaller plot.
 
-Do you build industrial steel sheds and warehouses?
-
-Yes. Our Industrial Steel Sheds use PEB (pre-engineered building) steel-frame construction for factories, warehouses, and storage facilities, with clear-height and clear-span options sized to your operational needs.
-
-What is Worker Accommodation, and can it be customized for large labor camps?
-
-Worker Accommodation is our safe, scalable staff-housing line, built for factories, industrial sites, and labor camps. Layouts and unit counts can be scaled up for large workforces - contact us with your headcount for a custom layout.
-
 ## Pricing &amp; Financing
 
 How much does a prefab steel building cost in Bangladesh?
 
-Construction rates vary by category: roughly Tk900-950/sqft for Industrial Sheds and Worker Accommodation, Tk1,500/sqft for Wooden and Tiny Houses, Tk2,200/sqft for Cottage Houses, Tk2,500-2,750/sqft for Apartment, Duplex, Simplex, Steel House, and Concrete Building lines, and Tk3,000/sqft for Container Houses. Use our free Get Custom Quote for an instant estimate based on your land size and floor count.
+Construction rates vary by category: roughly Tk1,500/sqft for Wooden and Tiny Houses, Tk2,200/sqft for Cottage Houses, Tk2,500-2,750/sqft for Apartment, Duplex, Simplex, Steel House, and Concrete Building lines, and Tk3,000/sqft for Container Houses. Use our free Get Custom Quote for an instant estimate based on your land size and floor count.
 
 What factors affect the final price of a steel building?
 

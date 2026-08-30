@@ -34,12 +34,6 @@ Residential
 
 🏢 Concrete building
 
-Commercial
-
-🏭 Industrial Steel Sheds
-
-🛌 Worker Accommodation
-
 Interactive Tools
 
 📋 Get Quote
@@ -114,18 +108,6 @@ Explore Container Homes
 
 Contact Us Today
 
-Commercial &amp; Industrial
-
-##
-
-Heavy-Duty Industrial Sheds
-
-Wide-span pre-engineered steel sheds built for factories, warehouses, and heavy-duty storage.
-
-Explore Industrial Sheds
-
-Contact Us Today
-
 Scroll
 
 Our Packages
@@ -133,10 +115,6 @@ Our Packages
 ## Premium Housing Packages
 
 Choose from our expertly designed housing solutions — crafted for every budget, lifestyle, and ambition.
-
-Residential
-
-Commercial &amp; Industrial
 
 Apartment Building
 
@@ -155,10 +133,6 @@ Tiny House
 Wooden House
 
 Concrete Building
-
-Industrial Steel Sheds
-
-Worker Accommodation
 
 🏆
 

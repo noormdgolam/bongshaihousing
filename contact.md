@@ -36,12 +36,6 @@ Residential
 
 🏢 Concrete building
 
-Commercial
-
-🏭 Industrial Steel Sheds
-
-🛌 Worker Accommodation
-
 Interactive Tools
 
 📋 Get Quote
@@ -379,54 +373,6 @@ Model No-BH-CB-910
 Model No-BH-CB-911
 
 Model No-BH-CB-912
-
-Model No-BH-IS-1001
-
-Model No-BH-IS-1002
-
-Model No-BH-IS-1003
-
-Model No-BH-IS-1004
-
-Model No-BH-IS-1005
-
-Model No-BH-IS-1006
-
-Model No-BH-IS-1007
-
-Model No-BH-IS-1008
-
-Model No-BH-IS-1009
-
-Model No-BH-IS-1010
-
-Model No-BH-IS-1011
-
-Model No-BH-IS-1012
-
-Model No-BH-WA-1101
-
-Model No-BH-WA-1102
-
-Model No-BH-WA-1103
-
-Model No-BH-WA-1104
-
-Model No-BH-WA-1105
-
-Model No-BH-WA-1106
-
-Model No-BH-WA-1107
-
-Model No-BH-WA-1108
-
-Model No-BH-WA-1109
-
-Model No-BH-WA-1110
-
-Model No-BH-WA-1111
-
-Model No-BH-WA-1112
 
 Floor Area (Optional)
 
