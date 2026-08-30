@@ -1,5 +1,12 @@
+// One-off (but reusable) live-site verification for the customer-portal
+// deploy: crash-loop check, DB schema check, and a full functional pass
+// through submit-inquiry -> auto-login -> dashboard -> set-password ->
+// logout -> login. Uses the app's own shared db connection (server/lib/db)
+// instead of a hand-rolled mysql2 client, so there is nothing here to
+// hardcode - it reads the same DB credentials the live app already uses
+// from its own environment.
 const https = require('https');
-const mysql = require('mysql2/promise');
+const db = require('../lib/db');
 
 function extractCookies(setCookieHeaders, existingCookies = '') {
   const cookieMap = {};
@@ -71,38 +78,29 @@ function extractCsrf(html) {
   return match ? match[1] : '';
 }
 
+const SITE = process.env.VERIFY_BASE_URL || 'https://bongshaihousing.com';
+
 async function verifyAll() {
   console.log('========================================================');
   console.log('  CHECK 1: APP CRASH-LOOP & STATUS CODE VERIFICATION');
   console.log('========================================================');
-  const homeRes = await get('https://bongshaihousing.com/');
-  console.log('GET https://bongshaihousing.com/ -> Status:', homeRes.statusCode, 'Body length:', homeRes.body.length);
-  
-  const adminRes = await get('https://bongshaihousing.com/admin/login');
-  console.log('GET https://bongshaihousing.com/admin/login -> Status:', adminRes.statusCode, 'Body length:', adminRes.body.length);
+  const homeRes = await get(`${SITE}/`);
+  console.log(`GET ${SITE}/ -> Status:`, homeRes.statusCode, 'Body length:', homeRes.body.length);
+
+  const adminRes = await get(`${SITE}/admin/login`);
+  console.log(`GET ${SITE}/admin/login -> Status:`, adminRes.statusCode, 'Body length:', adminRes.body.length);
 
   console.log('\n========================================================');
   console.log('  CHECK 2: DB MIGRATION & SCHEMA VERIFICATION');
   console.log('========================================================');
-  const conn = await mysql.createConnection({
-    host: 'bongshaihousing.com',
-    port: 3306,
-    user: 'abongsha_bongshai_prod',
-    password: '@Noldair_9361#',
-    database: 'abongsha_bongshai_prod'
-  });
+  const customerCols = await db('customers').columnInfo();
+  console.log('`customers` table columns in live DB:', Object.keys(customerCols));
 
-  const [customerCols] = await conn.query('DESCRIBE customers');
-  console.log('`customers` table columns in live DB:');
-  console.table(customerCols.map(c => ({ Field: c.Field, Type: c.Type, Null: c.Null, Key: c.Key })));
+  const leadsCols = await db('leads').columnInfo();
+  console.log('`leads.customer_id` column present:', 'customer_id' in leadsCols);
 
-  const [leadsCols] = await conn.query('DESCRIBE leads');
-  const leadCustId = leadsCols.find(c => c.Field === 'customer_id');
-  console.log('`leads.customer_id` column present:', !!leadCustId, leadCustId ? leadCustId.Type : '');
-
-  const [ordersCols] = await conn.query('DESCRIBE orders');
-  const orderCustId = ordersCols.find(c => c.Field === 'customer_id');
-  console.log('`orders.customer_id` column present:', !!orderCustId, orderCustId ? orderCustId.Type : '');
+  const ordersCols = await db('orders').columnInfo();
+  console.log('`orders.customer_id` column present:', 'customer_id' in ordersCols);
 
   console.log('\n========================================================');
   console.log('  CHECK 3: FUNCTIONAL TEST (LIVE CONTACT & CUSTOMER PORTAL)');
@@ -117,80 +115,63 @@ async function verifyAll() {
     phone: testPhone,
     email: testEmail,
     district: 'Dhaka',
-    building_category: 'duplex',
-    land_area: '2000 sqft',
-    approx_budget: '2500000',
-    message: 'Automated QA test inquiry - please ignore.'
+    model: 'General Inquiry',
+    floor_area: '2000',
+    message: 'Automated QA test inquiry - please ignore.',
   });
 
-  // 3a. Submit inquiry
-  const submitRes = await post('https://bongshaihousing.com/send_email.php', submitPayload);
+  const submitRes = await post(`${SITE}/send_email.php`, submitPayload);
   console.log('3a. POST /send_email.php -> Status:', submitRes.statusCode, 'Response:', submitRes.body);
   const submitJson = JSON.parse(submitRes.body);
-  console.log('    Success message contains dashboard URL (/my-project):', submitJson.dashboardUrl === '/my-project');
+  console.log('    Response has dashboardUrl (/my-project):', submitJson.dashboardUrl === '/my-project');
 
   let sessionCookie = extractCookies(submitRes.headers['set-cookie']);
-  console.log('    Received Session Cookie:', !!sessionCookie);
+  console.log('    Received session cookie:', !!sessionCookie);
 
-  // 3b. Load /my-project with session
-  const myProjectRes = await get('https://bongshaihousing.com/my-project', sessionCookie);
+  const myProjectRes = await get(`${SITE}/my-project`, sessionCookie);
   sessionCookie = extractCookies(myProjectRes.headers['set-cookie'], sessionCookie);
-  console.log('3b. GET /my-project with Session -> Status:', myProjectRes.statusCode);
+  console.log('3b. GET /my-project with session -> Status:', myProjectRes.statusCode);
   const csrfToken = extractCsrf(myProjectRes.body);
-  console.log('    Extracted CSRF token from /my-project:', csrfToken ? 'YES (' + csrfToken.slice(0, 8) + '...)' : 'NO');
-  
-  const hasInquiry = myProjectRes.body.includes(testName) || myProjectRes.body.includes(testPhone);
-  console.log('    Dashboard displays customer profile / phone:', hasInquiry);
-  const hasSecureCard = myProjectRes.body.includes('Secure Your Account');
-  console.log('    Dashboard displays "Secure Your Account" card:', hasSecureCard);
+  console.log('    Dashboard shows the submitted inquiry:', myProjectRes.body.includes(testName) || myProjectRes.body.includes(testPhone));
+  console.log('    Dashboard shows "Secure Your Account" card:', myProjectRes.body.includes('Secure Your Account'));
 
-  // 3c. Set password via POST /my-project/set-password
   const testPass = 'QaTestPass2026!';
   const setupForm = `_csrf=${encodeURIComponent(csrfToken)}&password=${encodeURIComponent(testPass)}&confirm_password=${encodeURIComponent(testPass)}`;
-  const setupRes = await post('https://bongshaihousing.com/my-project/set-password', setupForm, sessionCookie, 'application/x-www-form-urlencoded');
-  sessionCookie = extractCookies(setupRes.headers['set-cookie'], sessionCookie);
+  const setupRes = await post(`${SITE}/my-project/set-password`, setupForm, sessionCookie, 'application/x-www-form-urlencoded');
   console.log('3c. POST /my-project/set-password -> Status:', setupRes.statusCode, 'Location:', setupRes.headers['location']);
 
-  // Logout via POST /my-project/logout
   const logoutForm = `_csrf=${encodeURIComponent(csrfToken)}`;
-  const logoutRes = await post('https://bongshaihousing.com/my-project/logout', logoutForm, sessionCookie, 'application/x-www-form-urlencoded');
-  console.log('    POST /my-project/logout -> Status:', logoutRes.statusCode, 'Location:', logoutRes.headers['location']);
+  await post(`${SITE}/my-project/logout`, logoutForm, sessionCookie, 'application/x-www-form-urlencoded');
 
-  // Load login page to get fresh CSRF token
-  const loginPageRes = await get('https://bongshaihousing.com/my-project/login.html');
+  const loginPageRes = await get(`${SITE}/my-project/login.html`);
   let loginCookie = extractCookies(loginPageRes.headers['set-cookie']);
   const loginCsrf = extractCsrf(loginPageRes.body);
-  console.log('    GET /my-project/login.html -> Status:', loginPageRes.statusCode, 'CSRF:', loginCsrf ? 'YES' : 'NO');
 
-  // Login at /my-project/login.html
   const loginForm = `_csrf=${encodeURIComponent(loginCsrf)}&phone=${encodeURIComponent(testPhone)}&password=${encodeURIComponent(testPass)}`;
-  const loginRes = await post('https://bongshaihousing.com/my-project/login.html', loginForm, loginCookie, 'application/x-www-form-urlencoded');
+  const loginRes = await post(`${SITE}/my-project/login.html`, loginForm, loginCookie, 'application/x-www-form-urlencoded');
   loginCookie = extractCookies(loginRes.headers['set-cookie'], loginCookie);
   console.log('    POST /my-project/login.html -> Status:', loginRes.statusCode, 'Location:', loginRes.headers['location']);
-  
-  const loginDashRes = await get('https://bongshaihousing.com/my-project', loginCookie);
-  console.log('    GET /my-project after login -> Status:', loginDashRes.statusCode);
-  console.log('    Post-login dashboard displays customer name/phone:', loginDashRes.body.includes(testName) || loginDashRes.body.includes(testPhone));
+
+  const loginDashRes = await get(`${SITE}/my-project`, loginCookie);
+  console.log('    GET /my-project after re-login -> Status:', loginDashRes.statusCode);
+  console.log('    Re-login dashboard shows customer name/phone:', loginDashRes.body.includes(testName) || loginDashRes.body.includes(testPhone));
 
   console.log('\n========================================================');
-  console.log('  CHECK 4: EXISTING ORDERS INTEGRITY (ADMIN PANEL)');
+  console.log('  CHECK 4: EXISTING ORDERS INTEGRITY');
   console.log('========================================================');
-  const [orders] = await conn.query('SELECT id, customer_name, customer_phone, customer_district, model_number, floor_area, total_price, customer_id, status FROM orders LIMIT 3');
-  console.log('Existing orders in DB (schema with customer_id):');
+  const orders = await db('orders').select('id', 'customer_name', 'customer_phone', 'customer_id', 'status').limit(3);
   console.table(orders);
 
   console.log('\n========================================================');
   console.log('  CHECK 5: CLEANUP TEST DATA');
   console.log('========================================================');
-  const [delLeads] = await conn.query('DELETE FROM leads WHERE phone = ? OR name = ?', [testPhone, testName]);
-  console.log('Deleted test leads count:', delLeads.affectedRows);
-  const [delCust] = await conn.query('DELETE FROM customers WHERE phone = ? OR name = ?', [testPhone, testName]);
-  console.log('Deleted test customers count:', delCust.affectedRows);
+  const delLeads = await db('leads').where({ phone: testPhone }).orWhere({ name: testName }).del();
+  console.log('Deleted test leads:', delLeads);
+  const delCust = await db('customers').where({ phone: testPhone }).orWhere({ name: testName }).del();
+  console.log('Deleted test customers:', delCust);
 
-  await conn.end();
-  console.log('\n========================================================');
-  console.log('  ALL 5 CHECKS PASSED WITH 100% SPECIFIC VERIFICATION!');
-  console.log('========================================================');
+  await db.destroy();
+  console.log('\nVerification pass complete.');
 }
 
-verifyAll().catch(e => { console.error('Verification error:', e); process.exit(1); });
+verifyAll().catch((e) => { console.error('Verification error:', e); process.exit(1); });
