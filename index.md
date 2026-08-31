@@ -198,38 +198,6 @@ Earthquake &amp; cyclone-proof design ensuring safety and durability against nat
 
 Complete design-to-handover service, providing a hassle-free experience from blueprint to moving in.
 
-Our Technology
-
-## Advantage of Steel-RC Building
-
-Discover the benefits of our advanced steel-reinforced concrete building technology.
-
-✔️ Cost-effective and Eco-friendly
-
-✔️ High strength, inflexibility and high load bearing capacity
-
-✔️ Pre-fabricated, easy to install and dismantle
-
-✔️ Lightness, easy to transport and re-located
-
-✔️ Low maintenance cost
-
-✔️ Using several times and recycling
-
-✔️ Increase area efficiency by 10%--20%
-
-✔️ Environment friendly
-
-✔️ Weather-resistant with proper coating and maintenance
-
-✔️ Engineered for strong seismic performance
-
-✔️ Engineered for high wind-load resistance
-
-✔️ Energy saving with good thermal insulation system
-
-✔️ 50~60 years’ life span
-
 How We Work
 
 ## Our Simple 4-Step Process
