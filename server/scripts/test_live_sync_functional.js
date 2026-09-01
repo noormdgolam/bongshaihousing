@@ -1,4 +1,7 @@
 const https = require('https');
+if (!process.env.DB_PASSWORD) {
+  throw new Error('DB_PASSWORD env var not set - never hardcode the live DB password in a committed script.');
+}
 const querystring = require('querystring');
 
 const BASE_URL = 'https://bongshaihousing.com';
@@ -78,7 +81,7 @@ async function run() {
   const csrf = extractCsrf(loginGet.body);
   const loginPost = await makeRequest('/admin/login', 'POST', {
     email: 'admin@bongshaihousing.com',
-    password: '@Noldair_9361#',
+    password: process.env.DB_PASSWORD,
     _csrf: csrf
   });
   console.log(`  Login HTTP ${loginPost.statusCode} -> ${loginPost.headers.location || 'none'}`);

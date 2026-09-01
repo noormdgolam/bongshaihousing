@@ -1,4 +1,7 @@
 const mysql = require('mysql2/promise');
+if (!process.env.DB_PASSWORD) {
+  throw new Error('DB_PASSWORD env var not set - never hardcode the live DB password in a committed script.');
+}
 
 async function cleanDb() {
   for (const dbName of ['abongsha_bongshai_prod', 'abongsha_bongshai_app']) {
@@ -9,7 +12,7 @@ async function cleanDb() {
       host: 'bongshaihousing.com',
       port: 3306,
       user: dbName,
-      password: '@Noldair_9361#',
+      password: process.env.DB_PASSWORD,
       database: dbName
     });
 

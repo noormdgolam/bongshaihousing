@@ -5,7 +5,9 @@ import glob
 
 FTP_HOST = "ftp.bongshaixpress.com"
 FTP_USER = os.environ.get('BONGSHAI_FTP_USER', 'aaa@bongshaihousing.com')
-FTP_PASS = os.environ.get('BONGSHAI_FTP_PASS', '@No.hacking_9361#')
+FTP_PASS = os.environ.get('BONGSHAI_FTP_PASS')
+if not FTP_PASS:
+    raise RuntimeError('BONGSHAI_FTP_PASS env var not set - never hardcode the live FTP password in a committed script.')
 USER_PASS = f"{FTP_USER}:{FTP_PASS}"
 
 def upload(local_path, remote_path):

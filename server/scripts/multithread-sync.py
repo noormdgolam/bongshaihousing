@@ -7,7 +7,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 FTP_HOST = "ftp.bongshaixpress.com"
 FTP_USER = os.environ.get('BONGSHAI_FTP_USER', 'aaa@bongshaihousing.com')
-FTP_PASS = os.environ.get('BONGSHAI_FTP_PASS', '@No.hacking_9361#')
+FTP_PASS = os.environ.get('BONGSHAI_FTP_PASS')
+if not FTP_PASS:
+    raise RuntimeError('BONGSHAI_FTP_PASS env var not set - never hardcode the live FTP password in a committed script.')
 
 with open('server/scripts/sync-list.json', 'r') as f:
     data = json.load(f)
