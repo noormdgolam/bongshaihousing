@@ -1174,6 +1174,73 @@ router.post('/admin/products/bulk-action', requireRole('admin', 'superadmin', 'e
   res.redirect('/admin/products');
 });
 
+// Bulk description editor - a whole page (not a per-row dropdown action)
+// for writing one description and applying it to every selected model in
+// a category at once, instead of opening each product's edit form one by
+// one. Same live-sync-on-save pattern as the single-product edit route:
+// regenerates each affected product's own page plus the category's
+// landing page, so changes made here show up on the live site immediately
+// (bongshai-node-app-prod side - the static docroot twins still need a
+// normal deploy, same as every other server-side change).
+router.get('/admin/products/bulk-edit-description', async (req, res) => {
+  const categoryId = req.query.category ? Number(req.query.category) : null;
+  const categories = await db('categories').orderBy('sort_order');
+  let products = [];
+  if (categoryId) {
+    products = await db('products').where({ category_id: categoryId }).orderBy('sort_order');
+  }
+  res.render('admin/products/bulk-edit-description.njk', adminVars(req, {
+    categories,
+    categoryId,
+    products,
+    success: req.query.success === '1',
+    error: req.query.error || null,
+  }));
+});
+
+router.post('/admin/products/bulk-edit-description', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+
+  let { product_ids, description, category_id } = req.body;
+  const categoryId = Number(category_id) || '';
+  const backTo = '/admin/products/bulk-edit-description' + (categoryId ? `?category=${categoryId}` : '');
+
+  if (!description || !description.trim()) {
+    return res.redirect(`${backTo}${categoryId ? '&' : '?'}error=empty`);
+  }
+  if (!product_ids) return res.redirect(backTo);
+  if (!Array.isArray(product_ids)) product_ids = [product_ids];
+  product_ids = product_ids.map(Number).filter(Boolean);
+  if (!product_ids.length) return res.redirect(backTo);
+
+  const cleanDescription = description.trim();
+  await db('products').whereIn('id', product_ids).update({ description: cleanDescription, updated_at: db.fn.now() });
+
+  await logActivity(req, {
+    action: 'bulk_edit_description',
+    entityType: 'product',
+    summary: `Bulk-updated description for ${product_ids.length} product model(s) in one category (#${product_ids.join(', #')})`,
+  });
+
+  setImmediate(async () => {
+    invalidatePageCache();
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    try {
+      const updatedProducts = await db('products').whereIn('id', product_ids).select('slug');
+      for (const p of updatedProducts) {
+        if (p.slug) syncPageToLive(p.slug);
+      }
+      if (categoryId) {
+        const cat = await db('categories').where({ id: categoryId }).first();
+        if (cat && cat.landing_page_slug) syncPageToLive(cat.landing_page_slug);
+      }
+    } catch (e) { console.error('Bulk description sync error:', e.message); }
+  });
+
+  res.redirect(`${backTo}${categoryId ? '&' : '?'}success=1`);
+});
+
 router.get('/admin/products/new', async (req, res) => {
   const categories = await db('categories').orderBy('sort_order');
   res.render('admin/products/form.njk', adminVars(req, { product: null, categories, error: null }));

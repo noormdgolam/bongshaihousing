@@ -1,0 +1,68 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Bulk Edit Description{% endblock %}
+{% block header %}<h1 style="font-size:1.15rem; font-weight:700; margin:0;">Bulk Edit Description</h1>{% endblock %}
+
+{% block content %}
+<div class="card">
+  <p style="color:var(--grey-600); font-size:0.9rem; margin:0 0 16px;">Write one description and apply it to every selected model in a category at once, instead of opening each product's edit form individually.</p>
+
+  {% if success %}
+  <div style="background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:0.9rem;">✅ Description updated for the selected models. Live pages are syncing in the background.</div>
+  {% endif %}
+  {% if error == 'empty' %}
+  <div style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:0.9rem;">⚠️ Description can't be empty.</div>
+  {% endif %}
+
+  <form method="get" action="/admin/products/bulk-edit-description" style="display:flex; gap:8px; align-items:center; margin-bottom:20px;">
+    <label for="categorySelect" style="font-weight:700; font-size:0.85rem; color:var(--grey-700);">Category:</label>
+    <select name="category" id="categorySelect" onchange="this.form.submit()" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:220px;">
+      <option value="">Choose a category...</option>
+      {% for c in categories %}<option value="{{ c.id }}" {% if categoryId == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+  </form>
+
+  {% if categoryId and products.length %}
+  <form method="post" action="/admin/products/bulk-edit-description" id="bulkDescForm">
+    <input type="hidden" name="category_id" value="{{ categoryId }}">
+
+    <div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:14px; margin-bottom:16px;">
+      <label for="bulkDescription" style="display:block; font-weight:700; font-size:0.85rem; color:var(--grey-700); margin-bottom:8px;">New Description</label>
+      <textarea name="description" id="bulkDescription" rows="4" required placeholder="Type the description to apply to every checked model below..." style="width:100%; padding:10px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; font-family:inherit; resize:vertical;"></textarea>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span style="font-size:0.8rem; color:var(--grey-500);"><span id="selectedCount">{{ products.length }}</span> of {{ products.length }} model(s) selected</span>
+        <button type="submit" class="btn btn-primary" onclick="return confirm('Overwrite the description for all checked models with the text above? This can\'t be undone.');">Apply to Selected</button>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px; text-align:center;"><input type="checkbox" id="selectAllModels" checked onclick="document.querySelectorAll('.bulk-desc-checkbox').forEach(cb => cb.checked = this.checked); updateSelectedCount();" title="Select All"></th>
+            <th>Model</th>
+            <th>Current Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td style="text-align:center;"><input type="checkbox" name="product_ids" value="{{ p.id }}" class="bulk-desc-checkbox" checked onclick="updateSelectedCount()"></td>
+            <td><strong style="color:var(--primary);">{{ p.model_number }}</strong></td>
+            <td style="font-size:0.85rem; color:var(--grey-600); max-width:480px;">{{ p.description or '(none set)' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+  <script>
+    function updateSelectedCount() {
+      const n = document.querySelectorAll('.bulk-desc-checkbox:checked').length;
+      document.getElementById('selectedCount').textContent = n;
+    }
+  </script>
+  {% elif categoryId %}
+  <p style="color:var(--grey-500); font-size:0.9rem;">No models in this category yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
