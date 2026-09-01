@@ -1,4 +1,8 @@
+require('dotenv').config();
 const https = require('https');
+if (!process.env.DB_PASSWORD) {
+  throw new Error('DB_PASSWORD env var not set - never hardcode the live admin/DB password in a committed script (this repo has leaked it 5 times now).');
+}
 const querystring = require('querystring');
 
 const BASE_URL = 'https://bongshaihousing.com';
@@ -78,7 +82,7 @@ async function verifyBulkEdit() {
   const csrf = extractCsrf(loginGet.body);
   const loginPost = await makeRequest('/admin/login', 'POST', {
     email: 'admin@bongshaihousing.com',
-    password: '@Noldair_9361#',
+    password: process.env.DB_PASSWORD,
     _csrf: csrf
   });
   console.log(`  Login status: ${loginPost.statusCode}`);
