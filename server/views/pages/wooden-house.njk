@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "partials/product-card-image.njk" import cardImage %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -155,7 +156,7 @@
 
 <div class="stagger product-grid">
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-801" loading="eager" fetchpriority="high" src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-801" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-801', 'Bongshai Housing Model No-BH-WH-801', 'images/products/Model No-BH-WH-801.webp', 'images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -175,7 +176,7 @@
   <a class="btn btn-primary" href="bh-wh-801.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-802" loading="lazy" src="images/products/Model No-BH-WH-802.webp" srcset="images/products/Model%20No-BH-WH-802-400w.webp 400w, images/products/Model%20No-BH-WH-802-700w.webp 700w, images/products/Model%20No-BH-WH-802.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-802" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-802', 'Bongshai Housing Model No-BH-WH-802', 'images/products/Model No-BH-WH-802.webp', 'images/products/Model%20No-BH-WH-802-400w.webp 400w, images/products/Model%20No-BH-WH-802-700w.webp 700w, images/products/Model%20No-BH-WH-802.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -196,7 +197,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-803" loading="lazy" src="images/products/Model No-BH-WH-803.webp" srcset="images/products/Model%20No-BH-WH-803-400w.webp 400w, images/products/Model%20No-BH-WH-803-700w.webp 700w, images/products/Model%20No-BH-WH-803.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-803" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-803', 'Bongshai Housing Model No-BH-WH-803', 'images/products/Model No-BH-WH-803.webp', 'images/products/Model%20No-BH-WH-803-400w.webp 400w, images/products/Model%20No-BH-WH-803-700w.webp 700w, images/products/Model%20No-BH-WH-803.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -217,7 +218,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-804" loading="lazy" src="images/products/Model No-BH-WH-804.webp" srcset="images/products/Model%20No-BH-WH-804-400w.webp 400w, images/products/Model%20No-BH-WH-804-700w.webp 700w, images/products/Model%20No-BH-WH-804.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-804" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-804', 'Bongshai Housing Model No-BH-WH-804', 'images/products/Model No-BH-WH-804.webp', 'images/products/Model%20No-BH-WH-804-400w.webp 400w, images/products/Model%20No-BH-WH-804-700w.webp 700w, images/products/Model%20No-BH-WH-804.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -238,7 +239,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-805" loading="lazy" src="images/products/Model No-BH-WH-805.webp" srcset="images/products/Model%20No-BH-WH-805-400w.webp 400w, images/products/Model%20No-BH-WH-805-700w.webp 700w, images/products/Model%20No-BH-WH-805.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-805" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-805', 'Bongshai Housing Model No-BH-WH-805', 'images/products/Model No-BH-WH-805.webp', 'images/products/Model%20No-BH-WH-805-400w.webp 400w, images/products/Model%20No-BH-WH-805-700w.webp 700w, images/products/Model%20No-BH-WH-805.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -259,7 +260,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-806" loading="lazy" src="images/products/Model No-BH-WH-806.webp" srcset="images/products/Model%20No-BH-WH-806-400w.webp 400w, images/products/Model%20No-BH-WH-806-700w.webp 700w, images/products/Model%20No-BH-WH-806.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-806" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-806', 'Bongshai Housing Model No-BH-WH-806', 'images/products/Model No-BH-WH-806.webp', 'images/products/Model%20No-BH-WH-806-400w.webp 400w, images/products/Model%20No-BH-WH-806-700w.webp 700w, images/products/Model%20No-BH-WH-806.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -280,7 +281,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-807" loading="lazy" src="images/products/Model No-BH-WH-807.webp" srcset="images/products/Model%20No-BH-WH-807-400w.webp 400w, images/products/Model%20No-BH-WH-807-700w.webp 700w, images/products/Model%20No-BH-WH-807.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-807" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-807', 'Bongshai Housing Model No-BH-WH-807', 'images/products/Model No-BH-WH-807.webp', 'images/products/Model%20No-BH-WH-807-400w.webp 400w, images/products/Model%20No-BH-WH-807-700w.webp 700w, images/products/Model%20No-BH-WH-807.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -301,7 +302,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-808" loading="lazy" src="images/products/Model No-BH-WH-808.webp" srcset="images/products/Model%20No-BH-WH-808-400w.webp 400w, images/products/Model%20No-BH-WH-808-700w.webp 700w, images/products/Model%20No-BH-WH-808.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-808" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-808', 'Bongshai Housing Model No-BH-WH-808', 'images/products/Model No-BH-WH-808.webp', 'images/products/Model%20No-BH-WH-808-400w.webp 400w, images/products/Model%20No-BH-WH-808-700w.webp 700w, images/products/Model%20No-BH-WH-808.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -322,7 +323,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-809" loading="lazy" src="images/products/Model No-BH-WH-809.webp" srcset="images/products/Model%20No-BH-WH-809-400w.webp 400w, images/products/Model%20No-BH-WH-809-700w.webp 700w, images/products/Model%20No-BH-WH-809.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-809" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-809', 'Bongshai Housing Model No-BH-WH-809', 'images/products/Model No-BH-WH-809.webp', 'images/products/Model%20No-BH-WH-809-400w.webp 400w, images/products/Model%20No-BH-WH-809-700w.webp 700w, images/products/Model%20No-BH-WH-809.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -343,7 +344,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-810" loading="lazy" src="images/products/Model No-BH-WH-810.webp" srcset="images/products/Model%20No-BH-WH-810-400w.webp 400w, images/products/Model%20No-BH-WH-810-700w.webp 700w, images/products/Model%20No-BH-WH-810.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-810" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-810', 'Bongshai Housing Model No-BH-WH-810', 'images/products/Model No-BH-WH-810.webp', 'images/products/Model%20No-BH-WH-810-400w.webp 400w, images/products/Model%20No-BH-WH-810-700w.webp 700w, images/products/Model%20No-BH-WH-810.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -364,7 +365,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-811" loading="lazy" src="images/products/Model No-BH-WH-811.webp" srcset="images/products/Model%20No-BH-WH-811-400w.webp 400w, images/products/Model%20No-BH-WH-811-700w.webp 700w, images/products/Model%20No-BH-WH-811.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-811" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-811', 'Bongshai Housing Model No-BH-WH-811', 'images/products/Model No-BH-WH-811.webp', 'images/products/Model%20No-BH-WH-811-400w.webp 400w, images/products/Model%20No-BH-WH-811-700w.webp 700w, images/products/Model%20No-BH-WH-811.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>
@@ -385,7 +386,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-WH-812" loading="lazy" src="images/products/Model No-BH-WH-812.webp" srcset="images/products/Model%20No-BH-WH-812-400w.webp 400w, images/products/Model%20No-BH-WH-812-700w.webp 700w, images/products/Model%20No-BH-WH-812.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-WH-812" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-WH-812', 'Bongshai Housing Model No-BH-WH-812', 'images/products/Model No-BH-WH-812.webp', 'images/products/Model%20No-BH-WH-812-400w.webp 400w, images/products/Model%20No-BH-WH-812-700w.webp 700w, images/products/Model%20No-BH-WH-812.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Wooden House</span>

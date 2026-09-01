@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "partials/product-card-image.njk" import cardImage %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -155,7 +156,7 @@
 
 <div class="stagger product-grid">
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-901" loading="eager" fetchpriority="high" src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-901" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-901', 'Bongshai Housing Model No-BH-CB-901', 'images/products/bh-cb-901.webp', 'images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', true) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -175,7 +176,7 @@
   <a class="btn btn-primary" href="bh-cb-901.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:1">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-902" loading="lazy" src="images/products/bh-cb-902.webp" srcset="images/products/bh-cb-902-400w.webp 400w, images/products/bh-cb-902-700w.webp 700w, images/products/bh-cb-902.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-902" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-902', 'Bongshai Housing Model No-BH-CB-902', 'images/products/bh-cb-902.webp', 'images/products/bh-cb-902-400w.webp 400w, images/products/bh-cb-902-700w.webp 700w, images/products/bh-cb-902.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -196,7 +197,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-903" loading="lazy" src="images/products/bh-cb-903.webp" srcset="images/products/bh-cb-903-400w.webp 400w, images/products/bh-cb-903-700w.webp 700w, images/products/bh-cb-903.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-903" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-903', 'Bongshai Housing Model No-BH-CB-903', 'images/products/bh-cb-903.webp', 'images/products/bh-cb-903-400w.webp 400w, images/products/bh-cb-903-700w.webp 700w, images/products/bh-cb-903.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -217,7 +218,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-904" loading="lazy" src="images/products/bh-cb-904.webp" srcset="images/products/bh-cb-904-400w.webp 400w, images/products/bh-cb-904-700w.webp 700w, images/products/bh-cb-904.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-904" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-904', 'Bongshai Housing Model No-BH-CB-904', 'images/products/bh-cb-904.webp', 'images/products/bh-cb-904-400w.webp 400w, images/products/bh-cb-904-700w.webp 700w, images/products/bh-cb-904.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -238,7 +239,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-905" loading="lazy" src="images/products/bh-cb-905.webp" srcset="images/products/bh-cb-905-400w.webp 400w, images/products/bh-cb-905-700w.webp 700w, images/products/bh-cb-905.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-905" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-905', 'Bongshai Housing Model No-BH-CB-905', 'images/products/bh-cb-905.webp', 'images/products/bh-cb-905-400w.webp 400w, images/products/bh-cb-905-700w.webp 700w, images/products/bh-cb-905.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -259,7 +260,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-906" loading="lazy" src="images/products/bh-cb-906.webp" srcset="images/products/bh-cb-906-400w.webp 400w, images/products/bh-cb-906-700w.webp 700w, images/products/bh-cb-906.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-906" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-906', 'Bongshai Housing Model No-BH-CB-906', 'images/products/bh-cb-906.webp', 'images/products/bh-cb-906-400w.webp 400w, images/products/bh-cb-906-700w.webp 700w, images/products/bh-cb-906.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -280,7 +281,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-907" loading="lazy" src="images/products/bh-cb-907.webp" srcset="images/products/bh-cb-907-400w.webp 400w, images/products/bh-cb-907-700w.webp 700w, images/products/bh-cb-907.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-907" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-907', 'Bongshai Housing Model No-BH-CB-907', 'images/products/bh-cb-907.webp', 'images/products/bh-cb-907-400w.webp 400w, images/products/bh-cb-907-700w.webp 700w, images/products/bh-cb-907.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -301,7 +302,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-908" loading="lazy" src="images/products/bh-cb-908.webp" srcset="images/products/bh-cb-908-400w.webp 400w, images/products/bh-cb-908-700w.webp 700w, images/products/bh-cb-908.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-908" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-908', 'Bongshai Housing Model No-BH-CB-908', 'images/products/bh-cb-908.webp', 'images/products/bh-cb-908-400w.webp 400w, images/products/bh-cb-908-700w.webp 700w, images/products/bh-cb-908.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -322,7 +323,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-909" loading="lazy" src="images/products/bh-cb-909.webp" srcset="images/products/bh-cb-909-400w.webp 400w, images/products/bh-cb-909-700w.webp 700w, images/products/bh-cb-909.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-909" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-909', 'Bongshai Housing Model No-BH-CB-909', 'images/products/bh-cb-909.webp', 'images/products/bh-cb-909-400w.webp 400w, images/products/bh-cb-909-700w.webp 700w, images/products/bh-cb-909.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -343,7 +344,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-910" loading="lazy" src="images/products/bh-cb-910.webp" srcset="images/products/bh-cb-910-400w.webp 400w, images/products/bh-cb-910-700w.webp 700w, images/products/bh-cb-910.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-910" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-910', 'Bongshai Housing Model No-BH-CB-910', 'images/products/bh-cb-910.webp', 'images/products/bh-cb-910-400w.webp 400w, images/products/bh-cb-910-700w.webp 700w, images/products/bh-cb-910.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -364,7 +365,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-911" loading="lazy" src="images/products/bh-cb-911.webp" srcset="images/products/bh-cb-911-400w.webp 400w, images/products/bh-cb-911-700w.webp 700w, images/products/bh-cb-911.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-911" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-911', 'Bongshai Housing Model No-BH-CB-911', 'images/products/bh-cb-911.webp', 'images/products/bh-cb-911-400w.webp 400w, images/products/bh-cb-911-700w.webp 700w, images/products/bh-cb-911.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>
@@ -385,7 +386,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-CB-912" loading="lazy" src="images/products/bh-cb-912.webp" srcset="images/products/bh-cb-912-400w.webp 400w, images/products/bh-cb-912-700w.webp 700w, images/products/bh-cb-912.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-CB-912" width="1024" height="1024"></div>
+<div class="property-img-wrap">{{ cardImage(dbProductsByModel, 'BH-CB-912', 'Bongshai Housing Model No-BH-CB-912', 'images/products/bh-cb-912.webp', 'images/products/bh-cb-912-400w.webp 400w, images/products/bh-cb-912-700w.webp 700w, images/products/bh-cb-912.webp 1024w', '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px', false) }}</div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Concrete Building</span>

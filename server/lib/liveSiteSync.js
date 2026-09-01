@@ -29,6 +29,31 @@ const { getThemeSettings, generateCssVariables } = require('./theme');
 const DOCROOT = process.env.STATIC_DOCROOT || path.join(__dirname, '..', '..', 'bongshaihousing.com');
 const VIEWS_DIR = path.join(__dirname, '..', 'views');
 
+const registryPath = path.join(__dirname, '..', 'page-registry.json');
+const registry = fs.existsSync(registryPath) ? JSON.parse(fs.readFileSync(registryPath, 'utf8')) : {};
+
+function renderVars(meta, extra) {
+  return {
+    title: meta.title,
+    description: meta.description,
+    keywords: meta.keywords,
+    category: meta.category,
+    canonical: meta.canonical,
+    ogType: meta.ogType,
+    ogTitle: meta.ogTitle,
+    ogDescription: meta.ogDescription,
+    ogImage: meta.ogImage,
+    ogImageWidth: meta.ogImageWidth,
+    ogImageHeight: meta.ogImageHeight,
+    twitterTitle: meta.twitterTitle,
+    twitterDescription: meta.twitterDescription,
+    whatsappHref: meta.whatsappHref,
+    bodyClass: meta.bodyClass,
+    showQuoteShortcut: meta.showQuoteShortcut,
+    ...extra,
+  };
+}
+
 // Configure dedicated Nunjucks environment for offline / background page generation
 const nunjucksEnv = nunjucks.configure(VIEWS_DIR, {
   autoescape: true,
@@ -221,6 +246,73 @@ async function renderProductToHtml(slug) {
 }
 
 /**
+ * Directly renders a category landing page (e.g. duplex-steel-building.html)
+ * to HTML string using Nunjucks & DB - the exact same dbCategory/
+ * dbProductsByModel fetch server/routes/pages.js's CATEGORY_LANDING_PAGES
+ * handler does for a live request, just without needing a req/res. This is
+ * the render path a product-image upload actually needs: syncPageToLive()
+ * is called with the category's landing_page_slug after every product
+ * save, and until this existed that call fell all the way through to
+ * renderProductToHtml() (which only matches product slugs, so always
+ * returned null for a category) and then the fragile self-fetch fallback -
+ * meaning the category grid's thumbnail silently kept showing the old image
+ * whenever that fallback didn't fire (Passenger loopback fetches are not
+ * reliable - see project-node-hosting-quirks). This path never depends on
+ * a self-fetch at all.
+ */
+async function renderCategoryToHtml(pageFile) {
+  if (!db) throw new Error('Database connection not available');
+
+  const meta = registry['/' + pageFile];
+  if (!meta || !meta.template) return null;
+
+  let dbCategory = null;
+  const dbProductsByModel = {};
+
+  const pageSlug = pageFile.replace(/\.html$/, '');
+  dbCategory = await db('categories')
+    .where({ landing_page_slug: pageFile })
+    .orWhere({ slug: pageSlug })
+    .orWhere({ landing_page_slug: pageSlug })
+    .first();
+
+  if (!dbCategory) return null; // not actually a category page - let the caller try something else
+
+  const products = await db('products')
+    .where({ category_id: dbCategory.id, published: true })
+    .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'main_image')
+    .orderBy('sort_order', 'asc');
+
+  const productIds = products.map((p) => p.id);
+  let allSpecs = [];
+  if (productIds.length > 0) {
+    allSpecs = await db('product_specs').whereIn('product_id', productIds).orderBy('sort_order', 'asc');
+  }
+  const specsByProductId = {};
+  allSpecs.forEach((spec) => {
+    if (!specsByProductId[spec.product_id]) specsByProductId[spec.product_id] = [];
+    specsByProductId[spec.product_id].push(spec);
+  });
+  products.forEach((p) => {
+    p.specs = specsByProductId[p.id] || [];
+    dbProductsByModel[p.model_number] = p;
+  });
+  dbProductsByModel._list = products;
+
+  let theme = {};
+  let themeCssVars = '';
+  try {
+    theme = await getThemeSettings();
+    themeCssVars = generateCssVariables(theme);
+  } catch (e) {
+    theme = {};
+    themeCssVars = '';
+  }
+
+  return nunjucksEnv.render(meta.template, renderVars(meta, { dbCategory, dbProductsByModel, theme, themeCssVars }));
+}
+
+/**
  * Regenerates and writes the static HTML file directly to DOCROOT
  */
 async function syncPageToLive(slug) {
@@ -228,15 +320,24 @@ async function syncPageToLive(slug) {
   const file = slug.endsWith('.html') ? slug : `${slug}.html`;
 
   try {
-    // 1. Direct in-process Nunjucks template rendering
+    // 1. Direct in-process Nunjucks rendering - try a product page first,
+    // then a category landing page (a category's landing_page_slug is
+    // passed through this same function after every product save).
     let html = null;
     try {
       html = await renderProductToHtml(file);
     } catch (renderErr) {
       console.warn(`[liveSiteSync] In-process product render missed for ${file}:`, renderErr.message);
     }
+    if (!html) {
+      try {
+        html = await renderCategoryToHtml(file);
+      } catch (renderErr) {
+        console.warn(`[liveSiteSync] In-process category render missed for ${file}:`, renderErr.message);
+      }
+    }
 
-    // 2. If in-process product render didn't match, attempt loopback self-fetch
+    // 2. If neither in-process render matched, attempt loopback self-fetch
     if (!html) {
       const port = process.env.PORT || 3000;
       try {
@@ -265,4 +366,4 @@ async function syncPageToLive(slug) {
   }
 }
 
-module.exports = { syncPageToLive, renderProductToHtml };
+module.exports = { syncPageToLive, renderProductToHtml, renderCategoryToHtml };
