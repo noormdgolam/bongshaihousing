@@ -11,9 +11,9 @@ env.addGlobal('currentYear', 2026);
 
 const categoryPages = [
   'apartment-building.njk', 'concrete-building.njk', 'container-house.njk',
-  'cottage-house.njk', 'duplex-steel-building.njk', 'industrial-sheds.njk',
+  'cottage-house.njk', 'duplex-steel-building.njk',
   'luxury-villa.njk', 'simplex-steel-building.njk', 'steel-house.njk',
-  'tiny-house.njk', 'wooden-house.njk', 'worker-accommodation.njk',
+  'tiny-house.njk', 'wooden-house.njk',
   'multi-story-homes.njk', 'other-residential.njk', 'products-and-solutions.njk'
 ];
 

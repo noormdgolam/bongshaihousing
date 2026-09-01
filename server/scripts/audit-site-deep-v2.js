@@ -108,7 +108,7 @@ for (const [url, meta] of Object.entries(registry)) {
   }
 
   // 3. AEO Answer-First Check (Core landing pages)
-  const isCoreLanding = ['/index.html', '/about.html', '/contact.html', '/faq.html', '/solutions.html', '/products-and-solutions.html', '/service-areas.html', '/apartment-building.html', '/concrete-building.html', '/container-house.html', '/cottage-house.html', '/duplex-steel-building.html', '/industrial-sheds.html', '/luxury-villa.html', '/simplex-steel-building.html', '/steel-house.html', '/tiny-house.html', '/wooden-house.html', '/worker-accommodation.html'].includes(url);
+  const isCoreLanding = ['/index.html', '/about.html', '/contact.html', '/faq.html', '/solutions.html', '/products-and-solutions.html', '/service-areas.html', '/apartment-building.html', '/concrete-building.html', '/container-house.html', '/cottage-house.html', '/duplex-steel-building.html', '/luxury-villa.html', '/simplex-steel-building.html', '/steel-house.html', '/tiny-house.html', '/wooden-house.html'].includes(url);
   if (isCoreLanding) {
     if (!html.includes('AEO:') && !html.includes('Answer-First') && !html.includes('<strong>Bongshai Housing')) {
       findings.missingAeoAnswerFirst.push(url);
