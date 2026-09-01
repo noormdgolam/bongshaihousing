@@ -1,6 +1,11 @@
 const https = require('https');
 const querystring = require('querystring');
+require('dotenv').config();
 const mysql = require('mysql2/promise');
+
+if (!process.env.DB_PASSWORD || !process.env.ADMIN_PASSWORD) {
+  throw new Error('DB_PASSWORD / ADMIN_PASSWORD env vars not set - never hardcode the live admin/DB password in a committed script (this repo has leaked it 4 times now). Set them in .env or pass inline.');
+}
 
 const BASE_URL = 'https://bongshaihousing.com';
 let cookies = [];
@@ -79,7 +84,7 @@ async function verifyAll() {
     host: 'bongshaihousing.com',
     port: 3306,
     user: 'abongsha_bongshai_prod',
-    password: '@Noldair_9361#',
+    password: process.env.DB_PASSWORD,
     database: 'abongsha_bongshai_prod'
   });
   const [prods] = await conn.query('SELECT model_number, slug FROM products WHERE category_id = 51 ORDER BY sort_order');
@@ -113,7 +118,7 @@ async function verifyAll() {
   const csrf = extractCsrf(loginGet.body);
   const loginPost = await makeRequest('/admin/login', 'POST', {
     email: 'admin@bongshaihousing.com',
-    password: '@Noldair_9361#',
+    password: process.env.ADMIN_PASSWORD,
     _csrf: csrf
   });
   console.log(`  Login HTTP status: ${loginPost.statusCode}`);
