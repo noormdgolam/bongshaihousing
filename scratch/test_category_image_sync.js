@@ -1,5 +1,10 @@
+require('dotenv').config();
 const https = require('https');
 const querystring = require('querystring');
+
+if (!process.env.ADMIN_PASSWORD) {
+  throw new Error('ADMIN_PASSWORD env var not set - never hardcode the live admin/DB password in a committed script (this repo has leaked it 3 times already this way). Set it in .env or pass it inline: ADMIN_PASSWORD=... node test_category_image_sync.js');
+}
 
 const BASE_URL = 'https://bongshaihousing.com';
 let cookies = [];
@@ -76,8 +81,8 @@ async function testCategoryLiveSync() {
   const loginGet = await makeRequest('/admin/login');
   const csrf = extractCsrf(loginGet.body);
   const loginPost = await makeRequest('/admin/login', 'POST', {
-    email: 'admin@bongshaihousing.com',
-    password: '@Noldair_9361#',
+    email: process.env.ADMIN_EMAIL || 'admin@bongshaihousing.com',
+    password: process.env.ADMIN_PASSWORD,
     _csrf: csrf
   });
   console.log(`  Login status: ${loginPost.statusCode}`);
