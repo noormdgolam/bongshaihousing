@@ -1,6 +1,10 @@
 const https = require('https');
 const querystring = require('querystring');
 
+if (!process.env.DB_PASSWORD) {
+  throw new Error('DB_PASSWORD env var not set - never hardcode the live admin password in a committed script.');
+}
+
 const BASE_URL = 'https://bongshaihousing.com';
 let cookies = [];
 
@@ -96,7 +100,7 @@ async function verifySyncFix() {
   const csrf = extractCsrf(loginGet.body);
   const loginPost = await makeRequest('/admin/login', 'POST', {
     email: 'admin@bongshaihousing.com',
-    password: '@Noldair_9361#',
+    password: process.env.DB_PASSWORD,
     _csrf: csrf
   });
   console.log(`  Login status: ${loginPost.statusCode}\n`);
