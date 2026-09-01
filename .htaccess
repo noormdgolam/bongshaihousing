@@ -52,6 +52,9 @@ RewriteRule ^industrial-sheds\.html/?$ https://bongshaihousing.com/products-and-
 RewriteRule ^worker-accommodation\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 RewriteRule ^bh-is-10(0[1-9]|1[0-2])\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 RewriteRule ^bh-wa-11(0[1-9]|1[0-2])\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+# 4b-4. Low Cost House model numbers renumbered 1201-1220 -> 1001-1020
+# (2026-09-02) - old numbers were live and indexed.
+RewriteRule ^bh-lch-12(0[1-9]|1[0-9]|20)\.html/?$ https://bongshaihousing.com/bh-lch-10$1.html [R=301,L]
 # 4c. Google Search Console 404 Fixes (2026-08-08)
 # WordPress leftovers
 RewriteRule ^wp-(content|includes|login\.php|admin)(.*)$ https://bongshaihousing.com/ [R=301,L]
