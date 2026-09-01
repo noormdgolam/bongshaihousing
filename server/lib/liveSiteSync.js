@@ -160,7 +160,35 @@ function formatProductTitle(product, category) {
 async function renderProductToHtml(slug) {
   if (!db) throw new Error('Database connection not available');
 
-  const product = await db('products').where({ slug }).first();
+  const file = slug.endsWith('.html') ? slug : `${slug}.html`;
+
+  // Most product pages on this site have their OWN dedicated, hand-authored
+  // .njk template (bh-lch-1001.njk, bh-sb-301.njk, etc.) - page-registry.json
+  // records exactly which template + meta each URL uses, the same source
+  // renderCategoryToHtml() below already trusts. Only a small minority of
+  // DB-only products (e.g. the Cottage House models) have no registry entry
+  // and truly rely on the generic product-detail.njk render further down.
+  // Rendering every product through the generic template unconditionally
+  // was the bug: it silently overwrote a product's real page (cat-sidebar,
+  // model showcase, room/floor tables) with a stripped-down generic shell
+  // any time syncPageToLive() fired for it, while still LOOKING right in
+  // the <head> (title/description/canonical came from the DB row too) -
+  // making the corruption easy to miss without comparing full page content.
+  const regMeta = registry['/' + file];
+  if (regMeta && regMeta.template && regMeta.template !== 'pages/product-detail.njk') {
+    let dedicatedTheme = {};
+    let dedicatedThemeCssVars = '';
+    try {
+      dedicatedTheme = await getThemeSettings();
+      dedicatedThemeCssVars = generateCssVariables(dedicatedTheme);
+    } catch (e) {
+      dedicatedTheme = {};
+      dedicatedThemeCssVars = '';
+    }
+    return nunjucksEnv.render(regMeta.template, renderVars(regMeta, { theme: dedicatedTheme, themeCssVars: dedicatedThemeCssVars }));
+  }
+
+  const product = await db('products').where({ slug: file }).first();
   if (!product) return null;
 
   const category = await db('categories').where({ id: product.category_id }).first();
