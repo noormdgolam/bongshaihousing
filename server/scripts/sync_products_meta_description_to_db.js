@@ -127,7 +127,7 @@ async function run() {
     'bh-cb-901.html',
     'bh-tsb-101.html',
     'bh-ch-413.html',
-    'lcv-102.html',
+    'bh-lch-1001.html',
     'bh-sb-301.html',
     'bh-wh-801.html',
     'bh-th-701.html'

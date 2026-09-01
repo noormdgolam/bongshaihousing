@@ -14,7 +14,7 @@ const categoryPages = [
   'cottage-house.njk', 'duplex-steel-building.njk',
   'luxury-villa.njk', 'simplex-steel-building.njk', 'steel-house.njk',
   'tiny-house.njk', 'wooden-house.njk',
-  'multi-story-homes.njk', 'other-residential.njk', 'products-and-solutions.njk'
+  'multi-story-homes.njk', 'products-and-solutions.njk'
 ];
 
 // Individual model links (bh-xx-###.html, dv-###.html, lcv-###.html) are NOT in

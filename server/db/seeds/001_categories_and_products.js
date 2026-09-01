@@ -15,7 +15,6 @@ function numericFromMaybeHtml(value) {
 
 // Landing-page slug doesn't always match the category name's own slugified
 // form - "Low-Cost Villa" -> luxury-villa.html (the lcv-10x family
-// variants back to the luxury-villa landing page, not a page of its own -
 // see [[project-node-conversion-plan]]).
 const LANDING_PAGE_BY_CATEGORY_SLUG = {
   'concrete-building': 'concrete-building.html',
@@ -27,7 +26,6 @@ const LANDING_PAGE_BY_CATEGORY_SLUG = {
   'tiny-house': 'tiny-house.html',
   'apartment-building': 'apartment-building.html',
   'wooden-house': 'wooden-house.html',
-  'low-cost-villa': 'luxury-villa.html',
 };
 
 exports.seed = async function (knex) {

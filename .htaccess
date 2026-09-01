@@ -55,6 +55,11 @@ RewriteRule ^bh-wa-11(0[1-9]|1[0-2])\.html/?$ https://bongshaihousing.com/produc
 # 4b-4. Low Cost House model numbers renumbered 1201-1220 -> 1001-1020
 # (2026-09-02) - old numbers were live and indexed.
 RewriteRule ^bh-lch-12(0[1-9]|1[0-9]|20)\.html/?$ https://bongshaihousing.com/bh-lch-10$1.html [R=301,L]
+# 4b-5. Low-Cost Villa category discontinued (2026-09-02) - not a real
+# offering ("there is no low cost villa"). other-residential.html was the
+# actual 9-model listing page; lcv-101..109 were the individual models.
+RewriteRule ^other-residential\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
+RewriteRule ^lcv-10[1-9]\.html/?$ https://bongshaihousing.com/products-and-solutions.html [R=301,L]
 # 4c. Google Search Console 404 Fixes (2026-08-08)
 # WordPress leftovers
 RewriteRule ^wp-(content|includes|login\.php|admin)(.*)$ https://bongshaihousing.com/ [R=301,L]

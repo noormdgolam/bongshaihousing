@@ -44,7 +44,6 @@ POPULAR MODELS:
 - BH-SB-302: Popular 3-bedroom simplex steel house (approx 900-1200 sq.ft), ideal for suburban & village plots.
 - BH-CB-901 / BH-CB-902: 4-bedroom modern steel composite duplex villa.
 - BH-DV-201: Luxury duplex with panoramic glass balconies.
-- LCV-101 to LCV-109: Budget-friendly 1 to 2 bedroom prefab living units.
 - Container Homes (20ft & 40ft): Prefab mobile living/office solutions.
 
 SALES GUIDANCE & TONE:

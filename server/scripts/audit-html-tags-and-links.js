@@ -32,7 +32,7 @@ const knownRoutes = new Set([
   '/projects.html', '/solutions.html', '/products-and-solutions.html', '/service-areas.html',
   '/privacy-policy.html', '/terms.html', '/interactive-tools.html', '/certifications.html',
   '/iso-9001-certification.html', '/material-testing-certification.html', '/ohsas-safety-certification.html',
-  '/steel-vs-concrete-comparison.html', '/multi-story-homes.html', '/other-residential.html',
+  '/steel-vs-concrete-comparison.html', '/multi-story-homes.html',
   '/agent/signup.html', '/agent/login.html', '/agent/dashboard.html',
   '/my-project', '/my-project/login.html',
   '/admin', '/admin/login', '/admin/leads', '/admin/orders', '/admin/agents',
