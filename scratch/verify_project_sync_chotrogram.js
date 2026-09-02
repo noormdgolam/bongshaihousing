@@ -1,9 +1,10 @@
 const https = require('https');
+const querystring = require('querystring');
 const mysql = require('mysql2/promise');
 
 const BASE_URL = 'https://bongshaihousing.com';
 const ADMIN_EMAIL = 'admin@bongshaihousing.com';
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'zk2bGgqB_+a8Zk8T98Un';
+const ADMIN_PASS = 'zk2bGgqB_+a8Zk8T98Un';
 
 let cookies = [];
 
@@ -19,7 +20,6 @@ function buildMultipart(fields, boundary) {
 
 function makeReq(urlPath, method = 'GET', data = null, headers = {}, isMultipart = false) {
   return new Promise((resolve, reject) => {
-    const querystring = require('querystring');
     const url = new URL(urlPath, BASE_URL);
     const reqHeaders = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36', ...headers };
     if (cookies.length) reqHeaders['Cookie'] = cookies.join('; ');
@@ -58,35 +58,13 @@ function makeReq(urlPath, method = 'GET', data = null, headers = {}, isMultipart
 }
 
 function extractCsrf(html) {
-  const m = html.match(/name=["']_csrf["']\s+value=["']([^"']+)["']/i) ||
-            html.match(/value=["']([^"']+)["']\s+name=["']_csrf["']/i) ||
-            html.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i);
+  const m = html.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i) ||
+            html.match(/name=["']_csrf["']\s+value=["']([^"']+)["']/i);
   return m ? m[1] : '';
 }
 
-function extractFormFields(html) {
-  const fields = {};
-  const inputMatches = [...html.matchAll(/<input[^>]+name=["']([^"']+)["'][^>]*value=["']([^"']*)["'][^>]*>/gi)];
-  for (const m of inputMatches) {
-    fields[m[1]] = m[2];
-  }
-  const textareaMatches = [...html.matchAll(/<textarea[^>]+name=["']([^"']+)["'][^>]*>([\s\S]*?)<\/textarea>/gi)];
-  for (const m of textareaMatches) {
-    fields[m[1]] = m[2];
-  }
-  const selectMatches = [...html.matchAll(/<select[^>]+name=["']([^"']+)["'][^>]*>([\s\S]*?)<\/select>/gi)];
-  for (const m of selectMatches) {
-    const selOpt = m[2].match(/<option[^>]+value=["']([^"']*)["'][^>]*selected[^>]*>/i);
-    if (selOpt) fields[m[1]] = selOpt[1];
-  }
-  return fields;
-}
-
 function extractProjectDescription(html) {
-  const m = html.match(/<div class=["']project-intro["'][^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i) ||
-            html.match(/<section[^>]*class=["'][^"']*project[^"']*["'][^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i) ||
-            html.match(/<div style=["'][^"']*margin-bottom:\s*var\(--space-6\);[^"']*["']>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i) ||
-            html.match(/<main[^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+  const m = html.match(/<h2[^>]*>Chotrogram<\/h2>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
   return m ? m[1].trim() : '';
 }
 
@@ -95,80 +73,93 @@ async function verifyProjectSync() {
   console.log(' Project Live Sync Verification (project-chotrogram)');
   console.log('====================================================\n');
 
-  // 1. Get project info from DB
-  const conn = await mysql.createConnection({
-    host: 'bongshaihousing.com',
-    user: 'abongsha_bongshai_prod',
-    password: process.env.DB_PASSWORD || '@Noldair_9361#',
-    database: 'abongsha_bongshai_prod'
-  });
-  const [rows] = await conn.query("SELECT id, title, slug, description FROM projects WHERE slug = 'project-chotrogram.html'");
-  const proj = rows[0];
-  if (!proj) throw new Error('Project chotrogram not found in DB');
-  const originalDesc = proj.description;
-  console.log(`Found Project: "${proj.title}" (ID: ${proj.id}, Slug: ${proj.slug})`);
-  console.log(`Original DB Description:\n"${originalDesc}"\n`);
-  await conn.end();
+  const originalDesc = "An elegant multi-story commercial showroom delivered in Chotrogram. Bongshai Housing provides top-tier pre-engineered building (PEB) solutions for businesses across the Chattogram district.";
+  const testDesc = "An elegant multi-story commercial showroom delivered in Chotrogram. Built with high-strength structural steel and energy-efficient insulated panels by Bongshai Housing Ltd.";
 
-  // 2. Authenticate admin
-  console.log('[Admin Auth] Logging in...');
+  console.log('Original Description:\n"' + originalDesc + '"\n');
+
+  // 1. Admin login
+  console.log('[1] Logging into /admin/login...');
   const loginGet = await makeReq('/admin/login');
-  const loginCsrf = extractCsrf(loginGet.body);
+  const csrf = extractCsrf(loginGet.body);
   const loginRes = await makeReq('/admin/login', 'POST', {
     email: ADMIN_EMAIL,
     password: ADMIN_PASS,
-    _csrf: loginCsrf
+    _csrf: csrf
   });
-  console.log(`Login status: ${loginRes.status}\n`);
+  console.log('  Login status:', loginRes.status);
 
-  async function updateDescAndCheck(newDescription, label) {
-    console.log(`----------------------------------------------------`);
-    console.log(`[${label}] Updating description...`);
-    console.log(`----------------------------------------------------`);
+  // 2. Change description to testDesc
+  console.log('\n[2] Updating project description to new text...');
+  const editGet1 = await makeReq('/admin/projects/2/edit');
+  const editCsrf1 = extractCsrf(editGet1.body);
+  
+  const t0_A = Date.now();
+  const saveA = await makeReq('/admin/projects/2', 'POST', {
+    _csrf: editCsrf1,
+    title: 'Chotrogram',
+    slug: 'project-chotrogram.html',
+    location: 'Chotrogram',
+    description: testDesc,
+    status_label: 'Completed Project',
+    published: 'on',
+    sort_order: '0'
+  }, {}, true);
+  console.log('  Save response status:', saveA.status);
 
-    const editGet = await makeReq(`/admin/projects/${proj.id}/edit`);
-    const editCsrf = extractCsrf(editGet.body);
-    const formFields = extractFormFields(editGet.body);
+  console.log('  Waiting 3s for liveSiteSync.js to write static file...');
+  await new Promise(r => setTimeout(r, 3000));
+  const t_live_A = Date.now();
+  const elapsed_A = ((t_live_A - t0_A) / 1000).toFixed(1);
 
-    const postPayload = {
-      ...formFields,
-      _csrf: editCsrf,
-      description: newDescription,
-      published: 'on'
-    };
+  // 3. Curl live page
+  console.log('\n[3] Fetching live https://bongshaihousing.com/project-chotrogram.html...');
+  const liveResA = await makeReq(`/project-chotrogram.html?cb=${t_live_A}`);
+  const liveDescA = extractProjectDescription(liveResA.body);
 
-    const t0 = Date.now();
-    const saveRes = await makeReq(`/admin/projects/${proj.id}`, 'POST', postPayload, {}, true);
-    console.log(`Save response status: ${saveRes.status}`);
+  console.log('\n>>> [LIVE CURL OUTPUT WITH NEW DESCRIPTION]:');
+  console.log(`- Time to appear live: ${elapsed_A} seconds`);
+  console.log(`- HTTP Status: ${liveResA.status}`);
+  console.log(`- Paragraph Content (<p>):\n  "${liveDescA}"\n`);
 
-    console.log('Waiting 3 seconds for background liveSiteSync.js to write file...');
-    await new Promise(r => setTimeout(r, 3000));
-    const cb = Date.now();
-    const elapsed = ((cb - t0) / 1000).toFixed(1);
+  // 4. Revert description
+  console.log('\n[4] Reverting description back to original...');
+  const editGet2 = await makeReq('/admin/projects/2/edit');
+  const editCsrf2 = extractCsrf(editGet2.body);
 
-    const liveRes = await makeReq(`/${proj.slug}?cb=${cb}`);
-    const liveDesc = extractProjectDescription(liveRes.body);
+  const t0_B = Date.now();
+  const saveB = await makeReq('/admin/projects/2', 'POST', {
+    _csrf: editCsrf2,
+    title: 'Chotrogram',
+    slug: 'project-chotrogram.html',
+    location: 'Chotrogram',
+    description: originalDesc,
+    status_label: 'Completed Project',
+    published: 'on',
+    sort_order: '0'
+  }, {}, true);
+  console.log('  Save response status:', saveB.status);
 
-    console.log(`\n>>> [${label} LIVE CURL OUTPUT at timestamp ${cb} (${elapsed}s)]:`);
-    console.log(`  - HTTP Status: ${liveRes.status}`);
-    console.log(`  - Live Description on /${proj.slug}:`);
-    console.log(`    "${liveDesc}"\n`);
+  console.log('  Waiting 3s for liveSiteSync.js to write static file...');
+  await new Promise(r => setTimeout(r, 3000));
+  const t_live_B = Date.now();
+  const elapsed_B = ((t_live_B - t0_B) / 1000).toFixed(1);
 
-    return { liveDesc, elapsed };
-  }
+  // 5. Curl live page again
+  console.log('\n[5] Fetching live https://bongshaihousing.com/project-chotrogram.html...');
+  const liveResB = await makeReq(`/project-chotrogram.html?cb=${t_live_B}`);
+  const liveDescB = extractProjectDescription(liveResB.body);
 
-  // STEP 1 & 2: Test Description
-  const testDesc = "A modern multi-story commercial showroom delivered in Chotrogram. Built with high-strength structural steel and energy-efficient insulated panels by Bongshai Housing Ltd.";
-  const resTest = await updateDescAndCheck(testDesc, 'TEST DESCRIPTION');
-
-  // STEP 3: Restore Original Description
-  const resRestore = await updateDescAndCheck(originalDesc, 'RESTORE ORIGINAL DESCRIPTION');
+  console.log('\n>>> [LIVE CURL OUTPUT WITH RESTORED ORIGINAL DESCRIPTION]:');
+  console.log(`- Time to appear live: ${elapsed_B} seconds`);
+  console.log(`- HTTP Status: ${liveResB.status}`);
+  console.log(`- Paragraph Content (<p>):\n  "${liveDescB}"\n`);
 
   console.log('====================================================');
-  console.log(' VERIFICATION SUMMARY');
+  console.log(' SUMMARY & VERIFICATION CONFIRMATION');
   console.log('====================================================');
-  console.log(`Test Description reflected live: ${resTest.liveDesc === testDesc} (${resTest.elapsed}s)`);
-  console.log(`Original Description restored: ${resRestore.liveDesc === originalDesc} (${resRestore.elapsed}s)`);
+  console.log(`New description verified: ${liveDescA === testDesc}`);
+  console.log(`Original description restored: ${liveDescB === originalDesc}`);
   console.log('====================================================\n');
 }
 

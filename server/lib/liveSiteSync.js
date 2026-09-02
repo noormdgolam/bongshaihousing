@@ -26,7 +26,16 @@ try {
 const { formatTaka, formatTakaAscii } = require('./format');
 const { getThemeSettings, generateCssVariables } = require('./theme');
 
-const DOCROOT = process.env.STATIC_DOCROOT || path.join(__dirname, '..', '..', 'bongshaihousing.com');
+function getDocroots() {
+  if (process.env.STATIC_DOCROOT) return [process.env.STATIC_DOCROOT];
+  const candidates = [
+    path.join(__dirname, '..', '..', 'public_html'),
+    path.join(__dirname, '..', '..', 'bongshaihousing.com'),
+    path.join(__dirname, '..', '..'),
+  ];
+  const valid = candidates.filter(p => fs.existsSync(p));
+  return valid.length > 0 ? valid : [candidates[0]];
+}
 const VIEWS_DIR = path.join(__dirname, '..', 'views');
 
 const registryPath = path.join(__dirname, '..', 'page-registry.json');
@@ -488,11 +497,20 @@ async function syncPageToLive(slug) {
       return false;
     }
 
-    // Write generated HTML to sibling static docroot
-    const targetPath = path.join(DOCROOT, file);
-    await fsp.writeFile(targetPath, html, 'utf8');
-    console.log(`[liveSiteSync] Succeeded for ${file} -> wrote ${html.length} bytes to ${targetPath}`);
-    return true;
+    // Write generated HTML to sibling static docroot(s)
+    const docroots = getDocroots();
+    let written = false;
+    for (const d of docroots) {
+      const targetPath = path.join(d, file);
+      try {
+        await fsp.writeFile(targetPath, html, 'utf8');
+        console.log(`[liveSiteSync] Succeeded for ${file} -> wrote ${html.length} bytes to ${targetPath}`);
+        written = true;
+      } catch (writeErr) {
+        console.warn(`[liveSiteSync] Write missed for ${targetPath}:`, writeErr.message);
+      }
+    }
+    return written;
   } catch (err) {
     console.error(`[liveSiteSync] Error syncing ${file}:`, err.message);
     return false;
