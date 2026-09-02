@@ -974,6 +974,19 @@ router.post('/admin/agent-payouts', async (req, res) => {
     const leadId = agent_lead_id && agent_lead_id.trim() ? parseInt(agent_lead_id, 10) : null;
     const adminUser = req.admin?.username || 'Admin';
 
+    // The lead dropdown is filtered to the selected agent client-side only
+    // (CSS display:none on <option> elements, which isn't reliably honored
+    // by every browser's native <select> popup, and is trivially bypassed
+    // regardless) - without this check, a mismatched agent_id/agent_lead_id
+    // pair would silently record the payout under the wrong agent while
+    // updating a different agent's lead, corrupting both payout histories.
+    if (leadId) {
+      const linkedLead = await db('agent_leads').where({ id: leadId }).first();
+      if (!linkedLead || linkedLead.agent_id !== parseInt(agent_id, 10)) {
+        return res.redirect('/admin/agent-payouts?error=' + encodeURIComponent('That lead does not belong to the selected agent - reselect the agent first.'));
+      }
+    }
+
     await db('agent_payouts').insert({
       agent_id: parseInt(agent_id, 10),
       agent_lead_id: leadId,
