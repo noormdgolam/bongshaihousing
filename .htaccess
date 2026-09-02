@@ -137,6 +137,14 @@ ErrorDocument 404 /404.html
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Report-only for now (see server.js's matching Helmet config, which
+  # only actually reaches admin/agent/customer-portal routes - LiteSpeed
+  # serves every public page as a static file, bypassing Express/Helmet
+  # entirely, so the policy has to be duplicated here too or it silently
+  # only covers a handful of routes instead of the whole site). Same
+  # directives as server.js so violation reports mean the same thing on
+  # both halves of the site.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; frame-src 'self' https://www.google.com https://maps.google.com https://www.youtube.com https://youtube.com; connect-src 'self' https:; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; upgrade-insecure-requests"
 </IfModule>
 
 # Compress text-based assets
