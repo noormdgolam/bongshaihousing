@@ -283,7 +283,18 @@ if (process.env.NODE_ENV !== 'production') {
 // actual API routes (send_email.php etc.) keep JSON since that's correct
 // for those; this generic fallback just needs to not trip that check.
 app.use((req, res) => {
-  res.status(404).type('html').send('<!doctype html><title>Not Found</title>Not found.');
+  res.status(404).render('pages/404.njk', {
+    title: 'Page Not Found | Bongshai Housing',
+    description: "The page you're looking for doesn't exist. Explore Bongshai Housing's prefab steel buildings and solutions in Bangladesh.",
+    canonical: 'https://bongshaihousing.com/404.html',
+    currentYear: new Date().getFullYear()
+  }, (err, html) => {
+    if (err) {
+      console.error('Error rendering 404 template:', err);
+      return res.status(404).type('html').send('<!doctype html><title>Not Found</title>Not found.');
+    }
+    res.status(404).type('html').send(html);
+  });
 });
 
 // eslint-disable-next-line no-unused-vars
