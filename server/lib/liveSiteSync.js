@@ -411,27 +411,34 @@ async function renderProjectToHtml(pageFile) {
 
   const file = pageFile.endsWith('.html') ? pageFile : `${pageFile}.html`;
   const baseName = file.replace(/\.html$/, '');
-  const templatePath = `pages/${baseName}.njk`;
-  const templateFullPath = path.join(__dirname, '..', 'views', templatePath);
-
-  if (!fs.existsSync(templateFullPath)) return null;
+  const dedicatedTemplatePath = `pages/${baseName}.njk`;
+  const dedicatedTemplateFullPath = path.join(__dirname, '..', 'views', dedicatedTemplatePath);
+  const hasDedicatedTemplate = fs.existsSync(dedicatedTemplateFullPath);
 
   const project = await db('projects').where({ slug: file }).first();
   if (!project) return null; // not actually a project page - let the caller try something else
 
+  // A brand-new project (created via /admin/projects/new) has no
+  // page-registry.json entry and no hand-authored template - only a DB
+  // row. Falls back to the generic pages/project-detail.njk (same idea
+  // as product-detail.njk for DB-only products) built straight from the
+  // DB fields, instead of returning null and leaving the project with no
+  // live page at all.
   let meta = registry['/' + file];
   if (!meta) {
     meta = {
-      title: `${project.title} — Bongshai Housing Ltd.`,
-      description: project.description ? project.description.replace(/<[^>]+>/g, '').slice(0, 160) : `Completed steel building project in ${project.title} by Bongshai Housing Ltd.`,
+      title: `${project.title} | Bongshai Housing`,
+      description: project.description,
       canonical: `https://bongshaihousing.com/${file}`,
-      ogTitle: `${project.title} — Bongshai Housing`,
-      ogDescription: project.description ? project.description.replace(/<[^>]+>/g, '').slice(0, 160) : '',
-      ogImage: project.image || 'images/logo.png',
-      template: templatePath
+      ogType: 'article',
+      ogTitle: `${project.title} | Bongshai Housing`,
+      ogDescription: project.description,
+      ogImage: project.image ? `https://bongshaihousing.com/${project.image}` : undefined,
+      whatsappHref: 'https://wa.me/8801781636613',
+      template: hasDedicatedTemplate ? dedicatedTemplatePath : 'pages/project-detail.njk',
     };
   } else if (!meta.template) {
-    meta.template = templatePath;
+    meta.template = hasDedicatedTemplate ? dedicatedTemplatePath : 'pages/project-detail.njk';
   }
 
   let theme = {};
