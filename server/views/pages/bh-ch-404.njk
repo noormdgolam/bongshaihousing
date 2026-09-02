@@ -151,8 +151,18 @@
 <!-- 1. Hero Product Showcase (Horizontal Split) -->
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
-<div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex;">
+<div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex; flex-direction: column;">
 {% set dbp = dbProductsByModel['BH-CH-404'] %}<img alt="Model No-BH-CH-404 Exterior View" loading="eager" fetchpriority="high" src="{{ dbp.main_image if (dbp and dbp.main_image) else 'images/products/Model No-BH-CH-404.webp' }}"{% if dbp and dbp.main_image and dbp.main_image != 'images/products/Model No-BH-CH-404.webp' %}{% else %} srcset="images/products/Model%20No-BH-CH-404-400w.webp 400w, images/products/Model%20No-BH-CH-404-700w.webp 700w, images/products/Model%20No-BH-CH-404.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} style="width: 100%; object-fit: cover; display: block;" title="Model No-BH-CH-404 Exterior View" width="1024" height="1024">
+{% set g2 = product.image_2 if (product and product.image_2) else (dbp.image_2 if (dbp and dbp.image_2) else null) %}
+{% set g3 = product.image_3 if (product and product.image_3) else (dbp.image_3 if (dbp and dbp.image_3) else null) %}
+{% if g2 or g3 %}
+<div class="product-gallery-thumbnails" style="display: flex; gap: 8px; padding: 10px 12px; background: var(--off-white); border-top: 1px solid var(--grey-100);">
+  {% set g1 = dbp.main_image if (dbp and dbp.main_image) else (product.main_image if (product and product.main_image) else null) %}
+  {% if g1 %}<button type="button" onclick="const p = this.closest('.reveal-left'); const m = p ? p.querySelector('img') : null; if (m) { m.src = '{{ g1 }}'; m.removeAttribute('srcset'); }" style="flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--grey-200); padding: 0; background: white; cursor: pointer; aspect-ratio: 4/3; max-height: 80px;"><img src="{{ g1 }}" alt="Exterior View" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy"></button>{% endif %}
+  {% if g2 %}<button type="button" onclick="const p = this.closest('.reveal-left'); const m = p ? p.querySelector('img') : null; if (m) { m.src = '{{ g2 }}'; m.removeAttribute('srcset'); }" style="flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--grey-200); padding: 0; background: white; cursor: pointer; aspect-ratio: 4/3; max-height: 80px;"><img src="{{ g2 }}" alt="Gallery Image 2" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy"></button>{% endif %}
+  {% if g3 %}<button type="button" onclick="const p = this.closest('.reveal-left'); const m = p ? p.querySelector('img') : null; if (m) { m.src = '{{ g3 }}'; m.removeAttribute('srcset'); }" style="flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--grey-200); padding: 0; background: white; cursor: pointer; aspect-ratio: 4/3; max-height: 80px;"><img src="{{ g3 }}" alt="Gallery Image 3" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy"></button>{% endif %}
+</div>
+{% endif %}
 </div>
 <!-- Right: Details -->
 <div class="reveal-right" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">

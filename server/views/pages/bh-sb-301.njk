@@ -159,6 +159,16 @@
   <button type="button" class="bh301-thumb-btn"><img class="bh301-thumb" src="images/products/bh-sb-301.webp" alt="Model No-BH-SB-301 finished exterior" width="1024" height="1024" loading="lazy"></button>
   <button type="button" class="bh301-thumb-btn"><img class="bh301-thumb" src="images/products/bh-sb-301-img2.jpeg" alt="Model No-BH-SB-301 3D floor plan layout" width="1024" height="770" loading="lazy"></button>
   <button type="button" class="bh301-thumb-btn"><img class="bh301-thumb" src="images/products/bh-sb-301-img3.jpeg" alt="Model No-BH-SB-301 steel frame under construction" width="1024" height="768" loading="lazy"></button>
+{% set g2 = product.image_2 if (product and product.image_2) else (dbp.image_2 if (dbp and dbp.image_2) else null) %}
+{% set g3 = product.image_3 if (product and product.image_3) else (dbp.image_3 if (dbp and dbp.image_3) else null) %}
+{% if g2 or g3 %}
+<div class="product-gallery-thumbnails" style="display: flex; gap: 8px; padding: 10px 12px; background: var(--off-white); border-top: 1px solid var(--grey-100);">
+  {% set g1 = dbp.main_image if (dbp and dbp.main_image) else (product.main_image if (product and product.main_image) else null) %}
+  {% if g1 %}<button type="button" onclick="const p = this.closest('.reveal-left'); const m = p ? p.querySelector('img') : null; if (m) { m.src = '{{ g1 }}'; m.removeAttribute('srcset'); }" style="flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--grey-200); padding: 0; background: white; cursor: pointer; aspect-ratio: 4/3; max-height: 80px;"><img src="{{ g1 }}" alt="Exterior View" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy"></button>{% endif %}
+  {% if g2 %}<button type="button" onclick="const p = this.closest('.reveal-left'); const m = p ? p.querySelector('img') : null; if (m) { m.src = '{{ g2 }}'; m.removeAttribute('srcset'); }" style="flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--grey-200); padding: 0; background: white; cursor: pointer; aspect-ratio: 4/3; max-height: 80px;"><img src="{{ g2 }}" alt="Gallery Image 2" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy"></button>{% endif %}
+  {% if g3 %}<button type="button" onclick="const p = this.closest('.reveal-left'); const m = p ? p.querySelector('img') : null; if (m) { m.src = '{{ g3 }}'; m.removeAttribute('srcset'); }" style="flex: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--grey-200); padding: 0; background: white; cursor: pointer; aspect-ratio: 4/3; max-height: 80px;"><img src="{{ g3 }}" alt="Gallery Image 3" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy"></button>{% endif %}
+</div>
+{% endif %}
 </div>
 </div>
 <!-- Right: Details -->

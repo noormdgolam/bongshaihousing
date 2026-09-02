@@ -154,43 +154,7 @@
   <!-- Dynamic Theme Design Tokens & Custom Properties -->
   <style id="bh-theme-custom-vars">
     :root {
-      --primary: #1E40AF;
-    --primary-dark: #1E3A8A;
-    --primary-light: #3B82F6;
-    --accent: #EAB308;
-    --accent-light: #FDE047;
-    --accent-dark: #CA8A04;
-    --font-heading: 'Inter', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --container-max: 1280px;
-    --nav-height: 80px;
-    --space-24: 6rem;
-    --transition-base: all 0.25s ease;
-
-    /* Theme Tokens */
-    --bg-color: #ffffff;
-    --surface-color: #f8fafc;
-    --text-color: #0f172a;
-    --text-muted: #64748b;
-
-    /* Light/Dark Adaptive Foundation */
-    --white: #ffffff;
-    --off-white: #f8fafc;
-    --dark: #0f172a;
-    --grey-900: #0f172a;
-    --grey-800: #1e293b;
-    --grey-700: #334155;
-    --grey-600: #64748b;
-    --grey-500: #64748b;
-    --grey-400: #94a3b8;
-    --grey-300: #cbd5e1;
-    --grey-200: #cbd5e1;
-    --grey-100: #e2e8f0;
-    --grey-50: #f1f5f9;
+      
     }
   </style>
   <style id="bh-theme-adaptive-styles">
@@ -289,11 +253,9 @@
 <a href="#main-content" class="skip-link">Skip to content</a>
 
 <!-- Top Announcement Bar -->
-<div id="bhTopAnnouncement" class="bh-top-announcement" style="background: #1E3A8A; color: #FDE047; ">
+<div id="bhTopAnnouncement" class="bh-top-announcement" style="background: #1E3A8A; color: #FDE047; display:none;">
   <div class="bh-announcement-inner">
     <span id="bhAnnouncementText">⚡ দ্রুততম সময়ে ৪৫-৬০ দিনে ভূমিকম্প সহনশীল প্রি-ইঞ্জিনিয়ার্ড স্টিল বাড়ি নির্মাণ — ফ্রি পরামর্শ নিন!</span>
-    
-    <a href="contact.html" id="bhAnnouncementLink" class="bh-announcement-cta" style="color: #FDE047;">বিস্তারিত জানুন →</a>
     
   </div>
 </div>
@@ -543,8 +505,11 @@
 <!-- 1. Hero Product Showcase (Horizontal Split) -->
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
-<div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex;">
+<div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex; flex-direction: column;">
 <img alt="Model No-BH-SB-302 Exterior View" loading="eager" fetchpriority="high" src="images/products/bh-sb-302.webp" srcset="images/products/bh-sb-302-400w.webp 400w, images/products/bh-sb-302-700w.webp 700w, images/products/bh-sb-302.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" style="width: 100%; object-fit: cover; display: block;" title="Model No-BH-SB-302 Exterior View" width="1024" height="1024">
+
+
+
 </div>
 <!-- Right: Details -->
 <div class="reveal-right" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
@@ -1005,7 +970,7 @@
 </div>
 <div class="footer-bottom">
 
-<p class="footer-copy">© 2026 Bongshai Housing Ltd. All Rights Reserved. | Dhaka, Bangladesh</p>
+<p class="footer-copy">©  Bongshai Housing Ltd. All Rights Reserved. | Dhaka, Bangladesh</p>
 <p class="footer-copy" style="margin-top:8px;">Part of the Bongshai Group — see also <a href="https://bongshaisteel.com/" target="_blank" rel="noopener" style="color:var(--accent-light); font-weight:700;">Bongshai Steel</a></p>
 <nav aria-label="Legal links" class="footer-legal">
 <a href="privacy-policy.html">Privacy Policy</a>
