@@ -63,43 +63,6 @@
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Low-Cost Steel Prefab Cottage", "description": "Affordable steel-frame prefab cottages in Bangladesh."}},
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Luxury Steel Prefab Villa", "description": "Premium steel prefab villas with luxury finishes in Bangladesh."}}
           ]
-        },
-        "review": [
-          {% if dbTestimonials and dbTestimonials.length %}
-          {% for t in dbTestimonials %}
-          {
-            "@type": "Review",
-            "reviewRating": {"@type": "Rating", "ratingValue": "{{ t.rating or 5 }}", "bestRating": "5"},
-            "author": {"@type": "Person", "name": "{{ t.author_name | replace('\"', '\\\"') }}"},
-            "reviewBody": "{{ t.review_text | replace('\"', '\\\"') | replace('\r\n', ' ') | replace('\n', ' ') }}"
-          }{% if not loop.last %},{% endif %}
-          {% endfor %}
-          {% else %}
-          {
-            "@type": "Review",
-            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-            "author": {"@type": "Person", "name": "Mahmudul Hasan"},
-            "reviewBody": "Bongshai Housing delivered our industrial shed in Gazipur ahead of schedule. The quality of the steel structure is phenomenal and the team was highly professional."
-          },
-          {
-            "@type": "Review",
-            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-            "author": {"@type": "Person", "name": "Anwar Sadat"},
-            "reviewBody": "We built our eco-friendly resort using their prefab modular units. The finish is indistinguishable from concrete, but it was built in half the time!"
-          },
-          {
-            "@type": "Review",
-            "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"},
-            "author": {"@type": "Person", "name": "Farhana Rahman"},
-            "reviewBody": "From the first 3D mockup to the final handover, the process was seamless. Our two-story steel-framed house looks absolutely gorgeous."
-          }
-          {% endif %}
-        ],
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "{{ dbTestimonials.length if dbTestimonials and dbTestimonials.length else 3 }}",
-          "bestRating": "5"
         }
       },
       {
