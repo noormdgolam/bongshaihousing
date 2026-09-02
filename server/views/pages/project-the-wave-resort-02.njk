@@ -91,13 +91,13 @@
       <div class="container">
         <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start;">
             <div style="flex: 1 1 500px; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100);">
-                <img src="images/projects/wave/wave-4.jpg" srcset="images/projects/wave/wave-4-400w.webp 400w, images/projects/wave/wave-4-700w.webp 700w, images/projects/wave/wave-4.jpg 1152w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Sustainable prefab eco-friendly steel frame construction at The Wave Resort" title="Eco-friendly prefab resort" style="width: 100%; height: auto; display: block;" loading="lazy" width="1000" height="750">
+                <img src="{{ project.image if (project and project.image) else 'images/projects/wave/wave-4.jpg' }}"{% if not (project and project.image and project.image != 'images/projects/wave/wave-4.jpg') %} srcset="images/projects/wave/wave-4-400w.webp 400w, images/projects/wave/wave-4-700w.webp 700w, images/projects/wave/wave-4.jpg 1152w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} alt="Sustainable prefab eco-friendly steel frame construction at The Wave Resort" title="Eco-friendly prefab resort" style="width: 100%; height: auto; display: block;" loading="lazy" width="1000" height="750">
             </div>
             <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
                 <span class="property-type" style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">Completed Project</span>
                 <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">The Wave Resort 02</h2>
                 <div style="color: var(--grey-700); font-size: 1rem; line-height: 1.6; margin-bottom: var(--space-6);">
-                    <p>Phase 2 of The Wave Resort, expanding luxury accommodations with our advanced, sustainable prefab engineering and eco-friendly steel frame construction techniques.</p>
+                    <p>{{ project.description if project and project.description else "Phase 2 of The Wave Resort, expanding luxury accommodations with our advanced, sustainable prefab engineering and eco-friendly steel frame construction techniques." }}</p>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-100);">
                     <a href="contact.html" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Request Similar Project</a>

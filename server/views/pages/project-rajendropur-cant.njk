@@ -91,13 +91,13 @@
       <div class="container">
         <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start;">
             <div style="flex: 1 1 500px; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100);">
-                <img src="images/projects/completed/rajendropur_cant_1784362699980.webp" srcset="images/projects/completed/rajendropur_cant_1784362699980-400w.webp 400w, images/projects/completed/rajendropur_cant_1784362699980-700w.webp 700w, images/projects/completed/rajendropur_cant_1784362699980.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Durable prefab container office in Rajendropur Cantonment, Gazipur" title="Container office in Gazipur" style="width: 100%; height: auto; display: block;" loading="lazy" width="1000" height="750">
+                <img src="{{ project.image if (project and project.image) else 'images/projects/completed/rajendropur_cant_1784362699980.webp' }}"{% if not (project and project.image and project.image != 'images/projects/completed/rajendropur_cant_1784362699980.webp') %} srcset="images/projects/completed/rajendropur_cant_1784362699980-400w.webp 400w, images/projects/completed/rajendropur_cant_1784362699980-700w.webp 700w, images/projects/completed/rajendropur_cant_1784362699980.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} alt="Durable prefab container office in Rajendropur Cantonment, Gazipur" title="Container office in Gazipur" style="width: 100%; height: auto; display: block;" loading="lazy" width="1000" height="750">
             </div>
             <div style="flex: 1 1 400px; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
                 <span class="property-type" style="display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 16px;">Completed Project</span>
                 <h2 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); margin-bottom: var(--space-4);">Rajendropur Cant.</h2>
                 <div style="color: var(--grey-700); font-size: 1rem; line-height: 1.6; margin-bottom: var(--space-6);">
-                    <p>A practical, highly durable container office installed in <strong>Rajendropur Cantonment, Gazipur</strong>. Built for rapid deployment and tough environments.</p>
+                    <p>{{ project.description if project and project.description else "A practical, highly durable container office installed in <strong>Rajendropur Cantonment, Gazipur</strong>. Built for rapid deployment and tough environments." }}</p>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--grey-100);">
                     <a href="contact.html" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Request Similar Project</a>
