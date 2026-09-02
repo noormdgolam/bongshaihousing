@@ -1198,6 +1198,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let startScroll = 0;
 
         track.addEventListener('pointerdown', (e) => {
+            // A press starting on a card's own button (Order Now / Detail)
+            // should always behave like a normal link click, never a drag -
+            // setPointerCapture() below redirects the browser's click-target
+            // resolution to `track` itself for the rest of this pointer's
+            // lifecycle, which silently drops the <a> tag's own navigation
+            // (a plain <div> has no default click action), even on a press
+            // that never moved enough to actually be a drag.
+            if (e.target.closest('.mv-btn')) return;
             dragging = true;
             moved = false;
             startX = e.clientX;
