@@ -1,0 +1,209 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Agent Program Settings{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">⚙️ Agent Channel-Partner Program Settings</h1>{% endblock %}
+
+{% block content %}
+<div class="toolbar" style="margin-bottom:18px;">
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <a href="/admin/agents" class="btn">👥 Agents</a>
+    <a href="/admin/agent-leads" class="btn">📥 Agent Leads</a>
+    <a href="/admin/agent-payouts" class="btn">💳 Payout Ledger</a>
+    <a href="/admin/agent-settings" class="btn btn-primary" style="font-weight:700;">⚙️ Program Settings</a>
+  </div>
+</div>
+
+{% if saved %}
+<div style="background:rgba(220,252,231,0.9); color:var(--success); border:1px solid rgba(22,163,74,0.3); border-radius:8px; padding:12px 16px; margin-bottom:18px; font-weight:600;">
+  ✅ Agent program settings updated successfully. Changes are now active immediately across all portals and calculations.
+</div>
+{% endif %}
+
+{% if error %}
+<div class="error-box" style="margin-bottom:18px;">{{ error }}</div>
+{% endif %}
+
+<form method="post" action="/admin/agent-settings">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(460px, 1fr)); gap:20px; align-items:start;">
+
+    <!-- Card 1: Core Commission & Exclusivity -->
+    <div class="card">
+      <h2 style="font-size:1.05rem; margin-top:0; margin-bottom:14px; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        💰 Core Commission &amp; Protection
+      </h2>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-6px; margin-bottom:16px;">
+        Base rules governing deal attribution, protection windows, and minimum payouts.
+      </p>
+
+      <div class="form-row">
+        <label for="commission_default_rate">Default Commission Rate (%)</label>
+        <input type="number" step="0.1" min="0" max="50" id="commission_default_rate" name="commission_default_rate" value="{{ settings.commission_default_rate }}" required>
+        <span style="font-size:0.75rem; color:var(--grey-500);">Standard starting commission for new agents (e.g. 2.00%).</span>
+      </div>
+
+      <div class="form-row">
+        <label for="lead_protection_days">Lead Exclusivity Lock Window (Days)</label>
+        <input type="number" step="1" min="1" max="730" id="lead_protection_days" name="lead_protection_days" value="{{ settings.lead_protection_days }}" required>
+        <span style="font-size:0.75rem; color:var(--grey-500);">Number of days a submitted or referral lead is exclusively locked to the agent (e.g. 90 days).</span>
+      </div>
+
+      <div class="form-row">
+        <label for="payout_min_amount">Minimum Payout Amount (BDT)</label>
+        <input type="number" step="100" min="0" id="payout_min_amount" name="payout_min_amount" value="{{ settings.payout_min_amount }}" required>
+        <span style="font-size:0.75rem; color:var(--grey-500);">Minimum accrued commission required before issuing a payout (e.g. 5000 BDT).</span>
+      </div>
+    </div>
+
+    <!-- Card 2: Tiered Volume Incentives -->
+    <div class="card">
+      <h2 style="font-size:1.05rem; margin-top:0; margin-bottom:14px; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        🎖️ Tiered Volume Incentives (Silver / Gold / Platinum)
+      </h2>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-6px; margin-bottom:16px;">
+        Automatically upgrades agent commission rates as they close more deals in the pipeline.
+      </p>
+
+      <!-- Silver Tier -->
+      <div style="background:rgba(241,245,249,0.7); border:1px solid var(--grey-200); border-radius:8px; padding:12px; margin-bottom:12px;">
+        <div style="font-weight:700; font-size:0.88rem; color:#475569; margin-bottom:8px;">🥈 Silver Tier (Entry Level)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--grey-700); font-weight:600;">Min Closed Deals</label>
+            <input type="number" name="tier_silver_min_deals" value="{{ settings.tier_silver_min_deals }}" style="padding:6px 8px; font-size:0.85rem;" required>
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--grey-700); font-weight:600;">Commission Rate (%)</label>
+            <input type="number" step="0.1" name="tier_silver_rate" value="{{ settings.tier_silver_rate }}" style="padding:6px 8px; font-size:0.85rem;" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gold Tier -->
+      <div style="background:rgba(254,243,199,0.6); border:1px solid rgba(217,119,6,0.3); border-radius:8px; padding:12px; margin-bottom:12px;">
+        <div style="font-weight:700; font-size:0.88rem; color:#b45309; margin-bottom:8px;">🥇 Gold Tier (Established Partner)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--grey-700); font-weight:600;">Min Closed Deals</label>
+            <input type="number" name="tier_gold_min_deals" value="{{ settings.tier_gold_min_deals }}" style="padding:6px 8px; font-size:0.85rem;" required>
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--grey-700); font-weight:600;">Commission Rate (%)</label>
+            <input type="number" step="0.1" name="tier_gold_rate" value="{{ settings.tier_gold_rate }}" style="padding:6px 8px; font-size:0.85rem;" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Platinum Tier -->
+      <div style="background:rgba(224,231,255,0.6); border:1px solid rgba(79,70,229,0.3); border-radius:8px; padding:12px;">
+        <div style="font-weight:700; font-size:0.88rem; color:#4338ca; margin-bottom:8px;">💎 Platinum Tier (High-Volume Partner)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="font-size:0.75rem; color:var(--grey-700); font-weight:600;">Min Closed Deals</label>
+            <input type="number" name="tier_platinum_min_deals" value="{{ settings.tier_platinum_min_deals }}" style="padding:6px 8px; font-size:0.85rem;" required>
+          </div>
+          <div>
+            <label style="font-size:0.75rem; color:var(--grey-700); font-weight:600;">Commission Rate (%)</label>
+            <input type="number" step="0.1" name="tier_platinum_rate" value="{{ settings.tier_platinum_rate }}" style="padding:6px 8px; font-size:0.85rem;" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Milestone Payout Tranches -->
+    <div class="card">
+      <h2 style="font-size:1.05rem; margin-top:0; margin-bottom:14px; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        📑 Milestone Payout Tranches (100% Split)
+      </h2>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-6px; margin-bottom:16px;">
+        Commission release percentages mapped to the construction and payment stages. Sum must equal 100%.
+      </p>
+
+      <div class="form-row" style="background:var(--grey-50); padding:10px; border-radius:8px; border:1px solid var(--grey-200);">
+        <label style="font-weight:700;">Tranche 1 (Agreement &amp; Advance)</label>
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px; margin-top:4px;">
+          <input type="text" name="tranche_1_name" value="{{ settings.tranche_1_name }}" placeholder="Tranche name" required>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <input type="number" step="1" min="0" max="100" id="tranche_1_pct" name="tranche_1_pct" value="{{ settings.tranche_1_pct }}" onchange="checkTrancheSum()" required>
+            <span>%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row" style="background:var(--grey-50); padding:10px; border-radius:8px; border:1px solid var(--grey-200);">
+        <label style="font-weight:700;">Tranche 2 (Fabrication &amp; Delivery)</label>
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px; margin-top:4px;">
+          <input type="text" name="tranche_2_name" value="{{ settings.tranche_2_name }}" placeholder="Tranche name" required>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <input type="number" step="1" min="0" max="100" id="tranche_2_pct" name="tranche_2_pct" value="{{ settings.tranche_2_pct }}" onchange="checkTrancheSum()" required>
+            <span>%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row" style="background:var(--grey-50); padding:10px; border-radius:8px; border:1px solid var(--grey-200);">
+        <label style="font-weight:700;">Tranche 3 (Final Handover)</label>
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px; margin-top:4px;">
+          <input type="text" name="tranche_3_name" value="{{ settings.tranche_3_name }}" placeholder="Tranche name" required>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <input type="number" step="1" min="0" max="100" id="tranche_3_pct" name="tranche_3_pct" value="{{ settings.tranche_3_pct }}" onchange="checkTrancheSum()" required>
+            <span>%</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="trancheSumIndicator" style="font-size:0.85rem; font-weight:700; color:var(--success); margin-top:8px;">
+        Total Split: <span id="trancheSumVal">100</span>%
+      </div>
+    </div>
+
+    <!-- Card 4: WhatsApp Pre-composed Message -->
+    <div class="card">
+      <h2 style="font-size:1.05rem; margin-top:0; margin-bottom:14px; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        💬 WhatsApp Share Template (Bangla)
+      </h2>
+      <p style="font-size:0.8rem; color:var(--grey-500); margin-top:-6px; margin-bottom:12px;">
+        Pre-filled message when agents click "Share to WhatsApp". Use the placeholders below.
+      </p>
+
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:8px 12px; margin-bottom:12px; font-size:0.75rem; color:#166534;">
+        <strong>Available Placeholders:</strong><br>
+        <code>&#123;&#123;referral_link&#125;&#125;</code> &rarr; Agent's unique URL with tracking code<br>
+        <code>&#123;&#123;agent_name&#125;&#125;</code> &rarr; Agent's full name<br>
+        <code>&#123;&#123;business_name&#125;&#125;</code> &rarr; Agent's dealership or firm name<br>
+        <code>&#123;&#123;phone&#125;&#125;</code> &rarr; Agent's phone number
+      </div>
+
+      <div class="form-row">
+        <label for="whatsapp_share_template">Message Copy</label>
+        <textarea id="whatsapp_share_template" name="whatsapp_share_template" rows="7" style="font-size:0.85rem; line-height:1.4;" required>{{ settings.whatsapp_share_template }}</textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-actions" style="margin-top:24px;">
+    <button type="submit" class="btn btn-primary" style="padding:10px 24px; font-size:0.95rem; font-weight:700;">💾 Save Program Settings</button>
+    <a href="/admin/agents" class="btn" style="padding:10px 18px;">Cancel</a>
+  </div>
+</form>
+
+<script>
+function checkTrancheSum() {
+  const p1 = parseFloat(document.getElementById('tranche_1_pct').value) || 0;
+  const p2 = parseFloat(document.getElementById('tranche_2_pct').value) || 0;
+  const p3 = parseFloat(document.getElementById('tranche_3_pct').value) || 0;
+  const sum = p1 + p2 + p3;
+  const ind = document.getElementById('trancheSumIndicator');
+  const val = document.getElementById('trancheSumVal');
+  val.textContent = sum;
+  if (sum === 100) {
+    ind.style.color = 'var(--success, #16a34a)';
+    ind.innerHTML = 'Total Split: <strong>100%</strong> ✅';
+  } else {
+    ind.style.color = 'var(--danger, #dc2626)';
+    ind.innerHTML = 'Total Split: <strong>' + sum + '%</strong> ⚠️ (Warning: Must equal 100%)';
+  }
+}
+checkTrancheSum();
+</script>
+{% endblock %}

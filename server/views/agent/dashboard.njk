@@ -1,24 +1,53 @@
 {% extends "agent-layout.njk" %}
 {% import "partials/icons.njk" as icons %}
-{% block title %}My Dashboard{% endblock %}
+{% block title %}Partner Portal — {{ agent.name }}{% endblock %}
+
 {% block body %}
 <div class="agent-hero">
   <div class="agent-hero-top">
-    <div class="agent-hero-brand">{{ icons.icon('handshake', 20) }} Bongshai Agent Portal</div>
+    <div class="agent-hero-brand" style="display:flex; align-items:center; gap:8px;">
+      {{ icons.icon('handshake', 22) }} Bongshai Channel Partner Engine
+    </div>
     <div style="display:flex; gap:8px; align-items:center;">
-      <a href="/agent/profile.html" class="btn btn-ghost">{{ icons.icon('user', 16) }} My Profile</a>
+      <a href="/agent/profile.html" class="btn btn-ghost">{{ icons.icon('user', 16) }} Profile &amp; KYC</a>
       <form method="post" action="/agent/logout" style="margin:0;">
         <button type="submit" class="btn btn-ghost">Log out</button>
       </form>
     </div>
   </div>
+
   <div class="agent-hero-profile">
     <div>
       <div class="agent-hero-name">{{ agent.business_name or agent.name }}</div>
-      <div class="agent-hero-meta">{{ icons.icon('user', 15) }} {{ agent.name }} &nbsp;·&nbsp; {{ icons.icon('map-pin', 15) }} {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %}</div>
+      <div class="agent-hero-meta">
+        {{ icons.icon('user', 14) }} {{ agent.name }} &nbsp;·&nbsp;
+        {{ icons.icon('map-pin', 14) }} {{ agent.district }}{% if agent.thana %}, {{ agent.thana }}{% endif %} &nbsp;·&nbsp;
+        <strong>ID: {{ agent.referral_code }}</strong>
+      </div>
     </div>
-    <span class="pill pill-won">● Active Agent</span>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+      <span class="pill {{ tierInfo.badgeClass }}" style="font-size:0.8rem; padding:4px 12px; letter-spacing:0.02em;">
+        ★ {{ tierInfo.label }} ({{ tierInfo.rate }}% Comm.)
+      </span>
+      {% if tierInfo.nextTier %}
+      <div style="font-size:0.75rem; color:#fde047; opacity:0.95;">
+        {{ tierInfo.dealsToNext }} more deal{{ 's' if tierInfo.dealsToNext > 1 else '' }} to unlock {{ tierInfo.nextTier }}
+      </div>
+      {% endif %}
+    </div>
   </div>
+
+  {% if tierInfo.nextTier %}
+  <div style="max-width:900px; margin:14px auto 0;">
+    <div style="display:flex; justify-content:space-between; font-size:0.72rem; margin-bottom:4px; opacity:0.85;">
+      <span>Tier Progress: {{ tierInfo.wonCount }} closed</span>
+      <span>{{ tierInfo.nextTier }}</span>
+    </div>
+    <div style="background:rgba(255,255,255,0.2); height:6px; border-radius:10px; overflow:hidden;">
+      <div style="background:linear-gradient(90deg, #e8c766, #fde047); height:100%; width:{{ tierInfo.progressPct }}%;"></div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
 <div class="agent-content">
@@ -26,152 +55,525 @@
   <div class="error-box">{{ error }}</div>
   {% endif %}
 
-  <div class="agent-stats-row">
+  <!-- 4 Core Financial & Pipeline KPI Cards -->
+  <div class="agent-stats-row" style="grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); margin-bottom:20px;">
     <div class="agent-stat">
-      <span class="agent-stat-icon">{{ icons.icon('chart-bar', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:var(--primary);">{{ stats.total }}</div><div class="agent-stat-label">Total</div></div>
-    </div>
-    <div class="agent-stat">
-      <span class="agent-stat-icon">{{ icons.icon('sparkles', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:#1e40af;">{{ stats.new }}</div><div class="agent-stat-label">New</div></div>
-    </div>
-    <div class="agent-stat">
-      <span class="agent-stat-icon">{{ icons.icon('phone', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:#92400e;">{{ stats.contacted }}</div><div class="agent-stat-label">Contacted</div></div>
-    </div>
-    <div class="agent-stat">
-      <span class="agent-stat-icon">{{ icons.icon('chat', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:#4338ca;">{{ stats.quoted }}</div><div class="agent-stat-label">Quoted</div></div>
-    </div>
-    <div class="agent-stat">
-      <span class="agent-stat-icon">{{ icons.icon('check-circle', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:var(--success);">{{ stats.won }}</div><div class="agent-stat-label">Won</div></div>
-    </div>
-    <div class="agent-stat">
-      <span class="agent-stat-icon">{{ icons.icon('x-circle', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:var(--grey-500);">{{ stats.lost }}</div><div class="agent-stat-label">Lost</div></div>
-    </div>
-    <div class="agent-stat" style="background:rgba(254,243,199,0.75); border-color:rgba(217,119,6,0.3);">
-      <span class="agent-stat-icon">{{ icons.icon('sparkles', 24) }}</span>
-      <div><div class="agent-stat-num" style="color:#b45309;">{{ stats.wonThisMonth or 0 }}</div><div class="agent-stat-label" style="color:#92400e;">Won This Month</div></div>
-    </div>
-  </div>
-
-  <div style="background:rgba(255,255,255,0.2); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.3); border-radius:10px; padding:8px 14px; margin-bottom:18px; font-size:0.82rem; color:white; display:flex; align-items:center; gap:8px;">
-    <span>💼 <strong>Won leads this month: {{ stats.wonThisMonth or 0 }}</strong> &bull; Contact the office to confirm your payout for these.</span>
-  </div>
-
-  <div class="agent-grid">
-    <div class="card agent-lead-form-card">
-      <h2 style="margin-top:0; font-size:1.05rem;">{{ icons.icon('plus', 18) }} Submit a New Lead</h2>
-      <form method="post" action="/agent/leads">
-        <div class="form-row">
-          <label for="customer_name">Customer Name</label>
-          <input type="text" id="customer_name" name="customer_name" required>
-        </div>
-        <div class="form-row">
-          <label for="customer_phone">Customer Phone</label>
-          <input type="tel" id="customer_phone" name="customer_phone" placeholder="01XXXXXXXXX" required>
-        </div>
-        <div class="form-row">
-          <label for="customer_district">Customer District <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <input type="text" id="customer_district" name="customer_district">
-        </div>
-        <div class="form-row">
-          <label for="product_interest">Product Interest <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <input type="text" id="product_interest" name="product_interest" placeholder="e.g. Simplex Steel Building">
-        </div>
-        <div class="form-row">
-          <label for="notes">Notes <span style="font-weight:400; color:var(--grey-500);">(optional)</span></label>
-          <textarea id="notes" name="notes" placeholder="Land size, budget, timeline, anything useful for follow-up"></textarea>
-        </div>
-        <button type="submit" class="btn btn-accent" style="width:100%;">Submit Lead</button>
-      </form>
-    </div>
-
-    <div class="card agent-leads-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-        <h2 style="margin:0; font-size:1.05rem;">{{ icons.icon('clipboard-list', 18) }} My Leads <span style="color:var(--grey-500); font-weight:400;">({{ pagination.totalCount if pagination else leads.length }})</span></h2>
-        {% if filters.q or (filters.status and filters.status != 'all') %}
-        <a href="/agent/dashboard.html" style="font-size:0.8rem; color:var(--grey-500);">Clear Filters</a>
-        {% endif %}
+      <span class="agent-stat-icon" style="color:var(--primary);">📋</span>
+      <div>
+        <div class="agent-stat-num" style="color:var(--primary);">{{ activeDealsCount }}</div>
+        <div class="agent-stat-label">Active Pipeline Deals</div>
       </div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon" style="color:#b45309;">⏳</span>
+      <div>
+        <div class="agent-stat-num" style="color:#b45309; font-size:1.35rem;">৳ {{ pipelineValue }}</div>
+        <div class="agent-stat-label">Pipeline Value (BDT)</div>
+      </div>
+    </div>
+    <div class="agent-stat">
+      <span class="agent-stat-icon" style="color:#4338ca;">💰</span>
+      <div>
+        <div class="agent-stat-num" style="color:#4338ca; font-size:1.35rem;">৳ {{ unpaidCommission }}</div>
+        <div class="agent-stat-label">Unpaid Commission</div>
+      </div>
+    </div>
+    <div class="agent-stat" style="background:rgba(220,252,231,0.75); border-color:rgba(22,163,74,0.3);">
+      <span class="agent-stat-icon" style="color:var(--success);">✅</span>
+      <div>
+        <div class="agent-stat-num" style="color:var(--success); font-size:1.35rem;">৳ {{ paidThisYear }}</div>
+        <div class="agent-stat-label" style="color:#166534;">Paid This Year (BDT)</div>
+      </div>
+    </div>
+  </div>
 
-      <!-- Search and Status Filter Bar -->
-      <form method="get" action="/agent/dashboard.html" style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:140px;">
-          <input type="text" name="q" value="{{ filters.q or '' }}" placeholder="Search name, phone, district…" style="width:100%; padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+  <!-- Partner Referral & WhatsApp Share Toolkit Card -->
+  <div class="card" style="background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,249,255,0.85)); border:1px solid #bfdbfe; margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="font-weight:800; font-size:1.05rem; color:var(--primary); display:flex; align-items:center; gap:8px;">
+          🔗 Your Unique Partner Referral Link &amp; QR
         </div>
-        <div>
-          <select name="status" onchange="this.form.submit()" style="padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
-            <option value="all" {% if not filters.status or filters.status == 'all' %}selected{% endif %}>All Statuses</option>
-            <option value="new" {% if filters.status == 'new' %}selected{% endif %}>New</option>
-            <option value="contacted" {% if filters.status == 'contacted' %}selected{% endif %}>Contacted</option>
-            <option value="quoted" {% if filters.status == 'quoted' %}selected{% endif %}>Quoted</option>
-            <option value="won" {% if filters.status == 'won' %}selected{% endif %}>Won</option>
-            <option value="lost" {% if filters.status == 'lost' %}selected{% endif %}>Lost</option>
-          </select>
-        </div>
-        <button type="submit" class="btn" style="padding:7px 12px; font-size:0.85rem;">Filter</button>
-      </form>
+        <p style="font-size:0.8rem; color:var(--grey-700); margin:4px 0 0 0;">
+          Share this link or QR code with clients. Any inquiry or quote request is automatically locked to you for <strong>{{ settings.lead_protection_days }} days</strong>.
+        </p>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <button type="button" class="btn" onclick="copyReferralLink()" style="font-weight:700; font-size:0.82rem; display:flex; align-items:center; gap:4px;">
+          📋 Copy Link
+        </button>
+        <button type="button" class="btn" onclick="toggleQrModal()" style="font-weight:700; font-size:0.82rem; display:flex; align-items:center; gap:4px;">
+          📱 View QR Code
+        </button>
+        <a href="{{ whatsappShareUrl }}" target="_blank" rel="noopener noreferrer" class="btn" style="background:#22c55e; border-color:#16a34a; color:white; font-weight:700; font-size:0.82rem; display:flex; align-items:center; gap:6px;">
+          💬 Share to WhatsApp
+        </a>
+      </div>
+    </div>
+    <div style="margin-top:10px; background:rgba(255,255,255,0.7); border:1px solid var(--grey-200); border-radius:8px; padding:6px 12px; font-family:monospace; font-size:0.82rem; color:var(--grey-900); overflow-x:auto;">
+      <span id="referralUrlText">{{ referralUrl }}</span>
+    </div>
+  </div>
 
-      {% if leads.length %}
-      <div class="agent-lead-list">
-        {% for lead in leads %}
-        <div class="agent-lead-row">
-          <div class="agent-lead-main">
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <span class="agent-lead-name">{{ lead.customer_name }}</span>
-              {% if lead.is_overdue %}<span class="pill pill-danger" style="font-size:0.68rem; font-weight:700;">⚠️ &gt;24h Untouched</span>{% endif %}
+  <!-- Interactive Portal Navigation Tabs -->
+  <div style="display:flex; gap:8px; border-bottom:2px solid rgba(255,255,255,0.3); margin-bottom:20px; overflow-x:auto; padding-bottom:4px;">
+    <button type="button" class="tab-btn active" id="tab-btn-deals" onclick="switchTab('deals')">
+      📋 Deals &amp; Milestone Pipeline
+    </button>
+    <button type="button" class="tab-btn" id="tab-btn-payouts" onclick="switchTab('payouts')">
+      💳 Commission &amp; Payout Ledger ({{ payouts.length }})
+    </button>
+    <button type="button" class="tab-btn" id="tab-btn-toolkit" onclick="switchTab('toolkit')">
+      📁 Digital Partner Kit (Brochures &amp; Photos)
+    </button>
+  </div>
+
+  <!-- ==================== TAB 1: DEALS & MILESTONE PIPELINE ==================== -->
+  <div id="tab-content-deals" class="tab-pane active">
+    <div class="agent-grid">
+
+      <!-- Left Column: Submit New Lead with Dynamic Model Picker -->
+      <div class="card agent-lead-form-card">
+        <h2 style="margin-top:0; font-size:1.05rem; color:var(--primary); display:flex; align-items:center; gap:6px;">
+          {{ icons.icon('plus', 18) }} Submit a New Client Lead
+        </h2>
+        <p style="font-size:0.75rem; color:var(--grey-500); margin-top:-4px; margin-bottom:14px;">
+          Pick a building model to see your live commission estimate at <strong>{{ tierInfo.rate }}%</strong>.
+        </p>
+
+        <form method="post" action="/agent/leads">
+          <div class="form-row">
+            <label for="customer_name">Customer Name *</label>
+            <input type="text" id="customer_name" name="customer_name" required placeholder="e.g. Al-Haj Mahmud Rahman">
+          </div>
+
+          <div class="form-row">
+            <label for="customer_phone">Customer Phone *</label>
+            <input type="tel" id="customer_phone" name="customer_phone" placeholder="01XXXXXXXXX" required>
+          </div>
+
+          <div class="form-row">
+            <label for="customer_district">District / Location</label>
+            <input type="text" id="customer_district" name="customer_district" placeholder="e.g. Gazipur, Narayanganj">
+          </div>
+
+          <!-- Dynamic Product / Model Picker -->
+          <div class="form-row">
+            <label for="product_select">Interested Building Model</label>
+            <select id="product_select" name="product_id" onchange="updateCommissionPreview()">
+              <option value="">-- Choose Standard Model or Custom --</option>
+              {% for p in products %}
+              <option value="{{ p.id }}" 
+                      data-price="{{ p.fixed_price or (p.price_per_sqft * p.total_floor_area) or 0 }}"
+                      data-model="{{ p.model_number }}"
+                      data-area="{{ p.total_floor_area or 'Custom' }}">
+                {{ p.title }} ({{ p.model_number or 'Model' }}) - {{ (p.fixed_price or 0) | formatTaka if p.fixed_price else 'Custom Pricing' }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Live Commission Preview Box -->
+          <div id="commissionPreviewBox" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:12px; margin-bottom:14px;">
+            <div style="font-size:0.75rem; color:#166534; font-weight:700; text-transform:uppercase;">Live Earnings Estimate</div>
+            <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.85rem;">
+              <span style="color:#15803d;">Est. Model Price:</span>
+              <strong id="previewModelPrice" style="color:#166534;">৳ 0</strong>
             </div>
-            <form method="post" action="/agent/leads/{{ lead.id }}/status" style="margin:0; display:inline-flex; align-items:center;">
-              <input type="hidden" name="return_to" value="/agent/dashboard.html?page={{ pagination.page or 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}">
-              <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 8px; border-radius:12px; border:1px solid rgba(15,23,42,0.15); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">
-                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
-                <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
-                <option value="quoted" {% if lead.status == 'quoted' %}selected{% endif %}>Quoted</option>
-                <option value="won" {% if lead.status == 'won' %}selected{% endif %}>Won</option>
-                <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
-              </select>
-            </form>
+            <div style="display:flex; justify-content:space-between; margin-top:2px; font-size:0.85rem;">
+              <span style="color:#15803d;">Your Commission ({{ tierInfo.rate }}%):</span>
+              <strong id="previewCommissionAmount" style="color:#16a34a; font-size:1.05rem;">৳ 0</strong>
+            </div>
           </div>
-          <div class="agent-lead-details">
-            <span>{{ icons.icon('phone', 14) }} {{ lead.customer_phone }}</span>
-            {% if lead.customer_district %}<span>{{ icons.icon('map-pin', 14) }} {{ lead.customer_district }}</span>{% endif %}
-            {% if lead.product_interest %}<span>{{ icons.icon('home', 14) }} {{ lead.product_interest }}</span>{% endif %}
-            <span class="agent-lead-date">{{ lead.created_at | date }}</span>
+
+          <div class="form-row">
+            <label for="custom_deal_value">Custom Project Value (BDT) <span style="font-weight:400; color:var(--grey-500);">(optional override)</span></label>
+            <input type="number" step="1000" id="custom_deal_value" name="custom_deal_value" placeholder="Leave empty to use model price" oninput="updateCommissionPreview()">
           </div>
-        </div>
-        {% endfor %}
+
+          <div class="form-row">
+            <label for="notes">Notes / Requirements</label>
+            <textarea id="notes" name="notes" placeholder="Land size, soil condition, timeline, budget..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-accent" style="width:100%; padding:11px; font-weight:800; font-size:0.95rem;">
+            Submit &amp; Lock Lead ({{ settings.lead_protection_days }} Days Protection)
+          </button>
+        </form>
       </div>
 
-      <!-- Pagination Controls -->
-      {% if pagination and pagination.totalPages > 1 %}
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid rgba(15,23,42,0.06); font-size:0.85rem;">
-        <div>
-          {% if pagination.hasPrev %}
-          <a href="?page={{ pagination.page - 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">← Previous</a>
+      <!-- Right Column: My Leads & 5-Step Milestone Pipeline -->
+      <div class="card agent-leads-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <h2 style="margin:0; font-size:1.05rem; color:var(--primary);">
+            {{ icons.icon('clipboard-list', 18) }} My Pipeline Leads <span style="color:var(--grey-500); font-weight:400;">({{ pagination.totalCount if pagination else leads.length }})</span>
+          </h2>
+          {% if filters.q or (filters.status and filters.status != 'all') or (filters.milestone and filters.milestone != 'all') %}
+          <a href="/agent/dashboard.html" style="font-size:0.8rem; color:var(--grey-500);">Clear Filters</a>
           {% endif %}
         </div>
-        <span style="color:var(--grey-500);">Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
-        <div>
-          {% if pagination.hasNext %}
-          <a href="?page={{ pagination.page + 1 }}&status={{ filters.status or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">Next →</a>
-          {% endif %}
-        </div>
-      </div>
-      {% endif %}
 
-      {% else %}
-      <p style="color:var(--grey-500); font-size:0.9rem; margin-top:10px;">
-        {% if filters.q or (filters.status and filters.status != 'all') %}
-        No leads match your filter criteria.
-        {% else %}
-        No leads submitted yet — use the form to add your first one.
+        <!-- Filter Bar -->
+        <form method="get" action="/agent/dashboard.html" style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:140px;">
+            <input type="text" name="q" value="{{ filters.q or '' }}" placeholder="Search customer, phone, model…" style="width:100%; padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+          </div>
+          <div>
+            <select name="milestone" onchange="this.form.submit()" style="padding:7px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.15); font-size:0.85rem; background:rgba(255,255,255,0.7);">
+              <option value="all" {% if not filters.milestone or filters.milestone == 'all' %}selected{% endif %}>All Milestones</option>
+              <option value="site_visit" {% if filters.milestone == 'site_visit' %}selected{% endif %}>1. Site Visit</option>
+              <option value="design_boq" {% if filters.milestone == 'design_boq' %}selected{% endif %}>2. Design &amp; BOQ</option>
+              <option value="agreement_advance" {% if filters.milestone == 'agreement_advance' %}selected{% endif %}>3. Agreement &amp; Advance</option>
+              <option value="fabrication" {% if filters.milestone == 'fabrication' %}selected{% endif %}>4. Fabrication</option>
+              <option value="handover_commission" {% if filters.milestone == 'handover_commission' %}selected{% endif %}>5. Handover</option>
+            </select>
+          </div>
+          <button type="submit" class="btn" style="padding:7px 12px; font-size:0.85rem;">Filter</button>
+        </form>
+
+        {% if leads.length %}
+        <div class="agent-lead-list">
+          {% for lead in leads %}
+          <div class="agent-lead-row" style="background:rgba(255,255,255,0.65); border:1px solid rgba(15,23,42,0.08); margin-bottom:12px;">
+            
+            <div class="agent-lead-main">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <span class="agent-lead-name" style="font-size:1rem;">{{ lead.customer_name }}</span>
+                  {% if lead.is_protected %}
+                  <span class="pill pill-won" style="font-size:0.68rem; font-weight:700;">🔒 {{ lead.days_left }}d Protected</span>
+                  {% elif lead.protection_expires_at %}
+                  <span class="pill pill-lost" style="font-size:0.68rem;">Lock Expired</span>
+                  {% endif %}
+                  {% if lead.is_overdue %}<span class="pill pill-danger" style="font-size:0.68rem; font-weight:700;">⚠️ &gt;24h Untouched</span>{% endif %}
+                </div>
+                <div style="font-size:0.75rem; color:var(--grey-600); margin-top:2px;">
+                  Model: <strong>{{ lead.product_title or lead.product_interest or 'Custom Building' }}</strong>
+                </div>
+              </div>
+
+              <!-- Deal Financials Pill -->
+              <div style="text-align:right;">
+                <div style="font-size:0.85rem; font-weight:800; color:var(--grey-900);">৳ {{ lead.deal_value or 0 }}</div>
+                <div style="font-size:0.75rem; color:var(--success); font-weight:700;">
+                  Comm: ৳ {{ lead.estimated_commission or 0 }} ({{ lead.commission_rate }}%)
+                </div>
+              </div>
+            </div>
+
+            <!-- Visual 5-Step Milestone Progress Bar -->
+            <div style="margin:10px 0 8px 0; background:#f8fafc; border:1px solid var(--grey-200); border-radius:8px; padding:8px 10px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:700; color:var(--grey-600); margin-bottom:6px;">
+                <span style="{% if lead.milestone_num >= 1 %}color:#1e40af;{% endif %}">1. Site Visit</span>
+                <span style="{% if lead.milestone_num >= 2 %}color:#1e40af;{% endif %}">2. Design/BOQ</span>
+                <span style="{% if lead.milestone_num >= 3 %}color:#1e40af;{% endif %}">3. Agreement</span>
+                <span style="{% if lead.milestone_num >= 4 %}color:#1e40af;{% endif %}">4. Fabrication</span>
+                <span style="{% if lead.milestone_num >= 5 %}color:#16a34a;{% endif %}">5. Handover</span>
+              </div>
+              <div style="background:#e2e8f0; height:6px; border-radius:10px; overflow:hidden;">
+                <div style="background:{% if lead.milestone_num == 5 %}#16a34a{% else %}#2563eb{% endif %}; height:100%; width:{{ lead.milestone_num * 20 }}%;"></div>
+              </div>
+            </div>
+
+            <div class="agent-lead-details" style="align-items:center; justify-content:space-between; margin-top:8px;">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; font-size:0.78rem;">
+                <span>📞 {{ lead.customer_phone }}</span>
+                {% if lead.customer_district %}<span>📍 {{ lead.customer_district }}</span>{% endif %}
+                <span class="pill" style="font-size:0.68rem; background:{% if lead.commission_status == 'paid' %}#dcfce7; color:#16a34a;{% elif lead.commission_status == 'partial_paid' %}#fef3c7; color:#92400e;{% elif lead.commission_status == 'approved' %}#dbeafe; color:#1e40af;{% else %}#f1f5f9; color:#64748b;{% endif %};">
+                  {{ lead.commission_status | replace('_', ' ') | upper }}
+                </span>
+              </div>
+
+              <!-- Status Dropdown Form -->
+              <form method="post" action="/agent/leads/{{ lead.id }}/status" style="margin:0;">
+                <input type="hidden" name="return_to" value="/agent/dashboard.html?page={{ pagination.page or 1 }}&status={{ filters.status or 'all' }}&milestone={{ filters.milestone or 'all' }}&q={{ filters.q or '' }}">
+                <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 8px; border-radius:12px; border:1px solid rgba(15,23,42,0.15); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">
+                  <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
+                  <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                  <option value="quoted" {% if lead.status == 'quoted' %}selected{% endif %}>Quoted</option>
+                  <option value="won" {% if lead.status == 'won' %}selected{% endif %}>Won</option>
+                  <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
+                </select>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if pagination and pagination.totalPages > 1 %}
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid rgba(15,23,42,0.06); font-size:0.85rem;">
+          <div>
+            {% if pagination.hasPrev %}
+            <a href="?page={{ pagination.page - 1 }}&status={{ filters.status or 'all' }}&milestone={{ filters.milestone or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">← Previous</a>
+            {% endif %}
+          </div>
+          <span style="color:var(--grey-500);">Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
+          <div>
+            {% if pagination.hasNext %}
+            <a href="?page={{ pagination.page + 1 }}&status={{ filters.status or 'all' }}&milestone={{ filters.milestone or 'all' }}&q={{ filters.q or '' }}" class="btn" style="padding:5px 10px; font-size:0.8rem;">Next →</a>
+            {% endif %}
+          </div>
+        </div>
         {% endif %}
+
+        {% else %}
+        <p style="color:var(--grey-500); font-size:0.9rem; margin-top:10px;">
+          {% if filters.q or (filters.status and filters.status != 'all') or (filters.milestone and filters.milestone != 'all') %}
+          No leads match your filter criteria.
+          {% else %}
+          No leads submitted yet — select a model on the left to submit your first lead.
+          {% endif %}
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: COMMISSION & PAYOUT LEDGER ==================== -->
+  <div id="tab-content-payouts" class="tab-pane" style="display:none;">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+        <h2 style="margin:0; font-size:1.15rem; color:var(--primary);">
+          💳 Commission Payout History
+        </h2>
+        <span class="pill pill-won" style="font-size:0.8rem; padding:4px 10px;">Total Received: ৳ {{ paidThisYear }} BDT</span>
+      </div>
+
+      <!-- Tranche Payout Policy Explanation Box -->
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:0.82rem; color:#1e40af;">
+        <strong>Bongshai Housing Commission Disbursement Policy:</strong>
+        <ul style="margin:6px 0 0 16px; padding:0; line-height:1.5;">
+          <li><strong>Tranche 1 ({{ settings.tranche_1_pct }}%):</strong> Released upon Agreement Signing &amp; Foundation Advance payment.</li>
+          <li><strong>Tranche 2 ({{ settings.tranche_2_pct }}%):</strong> Released when steel frames are fabricated and delivered to project site.</li>
+          <li><strong>Tranche 3 ({{ settings.tranche_3_pct }}%):</strong> Final retention released upon structural erection &amp; customer handover.</li>
+        </ul>
+      </div>
+
+      {% if payouts.length %}
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Tranche</th>
+            <th>Customer Deal</th>
+            <th>Payment Method &amp; Ref</th>
+            <th>Amount (BDT)</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in payouts %}
+          <tr>
+            <td style="font-size:0.85rem;">{{ p.paid_at | date }}</td>
+            <td><span class="pill pill-muted">Tranche {{ p.tranche_number or 1 }}</span></td>
+            <td>
+              {% if p.customer_name %}
+              <strong>{{ p.customer_name }}</strong>
+              <div style="font-size:0.75rem; color:var(--grey-500);">Deal: ৳ {{ p.deal_value or '—' }}</div>
+              {% else %}
+              <span style="color:var(--grey-500);">General Balance</span>
+              {% endif %}
+            </td>
+            <td>
+              <span class="pill pill-won" style="text-transform:uppercase; font-size:0.7rem;">{{ p.payment_method | replace('_', ' ') }}</span>
+              {% if p.reference_no %}<div style="font-size:0.75rem; font-family:monospace; margin-top:2px;">{{ p.reference_no }}</div>{% endif %}
+            </td>
+            <td style="font-weight:800; color:var(--success); font-size:1rem;">৳ {{ p.amount }}</td>
+            <td style="font-size:0.8rem; color:var(--grey-600);">{{ p.notes or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p style="color:var(--grey-500); font-size:0.9rem; margin:16px 0;">
+        No payouts recorded yet. As your submitted deals advance through Agreement, Fabrication, and Handover stages, payout disbursements will be logged here with reference numbers.
       </p>
       {% endif %}
     </div>
   </div>
+
+  <!-- ==================== TAB 3: DIGITAL PARTNER KIT ==================== -->
+  <div id="tab-content-toolkit" class="tab-pane" style="display:none;">
+    <div class="card" style="margin-bottom:20px;">
+      <h2 style="margin-top:0; font-size:1.15rem; color:var(--primary);">
+        📁 Downloadable Model Spec Sheets (Co-Branded PDF)
+      </h2>
+      <p style="font-size:0.85rem; color:var(--grey-600); margin-top:-4px; margin-bottom:16px;">
+        Every brochure is dynamically generated with your name, phone number, and referral code stamped as the Authorized Regional Partner.
+      </p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
+        {% for p in products %}
+        <div style="background:rgba(255,255,255,0.7); border:1px solid var(--grey-200); border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--grey-900);">{{ p.title }}</div>
+            <div style="font-size:0.75rem; color:var(--primary); font-weight:700; margin-top:2px;">Model: {{ p.model_number }}</div>
+            <div style="font-size:0.8rem; color:var(--grey-600); margin-top:4px;">
+              {% if p.fixed_price %}Price: <strong>{{ p.fixed_price | formatTaka }}</strong>{% endif %}
+              {% if p.total_floor_area %}&nbsp;·&nbsp; {{ p.total_floor_area }} sq.ft{% endif %}
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <a href="/agent/toolkit/brochure/{{ p.id }}" target="_blank" class="btn btn-primary" style="width:100%; text-align:center; padding:7px 10px; font-size:0.8rem; font-weight:700;">
+              📄 Download PDF Spec Sheet
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Quick Sales Pitch & Pricing Cheat-Sheet -->
+    <div class="card" style="margin-bottom:20px;">
+      <h2 style="margin-top:0; font-size:1.05rem; color:var(--primary);">
+        💬 Sales Pitch &amp; Pricing Cheat-Sheet (Bangladesh Market)
+      </h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; font-size:0.85rem;">
+        <div style="background:#f8fafc; border:1px solid var(--grey-200); border-radius:8px; padding:12px;">
+          <strong style="color:var(--primary);">Residential Duplex / Villa</strong>
+          <p style="margin:4px 0 0 0; color:var(--grey-700);">৳ 2,400 – ৳ 3,500+ / sq.ft</p>
+          <div style="font-size:0.75rem; color:var(--grey-500); margin-top:2px;">45-60 days installation, seismic resistant, modern architectural finish.</div>
+        </div>
+        <div style="background:#f8fafc; border:1px solid var(--grey-200); border-radius:8px; padding:12px;">
+          <strong style="color:var(--primary);">Prefab Simplex / Cottage</strong>
+          <p style="margin:4px 0 0 0; color:var(--grey-700);">৳ 1,400 – ৳ 2,400 / sq.ft</p>
+          <div style="font-size:0.75rem; color:var(--grey-500); margin-top:2px;">Budget friendly, ideal for rural homes, farmhouses, or rooftop extensions.</div>
+        </div>
+        <div style="background:#f8fafc; border:1px solid var(--grey-200); border-radius:8px; padding:12px;">
+          <strong style="color:var(--primary);">Industrial PEB Factory Shed</strong>
+          <p style="margin:4px 0 0 0; color:var(--grey-700);">৳ 850 – ৳ 1,600 / sq.ft</p>
+          <div style="font-size:0.75rem; color:var(--grey-500); margin-top:2px;">Clear-span up to 60m, heavy ASTM A572 steel, high-volume project commissions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Gallery Showcase -->
+    {% if projects.length %}
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1.05rem; color:var(--primary);">
+        🏗️ Real Project Showcase (Show to Clients)
+      </h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+        {% for pr in projects %}
+        <div style="border-radius:10px; overflow:hidden; border:1px solid var(--grey-200); background:white;">
+          {% if pr.image %}
+          <img src="{{ pr.image }}" alt="{{ pr.title }}" style="width:100%; height:120px; object-fit:cover; display:block;" loading="lazy">
+          {% else %}
+          <div style="width:100%; height:120px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#94a3b8;">Project Image</div>
+          {% endif %}
+          <div style="padding:10px;">
+            <div style="font-weight:700; font-size:0.85rem; color:var(--grey-900);">{{ pr.title }}</div>
+            <div style="font-size:0.75rem; color:var(--grey-500);">📍 {{ pr.location or 'Bangladesh' }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
 </div>
+
+<!-- Modal: QR Code for Partner Referral Link -->
+<div id="qrModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+  <div class="card" style="background:#ffffff; max-width:360px; width:100%; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.3);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="margin:0; font-size:1rem; color:var(--primary);">📱 Partner QR Code</h3>
+      <button type="button" onclick="toggleQrModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--grey-500);">&times;</button>
+    </div>
+    <p style="font-size:0.78rem; color:var(--grey-600); margin:0 0 14px 0;">
+      Show this QR code to prospective clients. Scanning it will open the Bongshai website and automatically lock them to your partner ID (<strong>{{ agent.referral_code }}</strong>).
+    </p>
+    <div style="display:flex; justify-content:center; padding:10px; background:#f8fafc; border-radius:12px; border:1px solid var(--grey-200); margin-bottom:12px;">
+      <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={{ referralUrl | urlencode }}" alt="Agent Referral QR" style="width:200px; height:200px; display:block;">
+    </div>
+    <div style="font-family:monospace; font-size:0.75rem; color:var(--grey-700); word-break:break-all; margin-bottom:12px;">
+      {{ referralUrl }}
+    </div>
+    <button type="button" class="btn btn-primary" onclick="toggleQrModal()" style="width:100%;">Close</button>
+  </div>
+</div>
+
+<script>
+// Commission Calculation Logic for Lead Submission
+const AGENT_COMMISSION_RATE = {{ tierInfo.rate or 2.0 }};
+
+function updateCommissionPreview() {
+  const select = document.getElementById('product_select');
+  const customValInput = document.getElementById('custom_deal_value');
+  const previewBox = document.getElementById('commissionPreviewBox');
+  const previewPriceEl = document.getElementById('previewModelPrice');
+  const previewCommEl = document.getElementById('previewCommissionAmount');
+
+  let dealValue = 0;
+  const customVal = parseFloat(customValInput.value) || 0;
+
+  if (customVal > 0) {
+    dealValue = customVal;
+  } else if (select && select.selectedIndex > 0) {
+    const selectedOption = select.options[select.selectedIndex];
+    dealValue = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+  }
+
+  if (dealValue > 0) {
+    const comm = Math.round((dealValue * AGENT_COMMISSION_RATE) / 100);
+    previewPriceEl.textContent = '৳ ' + dealValue.toLocaleString();
+    previewCommEl.textContent = '৳ ' + comm.toLocaleString();
+    previewBox.style.display = 'block';
+  } else {
+    previewBox.style.display = 'none';
+  }
+}
+
+// Tab Switching Logic
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(pane => pane.style.display = 'none');
+
+  const btn = document.getElementById('tab-btn-' + tabId);
+  const pane = document.getElementById('tab-content-' + tabId);
+  if (btn) btn.classList.add('active');
+  if (pane) pane.style.display = 'block';
+}
+
+// Copy Referral Link
+function copyReferralLink() {
+  const url = document.getElementById('referralUrlText').textContent.trim();
+  navigator.clipboard.writeText(url).then(() => {
+    alert('✅ Referral link copied to clipboard!\n' + url);
+  }).catch(() => {
+    prompt('Copy your referral link:', url);
+  });
+}
+
+// QR Code Modal
+function toggleQrModal() {
+  const modal = document.getElementById('qrModal');
+  modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+}
+</script>
+
+<style>
+.tab-btn {
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.tab-btn:hover {
+  background: rgba(255,255,255,0.4);
+}
+.tab-btn.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+</style>
 {% endblock %}

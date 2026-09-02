@@ -124,6 +124,10 @@
       <a href="/admin/orders">{{ icons.icon('building-2', 18) }} Orders</a>
       <a href="/admin/agents">{{ icons.icon('handshake', 18) }} Agents</a>
       <a href="/admin/agent-leads">{{ icons.icon('inbox', 18) }} Agent Leads</a>
+      <a href="/admin/agent-payouts">{{ icons.icon('credit-card', 18) }} Agent Payouts</a>
+      {% if adminRole == 'admin' or adminRole == 'superadmin' %}
+      <a href="/admin/agent-settings">{{ icons.icon('cog', 18) }} Agent Settings</a>
+      {% endif %}
       {% if adminRole != 'sales' %}
       <a href="/admin/themes">{{ icons.icon('sparkles', 18) }} Themes Directory</a>
       <a href="/admin/theme-editor">{{ icons.icon('cog', 18) }} Theme Studio Pro</a>

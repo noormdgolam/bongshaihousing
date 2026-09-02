@@ -24,6 +24,11 @@ const {
 const { generateSecret, verifyTotp } = require('../lib/totp');
 const { getDynamicPermissionMatrix } = require('../lib/permission-matrix');
 const { formatTaka, formatTakaAscii } = require('../lib/format');
+const {
+  getAgentSettings,
+  saveAgentSettings,
+  calculateCommission,
+} = require('../lib/agent-settings');
 
 async function getProductPricingMap(database) {
   if (!database) return new Map();
@@ -738,14 +743,26 @@ router.post('/admin/agents/bulk-action', requireRole('admin', 'superadmin', 'edi
 
 router.get('/admin/agent-leads', async (req, res) => {
   const statusFilter = req.query.status || 'all';
+  const milestoneFilter = req.query.milestone || 'all';
   const agentFilter = req.query.agent_id || '';
   const search = (req.query.q || '').trim();
 
   let query = db('agent_leads')
     .join('agents', 'agents.id', 'agent_leads.agent_id')
-    .select('agent_leads.*', 'agents.name as agent_name', 'agents.phone as agent_phone', 'agents.business_name as agent_business_name')
+    .leftJoin('products', 'products.id', 'agent_leads.product_id')
+    .select(
+      'agent_leads.*',
+      'agents.name as agent_name',
+      'agents.phone as agent_phone',
+      'agents.business_name as agent_business_name',
+      'agents.tier as agent_tier',
+      'products.title as product_title',
+      'products.model_number as product_model_number'
+    )
     .orderBy('agent_leads.created_at', 'desc');
+
   if (statusFilter !== 'all') query = query.where('agent_leads.status', statusFilter);
+  if (milestoneFilter !== 'all') query = query.where('agent_leads.milestone_stage', milestoneFilter);
   if (agentFilter) query = query.where('agent_leads.agent_id', agentFilter);
   if (search) {
     query = query.where((builder) => {
@@ -754,11 +771,101 @@ router.get('/admin/agent-leads', async (req, res) => {
         .orWhere('agent_leads.customer_district', 'like', `%${search}%`);
     });
   }
+
   const leads = await query;
   const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  for (const l of leads) l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+  const now = new Date();
+
+  for (const l of leads) {
+    l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+    if (l.protection_expires_at) {
+      const expDate = new Date(l.protection_expires_at);
+      l.is_protected = expDate >= now;
+      l.days_left = Math.max(0, Math.ceil((expDate - now) / (1000 * 60 * 60 * 24)));
+    } else {
+      l.is_protected = false;
+      l.days_left = 0;
+    }
+  }
+
   const agentsForFilter = await db('agents').where({ status: 'active' }).orderBy('name').select('id', 'name', 'business_name');
-  res.render('admin/agents/leads.njk', adminVars(req, { leads, statusFilter, agentFilter, search, agentsForFilter }));
+  res.render('admin/agents/leads.njk', adminVars(req, {
+    leads,
+    statusFilter,
+    milestoneFilter,
+    agentFilter,
+    search,
+    agentsForFilter,
+  }));
+});
+
+router.post('/admin/agent-leads/:id/milestone', async (req, res) => {
+  if (!db) return res.status(500).json({ error: 'Database unavailable' });
+  const { milestone_stage } = req.body;
+  const allowed = ['site_visit', 'design_boq', 'agreement_advance', 'fabrication', 'handover_commission'];
+  if (!allowed.includes(milestone_stage)) {
+    return res.redirect('/admin/agent-leads');
+  }
+
+  try {
+    const lead = await db('agent_leads').where({ id: req.params.id }).first();
+    if (!lead) return res.redirect('/admin/agent-leads');
+
+    const updates = { milestone_stage, updated_at: db.fn.now() };
+    if (milestone_stage === 'handover_commission') {
+      updates.status = 'won';
+    } else if (milestone_stage === 'agreement_advance' && lead.commission_status === 'pending') {
+      updates.commission_status = 'approved';
+      if (lead.status === 'new' || lead.status === 'contacted') {
+        updates.status = 'quoted';
+      }
+    }
+
+    await db('agent_leads').where({ id: req.params.id }).update(updates);
+    await logActivity(req, {
+      action: 'milestone_change',
+      entityType: 'agent_lead',
+      entityId: req.params.id,
+      summary: `Agent lead #${req.params.id} milestone set to "${milestone_stage}"`,
+    });
+
+    res.redirect('/admin/agent-leads');
+  } catch (err) {
+    res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
+  }
+});
+
+router.post('/admin/agent-leads/:id/deal', async (req, res) => {
+  if (!db) return res.status(500).json({ error: 'Database unavailable' });
+  const { deal_value, commission_rate, commission_status } = req.body;
+
+  try {
+    const val = parseFloat(deal_value) || 0;
+    const rate = parseFloat(commission_rate) || 2.0;
+    const estComm = Math.round((val * rate) / 100);
+
+    const allowedStatus = ['pending', 'approved', 'partial_paid', 'paid'];
+    const commStatus = allowedStatus.includes(commission_status) ? commission_status : 'pending';
+
+    await db('agent_leads').where({ id: req.params.id }).update({
+      deal_value: val,
+      commission_rate: rate,
+      estimated_commission: estComm,
+      commission_status: commStatus,
+      updated_at: db.fn.now(),
+    });
+
+    await logActivity(req, {
+      action: 'deal_update',
+      entityType: 'agent_lead',
+      entityId: req.params.id,
+      summary: `Updated deal value to BDT ${val} (${rate}%, Comm: BDT ${estComm}) for lead #${req.params.id}`,
+    });
+
+    res.redirect('/admin/agent-leads');
+  } catch (err) {
+    res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
+  }
 });
 
 router.post('/admin/agent-leads/:id/status', async (req, res) => {
@@ -790,6 +897,157 @@ router.post('/admin/agent-leads/:id/status', async (req, res) => {
     res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
   }
 });
+
+// ---- Agent Payouts Ledger ----
+
+router.get('/admin/agent-payouts', async (req, res) => {
+  if (!db) return res.render('admin/agents/payouts.njk', adminVars(req, { payouts: [], agentsForFilter: [], leadsForPayout: [] }));
+
+  const agentFilter = req.query.agent_id || '';
+  const methodFilter = req.query.payment_method || 'all';
+  const search = (req.query.q || '').trim();
+
+  let query = db('agent_payouts')
+    .join('agents', 'agents.id', 'agent_payouts.agent_id')
+    .leftJoin('agent_leads', 'agent_leads.id', 'agent_payouts.agent_lead_id')
+    .select(
+      'agent_payouts.*',
+      'agents.name as agent_name',
+      'agents.phone as agent_phone',
+      'agents.business_name as agent_business_name',
+      'agent_leads.customer_name',
+      'agent_leads.deal_value'
+    )
+    .orderBy('agent_payouts.paid_at', 'desc');
+
+  if (agentFilter) query = query.where('agent_payouts.agent_id', agentFilter);
+  if (methodFilter && methodFilter !== 'all') query = query.where('agent_payouts.payment_method', methodFilter);
+  if (search) {
+    query = query.where((builder) => {
+      builder.where('agents.name', 'like', `%${search}%`)
+        .orWhere('agents.phone', 'like', `%${search}%`)
+        .orWhere('agent_payouts.reference_no', 'like', `%${search}%`);
+    });
+  }
+
+  const payouts = await query;
+
+  // Aggregate stats
+  const [totalRow] = await db('agent_payouts').sum({ total: 'amount' }).catch(() => [{ total: 0 }]);
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+  const [monthRow] = await db('agent_payouts')
+    .where('paid_at', '>=', startOfMonth)
+    .sum({ total: 'amount' })
+    .catch(() => [{ total: 0 }]);
+
+  const agentsForFilter = await db('agents').where({ status: 'active' }).orderBy('name').select('id', 'name', 'phone', 'business_name');
+  const leadsForPayout = await db('agent_leads')
+    .whereIn('commission_status', ['approved', 'partial_paid'])
+    .select('id', 'agent_id', 'customer_name', 'estimated_commission');
+
+  res.render('admin/agents/payouts.njk', adminVars(req, {
+    payouts,
+    totalPaidAmount: (totalRow?.total || 0).toLocaleString(),
+    thisMonthPaidAmount: (monthRow?.total || 0).toLocaleString(),
+    agentFilter,
+    methodFilter,
+    search,
+    agentsForFilter,
+    leadsForPayout,
+    recorded: req.query.recorded === '1',
+    error: req.query.error || null,
+  }));
+});
+
+router.post('/admin/agent-payouts', async (req, res) => {
+  if (!db) return res.redirect('/admin/agent-payouts?error=Database+unavailable');
+  const { agent_id, agent_lead_id, amount, payment_method, reference_no, tranche_number, notes } = req.body;
+
+  const amt = parseFloat(amount);
+  if (!agent_id || isNaN(amt) || amt <= 0) {
+    return res.redirect('/admin/agent-payouts?error=Agent+and+valid+amount+are+required');
+  }
+
+  try {
+    const leadId = agent_lead_id && agent_lead_id.trim() ? parseInt(agent_lead_id, 10) : null;
+    const adminUser = req.admin?.username || 'Admin';
+
+    await db('agent_payouts').insert({
+      agent_id: parseInt(agent_id, 10),
+      agent_lead_id: leadId,
+      amount: amt,
+      payment_method: payment_method || 'bank_transfer',
+      reference_no: reference_no ? reference_no.trim() : null,
+      tranche_number: parseInt(tranche_number, 10) || 1,
+      notes: notes ? notes.trim() : null,
+      created_by: adminUser,
+    });
+
+    // If linked to a lead, update commission_status
+    if (leadId) {
+      const lead = await db('agent_leads').where({ id: leadId }).first();
+      if (lead) {
+        const [sumRow] = await db('agent_payouts').where({ agent_lead_id: leadId }).sum({ paidTotal: 'amount' });
+        const paidSoFar = parseFloat(sumRow?.paidTotal) || 0;
+        const estComm = parseFloat(lead.estimated_commission) || 0;
+
+        const newStatus = paidSoFar >= estComm ? 'paid' : 'partial_paid';
+        await db('agent_leads').where({ id: leadId }).update({
+          commission_status: newStatus,
+          updated_at: db.fn.now(),
+        });
+      }
+    }
+
+    await logActivity(req, {
+      action: 'record_payout',
+      entityType: 'agent_payout',
+      summary: `Recorded BDT ${amt} commission payout for Agent #${agent_id} (${payment_method})`,
+    });
+
+    res.redirect('/admin/agent-payouts?recorded=1');
+  } catch (err) {
+    res.redirect('/admin/agent-payouts?error=' + encodeURIComponent(err.message));
+  }
+});
+
+// ---- Agent Program Settings ----
+
+router.get('/admin/agent-settings', requireRole('admin', 'superadmin'), async (req, res) => {
+  const settings = await getAgentSettings(db);
+  res.render('admin/agents/settings.njk', adminVars(req, {
+    settings,
+    saved: req.query.saved === '1',
+    error: req.query.error || null,
+  }));
+});
+
+router.post('/admin/agent-settings', requireRole('admin', 'superadmin'), async (req, res) => {
+  if (!db) return res.redirect('/admin/agent-settings?error=Database+unavailable');
+
+  try {
+    const p1 = parseFloat(req.body.tranche_1_pct) || 0;
+    const p2 = parseFloat(req.body.tranche_2_pct) || 0;
+    const p3 = parseFloat(req.body.tranche_3_pct) || 0;
+    if (p1 + p2 + p3 !== 100) {
+      return res.redirect('/admin/agent-settings?error=' + encodeURIComponent('Tranche percentages must sum to exactly 100% (currently ' + (p1 + p2 + p3) + '%)'));
+    }
+
+    await saveAgentSettings(req.body, db);
+    await logActivity(req, {
+      action: 'settings_update',
+      entityType: 'agent_settings',
+      summary: 'Updated Agent Channel-Partner Program Settings (commission rates, tiers, tranches)',
+    });
+
+    res.redirect('/admin/agent-settings?saved=1');
+  } catch (err) {
+    res.redirect('/admin/agent-settings?error=' + encodeURIComponent(err.message));
+  }
+});
+
 
 // ---- Leads / Inquiries ----
 

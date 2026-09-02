@@ -1,0 +1,204 @@
+{% extends "admin-layout.njk" %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Commission Payout Ledger{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">💳 Agent Commission Payout Ledger</h1>{% endblock %}
+
+{% block content %}
+<div class="toolbar" style="margin-bottom:18px;">
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <a href="/admin/agents" class="btn">👥 Agents</a>
+    <a href="/admin/agent-leads" class="btn">📥 Agent Leads</a>
+    <a href="/admin/agent-payouts" class="btn btn-primary" style="font-weight:700;">💳 Payout Ledger</a>
+    <a href="/admin/agent-settings" class="btn">⚙️ Program Settings</a>
+  </div>
+  <button type="button" class="btn btn-primary" onclick="document.getElementById('recordPayoutModal').style.display='flex';" style="font-weight:700;">
+    + Record New Payout
+  </button>
+</div>
+
+{% if recorded %}
+<div style="background:rgba(220,252,231,0.9); color:var(--success); border:1px solid rgba(22,163,74,0.3); border-radius:8px; padding:12px 16px; margin-bottom:18px; font-weight:600;">
+  ✅ Payout recorded successfully into the ledger and agent commission status updated.
+</div>
+{% endif %}
+
+{% if error %}
+<div class="error-box" style="margin-bottom:18px;">{{ error }}</div>
+{% endif %}
+
+<!-- Stats Cards -->
+<div class="stat-grid" style="margin-bottom:20px;">
+  <div class="stat-card">
+    <div class="num" style="color:var(--success);">৳ {{ totalPaidAmount | default('0') }}</div>
+    <div class="label">Total Paid to Date</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" style="color:var(--primary);">৳ {{ thisMonthPaidAmount | default('0') }}</div>
+    <div class="label">Paid This Month</div>
+  </div>
+  <div class="stat-card">
+    <div class="num">{{ payouts.length or 0 }}</div>
+    <div class="label">Total Transactions</div>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card" style="padding:12px 16px; margin-bottom:16px;">
+  <form method="get" action="/admin/agent-payouts" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+    <input type="text" name="q" value="{{ search or '' }}" placeholder="Search agent, phone, reference..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:220px; flex:1;">
+    <select name="agent_id" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+      <option value="">All Agents</option>
+      {% for a in agentsForFilter %}
+      <option value="{{ a.id }}" {% if agentFilter == a.id|string %}selected{% endif %}>{{ a.business_name or a.name }}</option>
+      {% endfor %}
+    </select>
+    <select name="payment_method" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+      <option value="all" {% if not methodFilter or methodFilter == 'all' %}selected{% endif %}>All Methods</option>
+      <option value="bank_transfer" {% if methodFilter == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
+      <option value="bkash" {% if methodFilter == 'bkash' %}selected{% endif %}>bKash</option>
+      <option value="nagad" {% if methodFilter == 'nagad' %}selected{% endif %}>Nagad</option>
+      <option value="cheque" {% if methodFilter == 'cheque' %}selected{% endif %}>Cheque</option>
+      <option value="cash" {% if methodFilter == 'cash' %}selected{% endif %}>Cash</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+    {% if search or agentFilter or (methodFilter and methodFilter != 'all') %}<a href="/admin/agent-payouts" class="btn">Clear</a>{% endif %}
+  </form>
+</div>
+
+<!-- Payouts Table -->
+{% if payouts.length %}
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Agent</th>
+      <th>Customer Lead</th>
+      <th>Tranche</th>
+      <th>Method &amp; Ref</th>
+      <th>Amount (BDT)</th>
+      <th>Recorded By</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in payouts %}
+    <tr>
+      <td style="white-space:nowrap; font-size:0.85rem;">{{ p.paid_at | date }}</td>
+      <td>
+        <a href="/admin/agents/{{ p.agent_id }}" style="font-weight:700;">{{ p.agent_business_name or p.agent_name }}</a>
+        <div style="font-size:0.75rem; color:var(--grey-500);">{{ p.agent_phone }}</div>
+      </td>
+      <td>
+        {% if p.customer_name %}
+        <span style="font-weight:600;">{{ p.customer_name }}</span>
+        <div style="font-size:0.75rem; color:var(--grey-500);">Deal: ৳ {{ p.deal_value or '—' }}</div>
+        {% else %}
+        <span style="color:var(--grey-400);">General Account</span>
+        {% endif %}
+      </td>
+      <td><span class="pill pill-muted">Tranche {{ p.tranche_number or 1 }}</span></td>
+      <td>
+        <span class="pill pill-success" style="text-transform:uppercase; font-size:0.7rem;">{{ p.payment_method | replace('_', ' ') }}</span>
+        {% if p.reference_no %}<div style="font-size:0.75rem; color:var(--grey-700); font-family:monospace; margin-top:2px;">{{ p.reference_no }}</div>{% endif %}
+      </td>
+      <td style="font-weight:800; color:var(--success); font-size:1rem; white-space:nowrap;">৳ {{ p.amount }}</td>
+      <td style="font-size:0.8rem; color:var(--grey-600);">{{ p.created_by or 'Admin' }}</td>
+      <td style="font-size:0.8rem; color:var(--grey-600); max-width:180px;">{{ p.notes or '—' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card"><p style="color:var(--grey-500); margin:0;">No payouts recorded yet. Click "+ Record New Payout" above to record commission payments.</p></div>
+{% endif %}
+
+<!-- Modal: Record Payout -->
+<div id="recordPayoutModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+  <div class="card" style="background:#ffffff; max-width:520px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.3); border:1px solid var(--grey-300);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--grey-200); padding-bottom:10px;">
+      <h2 style="margin:0; font-size:1.1rem; color:var(--primary);">💳 Record Commission Payout</h2>
+      <button type="button" onclick="document.getElementById('recordPayoutModal').style.display='none';" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--grey-500);">&times;</button>
+    </div>
+
+    <form method="post" action="/admin/agent-payouts">
+      <div class="form-row">
+        <label for="payout_agent_id">Select Agent *</label>
+        <select id="payout_agent_id" name="agent_id" required onchange="loadAgentLeads(this.value)">
+          <option value="">-- Choose Agent --</option>
+          {% for a in agentsForFilter %}
+          <option value="{{ a.id }}">{{ a.business_name or a.name }} ({{ a.phone }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="payout_lead_id">Linked Customer Lead (Optional)</label>
+        <select id="payout_lead_id" name="agent_lead_id">
+          <option value="">-- General Payout / No Specific Lead --</option>
+          {% for l in leadsForPayout %}
+          <option value="{{ l.id }}" data-agent="{{ l.agent_id }}">{{ l.customer_name }} (Est. Comm: ৳{{ l.estimated_commission }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="payout_amount">Payout Amount (BDT) *</label>
+        <input type="number" step="100" min="1" id="payout_amount" name="amount" required placeholder="e.g. 50000">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-row">
+          <label for="payout_method">Payment Method *</label>
+          <select id="payout_method" name="payment_method" required>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="bkash">bKash</option>
+            <option value="nagad">Nagad</option>
+            <option value="cheque">Cheque</option>
+            <option value="cash">Cash</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="payout_tranche">Milestone Tranche</label>
+          <select id="payout_tranche" name="tranche_number">
+            <option value="1">Tranche 1 (Advance)</option>
+            <option value="2">Tranche 2 (Fabrication)</option>
+            <option value="3">Tranche 3 (Handover)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="payout_ref">Reference / Transaction ID / Cheque #</label>
+        <input type="text" id="payout_ref" name="reference_no" placeholder="e.g. TrxID BKA89274291 or Chq #002819">
+      </div>
+
+      <div class="form-row">
+        <label for="payout_notes">Internal Notes</label>
+        <textarea id="payout_notes" name="notes" rows="2" placeholder="Bank account details, branch name, or any memo"></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+        <button type="button" class="btn" onclick="document.getElementById('recordPayoutModal').style.display='none';">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="font-weight:700;">Confirm &amp; Record Payout</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function loadAgentLeads(agentId) {
+  const leadSelect = document.getElementById('payout_lead_id');
+  if (!leadSelect) return;
+  const options = leadSelect.querySelectorAll('option');
+  options.forEach((opt, idx) => {
+    if (idx === 0) return;
+    const aId = opt.getAttribute('data-agent');
+    if (!agentId || aId === String(agentId)) {
+      opt.style.display = '';
+    } else {
+      opt.style.display = 'none';
+    }
+  });
+}
+</script>
+{% endblock %}

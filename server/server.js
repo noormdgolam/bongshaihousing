@@ -117,6 +117,23 @@ app.use(session({
   },
 }));
 
+// Partner Referral Auto-Attribution Middleware (?ref=BH-AG-101)
+// Stores referral in persistent 90-day cookie and active session
+app.use((req, res, next) => {
+  if (req.query && req.query.ref) {
+    const refCode = String(req.query.ref).trim();
+    if (refCode) {
+      if (req.session) req.session.agentRef = refCode;
+      res.cookie('bh_agent_ref', refCode, {
+        maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
+        httpOnly: true,
+        sameSite: 'lax',
+      });
+    }
+  }
+  next();
+});
+
 const nunjucksEnv = nunjucks.configure(path.join(__dirname, 'views'), {
   autoescape: true,
   express: app,

@@ -1,3 +1,25 @@
+/* =========================================================
+   PARTNER REFERRAL CAPTURE (?ref=BH-AG-101)
+   ========================================================= */
+// server.js has an equivalent ?ref= -> cookie middleware, but it only ever
+// runs for requests that actually reach the Node app - LiteSpeed serves the
+// homepage and every other public marketing page as a static file first,
+// completely bypassing Express (same gap that broke the CSP header until it
+// got duplicated at the .htaccess level). A shared agent's referral link
+// points at exactly those static pages, so the server-side middleware alone
+// never fires for the real use case. This client-side capture runs on every
+// page load regardless of how the page was served, so it's the one that
+// actually works. Not httpOnly (client-set cookies can't be), but contact.js
+// only ever reads this server-side from the Cookie header, same either way.
+(function () {
+  try {
+    const ref = new URLSearchParams(location.search).get('ref');
+    if (ref) {
+      document.cookie = 'bh_agent_ref=' + encodeURIComponent(ref.trim()) + '; path=/; max-age=' + (90 * 24 * 60 * 60) + '; SameSite=Lax';
+    }
+  } catch (e) {}
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   /* =========================================================
      DARK MODE LOGIC

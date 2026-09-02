@@ -1,19 +1,35 @@
 {% extends "admin-layout.njk" %}
-{% block title %}Agent Leads{% endblock %}
-{% block header %}<h1 style="margin:0; font-size:1.2rem;">📥 Agent-Submitted Leads</h1>{% endblock %}
+{% import "partials/icons.njk" as icons %}
+{% block title %}Agent Leads & Milestones{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.2rem;">📥 Agent Leads &amp; Milestone Pipeline</h1>{% endblock %}
+
 {% block content %}
-<div class="toolbar">
-  <a href="/admin/agents" class="btn">← Back to Agents</a>
+<div class="toolbar" style="margin-bottom:18px;">
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <a href="/admin/agents" class="btn">👥 Agents</a>
+    <a href="/admin/agent-leads" class="btn btn-primary" style="font-weight:700;">📥 Agent Leads</a>
+    <a href="/admin/agent-payouts" class="btn">💳 Payout Ledger</a>
+    <a href="/admin/agent-settings" class="btn">⚙️ Program Settings</a>
+  </div>
 </div>
 
-<div class="card" style="padding:12px 16px;">
+<!-- Filter Bar -->
+<div class="card" style="padding:12px 16px; margin-bottom:16px;">
   <form method="get" action="/admin/agent-leads" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-    <input type="text" name="q" value="{{ search }}" placeholder="Search by customer name, phone, district..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:240px; flex:1;">
+    <input type="text" name="q" value="{{ search }}" placeholder="Search customer, phone, district..." style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem; min-width:200px; flex:1;">
     <select name="agent_id" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
       <option value="">All Agents</option>
       {% for a in agentsForFilter %}
       <option value="{{ a.id }}" {% if agentFilter == a.id|string %}selected{% endif %}>{{ a.business_name or a.name }}</option>
       {% endfor %}
+    </select>
+    <select name="milestone" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
+      <option value="all" {% if not milestoneFilter or milestoneFilter == 'all' %}selected{% endif %}>All Milestones</option>
+      <option value="site_visit" {% if milestoneFilter == 'site_visit' %}selected{% endif %}>1. Site Visit</option>
+      <option value="design_boq" {% if milestoneFilter == 'design_boq' %}selected{% endif %}>2. Design &amp; BOQ</option>
+      <option value="agreement_advance" {% if milestoneFilter == 'agreement_advance' %}selected{% endif %}>3. Agreement &amp; Advance</option>
+      <option value="fabrication" {% if milestoneFilter == 'fabrication' %}selected{% endif %}>4. Fabrication &amp; Delivery</option>
+      <option value="handover_commission" {% if milestoneFilter == 'handover_commission' %}selected{% endif %}>5. Handover &amp; Settlement</option>
     </select>
     <select name="status" style="padding:8px 12px; border:1px solid var(--grey-200); border-radius:6px; font-size:0.9rem;">
       <option value="all" {% if statusFilter == 'all' %}selected{% endif %}>All Statuses</option>
@@ -24,40 +40,164 @@
       <option value="lost" {% if statusFilter == 'lost' %}selected{% endif %}>Lost</option>
     </select>
     <button type="submit" class="btn btn-primary">Filter</button>
-    {% if search or agentFilter or (statusFilter and statusFilter != 'all') %}<a href="/admin/agent-leads" class="btn">Clear</a>{% endif %}
+    {% if search or agentFilter or (statusFilter and statusFilter != 'all') or (milestoneFilter and milestoneFilter != 'all') %}
+    <a href="/admin/agent-leads" class="btn">Clear</a>
+    {% endif %}
   </form>
 </div>
 
 {% if leads.length %}
+<div style="overflow-x:auto;">
 <table>
   <thead>
-    <tr><th>Customer</th><th>Phone</th><th>District</th><th>Interest</th><th>Status</th><th>Agent</th><th>Submitted</th></tr>
+    <tr>
+      <th>Customer / Lead</th>
+      <th>Agent Partner</th>
+      <th>Product / Model</th>
+      <th>Milestone Stage</th>
+      <th>Deal &amp; Commission</th>
+      <th>Exclusivity Lock</th>
+      <th>Action</th>
+    </tr>
   </thead>
   <tbody>
     {% for lead in leads %}
     <tr>
-      <td>{{ lead.customer_name }}</td>
-      <td>{{ lead.customer_phone }}</td>
-      <td>{{ lead.customer_district or '—' }}</td>
-      <td>{{ lead.product_interest or '—' }}</td>
       <td>
-        <form method="post" action="/admin/agent-leads/{{ lead.id }}/status" style="margin:0;">
-          <select name="status" onchange="this.form.submit()" style="font-size:0.75rem; padding:3px 6px; border-radius:12px; border:1px solid var(--grey-200); font-weight:700; cursor:pointer; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %}">
-            <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
-            <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
-            <option value="quoted" {% if lead.status == 'quoted' %}selected{% endif %}>Quoted</option>
-            <option value="won" {% if lead.status == 'won' %}selected{% endif %}>Won</option>
-            <option value="lost" {% if lead.status == 'lost' %}selected{% endif %}>Lost</option>
+        <div style="font-weight:700; color:var(--grey-900);">{{ lead.customer_name }}</div>
+        <div style="font-size:0.8rem; color:var(--grey-600);">📞 {{ lead.customer_phone }}</div>
+        {% if lead.customer_district %}<div style="font-size:0.75rem; color:var(--grey-500);">📍 {{ lead.customer_district }}</div>{% endif %}
+        <div style="font-size:0.75rem; color:var(--grey-400); margin-top:2px;">{{ lead.created_at | date }}</div>
+      </td>
+
+      <td>
+        <a href="/admin/agents/{{ lead.agent_id }}" style="font-weight:700; color:var(--primary);">{{ lead.agent_business_name or lead.agent_name }}</a>
+        <div style="font-size:0.75rem; color:var(--grey-500);">{{ lead.agent_phone }}</div>
+        <span class="pill pill-muted" style="font-size:0.68rem; text-transform:uppercase;">{{ lead.agent_tier or 'Silver' }}</span>
+      </td>
+
+      <td>
+        <div style="font-weight:600;">{{ lead.product_title or lead.product_interest or 'Custom Building' }}</div>
+        {% if lead.product_model_number %}<div style="font-size:0.75rem; color:var(--grey-500); font-family:monospace;">{{ lead.product_model_number }}</div>{% endif %}
+      </td>
+
+      <td>
+        <!-- Milestone Update Form -->
+        <form method="post" action="/admin/agent-leads/{{ lead.id }}/milestone" style="margin:0;">
+          <select name="milestone_stage" onchange="this.form.submit()" style="font-size:0.78rem; padding:4px 8px; border-radius:8px; border:1px solid var(--grey-300); font-weight:700; cursor:pointer; background:white;">
+            <option value="site_visit" {% if lead.milestone_stage == 'site_visit' %}selected{% endif %}>1. Site Visit</option>
+            <option value="design_boq" {% if lead.milestone_stage == 'design_boq' %}selected{% endif %}>2. Design &amp; BOQ</option>
+            <option value="agreement_advance" {% if lead.milestone_stage == 'agreement_advance' %}selected{% endif %}>3. Agreement &amp; Advance</option>
+            <option value="fabrication" {% if lead.milestone_stage == 'fabrication' %}selected{% endif %}>4. Fabrication</option>
+            <option value="handover_commission" {% if lead.milestone_stage == 'handover_commission' %}selected{% endif %}>5. Handover</option>
           </select>
         </form>
+
+        <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+          <span class="pill" style="font-size:0.68rem; background:{% if lead.status == 'new' %}#dbeafe; color:#1e40af;{% elif lead.status == 'contacted' %}#fef3c7; color:#92400e;{% elif lead.status == 'quoted' %}#e0e7ff; color:#4338ca;{% elif lead.status == 'won' %}#dcfce7; color:#16a34a;{% else %}#f1f5f9; color:#64748b;{% endif %};">
+            {{ lead.status | upper }}
+          </span>
+          {% if lead.is_overdue %}<span class="pill pill-danger" style="font-size:0.65rem;">⚠️ &gt;24h</span>{% endif %}
+        </div>
       </td>
-      <td><a href="/admin/agents/{{ lead.agent_id }}">{{ lead.agent_business_name or lead.agent_name }}</a> <span style="color:var(--grey-500); font-size:0.8rem;">({{ lead.agent_phone }})</span></td>
-      <td>{{ lead.created_at | date }}</td>
+
+      <td>
+        <div>Deal: <strong>৳ {{ lead.deal_value or 0 }}</strong></div>
+        <div style="font-size:0.8rem; color:var(--primary); font-weight:700;">
+          Comm ({{ lead.commission_rate or 2 }}%): ৳ {{ lead.estimated_commission or 0 }}
+        </div>
+        <div style="margin-top:2px;">
+          <span class="pill" style="font-size:0.68rem; background:{% if lead.commission_status == 'paid' %}#dcfce7; color:#16a34a;{% elif lead.commission_status == 'partial_paid' %}#fef3c7; color:#92400e;{% elif lead.commission_status == 'approved' %}#dbeafe; color:#1e40af;{% else %}#f1f5f9; color:#64748b;{% endif %};">
+            {{ lead.commission_status | replace('_', ' ') | upper }}
+          </span>
+        </div>
+      </td>
+
+      <td>
+        {% if lead.is_protected %}
+        <span class="pill pill-success" style="font-size:0.72rem; font-weight:700;">🔒 {{ lead.days_left }}d Left</span>
+        <div style="font-size:0.7rem; color:var(--grey-500); margin-top:2px;">Until {{ lead.protection_expires_at | date }}</div>
+        {% elif lead.protection_expires_at %}
+        <span class="pill pill-muted" style="font-size:0.72rem;">Expired</span>
+        {% else %}
+        <span style="color:var(--grey-400); font-size:0.75rem;">None</span>
+        {% endif %}
+      </td>
+
+      <td style="white-space:nowrap;">
+        <button type="button" class="btn" style="padding:4px 8px; font-size:0.75rem;" onclick="openEditDeal('{{ lead.id }}', '{{ lead.deal_value }}', '{{ lead.commission_rate }}', '{{ lead.commission_status }}')">
+          ✏️ Edit Deal
+        </button>
+        <a href="/admin/agent-payouts?agent_id={{ lead.agent_id }}&lead_id={{ lead.id }}" class="btn btn-primary" style="padding:4px 8px; font-size:0.75rem;">
+          💳 Pay
+        </a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% else %}
 <div class="card"><p style="color:var(--grey-500); margin:0;">No agent leads match this filter.</p></div>
 {% endif %}
+
+<!-- Modal: Quick Edit Deal Value & Commission -->
+<div id="editDealModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+  <div class="card" style="background:#ffffff; max-width:440px; width:100%; box-shadow:0 20px 40px rgba(0,0,0,0.3); border:1px solid var(--grey-300);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--grey-200); padding-bottom:10px;">
+      <h2 style="margin:0; font-size:1.1rem; color:var(--primary);">✏️ Update Deal &amp; Commission</h2>
+      <button type="button" onclick="document.getElementById('editDealModal').style.display='none';" style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--grey-500);">&times;</button>
+    </div>
+
+    <form id="editDealForm" method="post" action="">
+      <div class="form-row">
+        <label for="deal_val_input">Final Deal Contract Value (BDT) *</label>
+        <input type="number" step="1000" id="deal_val_input" name="deal_value" required oninput="recalcModalCommission()">
+      </div>
+
+      <div class="form-row">
+        <label for="comm_rate_input">Commission Rate (%) *</label>
+        <input type="number" step="0.1" id="comm_rate_input" name="commission_rate" required oninput="recalcModalCommission()">
+      </div>
+
+      <div class="form-row">
+        <label>Calculated Estimated Commission</label>
+        <div id="modal_calc_comm" style="font-weight:800; font-size:1.1rem; color:var(--success);">৳ 0</div>
+      </div>
+
+      <div class="form-row">
+        <label for="comm_status_input">Commission Approval Status</label>
+        <select id="comm_status_input" name="commission_status">
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="partial_paid">Partial Paid</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+        <button type="button" class="btn" onclick="document.getElementById('editDealModal').style.display='none';">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="font-weight:700;">Save Deal Details</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEditDeal(leadId, dealValue, commRate, commStatus) {
+  document.getElementById('editDealForm').action = '/admin/agent-leads/' + leadId + '/deal';
+  document.getElementById('deal_val_input').value = dealValue || 0;
+  document.getElementById('comm_rate_input').value = commRate || 2.0;
+  document.getElementById('comm_status_input').value = commStatus || 'pending';
+  recalcModalCommission();
+  document.getElementById('editDealModal').style.display = 'flex';
+}
+
+function recalcModalCommission() {
+  const val = parseFloat(document.getElementById('deal_val_input').value) || 0;
+  const rate = parseFloat(document.getElementById('comm_rate_input').value) || 0;
+  const comm = Math.round((val * rate) / 100);
+  document.getElementById('modal_calc_comm').textContent = '৳ ' + comm.toLocaleString();
+}
+</script>
 {% endblock %}

@@ -40,6 +40,12 @@ function isRateLimited(ip) {
   return state.count > RATE_LIMIT_MAX;
 }
 
+function getCookieVal(req, name) {
+  if (!req.headers || !req.headers.cookie) return null;
+  const match = req.headers.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 // Mirrors send_email.php, wired to contact.html's #contactForm (submits JSON).
 router.post('/send_email.php', async (req, res) => {
   const body = req.body || {};
@@ -76,6 +82,20 @@ router.post('/send_email.php', async (req, res) => {
   let portalCustomer = null; // set below if auto-provisioning succeeds
   if (db) {
     try {
+      const refCode = req.session?.agentRef || getCookieVal(req, 'bh_agent_ref');
+      let attributedAgent = null;
+
+      if (refCode) {
+        attributedAgent = await db('agents').where({ referral_code: refCode, status: 'active' }).first();
+        if (!attributedAgent) {
+          const { parseAgentIdFromFallbackCode } = require('../lib/agent-settings');
+          const numericId = parseAgentIdFromFallbackCode(refCode);
+          if (numericId !== null) {
+            attributedAgent = await db('agents').where({ id: numericId, status: 'active' }).first();
+          }
+        }
+      }
+
       [leadId] = await db('leads').insert({
         name,
         email,
@@ -87,8 +107,56 @@ router.post('/send_email.php', async (req, res) => {
         bedrooms: bedrooms !== 'N/A' ? bedrooms : null,
         message: message !== 'No additional notes.' ? message : null,
         status: 'new',
-        source: 'contact_form',
+        source: attributedAgent ? `agent_referral: ${refCode}` : 'contact_form',
       });
+
+      // If referral lead, auto-attribute into agent_leads table
+      if (attributedAgent) {
+        try {
+          const { getAgentSettings, calculateAgentTier } = require('../lib/agent-settings');
+          const settings = await getAgentSettings(db);
+          const [wonRow] = await db('agent_leads').where({ agent_id: attributedAgent.id, status: 'won' }).count({ count: '*' }).catch(() => [{ count: 0 }]);
+          const tierInfo = calculateAgentTier(wonRow?.count || 0, settings);
+          const commissionRate = tierInfo.rate || 2.0;
+
+          let product = null;
+          if (model && model !== 'N/A') {
+            product = await db('products')
+              .where('title', 'like', `%${model}%`)
+              .orWhere('model_number', 'like', `%${model}%`)
+              .first()
+              .catch(() => null);
+          }
+
+          let dealVal = 0;
+          if (product) {
+            if (product.fixed_price) dealVal = parseFloat(product.fixed_price);
+            else if (product.price_per_sqft && product.total_floor_area) dealVal = parseFloat(product.price_per_sqft) * parseFloat(product.total_floor_area);
+          }
+          const estComm = Math.round((dealVal * commissionRate) / 100);
+          const protectionDays = parseInt(settings.lead_protection_days, 10) || 90;
+          const protectionExpiresAt = new Date(Date.now() + protectionDays * 24 * 60 * 60 * 1000);
+
+          await db('agent_leads').insert({
+            agent_id: attributedAgent.id,
+            product_id: product?.id || null,
+            customer_name: name,
+            customer_phone: phone,
+            customer_district: district !== 'N/A' ? district : null,
+            product_interest: model !== 'N/A' ? model : (product?.title || null),
+            deal_value: dealVal,
+            commission_rate: commissionRate,
+            estimated_commission: estComm,
+            commission_status: 'pending',
+            milestone_stage: 'site_visit',
+            protection_expires_at: protectionExpiresAt,
+            notes: `Auto-attributed via public website inquiry (Partner Code: ${refCode}). Message: ${message !== 'No additional notes.' ? message : 'N/A'}`,
+            status: 'new',
+          });
+        } catch (attrErr) {
+          console.error('[AutoAttribution] Failed to attribute lead to agent:', attrErr.message);
+        }
+      }
 
       const hasActivity = await db.schema.hasTable('activity_log');
       if (hasActivity) {
@@ -97,7 +165,7 @@ router.post('/send_email.php', async (req, res) => {
           action: 'create',
           entity_type: 'lead',
           entity_id: leadId || null,
-          summary: `New quote inquiry from ${name} (${district}) for ${model}`,
+          summary: `New quote inquiry from ${name} (${district}) for ${model}${attributedAgent ? ` [Ref: ${refCode} -> Agent: ${attributedAgent.name}]` : ''}`,
         });
       }
 
