@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bongshai-cache-v36';
+const CACHE_NAME = 'bongshai-cache-v37';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -40,9 +40,14 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, networkResponse.clone());
-          });
+          // Only cache real, successful responses - an error page (522/500/etc)
+          // must never get written into the cache as if it were the real
+          // asset, or every future load keeps serving that error forever.
+          if (networkResponse && networkResponse.ok) {
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, networkResponse.clone());
+            });
+          }
           return networkResponse;
         }).catch(() => {}); // Ignore network errors in background
         return cachedResponse || fetchPromise;
@@ -52,10 +57,15 @@ self.addEventListener('fetch', event => {
     // Network-First for HTML documents and other dynamic content
     event.respondWith(
       fetch(event.request).then(response => {
-        const resClone = response.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, resClone);
-        });
+        // Same rule as above: never cache an error response as if it were
+        // the real page - that would serve the error again on the next
+        // offline/failed request instead of falling through correctly.
+        if (response && response.ok) {
+          const resClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, resClone);
+          });
+        }
         return response;
       }).catch(() => {
         // Network failed, try to get from cache
