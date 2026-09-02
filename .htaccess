@@ -69,7 +69,7 @@ RewriteRule ^properties/(.*)$ https://bongshaihousing.com/ [R=301,L]
 # Old URLs & Categories
 RewriteRule ^container-house/?$ https://bongshaihousing.com/container-house.html [R=301,L]
 RewriteRule ^low-cost-villa/?$ https://bongshaihousing.com/luxury-villa.html [R=301,L]
-RewriteRule ^career/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^career/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^two-story-building/?$ https://bongshaihousing.com/apartment-building.html [R=301,L]
 RewriteRule ^our-mission-vission/?$ https://bongshaihousing.com/about.html [R=301,L]
 RewriteRule ^contact-bn\.html$ https://bongshaihousing.com/contact.html [R=301,L]
@@ -85,7 +85,7 @@ RewriteRule ^bh-dv-106\.html$ https://bongshaihousing.com/bh-dv-206.html [R=301,
 
 # 4d. GSC "Page with redirect" — slug-style URLs missing rules (2026-08-08)
 
-RewriteRule ^career-apply-now/?$ https://bongshaihousing.com/career.html [R=301,L]
+RewriteRule ^career-apply-now/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^login/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^logout/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^user/?$ https://bongshaihousing.com/ [R=301,L]
@@ -102,10 +102,13 @@ RewriteRule ^contact-us/?$ https://bongshaihousing.com/contact.html [R=301,L]
 RewriteRule ^luxury-villa/?$ https://bongshaihousing.com/luxury-villa.html [R=301,L]
 
 # 4e. GSC "Crawled - currently not indexed" — old WordPress slugs (2026-08-08)
-RewriteRule ^architect/?$ https://bongshaihousing.com/career.html [R=301,L]
-RewriteRule ^deputy-general-managerdgm/?$ https://bongshaihousing.com/career.html [R=301,L]
-RewriteRule ^project-manager/?$ https://bongshaihousing.com/career.html [R=301,L]
-RewriteRule ^foreman-civil-construction/?$ https://bongshaihousing.com/career.html [R=301,L]
+# Career section was permanently removed (see AGENTS.md Scope Exclusions) -
+# these old job-posting slugs now redirect to the homepage instead of the
+# now-nonexistent career.html, which was 404ing for real visitors.
+RewriteRule ^architect/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^deputy-general-managerdgm/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^project-manager/?$ https://bongshaihousing.com/ [R=301,L]
+RewriteRule ^foreman-civil-construction/?$ https://bongshaihousing.com/ [R=301,L]
 RewriteRule ^project/?$ https://bongshaihousing.com/projects.html [R=301,L]
 RewriteRule ^model-no-bh-tb-07/?$ https://bongshaihousing.com/bh-tsb-107.html [R=301,L]
 RewriteRule ^2-bedroom-luxury-building/?$ https://bongshaihousing.com/apartment-building.html [R=301,L]

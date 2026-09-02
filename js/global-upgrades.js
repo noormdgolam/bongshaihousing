@@ -125,6 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
    ========================================================= */
 if ('serviceWorker' in navigator) {
   let swRefreshed = false;
+  // Only reload for a REAL update - an already-controlled page getting a
+  // newer worker. A page's first-ever visit also fires 'controllerchange'
+  // (no controller -> a controller), but that page already loaded fine over
+  // the network with no SW involved, so reloading it does nothing useful -
+  // it was silently doubling the page load (and the "site feels slow"
+  // reports) for every new/returning visitor during today's SW version
+  // bump. hadController is snapshotted before register() ever runs.
+  const hadController = !!navigator.serviceWorker.controller;
   // A new service worker taking control mid-visit used to force an
   // immediate reload - silently wiping out anything a visitor was
   // actively typing (worst case: the contact form, losing a real lead).
@@ -137,6 +145,7 @@ if ('serviceWorker' in navigator) {
     return Array.from(document.querySelectorAll('input, textarea')).some((el) => el.value && el.value.trim());
   }
   navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController) return;
     if (swRefreshed) return;
     if (hasActiveFormInput()) return;
     swRefreshed = true;

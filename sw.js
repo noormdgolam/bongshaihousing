@@ -4,7 +4,7 @@ const STATIC_ASSETS = [
   '/index.html',
   '/offline.html',
   '/css/style.min.css?v=4.16',
-  '/js/global-upgrades.min.js?v=3.14',
+  '/js/global-upgrades.min.js?v=3.15',
   '/js/bd-geo-data.js',
   '/manifest.json'
 ];
