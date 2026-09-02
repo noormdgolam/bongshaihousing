@@ -287,6 +287,7 @@ for (const [urlPath, meta] of Object.entries(registry)) {
 
       let specs = [];
       let dbProductsByModel = {};
+      let dedicatedProduct = null;
       if (db) {
         try {
           const row = await db('page_content').where({ url_path: urlPath }).first();
@@ -313,6 +314,7 @@ for (const [urlPath, meta] of Object.entries(registry)) {
             if (product) {
               specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
               dbProductsByModel[product.model_number] = product;
+              dedicatedProduct = product;
             }
           } catch (specErr) {
             // Ignore - falls back to an empty specs table/stock image, not a crash
@@ -320,7 +322,10 @@ for (const [urlPath, meta] of Object.entries(registry)) {
         }
       }
 
-      const vars = renderVars({ ...meta, title: pageTitle, pc, specs, dbProductsByModel });
+      const ogImageOverride = dedicatedProduct && dedicatedProduct.main_image
+        ? `https://bongshaihousing.com/${dedicatedProduct.main_image}`
+        : undefined;
+      const vars = renderVars({ ...meta, title: pageTitle, pc, specs, dbProductsByModel, product: dedicatedProduct, ...(ogImageOverride ? { ogImage: ogImageOverride } : {}) });
 
       res.render(meta.template, vars, (err, html) => {
         if (err) {

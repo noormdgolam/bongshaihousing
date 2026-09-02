@@ -193,8 +193,9 @@ async function renderProductToHtml(slug) {
     // at authoring time.
     let dedicatedSpecs = [];
     let dedicatedProductsByModel = {};
+    let dedicatedProduct = null;
     try {
-      const dedicatedProduct = await db('products').where({ slug: file }).first();
+      dedicatedProduct = await db('products').where({ slug: file }).first();
       if (dedicatedProduct) {
         dedicatedSpecs = await db('product_specs').where({ product_id: dedicatedProduct.id }).orderBy('sort_order');
         dedicatedProductsByModel[dedicatedProduct.model_number] = dedicatedProduct;
@@ -202,8 +203,23 @@ async function renderProductToHtml(slug) {
     } catch (e) {
       dedicatedSpecs = [];
       dedicatedProductsByModel = {};
+      dedicatedProduct = null;
     }
-    return nunjucksEnv.render(regMeta.template, renderVars(regMeta, { specs: dedicatedSpecs, dbProductsByModel: dedicatedProductsByModel, theme: dedicatedTheme, themeCssVars: dedicatedThemeCssVars }));
+    // og:image/twitter:image (layout.njk uses the same `ogImage` var for
+    // both) default to whatever was in the registry at authoring time -
+    // override with the product's current DB photo when it has one, so a
+    // social-share preview doesn't keep showing an old uploaded photo.
+    const dedicatedOgImage = dedicatedProduct && dedicatedProduct.main_image
+      ? `https://bongshaihousing.com/${dedicatedProduct.main_image}`
+      : undefined;
+    return nunjucksEnv.render(regMeta.template, renderVars(regMeta, {
+      specs: dedicatedSpecs,
+      dbProductsByModel: dedicatedProductsByModel,
+      product: dedicatedProduct,
+      theme: dedicatedTheme,
+      themeCssVars: dedicatedThemeCssVars,
+      ...(dedicatedOgImage ? { ogImage: dedicatedOgImage } : {}),
+    }));
   }
 
   const product = await db('products').where({ slug: file }).first();
