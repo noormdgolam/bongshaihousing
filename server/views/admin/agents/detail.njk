@@ -6,6 +6,7 @@
   <a href="/admin/agents" class="btn">← Back to Agents</a>
   <div>
     <span class="pill {% if agent.status == 'active' %}pill-success{% elif agent.status == 'rejected' %}pill-muted{% endif %}">{{ agent.status }}</span>
+    {% if agent.status == 'active' %}<span class="pill pill-{{ agent.tier or 'silver' }}">{{ (agent.tier or 'silver') | capitalize }}</span>{% endif %}
   </div>
 </div>
 
@@ -93,6 +94,12 @@
       <h3 style="margin-top:0; display:flex; align-items:center; justify-content:space-between;">Referral Pipeline
         <a href="/admin/agent-leads?agent_id={{ agent.id }}" style="font-size:0.78rem; font-weight:500;">View all →</a>
       </h3>
+      {% if referralCode %}
+      <div style="display:flex; align-items:center; justify-content:space-between; background:var(--grey-50); border:1px solid var(--grey-200); border-radius:6px; padding:8px 10px; margin-bottom:12px;">
+        <span style="font-size:0.78rem; color:var(--grey-500);">Referral Code</span>
+        <code style="font-size:0.85rem; font-weight:700;">{{ referralCode }}</code>
+      </div>
+      {% endif %}
       <div style="display:flex; justify-content:space-around; text-align:center; margin-bottom:12px;">
         <div><div style="font-size:1.2rem; font-weight:800;">{{ referralStats.total }}</div><div style="font-size:0.68rem; color:var(--grey-500); text-transform:uppercase;">Total</div></div>
         <div><div style="font-size:1.2rem; font-weight:800; color:var(--success);">{{ referralStats.won }}</div><div style="font-size:0.68rem; color:var(--grey-500); text-transform:uppercase;">Won</div></div>

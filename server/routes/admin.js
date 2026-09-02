@@ -28,6 +28,7 @@ const {
   getAgentSettings,
   saveAgentSettings,
   calculateCommission,
+  getAgentReferralCode,
 } = require('../lib/agent-settings');
 
 async function getProductPricingMap(database) {
@@ -665,8 +666,10 @@ router.get('/admin/agents/:id', async (req, res) => {
   const referralStats = { total: referralLeads.length, new: 0, contacted: 0, quoted: 0, won: 0, lost: 0 };
   for (const l of referralLeads) referralStats[l.status] = (referralStats[l.status] || 0) + 1;
 
+  const referralCode = agent.status === 'active' ? getAgentReferralCode(agent) : null;
+
   res.render('admin/agents/detail.njk', adminVars(req, {
-    agent, documentFields, territoryConflicts,
+    agent, documentFields, territoryConflicts, referralCode,
     referralLeads: referralLeads.slice(0, 5), referralStats,
   }));
 });
