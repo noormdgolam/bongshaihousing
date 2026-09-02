@@ -44,7 +44,7 @@
       <thead>
         <tr>
           <th style="width:36px; text-align:center;"><input type="checkbox" id="selectAllAgents" onclick="document.querySelectorAll('.agent-checkbox').forEach(cb => cb.checked = this.checked);" title="Select All"></th>
-          <th>Business</th><th>Owner</th><th>Phone</th><th>Territory</th><th>Status</th><th>Applied</th><th>Actions</th>
+          <th>Business</th><th>Owner</th><th>Phone</th><th>Territory</th><th>Status</th><th>Tier</th><th>Applied</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -57,6 +57,9 @@
           <td>{{ a.district }}{% if a.thana %}, {{ a.thana }}{% endif %}</td>
           <td>
             <span class="pill {% if a.status == 'active' %}pill-success{% elif a.status == 'rejected' %}pill-muted{% endif %}">{{ a.status }}</span>
+          </td>
+          <td>
+            {% if a.status == 'active' %}<span class="pill pill-{{ a.tier or 'silver' }}">{{ (a.tier or 'silver') | capitalize }}</span>{% else %}—{% endif %}
           </td>
           <td>{{ a.created_at | date }}</td>
           <td>
