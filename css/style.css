@@ -5491,4 +5491,5 @@ body.dark-mode img.logo {
     font-size: 0.85rem;
   }
   /* Room for the sticky bar so it never covers the last section's content */
-  bod
+  body:has(.pd-sticky-cta) { padding-bottom: 64px; }
+}
