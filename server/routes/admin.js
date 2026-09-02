@@ -1705,7 +1705,10 @@ router.post('/admin/categories', upload.single('hero_image_file'), async (req, r
 router.get('/admin/categories/:id/edit', async (req, res) => {
   const category = await db('categories').where({ id: req.params.id }).first();
   if (!category) return res.status(404).send('Not found');
-  res.render('admin/categories/form.njk', adminVars(req, { category, error: null }));
+  const allSpecs = await db('category_specs').where({ category_id: req.params.id }).orderBy('sort_order');
+  const buildingSpecs = allSpecs.filter(s => s.spec_type === 'building');
+  const technicalSpecs = allSpecs.filter(s => s.spec_type === 'technical');
+  res.render('admin/categories/form.njk', adminVars(req, { category, error: null, buildingSpecs, technicalSpecs }));
 });
 
 router.post('/admin/categories/:id', upload.single('hero_image_file'), async (req, res) => {
@@ -1728,6 +1731,63 @@ router.post('/admin/categories/:id/delete', async (req, res) => {
   await db('categories').where({ id: req.params.id }).del();
   await logActivity(req, { action: 'delete', entityType: 'category', entityId: req.params.id, summary: `Deleted category ${c ? c.name : req.params.id}` });
   res.redirect('/admin/categories');
+});
+
+// ---- Category Specs (Building / Technical Specifications key/value rows) ----
+// Same key/value shape as product_specs, scoped to a category instead of a
+// single product, split by spec_type so Building and Technical don't mix.
+
+router.post('/admin/categories/:id/specs', async (req, res) => {
+  const { spec_key, spec_value, spec_type } = req.body;
+  const type = spec_type === 'technical' ? 'technical' : 'building';
+  if (spec_key && spec_value) {
+    const [{ maxSort }] = await db('category_specs').where({ category_id: req.params.id, spec_type: type }).max('sort_order as maxSort');
+    await db('category_specs').insert({ category_id: req.params.id, spec_type: type, spec_key, spec_value, sort_order: (maxSort ?? -1) + 1 });
+  }
+  res.redirect(`/admin/categories/${req.params.id}/edit`);
+});
+
+// Bulk editor: paste multi-line "Key: Value" text, one spec row per line -
+// replaces every existing row of that spec_type with what's in the
+// textarea, in the order given. A full-replace (not a merge) is the only
+// sane semantic for "here's the whole list, save it" - anything else would
+// need per-row identity tracking the plain-text box doesn't have.
+// NOTE: MUST be mounted BEFORE '/admin/categories/:id/specs/:specId' so
+// Express doesn't match the literal string 'bulk' as the :specId parameter.
+router.post('/admin/categories/:id/specs/bulk', async (req, res) => {
+  const { spec_type, bulk_text } = req.body;
+  const type = spec_type === 'technical' ? 'technical' : 'building';
+  const lines = (bulk_text || '').split('\n').map(l => l.trim()).filter(Boolean);
+  const rows = [];
+  for (const line of lines) {
+    const sepIndex = line.search(/[:|]/); // first ':' or '|' splits key from value
+    if (sepIndex === -1) continue;
+    const key = line.slice(0, sepIndex).trim();
+    const value = line.slice(sepIndex + 1).trim();
+    if (key && value) rows.push({ spec_key: key, spec_value: value });
+  }
+
+  await db.transaction(async (trx) => {
+    await trx('category_specs').where({ category_id: req.params.id, spec_type: type }).del();
+    if (rows.length > 0) {
+      await trx('category_specs').insert(
+        rows.map((r, i) => ({ category_id: req.params.id, spec_type: type, spec_key: r.spec_key, spec_value: r.spec_value, sort_order: i }))
+      );
+    }
+  });
+
+  res.redirect(`/admin/categories/${req.params.id}/edit`);
+});
+
+router.post('/admin/categories/:id/specs/:specId(\\d+)', async (req, res) => {
+  const { spec_key, spec_value } = req.body;
+  await db('category_specs').where({ id: req.params.specId, category_id: req.params.id }).update({ spec_key, spec_value, updated_at: db.fn.now() });
+  res.redirect(`/admin/categories/${req.params.id}/edit`);
+});
+
+router.post('/admin/categories/:id/specs/:specId(\\d+)/delete', async (req, res) => {
+  await db('category_specs').where({ id: req.params.specId, category_id: req.params.id }).del();
+  res.redirect(`/admin/categories/${req.params.id}/edit`);
 });
 
 // ---- Projects ----

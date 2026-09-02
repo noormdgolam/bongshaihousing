@@ -198,6 +198,17 @@ img {
   user-select: none;
 }
 
+/* The global img{pointer-events:none} above (anti-theft: blocks right-click
+   save/drag/context-menu) also silently blocks left-click on every image -
+   including the ones the lightbox script (global-upgrades.js) binds its
+   click listener to directly. Re-enable pointer-events specifically for
+   those three lightbox-target contexts so "click to view full image"
+   actually works, while every other image on the site keeps the
+   protection. */
+.gallery-item img, .project-card img, .about-img-wrap img {
+  pointer-events: auto;
+}
+
 /* ============================================================
    Layout Utilities
    ============================================================ */
@@ -1929,6 +1940,10 @@ textarea.form-control {
   display: flex;
   align-items: flex-end;
   padding: var(--space-5);
+  /* Decorative caption layer only - was sitting on top of the image and
+     silently absorbing every click before it ever reached the <img>
+     the lightbox listens on, so "click to view full image" never fired. */
+  pointer-events: none;
 }
 
 .gallery-item:hover .gallery-overlay { opacity: 1; }
@@ -2199,7 +2214,7 @@ textarea.form-control {
 .footer-links {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 0;
 }
 
 .footer-link {
@@ -2209,8 +2224,7 @@ textarea.form-control {
   align-items: center;
   gap: var(--space-2);
   transition: var(--transition-fast);
-  padding: 0.6rem 0;
-  min-height: 44px;
+  padding: 0.3rem 0;
   box-sizing: border-box;
 }
 
@@ -2955,6 +2969,7 @@ textarea.form-control {
 
   /* Footer grid */
   .footer-grid { grid-template-columns: 1fr; }
+  .footer-link { min-height: 44px; padding: 0.5rem 0; } /* real tap target on touch */
 
   /* Page hero */
   .page-hero { padding: calc(var(--nav-height) + 28px) 0 40px; }

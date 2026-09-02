@@ -44,6 +44,52 @@
 </form>
 </div>
 {% if category.id %}
+{% macro specSection(title, type, rows, placeholderKey, placeholderValue, categoryId) %}
+<div class="card">
+  <h2 style="font-size:1rem;">{{ title }} ({{ (rows or []).length }})</h2>
+
+  <details style="margin-bottom:16px;">
+    <summary style="cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--grey-700, #334155); padding:6px 0;">✏️ Bulk edit (paste a whole list at once)</summary>
+    <form method="post" action="/admin/categories/{{ categoryId }}/specs/bulk" style="margin-top:8px;">
+      <input type="hidden" name="spec_type" value="{{ type }}">
+      <textarea name="bulk_text" rows="8" style="width:100%; font-family:monospace; font-size:0.85rem; border:1px solid var(--grey-200); border-radius:6px; padding:10px;" placeholder="One per line, Key: Value&#10;e.g.&#10;{{ placeholderKey }}: {{ placeholderValue }}">{% for s in (rows or []) %}{{ s.spec_key }}: {{ s.spec_value }}
+{% endfor %}</textarea>
+      <p style="font-size:0.75rem; color:var(--grey-500, #64748b); margin:6px 0 10px;">Saving here <strong>replaces the whole {{ title | lower }} list</strong> with exactly what's typed above, in that order. One row per line, "Key: Value" or "Key | Value".</p>
+      <button type="submit" class="btn btn-primary" style="padding:6px 14px; font-size:0.85rem;">Save All {{ title }}</button>
+    </form>
+  </details>
+
+  <table>
+    <thead><tr><th>Item</th><th>Details</th><th></th></tr></thead>
+    <tbody>
+      {% for s in (rows or []) %}
+      <tr>
+        <form method="post" action="/admin/categories/{{ categoryId }}/specs/{{ s.id }}" style="display:contents;">
+          <td><input type="text" name="spec_key" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td style="white-space:nowrap;">
+            <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Save</button>
+            <button type="submit" formaction="/admin/categories/{{ categoryId }}/specs/{{ s.id }}/delete" formnovalidate class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;" onclick="return confirm('Delete this spec row?');">Del</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+      <tr>
+        <form method="post" action="/admin/categories/{{ categoryId }}/specs" style="display:contents;">
+          <input type="hidden" name="spec_type" value="{{ type }}">
+          <td><input type="text" name="spec_key" placeholder="e.g. {{ placeholderKey }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" placeholder="e.g. {{ placeholderValue }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><button type="submit" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;">+ Add</button></td>
+        </form>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endmacro %}
+
+{{ specSection('Building Specifications', 'building', buildingSpecs, 'WALL', "2.5'' RC precast concrete panel", category.id) }}
+{{ specSection('Technical Specifications', 'technical', technicalSpecs, 'Steel Grade', 'ASTM A572 Grade 50', category.id) }}
+
 <form method="post" action="/admin/categories/{{ category.id }}/delete" onsubmit="return confirm('Delete this category?');">
   <button type="submit" class="btn btn-danger">Delete Category</button>
 </form>
