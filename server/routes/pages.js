@@ -285,6 +285,8 @@ for (const [urlPath, meta] of Object.entries(registry)) {
       let pc = {};
       let pageTitle = meta.title;
 
+      let specs = [];
+      let dbProductsByModel = {};
       if (db) {
         try {
           const row = await db('page_content').where({ url_path: urlPath }).first();
@@ -297,9 +299,28 @@ for (const [urlPath, meta] of Object.entries(registry)) {
         } catch (dbErr) {
           // Ignore if table doesn't exist yet or local DB is offline
         }
+        // Dedicated product templates (bh-*, dv-*, lcv-*) loop over `specs`
+        // for their Building Specifications table, and look their own hero
+        // image up in dbProductsByModel - this route is a rare fallback
+        // (LiteSpeed normally serves the pre-baked static file directly,
+        // see liveSiteSync.js's renderProductToHtml for the path that
+        // actually keeps those static files in sync), but should still
+        // render real data rather than an empty table/stale image if it's
+        // ever hit.
+        if (/^\/(bh|dv|lcv)-/.test(urlPath)) {
+          try {
+            const product = await db('products').where({ slug: urlPath.replace(/^\//, '') }).first();
+            if (product) {
+              specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
+              dbProductsByModel[product.model_number] = product;
+            }
+          } catch (specErr) {
+            // Ignore - falls back to an empty specs table/stock image, not a crash
+          }
+        }
       }
 
-      const vars = renderVars({ ...meta, title: pageTitle, pc });
+      const vars = renderVars({ ...meta, title: pageTitle, pc, specs, dbProductsByModel });
 
       res.render(meta.template, vars, (err, html) => {
         if (err) {

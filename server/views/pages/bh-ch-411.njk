@@ -152,7 +152,7 @@
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
 <div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex;">
-<img alt="Model No-BH-CH-411 Exterior View" loading="eager" fetchpriority="high" src="images/products/Model No-BH-CH-411.webp" srcset="images/products/Model%20No-BH-CH-411-400w.webp 400w, images/products/Model%20No-BH-CH-411-700w.webp 700w, images/products/Model%20No-BH-CH-411.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" style="width: 100%; object-fit: cover; display: block;" title="Model No-BH-CH-411 Exterior View" width="1024" height="1024">
+{% set dbp = dbProductsByModel['BH-CH-411'] %}<img alt="Model No-BH-CH-411 Exterior View" loading="eager" fetchpriority="high" src="{{ dbp.main_image if (dbp and dbp.main_image) else 'images/products/Model No-BH-CH-411.webp' }}"{% if dbp and dbp.main_image %}{% else %} srcset="images/products/Model%20No-BH-CH-411-400w.webp 400w, images/products/Model%20No-BH-CH-411-700w.webp 700w, images/products/Model%20No-BH-CH-411.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} style="width: 100%; object-fit: cover; display: block;" title="Model No-BH-CH-411 Exterior View" width="1024" height="1024">
 </div>
 <!-- Right: Details -->
 <div class="reveal-right" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
@@ -279,58 +279,12 @@
       </tr>
     </thead>
     <tbody style="color: var(--grey-800);">
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">FOOTING</td>
-        <td style="padding: 12px 16px;">Precast RC footing &amp; Tie beam with 2200 psi concrete.</td>
+      {% for s in specs %}
+      <tr style="{% if not loop.last %}border-bottom: 1px solid var(--grey-100); {% endif %}{% if loop.index0 % 2 == 1 %}background: var(--off-white);{% endif %}">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;{% if loop.last %} border-bottom-left-radius: 8px;{% endif %}">{{ s.spec_key }}</td>
+        <td style="padding: 12px 16px;{% if loop.last %} border-bottom-right-radius: 8px;{% endif %}">{{ s.spec_value }}</td>
       </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">LIGHT STEEL STRUCTURE</td>
-        <td style="padding: 12px 16px;">Column, rafter, purlin and others member made of MS steel grade SS400, strength 250 Mpa</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">GROUND FLOOR</td>
-        <td style="padding: 12px 16px;">3’’ thickness cement concrete.</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">OUTER WALL</td>
-        <td style="padding: 12px 16px;">2.5’’ thickness RC precast concrete panel</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">INNER WALL</td>
-        <td style="padding: 12px 16px;">2’’ thickness RC precast concrete panel</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">DOOR</td>
-        <td style="padding: 12px 16px;">7’x3.5’ steel frame with wooden shutter</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">TOILET &amp; KITCHEN DOOR</td>
-        <td style="padding: 12px 16px;">7’x2.5’ PVC frame with PVC shutter</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">WINDOW</td>
-        <td style="padding: 12px 16px;">5’x4.5’ Thai frame, Glass shutter with Grill</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">FLOOR FINISHING</td>
-        <td style="padding: 12px 16px;">16''x16'' Tiles</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">PAINT</td>
-        <td style="padding: 12px 16px;">Weather coat and plastic paint</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">ROOF TOP</td>
-        <td style="padding: 12px 16px;">.56mm steel industrial profile sheet</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--grey-100);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark);">BATHROOM FITTING</td>
-        <td style="padding: 12px 16px;">Metal fittings</td>
-      </tr>
-      <tr style="background: var(--off-white);">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); border-bottom-left-radius: 8px;">ELECTRIC WIRING</td>
-        <td style="padding: 12px 16px; border-bottom-right-radius: 8px;">3 bulb, 1 fan point, 3 power sockets in each room. BRB cable is to be used.</td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

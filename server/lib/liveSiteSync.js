@@ -185,7 +185,25 @@ async function renderProductToHtml(slug) {
       dedicatedTheme = {};
       dedicatedThemeCssVars = '';
     }
-    return nunjucksEnv.render(regMeta.template, renderVars(regMeta, { theme: dedicatedTheme, themeCssVars: dedicatedThemeCssVars }));
+    // Dedicated templates' "Building Specifications" table loops over `specs`
+    // (product_specs rows), and their own hero image looks itself up in
+    // dbProductsByModel (same override pattern every OTHER product's card
+    // already used on category pages) - so admin edits to either actually
+    // reach the live page instead of being stuck on whatever was hardcoded
+    // at authoring time.
+    let dedicatedSpecs = [];
+    let dedicatedProductsByModel = {};
+    try {
+      const dedicatedProduct = await db('products').where({ slug: file }).first();
+      if (dedicatedProduct) {
+        dedicatedSpecs = await db('product_specs').where({ product_id: dedicatedProduct.id }).orderBy('sort_order');
+        dedicatedProductsByModel[dedicatedProduct.model_number] = dedicatedProduct;
+      }
+    } catch (e) {
+      dedicatedSpecs = [];
+      dedicatedProductsByModel = {};
+    }
+    return nunjucksEnv.render(regMeta.template, renderVars(regMeta, { specs: dedicatedSpecs, dbProductsByModel: dedicatedProductsByModel, theme: dedicatedTheme, themeCssVars: dedicatedThemeCssVars }));
   }
 
   const product = await db('products').where({ slug: file }).first();
