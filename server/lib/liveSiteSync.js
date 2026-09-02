@@ -205,6 +205,21 @@ async function renderProductToHtml(slug) {
       dedicatedProductsByModel = {};
       dedicatedProduct = null;
     }
+
+    // Category landing pages (apartment-building.html etc.) ALSO have a
+    // registry entry with their own non-generic template, so they match
+    // the branch condition above too - but they're not a product slug, so
+    // dedicatedProduct never resolves. Rendering anyway with empty specs/
+    // dbProductsByModel silently "succeeded" (non-null return), which
+    // meant syncPageToLive() never fell through to renderCategoryToHtml()
+    // at all - every category page's image-sync trigger was a no-op site-
+    // wide. Bail out here instead, so the real category renderer gets a
+    // chance. The 16 orphan product pages (Container House etc., no DB
+    // row either) hit this same null return, which is fine - nothing in
+    // the admin UI can ever target their slug for a sync in the first
+    // place, since no product row exists to edit.
+    if (!dedicatedProduct) return null;
+
     // og:image/twitter:image (layout.njk uses the same `ogImage` var for
     // both) default to whatever was in the registry at authoring time -
     // override with the product's current DB photo when it has one, so a
@@ -385,11 +400,30 @@ async function renderCategoryToHtml(pageFile) {
 async function renderProjectToHtml(pageFile) {
   if (!db) throw new Error('Database connection not available');
 
-  const meta = registry['/' + pageFile];
-  if (!meta || !meta.template) return null;
+  const file = pageFile.endsWith('.html') ? pageFile : `${pageFile}.html`;
+  const baseName = file.replace(/\.html$/, '');
+  const templatePath = `pages/${baseName}.njk`;
+  const templateFullPath = path.join(__dirname, '..', 'views', templatePath);
 
-  const project = await db('projects').where({ slug: pageFile }).first();
+  if (!fs.existsSync(templateFullPath)) return null;
+
+  const project = await db('projects').where({ slug: file }).first();
   if (!project) return null; // not actually a project page - let the caller try something else
+
+  let meta = registry['/' + file];
+  if (!meta) {
+    meta = {
+      title: `${project.title} — Bongshai Housing Ltd.`,
+      description: project.description ? project.description.replace(/<[^>]+>/g, '').slice(0, 160) : `Completed steel building project in ${project.title} by Bongshai Housing Ltd.`,
+      canonical: `https://bongshaihousing.com/${file}`,
+      ogTitle: `${project.title} — Bongshai Housing`,
+      ogDescription: project.description ? project.description.replace(/<[^>]+>/g, '').slice(0, 160) : '',
+      ogImage: project.image || 'images/logo.png',
+      template: templatePath
+    };
+  } else if (!meta.template) {
+    meta.template = templatePath;
+  }
 
   let theme = {};
   let themeCssVars = '';
