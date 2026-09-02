@@ -18,6 +18,18 @@ const DEFAULT_SETTINGS = {
   payout_min_amount: '5000',
   whatsapp_share_template:
     'বংশাই হাউজিং-এর প্রি-ফেব স্টিল ডুপ্লেক্স ও ইন্ডাস্ট্রিয়াল শেড সম্পর্কে বিস্তারিত জানতে এবং স্পেশাল ডিসকাউন্টে বুকিং করতে নিচের লিংকে ভিজিট করুন:\n{{referral_link}}\n\nঅথবা সরাসরি যোগাযোগ করুন: {{phone}}',
+  // Agent dashboard's "Pricing Cheat-Sheet" - the same rule as every other
+  // business number here: the user sets the real figures from the admin
+  // settings page, nothing is hardcoded in the template itself.
+  pricing_band_1_label: 'Residential Duplex / Villa',
+  pricing_band_1_range: '৳ 2,400 – ৳ 3,500+ / sq.ft',
+  pricing_band_1_desc: '45-60 days installation, seismic resistant, modern architectural finish.',
+  pricing_band_2_label: 'Prefab Simplex / Cottage',
+  pricing_band_2_range: '৳ 1,400 – ৳ 2,400 / sq.ft',
+  pricing_band_2_desc: 'Budget friendly, ideal for rural homes, farmhouses, or rooftop extensions.',
+  pricing_band_3_label: 'Industrial PEB Factory Shed',
+  pricing_band_3_range: '৳ 850 – ৳ 1,600 / sq.ft',
+  pricing_band_3_desc: 'Clear-span up to 60m, heavy ASTM A572 steel, high-volume project commissions.',
 };
 
 async function getAgentSettings(database = db) {
