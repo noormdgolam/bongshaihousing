@@ -75,7 +75,7 @@ async function runPriceVerification() {
   // 1. Get BH-DV-202 from DB
   const conn = await mysql.createConnection({
     host: 'bongshaihousing.com',
-    user: 'abongsha_housin',
+    user: 'abongsha_bongshai_prod',
     password: process.env.DB_PASSWORD,
     database: 'abongsha_bongshai_prod'
   });

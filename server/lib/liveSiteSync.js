@@ -375,6 +375,36 @@ async function renderCategoryToHtml(pageFile) {
 }
 
 /**
+ * Directly renders a project detail page (project-bodorgonj-rangpur.html
+ * etc.) to HTML string using Nunjucks & DB. Same shape as renderProductToHtml's
+ * dedicated-template branch: each project has its own hand-authored .njk
+ * template with a hardcoded description/image, but /admin/projects/:id has
+ * a working edit form with no live-sync path at all until this - editing a
+ * project updated the DB row and nothing else.
+ */
+async function renderProjectToHtml(pageFile) {
+  if (!db) throw new Error('Database connection not available');
+
+  const meta = registry['/' + pageFile];
+  if (!meta || !meta.template) return null;
+
+  const project = await db('projects').where({ slug: pageFile }).first();
+  if (!project) return null; // not actually a project page - let the caller try something else
+
+  let theme = {};
+  let themeCssVars = '';
+  try {
+    theme = await getThemeSettings();
+    themeCssVars = generateCssVariables(theme);
+  } catch (e) {
+    theme = {};
+    themeCssVars = '';
+  }
+
+  return nunjucksEnv.render(meta.template, renderVars(meta, { project, theme, themeCssVars }));
+}
+
+/**
  * Regenerates and writes the static HTML file directly to DOCROOT
  */
 async function syncPageToLive(slug) {
@@ -396,6 +426,13 @@ async function syncPageToLive(slug) {
         html = await renderCategoryToHtml(file);
       } catch (renderErr) {
         console.warn(`[liveSiteSync] In-process category render missed for ${file}:`, renderErr.message);
+      }
+    }
+    if (!html) {
+      try {
+        html = await renderProjectToHtml(file);
+      } catch (renderErr) {
+        console.warn(`[liveSiteSync] In-process project render missed for ${file}:`, renderErr.message);
       }
     }
 
@@ -428,4 +465,4 @@ async function syncPageToLive(slug) {
   }
 }
 
-module.exports = { syncPageToLive, renderProductToHtml, renderCategoryToHtml };
+module.exports = { syncPageToLive, renderProductToHtml, renderCategoryToHtml, renderProjectToHtml };

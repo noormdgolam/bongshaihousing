@@ -1781,6 +1781,13 @@ router.post('/admin/projects/:id', upload.single('image_file'), async (req, res)
     sort_order: sort_order || 0,
     updated_at: db.fn.now(),
   });
+
+  setImmediate(() => {
+    invalidatePageCache();
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    if (slug) syncPageToLive(slug);
+  });
+
   res.redirect(`/admin/projects/${req.params.id}/edit`);
 });
 
