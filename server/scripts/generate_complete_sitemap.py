@@ -96,10 +96,12 @@ def build_sitemap():
             priority, changefreq = PAGE_CONFIGS.get(o, ('0.6', 'monthly'))
             entries.append(get_url_entry(o, priority, changefreq))
 
-    # 7. Agent & Portal Pages
-    for portal in ['agent/signup.html', 'agent/login.html', 'my-project/login.html']:
-        priority, changefreq = PAGE_CONFIGS.get(portal, ('0.5', 'monthly'))
-        entries.append(get_url_entry(portal, priority, changefreq))
+    # 7. Agent signup only - a real acquisition page. login.html for both agent
+    # and customer portals are noindex,nofollow at the template level
+    # (agent-layout.njk / customer-layout.njk) since they're dead-end utility
+    # pages with no content value - listing a noindexed page in the sitemap
+    # sends crawlers a contradictory signal, so they're deliberately excluded here.
+    entries.append(get_url_entry('agent/signup.html', *PAGE_CONFIGS.get('agent/signup.html', ('0.7', 'monthly'))))
 
     # Deduplicate while preserving order
     seen_locs = set()

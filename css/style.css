@@ -2079,8 +2079,8 @@ textarea.form-control {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: var(--space-12);
+  grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr;
+  gap: var(--space-10);
   padding-bottom: var(--space-12);
 }
 
@@ -2175,13 +2175,25 @@ textarea.form-control {
 }
 
 .footer-col-title {
+  position: relative;
   font-size: var(--fs-sm);
   font-weight: 700;
   color: #ffffff;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
   font-family: var(--font-body);
+}
+
+.footer-col-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 2px;
+  background: var(--accent);
 }
 
 .footer-links {
@@ -2219,9 +2231,22 @@ textarea.form-control {
 .footer-link-accent {
   color: var(--accent-light);
   font-weight: 700;
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.footer-link-accent::before { content: '' !important; opacity: 0 !important; }
+
+.footer-link-accent::after {
+  content: '→';
+  font-size: var(--fs-xs);
+  margin-left: auto;
+  transition: var(--transition-fast);
 }
 
 .footer-link-accent:hover { color: #ffffff; }
+.footer-link-accent:hover::after { transform: translateX(4px); }
 
 .footer-contact-items {
   display: flex;
