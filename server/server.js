@@ -83,7 +83,19 @@ app.use((req, res, next) => {
 // static assets (see .htaccess) - these cover the routes Node actually
 // serves (dynamic pages once they exist, and the form/counter APIs).
 app.use(helmet({
-  contentSecurityPolicy: false, // site relies on inline scripts/styles extensively; revisit once a CSP is designed on purpose
+  contentSecurityPolicy: {
+    reportOnly: true,
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: ["'self'", "data:", "blob:", "https:"],
+      frameSrc: ["'self'", "https://www.google.com", "https://maps.google.com", "https://www.youtube.com", "https://youtube.com"],
+      connectSrc: ["'self'", "https:"]
+    }
+  }
 }));
 app.use(compression());
 
