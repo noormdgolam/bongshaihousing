@@ -50,6 +50,6 @@ Locations
 
 ## Areas We Serve
 
-Bongshai Housing proudly operates across all 64 districts and thanas in Bangladesh, delivering premium steel buildings and real estate solutions nationwide.
+Bongshai Housing proudly operates nationwide across Bangladesh, delivering premium steel buildings and real estate solutions nationwide.
 
 💬

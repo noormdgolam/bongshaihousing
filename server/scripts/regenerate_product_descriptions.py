@@ -114,14 +114,14 @@ def closer(kind, f):
     else:
         money = 'Priced on request'
     if kind == '2':
-        return f'{money}, steel-composite framing delivered to all 64 districts.'
+        return f'{money}, steel-composite framing, delivered nationwide.'
     if kind == '3':
         return f"{money}, anti-rust galvanized steel built for Bangladesh's climate."
     return f'{money}, pre-engineered steel for fast, durable assembly nationwide.'
 
 
 SHORT = {'1': ' pre-engineered steel, built fast nationwide.',
-         '2': ' steel-composite framing, all 64 districts.',
+         '2': ' steel-composite framing, nationwide.',
          '3': " galvanized steel for Bangladesh's climate."}
 
 

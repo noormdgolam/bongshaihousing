@@ -19,7 +19,7 @@ COMPANY PROFILE:
 - Headquarters: House #18, Road #18, Sector #10, Uttara, Dhaka-1230, Bangladesh.
 - Hotlines / WhatsApp: +880 1781-636613, +880 1714-104940
 - Email: sales@bongshai.com
-- Experience: Engineering excellence since 2008 (18+ years in Bangladesh), 500+ completed projects nationwide, service coverage across all 64 districts.
+- Experience: Engineering excellence since 2008 (18+ years in Bangladesh), 100+ completed projects nationwide, nationwide service coverage.
 
 CORE ADVANTAGES OVER TRADITIONAL RCC:
 1. Speed: Full construction in 45-60 days (vs 12-18 months for conventional brick/RCC).

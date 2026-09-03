@@ -25,7 +25,7 @@ Welcome! This file provides guidelines and context for autonomous agents interac
 ## 5. AI Architecture & Sales Assistant Guidelines
 - **No Local LLMs on Shared Hosting:** Due to CloudLinux memory limits (~512MB RAM) on cPanel shared hosting, do not attempt to run heavy local LLMs (e.g. Ollama, PyTorch, llama.cpp) or multi-tier Python microservices.
 - **Node.js + Groq/Cloud API Stack:** Implement AI features directly inside the Express server (`server/routes/ai-chat.js` and `server/lib/ai-assistant.js`) calling fast, low-latency APIs (such as Groq LPU `llama-3.3-70b-versatile`) with dynamic product context queried from MySQL.
-- **Sales Conversion Mandate:** Every AI response must provide direct, concise answers (<45 words), give realistic price estimates in BDT per sq.ft., recommend specific building models (e.g., BH-SB, BH-CB, LCV, PEB factory sheds), and provide an actionable call-to-action (direct WhatsApp link `+8801711200241` or quote request button) to convert visitors into booked consultations.
+- **Sales Conversion Mandate:** Every AI response must provide direct, concise answers (<45 words), give realistic price estimates in BDT per sq.ft., recommend specific building models (e.g., BH-SB, BH-CB, LCV, PEB factory sheds), and provide an actionable call-to-action (direct WhatsApp link `+8801781636613` or quote request button) to convert visitors into booked consultations.
 
 ## 6. Migration Priority Order
 - **Content First:** Customer-facing content, dynamic catalog pages, pricing calculators, and lead capture tools always take precedence over back-office admin tooling.

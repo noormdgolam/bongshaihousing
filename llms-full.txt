@@ -6,9 +6,9 @@
 
 ## Company Overview
 
-Bongshai Housing Ltd. is Bangladesh's leading pre-engineered steel building (PEB) manufacturer and EPC (Engineering, Procurement, Construction) contractor. The company is headquartered at House #18, Road #18, Sector #10, Uttara, Dhaka 1230, Bangladesh. Bongshai Housing serves all 64 districts of Bangladesh, with dedicated project teams in Dhaka, Chattogram, and Cumilla.
+Bongshai Housing Ltd. is Bangladesh's leading pre-engineered steel building (PEB) manufacturer and EPC (Engineering, Procurement, Construction) contractor. The company is headquartered at House #18, Road #18, Sector #10, Uttara, Dhaka 1230, Bangladesh. Bongshai Housing serves customers nationwide across Bangladesh, with dedicated project teams in Dhaka, Chattogram, and Cumilla.
 
-The company was founded in 2008, has delivered 500+ completed projects, employs 200+ engineering and construction professionals, and holds a 98% client satisfaction rate.
+The company was founded in 2008, has delivered 100+ completed projects, employs 175+ engineering and construction professionals, and holds a 99% client satisfaction rate.
 
 **Contact**: Phone +880 1781-636613, WhatsApp +880 1781-636613, Email sales@bongshai.com  
 **Hours**: Saturday–Thursday, 9:00 AM–7:00 PM (Friday closed)  
@@ -32,8 +32,8 @@ To deliver world-class, affordable, and innovative housing solutions across Bang
 
 ## Certifications
 
-- ISO 9001:2015 Quality Management System (certified)
-- OHSAS 18001 / ISO 45001 Occupational Health & Safety Standards (certified)
+- BNBC 2020 & AISC structural design code compliance
+- Occupational Health & Safety practices enforced on every construction site
 - In-house Material Testing Laboratory — all steel, concrete, and panel components tested before use
 - BNBC 2020 compliance — Bangladesh National Building Code seismic and wind-load standards
 
@@ -124,7 +124,7 @@ Reference: Bangladesh National Building Code (BNBC 2020) classifies Chattogram a
 
 ## Service Areas
 
-Bongshai Housing serves all 64 districts of Bangladesh across all 8 administrative divisions:
+Bongshai Housing serves customers nationwide across all 8 administrative divisions of Bangladesh:
 
 - **Dhaka Division** — Dhaka (Uttara, Gulshan, Mirpur, Dhanmondi), Gazipur, Narayanganj, Narsingdi, Manikganj, Tangail, Faridpur, Madaripur, Gopalganj, Munshiganj, Rajbari, Shariatpur
 - **Chattogram Division** — Chattogram (Chittagong), Cumilla (Comilla), Cox's Bazar, Brahmanbariya, Chandpur, Lakshmipur, Noakhali, Feni, Khagrachhori, Rangamati, Bandarban
@@ -179,7 +179,7 @@ Dedicated project offices: Dhaka (HQ), Chattogram, Cumilla.
 Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building (PEB) company and EPC contractor with 20+ years of experience, delivering prefab housing, industrial sheds, and turnkey construction projects from its office in Uttara, Dhaka.
 
 **Q: What areas does Bongshai Housing serve?**
-All 64 districts of Bangladesh. Dedicated project teams in Dhaka, Chattogram, and Cumilla.
+Nationwide across Bangladesh. Dedicated project teams in Dhaka, Chattogram, and Cumilla.
 
 **Q: How much does a prefab steel building cost in Bangladesh?**
 Industrial Sheds: Tk 900–950/sqft. Tiny/Wooden Houses: Tk 1,500/sqft. Cottage Houses: Tk 2,200/sqft. Apartment, Duplex, Simplex, Steel House, Concrete Building: Tk 2,500–2,750/sqft. Container Houses: Tk 3,000/sqft.
@@ -194,7 +194,7 @@ Yes. Grade 50 high-tensile steel provides high ductility and seismic resilience 
 For low-rise homes, steel-composite is 10–30% less expensive than RCC due to lower labor, no formwork, and shorter build time.
 
 **Q: What certifications does Bongshai Housing hold?**
-ISO 9001:2015 (Quality Management), OHSAS 18001 / ISO 45001 (Safety), in-house material testing laboratory.
+BNBC 2020 (Bangladesh National Building Code) and AISC structural design codes, with quality-control checks at every build stage.
 
 **Q: What is a pre-engineered steel building?**
 A PEB is designed and fabricated off-site to precise specifications, then assembled on your land — faster construction, tighter quality control, lower material waste vs. conventional on-site construction.

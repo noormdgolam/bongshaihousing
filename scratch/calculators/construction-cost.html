@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  BONGSHAI HOUSING — বাড়ি নির্মাণ খরচ ক্যালকুলেটর (২০২৬)
+  Prototype File: scratch/calculators/construction-cost.html
+  Language: Bengali (বাংলা) | Mobile-First Lightweight Architecture
+
+  RATE SOURCES & BENCHMARKS (Bangladesh 2026 Market Data):
+  1. Public Works Department (PWD), Government of Bangladesh — Schedule of Rates 2024-2026.
+  2. National Building Material Survey (Dhaka & Major Divisions, Q1-Q3 2026):
+     - 500W Deformed Rebar (BSRM, AKS, KSRM): ~৳92,000 - ৳98,000 per metric ton.
+     - Portland Composite Cement (PCC - Shah, Holcim, Bashundhara): ~৳530 - ৳580 per 50kg bag.
+     - Ordinary Portland Cement (OPC): ~৳560 - ৳620 per 50kg bag.
+     - 1st Class Auto/Clay Bricks: ~৳12 - ৳14 per piece; Concrete Blocks: ~৳45 - ৳65/pc.
+     - Sylhet Coarse Sand (FM 2.5): ~৳45 - ৳60 per cft; Local Sand (FM 1.2-1.5): ~৳25 - ৳35/cft.
+     - Mason Wage: ~৳800 - ৳1,000/day; Helper: ~৳600 - ৳750/day.
+  3. Real Estate & Architectural Cost Surveys (Nakshadhara, Level 7 Architects, Green Architect BD 2026):
+     - Single-story residential (Simple finish): ~৳1,850 - ৳2,200/sft
+     - Multi-story residential (Standard finish): ~৳2,400 - ৳2,850/sft
+     - Premium/Luxury finish: ~৳3,200 - ৳4,200+/sft
+  4. Cost Component Distribution:
+     - Grey Structure (Piling, Footing, Columns, Beams, Slabs, Masonry): ~60%
+     - Finishing Works (Plaster, Tiles, Paint, Doors, Windows, Grills): ~28%
+     - MEP Works (Electrical Wiring & Plumbing / Sanitary Fittings): ~12%
+  5. Actual Bongshai Housing Fixed-Price Models:
+     - Embedded complete database of 113 production models across all area tiers (240 to 2500+ sq.ft.).
+  ==========================================================================
+-->
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>বাড়ি নির্মাণ খরচ ক্যালকুলেটর ২০২৬ | সঠিক খরচের হিসাব | বংশাই হাউজিং</title>
+  <meta name="description" content="২০২৬ সালের বাজারদর অনুযায়ী বাড়ি নির্মাণ খরচের সঠিক ও পূর্ণাঙ্গ হিসাব। প্রতি স্কয়ার ফিট খরচ, তলা ভিত্তিক বাজেট এবং বংশাই হাউজিং-এর ১১২+ রেডিমেড মডেলের ফিক্সড প্রাইস তুলনা।">
+  <meta name="author" content="বংশাই হাউজিং সিভিল ইঞ্জিনিয়ারিং টিম">
+
+  <!-- Google Fonts: Hind Siliguri (Bengali) + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FAQ Schema for AEO / AI Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "২০২৬ সালে বাংলাদেশে বাড়ি তৈরিতে প্রতি স্কয়ার ফিটে কত খরচ হয়?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "২০২৬ সালের বর্তমান বাজারদর অনুযায়ী সাধারণ ফিনিশিংয়ে বাড়ি তৈরিতে প্রতি স্কয়ার ফিটে প্রায় ১,৯০০ থেকে ২,২০০ টাকা, মানসম্মত স্ট্যান্ডার্ড ফিনিশিংয়ে ২,৪০০ থেকে ২,৮৫০ টাকা এবং উন্নত লাক্সারি ফিনিশিংয়ে ৩,২০০ থেকে ৪,২০০ টাকা পর্যন্ত খরচ হয়।"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "বাড়ি তৈরির খরচের প্রধান খাতগুলো কীভাবে ভাগ করা থাকে?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "সাধারণত মোট ব্যয়ের প্রায় ৬০% খরচ হয় রড, সিমেন্ট, ইট, বালু ও ফাউন্ডেশনের কাঠামো (গ্রে স্ট্রাকচার) তৈরিতে, প্রায় ২৮% খরচ হয় ফিনিশিং কাজে (টাইলস, প্লাস্টার, রং, দরজা-জানালা) এবং প্রায় ১২% খরচ হয় ইলেকট্রিক্যাল ও স্যানিটারি ফিটিংসে।"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "ঐতিহ্যবাহী বাড়ি নির্মাণ বনাম বংশাই হাউজিং-এর নির্দিষ্ট প্যাকেজের সুবিধা কী?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "সনাতন পদ্ধতিতে বাড়ি তৈরিতে সময় ও বাজেট অনেক ক্ষেত্রে ২০% থেকে ৪০% বৃদ্ধি পায়। বংশাই হাউজিং-এর রেডিমেড মডেলে নির্দিষ্ট চুক্তিমূল্যে মাত্র ৩০ থেকে ৬০ দিনের মধ্যে সম্পূর্ণ বাড়ি প্রস্তুত পাওয়া যায়।"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — Matching Bongshai Housing Brand Palette
+       ============================================================ */
+    :root {
+      --bg-navy: #0f172a;        /* Deep Slate Navy (Brand Dark) */
+      --card-navy: #1e293b;      /* Slate Card Background */
+      --card-hover: #27354a;     /* Interactive Hover State */
+      --card-border: rgba(255, 255, 255, 0.09);
+      --card-border-gold: rgba(253, 224, 71, 0.35);
+
+      --gold-accent: #FDE047;    /* Light Gold / Bright Yellow Accent */
+      --gold-primary: #EAB308;   /* Brand Gold */
+      --gold-dark: #CA8A04;      /* Deep Gold */
+      --gold-glow: rgba(253, 224, 71, 0.22);
+
+      --blue-accent: #38bdf8;    /* Secondary Tech Blue */
+      --green-success: #10b981;  /* Success Emerald */
+
+      --text-white: #ffffff;
+      --text-light: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --font-main: 'Hind Siliguri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.35);
+      --shadow-gold: 0 10px 28px rgba(234, 179, 8, 0.28);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-navy);
+      color: var(--text-light);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Top Brand Bar */
+    .brand-topbar {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-topbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+    .brand-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--gold-accent) 0%, var(--gold-primary) 100%);
+      color: var(--bg-navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(253, 224, 71, 0.35);
+    }
+    .brand-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-logo-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--gold-accent);
+      line-height: 1.2;
+    }
+    .brand-logo-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .brand-hotline-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(253, 224, 71, 0.12);
+      border: 1px solid rgba(253, 224, 71, 0.3);
+      color: var(--gold-accent);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .brand-hotline-btn:hover {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      transform: translateY(-1px);
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    /* Hero & Answer-First Section */
+    .hero-box {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--blue-accent);
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: clamp(1.6rem, 4.5vw, 2.3rem);
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .hero-title span {
+      color: var(--gold-accent);
+      display: inline-block;
+    }
+
+    /* AEO Direct Answer Block (< 45 words) */
+    .answer-first-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      border: 1px solid var(--card-border-gold);
+      border-left: 4px solid var(--gold-accent);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      text-align: left;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .answer-first-card p {
+      font-size: 1rem;
+      color: #e2e8f0;
+      line-height: 1.65;
+    }
+    .answer-first-card strong {
+      color: var(--gold-accent);
+    }
+    .trust-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px dashed rgba(255,255,255,0.08);
+      padding-top: 8px;
+    }
+
+    /* Calculator Main Card */
+    .calc-card {
+      background: var(--card-navy);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+    .form-label-hint {
+      font-size: 0.8rem;
+      color: var(--gold-accent);
+      font-weight: 400;
+    }
+
+    /* Numeric Inputs */
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .calc-input {
+      width: 100%;
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-family: var(--font-main);
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding: 12px 80px 12px 16px;
+      outline: none;
+      transition: all 0.2s ease;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .calc-input::-webkit-outer-spin-button,
+    .calc-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .calc-input:focus {
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    .input-unit {
+      position: absolute;
+      right: 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Quick Preset Chips */
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 0.84rem;
+      font-family: var(--font-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .preset-chip:hover {
+      background: rgba(253, 224, 71, 0.15);
+      color: var(--gold-accent);
+      border-color: var(--gold-accent);
+    }
+    .preset-chip.active {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-weight: 700;
+      border-color: var(--gold-accent);
+    }
+
+    /* Floor Selector Buttons */
+    .floor-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .floor-btn {
+      background: #090d16;
+      border: 1.5px solid #334155;
+      color: var(--text-light);
+      border-radius: var(--radius-md);
+      padding: 12px 6px;
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .floor-btn:hover {
+      border-color: var(--gold-accent);
+      color: var(--gold-accent);
+    }
+    .floor-btn.active {
+      background: linear-gradient(135deg, rgba(253, 224, 71, 0.2) 0%, rgba(234, 179, 8, 0.15) 100%);
+      border-color: var(--gold-accent);
+      color: var(--gold-accent);
+      box-shadow: 0 0 16px var(--gold-glow);
+    }
+
+    /* Finish Level Cards */
+    .finish-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .finish-card {
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .finish-card:hover {
+      border-color: rgba(253, 224, 71, 0.5);
+    }
+    .finish-card.active {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 18px var(--gold-glow);
+    }
+    .finish-badge-rec {
+      position: absolute;
+      top: -10px;
+      right: 8px;
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .finish-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+    .finish-card.active .finish-title {
+      color: var(--gold-accent);
+    }
+    .finish-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .finish-rate-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--blue-accent);
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-top: 6px;
+    }
+
+    /* Result Showcase Box */
+    .result-showcase {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 1.5px solid var(--gold-accent);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      margin-top: 26px;
+      position: relative;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    }
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 12px;
+    }
+    .result-grid-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .result-summary-item .label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .result-summary-item .value {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-white);
+    }
+
+    .result-total-box {
+      text-align: center;
+      margin: 10px 0 20px;
+    }
+    .result-total-label {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .result-total-taka {
+      font-size: clamp(1.9rem, 6vw, 2.7rem);
+      font-weight: 800;
+      color: var(--gold-accent);
+      line-height: 1.2;
+      text-shadow: 0 0 24px rgba(253, 224, 71, 0.3);
+    }
+    .result-total-lakh {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    .result-total-range {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Breakdown Bars */
+    .breakdown-section {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .breakdown-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 12px;
+    }
+    .breakdown-item {
+      margin-bottom: 12px;
+    }
+    .breakdown-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      margin-bottom: 4px;
+    }
+    .breakdown-meta .b-name {
+      color: var(--text-light);
+    }
+    .breakdown-meta .b-amt {
+      color: var(--gold-accent);
+      font-weight: 600;
+    }
+    .breakdown-bar-bg {
+      height: 7px;
+      background: #090d16;
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .breakdown-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-full);
+      transition: width 0.4s ease;
+    }
+    .fill-struct { background: linear-gradient(90deg, #38bdf8, #2563eb); }
+    .fill-finish { background: linear-gradient(90deg, #fde047, #eab308); }
+    .fill-mep { background: linear-gradient(90deg, #34d399, #059669); }
+
+    /* ============================================================
+       BONGSHAI HOUSING FIXED-PRICE MODELS SECTION (ALL 113 MODELS)
+       ============================================================ */
+    .comparison-section {
+      margin-top: 40px;
+      margin-bottom: 36px;
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+    }
+    .section-head {
+      margin-bottom: 18px;
+    }
+    .section-head h2 {
+      font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .section-head p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Matched Area Banner */
+    .matched-banner {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);
+      border: 1px solid rgba(253, 224, 71, 0.35);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .matched-banner-text {
+      font-size: 0.92rem;
+      color: var(--text-light);
+    }
+    .matched-banner-text strong {
+      color: var(--gold-accent);
+    }
+    .matched-count-pill {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Area Tier Tabs */
+    .area-tier-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tier-tab-btn {
+      background: #090d16;
+      border: 1px solid #334155;
+      color: var(--text-muted);
+      border-radius: var(--radius-full);
+      padding: 7px 15px;
+      font-family: var(--font-main);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tier-tab-btn:hover {
+      border-color: var(--gold-accent);
+      color: var(--gold-accent);
+    }
+    .tier-tab-btn.active {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-weight: 700;
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 14px var(--gold-glow);
+    }
+
+    /* Controls Bar: Category Filter & Search */
+    .models-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .models-select {
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-family: var(--font-main);
+      font-size: 0.86rem;
+      padding: 8px 12px;
+      outline: none;
+      flex: 1;
+      min-width: 180px;
+    }
+    .models-select:focus {
+      border-color: var(--gold-accent);
+    }
+    .models-select option {
+      background: #1e293b;
+      color: #fff;
+    }
+    .models-search {
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-family: var(--font-main);
+      font-size: 0.86rem;
+      padding: 8px 12px;
+      outline: none;
+      flex: 1;
+      min-width: 180px;
+    }
+    .models-search:focus {
+      border-color: var(--gold-accent);
+    }
+
+    /* Models Cards Grid */
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .model-card {
+      background: #0d1527;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .model-card:hover {
+      border-color: var(--gold-accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .model-card.matched {
+      border-color: rgba(253, 224, 71, 0.4);
+      background: linear-gradient(160deg, #131c31 0%, #0d1527 100%);
+    }
+    .model-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .model-number {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--gold-accent);
+      letter-spacing: 0.02em;
+    }
+    .model-category-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--blue-accent);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .model-area-line {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+    .model-rooms {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Fixed Price Banner in Model */
+    .model-price-box {
+      background: #080c14;
+      border-radius: var(--radius-sm);
+      padding: 10px 10px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .model-price-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .model-price-val {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--gold-accent);
+      line-height: 1.2;
+    }
+    .model-rate-info {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Comparison Difference Badge */
+    .model-savings-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--green-success);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 6px;
+      padding: 4px 8px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .model-delivery {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .model-select-btn {
+      width: 100%;
+      background: rgba(253, 224, 71, 0.12);
+      border: 1.5px solid rgba(253, 224, 71, 0.35);
+      color: var(--gold-accent);
+      border-radius: var(--radius-sm);
+      padding: 9px 10px;
+      font-size: 0.84rem;
+      font-family: var(--font-main);
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: block;
+    }
+    .model-select-btn:hover {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      box-shadow: 0 4px 14px rgba(253, 224, 71, 0.35);
+    }
+
+    /* Show More Button */
+    .show-more-wrap {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .show-more-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-white);
+      border-radius: var(--radius-full);
+      padding: 10px 24px;
+      font-family: var(--font-main);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .show-more-btn:hover {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-weight: 700;
+      border-color: var(--gold-accent);
+    }
+
+    /* Lead Capture Block */
+    .lead-block {
+      background: linear-gradient(150deg, #1e293b 0%, #0d1527 100%);
+      border: 1.5px solid rgba(253, 224, 71, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 26px 20px;
+      margin-top: 36px;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.4);
+    }
+    .lead-head {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .lead-head h3 {
+      font-size: clamp(1.2rem, 3.5vw, 1.45rem);
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 6px;
+    }
+    .lead-head p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .lead-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-full {
+      grid-column: 1 / -1;
+    }
+    .lead-input, .lead-select {
+      width: 100%;
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .lead-input:focus, .lead-select:focus {
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    .lead-select option {
+      background: #1e293b;
+      color: #fff;
+    }
+
+    /* CTA WhatsApp Button */
+    .whatsapp-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 14px 20px;
+      font-family: var(--font-main);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+      transition: all 0.25s ease;
+      margin-top: 16px;
+    }
+    .whatsapp-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45);
+    }
+    .whatsapp-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 30px;
+    }
+    .faq-item {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .faq-item h3 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    /* Footer / Disclaimer */
+    .footer-note {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 768px) {
+      .models-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+    }
+    @media (max-width: 640px) {
+      .main-wrapper {
+        padding: 16px 12px 50px;
+      }
+      .hero-title {
+        font-size: 1.55rem;
+      }
+      .calc-card, .comparison-section {
+        padding: 18px 14px;
+      }
+      .finish-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .models-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .lead-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .floor-grid {
+        gap: 6px;
+      }
+      .floor-btn {
+        padding: 10px 4px;
+        font-size: 0.85rem;
+      }
+      .result-grid-summary {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .brand-hotline-btn span {
+        display: none;
+      }
+      .area-tier-tabs {
+        gap: 6px;
+      }
+      .tier-tab-btn {
+        padding: 5px 11px;
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="brand-topbar">
+    <div class="brand-topbar-inner">
+      <a href="https://bongshaihousing.com/" class="brand-logo" title="বংশাই হাউজিং হোমপেজ">
+        <div class="brand-logo-icon">ব</div>
+        <div class="brand-logo-text">
+          <span class="brand-logo-title">বংশাই হাউজিং</span>
+          <span class="brand-logo-sub">Bongshai Housing Ltd.</span>
+        </div>
+      </a>
+      <a href="tel:+8801781636613" class="brand-hotline-btn">
+        📞 <span>হটলাইন:</span> ০১৭৮১-৬৩৬৬১৩
+      </a>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    <!-- Hero / Header -->
+    <div class="hero-box">
+      <div class="trust-badge">
+        🏗️ ২০২৬ সালের বর্তমান বাজারদর ভিত্তিক এস্টিমেশন
+      </div>
+      <h1 class="hero-title">বাড়ি নির্মাণ খরচ ক্যালকুলেটর <span>২০২৬</span></h1>
+    </div>
+
+    <!-- AEO Direct Answer Block (< 45 words) -->
+    <section class="answer-first-card" aria-label="সংক্ষিপ্ত উত্তর">
+      <p>
+        ২০২৬ সালে বাংলাদেশে সাধারণ ফিনিশিংয়ে বাড়ি তৈরিতে প্রতি স্কয়ার ফিটে গড়ে <strong>১,৯০০ থেকে ২,২০০ টাকা</strong>, স্ট্যান্ডার্ড মানে <strong>২,৪০০ থেকে ২,৮৫০ টাকা</strong> এবং আধুনিক প্রিমিয়াম ফিনিশিংয়ে <strong>৩,২০০ থেকে ৪,২০০ টাকা</strong> পর্যন্ত খরচ হয়।
+      </p>
+      <div class="trust-meta">
+        <span>✍️ প্রস্তুতকারক: বংশাই হাউজিং স্ট্রাকচারাল টিম</span>
+        <span>📅 তথ্যসূত্র: পিডব্লিউডি রেট ও ২০২৬ বাজারদর</span>
+        <span>📍 কভারেজ: ৬৪ জেলা</span>
+      </div>
+    </section>
+
+    <!-- Main Calculator Form & Logic -->
+    <section class="calc-card" data-mcp-action="calculate-construction-cost">
+      
+      <!-- Input 1: Floor Area -->
+      <div class="form-group">
+        <label class="form-label" for="floorAreaInput">
+          <span>১. প্রতি তলার আয়তন (স্কয়ার ফিট)</span>
+          <span class="form-label-hint">কমপক্ষে ২০০ স্কয়ার ফিট</span>
+        </label>
+        <div class="input-wrapper">
+          <input 
+            type="number" 
+            id="floorAreaInput" 
+            class="calc-input" 
+            value="1000" 
+            min="200" 
+            max="15000" 
+            step="50"
+            data-mcp-param="floorArea"
+          >
+          <span class="input-unit">Sq. Ft.</span>
+        </div>
+        <!-- Quick Preset Chips -->
+        <div class="preset-chips" id="areaChips">
+          <button type="button" class="preset-chip" data-val="400">৪০০ sft</button>
+          <button type="button" class="preset-chip" data-val="600">৬০০ sft</button>
+          <button type="button" class="preset-chip" data-val="800">৮০০ sft</button>
+          <button type="button" class="preset-chip active" data-val="1000">১,০০০ sft</button>
+          <button type="button" class="preset-chip" data-val="1200">১,২০০ sft</button>
+          <button type="button" class="preset-chip" data-val="1600">১,৬০০ sft</button>
+          <button type="button" class="preset-chip" data-val="2000">২,০০০ sft</button>
+        </div>
+      </div>
+
+      <!-- Input 2: Number of Floors -->
+      <div class="form-group">
+        <label class="form-label">
+          <span>২. ভবনের তলা সংখ্যা</span>
+          <span class="form-label-hint" id="totalBuiltAreaHint">মোট এরিয়া: ২,০০০ sft</span>
+        </label>
+        <div class="floor-grid" id="floorsSelector" data-mcp-param="floors">
+          <button type="button" class="floor-btn" data-floors="1">১ তলা</button>
+          <button type="button" class="floor-btn active" data-floors="2">২ তলা</button>
+          <button type="button" class="floor-btn" data-floors="3">৩ তলা</button>
+          <button type="button" class="floor-btn" data-floors="4">৪ তলা</button>
+          <button type="button" class="floor-btn" data-floors="5">৫ তলা</button>
+        </div>
+      </div>
+
+      <!-- Input 3: Finish Quality -->
+      <div class="form-group">
+        <label class="form-label">
+          <span>৩. ফিনিশিংয়ের মান ও ক্যাটাগরি</span>
+          <span class="form-label-hint">উপাদান ও ফিটিংস নির্বাচন</span>
+        </label>
+        <div class="finish-grid" id="finishSelector" data-mcp-param="finishLevel">
+          <!-- Economy -->
+          <div class="finish-card" data-finish="economy">
+            <div>
+              <div class="finish-title">সাধারণ (Economy)</div>
+              <div class="finish-desc">বাজেট-বান্ধব ফিনিশিং, দেশি ফিটিংস ও লোকাল সিরামিক টাইলস।</div>
+            </div>
+            <div class="finish-rate-tag" id="rateTagEconomy">~ ৳ ২,১০০ / sft</div>
+          </div>
+          <!-- Standard -->
+          <div class="finish-card active" data-finish="standard">
+            <span class="finish-badge-rec">জনপ্রিয়</span>
+            <div>
+              <div class="finish-title">স্ট্যান্ডার্ড (Standard)</div>
+              <div class="finish-desc">ব্র্যান্ডেড রড-সিমেন্ট, আধুনিক টাইলস, মানসম্মত স্যানিটারি ও ওয়্যারিং।</div>
+            </div>
+            <div class="finish-rate-tag" id="rateTagStandard">~ ৳ ২,৬৫০ / sft</div>
+          </div>
+          <!-- Premium -->
+          <div class="finish-card" data-finish="premium">
+            <div>
+              <div class="finish-title">প্রিমিয়াম (Premium)</div>
+              <div class="finish-desc">সর্বোচ্চ ব্র্যান্ড রড-সিমেন্ট, ইম্পোর্টেড ফিটিংস, বড় টাইলস ও ফলস সিলিং।</div>
+            </div>
+            <div class="finish-rate-tag" id="rateTagPremium">~ ৳ ৩,৬০০ / sft</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Calculation Result Showcase -->
+      <div class="result-showcase" id="resultContainer">
+        <div style="text-align: center;">
+          <span class="result-badge">📊 সনাতন নির্মাণ আনুমানিক খরচ রিপোর্ট</span>
+        </div>
+
+        <div class="result-grid-summary">
+          <div class="result-summary-item">
+            <div class="label">মোট নির্মিত আয়তন:</div>
+            <div class="value" id="dispTotalArea">২,০০০ স্কয়ার ফিট</div>
+          </div>
+          <div class="result-summary-item">
+            <div class="label">প্রতি স্কয়ার ফিট গড় খরচ:</div>
+            <div class="value" id="dispRatePerSqft">৳ ২,৬৫০ / sft</div>
+          </div>
+        </div>
+
+        <div class="result-total-box">
+          <div class="result-total-label">সম্ভাব্য মোট সনাতন নির্মাণ বাজেট</div>
+          <div class="result-total-taka" id="dispTotalCost">৳ ৫৩,০০,০০০</div>
+          <div class="result-total-lakh" id="dispTotalLakh">৫৩.০০ লাখ টাকা</div>
+          <div class="result-total-range" id="dispTotalRange">(সম্ভাব্য রেঞ্জ: ৳ ৫০,০০,০০০ – ৳ ৫৬,০০,০০০)</div>
+        </div>
+
+        <!-- Breakdown Section -->
+        <div class="breakdown-section">
+          <div class="breakdown-title">খরচের প্রধান ৩টি খাতের আনুমানিক বণ্টন:</div>
+          
+          <div class="breakdown-item">
+            <div class="breakdown-meta">
+              <span class="b-name">১. গ্রে স্ট্রাকচার (রড, সিমেন্ট, ইট, বালু, ঢালাই - ৬০%)</span>
+              <span class="b-amt" id="dispStructCost">৳ ৩১,৮০,০০০</span>
+            </div>
+            <div class="breakdown-bar-bg">
+              <div class="breakdown-bar-fill fill-struct" style="width: 60%;"></div>
+            </div>
+          </div>
+
+          <div class="breakdown-item">
+            <div class="breakdown-meta">
+              <span class="b-name">২. ফিনিশিং কাজ (টাইলস, প্লাস্টার, পেইন্ট, দরজা-জানালা - ২৮%)</span>
+              <span class="b-amt" id="dispFinishCost">৳ ১৪,৮৪,০০০</span>
+            </div>
+            <div class="breakdown-bar-bg">
+              <div class="breakdown-bar-fill fill-finish" style="width: 28%;"></div>
+            </div>
+          </div>
+
+          <div class="breakdown-item">
+            <div class="breakdown-meta">
+              <span class="b-name">৩. স্যানিটারি ও ইলেকট্রিক্যাল ওয়্যারিং ফিটিংস (১২%)</span>
+              <span class="b-amt" id="dispMepCost">৳ ৬,৩৬,০০০</span>
+            </div>
+            <div class="breakdown-bar-bg">
+              <div class="breakdown-bar-fill fill-mep" style="width: 12%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Bongshai Housing Fixed-Price Models Comparison -->
+    <section class="comparison-section" id="modelsComparisonSection">
+      <div class="section-head">
+        <h2>বংশাই হাউজিং ফিক্সড-প্রাইস মডেল তুলনা (সকল মডেল ও আয়তন ভিত্তিক)</h2>
+        <p>সনাতন পদ্ধতিতে নির্মাণ কাজে দীর্ঘসূত্রতা ও বাজেট বৃদ্ধির ঝুঁকি থাকে। বংশাই হাউজিং দেয় ১০০% নির্দিষ্ট চুক্তি বাজেট ও দ্রুত হস্তান্তরের নিশ্চয়তা। আপনার পছন্দের আয়তন নির্বাচন করে বাস্তব মডেলসমূহ তুলনা করুন:</p>
+      </div>
+
+      <!-- Dynamic Matched Area Banner -->
+      <div class="matched-banner" id="matchedBanner">
+        <div class="matched-banner-text">
+          🎯 আপনার নির্বাচিত আয়তন <strong id="bannerSelectedArea">১,০০০ sft</strong>-এর সাথে সামঞ্জস্যপূর্ণ বংশাই মডেলসমূহ:
+        </div>
+        <div class="matched-count-pill" id="bannerMatchCount">মডেল সংখ্যা: ১০ টি</div>
+      </div>
+
+      <!-- Area Tier Tabs -->
+      <div class="area-tier-tabs" id="areaTierTabs">
+        <button type="button" class="tier-tab-btn active" data-tier="matched">🎯 নির্বাচিত আয়তনভিত্তিক</button>
+        <button type="button" class="tier-tab-btn" data-tier="240-550">২৪০ – ৫৫০ sft</button>
+        <button type="button" class="tier-tab-btn" data-tier="600-900">৬০০ – ৯০০ sft</button>
+        <button type="button" class="tier-tab-btn" data-tier="1050-1400">১০৫০ – ১৪০০ sft</button>
+        <button type="button" class="tier-tab-btn" data-tier="1600-1800">১৬০০ – ১৮০০ sft</button>
+        <button type="button" class="tier-tab-btn" data-tier="2100-2500">২১০০ – ২৫০০+ sft</button>
+        <button type="button" class="tier-tab-btn" data-tier="all">সকল ১১২+ মডেল</button>
+      </div>
+
+      <!-- Category Filter and Model Search Bar -->
+      <div class="models-filter-bar">
+        <select id="modelCategoryFilter" class="models-select">
+          <option value="all">সকল ক্যাটাগরি (All Categories)</option>
+          <option value="Concrete Building">কংক্রিট বিল্ডিং (Concrete Building)</option>
+          <option value="Duplex Steel Building">ডুপ্লেক্স স্টিল বিল্ডিং (Duplex)</option>
+          <option value="Simplex Steel Building">সিমপ্লেক্স স্টিল বিল্ডিং (Simplex)</option>
+          <option value="Cottage House">কটেজ হাউজ (Cottage House)</option>
+          <option value="Apartment Building">মাল্টি-স্টোরি অ্যাপার্টমেন্ট (Apartment)</option>
+          <option value="Container House">কনটেইনার হাউজ (Container House)</option>
+          <option value="Tiny House">টাইনি হাউজ (Tiny House)</option>
+          <option value="Wooden House">উডেন হাউজ (Wooden House)</option>
+        </select>
+        <input type="text" id="modelSearchInput" class="models-search" placeholder="🔍 মডেল নম্বর খুঁজুন (যেমন: DV-202, CB-901)...">
+      </div>
+
+      <!-- Models Dynamic Cards Grid -->
+      <div class="models-grid" id="modelsGridContainer">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <!-- Show More Toggle -->
+      <div class="show-more-wrap" id="showMoreWrap" style="display:none;">
+        <button type="button" class="show-more-btn" id="showMoreBtn">আরও মডেল দেখুন ▾</button>
+      </div>
+    </section>
+
+    <!-- Lead Capture Section -->
+    <section class="lead-block" id="leadCapture" data-mcp-action="submit-construction-lead">
+      <div class="lead-head">
+        <h3>বিনামূল্যে ইঞ্জিনিয়ারিং বাজেট ও আর্কিটেকচারাল ড্রয়িং পরামর্শ</h3>
+        <p>আপনার প্লটের পরিমাপ অনুযায়ী নির্বাচিত মডেলের পূর্ণাঙ্গ ফ্লোর প্ল্যান, ম্যাটেরিয়াল স্পেসিফিকেশন ও নির্দিষ্ট বাজেটের প্রস্তাবনা পেতে আমাদের সাথে যোগাযোগ করুন।</p>
+      </div>
+
+      <form id="constructionLeadForm" onsubmit="handleLeadSubmit(event)">
+        <div class="lead-form-grid">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="leadName">আপনার নাম *</label>
+            <input type="text" id="leadName" class="lead-input" placeholder="যেমন: মো: আরিফুল ইসলাম" required data-mcp-param="leadName">
+          </div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="leadPhone">মোবাইল নম্বর *</label>
+            <input type="tel" id="leadPhone" class="lead-input" placeholder="01XXXXXXXXX" pattern="[0-9]{11}" required data-mcp-param="leadPhone">
+          </div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="districtSelect">জেলা নির্বাচন করুন *</label>
+            <select id="districtSelect" class="lead-select" required data-mcp-param="district">
+              <option value="" disabled selected>জেলা বেছে নিন</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="upazilaSelect">উপজেলা / থানা *</label>
+            <select id="upazilaSelect" class="lead-select" required disabled data-mcp-param="upazila">
+              <option value="">প্রথমে জেলা নির্বাচন করুন</option>
+            </select>
+          </div>
+
+          <div class="form-group form-full" style="margin-bottom:0;">
+            <label class="form-label" for="leadNotes">বাড়ি বা মডেল সংক্রান্ত বিস্তারিত (ঐচ্ছিক)</label>
+            <input type="text" id="leadNotes" class="lead-input" placeholder="যেমন: কোনো মডেল পছন্দ থাকলে বা বিশেষ চাহিদা">
+          </div>
+        </div>
+
+        <button type="submit" class="whatsapp-btn" id="waSubmitBtn">
+          <svg viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.584 1.961.949 2.796.949 3.183 0 5.77-2.587 5.77-5.766.001-3.182-2.585-5.766-5.77-5.766zm10.024 5.828c0 5.518-4.484 9.999-10.023 9.999-1.748 0-3.385-.45-4.821-1.238l-7.211 1.889 1.927-7.032c-.879-1.492-1.395-3.23-1.395-5.088 0-5.519 4.485-10 10.023-10 5.541 0 10.024 4.481 10.024 10z"/>
+          </svg>
+          <span>হোয়াটসঅ্যাপে সরাসরি হিসাব ও ড্রয়িং নিন</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Natural Language Question-Based FAQs (AEO Compliant) -->
+    <section class="faq-section">
+      <div class="section-head">
+        <h2>বাড়ি নির্মাণ সম্পর্কিত সাধারণ প্রশ্নোত্তর</h2>
+      </div>
+
+      <div class="faq-item">
+        <h3>২০২৬ সালে বাংলাদেশে বাড়ি তৈরিতে প্রতি স্কয়ার ফিটে কত খরচ হয়?</h3>
+        <p>২০২৬ সালের বর্তমান বাজারদর অনুযায়ী সাধারণ ফিনিশিংয়ে বাড়ি তৈরিতে প্রতি স্কয়ার ফিটে প্রায় ১,৯০০ থেকে ২,২০০ টাকা, মানসম্মত স্ট্যান্ডার্ড ফিনিশিংয়ে ২,৪০০ থেকে ২,৮৫০ টাকা এবং উন্নত লাক্সারি ফিনিশিংয়ে ৩,২০০ থেকে ৪,২০০ টাকা পর্যন্ত খরচ হয়। এলাকাভেদে মাটির ভারবহন ক্ষমতা ও ফাউন্ডেশনের গভীরতার ওপর এই ব্যয় কিছুটা পরিবর্তনশীল।</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>বাড়ি তৈরির খরচের প্রধান খাতগুলো কীভাবে ভাগ করা থাকে?</h3>
+        <p>সাধারণত মোট ব্যয়ের প্রায় ৬০% খরচ হয় রড, সিমেন্ট, ইট, বালু ও ফাউন্ডেশনের কাঠামো (গ্রে স্ট্রাকচার) তৈরিতে, প্রায় ২৮% খরচ হয় ফিনিশিং কাজে (টাইলস, প্লাস্টার, রং, গ্রিল, দরজা-জানালা) এবং প্রায় ১২% খরচ হয় ইলেকট্রিক্যাল ওয়্যারিং ও স্যানিটারি ফিটিংসে।</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>ঐতিহ্যবাহী বাড়ি নির্মাণ বনাম বংশাই হাউজিং-এর নির্দিষ্ট প্যাকেজের সুবিধা কী?</h3>
+        <p>সনাতন পদ্ধতিতে বাড়ি তৈরিতে স্থানীয় মিস্ত্রিদের দীর্ঘসূত্রতার কারণে সময় ও বাজেট অনেক সময় দ্বিগুণ হয়ে যায়। বংশাই হাউজিং-এর রেডিমেড মডেলে নির্দিষ্ট চুক্তিমূল্যে মাত্র ৩০ থেকে ৬০ দিনের মধ্যে সম্পূর্ণ বাড়ি প্রস্তুত পাওয়া যায়, যার ফলে অপচয় ও অতিরিক্ত খরচ পুরোপুরি রোধ হয়।</p>
+      </div>
+    </section>
+
+    <!-- Disclaimer & Footer -->
+    <footer class="footer-note">
+      <p>※ এই ক্যালকুলেটরে প্রদর্শিত হিসাব ২০২৬ সালের বাজারদরের গড় বিশ্লেষণ। প্লটের মাটির ভারবহন ক্ষমতা, ভৌগোলিক অবস্থান এবং আপনার নিজস্ব উপাদানের পছন্দ অনুযায়ী বাস্তব খরচ কিছুটা কম-বেশি হতে পারে।</p>
+      <p style="margin-top: 6px; color: var(--gold-accent);">© ২০২৬ বংশাই হাউজিং লিমিটেড | প্রি-ইঞ্জিনিয়ার্ড ও আধুনিক আবাসন নির্মাণে অগ্রগামী</p>
+    </footer>
+  </main>
+
+  <!-- Complete 64 Districts & Upazilas Data (Bengali) + Calculator Logic -->
+  <script>
+    // Bangladesh 64 Districts and Main Upazilas in Bengali
+    const BD_GEO = {
+      "ঢাকা": ["ঢাকা সদর", "ধানমন্ডি", "মিরপুর", "উত্তরা", "গুলশান", "সাভার", "ধামরাই", "কেরানীগঞ্জ", "নবাবগঞ্জ", "দোহার"],
+      "গাজীপুর": ["গাজীপুর সদর", "কালিয়াকৈর", "শ্রীপুর", "কাপাসিয়া", "কালীগঞ্জ"],
+      "নারায়ণগঞ্জ": ["নারায়ণগঞ্জ সদর", "রূপগঞ্জ", "সোনারগাঁও", "আড়াইহাজার", "বন্দর"],
+      "নরসিংদী": ["নরসিংদী সদর", "পলাশ", "শিবপুর", "মনোহরদী", "বেলাবো", "রায়পুরা"],
+      "টাঙ্গাইল": ["টাঙ্গাইল সদর", "মির্জাপুর", "কালিহাতী", "ঘাটাইল", "সখিপুর", "বাসাইল", "ভূঞাপুর", "দেলদুয়ার", "গোপালপুর", "মধুপুর", "নাগরপুর"],
+      "কিশোরগঞ্জ": ["কিশোরগঞ্জ সদর", "ভৈরব", "বাজিতপুর", "হোসেনপুর", "করিমগঞ্জ", "কটিয়াদী", "কুলিয়ারচর", "নিকলী", "তাড়াইল", "পাকুন্দিয়া", "ইটনা", "মিঠামইন", "অষ্টগ্রাম"],
+      "মানিকগঞ্জ": ["মানিকগঞ্জ সদর", "সিংগাইর", "শিবালয়", "ঘিওর", "দৌলতপুর", "সাটুরিয়া", "হরিরামপুর"],
+      "মুন্সীগঞ্জ": ["মুন্সীগঞ্জ সদর", "সিরাজদিখান", "শ্রীনগর", "লৌহজং", "গজারিয়া", "টংগিবাড়ী"],
+      "ফরিদপুর": ["ফরিদপুর সদর", "বোয়ালমারী", "ভাঙ্গা", "আলফাডাঙ্গা", "মধুখালী", "নগরকান্দা", "সদরপুর", "চরভদ্রাসন", "সালথা"],
+      "গোপালগঞ্জ": ["গোপালগঞ্জ সদর", "কাশিয়ানী", "কোটালীপাড়া", "মুকসুদপুর", "টুঙ্গিপাড়া"],
+      "মাদারীপুর": ["মাদারীপুর সদর", "শিবচর", "কালকিনি", "রাজৈর", "ডাসার"],
+      "রাজবাড়ী": ["রাজবাড়ী সদর", "গোয়ালন্দ", "পাংশা", "বালিয়াকান্দি", "কালুখালী"],
+      "শরীয়তপুর": ["শরীয়তপুর সদর", "নড়িয়া", "জাজিরা", "গোসাইরহাট", "ডামুড্যা", "ভেদরগঞ্জ"],
+      "চট্টগ্রাম": ["চট্টগ্রাম কোতোয়ালি", "পাঁচলাইশ", "হালিশহর", "পটিয়া", "সীতাকুণ্ড", "মীরসরাই", "হাটহাজারী", "রাউজান", "রাঙ্গুনিয়া", "বোয়ালখালী", "আনোয়ারা", "চন্দনাইশ", "লোহাগাড়া", "বাঁশখালী", "সন্দ্বীপ", "কর্ণফুলী"],
+      "কক্সবাজার": ["কক্সবাজার সদর", "চকোরিয়া", "রামু", "টেকনাফ", "উখিয়া", "পেকুয়া", "মহেশখালী", "কুতুবদিয়া", "ঈদগাঁও"],
+      "কুমিল্লা": ["কুমিল্লা আদর্শ সদর", "কুমিল্লা সদর দক্ষিণ", "দাউদকান্দি", "চান্দিনা", "দেবিদ্বার", "মুরাদনগর", "হোমনা", "লাকসাম", "চৌদ্দগ্রাম", "ব্রাহ্মণপাড়া", "বুড়িচং", "বরুড়া", "নাঙ্গলকোট", "মেঘনা", "তিতাস", "মনোহরগঞ্জ", "লালমাই"],
+      "ফেনী": ["ফেনী সদর", "দাগনভূঞা", "সোনাগাজী", "ছাগলনাইয়া", "পরশুরাম", "ফুলগাজী"],
+      "ব্রাহ্মণবাড়িয়া": ["ব্রাহ্মণবাড়িয়া সদর", "আশুগঞ্জ", "সরাইল", "কসবা", "আখাউড়া", "নবীনগর", "বাঞ্ছারামপুর", "নাসিরনগর", "বিজয়নগর"],
+      "চাঁদপুর": ["চাঁদপুর সদর", "হাজীগঞ্জ", "শাহরাস্তি", "মতলব উত্তর", "মতলব দক্ষিণ", "ফরিদগঞ্জ", "কচুয়া", "হাইমচর"],
+      "নোয়াখালী": ["নোয়াখালী সদর", "বেগমগঞ্জ", "চাটখিল", "কোম্পানীগঞ্জ", "সেনবাগ", "হাতিয়া", "সুবর্ণচর", "কবিরহাট", "সোনাইমুড়ী"],
+      "লক্ষ্মীপুর": ["লক্ষ্মীপুর সদর", "রায়পুর", "রামগঞ্জ", "রামগতি", "কমলনগর"],
+      "রাঙ্গামাটি": ["রাঙ্গামাটি সদর", "কাপ্তাই", "কাউখালী", "বাঘাইছড়ি", "বরকল", "লংগদু", "রাজস্থলী", "বিলাইছড়ি", "জুরাইছড়ি", "নানিয়ারচর"],
+      "বান্দরবান": ["বান্দরবান সদর", "রুমা", "থানচি", "রোয়াংছড়ি", "লামা", "আলীকদম", "নাইক্ষ্যংছড়ি"],
+      "খাগড়াছড়ি": ["খাগড়াছড়ি সদর", "দীঘিনালা", "পানছড়ি", "মহালছড়ি", "মাটিরাঙ্গা", "মানিকছড়ি", "রামগড়", "গুইমারা"],
+      "রাজশাহী": ["রাজশাহী সদর", "পবা", "গোদাগাড়ী", "তানোর", "মোহনপুর", "বাগমারা", "পুঠিয়া", "দুর্গাপুর", "চারঘাট", "বাঘা"],
+      "বগুড়া": ["বগুড়া সদর", "শেরপুর", "শিবগঞ্জ", "দুপচাঁচিয়া", "গাবতলী", "কাহালু", "নন্দীগ্রাম", "সারিয়াকান্দি", "ধুনট", "আদমদিঘী", "সোনাতলা", "শাজাহানপুর"],
+      "পাবনা": ["পাবনা সদর", "ঈশ্বরদী", "সাঁথিয়া", "সুজানগর", "ফরিদপুর", "বেড়া", "ভাঙ্গুড়া", "চাটমোহর", "আটঘরিয়া"],
+      "সিরাজগঞ্জ": ["সিরাজগঞ্জ সদর", "বেলকুচি", "কামারখন্দ", "কাজীপুর", "রায়গঞ্জ", "শাহজাদপুর", "তাড়াশ", "উল্লাপাড়া", "চৌহালী"],
+      "নওগাঁ": ["নওগাঁ সদর", "মহাদেবপুর", "বদলগাছী", "পত্নীতলা", "ধামইরহাট", "নিয়ামাতপুর", "মান্দা", "আত্রাই", "রাণীনগর", "সাপাহার", "পোরশা"],
+      "নাটোর": ["নাটোর সদর", "সিংড়া", "বড়াইগ্রাম", "বাগাতিপাড়া", "লালপুর", "গুরুদাসপুর", "নলডাঙ্গা"],
+      "চাঁপাইনবাবগঞ্জ": ["চাঁপাইনবাবগঞ্জ সদর", "শিবগঞ্জ", "গোমস্তাপুর", "নাচোল", "ভোলাহাট"],
+      "জয়পুরহাট": ["জয়পুরহাট সদর", "পাঁচবিবি", "কালাই", "ক্ষেতলাল", "আক্কেলপুর"],
+      "খুলনা": ["খুলনা সদর", "দৌলতপুর", "খালিশপুর", "ডুমুরিয়া", "ফুলতলা", "দিঘলিয়া", "বটিয়াঘাটা", "দাকোপ", "পাইকগাছা", "কয়রা", "তেরখাদা", "রূপসা"],
+      "যশোর": ["যশোর সদর", "ঝিকরগাছা", "শার্শা", "অভয়নগর", "মণিরামপুর", "কেশবপুর", "বাঘারপাড়া", "চৌগাছা"],
+      "সাতক্ষীরা": ["সাতক্ষীরা সদর", "কলারোয়া", "তালা", "কালীগঞ্জ", "শ্যামনগর", "আশাশুনি", "দেবহাটা"],
+      "কুষ্টিয়া": ["কুষ্টিয়া সদর", "কুমারখালী", "মিরপুর", "ভেড়ামারা", "দৌলতপুর", "খোকসা"],
+      "ঝিনাইদহ": ["ঝিনাইদহ সদর", "কালীগঞ্জ", "কোটচাঁদপুর", "মহেশপুর", "শৈলকুপা", "হরিণাকুণ্ডু"],
+      "বাগেরহাট": ["বাগেরহাট সদর", "ফকিরহাট", "মোল্লাহাট", "রামপাল", "মোংলা", "কচুয়া", "মোরেলগঞ্জ", "শরণখোলা", "চিতলমারী"],
+      "চুয়াডাঙ্গা": ["চুয়াডাঙ্গা সদর", "আলমডাঙ্গা", "দামুড়হুদা", "জীবননগর"],
+      "মেহেরপুর": ["মেহেরপুর সদর", "গাংনী", "মুজিবনগর"],
+      "মাগুরা": ["মাগুরা সদর", "শ্রীপুর", "মহম্মদপুর", "শালিখা"],
+      "নড়াইল": ["নড়াইল সদর", "লোহাগড়া", "কালিয়া"],
+      "বরিশাল": ["বরিশাল সদর", "বাবুগঞ্জ", "উজিরপুর", "বাকেরগঞ্জ", "গৌরনদী", "আগৈলঝাড়া", "বানারীপাড়া", "মেহেন্দিগঞ্জ", "মুলাদী", "হিজলা"],
+      "পটুয়াখালী": ["পটুয়াখালী সদর", "গলাচিপা", "বাউফল", "দশমিনা", "কলাপাড়া", "মির্জাগঞ্জ", "দুমকি", "রাঙ্গাবালী"],
+      "ভোলা": ["ভোলা সদর", "দৌলতখান", "বোরহানউদ্দিন", "তজুমদ্দিন", "লালমোহন", "চরফ্যাশন", "মনপুরা"],
+      "পিরোজপুর": ["পিরোজপুর সদর", "নাজিরপুর", "মঠবাড়িয়া", "ভাণ্ডারিয়া", "কাউখালী", "নেছারাবাদ", "ইন্দুরকানী"],
+      "বরগুনা": ["বরগুনা সদর", "আমতলী", "পাথরঘাটা", "বেতাগী", "বামনা", "তালতলী"],
+      "ঝালকাঠি": ["ঝালকাঠি সদর", "নলছিটি", "রাজাপুর", "কাঠালিয়া"],
+      "সিলেট": ["সিলেট সদর", "দক্ষিণ সুরমা", "গোলাপগঞ্জ", "বিয়ানীবাজার", "বিশ্বনাথ", "ফেঞ্চুগঞ্জ", "বালাগঞ্জ", "কোম্পানীগঞ্জ", "জৈন্তাপুর", "গোয়াইনঘাট", "জকিগঞ্জ", "কানাইঘাট", "ওসমানীনগর"],
+      "মৌলভীবাজার": ["মৌলভীবাজার সদর", "শ্রীমঙ্গল", "কমলগঞ্জ", "কুলাউড়া", "বড়লেখা", "রাজনগর", "জুড়ী"],
+      "হবিগঞ্জ": ["হবিগঞ্জ সদর", "নবীগঞ্জ", "বাহুবল", "চুনারুঘাট", "মাধবপুর", "লাখাই", "বানিয়াচং", "আজমিরীগঞ্জ", "শায়স্তাগঞ্জ"],
+      "সুনামগঞ্জ": ["সুনামগঞ্জ সদর", "ছাতক", "জগন্নাথপুর", "দোয়ারাবাজার", "তাহিরপুর", "ধর্মপাশা", "জামালগঞ্জ", "শাল্লা", "দিরাই", "বিশ্বম্ভরপুর", "শান্তিগঞ্জ", "মধ্যনগর"],
+      "রংপুর": ["রংপুর সদর", "বদরগঞ্জ", "পীরগঞ্জ", "মিঠাপুকুর", "গঙ্গাচড়া", "কাউনিয়া", "পীরগাছা", "তারাগঞ্জ"],
+      "দিনাজপুর": ["দিনাজপুর সদর", "বিরামপুর", "বীরগঞ্জ", "বোচাগঞ্জ", "ফুলবাড়ী", "চিরিরবন্দর", "ঘোড়াঘাট", "হাকিমপুর", "কাহারোল", "খানসামা", "নবাবগঞ্জ", "পার্বতীপুর"],
+      "কুড়িগ্রাম": ["কুড়িগ্রাম সদর", "নাগেশ্বরী", "ভুরুঙ্গামারী", "উলিপুর", "চিলমারী", "রৌমারী", "রাজীবপুর", "ফুলবাড়ী", "রাজারহাট"],
+      "গাইবান্ধা": ["গাইবান্ধা সদর", "গোবিন্দগঞ্জ", "সুন্দরগঞ্জ", "সাদুল্লাপুর", "পলাশবাড়ী", "সাঘাটা", "ফুলছড়ি"],
+      "নীলফামারী": ["নীলফামারী সদর", "সৈয়দপুর", "ডোমার", "ডিমলা", "জলঢাকা", "কিশোরগঞ্জ"],
+      "পঞ্চগড়": ["পঞ্চগড় সদর", "তেঁতুলিয়া", "বোদা", "আটোয়ারী", "দেবীগঞ্জ"],
+      "লালমনিরহাট": ["লালমনিরহাট সদর", "হাতীবান্ধা", "পাটগ্রাম", "কালীগঞ্জ", "আদিতমারী"],
+      "ঠাকুরগাঁও": ["ঠাকুরগাঁও সদর", "পীরগঞ্জ", "রাণীশংকৈল", "বালিয়াডাঙ্গী", "হরিপুর"],
+      "ময়মনসিংহ": ["ময়মনসিংহ সদর", "মুক্তাগাছা", "ত্রিশাল", "ভালুকা", "গফরগাঁও", "ফুলবাড়িয়া", "ঈশ্বরগঞ্জ", "নান্দাইল", "হালুয়াঘাট", "ধোবাউড়া", "ফুলপুর", "তারাকান্দা"],
+      "জামালপুর": ["জামালপুর সদর", "মেলান্দহ", "ইসলামপুর", "দেওয়ানগঞ্জ", "সরিষাবাড়ী", "মাদারগঞ্জ", "বকশীগঞ্জ"],
+      "নেত্রকোণা": ["নেত্রকোণা সদর", "কেন্দুয়া", "মদন", "মোহনগঞ্জ", "বারহাট্টা", "কলমাকান্দা", "পূর্বধলা", "দুর্গাপুর", "খালিয়াজুড়ি", "আটপাড়া"],
+      "শেরপুর": ["শেরপুর সদর", "নকলা", "নালিতাবাড়ী", "শ্রীবরদী", "ঝিনাইগাতী"]
+    };
+
+    // Category Bengali Names
+    const CAT_NAMES_BN = {
+      "Concrete Building": "কংক্রিট বিল্ডিং",
+      "Cottage House": "কটেজ হাউজ",
+      "Container House": "কনটেইনার হাউজ",
+      "Duplex Steel Building": "ডুপ্লেক্স স্টিল বিল্ডিং",
+      "Simplex Steel Building": "সিমপ্লেক্স স্টিল বিল্ডিং",
+      "Steel House": "স্টিল হাউজ",
+      "Tiny House": "টাইনি হাউজ",
+      "Apartment Building": "মাল্টি-স্টোরি অ্যাপার্টমেন্ট",
+      "Wooden House": "উডেন হাউজ"
+    };
+
+    // 2026 Bangladesh Construction Rates Matrix (BDT / sq. ft.)
+    const RATES_TABLE = {
+      1: { economy: 2000, standard: 2500, premium: 3350 },
+      2: { economy: 2100, standard: 2650, premium: 3600 },
+      3: { economy: 2250, standard: 2800, premium: 3850 },
+      4: { economy: 2400, standard: 2980, premium: 4100 },
+      5: { economy: 2550, standard: 3150, premium: 4350 }
+    };
+
+    // COMPLETE BONGSHAI HOUSING ACTUAL MODELS DATABASE (113 Real Models)
+    const BONGSHAI_MODELS = [{"m":"BH-CB-901","c":"Concrete Building","a":400,"p":350000,"r":875,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-902","c":"Concrete Building","a":400,"p":375000,"r":938,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-903","c":"Concrete Building","a":320,"p":450000,"r":1406,"b":"1 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-904","c":"Concrete Building","a":400,"p":600000,"r":1500,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-905","c":"Concrete Building","a":400,"p":700000,"r":1750,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-906","c":"Concrete Building","a":550,"p":800000,"r":1455,"b":"2 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CB-907","c":"Concrete Building","a":600,"p":900000,"r":1500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CB-908","c":"Concrete Building","a":600,"p":1000000,"r":1667,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CB-909","c":"Concrete Building","a":900,"p":1200000,"r":1333,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CB-910","c":"Concrete Building","a":320,"p":500000,"r":1563,"b":"1 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-911","c":"Concrete Building","a":400,"p":600000,"r":1500,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CB-912","c":"Concrete Building","a":400,"p":700000,"r":1750,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-401","c":"Cottage House","a":800,"p":1650000,"r":2063,"b":"2 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-402","c":"Cottage House","a":600,"p":1250000,"r":2083,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-403","c":"Cottage House","a":400,"p":1150000,"r":2875,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-404","c":"Cottage House","a":850,"p":1800000,"r":2118,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-405","c":"Cottage House","a":1050,"p":2100000,"r":2000,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-406","c":"Cottage House","a":900,"p":1500000,"r":1667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-407","c":"Cottage House","a":700,"p":1350000,"r":1929,"b":"2 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-408","c":"Cottage House","a":550,"p":1200000,"r":2182,"b":"2 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-409","c":"Cottage House","a":600,"p":1250000,"r":2083,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-410","c":"Cottage House","a":550,"p":1200000,"r":2182,"b":"2 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-411","c":"Cottage House","a":1050,"p":2100000,"r":2000,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-412","c":"Cottage House","a":1200,"p":2400000,"r":2000,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-501","c":"Container House","a":400,"p":500000,"r":1250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-502","c":"Container House","a":400,"p":620000,"r":1550,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-503","c":"Container House","a":400,"p":900000,"r":2250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-504","c":"Container House","a":400,"p":1000000,"r":2500,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-505","c":"Container House","a":400,"p":1250000,"r":3125,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-506","c":"Container House","a":600,"p":1600000,"r":2667,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-507","c":"Container House","a":320,"p":750000,"r":2344,"b":"1 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-508","c":"Container House","a":400,"p":1150000,"r":2875,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-509","c":"Container House","a":1200,"p":3750000,"r":3125,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-510","c":"Container House","a":1200,"p":4000000,"r":3333,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-511","c":"Container House","a":400,"p":1000000,"r":2500,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-512","c":"Container House","a":400,"p":1000000,"r":2500,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-DV-201","c":"Duplex Steel Building","a":1800,"p":4500000,"r":2500,"b":"6 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-202","c":"Duplex Steel Building","a":1600,"p":4000000,"r":2500,"b":"5 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-203","c":"Duplex Steel Building","a":1200,"p":3500000,"r":2917,"b":"3 বেড","ba":"2 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-204","c":"Duplex Steel Building","a":1800,"p":4500000,"r":2500,"b":"6 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-205","c":"Duplex Steel Building","a":1600,"p":4000000,"r":2500,"b":"5 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-206","c":"Duplex Steel Building","a":1200,"p":3500000,"r":2917,"b":"3 বেড","ba":"2 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-207","c":"Duplex Steel Building","a":1800,"p":4500000,"r":2500,"b":"6 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-208","c":"Duplex Steel Building","a":1600,"p":4000000,"r":2500,"b":"5 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-209","c":"Duplex Steel Building","a":1200,"p":3500000,"r":2917,"b":"3 বেড","ba":"2 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-210","c":"Duplex Steel Building","a":1800,"p":4500000,"r":2500,"b":"6 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-211","c":"Duplex Steel Building","a":1600,"p":4000000,"r":2500,"b":"5 বেড","ba":"4 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-DV-212","c":"Duplex Steel Building","a":1200,"p":3500000,"r":2917,"b":"3 বেড","ba":"2 বাথ","d":"৬০-৭৫ দিন"},{"m":"BH-SB-301","c":"Simplex Steel Building","a":1200,"p":3000000,"r":2500,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-302","c":"Simplex Steel Building","a":1050,"p":2700000,"r":2571,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-303","c":"Simplex Steel Building","a":900,"p":2400000,"r":2667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-304","c":"Simplex Steel Building","a":600,"p":2100000,"r":3500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-305","c":"Simplex Steel Building","a":1200,"p":3000000,"r":2500,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-306","c":"Simplex Steel Building","a":1050,"p":2700000,"r":2571,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-307","c":"Simplex Steel Building","a":900,"p":2400000,"r":2667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-308","c":"Simplex Steel Building","a":600,"p":2100000,"r":3500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-309","c":"Simplex Steel Building","a":1200,"p":3000000,"r":2500,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-310","c":"Simplex Steel Building","a":1050,"p":2700000,"r":2571,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-311","c":"Simplex Steel Building","a":900,"p":2400000,"r":2667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SB-312","c":"Simplex Steel Building","a":600,"p":2100000,"r":3500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-601","c":"Steel House","a":1200,"p":4750000,"r":3958,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-602","c":"Steel House","a":1200,"p":3850000,"r":3208,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-603","c":"Steel House","a":1200,"p":3050000,"r":2542,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-604","c":"Steel House","a":1200,"p":4750000,"r":3958,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-605","c":"Steel House","a":1200,"p":3850000,"r":3208,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-606","c":"Steel House","a":1200,"p":3050000,"r":2542,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-607","c":"Steel House","a":1200,"p":4750000,"r":3958,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-608","c":"Steel House","a":1200,"p":3850000,"r":3208,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-609","c":"Steel House","a":1200,"p":3050000,"r":2542,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-610","c":"Steel House","a":1200,"p":4750000,"r":3958,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-611","c":"Steel House","a":1200,"p":3850000,"r":3208,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-SH-612","c":"Steel House","a":1200,"p":3050000,"r":2542,"b":"4 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-TH-701","c":"Tiny House","a":240,"p":500000,"r":2083,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-702","c":"Tiny House","a":320,"p":750000,"r":2344,"b":"1 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-703","c":"Tiny House","a":400,"p":900000,"r":2250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-704","c":"Tiny House","a":400,"p":1250000,"r":3125,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-705","c":"Tiny House","a":400,"p":500000,"r":1250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-706","c":"Tiny House","a":320,"p":750000,"r":2344,"b":"1 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-707","c":"Tiny House","a":400,"p":900000,"r":2250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-708","c":"Tiny House","a":400,"p":1250000,"r":3125,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-709","c":"Tiny House","a":400,"p":500000,"r":1250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-710","c":"Tiny House","a":320,"p":750000,"r":2344,"b":"1 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-711","c":"Tiny House","a":400,"p":900000,"r":2250,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TH-712","c":"Tiny House","a":400,"p":1250000,"r":3125,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-TSB-101","c":"Apartment Building","a":2500,"p":9600000,"r":3840,"b":"5 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-102","c":"Apartment Building","a":2100,"p":7200000,"r":3429,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-103","c":"Apartment Building","a":1800,"p":6500000,"r":3611,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-104","c":"Apartment Building","a":2500,"p":9600000,"r":3840,"b":"5 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-105","c":"Apartment Building","a":2100,"p":7200000,"r":3429,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-106","c":"Apartment Building","a":1800,"p":6500000,"r":3611,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-107","c":"Apartment Building","a":2500,"p":9600000,"r":3840,"b":"5 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-108","c":"Apartment Building","a":2100,"p":7200000,"r":3429,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-109","c":"Apartment Building","a":1800,"p":6500000,"r":3611,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-110","c":"Apartment Building","a":2500,"p":9600000,"r":3840,"b":"5 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-111","c":"Apartment Building","a":2100,"p":7200000,"r":3429,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-TSB-112","c":"Apartment Building","a":1800,"p":6500000,"r":3611,"b":"6 বেড","ba":"4 বাথ","d":"৯০-১২০ দিন"},{"m":"BH-WH-801","c":"Wooden House","a":400,"p":1500000,"r":3750,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-WH-802","c":"Wooden House","a":600,"p":1800000,"r":3000,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-803","c":"Wooden House","a":600,"p":2100000,"r":3500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-804","c":"Wooden House","a":900,"p":2400000,"r":2667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-805","c":"Wooden House","a":400,"p":1500000,"r":3750,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-WH-806","c":"Wooden House","a":600,"p":1800000,"r":3000,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-807","c":"Wooden House","a":600,"p":2100000,"r":3500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-808","c":"Wooden House","a":900,"p":2400000,"r":2667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-809","c":"Wooden House","a":400,"p":1500000,"r":3750,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-WH-810","c":"Wooden House","a":600,"p":1800000,"r":3000,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-811","c":"Wooden House","a":600,"p":2100000,"r":3500,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-WH-812","c":"Wooden House","a":900,"p":2400000,"r":2667,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-413","c":"Cottage House","a":900,"p":1750000,"r":1944,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-414","c":"Cottage House","a":600,"p":1400000,"r":2333,"b":"1 বেড","ba":"1 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-415","c":"Cottage House","a":900,"p":1700000,"r":1889,"b":"3 বেড","ba":"2 বাথ","d":"৪৫-৬০ দিন"},{"m":"BH-CH-416","c":"Cottage House","a":400,"p":760000,"r":1900,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"},{"m":"BH-CH-417","c":"Cottage House","a":400,"p":760000,"r":1900,"b":"2 বেড","ba":"1 বাথ","d":"৩০-৪৫ দিন"}];
+
+    // State Variables
+    let currentFloorArea = 1000;
+    let currentFloors = 2;
+    let currentFinish = "standard";
+    let activeAreaTier = "matched";
+    let activeCategoryFilter = "all";
+    let activeSearchQuery = "";
+    let isExpandedView = false;
+
+    // Number Converter to Bengali Digits
+    function toBengaliDigits(num) {
+      const bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      return String(num).replace(/[0-9]/g, d => bn[+d]);
+    }
+
+    // Format BDT in Bangladeshi Number Grouping (e.g., 53,00,000)
+    function formatBDT(amount) {
+      const n = Math.round(amount);
+      const str = n.toString();
+      if (str.length <= 3) return '৳ ' + toBengaliDigits(str);
+      const lastThree = str.substring(str.length - 3);
+      const remaining = str.substring(0, str.length - 3);
+      const formatted = remaining.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
+      return '৳ ' + toBengaliDigits(formatted);
+    }
+
+    // Format Lakhs (e.g., ৫৩.০০ লাখ টাকা)
+    function formatLakhs(amount) {
+      const lakh = (amount / 100000).toFixed(2);
+      return toBengaliDigits(lakh) + ' লাখ টাকা';
+    }
+
+    // Core Calculation Logic
+    function recalculate() {
+      const area = Math.max(200, parseInt(currentFloorArea) || 0);
+      const floors = parseInt(currentFloors) || 1;
+      const totalBuiltArea = area * floors;
+
+      const ratePerSqft = RATES_TABLE[floors][currentFinish];
+      const totalCost = totalBuiltArea * ratePerSqft;
+
+      const lowRange = Math.round(totalCost * 0.94);
+      const highRange = Math.round(totalCost * 1.07);
+
+      // Cost Components Breakdown (60% Structure, 28% Finishing, 12% MEP)
+      const structCost = Math.round(totalCost * 0.60);
+      const finishCost = Math.round(totalCost * 0.28);
+      const mepCost = Math.round(totalCost * 0.12);
+
+      // Update UI Elements
+      document.getElementById('totalBuiltAreaHint').textContent = 'মোট এরিয়া: ' + toBengaliDigits(totalBuiltArea.toLocaleString('en-US')) + ' sft';
+      document.getElementById('dispTotalArea').textContent = toBengaliDigits(totalBuiltArea.toLocaleString('en-US')) + ' স্কয়ার ফিট';
+      document.getElementById('dispRatePerSqft').textContent = '৳ ' + toBengaliDigits(ratePerSqft.toLocaleString('en-US')) + ' / sft';
+      
+      document.getElementById('dispTotalCost').textContent = formatBDT(totalCost);
+      document.getElementById('dispTotalLakh').textContent = formatLakhs(totalCost);
+      document.getElementById('dispTotalRange').textContent = 
+        '(সম্ভাব্য রেঞ্জ: ' + formatBDT(lowRange) + ' – ' + formatBDT(highRange) + ')';
+
+      document.getElementById('dispStructCost').textContent = formatBDT(structCost);
+      document.getElementById('dispFinishCost').textContent = formatBDT(finishCost);
+      document.getElementById('dispMepCost').textContent = formatBDT(mepCost);
+
+      // Update Rate Tags on Finish Cards
+      document.getElementById('rateTagEconomy').textContent = '~ ৳ ' + toBengaliDigits(RATES_TABLE[floors].economy.toLocaleString('en-US')) + ' / sft';
+      document.getElementById('rateTagStandard').textContent = '~ ৳ ' + toBengaliDigits(RATES_TABLE[floors].standard.toLocaleString('en-US')) + ' / sft';
+      document.getElementById('rateTagPremium').textContent = '~ ৳ ' + toBengaliDigits(RATES_TABLE[floors].premium.toLocaleString('en-US')) + ' / sft';
+
+      // Update Bongshai Models Comparison dynamically based on area
+      renderBongshaiModels();
+    }
+
+    // Render Bongshai Housing Models Based On Area & Filters
+    function renderBongshaiModels() {
+      const container = document.getElementById('modelsGridContainer');
+      const bannerArea = document.getElementById('bannerSelectedArea');
+      const bannerCount = document.getElementById('bannerMatchCount');
+      const showMoreWrap = document.getElementById('showMoreWrap');
+      const showMoreBtn = document.getElementById('showMoreBtn');
+
+      bannerArea.textContent = toBengaliDigits(currentFloorArea.toLocaleString('en-US')) + ' sft';
+
+      // 1. Filter by Area Tier
+      let filtered = BONGSHAI_MODELS;
+
+      if (activeAreaTier === "matched") {
+        // Find models within +/- 200 sqft or sorted by closest area
+        filtered = BONGSHAI_MODELS.filter(m => Math.abs(m.a - currentFloorArea) <= 200);
+        if (filtered.length < 3) {
+          // Fallback to closest 6 models if strict range has few results
+          filtered = [...BONGSHAI_MODELS].sort((x, y) => Math.abs(x.a - currentFloorArea) - Math.abs(y.a - currentFloorArea)).slice(0, 8);
+        }
+      } else if (activeAreaTier === "240-550") {
+        filtered = BONGSHAI_MODELS.filter(m => m.a >= 240 && m.a <= 550);
+      } else if (activeAreaTier === "600-900") {
+        filtered = BONGSHAI_MODELS.filter(m => m.a >= 600 && m.a <= 900);
+      } else if (activeAreaTier === "1050-1400") {
+        filtered = BONGSHAI_MODELS.filter(m => m.a >= 1050 && m.a <= 1400);
+      } else if (activeAreaTier === "1600-1800") {
+        filtered = BONGSHAI_MODELS.filter(m => m.a >= 1600 && m.a <= 1800);
+      } else if (activeAreaTier === "2100-2500") {
+        filtered = BONGSHAI_MODELS.filter(m => m.a >= 2100);
+      }
+
+      // 2. Filter by Category Dropdown
+      if (activeCategoryFilter !== "all") {
+        filtered = filtered.filter(m => m.c === activeCategoryFilter);
+      }
+
+      // 3. Filter by Search Query
+      if (activeSearchQuery) {
+        const q = activeSearchQuery.toLowerCase();
+        filtered = filtered.filter(m => m.m.toLowerCase().includes(q) || m.c.toLowerCase().includes(q));
+      }
+
+      // Update Count
+      bannerCount.textContent = 'মডেল সংখ্যা: ' + toBengaliDigits(filtered.length) + ' টি';
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);">' +
+          'নির্বাচিত ফিল্টারে কোনো মডেল পাওয়া যায়নি। দয়া করে ক্যাটাগরি পরিবর্তন করুন বা "সকল মডেল" বেছে নিন।</div>';
+        showMoreWrap.style.display = 'none';
+        return;
+      }
+
+      // Pagination Limit (default 6 unless expanded)
+      const limit = isExpandedView ? filtered.length : 6;
+      const visibleModels = filtered.slice(0, limit);
+
+      const ratePerSqft = RATES_TABLE[currentFloors][currentFinish];
+
+      // Build Cards HTML
+      container.innerHTML = visibleModels.map(m => {
+        const catBn = CAT_NAMES_BN[m.c] || m.c;
+        const areaBn = toBengaliDigits(m.a.toLocaleString('en-US'));
+        const priceBn = formatBDT(m.p);
+        const lakhBn = formatLakhs(m.p);
+        const rateBn = toBengaliDigits(m.r.toLocaleString('en-US'));
+
+        // Traditional cost estimate for the same area
+        const tradCostForThisModel = m.a * ratePerSqft;
+        const diff = tradCostForThisModel - m.p;
+
+        let savingsHtml = '';
+        if (diff > 50000) {
+          const diffLakh = (diff / 100000).toFixed(1);
+          savingsHtml = '<div class="model-savings-badge">💰 সনাতন নির্মাণের চেয়ে ~৳ ' + toBengaliDigits(diffLakh) + ' লাখ সাশ্রয়ী</div>';
+        } else {
+          savingsHtml = '<div class="model-savings-badge" style="color:var(--blue-accent); background:rgba(56,189,248,0.12); border-color:rgba(56,189,248,0.25);">🛡️ নির্দিষ্ট ফিক্সড বাজেট (জিরো ওভাররান)</div>';
+        }
+
+        const isExactMatch = (m.a === currentFloorArea);
+        const matchedClass = isExactMatch ? 'matched' : '';
+
+        return '<div class="model-card ' + matchedClass + '">' +
+          '<div>' +
+            '<div class="model-top">' +
+              '<div class="model-number">' + m.m + '</div>' +
+              '<div class="model-category-tag">' + catBn + '</div>' +
+            '</div>' +
+            '<div class="model-area-line">আয়তন: ' + areaBn + ' স্কয়ার ফিট</div>' +
+            '<div class="model-rooms">🛏️ ' + m.b + ' • 🚿 ' + m.ba + '</div>' +
+            '<div class="model-price-box">' +
+              '<div class="model-price-label">নির্ধারিত প্যাকেজ মূল্য (ফিক্সড)</div>' +
+              '<div class="model-price-val">' + priceBn + '</div>' +
+              '<div class="model-rate-info">(' + lakhBn + ' • প্রতি sft মাত্র ৳' + rateBn + ')</div>' +
+            '</div>' +
+            savingsHtml +
+            '<div class="model-delivery">⏱️ ডেলিভারি ও হ্যান্ডওভার: ' + m.d + '</div>' +
+          '</div>' +
+          '<button type="button" class="model-select-btn" onclick="selectModel(\'' + m.m + '\', ' + m.a + ', \'' + catBn + '\', \'' + priceBn + '\')">এই মডেল নির্বাচন করুন ➔</button>' +
+        '</div>';
+      }).join('');
+
+      // Show/Hide Show More Button
+      if (filtered.length > 6) {
+        showMoreWrap.style.display = 'block';
+        showMoreBtn.textContent = isExpandedView ? 
+          'সংক্ষিপ্ত আকারে দেখুন ▴' : 
+          'আরও মডেল দেখুন (বাকি ' + toBengaliDigits(filtered.length - 6) + ' টি) ▾';
+      } else {
+        showMoreWrap.style.display = 'none';
+      }
+    }
+
+    // Select Model & Pre-fill Lead Form
+    function selectModel(modelNo, area, cat, price) {
+      const notesInput = document.getElementById('leadNotes');
+      notesInput.value = 'আমি ' + modelNo + ' (' + cat + ', ' + area + ' sft, মূল্য: ' + price + ') মডেলটি সম্পর্কে বিস্তারিত ড্রয়িং ও অফার জানতে আগ্রহী।';
+      
+      const leadBlock = document.getElementById('leadCapture');
+      leadBlock.scrollIntoView({ behavior: 'smooth' });
+      
+      // Flash the lead card to draw user focus
+      leadBlock.style.borderColor = 'var(--gold-accent)';
+      leadBlock.style.boxShadow = '0 0 28px var(--gold-glow)';
+      setTimeout(() => {
+        leadBlock.style.borderColor = 'rgba(253, 224, 71, 0.35)';
+        leadBlock.style.boxShadow = '0 10px 32px rgba(0,0,0,0.4)';
+      }, 1500);
+
+      document.getElementById('leadName').focus();
+    }
+
+    // Form Submission & WhatsApp Link Generator
+    function handleLeadSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const district = document.getElementById('districtSelect').value;
+      const upazila = document.getElementById('upazilaSelect').value;
+      const notes = document.getElementById('leadNotes').value.trim();
+
+      const totalArea = currentFloorArea * currentFloors;
+      const rate = RATES_TABLE[currentFloors][currentFinish];
+      const totalCost = totalArea * rate;
+      const lakhText = (totalCost / 100000).toFixed(2) + ' লাখ টাকা';
+
+      const finishNames = {
+        economy: 'সাধারণ (Economy)',
+        standard: 'স্ট্যান্ডার্ড (Standard)',
+        premium: 'প্রিমিয়াম (Premium)'
+      };
+
+      let message = `*বাড়ি নির্মাণ খরচের হিসাব সংক্রান্ত অনুসন্ধান*\n` +
+        `------------------------------------\n` +
+        `👤 নাম: ${name}\n` +
+        `📱 ফোন: ${phone}\n` +
+        `📍 অবস্থান: ${upazila}, ${district}\n` +
+        `📐 প্রতি তলার আয়তন: ${currentFloorArea} স্কয়ার ফিট\n` +
+        `🏢 তলা সংখ্যা: ${currentFloors} তলা (মোট ${totalArea} sft)\n` +
+        `✨ ফিনিশিং মান: ${finishNames[currentFinish]}\n` +
+        `💰 আনুমানিক সনাতন খরচ: ৳ ${totalCost.toLocaleString('en-US')} (${lakhText})\n`;
+
+      if (notes) {
+        message += `🏠 নির্বাচিত মডেল / মন্তব্য: ${notes}\n`;
+      }
+      message += `------------------------------------\n` +
+        `আমি বিস্তারিত ড্রয়িং ও বংশাই হাউজিং-এর ফিক্সড বাজেটের সমাধান পেতে চাই।`;
+
+      // Redirect to WhatsApp with prefilled text
+      const waUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    // DOM Ready & Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const areaInput = document.getElementById('floorAreaInput');
+      const areaChips = document.querySelectorAll('#areaChips .preset-chip');
+      const floorBtns = document.querySelectorAll('#floorsSelector .floor-btn');
+      const finishCards = document.querySelectorAll('#finishSelector .finish-card');
+      const districtSelect = document.getElementById('districtSelect');
+      const upazilaSelect = document.getElementById('upazilaSelect');
+      const tierTabBtns = document.querySelectorAll('#areaTierTabs .tier-tab-btn');
+      const categoryFilter = document.getElementById('modelCategoryFilter');
+      const searchInput = document.getElementById('modelSearchInput');
+      const showMoreBtn = document.getElementById('showMoreBtn');
+
+      // Populate 64 Districts
+      const districtNames = Object.keys(BD_GEO).sort();
+      districtNames.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        districtSelect.appendChild(opt);
+      });
+
+      // District -> Upazila Cascade
+      districtSelect.addEventListener('change', function() {
+        const selected = this.value;
+        const upazilas = BD_GEO[selected] || [];
+        upazilaSelect.innerHTML = '<option value="" disabled selected>উপজেলা বেছে নিন</option>';
+        upazilas.forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u;
+          opt.textContent = u;
+          upazilaSelect.appendChild(opt);
+        });
+        upazilaSelect.disabled = false;
+      });
+
+      // Area Input Handler
+      areaInput.addEventListener('input', function() {
+        currentFloorArea = parseInt(this.value) || 0;
+        areaChips.forEach(c => c.classList.remove('active'));
+        recalculate();
+      });
+
+      // Area Preset Chips
+      areaChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+          areaChips.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          currentFloorArea = parseInt(this.getAttribute('data-val'));
+          areaInput.value = currentFloorArea;
+          recalculate();
+        });
+      });
+
+      // Floor Buttons
+      floorBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          floorBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentFloors = parseInt(this.getAttribute('data-floors'));
+          recalculate();
+        });
+      });
+
+      // Finish Quality Cards
+      finishCards.forEach(card => {
+        card.addEventListener('click', function() {
+          finishCards.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          currentFinish = this.getAttribute('data-finish');
+          recalculate();
+        });
+      });
+
+      // Area Tier Filter Tabs
+      tierTabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          tierTabBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          activeAreaTier = this.getAttribute('data-tier');
+          isExpandedView = false;
+          renderBongshaiModels();
+        });
+      });
+
+      // Category Dropdown Filter
+      categoryFilter.addEventListener('change', function() {
+        activeCategoryFilter = this.value;
+        isExpandedView = false;
+        renderBongshaiModels();
+      });
+
+      // Model Search Input
+      searchInput.addEventListener('input', function() {
+        activeSearchQuery = this.value.trim();
+        isExpandedView = false;
+        renderBongshaiModels();
+      });
+
+      // Show More Button Toggle
+      showMoreBtn.addEventListener('click', function() {
+        isExpandedView = !isExpandedView;
+        renderBongshaiModels();
+      });
+
+      // Initial calculation run
+      recalculate();
+    });
+  </script>
+</body>
+</html>

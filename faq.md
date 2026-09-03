@@ -62,11 +62,11 @@ Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building compan
 
 What areas of Bangladesh does Bongshai Housing serve?
 
-We serve all 64 districts of Bangladesh, with dedicated project teams based in Dhaka, Chattogram, and Cumilla. See our full district-by-district service area list for details on your region.
+We serve customers nationwide across Bangladesh, with dedicated project teams based in Dhaka, Chattogram, and Cumilla. See our full district-by-district service area list for details on your region.
 
 Is Bongshai Housing a certified company?
 
-Yes. Bongshai Housing is ISO 9001:2015 certified for Quality Management and follows OHSAS 18001 / ISO 45001 occupational health and safety standards, with in-house material testing on every steel, concrete, and panel component before use.
+Yes. Bongshai Housing follows BNBC 2020 and AISC structural design codes and applies rigorous quality-control and safety checks at every stage of construction.
 
 What is a pre-engineered steel building?
 

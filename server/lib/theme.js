@@ -47,7 +47,7 @@ const ARCHETYPES = {
     tagline: 'High-density statistics ticker & technical specs',
     icon: '📊',
     badge: 'Industrial PEB',
-    description: 'Text-forward industrial powerhouse layout featuring live metrics (64 districts, 500+ projects) and dense engineering comparison tables.',
+    description: 'Text-forward industrial powerhouse layout featuring live metrics (nationwide, 100+ projects) and dense engineering comparison tables.',
   },
   'mobile-priority': {
     name: 'Mobile-Priority Touch Architecture',

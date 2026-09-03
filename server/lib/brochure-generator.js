@@ -126,7 +126,7 @@ function generateBrochurePdf({ product, agent, specs = [], res }) {
 
   doc.fillColor('#1E3A8A').fontSize(9.5).font('Helvetica-Bold').text('CONNECT WITH YOUR REGIONAL BONGSHAI REPRESENTATIVE', 52, footerY + 10);
 
-  const phone = agent?.phone || '+8801711200241';
+  const phone = agent?.phone || '+8801781636613';
   const email = agent?.email || 'info@bongshaihousing.com';
   const district = agent?.district ? ` | District: ${agent.district}` : '';
 

@@ -58,29 +58,29 @@ Quality First
 
 ## Our Commitment to Excellence
 
-At Bongshai Housing, quality control is rigorous. We are committed to adhering to international ISO standards for all our pre-engineered steel buildings, ensuring maximum safety, durability, and compliance.
+At Bongshai Housing, quality control is rigorous. We are committed to adhering to BNBC 2020 and AISC structural design codes for all our pre-engineered steel buildings, ensuring maximum safety, durability, and compliance.
 
 🏆
 
-## ISO 9001 Compliant
+## Structural Design Codes
 
-Our manufacturing processes are aligned with global quality management systems.
+Our manufacturing and construction processes follow BNBC 2020 and AISC structural design standards.
 
 Read Full Details
 
 🛡️
 
-## Safety First (OHSAS)
+## Site Safety Practices
 
-Occupational health and safety are prioritized on every construction site.
+Occupational health and safety practices are enforced on every construction site.
 
 Read Full Details
 
 🧪
 
-## Material Testing
+## Material Quality
 
-All steel, concrete, and panel materials undergo strict laboratory testing before use.
+Steel, concrete, and panel materials are quality-checked before use in construction.
 
 Read Full Details
 

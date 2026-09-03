@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  BONGSHAI HOUSING — জমি রেজিস্ট্রি খরচ ক্যালকুলেটর (২০২৬)
+  Prototype File: scratch/calculators/land-registration-cost.html
+  Language: Bengali (বাংলা) | Mobile-First Lightweight Architecture
+
+  LEGAL & REGULATORY SOURCES (Bangladesh 2026 Actual Rates):
+  1. Registration Act 1908 (Section 78) & Inspector General of Registration (IGR) fee schedules:
+     - Registration Fee: 1% of deed declared value (minimum ৳100).
+  2. Stamp Act 1899 (as amended by Finance Acts):
+     - Stamp Duty: 1.5% of deed value for Saf-Kabla (sale deed).
+  3. Local Government Acts (City Corporation, Pourashava, Upazila/Zilla Parishad):
+     - Dhaka & Chattogram City Corporation / Cantonment areas: 2% - 3% (typically 2% to 3%)
+     - Other City Corporations: 2% - 3%
+     - District & Upazila Pourashavas: 2%
+     - Union Parishad / Rural areas: 1%
+  4. Income Tax Act 2023 / Finance Acts 2024-2025 / 2025-2026 (Section 53FF / Source Tax / Gain Tax):
+     - Dhaka & Chattogram City Corporation (commercial/prime residential): 4% - 6% (or mouza minimum per katha)
+     - Other City Corporations: 3% - 4%
+     - District & Upazila Pourashavas: 2% - 3%
+     - Union Parishad / Rural areas: 1.5% - 2%
+     * Note: Statutorily payable by seller (দাতার প্রদেয়), but traditionally factored into net registration costs.
+  5. Value Added Tax (VAT / মূসক):
+     - Individual-to-individual land sale: 0% (No VAT applicable).
+     - Registered Real Estate Developer / Housing Project sale: 2% - 3% (applicable on plot/flat transfer).
+  6. Ancillary Fixed Government Fees:
+     - Affidavit Stamp (হলফনামা স্ট্যাম্প): ৳300
+     - E-Fee (ই-ফি): ৳100
+     - N & NN Fees (নকল ও নথি তল্লাশি ফি): ~৳250 - ৳500 (based on word count / pages)
+     - Court Fee (কোর্ট ফি): ৳10 - ৳20
+     - Total fixed fees: ~৳710
+  7. Rate Ranges & Transparency:
+     - Source tax and local taxes vary by specific Mouza schedules and local authority circulars;
+       labeled ranges are explicitly displayed rather than false-precision single values.
+  ==========================================================================
+-->
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>জমি রেজিস্ট্রি খরচ ক্যালকুলেটর ২০২৬ | সঠিক সরকারি খরচের হিসাব | বংশাই হাউজিং</title>
+  <meta name="description" content="২০২৬ সালের সর্বশেষ বাজেট ও আইন অনুযায়ী জমি রেজিস্ট্রির পূর্ণাঙ্গ সরকারি খরচের হিসাব। স্ট্যাম্প ডিউটি, রেজিস্ট্রেশন ফি, স্থানীয় সরকার কর ও উৎসে করের আইটেমাইজড ব্রেকডাউন।">
+  <meta name="author" content="বংশাই হাউজিং লিগ্যাল ও এস্টিমেশন টিম">
+
+  <!-- Google Fonts: Hind Siliguri (Bengali) + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FAQ Schema for AEO / AI Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "২০২৬ সালে বাংলাদেশে জমি রেজিস্ট্রি করতে মোট কত শতাংশ খরচ হয়?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "২০২৬ সালে বাংলাদেশে জমি রেজিস্ট্রির মোট সরকারি খরচ এলাকাভেদে সাধারণত দলিল মূল্যের ৫% থেকে ১১.৫% পর্যন্ত হয়। যেমন: ইউনিয়ন পরিষদে ৫%-৫.৫%, পৌরসভায় ৬.৫%-৭.৫% এবং সিটি কর্পোরেশনে ৮.৫%-১১.৫% পর্যন্ত সরকারি ফি ও কর প্রযোজ্য।"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "জমি রেজিস্ট্রিতে কোন কোন খাতে সরকারি ফি দিতে হয়?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "জমি রেজিস্ট্রির প্রধান সরকারি খাতগুলো হলো: রেজিস্ট্রেশন ফি ১%, স্ট্যাম্প ডিউটি ১.৫%, স্থানীয় সরকার কর ১%-৩%, উৎসে আয়কর ১.৫%-৬%, এবং হলফনামা ও ই-ফি বাবদ প্রায় ৭১০ টাকা।"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "জমি রেজিস্ট্রির উৎসে কর (Source Tax) কার পরিশোধ করার কথা?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "আয়কর আইন ২০২৩-এর ধারা ৫৩এফএফ অনুযায়ী উৎসে কর বিক্রেতার প্রদেয়। তবে প্রচলিত প্রথা ও ক্রয়-বিক্রয় চুক্তির শর্তানুসারে রেজিস্ট্রেশনের সময় চালানের মাধ্যমে এটি পরিশোধ করে দলিলের সাথে জমা দিতে হয়।"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — Matching Bongshai Housing Brand Palette
+       ============================================================ */
+    :root {
+      --bg-navy: #0f172a;        /* Deep Slate Navy (Brand Dark) */
+      --card-navy: #1e293b;      /* Slate Card Background */
+      --card-hover: #27354a;     /* Interactive Hover State */
+      --card-border: rgba(255, 255, 255, 0.09);
+      --card-border-gold: rgba(253, 224, 71, 0.35);
+
+      --gold-accent: #FDE047;    /* Light Gold / Bright Yellow Accent */
+      --gold-primary: #EAB308;   /* Brand Gold */
+      --gold-dark: #CA8A04;      /* Deep Gold */
+      --gold-glow: rgba(253, 224, 71, 0.22);
+
+      --blue-accent: #38bdf8;    /* Tech Sky Blue */
+      --green-success: #10b981;  /* Success Emerald */
+      --amber-warning: #f59e0b;  /* Warning Amber */
+
+      --text-white: #ffffff;
+      --text-light: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --font-main: 'Hind Siliguri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+      --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.35);
+      --shadow-gold: 0 10px 28px rgba(234, 179, 8, 0.28);
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-navy);
+      color: var(--text-light);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Top Brand Bar */
+    .brand-topbar {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-topbar-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+    .brand-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--gold-accent) 0%, var(--gold-primary) 100%);
+      color: var(--bg-navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(253, 224, 71, 0.35);
+    }
+    .brand-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-logo-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--gold-accent);
+      line-height: 1.2;
+    }
+    .brand-logo-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .brand-hotline-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(253, 224, 71, 0.12);
+      border: 1px solid rgba(253, 224, 71, 0.3);
+      color: var(--gold-accent);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .brand-hotline-btn:hover {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      transform: translateY(-1px);
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    /* Hero & Answer-First Section */
+    .hero-box {
+      text-align: center;
+      margin-bottom: 26px;
+      padding: 0 4px;
+    }
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--blue-accent);
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: clamp(1.6rem, 4.5vw, 2.3rem);
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.3;
+      margin-bottom: 14px;
+    }
+    .hero-title span {
+      color: var(--gold-accent);
+      display: inline-block;
+    }
+
+    /* AEO Direct Answer Block (< 45 words) */
+    .answer-first-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      border: 1px solid var(--card-border-gold);
+      border-left: 4px solid var(--gold-accent);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      text-align: left;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .answer-first-card p {
+      font-size: 1rem;
+      color: #e2e8f0;
+      line-height: 1.65;
+    }
+    .answer-first-card strong {
+      color: var(--gold-accent);
+    }
+    .trust-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px dashed rgba(255,255,255,0.08);
+      padding-top: 8px;
+    }
+
+    /* Calculator Main Card */
+    .calc-card {
+      background: var(--card-navy);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+    .form-label-hint {
+      font-size: 0.8rem;
+      color: var(--gold-accent);
+      font-weight: 400;
+    }
+
+    /* Numeric Inputs */
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .calc-input {
+      width: 100%;
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-family: var(--font-main);
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding: 12px 60px 12px 16px;
+      outline: none;
+      transition: all 0.2s ease;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .calc-input::-webkit-outer-spin-button,
+    .calc-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .calc-input:focus {
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    .input-unit {
+      position: absolute;
+      right: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      pointer-events: none;
+    }
+
+    /* Quick Preset Chips */
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 0.84rem;
+      font-family: var(--font-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .preset-chip:hover {
+      background: rgba(253, 224, 71, 0.15);
+      color: var(--gold-accent);
+      border-color: var(--gold-accent);
+    }
+    .preset-chip.active {
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-weight: 700;
+      border-color: var(--gold-accent);
+    }
+
+    /* Area Selector Cards */
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .area-card {
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .area-card:hover {
+      border-color: rgba(253, 224, 71, 0.4);
+    }
+    .area-card.active {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 16px var(--gold-glow);
+    }
+    .area-card-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 3px;
+    }
+    .area-card.active .area-card-title {
+      color: var(--gold-accent);
+    }
+    .area-card-desc {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .area-rate-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--blue-accent);
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-top: 4px;
+    }
+
+    /* Seller Type Radio Group */
+    .seller-type-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .seller-type-btn {
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      color: var(--text-light);
+      font-family: var(--font-main);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .seller-type-btn:hover {
+      border-color: var(--gold-accent);
+    }
+    .seller-type-btn.active {
+      background: rgba(253, 224, 71, 0.15);
+      border-color: var(--gold-accent);
+      color: var(--gold-accent);
+    }
+
+    /* Result Showcase Box */
+    .result-showcase {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 1.5px solid var(--gold-accent);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      margin-top: 26px;
+      position: relative;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    }
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gold-accent);
+      color: var(--bg-navy);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 12px;
+    }
+
+    .result-total-box {
+      text-align: center;
+      margin: 10px 0 20px;
+    }
+    .result-total-label {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .result-total-taka {
+      font-size: clamp(1.9rem, 6vw, 2.7rem);
+      font-weight: 800;
+      color: var(--gold-accent);
+      line-height: 1.2;
+      text-shadow: 0 0 24px rgba(253, 224, 71, 0.3);
+    }
+    .result-total-lakh {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    .result-total-percent {
+      display: inline-block;
+      margin-top: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--blue-accent);
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    /* Itemized Breakdown Table */
+    .breakdown-table-box {
+      margin-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 16px;
+    }
+    .breakdown-table-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+    .breakdown-table th {
+      text-align: left;
+      padding: 8px 10px;
+      background: #090d16;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .breakdown-table th:last-child {
+      text-align: right;
+    }
+    .breakdown-table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+    }
+    .breakdown-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      color: var(--gold-accent);
+      white-space: nowrap;
+    }
+    .breakdown-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .fee-subtext {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 2px;
+    }
+    .range-tag {
+      font-size: 0.72rem;
+      color: var(--amber-warning);
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* Fixed Ancillary Fees List */
+    .fixed-fees-card {
+      background: #090d16;
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-top: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .fixed-fees-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+    .fixed-fees-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px 12px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .fixed-fees-grid span strong {
+      color: var(--text-light);
+    }
+
+    /* Notice Card */
+    .mouza-notice-box {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #fde68a;
+      line-height: 1.5;
+    }
+
+    /* Lead Capture Block */
+    .lead-block {
+      background: linear-gradient(150deg, #1e293b 0%, #0d1527 100%);
+      border: 1.5px solid rgba(253, 224, 71, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 26px 20px;
+      margin-top: 36px;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.4);
+    }
+    .lead-head {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .lead-head h3 {
+      font-size: clamp(1.2rem, 3.5vw, 1.45rem);
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 6px;
+    }
+    .lead-head p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .lead-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-full {
+      grid-column: 1 / -1;
+    }
+    .lead-input, .lead-select {
+      width: 100%;
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-md);
+      color: var(--text-white);
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .lead-input:focus, .lead-select:focus {
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    .lead-select option {
+      background: #1e293b;
+      color: #fff;
+    }
+
+    /* CTA WhatsApp Button */
+    .whatsapp-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 14px 20px;
+      font-family: var(--font-main);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+      transition: all 0.25s ease;
+      margin-top: 16px;
+    }
+    .whatsapp-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45);
+    }
+    .whatsapp-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 30px;
+    }
+    .section-head h2 {
+      font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.35;
+      margin-bottom: 14px;
+    }
+    .faq-item {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .faq-item h3 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      margin-bottom: 6px;
+    }
+    .faq-item p {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    /* Footer / Disclaimer */
+    .footer-note {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 640px) {
+      .main-wrapper {
+        padding: 16px 12px 50px;
+      }
+      .hero-title {
+        font-size: 1.55rem;
+      }
+      .calc-card {
+        padding: 18px 14px;
+      }
+      .area-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .seller-type-box {
+        grid-template-columns: 1fr;
+      }
+      .lead-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .fixed-fees-grid {
+        grid-template-columns: 1fr;
+      }
+      .brand-hotline-btn span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="brand-topbar">
+    <div class="brand-topbar-inner">
+      <a href="https://bongshaihousing.com/" class="brand-logo" title="বংশাই হাউজিং হোমপেজ">
+        <div class="brand-logo-icon">ব</div>
+        <div class="brand-logo-text">
+          <span class="brand-logo-title">বংশাই হাউজিং</span>
+          <span class="brand-logo-sub">Bongshai Housing Ltd.</span>
+        </div>
+      </a>
+      <a href="tel:+8801781636613" class="brand-hotline-btn">
+        📞 <span>হটলাইন:</span> ০১৭৮১-৬৩৬৬১৩
+      </a>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    <!-- Hero / Header -->
+    <div class="hero-box">
+      <div class="trust-badge">
+        📜 ২০২৬ সালের সর্বশেষ সরকারি গেজেট ও আইন ভিত্তিক
+      </div>
+      <h1 class="hero-title">জমি রেজিস্ট্রি খরচ ক্যালকুলেটর <span>২০২৬</span></h1>
+    </div>
+
+    <!-- AEO Direct Answer Block (< 45 words) -->
+    <section class="answer-first-card" aria-label="সংক্ষিপ্ত উত্তর">
+      <p>
+        ২০২৬ সালে বাংলাদেশে জমি রেজিস্ট্রির মোট সরকারি খরচ এলাকাভেদে দলিল মূল্যের <strong>৫% থেকে ১১.৫%</strong> পর্যন্ত হয়। এর মধ্যে রেজিস্ট্রেশন ফি ১%, স্ট্যাম্প ডিউটি ১.৫%, স্থানীয় সরকার কর ১-৩% এবং এলাকাভেদে উৎসে কর ১.৫% থেকে ৬% প্রযোজ্য।
+      </p>
+      <div class="trust-meta">
+        <span>⚖️ আইনগত ভিত্তি: রেজিস্ট্রেশন আইন ১৯০৮ ও আয়কর আইন ২০২৩</span>
+        <span>📅 বাজেট হার: ২০২৫-২০২৬ অর্থবছর</span>
+        <span>📍 এলাকাভিত্তিক পৃথক হার</span>
+      </div>
+    </section>
+
+    <!-- Main Calculator Form & Logic -->
+    <section class="calc-card" data-mcp-action="calculate-land-registration-cost">
+      
+      <!-- Input 1: Land / Deed Declared Value -->
+      <div class="form-group">
+        <label class="form-label" for="deedValueInput">
+          <span>১. জমির দলিলের ঘোষিত মোট মূল্য (টাকায়)</span>
+          <span class="form-label-hint">কমপক্ষে ১,০০,০০০ টাকা</span>
+        </label>
+        <div class="input-wrapper">
+          <input 
+            type="number" 
+            id="deedValueInput" 
+            class="calc-input" 
+            value="1000000" 
+            min="50000" 
+            step="50000"
+            data-mcp-param="deedValue"
+          >
+          <span class="input-unit">৳</span>
+        </div>
+        <!-- Quick Preset Chips -->
+        <div class="preset-chips" id="valueChips">
+          <button type="button" class="preset-chip" data-val="500000">৫ লাখ</button>
+          <button type="button" class="preset-chip active" data-val="1000000">১০ লাখ</button>
+          <button type="button" class="preset-chip" data-val="2500000">২৫ লাখ</button>
+          <button type="button" class="preset-chip" data-val="5000000">৫০ লাখ</button>
+          <button type="button" class="preset-chip" data-val="10000000">১ কোটি</button>
+        </div>
+      </div>
+
+      <!-- Input 2: Location / Area Type -->
+      <div class="form-group">
+        <label class="form-label">
+          <span>২. জমির অবস্থান ও এলাকার ধরন</span>
+          <span class="form-label-hint">এলাকাভেদে করের হার ভিন্ন</span>
+        </label>
+        <div class="area-grid" id="areaSelector" data-mcp-param="areaType">
+          <!-- Dhaka/Chattogram City Corp -->
+          <div class="area-card active" data-area="dhaka_ctg">
+            <div>
+              <div class="area-card-title">ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন</div>
+              <div class="area-card-desc">ডিএনসিসি, ডিএসসিসি ও সিজিসিসি এবং সংলগ্ন ক্যান্টনমেন্ট অঞ্চল।</div>
+            </div>
+            <div class="area-rate-pill">মোট সরকারি হার: ~ ৮.৫% – ১১.৫%</div>
+          </div>
+
+          <!-- Other City Corporations -->
+          <div class="area-card" data-area="other_city">
+            <div>
+              <div class="area-card-title">অন্যান্য সিটি কর্পোরেশন</div>
+              <div class="area-card-desc">গাজীপুর, নারায়ণগঞ্জ, রাজশাহী, খুলনা, সিলেট, বরিশাল ইত্যাদি।</div>
+            </div>
+            <div class="area-rate-pill">মোট সরকারি হার: ~ ৭.৫% – ৯.৫%</div>
+          </div>
+
+          <!-- Pourashava -->
+          <div class="area-card" data-area="pourashava">
+            <div>
+              <div class="area-card-title">জেলা ও উপজেলা পৌরসভা</div>
+              <div class="area-card-desc">সারাদেশের সকল জেলা ও উপজেলা ভিত্তিক মিউনিসিপ্যালিটি।</div>
+            </div>
+            <div class="area-rate-pill">মোট সরকারি হার: ~ ৬.৫% – ৭.৫%</div>
+          </div>
+
+          <!-- Union Parishad -->
+          <div class="area-card" data-area="union">
+            <div>
+              <div class="area-card-title">ইউনিয়ন পরিষদ / গ্রামাঞ্চল</div>
+              <div class="area-card-desc">পৌরসভার বাইরে অবস্থিত সাধারণ গ্রাম ও ইউনিয়ন ভূমি এলাকা।</div>
+            </div>
+            <div class="area-rate-pill">মোট সরকারি হার: ~ ৫.০% – ৫.৫%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input 3: Seller Category (Individual vs Developer) -->
+      <div class="form-group">
+        <label class="form-label">
+          <span>৩. জমি বিক্রেতার ধরন</span>
+          <span class="form-label-hint">ভ্যাট প্রযোজ্যতার জন্য</span>
+        </label>
+        <div class="seller-type-box" id="sellerSelector" data-mcp-param="sellerType">
+          <button type="button" class="seller-type-btn active" data-seller="individual">
+            ব্যক্তি মালিকানাধীন জমি (ভ্যাট ০%)
+          </button>
+          <button type="button" class="seller-type-btn" data-seller="developer">
+            হাউজিং / ডেভেলপার প্রকল্প (ভ্যাট ২%-৩%)
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Calculation Result Showcase -->
+      <div class="result-showcase" id="resultContainer">
+        <div style="text-align: center;">
+          <span class="result-badge">⚖️ জমি রেজিস্ট্রি সরকারি খরচের খতিয়ান</span>
+        </div>
+
+        <div class="result-total-box">
+          <div class="result-total-label">আনুমানিক মোট সরকারি খরচ (চালান ও ফি)</div>
+          <div class="result-total-taka" id="dispTotalCost">৳ ১,০৫,৭১০</div>
+          <div class="result-total-lakh" id="dispTotalLakh">১.০৬ লাখ টাকা</div>
+          <div>
+            <span class="result-total-percent" id="dispTotalPercent">দলিল মূল্যের প্রায় ১০.৫%</span>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;" id="dispCostRange">
+            (সম্ভাব্য রেঞ্জ: ৳ ৮৫,৭১০ – ৳ ১,১৫,৭১০ | ৮.৫% – ১১.৫%)
+          </div>
+        </div>
+
+        <!-- Itemized Breakdown Table -->
+        <div class="breakdown-table-box">
+          <div class="breakdown-table-title">
+            <span>আইটেমাইজড ফি ও ট্যাক্স তালিকা:</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">(শতকরা হার ও টাকা)</span>
+          </div>
+
+          <table class="breakdown-table">
+            <thead>
+              <tr>
+                <th>খাতের নাম ও বিবরণ</th>
+                <th>হার (%)</th>
+                <th>পরিমাণ (টাকা)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Registration Fee -->
+              <tr>
+                <td>
+                  <strong>১. রেজিস্ট্রেশন ফি (Registration Fee)</strong>
+                  <span class="fee-subtext">রেজিস্ট্রেশন আইন ১৯০৮ অনুযায়ী নির্ধারিত</span>
+                </td>
+                <td>১.০%</td>
+                <td id="rowRegFee">৳ ১০,০০০</td>
+              </tr>
+
+              <!-- Stamp Duty -->
+              <tr>
+                <td>
+                  <strong>২. স্ট্যাম্প ডিউটি (Stamp Duty)</strong>
+                  <span class="fee-subtext">১৮৯৯ সালের স্ট্যাম্প আইনের বর্তমান হার</span>
+                </td>
+                <td>১.৫%</td>
+                <td id="rowStampDuty">৳ ১৫,০০০</td>
+              </tr>
+
+              <!-- Local Government Tax -->
+              <tr>
+                <td>
+                  <strong>৩. স্থানীয় সরকার কর (Local Govt. Tax)</strong>
+                  <span class="fee-subtext" id="rowLocalTaxDesc">সিটি কর্পোরেশন এলাকার জন্য ২% – ৩%</span>
+                </td>
+                <td id="rowLocalTaxRate">২.০% – ৩.০%</td>
+                <td id="rowLocalTax">৳ ২০,০০০ – ৩০,০০০</td>
+              </tr>
+
+              <!-- Source Tax / Gain Tax -->
+              <tr>
+                <td>
+                  <strong>৪. উৎসে আয়কর / গেইন ট্যাক্স (Source Tax)</strong>
+                  <span class="fee-subtext">আয়কর আইন ২০২৩, ধারা ৫৩এফএফ (আইনত বিক্রেতার প্রদেয়)</span>
+                  <span class="range-tag">মৌজাভেদে তারতম্য</span>
+                </td>
+                <td id="rowSourceTaxRate">৪.০% – ৬.০%</td>
+                <td id="rowSourceTax">৳ ৪০,০০০ – ৬০,০০০</td>
+              </tr>
+
+              <!-- VAT -->
+              <tr>
+                <td>
+                  <strong>৫. মূল্য সংযোজন কর (মূসক / VAT)</strong>
+                  <span class="fee-subtext" id="rowVatDesc">ব্যক্তি মালিকানাধীন সাধারণ জমিতে প্রযোজ্য নয়</span>
+                </td>
+                <td id="rowVatRate">০.০%</td>
+                <td id="rowVat">৳ ০</td>
+              </tr>
+
+              <!-- Fixed Ancillary Fees -->
+              <tr>
+                <td>
+                  <strong>৬. অন্যান্য নির্দিষ্ট সরকারি ফি</strong>
+                  <span class="fee-subtext">হলফনামা (৩০০৳), ই-ফি (১০০৳), এন-ফি (৩০০৳), কোর্ট ফি (১০৳)</span>
+                </td>
+                <td>ফিক্সড</td>
+                <td>৳ ৭১০</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Fixed Fees Card -->
+          <div class="fixed-fees-card">
+            <div class="fixed-fees-title">নির্দিষ্ট আনুষঙ্গিক ফি-র বিস্তারিত:</div>
+            <div class="fixed-fees-grid">
+              <span>• হলফনামা স্ট্যাম্প: <strong>৩০০ টাকা</strong></span>
+              <span>• ই-ফি (E-Fee): <strong>১০০ টাকা</strong></span>
+              <span>• এন ও এনএন ফি (নকল ফি): <strong>৩০০ টাকা</strong></span>
+              <span>• কোর্ট ফি স্ট্যাম্প: <strong>১০ টাকা</strong></span>
+            </div>
+          </div>
+
+          <!-- Non-government / Deed writer advisory note -->
+          <div style="margin-top:12px; font-size:0.8rem; color:var(--text-muted); border-left: 2px solid var(--blue-accent); padding-left:10px;">
+            ℹ️ <strong>দলিল লেখক (মুহুরী) ও আইনি খরচ:</strong> সরকারি ফি ছাড়াও দলিল ড্রাফটিং ও লেখক সমিতির নিয়ম অনুযায়ী দলিল প্রতি আনুমানিক ৫,০০০ থেকে ১৫,০০০ টাকা পর্যন্ত পেশাগত ফি আলোচনা সাপেক্ষে হতে পারে।
+          </div>
+        </div>
+
+        <!-- Mouza Notice Box -->
+        <div class="mouza-notice-box">
+          ⚠️ <strong>মৌজা রেইট সংক্রান্ত সতর্কতা:</strong> জমি যে মৌজায় অবস্থিত, সেখানে সরকার নির্ধারিত সর্বনিম্ন গড় বাজারমূল্য রয়েছে। দলিলে লিখিত মূল্য যদি সরকারি মৌজা মূল্যের চেয়ে কম দেখানো হয়, তবে সরকারি মৌজা মূল্যকেই ভিত্তি ধরে কর ও ফি পরিশোধ করতে হয়।
+        </div>
+      </div>
+    </section>
+
+    <!-- Lead Capture Section -->
+    <section class="lead-block" id="leadCapture" data-mcp-action="submit-registration-lead">
+      <div class="lead-head">
+        <h3>জমি রেজিস্ট্রি সংক্রান্ত আইনি সহায়তা চান?</h3>
+        <p>দলিলের মৌজা মূল্য যাচাই, খতিয়ান বা নামজারি চেক এবং সঠিক সরকারি খরচ নির্ধারণে আমাদের লিগ্যাল ও এস্টিমেশন টিমের পরামর্শ নিন।</p>
+      </div>
+
+      <form id="registrationLeadForm" onsubmit="handleLeadSubmit(event)">
+        <div class="lead-form-grid">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="leadName">আপনার নাম *</label>
+            <input type="text" id="leadName" class="lead-input" placeholder="যেমন: ইঞ্জিনিয়ার সাদিকুর রহমান" required data-mcp-param="leadName">
+          </div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="leadPhone">মোবাইল নম্বর *</label>
+            <input type="tel" id="leadPhone" class="lead-input" placeholder="01XXXXXXXXX" pattern="[0-9]{11}" required data-mcp-param="leadPhone">
+          </div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="districtSelect">জমির জেলা নির্বাচন করুন *</label>
+            <select id="districtSelect" class="lead-select" required data-mcp-param="district">
+              <option value="" disabled selected>জেলা বেছে নিন</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="upazilaSelect">উপজেলা / থানা বা সাব-রেজিস্ট্রি অফিস *</label>
+            <select id="upazilaSelect" class="lead-select" required disabled data-mcp-param="upazila">
+              <option value="">প্রথমে জেলা নির্বাচন করুন</option>
+            </select>
+          </div>
+
+          <div class="form-group form-full" style="margin-bottom:0;">
+            <label class="form-label" for="leadNotes">জমির অতিরিক্ত বিবরণ (ঐচ্ছিক)</label>
+            <input type="text" id="leadNotes" class="lead-input" placeholder="যেমন: মৌজার নাম, জমির পরিমাণ (শতাংশ/কাঠা) বা দলিলের ধরন">
+          </div>
+        </div>
+
+        <button type="submit" class="whatsapp-btn" id="waSubmitBtn">
+          <svg viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.584 1.961.949 2.796.949 3.183 0 5.77-2.587 5.77-5.766.001-3.182-2.585-5.766-5.77-5.766zm10.024 5.828c0 5.518-4.484 9.999-10.023 9.999-1.748 0-3.385-.45-4.821-1.238l-7.211 1.889 1.927-7.032c-.879-1.492-1.395-3.23-1.395-5.088 0-5.519 4.485-10 10.023-10 5.541 0 10.024 4.481 10.024 10z"/>
+          </svg>
+          <span>হোয়াটসঅ্যাপে রেজিস্ট্রি খরচের খসড়া ও পরামর্শ নিন</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Natural Language Question-Based FAQs (AEO Compliant) -->
+    <section class="faq-section">
+      <div class="section-head">
+        <h2>জমি রেজিস্ট্রি সম্পর্কিত সাধারণ প্রশ্নোত্তর</h2>
+      </div>
+
+      <div class="faq-item">
+        <h3>২০২৬ সালে বাংলাদেশে জমি রেজিস্ট্রি করতে মোট কত টাকা বা কত শতাংশ খরচ হয়?</h3>
+        <p>২০২৬ সালে জমি রেজিস্ট্রির মোট সরকারি খরচ এলাকাভেদে ৫% থেকে ১১.৫% পর্যন্ত হয়। যেমন: ইউনিয়ন পরিষদ এলাকায় ৫% থেকে ৫.৫%, পৌরসভা এলাকায় ৬.৫% থেকে ৭.৫% এবং সিটি কর্পোরেশন এলাকায় ৮.৫% থেকে ১১.৫% পর্যন্ত সরকারি কর ও ফি নির্ধারিত রয়েছে। এর সাথে নির্দিষ্ট সরকারি ফি বাবদ ৭১০ টাকা যুক্ত হয়।</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>জমি রেজিস্ট্রেশনে কোন কোন খাতে সরকারি ফি দিতে হয়?</h3>
+        <p>মূল সরকারি খাতগুলো হলো: ১% রেজিস্ট্রেশন ফি, ১.৫% স্ট্যাম্প ডিউটি, এলাকাভেদে ১% থেকে ৩% স্থানীয় সরকার কর, এলাকাভেদে ১.৫% থেকে ৬% উৎসে আয়কর (গেইন ট্যাক্স) এবং হলফনামা স্ট্যাম্প, ই-ফি ও নকল ফি বাবদ ৭১০ টাকা। ব্যক্তি মালিকানাধীন জমিতে ভ্যাট দিতে হয় না।</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>গ্রাম ও শহরের জমি রেজিস্ট্রির খরচে কী কী পার্থক্য রয়েছে?</h3>
+        <p>গ্রাম এলাকায় (ইউনিয়ন পরিষদ) স্থানীয় সরকার কর মাত্র ১% এবং উৎসে আয়কর ১.৫% থেকে ২%। অন্যদিকে সিটি কর্পোরেশন এলাকায় স্থানীয় সরকার কর ২% থেকে ৩% এবং উৎসে আয়কর ৪% থেকে ৬% পর্যন্ত হয়ে থাকে। ফলে শহর এলাকায় জমি রেজিস্ট্রির খরচ তুলনামূলক বেশি হয়।</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>রেজিস্ট্রেশনের উৎসে আয়কর (Source Tax) কে পরিশোধ করবে?</h3>
+        <p>আয়কর আইন ২০২৩-এর ধারা ৫৩এফএফ অনুযায়ী জমি বিক্রির উৎসে আয়কর বা গেইন ট্যাক্স বিক্রেতার প্রদেয়। তবে বাস্তব ক্ষেত্রে ক্রেতা ও বিক্রেতার মধ্যকার পারস্পরিক চুক্তি অনুযায়ী জমি রেজিস্ট্রির সময় চালান ও পে-অর্ডারের মাধ্যমে এটি সাব-রেজিস্ট্রারের দপ্তরে জমা দিতে হয়।</p>
+      </div>
+    </section>
+
+    <!-- Disclaimer & Footer -->
+    <footer class="footer-note">
+      <p>※ এই ক্যালকুলেটরে প্রদর্শিত খরচ বাংলাদেশ সরকারের বর্তমান অর্থ আইন ও রেজিস্ট্রেশন নির্দেশিকা অনুযায়ী প্রস্তুতকৃত। স্থানীয় সাব-রেজিস্ট্রি অফিসের বিশেষ প্রজ্ঞাপন বা মৌজা শ্রেণির পরিবর্তনের কারণে বাস্তব ফি সামান্য কম-বেশি হতে পারে।</p>
+      <p style="margin-top: 6px; color: var(--gold-accent);">© ২০২৬ বংশাই হাউজিং লিমিটেড | জমি যাচাই, নকশা অনুমোদন ও বাড়ি নির্মাণে আপনার বিশ্বস্ত পার্টনার</p>
+    </footer>
+  </main>
+
+  <!-- Complete 64 Districts Data & Registration Calculator Logic -->
+  <script>
+    // Bangladesh 64 Districts and Upazilas (Bengali)
+    const BD_GEO = {
+      "ঢাকা": ["ঢাকা সদর", "ধানমন্ডি", "মিরপুর", "উত্তরা", "গুলশান", "সাভার", "ধামরাই", "কেরানীগঞ্জ", "নবাবগঞ্জ", "দোহার"],
+      "গাজীপুর": ["গাজীপুর সদর", "কালিয়াকৈর", "শ্রীপুর", "কাপাসিয়া", "কালীগঞ্জ"],
+      "নারায়ণগঞ্জ": ["নারায়ণগঞ্জ সদর", "রূপগঞ্জ", "সোনারগাঁও", "আড়াইহাজার", "বন্দর"],
+      "নরসিংদী": ["নরসিংদী সদর", "পলাশ", "শিবপুর", "মনোহরদী", "বেলাবো", "রায়পুরা"],
+      "টাঙ্গাইল": ["টাঙ্গাইল সদর", "মির্জাপুর", "কালিহাতী", "ঘাটাইল", "সখিপুর", "বাসাইল", "ভূঞাপুর", "দেলদুয়ার", "গোপালপুর", "মধুপুর", "নাগরপুর"],
+      "কিশোরগঞ্জ": ["কিশোরগঞ্জ সদর", "ভৈরব", "বাজিতপুর", "হোসেনপুর", "করিমগঞ্জ", "কটিয়াদী", "কুলিয়ারচর", "নিকলী", "তাড়াইল", "পাকুন্দিয়া", "ইটনা", "মিঠামইন", "অষ্টগ্রাম"],
+      "মানিকগঞ্জ": ["মানিকগঞ্জ সদর", "সিংগাইর", "শিবালয়", "ঘিওর", "দৌলতপুর", "সাটুরিয়া", "হরিরামপুর"],
+      "মুন্সীগঞ্জ": ["মুন্সীগঞ্জ সদর", "সিরাজদিখান", "শ্রীনগর", "লৌহজং", "গজারিয়া", "টংগিবাড়ী"],
+      "ফরিদপুর": ["ফরিদপুর সদর", "বোয়ালমারী", "ভাঙ্গা", "আলফাডাঙ্গা", "মধুখালী", "নগরকান্দা", "সদরপুর", "চরভদ্রাসন", "সালথা"],
+      "গোপালগঞ্জ": ["গোপালগঞ্জ সদর", "কাশিয়ানী", "কোটালীপাড়া", "মুকসুদপুর", "টুঙ্গিপাড়া"],
+      "মাদারীপুর": ["মাদারীপুর সদর", "শিবচর", "কালকিনি", "রাজৈর", "ডাসার"],
+      "রাজবাড়ী": ["রাজবাড়ী সদর", "গোয়ালন্দ", "পাংশা", "বালিয়াকান্দি", "কালুখালী"],
+      "শরীয়তপুর": ["শরীয়তপুর সদর", "নড়িয়া", "জাজিরা", "গোসাইরহাট", "ডামুড্যা", "ভেদরগঞ্জ"],
+      "চট্টগ্রাম": ["চট্টগ্রাম কোতোয়ালি", "পাঁচলাইশ", "হালিশহর", "পটিয়া", "সীতাকুণ্ড", "মীরসরাই", "হাটহাজারী", "রাউজান", "রাঙ্গুনিয়া", "বোয়ালখালী", "আনোয়ারা", "চন্দনাইশ", "লোহাগাড়া", "বাঁশখালী", "সন্দ্বীপ", "কর্ণফুলী"],
+      "কক্সবাজার": ["কক্সবাজার সদর", "চকোরিয়া", "রামু", "টেকনাফ", "উখিয়া", "পেকুয়া", "মহেশখালী", "কুতুবদিয়া", "ঈদগাঁও"],
+      "কুমিল্লা": ["কুমিল্লা আদর্শ সদর", "কুমিল্লা সদর দক্ষিণ", "দাউদকান্দি", "চান্দিনা", "দেবিদ্বার", "মুরাদনগর", "হোমনা", "লাকসাম", "চৌদ্দগ্রাম", "ব্রাহ্মণপাড়া", "বুড়িচং", "বরুড়া", "নাঙ্গলকোট", "মেঘনা", "তিতাস", "মনোহরগঞ্জ", "লালমাই"],
+      "ফেনী": ["ফেনী সদর", "দাগনভূঞা", "সোনাগাজী", "ছাগলনাইয়া", "পরশুরাম", "ফুলগাজী"],
+      "ব্রাহ্মণবাড়িয়া": ["ব্রাহ্মণবাড়িয়া সদর", "আশুগঞ্জ", "সরাইল", "কসবা", "আখাউড়া", "নবীনগর", "বাঞ্ছারামপুর", "নাসিরনগর", "বিজয়নগর"],
+      "চাঁদপুর": ["চাঁদপুর সদর", "হাজীগঞ্জ", "শাহরাস্তি", "মতলব উত্তর", "মতলব দক্ষিণ", "ফরিদগঞ্জ", "কচুয়া", "হাইমচর"],
+      "নোয়াখালী": ["নোয়াখালী সদর", "বেগমগঞ্জ", "চাটখিল", "কোম্পানীগঞ্জ", "সেনবাগ", "হাতিয়া", "সুবর্ণচর", "কবিরহাট", "সোনাইমুড়ী"],
+      "লক্ষ্মীপুর": ["লক্ষ্মীপুর সদর", "রায়পুর", "রামগঞ্জ", "রামগতি", "কমলনগর"],
+      "রাঙ্গামাটি": ["রাঙ্গামাটি সদর", "কাপ্তাই", "কাউখালী", "বাঘাইছড়ি", "বরকল", "লংগদু", "রাজস্থলী", "বিলাইছড়ি", "জুরাইছড়ি", "নানিয়ারচর"],
+      "বান্দরবান": ["বান্দরবান সদর", "রুমা", "থানচি", "রোয়াংছড়ি", "লামা", "আলীকদম", "নাইক্ষ্যংছড়ি"],
+      "খাগড়াছড়ি": ["খাগড়াছড়ি সদর", "দীঘিনালা", "পানছড়ি", "মহালছড়ি", "মাটিরাঙ্গা", "মানিকছড়ি", "রামগড়", "গুইমারা"],
+      "রাজশাহী": ["রাজশাহী সদর", "পবা", "গোদাগাড়ী", "তানোর", "মোহনপুর", "বাগমারা", "পুঠিয়া", "দুর্গাপুর", "চারঘাট", "বাঘা"],
+      "বগুড়া": ["বগুড়া সদর", "শেরপুর", "শিবগঞ্জ", "দুপচাঁচিয়া", "গাবতলী", "কাহালু", "নন্দীগ্রাম", "সারিয়াকান্দি", "ধুনট", "আদমদিঘী", "সোনাতলা", "শাজাহানপুর"],
+      "পাবনা": ["পাবনা সদর", "ঈশ্বরদী", "সাঁথিয়া", "সুজানগর", "ফরিদপুর", "বেড়া", "ভাঙ্গুড়া", "চাটমোহর", "আটঘরিয়া"],
+      "সিরাজগঞ্জ": ["সিরাজগঞ্জ সদর", "বেলকুচি", "কামারখন্দ", "কাজীপুর", "রায়গঞ্জ", "শাহজাদপুর", "তাড়াশ", "উল্লাপাড়া", "চৌহালী"],
+      "নওগাঁ": ["নওগাঁ সদর", "মহাদেবপুর", "বদলগাছী", "পত্নীতলা", "ধামইরহাট", "নিয়ামাতপুর", "মান্দা", "আত্রাই", "রাণীনগর", "সাপাহার", "পোরশা"],
+      "নাটোর": ["নাটোর সদর", "সিংড়া", "বড়াইগ্রাম", "বাগাতিপাড়া", "লালপুর", "গুরুদাসপুর", "নলডাঙ্গা"],
+      "চাঁপাইনবাবগঞ্জ": ["চাঁপাইনবাবগঞ্জ সদর", "শিবগঞ্জ", "গোমস্তাপুর", "নাচোল", "ভোলাহাট"],
+      "জয়পুরহাট": ["জয়পুরহাট সদর", "পাঁচবিবি", "কালাই", "ক্ষেতলাল", "আক্কেলপুর"],
+      "খুলনা": ["খুলনা সদর", "দৌলতপুর", "খালিশপুর", "ডুমুরিয়া", "ফুলতলা", "দিঘলিয়া", "বটিয়াঘাটা", "দাকোপ", "পাইকগাছা", "কয়রা", "তেরখাদা", "রূপসা"],
+      "যশোর": ["যশোর সদর", "ঝিকরগাছা", "শার্শা", "অভয়নগর", "মণিরামপুর", "কেশবপুর", "বাঘারপাড়া", "চৌগাছা"],
+      "সাতক্ষীরা": ["সাতক্ষীরা সদর", "কলারোয়া", "তালা", "কালীগঞ্জ", "শ্যামনগর", "আশাশুনি", "দেবহাটা"],
+      "কুষ্টিয়া": ["কুষ্টিয়া সদর", "কুমারখালী", "মিরপুর", "ভেড়ামারা", "দৌলতপুর", "খোকসা"],
+      "ঝিনাইদহ": ["ঝিনাইদহ সদর", "কালীগঞ্জ", "কোটচাঁদপুর", "মহেশপুর", "শৈলকুপা", "হরিণাকুণ্ডু"],
+      "বাগেরহাট": ["বাগেরহাট সদর", "ফকিরহাট", "মোল্লাহাট", "রামপাল", "মোংলা", "কচুয়া", "মোরেলগঞ্জ", "শরণখোলা", "চিতলমারী"],
+      "চুয়াডাঙ্গা": ["চুয়াডাঙ্গা সদর", "আলমডাঙ্গা", "দামুড়হুদা", "জীবননগর"],
+      "মেহেরপুর": ["মেহেরপুর সদর", "গাংনী", "মুজিবনগর"],
+      "মাগুরা": ["মাগুরা সদর", "শ্রীপুর", "মহম্মদপুর", "শালিখা"],
+      "নড়াইল": ["নড়াইল সদর", "লোহাগড়া", "কালিয়া"],
+      "বরিশাল": ["বরিশাল সদর", "বাবুগঞ্জ", "উজিরপুর", "বাকেরগঞ্জ", "গৌরনদী", "আগৈলঝাড়া", "বানারীপাড়া", "মেহেন্দিগঞ্জ", "মুলাদী", "হিজলা"],
+      "পটুয়াখালী": ["পটুয়াখালী সদর", "গলাচিপা", "বাউফল", "দশমিনা", "কলাপাড়া", "মির্জাগঞ্জ", "দুমকি", "রাঙ্গাবালী"],
+      "ভোলা": ["ভোলা সদর", "দৌলতখান", "বোরহানউদ্দিন", "তজুমদ্দিন", "লালমোহন", "চরফ্যাশন", "মনপুরা"],
+      "পিরোজপুর": ["পিরোজপুর সদর", "নাজিরপুর", "মঠবাড়িয়া", "ভাণ্ডারিয়া", "কাউখালী", "নেছারাবাদ", "ইন্দুরকানী"],
+      "বরগুনা": ["বরগুনা সদর", "আমতলী", "পাথরঘাটা", "বেতাগী", "বামনা", "তালতলী"],
+      "ঝালকাঠি": ["ঝালকাঠি সদর", "নলছিটি", "রাজাপুর", "কাঠালিয়া"],
+      "সিলেট": ["সিলেট সদর", "দক্ষিণ সুরমা", "গোলাপগঞ্জ", "বিয়ানীবাজার", "বিশ্বনাথ", "ফেঞ্চুগঞ্জ", "বালাগঞ্জ", "কোম্পানীগঞ্জ", "জৈন্তাপুর", "গোয়াইনঘাট", "জকিগঞ্জ", "কানাইঘাট", "ওসমানীনগর"],
+      "মৌলভীবাজার": ["মৌলভীবাজার সদর", "শ্রীমঙ্গল", "কমলগঞ্জ", "কুলাউড়া", "বড়লেখা", "রাজনগর", "জুড়ী"],
+      "হবিগঞ্জ": ["হবিগঞ্জ সদর", "নবীগঞ্জ", "বাহুবল", "চুনারুঘাট", "মাধবপুর", "লাখাই", "বানিয়াচং", "আজমিরীগঞ্জ", "শায়স্তাগঞ্জ"],
+      "সুনামগঞ্জ": ["সুনামগঞ্জ সদর", "ছাতক", "জগন্নাথপুর", "দোয়ারাবাজার", "তাহিরপুর", "ধর্মপাশা", "জামালগঞ্জ", "শাল্লা", "দিরাই", "বিশ্বম্ভরপুর", "শান্তিগঞ্জ", "মধ্যনগর"],
+      "রংপুর": ["রংপুর সদর", "বদরগঞ্জ", "পীরগঞ্জ", "মিঠাপুকুর", "গঙ্গাচড়া", "কাউনিয়া", "পীরগাছা", "তারাগঞ্জ"],
+      "দিনাজপুর": ["দিনাজপুর সদর", "বিরামপুর", "বীরগঞ্জ", "বোচাগঞ্জ", "ফুলবাড়ী", "চিরিরবন্দর", "ঘোড়াঘাট", "হাকিমপুর", "কাহারোল", "খানসামা", "নবাবগঞ্জ", "পার্বতীপুর"],
+      "কুড়িগ্রাম": ["কুড়িগ্রাম সদর", "নাগেশ্বরী", "ভুরুঙ্গামারী", "উলিপুর", "চিলমারী", "রৌমারী", "রাজীবপুর", "ফুলবাড়ী", "রাজারহাট"],
+      "গাইবান্ধা": ["গাইবান্ধা সদর", "গোবিন্দগঞ্জ", "সুন্দরগঞ্জ", "সাদুল্লাপুর", "পলাশবাড়ী", "সাঘাটা", "ফুলছড়ি"],
+      "নীলফামারী": ["নীলফামারী সদর", "সৈয়দপুর", "ডোমার", "ডিমলা", "জলঢাকা", "কিশোরগঞ্জ"],
+      "পঞ্চগড়": ["পঞ্চগড় সদর", "তেঁতুলিয়া", "বোদা", "আটোয়ারী", "দেবীগঞ্জ"],
+      "লালমনিরহাট": ["লালমনিরহাট সদর", "হাতীবান্ধা", "পাটগ্রাম", "কালীগঞ্জ", "আদিতমারী"],
+      "ঠাকুরগাঁও": ["ঠাকুরগাঁও সদর", "পীরগঞ্জ", "রাণীশংকৈল", "বালিয়াডাঙ্গী", "হরিপুর"],
+      "ময়মনসিংহ": ["ময়মনসিংহ সদর", "মুক্তাগাছা", "ত্রিশাল", "ভালুকা", "গফরগাঁও", "ফুলবাড়িয়া", "ঈশ্বরগঞ্জ", "নান্দাইল", "হালুয়াঘাট", "ধোবাউড়া", "ফুলপুর", "তারাকান্দা"],
+      "জামালপুর": ["জামালপুর সদর", "মেলান্দহ", "ইসলামপুর", "দেওয়ানগঞ্জ", "সরিষাবাড়ী", "মাদারগঞ্জ", "বকশীগঞ্জ"],
+      "নেত্রকোণা": ["নেত্রকোণা সদর", "কেন্দুয়া", "মদন", "মোহনগঞ্জ", "বারহাট্টা", "কলমাকান্দা", "পূর্বধলা", "দুর্গাপুর", "খালিয়াজুড়ি", "আটপাড়া"],
+      "শেরপুর": ["শেরপুর সদর", "নকলা", "নালিতাবাড়ী", "শ্রীবরদী", "ঝিনাইগাতী"]
+    };
+
+    // Actual 2026 Bangladesh Land Registration Rate Matrix
+    const REG_RATES = {
+      dhaka_ctg: {
+        name: "ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন",
+        regFee: 0.01,          // 1%
+        stampDuty: 0.015,       // 1.5%
+        localTaxMin: 0.02,      // 2%
+        localTaxMax: 0.03,      // 3%
+        localTaxAvg: 0.025,
+        sourceTaxMin: 0.04,     // 4%
+        sourceTaxMax: 0.06,     // 6%
+        sourceTaxAvg: 0.05,
+        localDesc: "সিটি কর্পোরেশন এলাকার জন্য ২% – ৩%",
+        sourceDesc: "প্রাইম এলাকা ও মৌজাভেদে ৪% – ৬%"
+      },
+      other_city: {
+        name: "অন্যান্য সিটি কর্পোরেশন",
+        regFee: 0.01,          // 1%
+        stampDuty: 0.015,       // 1.5%
+        localTaxMin: 0.02,      // 2%
+        localTaxMax: 0.03,      // 3%
+        localTaxAvg: 0.02,
+        sourceTaxMin: 0.03,     // 3%
+        sourceTaxMax: 0.04,     // 4%
+        sourceTaxAvg: 0.035,
+        localDesc: "সিটি কর্পোরেশন এলাকার জন্য ২% – ৩%",
+        sourceDesc: "সিটি এলাকাভেদে ৩% – ৪%"
+      },
+      pourashava: {
+        name: "জেলা ও উপজেলা পৌরসভা",
+        regFee: 0.01,          // 1%
+        stampDuty: 0.015,       // 1.5%
+        localTaxMin: 0.02,      // 2%
+        localTaxMax: 0.02,      // 2%
+        localTaxAvg: 0.02,
+        sourceTaxMin: 0.02,     // 2%
+        sourceTaxMax: 0.03,     // 3%
+        sourceTaxAvg: 0.025,
+        localDesc: "পৌরসভা ট্যাক্স ২%",
+        sourceDesc: "পৌরসভা এলাকায় ২% – ৩%"
+      },
+      union: {
+        name: "ইউনিয়ন পরিষদ / গ্রামাঞ্চল",
+        regFee: 0.01,          // 1%
+        stampDuty: 0.015,       // 1.5%
+        localTaxMin: 0.01,      // 1%
+        localTaxMax: 0.01,      // 1%
+        localTaxAvg: 0.01,
+        sourceTaxMin: 0.015,    // 1.5%
+        sourceTaxMax: 0.02,     // 2%
+        sourceTaxAvg: 0.015,
+        localDesc: "ইউনিয়ন পরিষদ কর ১%",
+        sourceDesc: "গ্রাম ও ইউনিয়ন এলাকায় ১.৫% – ২%"
+      }
+    };
+
+    const FIXED_FEES = 710; // 300 (Affidavit) + 100 (E-Fee) + 300 (N-Fee) + 10 (Court Fee)
+
+    // Current State
+    let currentDeedValue = 1000000;
+    let currentAreaType = "dhaka_ctg";
+    let currentSellerType = "individual";
+
+    // Number Converter to Bengali Digits
+    function toBengaliDigits(num) {
+      const bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      return String(num).replace(/[0-9]/g, d => bn[+d]);
+    }
+
+    // Format BDT with Bangladeshi Comma Grouping
+    function formatBDT(amount) {
+      const n = Math.round(amount);
+      const str = n.toString();
+      if (str.length <= 3) return '৳ ' + toBengaliDigits(str);
+      const lastThree = str.substring(str.length - 3);
+      const remaining = str.substring(0, str.length - 3);
+      const formatted = remaining.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
+      return '৳ ' + toBengaliDigits(formatted);
+    }
+
+    // Format Lakhs
+    function formatLakhs(amount) {
+      const lakh = (amount / 100000).toFixed(2);
+      return toBengaliDigits(lakh) + ' লাখ টাকা';
+    }
+
+    // Recalculate Registration Fees
+    function recalculate() {
+      const val = Math.max(50000, parseFloat(currentDeedValue) || 0);
+      const area = REG_RATES[currentAreaType];
+      const isDeveloper = (currentSellerType === "developer");
+
+      // 1. Registration Fee: 1%
+      const regFee = Math.round(val * area.regFee);
+
+      // 2. Stamp Duty: 1.5%
+      const stampDuty = Math.round(val * area.stampDuty);
+
+      // 3. Local Government Tax
+      const localTaxMinVal = Math.round(val * area.localTaxMin);
+      const localTaxMaxVal = Math.round(val * area.localTaxMax);
+      const localTaxAvgVal = Math.round(val * area.localTaxAvg);
+
+      // 4. Source Tax (Sec 53FF)
+      const sourceTaxMinVal = Math.round(val * area.sourceTaxMin);
+      const sourceTaxMaxVal = Math.round(val * area.sourceTaxMax);
+      const sourceTaxAvgVal = Math.round(val * area.sourceTaxAvg);
+
+      // 5. VAT (0% for individual, 2% for developer)
+      const vatRate = isDeveloper ? 0.02 : 0;
+      const vatVal = Math.round(val * vatRate);
+
+      // Totals
+      const totalMin = regFee + stampDuty + localTaxMinVal + sourceTaxMinVal + vatVal + FIXED_FEES;
+      const totalMax = regFee + stampDuty + localTaxMaxVal + sourceTaxMaxVal + vatVal + FIXED_FEES;
+      const totalAvg = regFee + stampDuty + localTaxAvgVal + sourceTaxAvgVal + vatVal + FIXED_FEES;
+
+      const minPercent = ((totalMin / val) * 100).toFixed(1);
+      const maxPercent = ((totalMax / val) * 100).toFixed(1);
+      const avgPercent = ((totalAvg / val) * 100).toFixed(1);
+
+      // Update Showcase Header
+      document.getElementById('dispTotalCost').textContent = formatBDT(totalAvg);
+      document.getElementById('dispTotalLakh').textContent = formatLakhs(totalAvg);
+      document.getElementById('dispTotalPercent').textContent = 'দলিল মূল্যের প্রায় ' + toBengaliDigits(avgPercent) + '%';
+      
+      if (totalMin !== totalMax) {
+        document.getElementById('dispCostRange').textContent = 
+          '(সম্ভাব্য রেঞ্জ: ' + formatBDT(totalMin) + ' – ' + formatBDT(totalMax) + ' | ' + 
+          toBengaliDigits(minPercent) + '% – ' + toBengaliDigits(maxPercent) + '%)';
+      } else {
+        document.getElementById('dispCostRange').textContent = 
+          '(নির্ধারিত সরকারি মোট হার: ' + toBengaliDigits(avgPercent) + '%)';
+      }
+
+      // Update Breakdown Table Rows
+      document.getElementById('rowRegFee').textContent = formatBDT(regFee);
+      document.getElementById('rowStampDuty').textContent = formatBDT(stampDuty);
+
+      // Local Tax Row
+      document.getElementById('rowLocalTaxDesc').textContent = area.localDesc;
+      if (area.localTaxMin !== area.localTaxMax) {
+        document.getElementById('rowLocalTaxRate').textContent = 
+          toBengaliDigits((area.localTaxMin * 100).toFixed(1)) + '% – ' + toBengaliDigits((area.localTaxMax * 100).toFixed(1)) + '%';
+        document.getElementById('rowLocalTax').textContent = formatBDT(localTaxMinVal) + ' – ' + formatBDT(localTaxMaxVal).replace('৳ ', '');
+      } else {
+        document.getElementById('rowLocalTaxRate').textContent = toBengaliDigits((area.localTaxMin * 100).toFixed(1)) + '%';
+        document.getElementById('rowLocalTax').textContent = formatBDT(localTaxAvgVal);
+      }
+
+      // Source Tax Row
+      if (area.sourceTaxMin !== area.sourceTaxMax) {
+        document.getElementById('rowSourceTaxRate').textContent = 
+          toBengaliDigits((area.sourceTaxMin * 100).toFixed(1)) + '% – ' + toBengaliDigits((area.sourceTaxMax * 100).toFixed(1)) + '%';
+        document.getElementById('rowSourceTax').textContent = formatBDT(sourceTaxMinVal) + ' – ' + formatBDT(sourceTaxMaxVal).replace('৳ ', '');
+      } else {
+        document.getElementById('rowSourceTaxRate').textContent = toBengaliDigits((area.sourceTaxMin * 100).toFixed(1)) + '%';
+        document.getElementById('rowSourceTax').textContent = formatBDT(sourceTaxAvgVal);
+      }
+
+      // VAT Row
+      if (isDeveloper) {
+        document.getElementById('rowVatDesc').textContent = "ডেভেলপার / হাউজিং কোম্পানির প্লট (২% মূসক)";
+        document.getElementById('rowVatRate').textContent = "২.০%";
+        document.getElementById('rowVat').textContent = formatBDT(vatVal);
+      } else {
+        document.getElementById('rowVatDesc').textContent = "ব্যক্তি মালিকানাধীন সাধারণ জমিতে ভ্যাট নেই";
+        document.getElementById('rowVatRate').textContent = "০.০%";
+        document.getElementById('rowVat').textContent = "৳ ০";
+      }
+    }
+
+    // Lead Form WhatsApp Submission
+    function handleLeadSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const district = document.getElementById('districtSelect').value;
+      const upazila = document.getElementById('upazilaSelect').value;
+      const notes = document.getElementById('leadNotes').value.trim();
+
+      const areaInfo = REG_RATES[currentAreaType];
+      const lakhText = (currentDeedValue / 100000).toFixed(2) + ' লাখ টাকা';
+      const avgCostText = document.getElementById('dispTotalCost').textContent;
+      const percentText = document.getElementById('dispTotalPercent').textContent;
+
+      let message = `*জমি রেজিস্ট্রি খরচ সংক্রান্ত অনুসন্ধান*\n` +
+        `------------------------------------\n` +
+        `👤 নাম: ${name}\n` +
+        `📱 ফোন: ${phone}\n` +
+        `📍 অবস্থান: ${upazila}, ${district}\n` +
+        `💰 ঘোষিত দলিল মূল্য: ৳ ${Number(currentDeedValue).toLocaleString('en-US')} (${lakhText})\n` +
+        `🏢 এলাকার ধরন: ${areaInfo.name}\n` +
+        `🏷️ বিক্রেতার ধরন: ${currentSellerType === 'developer' ? 'হাউজিং কোম্পানি' : 'ব্যক্তি মালিকানা'}\n` +
+        `📊 আনুমানিক রেজিস্ট্রি খরচ: ${avgCostText} (${percentText})\n`;
+
+      if (notes) {
+        message += `📝 মন্তব্য/জমির বিবরণ: ${notes}\n`;
+      }
+      message += `------------------------------------\n` +
+        `আমি দলিল যাচাই, মৌজা মূল্য ও সঠিক রেজিস্ট্রি খরচের আইনি সহায়তা পেতে চাই।`;
+
+      const waUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    // Event Listeners on DOM Load
+    document.addEventListener('DOMContentLoaded', function() {
+      const deedInput = document.getElementById('deedValueInput');
+      const valueChips = document.querySelectorAll('#valueChips .preset-chip');
+      const areaCards = document.querySelectorAll('#areaSelector .area-card');
+      const sellerBtns = document.querySelectorAll('#sellerSelector .seller-type-btn');
+      const districtSelect = document.getElementById('districtSelect');
+      const upazilaSelect = document.getElementById('upazilaSelect');
+
+      // Populate 64 Districts
+      const districtNames = Object.keys(BD_GEO).sort();
+      districtNames.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        districtSelect.appendChild(opt);
+      });
+
+      // District -> Upazila Cascade
+      districtSelect.addEventListener('change', function() {
+        const selected = this.value;
+        const upazilas = BD_GEO[selected] || [];
+        upazilaSelect.innerHTML = '<option value="" disabled selected>উপজেলা / সাব-রেজিস্ট্রি অফিস বেছে নিন</option>';
+        upazilas.forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u;
+          opt.textContent = u;
+          upazilaSelect.appendChild(opt);
+        });
+        upazilaSelect.disabled = false;
+      });
+
+      // Deed Value Input
+      deedInput.addEventListener('input', function() {
+        currentDeedValue = parseFloat(this.value) || 0;
+        valueChips.forEach(c => c.classList.remove('active'));
+        recalculate();
+      });
+
+      // Value Preset Chips
+      valueChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+          valueChips.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          currentDeedValue = parseFloat(this.getAttribute('data-val'));
+          deedInput.value = currentDeedValue;
+          recalculate();
+        });
+      });
+
+      // Area Selector Cards
+      areaCards.forEach(card => {
+        card.addEventListener('click', function() {
+          areaCards.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          currentAreaType = this.getAttribute('data-area');
+          recalculate();
+        });
+      });
+
+      // Seller Type Buttons
+      sellerBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          sellerBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentSellerType = this.getAttribute('data-seller');
+          recalculate();
+        });
+      });
+
+      // Initial calculation run
+      recalculate();
+    });
+  </script>
+</body>
+</html>

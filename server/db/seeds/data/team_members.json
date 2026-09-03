@@ -73,8 +73,8 @@
   },
   {
     "name": "Engr. Zahidul Karim",
-    "role": "Lead QC Inspector (ISO 9001:2015)",
-    "bio": "Conducts non-destructive steel testing, concrete compressive strength validation, and OHSAS safety compliance audits.",
+    "role": "Lead QC Inspector",
+    "bio": "Conducts on-site quality checks on structural steel and concrete, and monitors site safety compliance.",
     "photo": null,
     "department": "quality-control",
     "sort_order": 0,
@@ -119,7 +119,7 @@
   {
     "name": "Imran Hossain",
     "role": "Project Consultation & Site Visit Coordinator",
-    "bio": "Coordinates field engineer visits across all 64 districts and manages customer inquiry intake.",
+    "bio": "Coordinates field engineer visits nationwide and manages customer inquiry intake.",
     "photo": null,
     "department": "client-service",
     "sort_order": 1,

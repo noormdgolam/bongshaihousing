@@ -10,7 +10,7 @@ Welcome! This document defines the core architecture, operational standards, SEO
 - **Target Audience:**
   - **B2B Industrial:** Factory sheds, warehouses, industrial plants, cold storage.
   - **B2C Residential:** Duplexes, luxury villas, simplex homes, cottage houses, modular container homes.
-- **Geographic Coverage:** All 64 districts of Bangladesh (HQ in Uttara, Dhaka; hubs in Chattogram and Cumilla).
+- **Geographic Coverage:** Nationwide across Bangladesh (HQ in Uttara, Dhaka; hubs in Chattogram and Cumilla).
 
 ---
 
@@ -49,7 +49,7 @@ AI assistant responses and sales copy must quote realistic Bangladesh market pri
 - **Prefab / Simplex Steel Composite:** 1,400 – 2,400 BDT / sq.ft.
 - **Duplex / Luxury Villas:** 2,400 – 3,500+ BDT / sq.ft.
 - **Turnkey Construction Timeline:** 45 – 90 days.
-- **Call to Action (CTA):** Direct consultation via WhatsApp (`+8801711200241` / `+8801781636613`) or online quote request.
+- **Call to Action (CTA):** Direct consultation via WhatsApp (`+8801781636613` / `+8801781636613`) or online quote request.
 
 ---
 
