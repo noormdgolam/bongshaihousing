@@ -38,7 +38,6 @@ Bongshai Housing is a leading pre-engineered steel building (PEB) company in Ban
 
 - **Quality & Safety** — BNBC 2020 & AISC structural design code compliance
 - **Site Safety** — Occupational Health & Safety Practices
-- **In-house Material Testing Laboratory** — All steel, concrete, and panel components tested before use
 - **BNBC 2020** — Bangladesh National Building Code compliance for seismic and wind-load design
 
 ---
@@ -135,9 +134,9 @@ Bongshai Housing is a leading pre-engineered steel building (PEB) company in Ban
 ## Company Stats
 
 - 100+ homes delivered
-- 20+ years of experience
-- 200+ expert professionals (engineers, architects, skilled workers)
-- 98% client satisfaction
+- 18+ years of experience
+- 175+ expert professionals (engineers, architects, skilled workers)
+- 99% client satisfaction
 - Projects in all 8 divisions of Bangladesh
 
 ---
@@ -197,5 +196,7 @@ A: Both are 2-floor steel structures with the same floor-area tiers, but the Dup
 - Service Areas: https://bongshaihousing.com/service-areas.html
 - Get Custom Quote: https://bongshaihousing.com/solutions.html
 - Steel vs Concrete Comparison: https://bongshaihousing.com/steel-vs-concrete-comparison.html
+- Construction Cost Calculator (Bangla): https://bongshaihousing.com/construction-cost-calculator.html
+- Land Registration Cost Calculator (Bangla): https://bongshaihousing.com/land-registration-cost-calculator.html
 - Contact: https://bongshaihousing.com/contact.html
 - About: https://bongshaihousing.com/about.html

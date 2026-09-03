@@ -58,7 +58,7 @@ Everything you need to know about prefab and steel building construction in Bang
 
 What is Bongshai Housing?
 
-Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building company and EPC (Engineering, Procurement, Construction) contractor with 20+ years of experience, delivering prefab housing, cottages, container houses, and industrial steel structures from our office in Uttara, Dhaka.
+Bongshai Housing Ltd. is a Bangladesh-based pre-engineered steel building company and EPC (Engineering, Procurement, Construction) contractor with 18+ years of experience, delivering prefab housing, cottages, container houses, and industrial steel structures from our office in Uttara, Dhaka.
 
 What areas of Bangladesh does Bongshai Housing serve?
 

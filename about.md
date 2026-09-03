@@ -54,7 +54,7 @@ About Us
 
 ## Bangladesh's Most Trusted Housing Company
 
-20+ years of building dreams with international quality, innovative prefab technology, and an unwavering commitment to excellence.
+18+ years of building dreams with international quality, innovative prefab technology, and an unwavering commitment to excellence.
 
 🏆
 
