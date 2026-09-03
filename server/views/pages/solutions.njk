@@ -166,8 +166,8 @@
                 </div>
 
                 <div style="margin-bottom: var(--space-4);">
-                  <label for="email" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">Email Address</label>
-                  <input type="email" id="email" name="email" placeholder="john@example.com" data-mcp-param="email" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s;">
+                  <label for="email" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">Email Address *</label>
+                  <input type="email" id="email" name="email" required="" placeholder="john@example.com" data-mcp-param="email" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s;">
                 </div>
 
                 <div style="margin-bottom: var(--space-4);">
@@ -191,23 +191,28 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
                   <div>
-                    <label for="district" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">District *</label>
+                    <label for="division" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">Division *</label>
                     <div style="position: relative;">
-                      <select id="district" name="district" required="" onchange="loadUpazilas(this.value)" data-mcp-param="district" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s; appearance: none; cursor: pointer;">
-                        <option value="">Select District</option>
+                      <select id="division" name="division" required="" data-mcp-param="division" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s; appearance: none; cursor: pointer;">
+                        <option value="">Select Division</option>
                       </select>
                       <div style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--grey-500);">▼</div>
                     </div>
                   </div>
                   <div>
-                    <label for="upazila" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">Upazila *</label>
+                    <label for="district" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">District *</label>
                     <div style="position: relative;">
-                      <select id="upazila" name="upazila" required="" data-mcp-param="upazila" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s; appearance: none; cursor: pointer;">
-                        <option value="">Select Upazila</option>
+                      <select id="district" name="district" required="" disabled="" data-mcp-param="district" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s; appearance: none; cursor: pointer;">
+                        <option value="">Select Division First</option>
                       </select>
                       <div style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--grey-500);">▼</div>
                     </div>
                   </div>
+                </div>
+
+                <div style="margin-bottom: var(--space-4);">
+                  <label for="upazila" style="display: block; font-size: 0.9rem; font-weight: 600; color: var(--grey-700); margin-bottom: 8px;">Police Station / Thana *</label>
+                  <input type="text" id="upazila" name="upazila" required="" placeholder="e.g., Uttara, Gulshan" data-mcp-param="upazila" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--grey-200); background: var(--off-white); font-size: 1rem; outline: none; transition: all 0.3s;">
                 </div>
 
                 <div style="margin-bottom: var(--space-5);">
@@ -218,6 +223,7 @@
                 <button type="submit" id="contact-submit-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px; font-size: 1.1rem; border-radius: 12px; box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);">
                   Contact Sales
                 </button>
+                <div id="contactFormFeedback" role="status" aria-live="polite" style="display:none; margin-top:16px; padding:14px 16px; border-radius:10px; font-size:0.9rem;"></div>
               </form>
             </div>
           </div>
@@ -225,6 +231,80 @@
         </div>
       </div>
     </section>
+
+    <script src="js/division-districts.js?v=1"></script>
+    <script>
+      initDivisionCascade('division', 'district');
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('contactForm');
+        if (!form) return;
+        const submitBtn = document.getElementById('contact-submit-btn');
+        const feedback = document.getElementById('contactFormFeedback');
+        const submitBtnLabel = submitBtn ? submitBtn.innerHTML : '';
+        const formLoadTime = Date.now();
+
+        function showFeedback(kind, html) {
+          if (!feedback) return;
+          feedback.style.display = 'block';
+          feedback.innerHTML = html;
+          if (kind === 'success') {
+            feedback.style.background = 'rgba(240,253,244,0.9)';
+            feedback.style.border = '1px solid rgba(22,163,74,0.35)';
+            feedback.style.color = '#166534';
+          } else {
+            feedback.style.background = 'rgba(254,242,242,0.9)';
+            feedback.style.border = '1px solid rgba(220,38,38,0.3)';
+            feedback.style.color = '#991b1b';
+          }
+          feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const honeypot = document.getElementById('cust_website_url');
+          if (honeypot && honeypot.value !== '') {
+            console.warn('Spam bot detected (Honeypot filled).');
+            return;
+          }
+
+          if (Date.now() - formLoadTime < 3000) {
+            showFeedback('error', 'Please take a moment to review your details before sending.');
+            return;
+          }
+
+          const fd = new FormData(form);
+          const payload = Object.fromEntries(fd.entries());
+          // Backend expects the field name "model" for product/commission
+          // matching; this form calls it "project_type" for the visitor.
+          payload.model = payload.project_type || 'General Inquiry';
+
+          if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = 'Sending…'; }
+          if (feedback) feedback.style.display = 'none';
+
+          try {
+            const res = await fetch('/send_email.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json().catch(() => ({}));
+
+            if (res.ok && data.status === 'success') {
+              form.reset();
+              showFeedback('success', '✓ Your inquiry has been sent — our team will get back to you within 24 hours.');
+            } else {
+              showFeedback('error', (data && data.message) || 'Something went wrong sending your message. Please try again or WhatsApp us directly.');
+            }
+          } catch (err) {
+            showFeedback('error', 'Network error — please check your connection and try again.');
+          } finally {
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = submitBtnLabel; }
+          }
+        });
+      });
+    </script>
 
     <!-- FAQ SECTION FOR AEO/SEO -->
     <section class="section" style="background: var(--white); padding: var(--space-12) 0;">
