@@ -1,0 +1,84 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Nav Menu{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.4rem;">Nav Menu</h1>{% endblock %}
+{% block content %}
+{% if synced %}<div class="card" style="margin-bottom:16px; background:#f0fdf4; border-left:4px solid #16a34a;">
+  ✅ Nav synced to <strong>{{ synced }}</strong> static page(s){% if skipped and skipped != '0' %} · {{ skipped }} skipped (no nav on those pages){% endif %}{% if failed and failed != '0' %} · <span style="color:var(--danger);">{{ failed }} failed</span>{% endif %}.
+</div>{% endif %}
+{% if syncError %}<div class="card" style="margin-bottom:16px; background:#fef2f2; border-left:4px solid var(--danger);">
+  ❌ Sync failed: {{ syncError }}
+</div>{% endif %}
+
+<div class="card" style="margin-bottom:16px;">
+  <p style="color:var(--grey-600); font-size:0.9rem; margin:0 0 12px;">
+    Controls the site's main navigation — every top-level link and its dropdown.
+    Changes save instantly for server-rendered pages. Most of the site is served from
+    pre-built static files, so hit <strong>Sync to Live Site</strong> after editing to
+    push the new nav into those too.
+  </p>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <a href="/admin/nav-menu/new" class="btn btn-primary">+ Add Top-Level Item</a>
+    <form method="post" action="/admin/nav-menu/sync-static" onsubmit="return confirm('Push the current nav into every static page on the live site? This rewrites the nav block in ~205 files.');" style="display:inline;">
+      <button type="submit" class="btn">🔄 Sync to Live Site</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <table style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="text-align:left; border-bottom:2px solid var(--grey-100);">
+        <th style="padding:8px;">Order</th>
+        <th style="padding:8px;">Label</th>
+        <th style="padding:8px;">Type / URL</th>
+        <th style="padding:8px;">Visible</th>
+        <th style="padding:8px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr style="border-bottom:1px solid var(--grey-100);">
+        <td style="padding:8px; white-space:nowrap;">
+          <form method="post" action="/admin/nav-menu/{{ item.id }}/move/up" style="display:inline;"><button type="submit" class="btn" style="padding:2px 8px; font-size:0.75rem;" title="Move up">▲</button></form>
+          <form method="post" action="/admin/nav-menu/{{ item.id }}/move/down" style="display:inline;"><button type="submit" class="btn" style="padding:2px 8px; font-size:0.75rem;" title="Move down">▼</button></form>
+        </td>
+        <td style="padding:8px; font-weight:600;">{{ item.label }}</td>
+        <td style="padding:8px; font-size:0.85rem; color:var(--grey-600);">
+          {% if item.item_type == 'category_grid' %}
+            <span class="tag" style="background:var(--grey-100); padding:2px 8px; border-radius:4px; font-size:0.75rem;">Category Grid</span>
+            — managed via <a href="/admin/categories">Categories</a>
+          {% else %}{{ item.url or '—' }}{% endif %}
+        </td>
+        <td style="padding:8px;">{% if item.visible %}✅{% else %}⬜{% endif %}</td>
+        <td style="padding:8px; text-align:right; white-space:nowrap;">
+          <a href="/admin/nav-menu/{{ item.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+          <a href="/admin/nav-menu/new?parent_id={{ item.id }}" class="btn" style="padding:4px 10px; font-size:0.8rem;">+ Sub-item</a>
+          <form method="post" action="/admin/nav-menu/{{ item.id }}/delete" onsubmit="return confirm('Delete \'{{ item.label }}\'{% if item.children.length %} and its {{ item.children.length }} sub-item(s){% endif %}?');" style="display:inline;">
+            <button type="submit" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% if item.children.length %}
+      {% for child in item.children %}
+      <tr style="border-bottom:1px solid var(--grey-100); background:var(--grey-50, #fafafa);">
+        <td style="padding:8px 8px 8px 24px; white-space:nowrap;">
+          <form method="post" action="/admin/nav-menu/{{ child.id }}/move/up" style="display:inline;"><button type="submit" class="btn" style="padding:2px 8px; font-size:0.75rem;" title="Move up">▲</button></form>
+          <form method="post" action="/admin/nav-menu/{{ child.id }}/move/down" style="display:inline;"><button type="submit" class="btn" style="padding:2px 8px; font-size:0.75rem;" title="Move down">▼</button></form>
+        </td>
+        <td style="padding:8px 8px 8px 24px; color:var(--grey-700);">↳ {{ child.icon }}{% if child.icon %} {% endif %}{{ child.label }}</td>
+        <td style="padding:8px; font-size:0.85rem; color:var(--grey-600);">{{ child.url or '—' }}</td>
+        <td style="padding:8px;">{% if child.visible %}✅{% else %}⬜{% endif %}</td>
+        <td style="padding:8px; text-align:right; white-space:nowrap;">
+          <a href="/admin/nav-menu/{{ child.id }}/edit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Edit</a>
+          <form method="post" action="/admin/nav-menu/{{ child.id }}/delete" onsubmit="return confirm('Delete \'{{ child.label }}\'?');" style="display:inline;">
+            <button type="submit" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

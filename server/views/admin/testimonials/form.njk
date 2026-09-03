@@ -26,5 +26,9 @@
 <form method="post" action="/admin/testimonials/{{ testimonial.id }}/delete" onsubmit="return confirm('Delete this testimonial?');">
   <button type="submit" class="btn btn-danger">Delete Testimonial</button>
 </form>
+
+{% set entityType = "testimonial" %}
+{% set entityId = testimonial.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 {% endblock %}

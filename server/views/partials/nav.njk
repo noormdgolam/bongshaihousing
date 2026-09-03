@@ -1,5 +1,8 @@
 <!-- ======================================================
-       NAVIGATION
+       NAVIGATION — rendered from nav_items / categories (server/lib/nav.js),
+       admin-editable at /admin/nav-menu. A 'category_grid' item's dropdown
+       renders navCategories instead of its own children (no nav_items rows
+       duplicate what the categories table already has).
   ====================================================== -->
 <nav aria-label="Main navigation" class="navbar" id="mainNav" role="navigation">
 <div class="navbar-inner">
@@ -17,115 +20,43 @@
 </a>
 <!-- Desktop Menu -->
 <ul class="nav-menu" role="menubar">
+{% for item in navItems %}
 <li class="nav-item" role="none">
-<a class="nav-link" href="index.html" role="menuitem">Home</a>
-</li>
-<li class="nav-item" role="none">
-<a class="nav-link" href="about.html" role="menuitem">
-            About
-            <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</a>
-<div class="dropdown" role="menu">
-<a class="dropdown-item" href="about.html" role="menuitem">
-<div class="dropdown-icon">ℹ️</div>
-<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Company Profile</strong></div>
-</a>
-<a class="dropdown-item" href="certifications.html" role="menuitem">
-<div class="dropdown-icon">📜</div>
-<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Certifications</strong></div>
-</a>
-<a class="dropdown-item" href="faq.html" role="menuitem">
-<div class="dropdown-icon">❓</div>
-<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">FAQ</strong></div>
-</a>
-<a class="dropdown-item" href="/agent/signup.html" role="menuitem">
-<div class="dropdown-icon">🤝</div>
-<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Become an Agent</strong></div>
-</a>
-<a class="dropdown-item" href="/my-project/login.html" role="menuitem">
-<div class="dropdown-icon">📊</div>
-<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Track My Project</strong></div>
-</a>
-</div>
-</li>
-<li class="nav-item" role="none">
-<a class="nav-link" href="products-and-solutions.html" role="menuitem">
-            Products &amp; Solutions
+{% if item.item_type == 'category_grid' %}
+<a class="nav-link" href="{{ item.url }}" role="menuitem">
+            {{ item.label }}
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </a>
 <div class="dropdown image-mega-dropdown" role="menu">
   <div class="mega-image-grid">
-    <a href="apartment-building.html" class="mega-card">
-      <img src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Apartment Building" loading="lazy" width="675" height="720">
+    {% for cat in navCategories %}
+    <a href="{{ cat.landing_page_slug or (cat.slug + '.html') }}" class="mega-card">
+      <img src="{{ cat.hero_effective or cat.hero_image or 'images/products/coming-soon-placeholder.png' }}"{% if cat.hero_srcset %} srcset="{{ cat.hero_srcset }}"{% endif %} sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="{{ cat.name }}" loading="lazy"{% if cat.hero_dims %} width="{{ cat.hero_dims.width }}" height="{{ cat.hero_dims.height }}"{% endif %}>
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Apartment Building</span>
+        <span class="mega-card-title">{{ cat.name }}</span>
       </div>
     </a>
-    <a href="duplex-steel-building.html" class="mega-card">
-      <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Duplex Steel Building" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Duplex Steel Building</span>
-      </div>
-    </a>
-    <a href="simplex-steel-building.html" class="mega-card">
-      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Steel Building" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Simplex Steel Building</span>
-      </div>
-    </a>
-    <a href="cottage-house.html" class="mega-card">
-      <img src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Cottage House" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Cottage House</span>
-      </div>
-    </a>
-    <a href="container-house.html" class="mega-card">
-      <img src="images/products/bh-ct-501.webp" srcset="images/products/bh-ct-501-400w.webp 400w, images/products/bh-ct-501-700w.webp 700w, images/products/bh-ct-501.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Container House" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Container House</span>
-      </div>
-    </a>
-    <a href="steel-house.html" class="mega-card">
-      <img src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Steel House" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Steel House</span>
-      </div>
-    </a>
-    <a href="tiny-house.html" class="mega-card">
-      <img src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Tiny House" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Tiny House</span>
-      </div>
-    </a>
-    <a href="wooden-house.html" class="mega-card">
-      <img src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Wooden House" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Wooden House</span>
-      </div>
-    </a>
-    <a href="low-cost-house.html" class="mega-card">
-      <img src="images/products/coming-soon-placeholder.png" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Low Cost House — photo coming soon" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Low Cost House</span>
-      </div>
-    </a>
-    <a href="concrete-building.html" class="mega-card">
-      <img src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Concrete Building" loading="lazy" width="1024" height="1024">
-      <div class="mega-card-overlay">
-        <span class="mega-card-title">Concrete Building</span>
-      </div>
-    </a>
-    </div>
+    {% endfor %}
+  </div>
 </div>
-</li> <li class="nav-item" role="none">
-<a class="nav-link" href="projects.html" role="menuitem">Our Projects</a>
+{% elif item.children.length %}
+<a class="nav-link" href="{{ item.url }}" role="menuitem">
+            {{ item.label }}
+            <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</a>
+<div class="dropdown" role="menu">
+{% for child in item.children %}
+<a class="dropdown-item" href="{{ child.url }}" role="menuitem"{% if child.target == '_blank' %} target="_blank" rel="noopener"{% endif %}>
+<div class="dropdown-icon">{{ child.icon or '' }}</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">{{ child.label }}</strong></div>
+</a>
+{% endfor %}
+</div>
+{% else %}
+<a class="nav-link" href="{{ item.url }}" role="menuitem"{% if item.target == '_blank' %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
+{% endif %}
 </li>
-<li class="nav-item" role="none">
-<a class="nav-link" href="gallery.html" role="menuitem">Image Gallery</a>
-</li>
-<li class="nav-item" role="none">
-<a class="nav-link" href="contact.html" role="menuitem">Contact</a>
-</li>
+{% endfor %}
 </ul>
 <!-- Desktop CTA -->
 <div class="nav-cta">
@@ -146,47 +77,34 @@
   <!-- Mobile Drawer -->
 <div aria-label="Mobile navigation" class="mobile-drawer" id="mobileDrawer" role="dialog">
 <div>
-<a class="mobile-nav-link" href="index.html">Home</a>
-<div>
-<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About Us <span>▾</span>
-</button>
-<div class="mobile-sub-links">
-<a class="mobile-sub-link" href="about.html">Company Profile</a>
-<a class="mobile-sub-link" href="certifications.html">Certifications</a>
-<a class="mobile-sub-link" href="faq.html">FAQ</a>
-</div>
-</div>
+{% for item in navItems %}
+{% if item.item_type == 'category_grid' %}
       <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products &amp; Solutions <span>▾</span>
+        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">{{ item.label }} <span>▾</span>
         </button>
         <div class="mobile-sub-links">
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
-<a class="mobile-sub-link" href="apartment-building.html">Apartment building</a>
-<a class="mobile-sub-link" href="duplex-steel-building.html">Duplex steel building</a>
-<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex steel building</a>
-<a class="mobile-sub-link" href="cottage-house.html">Cottage House</a>
-<a class="mobile-sub-link" href="container-house.html">Container house</a>
-<a class="mobile-sub-link" href="steel-house.html">Steel house</a>
-<a class="mobile-sub-link" href="tiny-house.html">Tiny house</a>
-<a class="mobile-sub-link" href="wooden-house.html">Wooden House</a>
-<a class="mobile-sub-link" href="low-cost-house.html">Low Cost House</a>
-<a class="mobile-sub-link" href="concrete-building.html">Concrete building</a>
-
+{% for cat in navCategories %}
+<a class="mobile-sub-link" href="{{ cat.landing_page_slug or (cat.slug + '.html') }}">{{ cat.name }}</a>
+{% endfor %}
           {% if showQuoteShortcut %}<div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Interactive Tools</div>
           <a href="solutions.html" class="mobile-sub-link">Contact Sales</a>{% endif %}
         </div>
-      </div>      <a href="projects.html" class="mobile-nav-link">Our Projects</a>
-      <a href="gallery.html" class="mobile-nav-link">Image Gallery</a>
-      <a href="contact.html" class="mobile-nav-link">Contact</a>
-      <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Portals &amp; Tracking <span>▾</span>
-        </button>
-        <div class="mobile-sub-links">
-          <a href="/agent/signup.html" class="mobile-sub-link">🤝 Become an Agent</a>
-          <a href="/agent/login.html" class="mobile-sub-link">Agent Login</a>
-          <a href="/my-project/login.html" class="mobile-sub-link">Track My Project</a>
-        </div>
       </div>
+{% elif item.children.length %}
+<div>
+<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">{{ item.label }} <span>▾</span>
+</button>
+<div class="mobile-sub-links">
+{% for child in item.children %}
+<a class="mobile-sub-link" href="{{ child.url }}">{{ child.icon }}{% if child.icon %} {% endif %}{{ child.label }}</a>
+{% endfor %}
+</div>
+</div>
+{% else %}
+<a class="mobile-nav-link" href="{{ item.url }}">{{ item.label }}</a>
+{% endif %}
+{% endfor %}
     </div>
 
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">

@@ -62,5 +62,9 @@
     <button type="submit" class="btn btn-danger">Delete FAQ</button>
   </form>
 </div>
+
+{% set entityType = "faq" %}
+{% set entityId = faq.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 {% endblock %}

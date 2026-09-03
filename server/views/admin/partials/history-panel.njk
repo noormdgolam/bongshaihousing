@@ -1,0 +1,47 @@
+{# Shared version-history panel, included at the bottom of every entity's edit
+   form. Expects `history` (from lib/history.js's getHistory()) and
+   `entityType`/`entityId` in scope. Every save appends a new snapshot - this
+   is a version list, not a linear undo/redo stack, so "redo" is just
+   restoring the version you moved away from, still sitting right here. #}
+{% if history and history.length %}
+<div style="margin-top:32px; border-top:2px solid var(--grey-100, #eee); padding-top:20px;">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+    <h3 style="margin:0; font-size:1.1rem;">🕘 Version History</h3>
+    {% if history.length >= 2 %}
+    <form method="post" action="/admin/history/{{ entityType }}/{{ entityId }}/restore/{{ history[1].id }}" onsubmit="return confirm('Undo the last change? This restores the version from before your most recent save.');">
+      <button type="submit" class="btn btn-primary" style="padding:6px 14px; font-size:0.85rem;">↩ Undo Last Change</button>
+    </form>
+    {% endif %}
+  </div>
+  <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+      <thead>
+        <tr style="text-align:left; border-bottom:1px solid var(--grey-200, #ddd);">
+          <th style="padding:6px 10px;">When</th>
+          <th style="padding:6px 10px;">Who</th>
+          <th style="padding:6px 10px;">What changed</th>
+          <th style="padding:6px 10px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in history %}
+        <tr style="border-bottom:1px solid var(--grey-100, #f0f0f0);">
+          <td style="padding:6px 10px; white-space:nowrap;">{{ entry.createdAt | date }}{% if loop.first %} <span style="color:var(--primary, #1E40AF); font-weight:600;">(current)</span>{% endif %}</td>
+          <td style="padding:6px 10px;">{{ entry.adminName or 'Admin' }}</td>
+          <td style="padding:6px 10px; color:var(--grey-600, #666);">
+            {% if entry.changedFields.length %}{{ entry.changedFields | join(', ') }}{% else %}—{% endif %}
+          </td>
+          <td style="padding:6px 10px; text-align:right;">
+            {% if not loop.first %}
+            <form method="post" action="/admin/history/{{ entityType }}/{{ entityId }}/restore/{{ entry.id }}" onsubmit="return confirm('Restore this version? The current values will be replaced (and saved as a new history entry, so nothing is lost).');" style="display:inline;">
+                      <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Restore</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}

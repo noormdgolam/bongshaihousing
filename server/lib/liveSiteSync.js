@@ -25,6 +25,20 @@ try {
 
 const { formatTaka, formatTakaAscii } = require('./format');
 const { getThemeSettings, generateCssVariables } = require('./theme');
+const { getNavTree } = require('./nav');
+
+// partials/nav.njk renders from navItems/navCategories, which the live app
+// injects via res.locals middleware (server.js). This module renders offline
+// with no req/res, so it has to fetch that data itself - without it the nav
+// loop iterates nothing and every regenerated page ships with an empty menu.
+async function navLocals() {
+  try {
+    return await getNavTree();
+  } catch (e) {
+    console.warn('[liveSiteSync] nav data fetch failed, page will render with an empty nav:', e.message);
+    return { navItems: [], navCategories: [] };
+  }
+}
 
 function getDocroots() {
   if (process.env.STATIC_DOCROOT) return [process.env.STATIC_DOCROOT];
@@ -242,6 +256,7 @@ async function renderProductToHtml(slug) {
       product: dedicatedProduct,
       theme: dedicatedTheme,
       themeCssVars: dedicatedThemeCssVars,
+      ...(await navLocals()),
       ...(dedicatedOgImage ? { ogImage: dedicatedOgImage } : {}),
     }));
   }
@@ -326,6 +341,7 @@ async function renderProductToHtml(slug) {
     relatedProducts,
     theme,
     themeCssVars,
+    ...(await navLocals()),
   };
 
   return nunjucksEnv.render('pages/product-detail.njk', renderData);
@@ -395,7 +411,7 @@ async function renderCategoryToHtml(pageFile) {
     themeCssVars = '';
   }
 
-  return nunjucksEnv.render(meta.template, renderVars(meta, { dbCategory, dbProductsByModel, theme, themeCssVars }));
+  return nunjucksEnv.render(meta.template, renderVars(meta, { dbCategory, dbProductsByModel, theme, themeCssVars, ...(await navLocals()) }));
 }
 
 /**
@@ -451,7 +467,7 @@ async function renderProjectToHtml(pageFile) {
     themeCssVars = '';
   }
 
-  return nunjucksEnv.render(meta.template, renderVars(meta, { project, theme, themeCssVars }));
+  return nunjucksEnv.render(meta.template, renderVars(meta, { project, theme, themeCssVars, ...(await navLocals()) }));
 }
 
 /**

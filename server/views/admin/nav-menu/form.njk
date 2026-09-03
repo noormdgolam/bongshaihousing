@@ -1,0 +1,65 @@
+{% extends "admin-layout.njk" %}
+{% block title %}{% if item.id %}Edit Nav Item{% else %}New Nav Item{% endif %}{% endblock %}
+{% block header %}<h1 style="margin:0; font-size:1.4rem;">{% if item.id %}Edit Nav Item{% else %}New Nav Item{% endif %}</h1>{% endblock %}
+{% block content %}
+<div class="card">
+  {% if error %}<div class="alert alert-danger" style="margin-bottom:16px; padding:10px; background:#fef2f2; color:var(--danger); border-radius:6px;">{{ error }}</div>{% endif %}
+
+  <form method="post" action="{% if item.id %}/admin/nav-menu/{{ item.id }}{% else %}/admin/nav-menu{% endif %}">
+    <div class="form-row" style="margin-bottom:14px;">
+      <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Label *</label>
+      <input type="text" name="label" value="{{ item.label or '' }}" required style="width:100%; padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+    </div>
+
+    <div class="form-row" style="margin-bottom:14px;">
+      <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Link URL</label>
+      <input type="text" name="url" value="{{ item.url or '' }}" placeholder="e.g. about.html or /agent/signup.html" style="width:100%; padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+      <div style="font-size:0.75rem; color:var(--grey-500); margin-top:4px;">Leave blank for a pure dropdown parent with no direct link.</div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:14px;">
+      <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Parent (for a dropdown sub-item)</label>
+      <select name="parent_id" style="width:100%; padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+        <option value="">— Top level —</option>
+        {% for p in parents %}
+        <option value="{{ p.id }}" {% if item.parent_id and item.parent_id|string == p.id|string %}selected{% endif %}>{{ p.label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-row" style="margin-bottom:14px; display:flex; gap:20px; flex-wrap:wrap;">
+      <div>
+        <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Type</label>
+        <select name="item_type" style="padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+          <option value="link" {% if item.item_type != 'category_grid' %}selected{% endif %}>Regular link</option>
+          <option value="category_grid" {% if item.item_type == 'category_grid' %}selected{% endif %}>Category image grid (renders your Products & Solutions categories)</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Icon (emoji, for dropdown items)</label>
+        <input type="text" name="icon" value="{{ item.icon or '' }}" maxlength="10" placeholder="e.g. 📜" style="width:80px; padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+      </div>
+      <div>
+        <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Opens in</label>
+        <select name="target" style="padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+          <option value="_self" {% if item.target != '_blank' %}selected{% endif %}>Same tab</option>
+          <option value="_blank" {% if item.target == '_blank' %}selected{% endif %}>New tab</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block; font-weight:600; margin-bottom:4px; font-size:0.85rem;">Sort order</label>
+        <input type="number" name="sort_order" value="{{ item.sort_order or 0 }}" style="width:80px; padding:8px; border:1px solid var(--grey-200); border-radius:6px;">
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:20px;">
+      <label><input type="checkbox" name="visible" {% if item.visible or not item.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Visible in menu</label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{% if item.id %}Save Changes{% else %}Create Item{% endif %}</button>
+      <a href="/admin/nav-menu" class="btn">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

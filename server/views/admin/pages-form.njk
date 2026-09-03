@@ -46,4 +46,8 @@
     <button type="submit" class="btn btn-primary" style="padding:10px 24px; font-weight:bold;">Save Changes</button>
   </div>
 </form>
+
+{% set entityType = "page_content" %}
+{% set entityId = page.url_path %}
+{% include "admin/partials/history-panel.njk" %}
 {% endblock %}

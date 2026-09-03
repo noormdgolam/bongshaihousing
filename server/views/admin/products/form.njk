@@ -276,6 +276,10 @@
     <button type="submit" class="btn btn-danger">Delete Product</button>
   </form>
 </div>
+
+{% set entityType = "product" %}
+{% set entityId = product.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 
 <script>

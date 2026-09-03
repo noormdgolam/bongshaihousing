@@ -13,6 +13,7 @@ const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAUL
 const { seedDefaultMilestones } = require('../lib/order-milestones');
 const { normalizePhone } = require('../lib/customer-identity');
 const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/settings');
+const { recordHistory, getHistory, restoreVersion } = require('../lib/history');
 const { runTechnicalAudit } = require('../lib/seo/audit');
 const { generateBatch, generateForProduct } = require('../lib/seo/generate');
 const { COUNTRY_MAP } = require('../lib/visitor-tracker');
@@ -1688,7 +1689,8 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   for (const v of variants) {
     v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
   }
-  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null, seoGenerated: req.query.seo_generated === '1' }));
+  const history = await getHistory('product', req.params.id);
+  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null, seoGenerated: req.query.seo_generated === '1', history }));
 });
 
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
@@ -1712,7 +1714,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
     }
 
-    await db('products').where({ id: req.params.id }).update({
+    const productFields = {
       category_id, model_number, slug, title, description,
       price_per_sqft: cleanPriceSqft,
       price_currency: price_currency || 'BDT',
@@ -1726,8 +1728,10 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       main_image_alt: main_image_alt || null,
       published: isPublished,
       updated_at: db.fn.now(),
-    });
-    
+    };
+    await db('products').where({ id: req.params.id }).update(productFields);
+    await recordHistory(req, 'product', req.params.id, existingProduct, { ...existingProduct, ...productFields });
+
     let seoMsg = '';
     if (isPublished && existingProduct && !existingProduct.published && auto_seo === 'on') {
       setImmediate(() => {
@@ -1936,6 +1940,127 @@ router.post('/admin/products/:id/variants/:variantId/rooms/:roomId/delete', asyn
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
+// ---- Nav Menu ----
+// Admin-editable site navigation (server/lib/nav.js builds the parent->child
+// tree the live site renders from). The 'category_grid' item type is the one
+// special row whose "children" are the categories table, not real nav_items
+// rows - the categories list link here points admins there for that item.
+
+router.get('/admin/nav-menu', async (req, res) => {
+  const rows = await db('nav_items').orderBy('sort_order');
+  const byParent = new Map();
+  for (const row of rows) {
+    const key = row.parent_id || 'root';
+    if (!byParent.has(key)) byParent.set(key, []);
+    byParent.get(key).push(row);
+  }
+  const items = (byParent.get('root') || []).map((item) => ({ ...item, children: byParent.get(item.id) || [] }));
+  res.render('admin/nav-menu/list.njk', adminVars(req, {
+    items,
+    synced: req.query.synced || null,
+    skipped: req.query.skipped || null,
+    failed: req.query.failed || null,
+    syncError: req.query.sync_error || null,
+  }));
+});
+
+router.get('/admin/nav-menu/new', async (req, res) => {
+  const parents = await db('nav_items').whereNull('parent_id').orderBy('sort_order');
+  res.render('admin/nav-menu/form.njk', adminVars(req, { item: { parent_id: req.query.parent_id || null }, parents, error: null }));
+});
+
+router.post('/admin/nav-menu', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  const { label, url, parent_id, item_type, icon, target, sort_order, visible } = req.body;
+  try {
+    if (!label || !label.trim()) throw new Error('Label is required');
+    const [id] = await db('nav_items').insert({
+      label: label.trim(), url: url ? url.trim() : null,
+      parent_id: parent_id || null,
+      item_type: item_type === 'category_grid' ? 'category_grid' : 'link',
+      icon: icon || null, target: target === '_blank' ? '_blank' : '_self',
+      sort_order: sort_order || 0,
+      visible: visible === 'on' || visible === true || visible === 'true',
+    });
+    res.redirect(`/admin/nav-menu/${id}/edit`);
+  } catch (err) {
+    const parents = await db('nav_items').whereNull('parent_id').orderBy('sort_order');
+    res.status(400).render('admin/nav-menu/form.njk', adminVars(req, { item: req.body, parents, error: err.message }));
+  }
+});
+
+router.get('/admin/nav-menu/:id/edit', async (req, res) => {
+  const item = await db('nav_items').where({ id: req.params.id }).first();
+  if (!item) return res.status(404).send('Not found');
+  const parents = await db('nav_items').whereNull('parent_id').whereNot({ id: req.params.id }).orderBy('sort_order');
+  res.render('admin/nav-menu/form.njk', adminVars(req, { item, parents, error: null }));
+});
+
+router.post('/admin/nav-menu/:id', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  const { label, url, parent_id, item_type, icon, target, sort_order, visible } = req.body;
+  try {
+    if (!label || !label.trim()) throw new Error('Label is required');
+    if (parent_id && Number(parent_id) === Number(req.params.id)) throw new Error('An item cannot be its own parent');
+    await db('nav_items').where({ id: req.params.id }).update({
+      label: label.trim(), url: url ? url.trim() : null,
+      parent_id: parent_id || null,
+      item_type: item_type === 'category_grid' ? 'category_grid' : 'link',
+      icon: icon || null, target: target === '_blank' ? '_blank' : '_self',
+      sort_order: sort_order || 0,
+      visible: visible === 'on' || visible === true || visible === 'true',
+      updated_at: db.fn.now(),
+    });
+    res.redirect(`/admin/nav-menu/${req.params.id}/edit`);
+  } catch (err) {
+    const parents = await db('nav_items').whereNull('parent_id').whereNot({ id: req.params.id }).orderBy('sort_order');
+    res.status(400).render('admin/nav-menu/form.njk', adminVars(req, { item: { ...req.body, id: req.params.id }, parents, error: err.message }));
+  }
+});
+
+router.post('/admin/nav-menu/:id/delete', async (req, res) => {
+  const item = await db('nav_items').where({ id: req.params.id }).first();
+  await db('nav_items').where({ id: req.params.id }).del(); // ON DELETE CASCADE removes any children too
+  await logActivity(req, { action: 'delete', entityType: 'nav_item', entityId: req.params.id, summary: `Deleted nav item ${item ? item.label : req.params.id}` });
+  res.redirect('/admin/nav-menu');
+});
+
+// Pushes the current nav into the ~205 pre-baked static .html files. Manual
+// trigger rather than automatic on every save: it rewrites every page in the
+// docroot, which is not something a single label edit should silently do.
+router.post('/admin/nav-menu/sync-static', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  try {
+    const { syncNavToStaticFiles } = require('../lib/navStaticSync');
+    const result = await syncNavToStaticFiles({ apply: true });
+    await logActivity(req, { action: 'update', entityType: 'nav_item', entityId: null, summary: `Synced nav to ${result.changed.length} static page(s)` });
+    res.redirect(`/admin/nav-menu?synced=${result.changed.length}&skipped=${result.skipped.length}&failed=${result.failed.length}`);
+  } catch (e) {
+    console.error('Nav static sync failed:', e);
+    res.redirect(`/admin/nav-menu?sync_error=${encodeURIComponent(e.message)}`);
+  }
+});
+
+router.post('/admin/nav-menu/:id/move/:direction', async (req, res) => {
+  const { id, direction } = req.params;
+  const item = await db('nav_items').where({ id }).first();
+  if (!item) return res.redirect('/admin/nav-menu');
+  const siblings = item.parent_id
+    ? await db('nav_items').where({ parent_id: item.parent_id }).orderBy('sort_order')
+    : await db('nav_items').whereNull('parent_id').orderBy('sort_order');
+  const idx = siblings.findIndex((s) => s.id === item.id);
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (swapIdx >= 0 && swapIdx < siblings.length) {
+    const other = siblings[swapIdx];
+    await db('nav_items').where({ id: item.id }).update({ sort_order: other.sort_order });
+    await db('nav_items').where({ id: other.id }).update({ sort_order: item.sort_order });
+  }
+  res.redirect('/admin/nav-menu');
+});
+
 // ---- Categories ----
 
 router.get('/admin/categories', async (req, res) => {
@@ -1951,16 +2076,17 @@ router.post('/admin/categories', upload.single('hero_image_file'), async (req, r
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
+  const { slug, name, landing_page_slug, description, hero_image, sort_order, show_in_nav } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
-  
+
   const isAjax = req.xhr || (req.headers.accept && req.headers.accept.includes('application/json')) || req.query.ajax;
-  
+
   try {
     const [id] = await db('categories').insert({
       slug, name, landing_page_slug: landing_page_slug || null,
       description: description || null, hero_image: finalImage,
-      sort_order: sort_order || 0
+      sort_order: sort_order || 0,
+      show_in_nav: show_in_nav === 'on' || show_in_nav === true || show_in_nav === 'true' || show_in_nav === undefined,
     });
     
     if (isAjax) {
@@ -1982,19 +2108,25 @@ router.get('/admin/categories/:id/edit', async (req, res) => {
   const allSpecs = await db('category_specs').where({ category_id: req.params.id }).orderBy('sort_order');
   const buildingSpecs = allSpecs.filter(s => s.spec_type === 'building');
   const technicalSpecs = allSpecs.filter(s => s.spec_type === 'technical');
-  res.render('admin/categories/form.njk', adminVars(req, { category, error: null, buildingSpecs, technicalSpecs }));
+  const history = await getHistory('category', req.params.id);
+  res.render('admin/categories/form.njk', adminVars(req, { category, error: null, buildingSpecs, technicalSpecs, history }));
 });
 
 router.post('/admin/categories/:id', upload.single('hero_image_file'), async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { slug, name, landing_page_slug, description, hero_image, sort_order } = req.body;
+  const { slug, name, landing_page_slug, description, hero_image, sort_order, show_in_nav } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
-  await db('categories').where({ id: req.params.id }).update({
+  const existingCategory = await db('categories').where({ id: req.params.id }).first();
+  const categoryFields = {
     slug, name, landing_page_slug: landing_page_slug || null, description: description || null,
-    hero_image: finalImage, sort_order: sort_order || 0, updated_at: db.fn.now(),
-  });
+    hero_image: finalImage, sort_order: sort_order || 0,
+    show_in_nav: show_in_nav === 'on' || show_in_nav === true || show_in_nav === 'true',
+    updated_at: db.fn.now(),
+  };
+  await db('categories').where({ id: req.params.id }).update(categoryFields);
+  await recordHistory(req, 'category', req.params.id, existingCategory, { ...existingCategory, ...categoryFields });
   res.redirect(`/admin/categories/${req.params.id}/edit`);
 });
 
@@ -2098,7 +2230,8 @@ router.post('/admin/projects', upload.single('image_file'), async (req, res) => 
 router.get('/admin/projects/:id/edit', async (req, res) => {
   const project = await db('projects').where({ id: req.params.id }).first();
   if (!project) return res.status(404).send('Not found');
-  res.render('admin/projects/form.njk', adminVars(req, { project, error: null }));
+  const history = await getHistory('project', req.params.id);
+  res.render('admin/projects/form.njk', adminVars(req, { project, error: null, history }));
 });
 
 router.post('/admin/projects/:id', upload.single('image_file'), async (req, res) => {
@@ -2107,14 +2240,17 @@ router.post('/admin/projects/:id', upload.single('image_file'), async (req, res)
 
   const { slug, title, location, description, image, status_label, published, sort_order } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (image || null);
-  await db('projects').where({ id: req.params.id }).update({
+  const existingProject = await db('projects').where({ id: req.params.id }).first();
+  const projectFields = {
     slug, title, location: location || null, description: description || null,
     image: finalImage,
     status_label: status_label || 'Completed Project',
     published: published === 'on' || published === true || published === 'true',
     sort_order: sort_order || 0,
     updated_at: db.fn.now(),
-  });
+  };
+  await db('projects').where({ id: req.params.id }).update(projectFields);
+  await recordHistory(req, 'project', req.params.id, existingProject, { ...existingProject, ...projectFields });
 
   setImmediate(() => {
     invalidatePageCache();
@@ -2235,7 +2371,8 @@ router.get('/admin/service-areas/:id/edit', async (req, res) => {
   try {
     const area = await db('service_areas').where({ id: req.params.id }).first();
     if (!area) return res.status(404).send('Service area not found');
-    res.render('admin/service-areas/form.njk', adminVars(req, { area, divisions: BD_DIVISIONS, error: null }));
+    const history = await getHistory('service_area', req.params.id);
+    res.render('admin/service-areas/form.njk', adminVars(req, { area, divisions: BD_DIVISIONS, error: null, history }));
   } catch (e) {
     res.status(500).send('Database error: ' + e.message);
   }
@@ -2249,13 +2386,16 @@ router.post('/admin/service-areas/:id', async (req, res) => {
     const cleanSlug = page_slug ? page_slug.trim().replace(/^\//, '') : null;
     const hasDedicated = has_dedicated_page === 'on' || has_dedicated_page === true || Boolean(cleanSlug);
 
-    await db('service_areas').where({ id: req.params.id }).update({
+    const existingServiceArea = await db('service_areas').where({ id: req.params.id }).first();
+    const serviceAreaFields = {
       district: district.trim(),
       division: division || 'Dhaka Division',
       has_dedicated_page: hasDedicated,
       page_slug: cleanSlug,
       updated_at: db.fn.now(),
-    });
+    };
+    await db('service_areas').where({ id: req.params.id }).update(serviceAreaFields);
+    await recordHistory(req, 'service_area', req.params.id, existingServiceArea, { ...existingServiceArea, ...serviceAreaFields });
     res.redirect('/admin/service-areas');
   } catch (e) {
     res.render('admin/service-areas/form.njk', adminVars(req, {
@@ -2398,7 +2538,8 @@ router.get('/admin/faqs/:id/edit', async (req, res) => {
     const dbCats = await db('faqs').distinct('category').whereNotNull('category');
     categories = Array.from(new Set([...DEFAULT_FAQ_CATEGORIES, ...dbCats.map(c => c.category).filter(Boolean)]));
 
-    res.render('admin/faqs/form.njk', adminVars(req, { faq, categories, error: null }));
+    const history = await getHistory('faq', req.params.id);
+    res.render('admin/faqs/form.njk', adminVars(req, { faq, categories, error: null, history }));
   } catch (e) {
     res.status(500).send('Database error: ' + e.message);
   }
@@ -2414,14 +2555,17 @@ router.post('/admin/faqs/:id', async (req, res) => {
     let finalSort = parseInt(sort_order, 10);
     if (isNaN(finalSort)) finalSort = 0;
 
-    await db('faqs').where({ id: req.params.id }).update({
+    const existingFaq = await db('faqs').where({ id: req.params.id }).first();
+    const faqFields = {
       question: question.trim(),
       answer: answer.trim(),
       category: category && category.trim() ? category.trim() : 'General',
       published: published === 'on' || published === true || published === 'true',
       sort_order: finalSort,
       updated_at: db.fn.now(),
-    });
+    };
+    await db('faqs').where({ id: req.params.id }).update(faqFields);
+    await recordHistory(req, 'faq', req.params.id, existingFaq, { ...existingFaq, ...faqFields });
     res.redirect('/admin/faqs');
   } catch (e) {
     let categories = [...DEFAULT_FAQ_CATEGORIES];
@@ -2556,10 +2700,12 @@ router.get('/admin/team-members/:id/edit', async (req, res) => {
     const member = await db('team_members').where({ id: req.params.id }).first();
     if (!member) return res.status(404).send('Team member not found');
 
+    const history = await getHistory('team_member', req.params.id);
     res.render('admin/team-members/form.njk', adminVars(req, {
       member,
       departments: TEAM_DEPARTMENTS,
       error: null,
+      history,
     }));
   } catch (e) {
     res.status(500).send('Database error: ' + e.message);
@@ -2583,7 +2729,8 @@ router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, 
     let finalSort = parseInt(sort_order, 10);
     if (isNaN(finalSort)) finalSort = 0;
 
-    await db('team_members').where({ id: req.params.id }).update({
+    const existingMember = await db('team_members').where({ id: req.params.id }).first();
+    const memberFields = {
       name: name.trim(),
       role: role.trim(),
       bio: bio ? bio.trim() : '',
@@ -2592,7 +2739,9 @@ router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, 
       published: published === 'on' || published === true || published === 'true',
       sort_order: finalSort,
       updated_at: db.fn.now(),
-    });
+    };
+    await db('team_members').where({ id: req.params.id }).update(memberFields);
+    await recordHistory(req, 'team_member', req.params.id, existingMember, { ...existingMember, ...memberFields });
 
     logActivity(req, 'update', 'team_member', req.params.id, `Updated team member: ${name.trim()}`);
     res.redirect('/admin/team-members');
@@ -2760,20 +2909,24 @@ router.post('/admin/users', requireRole('admin', 'superadmin'), async (req, res)
 router.get('/admin/users/:id/edit', requireRole('admin', 'superadmin'), async (req, res) => {
   const user = await db('admin_users').where({ id: req.params.id }).first();
   if (!user) return res.status(404).send('Not found');
-  res.render('admin/users/form.njk', adminVars(req, { user, error: null }));
+  const history = await getHistory('user', req.params.id);
+  res.render('admin/users/form.njk', adminVars(req, { user, error: null, history }));
 });
 
 router.post('/admin/users/:id', requireRole('admin', 'superadmin'), async (req, res) => {
   const { email, name, role, password } = req.body;
+  const existingUser = await db('admin_users').where({ id: req.params.id }).first();
   const update = { email, name, role: role || 'editor', updated_at: db.fn.now() };
   if (password && password.length > 0) {
     if (password.length < 8) {
-      const user = await db('admin_users').where({ id: req.params.id }).first();
-      return res.status(400).render('admin/users/form.njk', adminVars(req, { user: { ...user, ...req.body }, error: 'Password must be at least 8 characters.' }));
+      return res.status(400).render('admin/users/form.njk', adminVars(req, { user: { ...existingUser, ...req.body }, error: 'Password must be at least 8 characters.' }));
     }
     update.password_hash = await bcrypt.hash(password, 12);
   }
   await db('admin_users').where({ id: req.params.id }).update(update);
+  // recordHistory/snapshotRow strips password_hash for entity_type 'user' -
+  // a password reset never gets captured in the version-history snapshot.
+  await recordHistory(req, 'user', req.params.id, existingUser, { ...existingUser, ...update });
   await logActivity(req, { action: 'update', entityType: 'user', entityId: req.params.id, summary: `Updated user ${email} (role: ${role || 'editor'}${update.password_hash ? ', password reset' : ''})` });
   res.redirect(`/admin/users/${req.params.id}/edit`);
 });
@@ -2909,15 +3062,19 @@ router.post('/admin/testimonials', async (req, res) => {
 router.get('/admin/testimonials/:id/edit', async (req, res) => {
   const testimonial = await db('testimonials').where({ id: req.params.id }).first();
   if (!testimonial) return res.status(404).send('Not found');
-  res.render('admin/testimonials/form.njk', adminVars(req, { testimonial, error: null }));
+  const history = await getHistory('testimonial', req.params.id);
+  res.render('admin/testimonials/form.njk', adminVars(req, { testimonial, error: null, history }));
 });
 
 router.post('/admin/testimonials/:id', async (req, res) => {
   const { author_name, author_title, rating, review_text, published, sort_order } = req.body;
-  await db('testimonials').where({ id: req.params.id }).update({
+  const existingTestimonial = await db('testimonials').where({ id: req.params.id }).first();
+  const testimonialFields = {
     author_name, author_title: author_title || null, rating: rating || 5, review_text,
     published: published === 'on', sort_order: sort_order || 0, updated_at: db.fn.now(),
-  });
+  };
+  await db('testimonials').where({ id: req.params.id }).update(testimonialFields);
+  await recordHistory(req, 'testimonial', req.params.id, existingTestimonial, { ...existingTestimonial, ...testimonialFields });
   res.redirect(`/admin/testimonials/${req.params.id}/edit`);
 });
 
@@ -2939,6 +3096,22 @@ router.get('/admin/activity', async (req, res) => {
     return res.status(500).send('Database unavailable: ' + err.message);
   }
   res.render('admin/activity/list.njk', adminVars(req, { entries }));
+});
+
+// ---- Version history / undo (shared across every entity in history.js's ENTITY_MAP) ----
+
+router.post('/admin/history/:entityType/:entityId/restore/:historyId', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  const { entityType, entityId, historyId } = req.params;
+  try {
+    await restoreVersion(req, entityType, entityId, historyId);
+    await logActivity(req, { action: 'update', entityType, entityId, summary: `Restored a previous version (history #${historyId})` });
+  } catch (e) {
+    console.error('History restore error:', e.message);
+  }
+  const returnTo = req.body.return_to || req.get('Referer') || '/admin';
+  res.redirect(returnTo);
 });
 
 // ---- Analytics & Visitor Stats ----
@@ -3384,7 +3557,8 @@ router.get('/admin/pages/edit', requireRole('admin', 'superadmin', 'editor'), as
       contentJson = typeof page.content_json === 'string' ? JSON.parse(page.content_json) : page.content_json;
     }
     
-    res.render('admin/pages-form.njk', adminVars(req, { page, fields, contentJson }));
+    const history = await getHistory('page_content', urlPath);
+    res.render('admin/pages-form.njk', adminVars(req, { page, fields, contentJson, history }));
   } catch (err) {
     res.redirect('/admin/pages?error=Database+error');
   }
@@ -3393,11 +3567,14 @@ router.get('/admin/pages/edit', requireRole('admin', 'superadmin', 'editor'), as
 router.post('/admin/pages/edit', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   const { url_path, title, ...contentFields } = req.body;
   try {
-    await db('page_content').where({ url_path }).update({
+    const existingPage = await db('page_content').where({ url_path }).first();
+    const pageUpdateFields = {
       title: (title || '').trim(),
       content_json: JSON.stringify(contentFields),
       updated_at: db.fn.now()
-    });
+    };
+    await db('page_content').where({ url_path }).update(pageUpdateFields);
+    await recordHistory(req, 'page_content', url_path, existingPage, { ...existingPage, ...pageUpdateFields });
     // cache invalidation is handled by the middleware!
     res.redirect('/admin/pages?success=1');
   } catch (err) {

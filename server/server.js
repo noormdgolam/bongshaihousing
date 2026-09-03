@@ -198,6 +198,24 @@ app.use(async (req, res, next) => {
   next();
 });
 
+// Global Nav Menu Middleware: injects the admin-editable nav structure so
+// partials/nav.njk can render from the DB instead of hardcoded HTML. Built
+// into a parent->children tree here (not in the template) so nav.njk just
+// loops - the 'category_grid' item's "children" are the categories table,
+// not real nav_items rows, so those are fetched and injected separately.
+const { getNavTree } = require('./lib/nav');
+app.use(async (req, res, next) => {
+  try {
+    const { navItems, navCategories } = await getNavTree();
+    res.locals.navItems = navItems;
+    res.locals.navCategories = navCategories;
+  } catch (e) {
+    res.locals.navItems = [];
+    res.locals.navCategories = [];
+  }
+  next();
+});
+
 // Static asset directories: /css, /js, /images, /fonts, plus root assets
 // In production on cPanel, Apache handles these directly; in Node dev/staging,
 // Express serves them cleanly so styles and media always load.

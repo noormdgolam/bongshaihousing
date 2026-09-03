@@ -50,5 +50,9 @@
     <button type="submit" class="btn btn-danger">Delete Service Area</button>
   </form>
 </div>
+
+{% set entityType = "service_area" %}
+{% set entityId = area.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 {% endblock %}

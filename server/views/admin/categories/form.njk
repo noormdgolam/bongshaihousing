@@ -11,7 +11,7 @@
   <div class="form-row"><label for="description">Description (Banner / Hero intro)</label><textarea id="description" name="description" rows="3">{{ category.description or '' }}</textarea></div>
   
   <div class="form-row">
-    <label>Category Hero / Banner Image</label>
+    <label>Category Hero / Banner Image <span style="font-weight:400; color:var(--grey-500, #64748b); font-size:0.8rem;">(also used as this category's photo in the Products &amp; Solutions nav dropdown)</span></label>
     <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">
       <div id="heroPreviewContainer" style="width:140px; height:95px; border-radius:6px; border:1px solid var(--grey-300, #cbd5e1); background:#ffffff; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; flex-shrink:0;">
         {% if category.hero_image %}
@@ -37,6 +37,7 @@
   </div>
 
   <div class="form-row"><label for="sort_order">Sort Order</label><input type="number" id="sort_order" name="sort_order" value="{{ category.sort_order or 0 }}"></div>
+  <div class="form-row"><label><input type="checkbox" name="show_in_nav" {% if category.show_in_nav or not category.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Show in Products &amp; Solutions nav dropdown</label></div>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">{% if category.id %}Save Changes{% else %}Create Category{% endif %}</button>
     <a href="/admin/categories" class="btn">Cancel</a>
@@ -93,6 +94,10 @@
 <form method="post" action="/admin/categories/{{ category.id }}/delete" onsubmit="return confirm('Delete this category?');">
   <button type="submit" class="btn btn-danger">Delete Category</button>
 </form>
+
+{% set entityType = "category" %}
+{% set entityId = category.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 
 <script>

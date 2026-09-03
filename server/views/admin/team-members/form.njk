@@ -79,5 +79,9 @@
     <button type="submit" class="btn btn-danger">Delete Member</button>
   </form>
 </div>
+
+{% set entityType = "team_member" %}
+{% set entityId = member.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 {% endblock %}

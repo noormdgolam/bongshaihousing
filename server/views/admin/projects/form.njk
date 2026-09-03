@@ -49,6 +49,10 @@
 <form method="post" action="/admin/projects/{{ project.id }}/delete" onsubmit="return confirm('Delete this project?');">
   <button type="submit" class="btn btn-danger">Delete Project</button>
 </form>
+
+{% set entityType = "project" %}
+{% set entityId = project.id %}
+{% include "admin/partials/history-panel.njk" %}
 {% endif %}
 
 <script>
