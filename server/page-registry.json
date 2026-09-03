@@ -4058,5 +4058,25 @@
     "bodyClass": null,
     "showQuoteShortcut": false,
     "template": "pages/bh-lch-1020.njk"
+  },
+  "/kaliganj-dhaka.html": {
+    "urlPath": "/kaliganj-dhaka.html",
+    "title": "Kaliganj, Dhaka | Bongshai Housing",
+    "description": "A completed steel building project by Bongshai Housing in Kaliganj, Dhaka - pre-engineered steel construction, EPC contractor Bangladesh.",
+    "keywords": "Our Projects, steel building contractor Dhaka, prefab housing Kaliganj, Bongshai Housing, EPC contractor Bangladesh, pre-engineered steel buildings",
+    "category": "Steel Building Company, Real Estate, EPC Contractor Bangladesh",
+    "canonical": "https://bongshaihousing.com/kaliganj-dhaka.html",
+    "ogType": "website",
+    "ogTitle": "Kaliganj, Dhaka | Bongshai Housing",
+    "ogDescription": "A completed steel building project by Bongshai Housing in Kaliganj, Dhaka.",
+    "ogImage": "https://bongshaihousing.com/images/uploads/project-photo-unavailable.png",
+    "ogImageWidth": "1000",
+    "ogImageHeight": "750",
+    "twitterTitle": "Kaliganj, Dhaka | Bongshai Housing",
+    "twitterDescription": "A completed steel building project by Bongshai Housing in Kaliganj, Dhaka.",
+    "whatsappHref": "https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20would%20like%20to%20know%20more.",
+    "bodyClass": null,
+    "showQuoteShortcut": true,
+    "template": "pages/kaliganj-dhaka.njk"
   }
 }
