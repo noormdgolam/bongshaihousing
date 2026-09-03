@@ -731,6 +731,19 @@ img {
   opacity: 1;
 }
 
+/* Banner-driven slides ship 3 pre-sized image variants (mobile/tablet/
+   desktop) picked via <picture><source> media queries, but real devices
+   don't always agree with our breakpoint assumptions (browser UI chrome,
+   zoom, unusual viewports). If the "wrong" variant ever loads, cover would
+   crop it hard; contain guarantees the whole banner - including every
+   photo and the full title - stays visible, just letterboxed. The bars
+   are near-invisible since the banner's own background is the same navy
+   as .hero-bg's fill here. */
+.slide-banner-driven .hero-bg img {
+  object-fit: contain;
+  background: #0f172a;
+}
+
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -819,6 +832,46 @@ img {
   animation: fadeInUp 0.7s 0.3s ease both;
 }
 
+/* Category banner slides bake their title/subtitle/eyebrow into the image
+   itself, so the live HTML text is visually hidden (kept for SEO/screen
+   readers) and the default hero-overlay gradient is dropped since the
+   banner already has its own gradient built in. */
+.swiper-slide.slide-banner-driven .hero-overlay {
+  display: none;
+}
+
+.swiper-slide.slide-banner-driven .hero-badge,
+.swiper-slide.slide-banner-driven .hero-title,
+.swiper-slide.slide-banner-driven .hero-subtitle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* With the badge/title/subtitle removed from flow, hero-content would
+   otherwise collapse to just the button row and land wherever Swiper's own
+   slide-centering puts it - overlapping the banner's own baked-in text.
+   Anchor it directly to the bottom of the slide instead, clear of that text. */
+.swiper-slide.slide-banner-driven {
+  position: relative;
+}
+
+.swiper-slide.slide-banner-driven .hero-content {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  bottom: 4%;
+  top: auto !important;
+  padding: 0 var(--space-4) !important;
+}
+
+.swiper-slide.slide-banner-driven .hero-actions {
+  margin-bottom: 0;
+}
+
 .hero-stats {
   display: flex;
   gap: var(--space-8);
@@ -850,6 +903,87 @@ img {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-top: var(--space-1);
+}
+
+/* ============================================================
+   Category Slider - Swiper nav/pagination overrides
+   Swiper's own default arrows/dots are bare-bones (plain chevrons,
+   small flat dots) - this replaces them with a glass-morphism style
+   matching the rest of the site's brand (blue/gold, backdrop blur).
+   ============================================================ */
+.category-swiper .swiper-button-prev,
+.category-swiper .swiper-button-next {
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.category-swiper .swiper-button-prev:hover,
+.category-swiper .swiper-button-next:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+
+.category-swiper .swiper-button-prev::after,
+.category-swiper .swiper-button-next::after {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.category-swiper .swiper-button-prev:hover::after,
+.category-swiper .swiper-button-next:hover::after {
+  color: var(--grey-900);
+}
+
+.category-swiper .swiper-button-prev {
+  left: var(--space-6);
+}
+
+.category-swiper .swiper-button-next {
+  right: var(--space-6);
+}
+
+.category-swiper .swiper-pagination {
+  bottom: 22px !important;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.category-swiper .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  border-radius: 999px;
+  transition: width 0.25s ease, background 0.25s ease;
+  margin: 0 !important;
+}
+
+.category-swiper .swiper-pagination-bullet-active {
+  width: 28px;
+  background: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .category-swiper .swiper-button-prev,
+  .category-swiper .swiper-button-next {
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+  }
+  .category-swiper .swiper-button-prev::after,
+  .category-swiper .swiper-button-next::after {
+    font-size: 14px;
+  }
 }
 
 .hero-scroll {
