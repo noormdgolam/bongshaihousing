@@ -1997,6 +1997,26 @@ router.get('/admin/nav-menu/:id/edit', async (req, res) => {
   res.render('admin/nav-menu/form.njk', adminVars(req, { item, parents, error: null }));
 });
 
+// Pushes the current nav into the ~205 pre-baked static .html files. Manual
+// trigger rather than automatic on every save: it rewrites every page in the
+// docroot, which is not something a single label edit should silently do.
+router.post('/admin/nav-menu/sync-static', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  try {
+    const { syncNavToStaticFiles } = require('../lib/navStaticSync');
+    // `only` (comma-separated filenames) lets a single page be synced and
+    // eyeballed before rewriting all ~205 in one go.
+    const only = req.body.only ? String(req.body.only).split(',').map((s) => s.trim()).filter(Boolean) : null;
+    const result = await syncNavToStaticFiles({ apply: true, only });
+    await logActivity(req, { action: 'update', entityType: 'nav_item', entityId: null, summary: `Synced nav to ${result.changed.length} static page(s)` });
+    res.redirect(`/admin/nav-menu?synced=${result.changed.length}&skipped=${result.skipped.length}&failed=${result.failed.length}`);
+  } catch (e) {
+    console.error('Nav static sync failed:', e);
+    res.redirect(`/admin/nav-menu?sync_error=${encodeURIComponent(e.message)}`);
+  }
+});
+
 router.post('/admin/nav-menu/:id', async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
@@ -2025,23 +2045,6 @@ router.post('/admin/nav-menu/:id/delete', async (req, res) => {
   await db('nav_items').where({ id: req.params.id }).del(); // ON DELETE CASCADE removes any children too
   await logActivity(req, { action: 'delete', entityType: 'nav_item', entityId: req.params.id, summary: `Deleted nav item ${item ? item.label : req.params.id}` });
   res.redirect('/admin/nav-menu');
-});
-
-// Pushes the current nav into the ~205 pre-baked static .html files. Manual
-// trigger rather than automatic on every save: it rewrites every page in the
-// docroot, which is not something a single label edit should silently do.
-router.post('/admin/nav-menu/sync-static', async (req, res) => {
-  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
-  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
-  try {
-    const { syncNavToStaticFiles } = require('../lib/navStaticSync');
-    const result = await syncNavToStaticFiles({ apply: true });
-    await logActivity(req, { action: 'update', entityType: 'nav_item', entityId: null, summary: `Synced nav to ${result.changed.length} static page(s)` });
-    res.redirect(`/admin/nav-menu?synced=${result.changed.length}&skipped=${result.skipped.length}&failed=${result.failed.length}`);
-  } catch (e) {
-    console.error('Nav static sync failed:', e);
-    res.redirect(`/admin/nav-menu?sync_error=${encodeURIComponent(e.message)}`);
-  }
 });
 
 router.post('/admin/nav-menu/:id/move/:direction', async (req, res) => {

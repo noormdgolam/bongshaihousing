@@ -130,7 +130,7 @@ async function syncNavToStaticFiles({ apply = false, only = null } = {}) {
         const html = await fsp.readFile(full, 'utf8');
         const regions = locateNavRegions(html);
         if (!regions) {
-          results.skipped.push({ file, reason: 'no nav/mobileDrawer region found' });
+          results.skipped.push({ file: `${path.basename(docroot)}/${file}`, reason: 'no nav/mobileDrawer region found' });
           continue;
         }
 
@@ -142,16 +142,20 @@ async function syncNavToStaticFiles({ apply = false, only = null } = {}) {
         out = out.slice(0, regions.navRegion[0]) + parts.nav + out.slice(regions.navRegion[1]);
 
         if (out === html) {
-          results.unchanged.push(file);
+          results.unchanged.push(`${path.basename(docroot)}/${file}`);
           continue;
         }
         if (apply) await fsp.writeFile(full, out, 'utf8');
-        results.changed.push(file);
+        results.changed.push(`${path.basename(docroot)}/${file}`);
       } catch (e) {
-        results.failed.push({ file, error: e.message });
+        results.failed.push({ file: `${path.basename(docroot)}/${file}`, error: e.message });
       }
     }
-    break; // only the first valid docroot - the others are the same tree from a different path
+    // No break: getDocroots() returns several candidate paths and which one
+    // is the real served tree differs per environment (locally it's the repo
+    // root, on the host it's bongshaihousing.com/ while a stale public_html/
+    // may also exist). liveSiteSync writes to all of them for the same
+    // reason - stopping at the first match silently syncs the wrong tree.
   }
 
   return results;
