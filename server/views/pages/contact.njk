@@ -592,6 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const fd = new FormData(form);
         const payload = Object.fromEntries(fd.entries());
+        payload.utm_source = (window.BHUtm ? window.BHUtm.source() : null) || 'direct';
 
         if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = 'Sending…'; }
         if (feedback) feedback.style.display = 'none';

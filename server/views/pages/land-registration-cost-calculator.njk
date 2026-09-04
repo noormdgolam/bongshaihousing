@@ -1471,7 +1471,7 @@
         model: 'জমি রেজিস্ট্রি ক্যালকুলেটর',
         floor_area: '',
         message: message,
-        source: 'calculator'
+        source: (window.BHUtm ? window.BHUtm.source() : null) || 'calculator'
       });
 
       const waUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(message)}`;

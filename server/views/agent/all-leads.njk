@@ -1,0 +1,124 @@
+{% extends "agent-layout.njk" %}
+{% block title %}সব লিড{% endblock %}
+
+{% block body %}
+<div class="agent-hero">
+  <div class="agent-hero-top">
+    <div class="agent-hero-brand">🏗️ বংশাই লিড ড্যাশবোর্ড</div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="/agent/today" class="btn btn-ghost">✅ আজকের কাজ</a>
+      {% if isAdmin %}<a href="/agent/settings" class="btn btn-ghost">⚙️ সেটিংস</a>{% endif %}
+      <form method="post" action="/agent/logout" style="margin:0;">
+        <button type="submit" class="btn btn-ghost">লগ আউট</button>
+      </form>
+    </div>
+  </div>
+  <div class="agent-hero-profile">
+    <div>
+      <div class="agent-hero-name">সব লিড</div>
+      <div class="agent-hero-meta">{{ agentName }} · {{ rows.length }}টি (সর্বোচ্চ ৩০০)</div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-content">
+  <style>
+    .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .filter-bar select,.filter-bar input{padding:8px 10px;border-radius:8px;border:1px solid rgba(15,23,42,0.15);font-size:0.85rem;background:rgba(255,255,255,0.7)}
+    .status-form{display:inline-flex;gap:4px;align-items:center}
+    .status-form select{padding:4px 6px;font-size:0.78rem;border-radius:6px;border:1px solid rgba(15,23,42,0.15)}
+    .lead-row-name{font-weight:700}
+    .import-box{margin-top:16px}
+  </style>
+
+  {% if filters.status or filters.source or filters.district or filters.from or filters.to or filters.q %}
+  <div style="margin-bottom:10px;"><a href="/agent/all-leads" class="btn btn-ghost" style="font-size:0.8rem;padding:5px 10px;">✕ ফিল্টার মুছুন</a></div>
+  {% endif %}
+
+  <form method="get" action="/agent/all-leads" class="filter-bar">
+    <input type="text" name="q" placeholder="নাম বা ফোন" value="{{ filters.q or '' }}">
+    <select name="status">
+      <option value="">সব স্ট্যাটাস</option>
+      {% for s in statuses %}<option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+    </select>
+    <select name="source">
+      <option value="">সব সোর্স</option>
+      {% for s in sources %}<option value="{{ s }}" {% if filters.source == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+    </select>
+    <select name="district">
+      <option value="">সব জেলা</option>
+      {% for d in districts %}<option value="{{ d }}" {% if filters.district == d %}selected{% endif %}>{{ d }}</option>{% endfor %}
+    </select>
+    <input type="date" name="from" value="{{ filters.from or '' }}" title="তারিখ থেকে">
+    <input type="date" name="to" value="{{ filters.to or '' }}" title="তারিখ পর্যন্ত">
+    <button type="submit" class="btn btn-primary">ফিল্টার করুন</button>
+    <a href="/agent/all-leads/export.csv{{ '?' + query_string if query_string }}" class="btn btn-accent">⬇ CSV এক্সপোর্ট</a>
+  </form>
+
+  <div class="tw" style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr><th>নাম / ফোন</th><th>জেলা</th><th>কী চায়</th><th>সোর্স</th><th>স্ট্যাটাস</th><th>তারিখ</th></tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td data-label="নাম/ফোন">
+            <div class="lead-row-name">{{ r.name }}</div>
+            <div style="font-size:0.8rem;color:var(--grey-500);">{{ r.phone }}</div>
+          </td>
+          <td data-label="জেলা">{{ r.district or '—' }}</td>
+          <td data-label="কী চায়">{{ r.model or '—' }}{% if r.floor_area %} ({{ r.floor_area }} sft){% endif %}</td>
+          <td data-label="সোর্স">{{ r.source or '—' }}</td>
+          <td data-label="স্ট্যাটাস">
+            <form method="post" action="/agent/all-leads/{{ r.id }}/status" class="status-form">
+              <input type="hidden" name="return_to" value="/agent/all-leads">
+              <select name="status" onchange="this.closest('form').querySelector('.lost-reason-wrap').hidden = (this.value !== 'হারানো'); this.closest('form').querySelector('.quote-wrap').hidden = (this.value !== 'কোটেশন দেওয়া');">
+                {% for s in statuses %}<option value="{{ s }}" {% if r.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+              </select>
+              <span class="lost-reason-wrap" {% if r.status != 'হারানো' %}hidden{% endif %}>
+                <select name="lost_reason">
+                  <option value="">কারণ</option>
+                  {% for lr in lostReasons %}<option value="{{ lr }}" {% if r.lost_reason == lr %}selected{% endif %}>{{ lr }}</option>{% endfor %}
+                </select>
+              </span>
+              <span class="quote-wrap" {% if r.status != 'কোটেশন দেওয়া' %}hidden{% endif %}>
+                <input type="number" name="quote_amount" placeholder="৳" value="{{ r.quote_amount or '' }}" style="width:80px;">
+              </span>
+              <button type="submit" class="btn" style="padding:4px 8px;font-size:0.75rem;">সেভ</button>
+            </form>
+          </td>
+          <td data-label="তারিখ">{{ r.created_at | date if r.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--grey-500);">কোনো লিড পাওয়া যায়নি</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if isAdmin %}
+  <div class="card import-box">
+    <h3 style="margin:0 0 10px;font-size:0.95rem;">📤 CSV ইমপোর্ট (একবারের জন্য - পুরনো ডেটা মাইগ্রেট করতে)</h3>
+    <p style="font-size:0.8rem;color:var(--grey-500);margin:0 0 10px;">Bangla-header Google Sheet থেকে এক্সপোর্ট করা CSV ফাইল বেছে নিন। কলাম হেডার হুবহু মিলতে হবে।</p>
+    <input type="file" id="csvFile" accept=".csv" style="margin-bottom:8px;">
+    <button type="button" class="btn btn-primary" onclick="submitCsv()">ইমপোর্ট করুন</button>
+    <script>
+      function submitCsv() {
+        var file = document.getElementById('csvFile').files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          fetch('/agent/all-leads/import', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ _csrf: '{{ csrfToken }}', csv: reader.result }),
+          }).then(function () { window.location.href = '/agent/all-leads'; });
+        };
+        reader.readAsText(file, 'UTF-8');
+      }
+    </script>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

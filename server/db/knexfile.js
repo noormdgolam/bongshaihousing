@@ -23,6 +23,17 @@ const connection = {
   // is perfectly fine on a longer leash. In production this is a no-op -
   // the app connects to localhost and completes instantly.
   connectTimeout: 25000,
+  // Without this, mysql2 converts a SQL DATE column into a JS Date object at
+  // midnight in the *connection's* timezone, then serializes it back to UTC -
+  // on this UTC+6 server that silently shifts every plain calendar date back
+  // by a day the moment anything touches .toISOString()/JSON.stringify()
+  // (a CSV export, a template render, a log line). Confirmed live: a followup
+  // date correctly written as the string '2026-09-06' read back as
+  // "2026-09-05T18:00:00.000Z". Scoped to the SQL type DATE only (an array,
+  // not `true`) so DATETIME/TIMESTAMP columns everywhere else in this app
+  // keep returning real Date objects exactly as before - zero behavior change
+  // for anything that isn't a plain date.
+  dateStrings: ['DATE'],
 };
 
 module.exports = {

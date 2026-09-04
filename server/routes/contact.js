@@ -5,6 +5,7 @@ const { sendMail } = require('../lib/mailer');
 const { sendTelegramAlert } = require('../lib/telegram');
 const { formatTakaAscii } = require('../lib/format');
 const { normalizePhone } = require('../lib/customer-identity');
+const { isValidBdPhone, checkDuplicate, leadDefaults, notifyOwner } = require('../lib/leads');
 let db;
 try {
   db = require('../lib/db');
@@ -73,19 +74,41 @@ router.post('/send_email.php', async (req, res) => {
   const bedrooms = stripTags(body.bedrooms) || 'N/A';
   const message = stripTags(body.message) || 'No additional notes.';
 
-  if (!name || !email || !phoneRaw) {
+  // email is intentionally NOT required here (leads.email is nullable as of
+  // the 2026-09-05 migration): this same route is what the cost calculators'
+  // postLeadToCrm() posts to, and neither calculator form has ever collected
+  // an email address. Requiring it meant every calculator-sourced submission
+  // was silently rejected with a 400 - postLeadToCrm's fetch().catch(()=>{})
+  // swallows that, so the visitor still saw the WhatsApp handoff open and had
+  // no way to know the lead was never actually recorded. Confirmed live:
+  // production had exactly 1 row in `leads`, source=contact_form, zero with
+  // source=calculator, despite the calculators being live and "working" all
+  // session from a visitor's point of view.
+  if (!name || !phoneRaw) {
     return res.status(400).json({ status: 'error', message: 'Please fill in all required fields.' });
   }
 
+  const phoneKey = isValidBdPhone(phoneRaw);
+
   // Save to database leads table if DB is available
   let leadId = null;
+  let isNewLead = false; // false on a dedup hit - controls whether we notify
+  // the owner and credit an agent referral again below, so a visitor
+  // resubmitting the same form (or the calculator + contact form both firing
+  // for the same person within a few minutes) doesn't page the owner twice
+  // or double-credit a commission for one underlying inquiry.
   let portalCustomer = null; // set below if auto-provisioning succeeds
   if (db) {
     try {
+      const dup = await checkDuplicate(phoneKey, 'bongshaihousing.com');
+      if (dup) {
+        leadId = dup.id;
+      }
+
       const refCode = req.session?.agentRef || getCookieVal(req, 'bh_agent_ref');
       let attributedAgent = null;
 
-      if (refCode) {
+      if (!dup && refCode) {
         attributedAgent = await db('agents').where({ referral_code: refCode, status: 'active' }).first();
         if (!attributedAgent) {
           const { parseAgentIdFromFallbackCode } = require('../lib/agent-settings');
@@ -96,19 +119,29 @@ router.post('/send_email.php', async (req, res) => {
         }
       }
 
-      [leadId] = await db('leads').insert({
+      if (!dup) [leadId] = await db('leads').insert({
         name,
         email,
         phone,
+        ...leadDefaults(phoneKey, 'bongshaihousing.com'),
         district: district !== 'N/A' ? district : null,
         upazila: upazila !== 'N/A' ? upazila : null,
         model: model !== 'N/A' ? model : null,
         floor_area: floorArea !== 'N/A' ? floorArea : null,
         bedrooms: bedrooms !== 'N/A' ? bedrooms : null,
         message: message !== 'No additional notes.' ? message : null,
-        status: 'new',
-        source: attributedAgent ? `agent_referral: ${refCode}` : 'contact_form',
+        // status comes from leadDefaults() above (Bangla funnel, defaults to
+        // নতুন) - not re-set here, so it isn't silently overridden back to
+        // the old English 'new' value by object-literal ordering.
+        // The lead pipeline's "কোথা থেকে এসেছে" column wants the UTM source
+        // (js/utm-capture.js attaches it as body.utm_source from a 30-day
+        // first-party cookie), falling back to this route's own pre-existing
+        // channel labels when no campaign data exists at all - an agent
+        // referral link, or plain 'contact_form', are still more informative
+        // than a bare "direct".
+        source: attributedAgent ? `agent_referral: ${refCode}` : (stripTags(body.utm_source) || 'contact_form'),
       });
+      if (!dup) isNewLead = true;
 
       // If referral lead, auto-attribute into agent_leads table
       if (attributedAgent) {
@@ -209,6 +242,13 @@ router.post('/send_email.php', async (req, res) => {
   sendTelegramAlert(
     `🔔 New Lead: ${name}\n📞 ${phone}\n📍 ${district}, ${upazila}\n🏠 ${model}\n💬 ${message}`
   );
+  // WhatsApp (falling back to email) - only for a genuinely new lead, not a
+  // dedup hit within 24h, so a visitor resubmitting the form doesn't page
+  // the owner twice about the same person.
+  if (isNewLead) {
+    notifyOwner({ name, phoneDisplay: phone, district: district !== 'N/A' ? district : null, product: model !== 'N/A' ? model : null })
+      .catch((e) => console.error('[leads] notify failed:', e.message));
+  }
 
   // Ballpark estimate for the sales rep's reference, not a customer-facing
   // quote - only computed when the form's free-text model/floor-area
@@ -247,7 +287,7 @@ router.post('/send_email.php', async (req, res) => {
     await sendMail({
       to: process.env.MAIL_TO_SALES || 'sales@bongshai.com',
       subject: `New Quote Request from ${name}`,
-      replyTo: email,
+      replyTo: email || undefined, // calculator-sourced leads have no email
       text:
         'You have received a new inquiry from your website contact form. Please find the detailed Quote Request attached as a PDF.\n\n' +
         `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nModel: ${model}\n`,

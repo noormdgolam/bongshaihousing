@@ -1,0 +1,120 @@
+{% extends "agent-layout.njk" %}
+{% block title %}আজকের কাজ{% endblock %}
+
+{% block body %}
+<div class="agent-hero">
+  <div class="agent-hero-top">
+    <div class="agent-hero-brand">🏗️ বংশাই লিড ড্যাশবোর্ড</div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <a href="/agent/all-leads" class="btn btn-ghost">📋 সব লিড</a>
+      {% if isAdmin %}<a href="/agent/settings" class="btn btn-ghost">⚙️ সেটিংস</a>{% endif %}
+      <form method="post" action="/agent/logout" style="margin:0;">
+        <button type="submit" class="btn btn-ghost">লগ আউট</button>
+      </form>
+    </div>
+  </div>
+  <div class="agent-hero-profile">
+    <div>
+      <div class="agent-hero-name">আজকের কাজ</div>
+      <div class="agent-hero-meta">{{ agentName }} · {{ rows.length }}টি কাজ বাকি</div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-content">
+  <style>
+    .today-row{background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.4);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 6px 18px rgba(15,23,42,0.1)}
+    .today-row.urgent{border-left:4px solid var(--danger)}
+    .today-row.quoted{border-left:4px solid #b45309}
+    .today-row.fresh{border-left:4px solid var(--primary)}
+    .today-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+    .today-name{font-weight:800;font-size:1.05rem;color:var(--grey-900)}
+    .today-meta{font-size:0.82rem;color:var(--grey-700);margin-top:2px}
+    .today-reason{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;padding:2px 9px;border-radius:20px}
+    .today-row.urgent .today-reason{background:#fee2e2;color:var(--danger)}
+    .today-row.quoted .today-reason{background:#fef3c7;color:#92400e}
+    .today-row.fresh .today-reason{background:#dbeafe;color:#1e40af}
+    .today-days{font-size:0.72rem;color:var(--grey-500);margin-top:4px}
+    .today-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+    .today-actions .btn{padding:7px 12px;font-size:0.82rem}
+    .touch-form{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+    .touch-form select,.touch-form input{flex:1;min-width:140px;padding:7px 9px;border-radius:8px;border:1px solid rgba(15,23,42,0.15);font-size:0.85rem;background:rgba(255,255,255,0.7)}
+    .empty-state{text-align:center;padding:48px 16px;color:var(--grey-500)}
+    @media (max-width:480px){.today-top{flex-direction:column}.today-reason{align-self:flex-start}}
+  </style>
+
+  <div class="agent-stats-row">
+    <div class="agent-stat"><span class="agent-stat-icon">📥</span><div><div class="agent-stat-num">{{ stats.leads }}</div><div class="agent-stat-label">লিড</div></div></div>
+    <div class="agent-stat"><span class="agent-stat-icon">📄</span><div><div class="agent-stat-num">{{ stats.quoted }}</div><div class="agent-stat-label">কোটেশন</div></div></div>
+    <div class="agent-stat"><span class="agent-stat-icon">📊</span><div><div class="agent-stat-num">{{ stats.quoteRate }}%</div><div class="agent-stat-label">কোটেশন রেট</div></div></div>
+    <div class="agent-stat"><span class="agent-stat-icon">✅</span><div><div class="agent-stat-num">{{ stats.sold }}</div><div class="agent-stat-label">বিক্রি</div></div></div>
+    <div class="agent-stat"><span class="agent-stat-icon">❌</span><div><div class="agent-stat-num">{{ stats.lost }}</div><div class="agent-stat-label">হারানো</div></div></div>
+    <div class="agent-stat"><span class="agent-stat-icon">💰</span><div><div class="agent-stat-num">{% if stats.costPerLead != null %}৳{{ stats.costPerLead }}{% else %}—{% endif %}</div><div class="agent-stat-label">প্রতি লিড খরচ</div></div></div>
+  </div>
+
+  {% if rows.length == 0 %}
+  <div class="card empty-state">
+    <div style="font-size:2.2rem;margin-bottom:8px;">✅</div>
+    <div style="font-weight:700;color:var(--grey-900);">আজকের কাজ শেষ!</div>
+    <div style="font-size:0.85rem;margin-top:4px;">কোনো ফলোআপ বাকি নেই, কোনো নতুন লিড অপেক্ষা করছে না।</div>
+  </div>
+  {% endif %}
+
+  {% for r in rows %}
+  <div class="today-row {% if r.reason == 'ফলোআপ বাকি' %}urgent{% elif r.reason == 'কোটেশনের পর যোগাযোগ হয়নি' %}quoted{% else %}fresh{% endif %}">
+    <div class="today-top">
+      <div>
+        <div class="today-name">{{ r.name }}</div>
+        <div class="today-meta">📍 {{ r.district or 'জেলা নেই' }} &nbsp;·&nbsp; {{ r.status }} &nbsp;·&nbsp; {{ r.model or 'পণ্য উল্লেখ নেই' }}</div>
+        <div class="today-days">শেষ যোগাযোগ: {% if r.daysSinceTouch != null %}{{ r.daysSinceTouch }} দিন আগে{% else %}কখনো না{% endif %}</div>
+      </div>
+      <span class="today-reason">{{ r.reason }}</span>
+    </div>
+    <div class="today-actions">
+      <a href="#" target="_blank" class="btn btn-accent js-wa-link" data-name="{{ r.name }}" data-district="{{ r.district or '' }}" data-phone="{{ r.phone }}">💬 WhatsApp</a>
+      <select class="js-wa-template" style="padding:6px 8px;border-radius:8px;border:1px solid rgba(15,23,42,0.15);font-size:0.8rem;">
+        {% for t in templates %}<option value="{{ loop.index0 }}">{{ t.label }}</option>{% endfor %}
+      </select>
+      <a href="{{ r.telHref }}" class="btn btn-primary">📞 Call</a>
+      <a href="/agent/all-leads?q={{ r.phone }}" class="btn btn-ghost">বিস্তারিত</a>
+    </div>
+    <div class="today-actions">
+      <form method="post" action="/agent/today/touch/{{ r.id }}" style="margin:0;"><input type="hidden" name="return_to" value="/agent/today"><input type="hidden" name="note" value="কল করেছি"><button type="submit" class="btn">✓ কল করেছি</button></form>
+      <form method="post" action="/agent/today/touch/{{ r.id }}" style="margin:0;"><input type="hidden" name="return_to" value="/agent/today"><input type="hidden" name="note" value="মেসেজ পাঠিয়েছি"><button type="submit" class="btn">✓ মেসেজ পাঠিয়েছি</button></form>
+      <form method="post" action="/agent/today/touch/{{ r.id }}" style="margin:0;"><input type="hidden" name="return_to" value="/agent/today"><input type="hidden" name="note" value="ধরেনি / ব্যস্ত ছিল"><button type="submit" class="btn">✓ ধরেনি</button></form>
+    </div>
+    <form method="post" action="/agent/today/touch/{{ r.id }}" class="touch-form">
+      <input type="hidden" name="return_to" value="/agent/today">
+      <input type="text" name="note" placeholder="অথবা নিজের নোট লিখুন..." maxlength="200">
+      <button type="submit" class="btn btn-primary" style="white-space:nowrap;">✓ লগ করুন</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+(function () {
+  // Bangla date, matching the {{তারিখ}} placeholder's expected format.
+  var TODAY = new Date().toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+  var TEMPLATES = {{ templates | dump | safe }};
+
+  function buildLink(link) {
+    var idx = link.closest('.today-actions').querySelector('.js-wa-template').value;
+    var tpl = TEMPLATES[idx] ? TEMPLATES[idx].text : '';
+    var text = tpl
+      .replace(/\{\{নাম\}\}/g, link.dataset.name || '')
+      .replace(/\{\{জেলা\}\}/g, link.dataset.district || '')
+      .replace(/\{\{তারিখ\}\}/g, TODAY);
+    var digits = (link.dataset.phone || '').replace(/\D/g, '');
+    var local = digits.indexOf('880') === 0 ? digits : (digits.indexOf('0') === 0 ? '88' + digits.slice(1) : '88' + digits);
+    link.href = 'https://wa.me/' + local + (text ? '?text=' + encodeURIComponent(text) : '');
+  }
+
+  document.querySelectorAll('.js-wa-link').forEach(function (link) {
+    buildLink(link);
+    var select = link.closest('.today-actions').querySelector('.js-wa-template');
+    select.addEventListener('change', function () { buildLink(link); });
+  });
+})();
+</script>
+{% endblock %}

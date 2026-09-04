@@ -33,6 +33,10 @@ venv/
 !server/theme-settings.json
 !f446c3814965a067992e82231bb56211.txt
 
+# Lead-pipeline runtime data - contains real customer PII (name/phone), never
+# committed. Narrow path, not a directory glob, per the *.py lesson above.
+server/data/leads-fallback.jsonl
+
 # OS / Editor
 .DS_Store
 Thumbs.db

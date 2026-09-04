@@ -1033,12 +1033,6 @@
 
 <li class="nav-item" role="none">
 
-<a class="nav-link" href="https://bongshaihousing.com/" role="menuitem">Times</a>
-
-</li>
-
-<li class="nav-item" role="none">
-
 <a class="nav-link" href="about.html" role="menuitem">
             About
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1082,7 +1076,7 @@
 <li class="nav-item" role="none">
 
 <a class="nav-link" href="products-and-solutions.html" role="menuitem">
-            Products &amp; Solutions
+            Products
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </a>
 <div class="dropdown image-mega-dropdown" role="menu">
@@ -1103,9 +1097,9 @@
     </a>
     
     <a href="simplex-steel-building.html" class="mega-card">
-      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Steel Building" loading="lazy" width="1024" height="1024">
+      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Prefab Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Simplex Steel Building</span>
+        <span class="mega-card-title">Simplex Prefab Building</span>
       </div>
     </a>
     
@@ -1165,6 +1159,12 @@
 
 <li class="nav-item" role="none">
 
+<a class="nav-link" href="interactive-tools.html" role="menuitem">Cost Calculator</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
 <a class="nav-link" href="projects.html" role="menuitem">Our Projects</a>
 
 </li>
@@ -1207,10 +1207,6 @@
 
 
 
-<a class="mobile-nav-link" href="https://bongshaihousing.com/">Times</a>
-
-
-
 <div>
 <button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About <span>▾</span>
 </button>
@@ -1234,7 +1230,7 @@
 
 
       <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products &amp; Solutions <span>▾</span>
+        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products <span>▾</span>
         </button>
         <div class="mobile-sub-links">
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
@@ -1243,7 +1239,7 @@
 
 <a class="mobile-sub-link" href="duplex-steel-building.html">Duplex Steel Building</a>
 
-<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex Steel Building</a>
+<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex Prefab Building</a>
 
 <a class="mobile-sub-link" href="cottage-house.html">Cottage House</a>
 
@@ -1263,6 +1259,10 @@
           <a href="solutions.html" class="mobile-sub-link">Contact Sales</a>
         </div>
       </div>
+
+
+
+<a class="mobile-nav-link" href="interactive-tools.html">Cost Calculator</a>
 
 
 
@@ -2848,6 +2848,7 @@
     });
   }
 </script>
+<script src="js/utm-capture.js?v=1" defer></script>
 <script src="js/3d-tilt.js?v=1" defer></script>
 <script src="js/page-transition.js?v=1" defer></script>
 <script src="js/global-upgrades.min.js?v=3.16" defer></script>
@@ -3620,7 +3621,7 @@
         model: 'জমি রেজিস্ট্রি ক্যালকুলেটর',
         floor_area: '',
         message: message,
-        source: 'calculator'
+        source: (window.BHUtm ? window.BHUtm.source() : null) || 'calculator'
       });
 
       const waUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(message)}`;

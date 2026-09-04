@@ -20,6 +20,7 @@ const sitemapRouter = require('./routes/sitemap');
 const searchIndexRouter = require('./routes/search-index');
 const adminAuthRouter = require('./routes/admin-auth');
 const adminRouter = require('./routes/admin');
+const leadsRouter = require('./routes/leads');
 const agentAuthRouter = require('./routes/agent-auth');
 const agentRouter = require('./routes/agent');
 const customerAuthRouter = require('./routes/customer-auth');
@@ -272,9 +273,14 @@ app.use((req, res, next) => {
 app.use('/admin', require('./middleware/csrf'));
 app.use('/', adminAuthRouter);
 app.use('/', adminRouter);
+// Public, cross-origin lead ingest - deliberately outside the /admin CSRF
+// middleware above (sister sites and anonymous visitors can't carry an admin
+// session token); see routes/leads.js for its own origin/rate-limit guards.
+app.use('/', leadsRouter);
 app.use('/agent', require('./middleware/csrf'));
 app.use('/', agentAuthRouter);
 app.use('/', agentRouter);
+app.use('/', require('./routes/lead-dashboard'));
 app.use('/my-project', require('./middleware/csrf'));
 app.use('/', customerAuthRouter);
 app.use('/', customerRouter);

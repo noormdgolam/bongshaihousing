@@ -3,6 +3,7 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const db = require('../lib/db');
 const { saveDocument } = require('../lib/document-uploader');
+const { recordLead } = require('../lib/leads');
 
 const router = express.Router();
 
@@ -206,6 +207,20 @@ router.post(['/agent/signup', '/agent/signup.html'], function (req, res, next) {
     certification_agreed: true,
   });
 
+  // Every form that collects a phone number writes to the leads pipeline too
+  // (see server/lib/leads.js) - fire-and-forget, since a slow/failed notify
+  // must never hold up the applicant's own signup confirmation page.
+  recordLead({
+    name: b.name.trim(),
+    phone: b.phone.trim(),
+    district: b.district.trim(),
+    source: 'agent-signup',
+    product: null,
+    message: `Agent partner application: ${businessTypes}`,
+    email: b.email.trim(),
+    site: 'bongshaihousing.com',
+  }).catch((e) => console.error('[agent-signup] lead record failed:', e.message));
+
   res.render('agent/signup-pending.njk', { name: b.name });
 });
 
@@ -255,7 +270,10 @@ router.post(['/agent/login', '/agent/login.html'], async (req, res) => {
     req.session.agentName = agent.name;
     req.session.save((saveErr) => {
       if (saveErr) console.error('Agent session save failed:', saveErr.message);
-      res.redirect('/agent/dashboard.html');
+      // The lead dashboard's "আজকের কাজ" screen is the new default landing
+      // page - the referral/commission dashboard (agent/dashboard.html) is
+      // unchanged and still reachable, just no longer where login lands.
+      res.redirect('/agent/today');
     });
   });
 });

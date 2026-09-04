@@ -1737,7 +1737,7 @@
         model: 'নির্মাণ খরচ ক্যালকুলেটর',
         floor_area: String(currentFloorArea * currentFloors),
         message: message,
-        source: 'calculator'
+        source: (window.BHUtm ? window.BHUtm.source() : null) || 'calculator'
       });
 
       const waUrl = `https://wa.me/8801781636613?text=${encodeURIComponent(message)}`;
