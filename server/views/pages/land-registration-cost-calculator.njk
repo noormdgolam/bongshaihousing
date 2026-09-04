@@ -35,33 +35,37 @@
 <style>
 /* Calculator styles, scoped to .calc-app so the site nav/footer are untouched */
 .calc-app {
-      --bg-navy: #0f172a;        /* Deep Slate Navy (Brand Dark) */
-      --card-navy: #1e293b;      /* Slate Card Background */
-      --card-hover: #27354a;     /* Interactive Hover State */
-      --card-border: rgba(255, 255, 255, 0.09);
-      --card-border-gold: rgba(253, 224, 71, 0.35);
+      /* Rethemed onto the site design system (css/style.css tokens). */
+      --bg-navy: #f8fafc;        /* page ground - now the site's off-white */
+      --card-navy: #ffffff;      /* card surface */
+      --card-hover: #f1f5f9;
+      --card-border: #e2e8f0;
+      --card-border-gold: rgba(30, 64, 175, 0.28);
 
-      --gold-accent: #FDE047;    /* Light Gold / Bright Yellow Accent */
-      --gold-primary: #EAB308;   /* Brand Gold */
-      --gold-dark: #CA8A04;      /* Deep Gold */
-      --gold-glow: rgba(253, 224, 71, 0.22);
+      --gold-accent: #EAB308;    /* backgrounds only - see --brand for text */
+      --gold-primary: #CA8A04;
+      --gold-dark: #A16207;
+      --gold-glow: rgba(30, 64, 175, 0.14);
 
-      --blue-accent: #38bdf8;    /* Tech Sky Blue */
-      --green-success: #10b981;  /* Success Emerald */
-      --amber-warning: #f59e0b;  /* Warning Amber */
+      --brand: #1E40AF;          /* emphasis text/borders that used to be gold */
+      --brand-soft: #eff4ff;
+      --on-gold: #0f172a;        /* text sitting on a gold fill */
 
-      --text-white: #ffffff;
-      --text-light: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
+      --blue-accent: #1E40AF;
+      --green-success: #059669;
 
-      --font-main: 'Hind Siliguri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --text-white: #0f172a;     /* strongest ink */
+      --text-light: #1e293b;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+
+      --font-main: 'Inter', 'Noto Sans Bengali', 'Hind Siliguri', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --radius-sm: 8px;
       --radius-md: 12px;
-      --radius-lg: 18px;
+      --radius-lg: 16px;
       --radius-full: 9999px;
-      --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.35);
-      --shadow-gold: 0 10px 28px rgba(234, 179, 8, 0.28);
+      --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-gold: 0 8px 24px rgba(30, 64, 175, 0.18);
     }
 .calc-app *, .calc-app *::before, .calc-app *::after {
       box-sizing: border-box;
@@ -73,7 +77,7 @@
       scroll-behavior: smooth;
     }
 .calc-app {
-      background-color: var(--bg-navy);
+      background-color: var(--on-gold);
       color: var(--text-light);
       font-family: var(--font-main);
       line-height: 1.6;
@@ -83,7 +87,7 @@
       overflow-x: hidden;
     }
 .calc-app .brand-topbar {
-      background: rgba(15, 23, 42, 0.95);
+      background: #ffffff;
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--card-border);
       padding: 12px 20px;
@@ -110,14 +114,14 @@
       width: 38px;
       height: 38px;
       background: linear-gradient(135deg, var(--gold-accent) 0%, var(--gold-primary) 100%);
-      color: var(--bg-navy);
+      color: var(--on-gold);
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 10px;
       font-weight: 800;
       font-size: 1.25rem;
-      box-shadow: 0 4px 12px rgba(253, 224, 71, 0.35);
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.32);
     }
 .calc-app .brand-logo-text {
       display: flex;
@@ -127,7 +131,7 @@
       font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: -0.01em;
-      color: var(--gold-accent);
+      color: var(--brand);
       line-height: 1.2;
     }
 .calc-app .brand-logo-sub {
@@ -140,9 +144,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(253, 224, 71, 0.12);
-      border: 1px solid rgba(253, 224, 71, 0.3);
-      color: var(--gold-accent);
+      background: rgba(30, 64, 175, 0.07);
+      border: 1px solid rgba(30, 64, 175, 0.28);
+      color: var(--brand);
       padding: 6px 14px;
       border-radius: var(--radius-full);
       font-size: 0.85rem;
@@ -152,7 +156,7 @@
     }
 .calc-app .brand-hotline-btn:hover {
       background: var(--gold-accent);
-      color: var(--bg-navy);
+      color: var(--on-gold);
       transform: translateY(-1px);
     }
 .calc-app .main-wrapper {
@@ -169,8 +173,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: rgba(30, 64, 175, 0.07);
+      border: 1px solid rgba(30, 64, 175, 0.22);
       color: var(--blue-accent);
       padding: 4px 14px;
       border-radius: var(--radius-full);
@@ -186,26 +190,26 @@
       margin-bottom: 14px;
     }
 .calc-app .hero-title span {
-      color: var(--gold-accent);
+      color: var(--brand);
       display: inline-block;
     }
 .calc-app .answer-first-card {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      background: linear-gradient(145deg, #ffffff, #ffffff);
       border: 1px solid var(--card-border-gold);
-      border-left: 4px solid var(--gold-accent);
+      border-left: 4px solid var(--brand);
       border-radius: var(--radius-md);
       padding: 16px 20px;
       margin-bottom: 24px;
       text-align: left;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
     }
 .calc-app .answer-first-card p {
       font-size: 1rem;
-      color: #e2e8f0;
+      color: var(--text-light);
       line-height: 1.65;
     }
 .calc-app .answer-first-card strong {
-      color: var(--gold-accent);
+      color: var(--brand);
     }
 .calc-app .trust-meta {
       display: flex;
@@ -215,7 +219,7 @@
       margin-top: 10px;
       font-size: 0.78rem;
       color: var(--text-muted);
-      border-top: 1px dashed rgba(255,255,255,0.08);
+      border-top: 1px dashed #e2e8f0;
       padding-top: 8px;
     }
 .calc-app .calc-card {
@@ -240,7 +244,7 @@
     }
 .calc-app .form-label-hint {
       font-size: 0.8rem;
-      color: var(--gold-accent);
+      color: var(--brand);
       font-weight: 400;
     }
 .calc-app .input-wrapper {
@@ -250,8 +254,8 @@
     }
 .calc-app .calc-input {
       width: 100%;
-      background: #090d16;
-      border: 1.5px solid #334155;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
       border-radius: var(--radius-md);
       color: var(--text-white);
       font-family: var(--font-main);
@@ -268,7 +272,7 @@
       margin: 0;
     }
 .calc-app .calc-input:focus {
-      border-color: var(--gold-accent);
+      border-color: var(--brand);
       box-shadow: 0 0 0 3px var(--gold-glow);
     }
 .calc-app .input-unit {
@@ -276,7 +280,7 @@
       right: 16px;
       font-size: 1.1rem;
       font-weight: 700;
-      color: var(--gold-accent);
+      color: var(--brand);
       pointer-events: none;
     }
 .calc-app .preset-chips {
@@ -286,8 +290,8 @@
       margin-top: 10px;
     }
 .calc-app .preset-chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       color: var(--text-muted);
       border-radius: var(--radius-full);
       padding: 6px 14px;
@@ -297,15 +301,15 @@
       transition: all 0.15s ease;
     }
 .calc-app .preset-chip:hover {
-      background: rgba(253, 224, 71, 0.15);
-      color: var(--gold-accent);
-      border-color: var(--gold-accent);
+      background: rgba(30, 64, 175, 0.10);
+      color: var(--brand);
+      border-color: var(--brand);
     }
 .calc-app .preset-chip.active {
       background: var(--gold-accent);
-      color: var(--bg-navy);
+      color: var(--on-gold);
       font-weight: 700;
-      border-color: var(--gold-accent);
+      border-color: var(--brand);
     }
 .calc-app .area-grid {
       display: grid;
@@ -313,8 +317,8 @@
       gap: 10px;
     }
 .calc-app .area-card {
-      background: #090d16;
-      border: 1.5px solid #334155;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
       border-radius: var(--radius-md);
       padding: 12px 14px;
       cursor: pointer;
@@ -324,11 +328,11 @@
       justify-content: space-between;
     }
 .calc-app .area-card:hover {
-      border-color: rgba(253, 224, 71, 0.4);
+      border-color: rgba(30, 64, 175, 0.38);
     }
 .calc-app .area-card.active {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-      border-color: var(--gold-accent);
+      background: linear-gradient(145deg, #ffffff, #ffffff);
+      border-color: var(--brand);
       box-shadow: 0 0 16px var(--gold-glow);
     }
 .calc-app .area-card-title {
@@ -338,7 +342,7 @@
       margin-bottom: 3px;
     }
 .calc-app .area-card.active .area-card-title {
-      color: var(--gold-accent);
+      color: var(--brand);
     }
 .calc-app .area-card-desc {
       font-size: 0.74rem;
@@ -350,7 +354,7 @@
       font-size: 0.76rem;
       font-weight: 700;
       color: var(--blue-accent);
-      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      border-top: 1px dashed #e2e8f0;
       padding-top: 4px;
     }
 .calc-app .seller-type-box {
@@ -359,8 +363,8 @@
       gap: 10px;
     }
 .calc-app .seller-type-btn {
-      background: #090d16;
-      border: 1.5px solid #334155;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
       border-radius: var(--radius-md);
       padding: 10px 12px;
       color: var(--text-light);
@@ -372,28 +376,28 @@
       transition: all 0.2s ease;
     }
 .calc-app .seller-type-btn:hover {
-      border-color: var(--gold-accent);
+      border-color: var(--brand);
     }
 .calc-app .seller-type-btn.active {
-      background: rgba(253, 224, 71, 0.15);
-      border-color: var(--gold-accent);
-      color: var(--gold-accent);
+      background: rgba(30, 64, 175, 0.10);
+      border-color: var(--brand);
+      color: var(--brand);
     }
 .calc-app .result-showcase {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
-      border: 1.5px solid var(--gold-accent);
+      background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+      border: 1.5px solid var(--brand);
       border-radius: var(--radius-lg);
       padding: 24px 20px;
       margin-top: 26px;
       position: relative;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.10);
     }
 .calc-app .result-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: var(--gold-accent);
-      color: var(--bg-navy);
+      color: var(--on-gold);
       font-size: 0.78rem;
       font-weight: 700;
       padding: 4px 12px;
@@ -412,9 +416,9 @@
 .calc-app .result-total-taka {
       font-size: clamp(1.9rem, 6vw, 2.7rem);
       font-weight: 800;
-      color: var(--gold-accent);
+      color: var(--brand);
       line-height: 1.2;
-      text-shadow: 0 0 24px rgba(253, 224, 71, 0.3);
+      text-shadow: 0 0 24px rgba(30, 64, 175, 0.28);
     }
 .calc-app .result-total-lakh {
       font-size: 1.05rem;
@@ -425,8 +429,8 @@
 .calc-app .result-total-percent {
       display: inline-block;
       margin-top: 6px;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(30, 64, 175, 0.10);
+      border: 1px solid rgba(30, 64, 175, 0.28);
       color: var(--blue-accent);
       padding: 3px 12px;
       border-radius: var(--radius-full);
@@ -435,7 +439,7 @@
     }
 .calc-app .breakdown-table-box {
       margin-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid #e2e8f0;
       padding-top: 16px;
     }
 .calc-app .breakdown-table-title {
@@ -455,23 +459,23 @@
 .calc-app .breakdown-table th {
       text-align: left;
       padding: 8px 10px;
-      background: #090d16;
+      background: #f8fafc;
       color: var(--text-muted);
       font-weight: 600;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid #e2e8f0;
     }
 .calc-app .breakdown-table th:last-child {
       text-align: right;
     }
 .calc-app .breakdown-table td {
       padding: 10px 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      color: #cbd5e1;
+      border-bottom: 1px solid #eef2f7;
+      color: var(--text-light);
     }
 .calc-app .breakdown-table td:last-child {
       text-align: right;
       font-weight: 700;
-      color: var(--gold-accent);
+      color: var(--brand);
       white-space: nowrap;
     }
 .calc-app .breakdown-table tr:hover td {
@@ -493,7 +497,7 @@
       display: inline-block;
     }
 .calc-app .fixed-fees-card {
-      background: #090d16;
+      background: #f8fafc;
       border-radius: var(--radius-md);
       padding: 12px 14px;
       margin-top: 14px;
@@ -522,12 +526,12 @@
       padding: 12px 14px;
       margin-top: 16px;
       font-size: 0.8rem;
-      color: #fde68a;
+      color: #92400e;
       line-height: 1.5;
     }
 .calc-app .lead-block {
-      background: linear-gradient(150deg, #1e293b 0%, #0d1527 100%);
-      border: 1.5px solid rgba(253, 224, 71, 0.35);
+      background: linear-gradient(150deg, #ffffff 0%, #ffffff 100%);
+      border: 1.5px solid rgba(30, 64, 175, 0.32);
       border-radius: var(--radius-lg);
       padding: 26px 20px;
       margin-top: 36px;
@@ -559,8 +563,8 @@
     }
 .calc-app .lead-input, .calc-app .lead-select {
       width: 100%;
-      background: #090d16;
-      border: 1.5px solid #334155;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
       border-radius: var(--radius-md);
       color: var(--text-white);
       font-family: var(--font-main);
@@ -570,12 +574,12 @@
       transition: all 0.2s ease;
     }
 .calc-app .lead-input:focus, .calc-app .lead-select:focus {
-      border-color: var(--gold-accent);
+      border-color: var(--brand);
       box-shadow: 0 0 0 3px var(--gold-glow);
     }
 .calc-app .lead-select option {
-      background: #1e293b;
-      color: #fff;
+      background: #ffffff;
+      color: var(--text-white);
     }
 .calc-app .whatsapp-btn {
       width: 100%;
@@ -608,7 +612,7 @@
     }
 .calc-app .faq-section {
       margin-top: 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid #e2e8f0;
       padding-top: 30px;
     }
 .calc-app .section-head h2 {
@@ -619,7 +623,7 @@
       margin-bottom: 14px;
     }
 .calc-app .faq-item {
-      background: rgba(30, 41, 59, 0.5);
+      background: #f8fafc;
       border: 1px solid var(--card-border);
       border-radius: var(--radius-md);
       padding: 16px 18px;
@@ -628,12 +632,12 @@
 .calc-app .faq-item h3 {
       font-size: 1.02rem;
       font-weight: 700;
-      color: var(--gold-accent);
+      color: var(--brand);
       margin-bottom: 6px;
     }
 .calc-app .faq-item p {
       font-size: 0.88rem;
-      color: #cbd5e1;
+      color: var(--text-light);
       line-height: 1.6;
     }
 .calc-app .footer-note {
@@ -670,26 +674,152 @@
         display: none;
       }
     }
-/* Sit clear of the site's fixed navbar, and let the dark panel run full-bleed */
+
+
+/* --- Site-layout integration -------------------------------------------- */
+
+/* The standalone page's <main class="main-wrapper"> supplied the container and
+   was dropped when the content moved into layout.njk's own <main>, so the
+   calculator ran the full width of the viewport. .calc-shell restores it. */
 .calc-app {
-  padding-top: calc(var(--nav-height, 80px) + 24px);
-  padding-bottom: 48px;
+  background: var(--bg-navy);
+  padding-bottom: 56px;   /* top clearance is the hero band's job, see below */
+}
+.calc-app .calc-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 .calc-app .main-wrapper { padding-top: 0; }
 
+/* Every other interior page opens with a full-bleed navy hero band - gold
+   eyebrow, white title - and drops to off-white content below it (.page-hero in
+   css/style.css). The calculator's hero-box holds exactly that content, so it
+   gets moved out of .calc-shell and dressed as the site's band; without it the
+   nav clearance is just a tall empty gap, which is most of what made the page
+   look imported. */
+.calc-app .hero-box {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+  padding: calc(var(--nav-height, 80px) + 44px) 16px 44px;
+  margin: 0 0 32px;
+  text-align: center;
+}
+.calc-app .hero-box .hero-title {
+  color: #ffffff;
+  max-width: 960px;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+.calc-app .hero-box .hero-title span { color: #FDE047; }
+.calc-app .hero-box .trust-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(253, 224, 71, 0.45);
+  color: #FDE047;
+}
+@media (max-width: 768px) {
+  .calc-app .hero-box { padding: calc(var(--nav-height, 80px) + 26px) 16px 30px; margin-bottom: 24px; }
+}
+
+/* On a narrow screen the label and its hint are two competing lines, not a
+   left/right pair - stop them colliding. */
+@media (max-width: 560px) {
+  .calc-app .form-label { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
+
+/* Cards read as cards against the off-white ground, matching the site's. */
+.calc-app .calc-card,
+.calc-app .answer-first-card,
+.calc-app .models-block,
+.calc-app .lead-block,
+.calc-app .faq-block {
+  box-shadow: var(--shadow-card);
+}
+
+/* The answer block: a light brand-tinted panel, not a dark slab. */
+.calc-app .answer-first-card {
+  background: var(--brand-soft);
+  border: 1px solid #dbe4fb;
+  border-left: 4px solid var(--brand);
+}
+
+/* The result panel. Keeping it dark was tempting - it's the answer - but on the
+   land page it wraps the whole fee table plus the e-fee, warning and sources
+   boxes, and those are light, so a dark slab ends up punched full of holes.
+   Light card, brand border, gold badge: the emphasis comes from the frame. */
+.calc-app .result-showcase {
+  background: #ffffff;
+  border: 2px solid var(--brand);
+  box-shadow: 0 10px 30px rgba(30, 64, 175, 0.10);
+}
+.calc-app .result-showcase .result-badge {
+  background: var(--gold-accent);
+  color: var(--on-gold);
+}
+.calc-app .result-showcase .result-total-taka {
+  color: var(--brand);
+  text-shadow: none;
+}
+.calc-app .result-showcase .breakdown-bar-bg,
+.calc-app .result-showcase .breakdown-table th {
+  background: #f1f5f9;
+}
+.calc-app .result-showcase .breakdown-table th { color: var(--text-muted); }
+
+/* Selected states: the original relied on a gold glow against near-black, which
+   on white washes out to a smudge. A tinted fill plus a solid brand border is
+   how the rest of the site marks a chosen option. */
+.calc-app .floor-btn.active,
+.calc-app .finish-card.active,
+.calc-app .tier-tab-btn.active,
+.calc-app .seller-type-btn.active {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+  color: var(--brand);
+  box-shadow: none;
+}
+.calc-app .finish-card.active .finish-desc { color: var(--text-muted); }
+
+/* Price panel inside each model card - a brand-tinted plate, not a black box. */
+.calc-app .model-price-box {
+  background: var(--brand-soft);
+  border: 1px solid #dbe4fb;
+}
+
+/* The lead-capture block was a dark slab; make it the site's navy CTA instead. */
+.calc-app .lead-block {
+  --text-white: #ffffff;
+  --text-light: #f1f5f9;
+  --text-muted: #cbd5e1;
+  --brand: #FDE047;
+  background: linear-gradient(150deg, #1e3a8a 0%, #1e40af 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.calc-app .lead-block .lead-input,
+.calc-app .lead-block .lead-select {
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #0f172a;
+}
+
+/* Bengali numerals and Taka figures line up in the breakdown tables. */
+.calc-app .breakdown-table td,
+.calc-app .b-amt,
+.calc-app .result-total-taka { font-variant-numeric: tabular-nums; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="calc-app">
-
-    <!-- Hero / Header -->
-    <div class="hero-box">
+<div class="hero-box">
       <div class="trust-badge">
         📜 ২০২৬ সালের সর্বশেষ সরকারি গেজেট ও আইন ভিত্তিক
       </div>
       <h1 class="hero-title">জমি রেজিস্ট্রি খরচ ক্যালকুলেটর <span>২০২৬</span></h1>
     </div>
+<div class="calc-shell">
+
+    <!-- Hero / Header -->
+    
 
     <!-- AEO Direct Answer Block (< 45 words) -->
     <section class="answer-first-card" aria-label="সংক্ষিপ্ত উত্তর">
@@ -1007,10 +1137,10 @@
     </section>
 
     <!-- Disclaimer & Footer -->
-    <footer class="footer-note">
+    <div class="footer-note">
       <p>※ এই ক্যালকুলেটরে প্রদর্শিত খরচ বাংলাদেশ সরকারের বর্তমান অর্থ আইন ও রেজিস্ট্রেশন নির্দেশিকা অনুযায়ী প্রস্তুতকৃত। স্থানীয় সাব-রেজিস্ট্রি অফিসের বিশেষ প্রজ্ঞাপন বা মৌজা শ্রেণির পরিবর্তনের কারণে বাস্তব ফি সামান্য কম-বেশি হতে পারে।</p>
       <p style="margin-top: 6px; color: var(--gold-accent);">© ২০২৬ বংশাই হাউজিং লিমিটেড | জমি যাচাই, নকশা অনুমোদন ও বাড়ি নির্মাণে আপনার বিশ্বস্ত পার্টনার</p>
-    </footer>
+    </div>
   
 
 
@@ -1026,6 +1156,7 @@
   <a href="index.html" style="margin-left:6px;">হোম</a>
 </div>
 
+</div>
 </div>
 {% endblock %}
 
