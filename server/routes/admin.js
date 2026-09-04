@@ -2119,17 +2119,41 @@ router.post('/admin/categories/:id', upload.single('hero_image_file'), async (re
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
-  const { slug, name, landing_page_slug, description, hero_image, sort_order, show_in_nav } = req.body;
+  const {
+    slug, name, landing_page_slug, description, hero_image, sort_order, show_in_nav,
+    hero_subtitle, intro_paragraph,
+  } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
   const existingCategory = await db('categories').where({ id: req.params.id }).first();
   const categoryFields = {
     slug, name, landing_page_slug: landing_page_slug || null, description: description || null,
+    // Blank means "use the template's built-in wording", so store NULL rather
+    // than an empty string - the templates' `default(..., true)` fallback keys
+    // off falsy, and NULL keeps that intent obvious in the data.
+    hero_subtitle: (hero_subtitle || '').trim() || null,
+    intro_paragraph: (intro_paragraph || '').trim() || null,
     hero_image: finalImage, sort_order: sort_order || 0,
     show_in_nav: show_in_nav === 'on' || show_in_nav === true || show_in_nav === 'true',
     updated_at: db.fn.now(),
   };
   await db('categories').where({ id: req.params.id }).update(categoryFields);
   await recordHistory(req, 'category', req.params.id, existingCategory, { ...existingCategory, ...categoryFields });
+
+  // LiteSpeed serves the category's .html straight off disk ahead of this app,
+  // so a DB-only save would leave the live page showing the old copy. Product
+  // saves already trigger this for their category page; category saves did not,
+  // which is why editing a category previously appeared to do nothing.
+  const pageSlug = categoryFields.landing_page_slug || existingCategory?.landing_page_slug;
+  if (pageSlug) {
+    try {
+      const { syncPageToLive } = require('../lib/liveSiteSync');
+      const synced = await syncPageToLive(pageSlug);
+      console.log(`category ${req.params.id} saved; static sync of ${pageSlug}:`, synced ? 'ok' : 'no-op');
+    } catch (err) {
+      // The DB write already succeeded - report, don't fail the save.
+      console.error(`category ${req.params.id} saved but static sync of ${pageSlug} failed:`, err.message);
+    }
+  }
   res.redirect(`/admin/categories/${req.params.id}/edit`);
 });
 

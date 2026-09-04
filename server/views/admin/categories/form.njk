@@ -8,8 +8,23 @@
   <div class="form-row"><label for="name">Name</label><input type="text" id="name" name="name" value="{{ category.name or '' }}" required></div>
   <div class="form-row"><label for="slug">Slug</label><input type="text" id="slug" name="slug" value="{{ category.slug or '' }}" required></div>
   <div class="form-row"><label for="landing_page_slug">Landing Page (filename)</label><input type="text" id="landing_page_slug" name="landing_page_slug" value="{{ category.landing_page_slug or '' }}" placeholder="e.g. apartment-building.html"></div>
-  <div class="form-row"><label for="description">Description (Banner / Hero intro)</label><textarea id="description" name="description" rows="3">{{ category.description or '' }}</textarea></div>
-  
+  {# The two blocks of copy that actually render at the top of the category's
+     landing page. Both fall back to the template's built-in text when blank,
+     so clearing a field restores the original wording rather than emptying
+     the page. Saving either one regenerates the static .html. #}
+  <div class="form-row">
+    <label for="hero_subtitle">Hero Subtitle <span style="font-weight:400; color:var(--grey-500, #64748b); font-size:0.8rem;">(the line under the big page title, in the blue banner)</span></label>
+    <textarea id="hero_subtitle" name="hero_subtitle" rows="3" placeholder="Leave blank to use the page's built-in wording">{{ category.hero_subtitle or '' }}</textarea>
+  </div>
+  <div class="form-row">
+    <label for="intro_paragraph">Intro Paragraph <span style="font-weight:400; color:var(--grey-500, #64748b); font-size:0.8rem;">(the bold paragraph in the grey strip directly below the banner)</span></label>
+    <textarea id="intro_paragraph" name="intro_paragraph" rows="4" placeholder="Leave blank to use the page's built-in wording">{{ category.intro_paragraph or '' }}</textarea>
+  </div>
+  <div class="form-row">
+    <label for="description">Internal Note <span style="font-weight:400; color:var(--grey-500, #64748b); font-size:0.8rem;">(not shown on the website - admin reference only)</span></label>
+    <textarea id="description" name="description" rows="2">{{ category.description or '' }}</textarea>
+  </div>
+
   <div class="form-row">
     <label>Category Hero / Banner Image <span style="font-weight:400; color:var(--grey-500, #64748b); font-size:0.8rem;">(also used as this category's photo in the Products &amp; Solutions nav dropdown)</span></label>
     <div style="display:flex; gap:16px; align-items:start; flex-wrap:wrap; background:var(--off-white, #f8fafc); padding:14px; border-radius:8px; border:1px solid var(--grey-200, #e2e8f0);">

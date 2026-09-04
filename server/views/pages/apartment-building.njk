@@ -206,7 +206,7 @@
 
 <h1 class="page-hero-title" data-aos="fade-up" id="ssb-page-title">Apartment Building</h1>
 
-<p class="page-hero-text">Two-floor steel-composite apartment buildings designed for multi-family or rental-style living — durable, expandable, and built for Bangladesh’s urban density.</p>
+<p class="page-hero-text">{{ dbCategory.hero_subtitle | default('Two-floor steel-composite apartment buildings designed for multi-family or rental-style living — durable, expandable, and built for Bangladesh’s urban density.', true) }}</p>
 
 <nav aria-label="Breadcrumb" class="breadcrumb">
 
@@ -226,7 +226,7 @@
 
   <div class="container">
 
-    <p><strong>Bongshai Housing constructs robust, multi-story steel-composite apartment buildings designed for urban density in Bangladesh. Our EPC engineering ensures fast assembly, superior earthquake resistance, and cost-efficient residential scaling.</strong></p>
+    <p><strong>{{ dbCategory.intro_paragraph | default('Bongshai Housing constructs robust, multi-story steel-composite apartment buildings designed for urban density in Bangladesh. Our EPC engineering ensures fast assembly, superior earthquake resistance, and cost-efficient residential scaling.', true) }}</strong></p>
 
     <div class="trust-signals" style="font-size: 0.9rem; color: var(--grey-600); margin-top: 1rem;">
 
