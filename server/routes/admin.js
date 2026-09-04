@@ -3143,8 +3143,31 @@ router.post('/admin/history/:entityType/:entityId/restore/:historyId', async (re
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
   const { entityType, entityId, historyId } = req.params;
   try {
-    await restoreVersion(req, entityType, entityId, historyId);
+    const restored = await restoreVersion(req, entityType, entityId, historyId);
     await logActivity(req, { action: 'update', entityType, entityId, summary: `Restored a previous version (history #${historyId})` });
+
+    // LiteSpeed serves a static copy of product/category/project pages ahead
+    // of this app, and restoreVersion() only ever touches the database - so
+    // without this, Undo looked like it worked (the DB rolled back, the form
+    // showed the old values) while the live page kept showing whatever the
+    // pre-undo edit had put there. That's exactly the class of bug this
+    // feature exists to fix, just moved one step later in the same flow.
+    // Mirrors the slug conventions the direct save routes already use.
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    if (entityType === 'product' && restored?.slug) {
+      invalidatePageCache();
+      await syncPageToLive(restored.slug);
+      if (restored.category_id) {
+        const cat = await db('categories').where({ id: restored.category_id }).first();
+        if (cat?.landing_page_slug) await syncPageToLive(cat.landing_page_slug);
+      }
+    } else if (entityType === 'category' && restored?.landing_page_slug) {
+      invalidatePageCache();
+      await syncPageToLive(restored.landing_page_slug);
+    } else if (entityType === 'project' && restored?.slug) {
+      invalidatePageCache();
+      await syncPageToLive(restored.slug);
+    }
   } catch (e) {
     console.error('History restore error:', e.message);
   }
