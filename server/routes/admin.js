@@ -1707,7 +1707,18 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     const existingProduct = await db('products').where({ id: req.params.id }).first();
     const isPublished = published === 'on' || published === true || published === 'true';
 
-    const cleanPriceSqft = price_per_sqft !== '' && price_per_sqft !== undefined && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null;
+    // price_per_sqft has no input on this form (by design - see the
+    // 2026-09-04 category-copy commit), so req.body.price_per_sqft is always
+    // undefined here, on every save, for every product. Treating "absent"
+    // the same as "explicitly cleared" would null out an existing value on
+    // the next unrelated edit (a photo swap, a floor-area fix) - 103 of 134
+    // live products carry a real price_per_sqft today, none of it set
+    // through this form. So: undefined preserves whatever is already on the
+    // row; an actual empty string (the field re-appearing on a future form)
+    // is still a real intentional clear.
+    const cleanPriceSqft = price_per_sqft === undefined
+      ? (existingProduct ? existingProduct.price_per_sqft : null)
+      : (price_per_sqft !== '' && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null);
     const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
     let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
     if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {

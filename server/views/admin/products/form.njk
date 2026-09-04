@@ -154,7 +154,7 @@
   <!-- Model Pricing -->
   <div style="background:var(--grey-50, #f8fafc); border:1px solid var(--grey-200, #e2e8f0); border-radius:10px; padding:16px; margin-bottom:16px;">
     <h3 style="font-size:0.95rem; font-weight:700; margin:0 0 12px 0; color:var(--grey-900);">💰 Model Pricing</h3>
-    
+
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
       <div class="form-row" style="margin:0;">
         <label for="fixed_price">Fixed Total Price (BDT)</label>
@@ -164,6 +164,15 @@
       <div class="form-row" style="margin:0;">
         <label for="price_currency">Currency</label>
         <input type="text" id="price_currency" name="price_currency" value="{{ product.price_currency or 'BDT' }}">
+      </div>
+
+      {# total_floor_area already has a live product-detail.njk display, powers
+         the agent dashboard's deal-value line, and feeds the AI assistant's
+         area answers - the column and every reader were already there, only
+         this input was missing, so nothing outside the form needed to change. #}
+      <div class="form-row" style="margin:0;">
+        <label for="total_floor_area">Total Floor Area (sq.ft)</label>
+        <input type="number" step="1" min="0" id="total_floor_area" name="total_floor_area" value="{{ product.total_floor_area or '' }}" placeholder="e.g. 1200">
       </div>
     </div>
   </div>
