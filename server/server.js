@@ -354,7 +354,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error(err);
   if (!res.headersSent) {
-    res.status(500).json({ status: 'error', message: 'Internal server error.', details: err.message });
+    res.status(500).json({ status: 'error', message: 'Internal server error.', details: "An unexpected error occurred." });
   }
 });
 

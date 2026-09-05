@@ -7,6 +7,12 @@ const { recordLead } = require('../lib/leads');
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  res.set('Cache-Control', 'private, no-store, max-age=0');
+  res.set('X-Robots-Tag', 'noindex');
+  next();
+});
+
 const DOCUMENT_FIELDS = ['doc_application_letter', 'doc_passport_photo', 'doc_trade_license', 'doc_tin_certificate', 'doc_nid_copy'];
 
 const upload = multer({
@@ -75,7 +81,7 @@ router.post(['/agent/signup', '/agent/signup.html'], function (req, res, next) {
   documentUpload(req, res, (err) => {
     if (err) {
       return res.status(400).render('agent/signup.njk', {
-        error: err.message,
+        error: "An unexpected error occurred.",
         districts: BANGLADESH_DISTRICTS,
         businessTypeOptions: BUSINESS_TYPE_OPTIONS,
         values: req.body || {},

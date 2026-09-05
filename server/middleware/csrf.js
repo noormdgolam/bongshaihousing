@@ -6,10 +6,12 @@ const crypto = require('crypto');
 // form by a page-load script in admin-layout.njk/agent-layout.njk, so
 // individual form templates never need to be touched.
 module.exports = function csrfProtection(req, res, next) {
-  if (!req.session.csrfSecret) {
+  const isAuthOrLogin = req.session.user || req.session.agent || req.path.includes('/login') || req.path.includes('/register') || req.path.includes('/forgot-password') || req.path.includes('/reset-password') || req.path.includes('/set-password');
+  
+  if (isAuthOrLogin && !req.session.csrfSecret) {
     req.session.csrfSecret = crypto.randomBytes(24).toString('hex');
   }
-  res.locals.csrfToken = req.session.csrfSecret;
+  res.locals.csrfToken = req.session.csrfSecret || '';
 
   const stateChanging = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
   if (!stateChanging) return next();

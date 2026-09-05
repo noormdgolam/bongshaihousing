@@ -158,6 +158,12 @@ const documentUpload = multer({
 });
 
 const router = express.Router();
+
+router.use((req, res, next) => {
+  res.set('Cache-Control', 'private, no-store, max-age=0');
+  res.set('X-Robots-Tag', 'noindex');
+  next();
+});
 const { invalidatePageCache, getCacheSize } = require('../lib/pageCache');
 
 // Auto-invalidate page cache on successful content mutations
@@ -472,9 +478,9 @@ router.post('/admin/leads/:id/quick-status', async (req, res) => {
     res.redirect('/admin');
   } catch (err) {
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      return res.status(400).json({ error: err.message });
+      return res.status(400).json({ error: "An unexpected error occurred." });
     }
-    res.redirect('/admin?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -835,7 +841,7 @@ router.post('/admin/agent-leads/:id/milestone', async (req, res) => {
 
     res.redirect('/admin/agent-leads');
   } catch (err) {
-    res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/agent-leads?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -868,7 +874,7 @@ router.post('/admin/agent-leads/:id/deal', async (req, res) => {
 
     res.redirect('/admin/agent-leads');
   } catch (err) {
-    res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/agent-leads?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -896,9 +902,9 @@ router.post('/admin/agent-leads/:id/status', async (req, res) => {
     res.redirect('/admin/agent-leads');
   } catch (err) {
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      return res.status(400).json({ error: err.message });
+      return res.status(400).json({ error: "An unexpected error occurred." });
     }
-    res.redirect('/admin/agent-leads?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/agent-leads?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -1026,7 +1032,7 @@ router.post('/admin/agent-payouts', async (req, res) => {
 
     res.redirect('/admin/agent-payouts?recorded=1');
   } catch (err) {
-    res.redirect('/admin/agent-payouts?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/agent-payouts?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -1061,7 +1067,7 @@ router.post('/admin/agent-settings', requireRole('admin', 'superadmin'), async (
 
     res.redirect('/admin/agent-settings?saved=1');
   } catch (err) {
-    res.redirect('/admin/agent-settings?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/agent-settings?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -1198,7 +1204,7 @@ router.post('/admin/leads', async (req, res) => {
     res.redirect('/admin/leads?success=Lead added manually');
   } catch (err) {
     console.error('Error adding manual lead:', err);
-    res.redirect('/admin/leads?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/leads?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -1621,7 +1627,7 @@ router.post('/admin/products', galleryUpload, async (req, res) => {
     res.redirect(`/admin/products/${id}/edit${seoMsg}`);
   } catch (err) {
     const categories = await db('categories').orderBy('sort_order');
-    res.status(400).render('admin/products/form.njk', adminVars(req, { product: req.body, categories, error: err.message }));
+    res.status(400).render('admin/products/form.njk', adminVars(req, { product: req.body, categories, error: "An unexpected error occurred." }));
   }
 });
 
@@ -1676,7 +1682,7 @@ router.post('/admin/products/sync-meta-descriptions', async (req, res) => {
       updatedProducts: updated
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "An unexpected error occurred." });
   }
 });
 
@@ -1769,7 +1775,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     const categories = await db('categories').orderBy('sort_order');
     const specs = await db('product_specs').where({ product_id: req.params.id }).orderBy('sort_order');
     const variants = await db('product_variants').where({ product_id: req.params.id }).orderBy('sort_order');
-    res.status(400).render('admin/products/form.njk', adminVars(req, { product: { ...(product || {}), ...req.body, id: req.params.id }, categories, specs, variants, error: err.message }));
+    res.status(400).render('admin/products/form.njk', adminVars(req, { product: { ...(product || {}), ...req.body, id: req.params.id }, categories, specs, variants, error: "An unexpected error occurred." }));
   }
 });
 
@@ -1864,7 +1870,7 @@ router.post('/admin/products/:id/duplicate', async (req, res) => {
     await logActivity(req, { action: 'create', entityType: 'product', entityId: newId, summary: `Duplicated product #${req.params.id} as #${newId}` });
     res.redirect(`/admin/products/${newId}/edit`);
   } catch (err) {
-    res.status(500).send('Duplicate error: ' + err.message);
+    res.status(500).send('Duplicate error: ' + "An unexpected error occurred.");
   }
 });
 
@@ -1997,7 +2003,7 @@ router.post('/admin/nav-menu', async (req, res) => {
     res.redirect(`/admin/nav-menu/${id}/edit`);
   } catch (err) {
     const parents = await db('nav_items').whereNull('parent_id').orderBy('sort_order');
-    res.status(400).render('admin/nav-menu/form.njk', adminVars(req, { item: req.body, parents, error: err.message }));
+    res.status(400).render('admin/nav-menu/form.njk', adminVars(req, { item: req.body, parents, error: "An unexpected error occurred." }));
   }
 });
 
@@ -2047,7 +2053,7 @@ router.post('/admin/nav-menu/:id', async (req, res) => {
     res.redirect(`/admin/nav-menu/${req.params.id}/edit`);
   } catch (err) {
     const parents = await db('nav_items').whereNull('parent_id').whereNot({ id: req.params.id }).orderBy('sort_order');
-    res.status(400).render('admin/nav-menu/form.njk', adminVars(req, { item: { ...req.body, id: req.params.id }, parents, error: err.message }));
+    res.status(400).render('admin/nav-menu/form.njk', adminVars(req, { item: { ...req.body, id: req.params.id }, parents, error: "An unexpected error occurred." }));
   }
 });
 
@@ -2110,9 +2116,9 @@ router.post('/admin/categories', upload.single('hero_image_file'), async (req, r
     res.redirect(`/admin/categories/${id}/edit`);
   } catch (err) {
     if (isAjax) {
-      return res.status(400).json({ error: err.message });
+      return res.status(400).json({ error: "An unexpected error occurred." });
     }
-    res.status(400).render('admin/categories/form.njk', adminVars(req, { category: req.body, error: err.message }));
+    res.status(400).render('admin/categories/form.njk', adminVars(req, { category: req.body, error: "An unexpected error occurred." }));
   }
 });
 
@@ -2261,7 +2267,7 @@ router.post('/admin/projects', upload.single('image_file'), async (req, res) => 
     });
     res.redirect(`/admin/projects/${id}/edit`);
   } catch (err) {
-    res.status(400).render('admin/projects/form.njk', adminVars(req, { project: req.body, error: err.message }));
+    res.status(400).render('admin/projects/form.njk', adminVars(req, { project: req.body, error: "An unexpected error occurred." }));
   }
 });
 
@@ -2316,7 +2322,7 @@ router.post('/admin/api/upload', upload.single('file'), async (req, res) => {
       mimetype: 'image/webp',
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({ success: false, error: "An unexpected error occurred." });
   }
 });
 
@@ -2846,7 +2852,7 @@ router.post('/admin/themes/activate/:slug', requireRole('admin', 'superadmin', '
     res.redirect(`/admin/themes?activated=1&theme=${encodeURIComponent(slug)}`);
   } catch (err) {
     console.error('Failed to activate theme:', err);
-    res.status(500).send('Theme activation failed: ' + err.message);
+    res.status(500).send('Theme activation failed: ' + "An unexpected error occurred.");
   }
 });
 
@@ -2871,9 +2877,33 @@ router.get('/admin/theme-editor', requireRole('admin', 'superadmin', 'editor'), 
 router.post('/admin/theme-editor', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   try {
     const rawData = req.body;
+    
+    // 1. Whitelist keys against DEFAULT_THEME
+    const allowedKeys = Object.keys(DEFAULT_THEME);
+    const sanitizedData = {};
+    for (const key of allowedKeys) {
+      if (rawData[key] !== undefined) {
+        let val = String(rawData[key]);
+        
+        // 2. Validate colors (basic hex check, if it ends in color, bg, or primary/accent)
+        if (/(color|bg|primary|accent|whatsapp)/.test(key) && val) {
+          if (!/^#([0-9A-F]{3}){1,2}$/i.test(val)) {
+            val = DEFAULT_THEME[key]; // invalid color, fallback
+          }
+        }
+        
+        // 3. Strip `</` from custom_css and custom_js to prevent XSS breakout
+        if (key === 'custom_css' || key === 'custom_js') {
+          val = val.replace(/<\//g, '< /');
+        }
+        
+        sanitizedData[key] = val;
+      }
+    }
+
     // Format checkboxes and values
     const newSettings = {
-      ...rawData,
+      ...sanitizedData,
       show_announcement: rawData.show_announcement === 'on' || rawData.show_announcement === true || rawData.show_announcement === 'true',
       navbar_sticky: rawData.navbar_sticky === 'on' || rawData.navbar_sticky === true || rawData.navbar_sticky === 'true',
       navbar_blur: rawData.navbar_blur === 'on' || rawData.navbar_blur === true || rawData.navbar_blur === 'true',
@@ -2887,7 +2917,7 @@ router.post('/admin/theme-editor', requireRole('admin', 'superadmin', 'editor'),
   } catch (err) {
     console.error('Failed to save theme settings:', err);
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      return res.status(400).json({ success: false, error: err.message });
+      return res.status(400).json({ success: false, error: "An unexpected error occurred." });
     }
     res.redirect('/admin/theme-editor?error=1');
   }
@@ -2902,7 +2932,7 @@ router.post('/admin/theme-editor/reset', requireRole('admin', 'superadmin', 'edi
     }
     res.redirect('/admin/theme-editor?reset=1');
   } catch (err) {
-    res.status(500).send('Reset failed: ' + err.message);
+    res.status(500).send('Reset failed: ' + "An unexpected error occurred.");
   }
 });
 
@@ -2940,7 +2970,7 @@ router.post('/admin/users', requireRole('admin', 'superadmin'), async (req, res)
     await logActivity(req, { action: 'create', entityType: 'user', entityId: id, summary: `Created user ${email} (${role || 'editor'})` });
     res.redirect(`/admin/users/${id}/edit`);
   } catch (err) {
-    res.status(400).render('admin/users/form.njk', adminVars(req, { user: req.body, error: err.message }));
+    res.status(400).render('admin/users/form.njk', adminVars(req, { user: req.body, error: "An unexpected error occurred." }));
   }
 });
 
@@ -3043,9 +3073,9 @@ router.post('/admin/media/upload', requireRole('admin', 'superadmin', 'editor'),
   } catch (err) {
     console.error('Media upload error:', err.message);
     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-      return res.status(500).json({ success: false, error: err.message });
+      return res.status(500).json({ success: false, error: "An unexpected error occurred." });
     }
-    res.redirect('/admin/media?error=' + encodeURIComponent(err.message));
+    res.redirect('/admin/media?error=' + encodeURIComponent("An unexpected error occurred."));
   }
 });
 
@@ -3074,7 +3104,7 @@ router.get('/admin/testimonials', async (req, res) => {
     testimonials = await db('testimonials').orderBy('sort_order');
   } catch (err) {
     console.error('Testimonials list error:', err.message);
-    return res.status(500).send('Database unavailable: ' + err.message);
+    return res.status(500).send('Database unavailable: ' + "An unexpected error occurred.");
   }
   res.render('admin/testimonials/list.njk', adminVars(req, { testimonials }));
 });
@@ -3093,7 +3123,7 @@ router.post('/admin/testimonials', async (req, res) => {
     await logActivity(req, { action: 'create', entityType: 'testimonial', entityId: id, summary: `Added testimonial from ${author_name}` });
     res.redirect(`/admin/testimonials/${id}/edit`);
   } catch (err) {
-    res.status(400).render('admin/testimonials/form.njk', adminVars(req, { testimonial: req.body, error: err.message }));
+    res.status(400).render('admin/testimonials/form.njk', adminVars(req, { testimonial: req.body, error: "An unexpected error occurred." }));
   }
 });
 
@@ -3131,7 +3161,7 @@ router.get('/admin/activity', async (req, res) => {
     entries = await db('activity_log').orderBy('created_at', 'desc').limit(200);
   } catch (err) {
     console.error('Activity log list error:', err.message);
-    return res.status(500).send('Database unavailable: ' + err.message);
+    return res.status(500).send('Database unavailable: ' + "An unexpected error occurred.");
   }
   res.render('admin/activity/list.njk', adminVars(req, { entries }));
 });
