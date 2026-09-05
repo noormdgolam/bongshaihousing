@@ -17,6 +17,28 @@ const { sendMail } = require('./mailer');
 const BD_PHONE_RE = /^01[3-9]\d{8}$/;
 const FALLBACK_LOG = path.join(__dirname, '..', 'data', 'leads-fallback.jsonl');
 const KNOWN_SITES = ['bongshaihousing.com', 'bongshaisteel.com', 'bongshaiengineering.com', 'bongshai.com'];
+const TERMINAL_STATUSES = ['বিক্রি', 'হারানো'];
+
+// A lead is "overdue" when a followup date has passed with no touch logged
+// since - compares last_touch_at against each followup date rather than a
+// literal "next_action is empty" check, because next_action holds the latest
+// touch note (not a boolean), and a static empty-check would stop flagging a
+// row forever after one touch, even once the *next* scheduled date (2 or 3)
+// later passes untouched. Shared by /agent/today (server/routes/lead-dashboard.js)
+// and the weekly report (server/lib/lead-report.js) so both ever mean the same
+// thing by "overdue" - built once here instead of risking the two definitions
+// drifting apart under separate edits.
+function applyOverdueFilter(qb) {
+  const today = new Date().toISOString().slice(0, 10);
+  qb.whereNotIn('status', TERMINAL_STATUSES).where((outer) => {
+    outer.where((q) => q.whereNotNull('followup_1_at').andWhere('followup_1_at', '<=', today)
+      .andWhere((q2) => q2.whereNull('last_touch_at').orWhere('last_touch_at', '<', db.raw('followup_1_at'))))
+      .orWhere((q) => q.whereNotNull('followup_2_at').andWhere('followup_2_at', '<=', today)
+        .andWhere((q2) => q2.whereNull('last_touch_at').orWhere('last_touch_at', '<', db.raw('followup_2_at'))))
+      .orWhere((q) => q.whereNotNull('followup_3_at').andWhere('followup_3_at', '<=', today)
+        .andWhere((q2) => q2.whereNull('last_touch_at').orWhere('last_touch_at', '<', db.raw('followup_3_at'))));
+  });
+}
 
 // Accepts a Bangladeshi mobile in any of the forms visitors actually type -
 // "01712345678", "+8801712345678", "880 1712-345678" - and returns the
@@ -188,5 +210,6 @@ function leadDefaults(phoneKey, site) {
 }
 
 module.exports = {
-  recordLead, isValidBdPhone, checkDuplicate, leadDefaults, notifyOwner, appendFallbackLog, KNOWN_SITES,
+  recordLead, isValidBdPhone, checkDuplicate, leadDefaults, notifyOwner, appendFallbackLog,
+  applyOverdueFilter, KNOWN_SITES, TERMINAL_STATUSES,
 };

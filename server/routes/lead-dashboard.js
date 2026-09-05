@@ -13,6 +13,7 @@ const router = express.Router();
 const db = require('../lib/db');
 const requireAgent = require('../middleware/requireAgent');
 const { sendWhatsAppTemplate } = require('../lib/whatsapp');
+const { applyOverdueFilter } = require('../lib/leads');
 
 // Express 4 does not catch a rejected promise from an async route handler -
 // an uncaught error inside one leaves the request hanging with NO response
@@ -117,15 +118,9 @@ async function computeMonthlyStats(isAdmin, agentId) {
 
 // ---------------------------------------------------------------------------
 // "আজকের কাজ" - the default landing page. Sorted by urgency: overdue
-// followups, quoted-with-no-followup, then untouched new leads.
-//
-// "Overdue" compares last_touch_at against each followup date rather than the
-// literal "next_action is empty" rule the spec text uses: next_action holds
-// the *latest* touch note, not a boolean, and a static empty-check would stop
-// flagging a row as overdue forever after just one touch, even once the next
-// scheduled followup date (2 or 3) later passes untouched. Comparing
-// last_touch_at re-triggers correctly on each of the three dates in turn,
-// which is what "remind me again if I let it slip" actually requires.
+// followups, quoted-with-no-followup, then untouched new leads. "Overdue" is
+// applyOverdueFilter() from lib/leads.js - shared with the weekly report so
+// the two can't drift into disagreeing about what "overdue" means.
 // ---------------------------------------------------------------------------
 router.get(['/agent/today', '/agent/today.html'], requireAgent, asyncHandler(async (req, res) => {
   const isAdmin = req.agent.role === 'admin';
@@ -135,13 +130,8 @@ router.get(['/agent/today', '/agent/today.html'], requireAgent, asyncHandler(asy
     if (!isAdmin) qb.where({ assigned_to: req.agent.id });
   });
 
-  const overdue = await base().where((qb) => {
-    qb.where((q) => q.whereNotNull('followup_1_at').andWhere('followup_1_at', '<=', today)
-      .andWhere((q2) => q2.whereNull('last_touch_at').orWhere('last_touch_at', '<', db.raw('followup_1_at'))))
-      .orWhere((q) => q.whereNotNull('followup_2_at').andWhere('followup_2_at', '<=', today)
-        .andWhere((q2) => q2.whereNull('last_touch_at').orWhere('last_touch_at', '<', db.raw('followup_2_at'))))
-      .orWhere((q) => q.whereNotNull('followup_3_at').andWhere('followup_3_at', '<=', today)
-        .andWhere((q2) => q2.whereNull('last_touch_at').orWhere('last_touch_at', '<', db.raw('followup_3_at'))));
+  const overdue = await db('leads').modify(applyOverdueFilter).modify((qb) => {
+    if (!isAdmin) qb.where({ assigned_to: req.agent.id });
   }).orderBy('created_at', 'asc');
 
   const overdueIds = overdue.map((r) => r.id);

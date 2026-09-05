@@ -90,6 +90,46 @@ lead-submitting form reads `window.BHUtm.source()` and attaches it as the
 lead's source (falling back to `'direct'`, or a form-specific label like
 `contact_form` when no campaign data exists at all).
 
+## Weekly lead report
+
+`server/scripts/weekly-lead-report.js` is a standalone script, not an
+in-process scheduler - no `node-cron` dependency was added. Read-only against
+the `leads` table: new leads this week (by source), cost per lead, top-5
+districts, all currently-overdue followups (same definition the dashboard
+uses - see `lib/leads.js`'s `applyOverdueFilter`), and the full status
+funnel, as one plain-text message capped at 1500 characters.
+
+### Set up the cron job (cPanel)
+
+cPanel → **Cron Jobs** → Add New Cron Job:
+
+- **Minute** `0`, **Hour** `9`, every day, every month, **Weekday** `0` (Sunday)
+  - This fires at 9:00 **in whatever timezone the cron daemon itself runs
+    in** - check cPanel's own displayed server time first. The script computes
+    its "this week" date window in Asia/Dhaka internally regardless, but the
+    time it *fires* depends on the server's cron timezone, not the app's.
+- **Command**:
+  ```
+  /usr/local/bin/node /home/<cpanel-user>/bongshai-node-app-prod/scripts/weekly-lead-report.js
+  ```
+  (adjust the Node binary path and app directory to match this host - check
+  an existing working cron entry or `which node` via a cPanel terminal if
+  unsure)
+
+### Additional environment variables (optional)
+
+| Variable | Purpose | If unset |
+|---|---|---|
+| `AD_SPEND_USD` | Monthly ad spend in USD, for the report's cost-per-lead line | Cost-per-lead line omitted |
+| `USD_BDT_RATE` | USD→BDT conversion rate | Defaults to `122` |
+| `WHATSAPP_REPORT_TEMPLATE_NAME` | A **separate** approved template from the lead-alert one - single `{{1}}` variable holding the whole report text | Falls back to email |
+
+The report's WhatsApp template needs its own Meta approval, distinct from the
+4-variable lead-alert template documented above - a business-initiated
+message must match its template's exact parameter count, and this message
+doesn't fit that one. Until `WHATSAPP_REPORT_TEMPLATE_NAME` is set, the report
+goes out by email - same safe default as the lead-alert notify.
+
 ## Known limitation
 
 Comparing a SQL `DATE` column against `NOW()`/`last_touch_at` across MySQL's
