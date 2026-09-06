@@ -1691,12 +1691,14 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   if (!product) return res.status(404).send('Not found');
   const categories = await db('categories').orderBy('sort_order');
   const specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
+  const buildingSpecs = specs.filter(s => s.spec_type === 'building');
+  const technicalSpecs = specs.filter(s => s.spec_type === 'technical');
   const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
   for (const v of variants) {
     v.rooms = await db('product_rooms').where({ product_variant_id: v.id }).orderBy('sort_order');
   }
   const history = await getHistory('product', req.params.id);
-  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, variants, error: null, seoGenerated: req.query.seo_generated === '1', history }));
+  res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, buildingSpecs, technicalSpecs, variants, error: null, seoGenerated: req.query.seo_generated === '1', history }));
 });
 
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
@@ -1825,6 +1827,7 @@ router.post('/admin/products/:id/duplicate', async (req, res) => {
       if (specs.length > 0) {
         const newSpecs = specs.map(s => ({
           product_id: insertedId,
+          spec_type: s.spec_type || 'building',
           spec_key: s.spec_key,
           spec_value: s.spec_value,
           sort_order: s.sort_order
@@ -1877,17 +1880,20 @@ router.post('/admin/products/:id/duplicate', async (req, res) => {
 // ---- Product Specs (Building Specifications key/value rows) ----
 
 router.post('/admin/products/:id/specs', async (req, res) => {
-  const { spec_key, spec_value } = req.body;
+  const { spec_key, spec_value, spec_type } = req.body;
+  const cleanType = spec_type === 'technical' ? 'technical' : 'building';
   if (spec_key && spec_value) {
     const [{ maxSort }] = await db('product_specs').where({ product_id: req.params.id }).max('sort_order as maxSort');
-    await db('product_specs').insert({ product_id: req.params.id, spec_key, spec_value, sort_order: (maxSort ?? -1) + 1 });
+    await db('product_specs').insert({ product_id: req.params.id, spec_type: cleanType, spec_key, spec_value, sort_order: (maxSort ?? -1) + 1 });
   }
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
 router.post('/admin/products/:id/specs/:specId', async (req, res) => {
-  const { spec_key, spec_value } = req.body;
-  await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).update({ spec_key, spec_value });
+  const { spec_key, spec_value, spec_type } = req.body;
+  const updateData = { spec_key, spec_value };
+  if (spec_type) updateData.spec_type = spec_type === 'technical' ? 'technical' : 'building';
+  await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).update(updateData);
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
@@ -2263,21 +2269,35 @@ router.post('/admin/categories/:id/sync-specs-to-products', async (req, res) => 
     return res.status(400).send('This category has no Building or Technical specs saved yet - add some above first.');
   }
 
-  const finalRows = [...buildingRows.map((r) => [r.spec_key, r.spec_value])];
-  if (technicalRows.length) {
-    finalRows.push(['5. TECHNICAL SPECIFICATION & CODES', '']);
-    for (const r of technicalRows) finalRows.push([r.spec_key, r.spec_value]);
-  }
-
   const products = await db('products').where({ category_id: req.params.id });
   const { syncPageToLive } = require('../lib/liveSiteSync');
   let synced = 0;
   for (const p of products) {
     await db.transaction(async (trx) => {
       await trx('product_specs').where({ product_id: p.id }).del();
-      await trx('product_specs').insert(
-        finalRows.map(([spec_key, spec_value], i) => ({ product_id: p.id, spec_key, spec_value, sort_order: i }))
-      );
+      const insertRows = [];
+      let sortOrder = 0;
+      for (const r of technicalRows) {
+        insertRows.push({
+          product_id: p.id,
+          spec_type: 'technical',
+          spec_key: r.spec_key,
+          spec_value: r.spec_value,
+          sort_order: sortOrder++
+        });
+      }
+      for (const r of buildingRows) {
+        insertRows.push({
+          product_id: p.id,
+          spec_type: 'building',
+          spec_key: r.spec_key,
+          spec_value: r.spec_value,
+          sort_order: sortOrder++
+        });
+      }
+      if (insertRows.length) {
+        await trx('product_specs').insert(insertRows);
+      }
     });
     if (p.slug) {
       try { if (await syncPageToLive(p.slug)) synced++; } catch (e) { console.error(`sync-specs-to-products: static sync failed for ${p.slug}:`, e.message); }

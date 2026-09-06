@@ -291,6 +291,8 @@ function formatProductTitle(product, category) {
 }
 
     const pageTitle = formatProductTitle(product, category);
+    const techSpecs = specs.filter((s) => s.spec_type === 'technical');
+    const buildingSpecs = specs.filter((s) => s.spec_type === 'building');
 
     res.set('Cache-Control', 'no-store');
     res.render('pages/product-detail.njk', {
@@ -303,6 +305,9 @@ function formatProductTitle(product, category) {
       category: category || { name: '' },
       product,
       specs,
+      techSpecs,
+      buildingSpecs,
+      materialSpecs: buildingSpecs,
       variants,
       relatedProducts,
     });

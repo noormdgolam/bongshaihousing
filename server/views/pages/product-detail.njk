@@ -237,19 +237,7 @@
 
 
 
-{% if specs.length %}
-<section class="section" aria-labelledby="specs-title">
-  <div class="section-header reveal">
-    <h2 class="section-title" id="specs-title">Building Specifications</h2>
-  </div>
-  <table class="modern-table">
-    <thead><tr><th>Item</th><th>Materials</th></tr></thead>
-    <tbody>
-      {% for s in specs %}<tr><td>{{ s.spec_key }}</td><td>{{ s.spec_value }}</td></tr>{% endfor %}
-    </tbody>
-  </table>
-</section>
-{% endif %}
+{% include "partials/product-specs-tables.njk" %}
 
 {% include "partials/most-viewed.njk" %}
 

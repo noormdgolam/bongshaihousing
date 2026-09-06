@@ -278,27 +278,7 @@
     </div>
   </div>
 </div>
-<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
-<h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Building Specifications</h3>
-<div style="overflow-x: auto;">
-  <table class="modern-table">
-    <thead>
-        <tr>
-        <th>Item</th>
-        <th>Materials</th>
-      </tr>
-    </thead>
-    <tbody style="color: var(--grey-800);">
-      {% for s in specs %}
-      <tr style="{% if not loop.last %}border-bottom: 1px solid var(--grey-100); {% endif %}{% if loop.index0 % 2 == 1 %}background: var(--off-white);{% endif %}">
-        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;{% if loop.last %} border-bottom-left-radius: 8px;{% endif %}">{{ s.spec_key }}</td>
-        <td style="padding: 12px 16px;{% if loop.last %} border-bottom-right-radius: 8px;{% endif %}">{{ s.spec_value }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-</div>
+{% include "partials/product-specs-tables.njk" %}
 <script>
     const floorData302 = {
       "400": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":400,"length":"-","width":"-"},{"section":"Master bed","area":120,"length":12,"width":10},{"section":"Child bed","area":100,"length":10,"width":10},{"section":"Living/Dining","area":70,"length":10,"width":7},{"section":"Kitchen","area":40,"length":8,"width":5},{"section":"Bath room","area":30,"length":6,"width":5},{"section":"Wall & Stairs area","area":40,"length":"-","width":"-"}] },

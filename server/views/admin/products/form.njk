@@ -189,14 +189,16 @@
 </div>
 
 {% if product.id %}
+{% macro productSpecTable(title, type, rows, placeholderKey, placeholderValue, col2Header) %}
 <div class="card">
-  <h2 style="font-size:1rem;">Building Specifications ({{ specs.length }})</h2>
+  <h2 style="font-size:1rem;">{{ title }} ({{ (rows or []).length }})</h2>
   <table>
-    <thead><tr><th>Item</th><th>Materials</th><th></th></tr></thead>
+    <thead><tr><th>Item</th><th>{{ col2Header }}</th><th></th></tr></thead>
     <tbody>
-      {% for s in specs %}
+      {% for s in (rows or []) %}
       <tr>
         <form method="post" action="/admin/products/{{ product.id }}/specs/{{ s.id }}" style="display:contents;">
+          <input type="hidden" name="spec_type" value="{{ type }}">
           <td><input type="text" name="spec_key" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
           <td><input type="text" name="spec_value" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
           <td style="white-space:nowrap;">
@@ -208,14 +210,20 @@
       {% endfor %}
       <tr>
         <form method="post" action="/admin/products/{{ product.id }}/specs" style="display:contents;">
-          <td><input type="text" name="spec_key" placeholder="e.g. WALL" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
-          <td><input type="text" name="spec_value" placeholder="e.g. 2.5'' RC precast concrete panel" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <input type="hidden" name="spec_type" value="{{ type }}">
+          <td><input type="text" name="spec_key" placeholder="e.g. {{ placeholderKey }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="spec_value" placeholder="e.g. {{ placeholderValue }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
           <td><button type="submit" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;">+ Add</button></td>
         </form>
       </tr>
     </tbody>
   </table>
 </div>
+{% endmacro %}
+
+{{ productSpecTable('Technical Specifications', 'technical', technicalSpecs, 'Steel Grade', 'ASTM A572 Grade 50', 'Description') }}
+{{ productSpecTable('Material Specifications', 'building', buildingSpecs, 'WALL', "2.5'' RC precast concrete panel", 'Materials') }}
+
 
 <div class="card">
   <h2 style="font-size:1rem;">Floor-Area Variants ({{ variants.length }})</h2>

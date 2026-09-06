@@ -117,6 +117,8 @@ nunjucksEnv.addFilter('formatTakaAscii', (value) => {
   return Number.isFinite(n) ? formatTakaAscii(n) : String(value);
 });
 
+nunjucksEnv.addFilter('filterSpecs', (specs, type) => (specs || []).filter((s) => s.spec_type === type));
+
 nunjucksEnv.addGlobal('currentYear', new Date().getFullYear());
 
 function groupRoomsByFloor(rooms) {
@@ -250,8 +252,13 @@ async function renderProductToHtml(slug) {
     const dedicatedOgImage = dedicatedProduct && dedicatedProduct.main_image
       ? `https://bongshaihousing.com/${dedicatedProduct.main_image}`
       : undefined;
+    const dedicatedTechSpecs = dedicatedSpecs.filter((s) => s.spec_type === 'technical');
+    const dedicatedBuildingSpecs = dedicatedSpecs.filter((s) => s.spec_type === 'building');
     return nunjucksEnv.render(regMeta.template, renderVars(regMeta, {
       specs: dedicatedSpecs,
+      techSpecs: dedicatedTechSpecs,
+      buildingSpecs: dedicatedBuildingSpecs,
+      materialSpecs: dedicatedBuildingSpecs,
       dbProductsByModel: dedicatedProductsByModel,
       product: dedicatedProduct,
       theme: dedicatedTheme,
@@ -327,6 +334,8 @@ async function renderProductToHtml(slug) {
     themeCssVars = '';
   }
 
+  const techSpecs = specs.filter((s) => s.spec_type === 'technical');
+  const buildingSpecs = specs.filter((s) => s.spec_type === 'building');
   const renderData = {
     title: pageTitle,
     description: product.meta_description || product.description,
@@ -337,6 +346,9 @@ async function renderProductToHtml(slug) {
     category: category || { name: '' },
     product,
     specs,
+    techSpecs,
+    buildingSpecs,
+    materialSpecs: buildingSpecs,
     variants,
     relatedProducts,
     theme,

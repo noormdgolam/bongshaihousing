@@ -179,6 +179,8 @@ nunjucksEnv.addFilter('formatTakaAscii', (value) => {
   return Number.isFinite(n) ? formatTakaAscii(n) : String(value);
 });
 
+nunjucksEnv.addFilter('filterSpecs', (specs, type) => (specs || []).filter((s) => s.spec_type === type));
+
 // Footer copyright year - was a client-side <span id="year"> filled by JS
 // after page load; server-rendering it removes the dependency on that
 // script actually running (an earlier JS error elsewhere on the page, or
