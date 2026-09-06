@@ -42,6 +42,11 @@ html, body {
   --accent-light:   #FDE047; /* Light Yellow */
   --accent-dark:    #CA8A04; /* Deep Yellow */
 
+  /* Nav accent - yellow+red professional pairing, scoped to the nav bar */
+  --nav-red:        #DC2626;
+  --nav-red-dark:   #B91C1C;
+  --nav-red-light:  #EF4444;
+
   /* Neutral Palette - Greys */
   --white:          #ffffff; /* Pure White */
   --off-white:      #f8fafc; /* Very Light Grey */
@@ -444,12 +449,26 @@ img {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(26, 60, 94, 0.08);
+  border-bottom: 3px solid var(--nav-red);
   transition: var(--transition-base);
 }
 
+/* Slim yellow-to-red brand stripe above the nav bar itself - a common
+   professional-construction-site convention (matches the requested
+   yellow+red pairing without touching the sitewide blue/gold palette
+   used everywhere else). */
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--nav-red) 100%);
+}
+
 .navbar.scrolled {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.12);
 }
 
 .navbar-inner {
@@ -525,8 +544,8 @@ img {
 
 .nav-link:hover,
 .nav-link.active {
-  color: var(--primary);
-  background: var(--grey-50);
+  color: var(--nav-red);
+  background: rgba(234, 179, 8, 0.1);
 }
 
 .nav-link .arrow-icon {
@@ -549,6 +568,7 @@ img {
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
   border: 1px solid var(--grey-100);
+  border-top: 3px solid var(--accent);
   padding: var(--space-2);
   opacity: 0;
   visibility: hidden;
@@ -586,8 +606,8 @@ img {
 }
 
 .dropdown-item:hover {
-  background: var(--grey-50);
-  color: var(--primary);
+  background: rgba(220, 38, 38, 0.06);
+  color: var(--nav-red);
 }
 
 .dropdown-icon {
@@ -616,16 +636,27 @@ img {
   gap: var(--space-2);
   font-size: var(--fs-sm);
   font-weight: 600;
-  color: var(--primary);
+  color: var(--nav-red-dark);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-full);
-  border: 1.5px solid var(--grey-200);
+  border: 1.5px solid var(--nav-red-light);
   transition: var(--transition-fast);
 }
 
 .nav-phone:hover {
-  border-color: var(--primary);
-  background: var(--grey-50);
+  border-color: var(--nav-red);
+  background: rgba(220, 38, 38, 0.06);
+}
+
+/* Nav CTA button - a distinct yellow-to-red gradient scoped to this one
+   button so the rest of the site's gold .btn-primary is untouched. */
+.nav-cta .btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--nav-red) 100%);
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+}
+
+.nav-cta .btn-primary:hover {
+  box-shadow: 0 12px 32px rgba(220, 38, 38, 0.35);
 }
 
 /* Hamburger */
@@ -649,9 +680,9 @@ img {
   transition: var(--transition-base);
 }
 
-.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--nav-red); }
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--nav-red); }
 
 /* Mobile Drawer */
 .mobile-drawer {
@@ -664,6 +695,7 @@ img {
   z-index: 999;
   overflow-y: auto;
   padding: var(--space-6);
+  border-top: 3px solid var(--nav-red);
   transform: translateX(100%);
   visibility: hidden;
   pointer-events: none;
@@ -687,7 +719,7 @@ img {
   border-bottom: 1px solid var(--grey-100);
 }
 
-.mobile-nav-link:hover { color: var(--primary); }
+.mobile-nav-link:hover { color: var(--nav-red); }
 
 .mobile-sub-links {
   padding-left: var(--space-4);
@@ -704,7 +736,7 @@ img {
   border-bottom: 1px solid var(--grey-50);
 }
 
-.mobile-sub-link:hover { color: var(--primary); }
+.mobile-sub-link:hover { color: var(--nav-red); }
 
 /* ============================================================
    Hero Section
@@ -731,17 +763,14 @@ img {
   opacity: 1;
 }
 
-/* Banner-driven slides ship 3 pre-sized image variants (mobile/tablet/
-   desktop) picked via <picture><source> media queries, but real devices
-   don't always agree with our breakpoint assumptions (browser UI chrome,
-   zoom, unusual viewports). If the "wrong" variant ever loads, cover would
-   crop it hard; contain guarantees the whole banner - including every
-   photo and the full title - stays visible, just letterboxed. The bars
-   are near-invisible since the banner's own background is the same navy
-   as .hero-bg's fill here. */
+/* Full-bleed background treatment (karmod.com-style reference) - the
+   banner image fills the entire hero edge to edge with no letterbox bars,
+   matching how competitor sites treat their hero imagery. Cover can crop
+   the very edges of a mismatched-aspect-ratio variant, but every banner's
+   own baked-in title sits centered with margin specifically so a crop
+   never touches it. */
 .slide-banner-driven .hero-bg img {
-  object-fit: contain;
-  background: #0f172a;
+  object-fit: cover;
 }
 
 .hero-overlay {
@@ -5109,6 +5138,7 @@ body.dark-mode img.logo {
   padding: 1.5rem;
   background: var(--white);
   border-radius: 8px;
+  border-top: 3px solid var(--nav-red);
   box-shadow: var(--shadow-xl);
 }
 .nav-item:hover .image-mega-dropdown { position: absolute;
@@ -5126,6 +5156,12 @@ body.dark-mode img.logo {
   overflow: hidden;
   text-decoration: none;
   aspect-ratio: 16 / 9;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.mega-card:hover {
+  border-color: var(--accent);
 }
 .mega-card img {
   width: 100%;
