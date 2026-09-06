@@ -106,6 +106,25 @@
 {{ specSection('Building Specifications', 'building', buildingSpecs, 'WALL', "2.5'' RC precast concrete panel", category.id) }}
 {{ specSection('Technical Specifications', 'technical', technicalSpecs, 'Steel Grade', 'ASTM A572 Grade 50', category.id) }}
 
+{% if synced %}
+<div style="background:#e6f7ed; border:1px solid #34a853; color:#1e6b3a; border-radius:6px; padding:10px 14px; margin:16px 0; font-size:0.9rem;">
+  Synced to {{ synced }} of {{ syncedTotal }} product page(s) - republished live.
+</div>
+{% endif %}
+
+<div style="background:var(--grey-50); border:1px solid var(--grey-200); border-radius:8px; padding:16px; margin:16px 0;">
+  <p style="margin:0 0 10px; font-size:0.9rem; color:var(--grey-700);">
+    The Building/Technical specs above are reference-only - editing them here does not
+    change any product page by itself. Click below to push this exact list onto <strong>every
+    product in this category</strong> (replacing each product's own spec list) and republish
+    their live pages immediately.
+  </p>
+  <form method="post" action="/admin/categories/{{ category.id }}/sync-specs-to-products"
+        onsubmit="return confirm('This replaces the spec list on every product in this category and republishes their live pages now. Continue?');">
+    <button type="submit" class="btn btn-primary">Sync Specs to All Products in This Category</button>
+  </form>
+</div>
+
 <form method="post" action="/admin/categories/{{ category.id }}/delete" onsubmit="return confirm('Delete this category?');">
   <button type="submit" class="btn btn-danger">Delete Category</button>
 </form>

@@ -19,7 +19,11 @@
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="revisit-after" content="7 days" />
   <meta name="language" content="English" />
-  {% if category %}<meta name="category" content="{{ category }}" />{% endif %}
+  {# `category` is a plain SEO string on registry-driven pages, but the product
+     route/liveSiteSync's generic (no-dedicated-template) render path reuses the
+     same variable name for the actual category DB row/object - guard on type so
+     that case is silently omitted instead of printing "[object Object]". #}
+  {% if category and category is string %}<meta name="category" content="{{ category }}" />{% endif %}
   <meta name="geo.region" content="BD-C" />
   <meta name="geo.placename" content="Uttara, Dhaka, Bangladesh" />
   <meta name="geo.position" content="23.8728;90.3984" />

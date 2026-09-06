@@ -2129,7 +2129,10 @@ router.get('/admin/categories/:id/edit', async (req, res) => {
   const buildingSpecs = allSpecs.filter(s => s.spec_type === 'building');
   const technicalSpecs = allSpecs.filter(s => s.spec_type === 'technical');
   const history = await getHistory('category', req.params.id);
-  res.render('admin/categories/form.njk', adminVars(req, { category, error: null, buildingSpecs, technicalSpecs, history }));
+  res.render('admin/categories/form.njk', adminVars(req, {
+    category, error: null, buildingSpecs, technicalSpecs, history,
+    synced: req.query.synced, syncedTotal: req.query.total,
+  }));
 });
 
 router.post('/admin/categories/:id', upload.single('hero_image_file'), async (req, res) => {
@@ -2238,6 +2241,57 @@ router.post('/admin/categories/:id/specs/:specId(\\d+)', async (req, res) => {
 router.post('/admin/categories/:id/specs/:specId(\\d+)/delete', async (req, res) => {
   await db('category_specs').where({ id: req.params.specId, category_id: req.params.id }).del();
   res.redirect(`/admin/categories/${req.params.id}/edit`);
+});
+
+// Pushes this category's Building + Technical specs (above) onto every
+// product in the category, replacing whatever that product's own
+// product_specs currently holds - added 2026-09-06 after a one-off script
+// had to do this by hand for all 9 categories. Category specs are
+// reference data only (admin-form-only, no customer-facing template reads
+// `category_specs`); product_specs is what product-detail.njk actually
+// renders, so "editing a category's specs" only reaches the live site
+// through this action.
+router.post('/admin/categories/:id/sync-specs-to-products', async (req, res) => {
+  const category = await db('categories').where({ id: req.params.id }).first();
+  if (!category) return res.status(404).send('Not found');
+
+  const buildingRows = await db('category_specs')
+    .where({ category_id: req.params.id, spec_type: 'building' }).orderBy('sort_order');
+  const technicalRows = await db('category_specs')
+    .where({ category_id: req.params.id, spec_type: 'technical' }).orderBy('sort_order');
+  if (!buildingRows.length && !technicalRows.length) {
+    return res.status(400).send('This category has no Building or Technical specs saved yet - add some above first.');
+  }
+
+  const finalRows = [...buildingRows.map((r) => [r.spec_key, r.spec_value])];
+  if (technicalRows.length) {
+    finalRows.push(['5. TECHNICAL SPECIFICATION & CODES', '']);
+    for (const r of technicalRows) finalRows.push([r.spec_key, r.spec_value]);
+  }
+
+  const products = await db('products').where({ category_id: req.params.id });
+  const { syncPageToLive } = require('../lib/liveSiteSync');
+  let synced = 0;
+  for (const p of products) {
+    await db.transaction(async (trx) => {
+      await trx('product_specs').where({ product_id: p.id }).del();
+      await trx('product_specs').insert(
+        finalRows.map(([spec_key, spec_value], i) => ({ product_id: p.id, spec_key, spec_value, sort_order: i }))
+      );
+    });
+    if (p.slug) {
+      try { if (await syncPageToLive(p.slug)) synced++; } catch (e) { console.error(`sync-specs-to-products: static sync failed for ${p.slug}:`, e.message); }
+    }
+  }
+  if (category.landing_page_slug) {
+    try { await syncPageToLive(category.landing_page_slug); } catch (e) { /* category page itself doesn't show these specs; best-effort only */ }
+  }
+
+  await logActivity(req, {
+    action: 'update', entityType: 'category', entityId: req.params.id,
+    summary: `Synced specs to ${products.length} product(s) in ${category.name} (${synced} static pages republished)`,
+  });
+  res.redirect(`/admin/categories/${req.params.id}/edit?synced=${synced}&total=${products.length}`);
 });
 
 // ---- Projects ----
