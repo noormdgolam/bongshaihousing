@@ -94,6 +94,8 @@ const DEFAULT_THEME = {
   navbar_sticky: true,
   navbar_blur: true,
   navbar_height: '80px',
+  nav_bg_start: '#FFFBF5', // Nav bar gradient - warm ivory-to-coral wash,
+  nav_bg_end: '#FEE7DE',   // yellow+red brand pairing without going dark
 
   // Border Radius
   radius_sm: '4px',
@@ -814,6 +816,8 @@ function generateCssVariables(theme) {
     --radius-xl: ${t.radius_xl};
     --container-max: ${t.container_width || '1280px'};
     --nav-height: ${t.navbar_height || '80px'};
+    --nav-bg-start: ${t.nav_bg_start || '#FFFBF5'};
+    --nav-bg-end: ${t.nav_bg_end || '#FEE7DE'};
     --space-24: ${sectionPad};
     --transition-base: all ${t.transition_speed || '0.25s'} ease;
 

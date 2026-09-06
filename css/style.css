@@ -46,6 +46,11 @@ html, body {
   --nav-red:        #DC2626;
   --nav-red-dark:   #B91C1C;
   --nav-red-light:  #EF4444;
+  /* Nav background wash - admin-editable via Theme Editor > Header & Navbar
+     (server/lib/theme.js nav_bg_start/nav_bg_end); these are just the
+     no-theme-override fallback, same values as DEFAULT_THEME there. */
+  --nav-bg-start:   #FFFBF5;
+  --nav-bg-end:     #FEE7DE;
 
   /* Neutral Palette - Greys */
   --white:          #ffffff; /* Pure White */
@@ -446,7 +451,7 @@ img {
   right: 0;
   z-index: 1000;
   height: var(--nav-height);
-  background: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(120deg, var(--nav-bg-start), var(--nav-bg-end));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 3px solid var(--nav-red);
@@ -465,6 +470,19 @@ img {
   right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent) 0%, var(--nav-red) 100%);
+}
+
+/* Diagonal hazard-stripe accent tab at the leading edge - a construction-site
+   caution-tape motif (fits a housing/construction brand) that gives the bar a
+   distinctive signature without darkening it or touching link legibility. */
+.navbar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 7px;
+  background: repeating-linear-gradient(135deg, var(--accent) 0px, var(--accent) 9px, var(--nav-red) 9px, var(--nav-red) 18px);
 }
 
 .navbar.scrolled {
@@ -691,7 +709,7 @@ img {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--white);
+  background: linear-gradient(160deg, var(--nav-bg-start), var(--nav-bg-end));
   z-index: 999;
   overflow-y: auto;
   padding: var(--space-6);

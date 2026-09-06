@@ -574,6 +574,30 @@
         </div>
       </div>
 
+      <!-- Nav Bar Background -->
+      <div class="te-section" data-collapsed="false">
+        <div class="te-section-header">
+          <span>🧭 Navigation Bar</span>
+          <span>▾</span>
+        </div>
+        <div class="te-section-body">
+          <div class="te-field">
+            <label class="te-label">Nav Background - Start (left edge)</label>
+            <div class="te-color-row">
+              <input type="color" id="navBgStart" class="te-color-picker" value="{{ theme.nav_bg_start or '#FFFBF5' }}">
+              <input type="text" id="navBgStartText" class="te-input" value="{{ theme.nav_bg_start or '#FFFBF5' }}">
+            </div>
+          </div>
+          <div class="te-field">
+            <label class="te-label">Nav Background - End (right edge)</label>
+            <div class="te-color-row">
+              <input type="color" id="navBgEnd" class="te-color-picker" value="{{ theme.nav_bg_end or '#FEE7DE' }}">
+              <input type="text" id="navBgEndText" class="te-input" value="{{ theme.nav_bg_end or '#FEE7DE' }}">
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ─── TAB 2: TYPOGRAPHY ────────────────────────────────────── -->
@@ -972,6 +996,11 @@ const presetsData = {{ presets | dump | safe }};
   const textMutedColor = document.getElementById('textMutedColor');
   const textMutedColorText = document.getElementById('textMutedColorText');
 
+  const navBgStart = document.getElementById('navBgStart');
+  const navBgStartText = document.getElementById('navBgStartText');
+  const navBgEnd = document.getElementById('navBgEnd');
+  const navBgEndText = document.getElementById('navBgEndText');
+
   const fontHeading = document.getElementById('fontHeading');
   const fontBody = document.getElementById('fontBody');
   const fontSizeBase = document.getElementById('fontSizeBase');
@@ -1008,6 +1037,8 @@ const presetsData = {{ presets | dump | safe }};
   syncPair(surfaceColor, surfaceColorText);
   syncPair(textColor, textColorText);
   syncPair(textMutedColor, textMutedColorText);
+  syncPair(navBgStart, navBgStartText);
+  syncPair(navBgEnd, navBgEndText);
   syncPair(announcementBg, announcementBgText);
   syncPair(announcementColor, announcementColorText);
   syncPair(aiWidgetPrimary, aiWidgetPrimaryText);
@@ -1059,6 +1090,8 @@ const presetsData = {{ presets | dump | safe }};
       surface_color: surfaceColor.value,
       text_color: textColor.value,
       text_muted: textMutedColor.value,
+      nav_bg_start: navBgStart.value,
+      nav_bg_end: navBgEnd.value,
       font_heading: fontHeading.value,
       font_body: fontBody.value,
       font_size_base: (fontSizeBase ? fontSizeBase.value : '16') + 'px',
@@ -1100,6 +1133,8 @@ const presetsData = {{ presets | dump | safe }};
     if (theme.surface_color) { surfaceColor.value = theme.surface_color; surfaceColorText.value = theme.surface_color; }
     if (theme.text_color) { textColor.value = theme.text_color; textColorText.value = theme.text_color; }
     if (theme.text_muted) { textMutedColor.value = theme.text_muted; textMutedColorText.value = theme.text_muted; }
+    if (theme.nav_bg_start) { navBgStart.value = theme.nav_bg_start; navBgStartText.value = theme.nav_bg_start; }
+    if (theme.nav_bg_end) { navBgEnd.value = theme.nav_bg_end; navBgEndText.value = theme.nav_bg_end; }
     if (theme.font_heading) { fontHeading.value = theme.font_heading; }
     if (theme.font_body) { fontBody.value = theme.font_body; }
     if (theme.announcement_bg) { announcementBg.value = theme.announcement_bg; announcementBgText.value = theme.announcement_bg; }
