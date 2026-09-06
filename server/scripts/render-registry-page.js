@@ -33,6 +33,7 @@ env.addFilter('date', (v) => {
 env.addFilter('taka', (v) => (v === null || v === undefined || v === '' ? 'N/A' : formatTaka(Number(v))));
 env.addFilter('formatTaka', (v) => (v === null || v === undefined || v === '' ? '' : formatTaka(Number(v))));
 env.addFilter('formatTakaAscii', (v) => (v === null || v === undefined || v === '' ? '' : formatTakaAscii(Number(v))));
+env.addFilter('filterSpecs', (specs, type) => (specs || []).filter((s) => s.spec_type === type));
 
 (async () => {
   const files = process.argv.slice(2);
@@ -91,7 +92,7 @@ env.addFilter('formatTakaAscii', (v) => (v === null || v === undefined || v === 
   for (const file of files) {
     const meta = registry['/' + file];
     if (!meta || !meta.template) { console.error(`[skip] ${file}: no registry entry or template`); continue; }
-    const html = env.render(meta.template, { ...meta, theme, themeCssVars, navItems, navCategories });
+    const html = env.render(meta.template, { ...meta, theme, themeCssVars, navItems, navCategories, dbProductsByModel: {} });
     const out = path.join(REPO_ROOT, file);
     fs.writeFileSync(out, html, 'utf8');
     console.log(`[ok] ${file} -> ${html.length} bytes`);

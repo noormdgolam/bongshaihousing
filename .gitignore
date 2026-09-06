@@ -19,6 +19,7 @@ venv/
 *.txt
 *.json
 !llms.txt
+!llms-full.txt
 !manifest.json
 !package.json
 !package-lock.json

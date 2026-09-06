@@ -1,6 +1,54 @@
 {% extends "layout.njk" %}
 {% block head_extra %}
 <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Interactive Tools",
+      "item": "https://bongshaihousing.com/interactive-tools.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "বাড়ি নির্মাণ খরচ ক্যালকুলেটর",
+      "item": "https://bongshaihousing.com/construction-cost-calculator.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "বাড়ি নির্মাণ খরচ ক্যালকুলেটর ২০২৬ - House Construction Cost Calculator Bangladesh",
+  "description": "বিনামূল্যে বাড়ি নির্মাণ খরচ হিসাব করুন — প্রতি স্কয়ার ফিট খরচ, গ্রে স্ট্রাকচার ও ফিনিশিং খরচসহ বংশাই হাউজিং-এর আধুনিক ক্যালকুলেটর।",
+  "url": "https://bongshaihousing.com/construction-cost-calculator.html",
+  "applicationCategory": "ConstructionCalculator",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BDT"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Bongshai Housing Ltd.",
+    "url": "https://bongshaihousing.com"
+  }
+}
+</script>
+<script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -32,6 +80,7 @@
     ]
   }
   </script>
+
 <style>
 /* Calculator styles, scoped to .calc-app so the site nav/footer are untouched */
 .calc-app {

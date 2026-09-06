@@ -1,5 +1,67 @@
 {% extends "layout.njk" %}
+{% block head_extra %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ category.name | default('Products') }}",
+      "item": "https://bongshaihousing.com/{{ (category.landing_page_slug or category.slug or 'products-and-solutions.html') | replace('^/', '') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Model No-{{ product.model_number }}",
+      "item": "https://bongshaihousing.com/{{ product.slug }}"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ category.name }} Model No-{{ product.model_number }}",
+  "description": "{{ (product.meta_description or product.description) | striptags | replace('\"', '\\\"') }}",
+  "image": "{% if product.main_image %}https://bongshaihousing.com/{{ product.main_image }}{% else %}https://bongshaihousing.com/images/logo-icon-512.webp{% endif %}",
+  "model": "{{ product.model_number }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "Bongshai Housing Ltd.",
+    "url": "https://bongshaihousing.com"
+  },
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "Bongshai Housing Ltd.",
+    "url": "https://bongshaihousing.com",
+    "foundingDate": "2008"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "BDT",
+    "price": "{{ product.fixed_price or (product.price_per_sqft * product.total_floor_area) or 2500 }}",
+    "priceValidUntil": "2030-12-31",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "Bongshai Housing Ltd."
+    }
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
+
 <section class="page-hero" style="min-height: 22vh; padding: 90px 0 30px;">
 <div class="container page-hero-content" style="text-align: center;">
 <span class="page-hero-label">{{ category.name }}</span>

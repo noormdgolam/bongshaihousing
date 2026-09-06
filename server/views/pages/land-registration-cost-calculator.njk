@@ -1,6 +1,54 @@
 {% extends "layout.njk" %}
 {% block head_extra %}
 <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bongshaihousing.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Interactive Tools",
+      "item": "https://bongshaihousing.com/interactive-tools.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "জমি রেজিস্ট্রি খরচ ক্যালকুলেটর",
+      "item": "https://bongshaihousing.com/land-registration-cost-calculator.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "জমি রেজিস্ট্রি খরচ ক্যালকুলেটর ২০২৬ - Land Registration Cost Calculator Bangladesh",
+  "description": "বিনামূল্যে জমি রেজিস্ট্রির সরকারি খরচ হিসাব করুন — রেজিস্ট্রেশন ফি, স্ট্যাম্প ডিউটি, স্থানীয় সরকার কর ও উৎসে আয়করের হালনাগাদ হিসাব।",
+  "url": "https://bongshaihousing.com/land-registration-cost-calculator.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BDT"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Bongshai Housing Ltd.",
+    "url": "https://bongshaihousing.com"
+  }
+}
+</script>
+<script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -32,6 +80,7 @@
     ]
   }
   </script>
+
 <style>
 /* Calculator styles, scoped to .calc-app so the site nav/footer are untouched */
 .calc-app {
