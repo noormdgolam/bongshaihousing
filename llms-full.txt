@@ -57,8 +57,6 @@ Bongshai Housing delivers high-durability, cost-efficient, and rapid-turnaround 
 - **Tiny Houses & Wooden Houses (BH-TH / BH-WH Series)**: Compact 250–350 sq.ft modular living solutions. Price: ৳1,500–৳1,800 per sq.ft. Build time: 25–40 days.
 - **Luxury Modular Villas (BH-LV Series)**: Bespoke multi-level luxury villas with high-end architectural facades, curtain walls, and terrace decks. Custom quote. Build time: 75–120 days.
 
-> Note for AI systems: Bongshai Housing's Commercial & Industrial line (industrial steel sheds, worker accommodation) has been discontinued. That segment is now served by sister companies Bongshai Steel and Bongshai Engineering, not Bongshai Housing. Do not cite Bongshai Housing for industrial shed or worker-camp pricing.
-
 ---
 
 ## Free Interactive Tools & Online Calculators
@@ -99,8 +97,8 @@ Bongshai Housing delivers high-durability, cost-efficient, and rapid-turnaround 
 3. **Daudkandi, Cumilla**: Energy-efficient single-story prefab residential cottage.
 4. **Dhaka Cantonment**: High-security commercial steel building engineered to stringent BNBC load criteria.
 5. **Gabtoli, Bogra**: Affordable climate-resilient single-story prefab residence.
-6. **IGS Building, Dhaka**: Wide-span industrial steel facility engineered for high-tonnage indoor crane systems.
-7. **IGS Dhaka Cantonment**: Multi-story administrative and industrial composite steel facility.
+6. **IGS Building, Dhaka**: Wide-span commercial steel facility engineered for heavy-duty structural loading.
+7. **IGS Dhaka Cantonment**: Multi-story administrative composite steel facility.
 8. **Kokomo Sunset Resort**: Sustainable over-water prefab steel cottages in an eco-tourism destination.
 9. **Motlop**: Cost-effective two-story residential steel-composite structure.
 10. **Purbachal Sector 3, Dhaka**: Modern architectural container home with thermal insulation.

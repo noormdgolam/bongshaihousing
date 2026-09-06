@@ -73,7 +73,19 @@
       "permanent": true
     },
     "/career": {
-      "to": "/career.html",
+      "to": "/",
+      "permanent": true
+    },
+    "/career.html": {
+      "to": "/",
+      "permanent": true
+    },
+    "/career-apply": {
+      "to": "/",
+      "permanent": true
+    },
+    "/career-apply.html": {
+      "to": "/",
       "permanent": true
     },
     "/two-story-building": {
@@ -117,7 +129,7 @@
       "permanent": true
     },
     "/career-apply-now": {
-      "to": "/career.html",
+      "to": "/",
       "permanent": true
     },
     "/login": {
@@ -177,19 +189,19 @@
       "permanent": true
     },
     "/architect": {
-      "to": "/career.html",
+      "to": "/",
       "permanent": true
     },
     "/deputy-general-managerdgm": {
-      "to": "/career.html",
+      "to": "/",
       "permanent": true
     },
     "/project-manager": {
-      "to": "/career.html",
+      "to": "/",
       "permanent": true
     },
     "/foreman-civil-construction": {
-      "to": "/career.html",
+      "to": "/",
       "permanent": true
     },
     "/project": {
@@ -233,6 +245,14 @@
       "permanent": true
     },
     "/site-offices.html": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/industrial-sheds.html": {
+      "to": "/products-and-solutions.html",
+      "permanent": true
+    },
+    "/worker-accommodation.html": {
       "to": "/products-and-solutions.html",
       "permanent": true
     }

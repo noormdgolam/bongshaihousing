@@ -19,6 +19,7 @@
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="revisit-after" content="7 days" />
   <meta name="language" content="English" />
+  
   <meta name="category" content="Steel Building Company, Composite Building, Construction Bangladesh" />
   <meta name="geo.region" content="BD-C" />
   <meta name="geo.placename" content="Uttara, Dhaka, Bangladesh" />
@@ -91,7 +92,7 @@
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Duplex Steel Building",
-  "description": "Two-floor steel-composite duplex home by Bongshai Housing. Private single-family multi-level living. Grade 50 steel, ISO certified.",
+  "description": "Two-floor steel-composite duplex home by Bongshai Housing. Private single-family multi-level living. Grade 50 steel, BNBC 2020 compliant.",
   "image": "https://bongshaihousing.com/images/products/dv-101.webp",
   "brand": {"@type": "Brand", "name": "Bongshai Housing Ltd.", "url": "https://bongshaihousing.com"},
   "manufacturer": {"@type": "Organization", "name": "Bongshai Housing Ltd.", "@id": "https://bongshaihousing.com/#organization", "foundingDate": "2008"},
@@ -296,7 +297,10 @@
 </div>
 
 <!-- ======================================================
-       NAVIGATION
+       NAVIGATION — rendered from nav_items / categories (server/lib/nav.js),
+       admin-editable at /admin/nav-menu. A 'category_grid' item's dropdown
+       renders navCategories instead of its own children (no nav_items rows
+       duplicate what the categories table already has).
   ====================================================== -->
 <nav aria-label="Main navigation" class="navbar" id="mainNav" role="navigation">
 <div class="navbar-inner">
@@ -314,115 +318,163 @@
 </a>
 <!-- Desktop Menu -->
 <ul class="nav-menu" role="menubar">
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="index.html" role="menuitem">Home</a>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="about.html" role="menuitem">
             About
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </a>
 <div class="dropdown" role="menu">
+
 <a class="dropdown-item" href="about.html" role="menuitem">
 <div class="dropdown-icon">ℹ️</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Company Profile</strong></div>
 </a>
+
 <a class="dropdown-item" href="certifications.html" role="menuitem">
 <div class="dropdown-icon">📜</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Certifications</strong></div>
 </a>
+
 <a class="dropdown-item" href="faq.html" role="menuitem">
 <div class="dropdown-icon">❓</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">FAQ</strong></div>
 </a>
+
 <a class="dropdown-item" href="/agent/signup.html" role="menuitem">
 <div class="dropdown-icon">🤝</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Become an Agent</strong></div>
 </a>
+
+<a class="dropdown-item" href="/agent/login.html" role="menuitem">
+<div class="dropdown-icon">🔑</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Agent Login</strong></div>
+</a>
+
 <a class="dropdown-item" href="/my-project/login.html" role="menuitem">
 <div class="dropdown-icon">📊</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Track My Project</strong></div>
 </a>
+
 </div>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="products-and-solutions.html" role="menuitem">
-            Products &amp; Solutions
+            Products
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </a>
 <div class="dropdown image-mega-dropdown" role="menu">
   <div class="mega-image-grid">
+    
     <a href="apartment-building.html" class="mega-card">
       <img src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Apartment Building" loading="lazy" width="675" height="720">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Apartment Building</span>
       </div>
     </a>
+    
     <a href="duplex-steel-building.html" class="mega-card">
       <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Duplex Steel Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Duplex Steel Building</span>
       </div>
     </a>
+    
     <a href="simplex-steel-building.html" class="mega-card">
-      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Steel Building" loading="lazy" width="1024" height="1024">
+      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Prefab Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Simplex Steel Building</span>
+        <span class="mega-card-title">Simplex Prefab Building</span>
       </div>
     </a>
+    
     <a href="cottage-house.html" class="mega-card">
       <img src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Cottage House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Cottage House</span>
       </div>
     </a>
+    
     <a href="container-house.html" class="mega-card">
       <img src="images/products/bh-ct-501.webp" srcset="images/products/bh-ct-501-400w.webp 400w, images/products/bh-ct-501-700w.webp 700w, images/products/bh-ct-501.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Container House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Container House</span>
       </div>
     </a>
+    
     <a href="steel-house.html" class="mega-card">
       <img src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Steel House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Steel House</span>
       </div>
     </a>
+    
     <a href="tiny-house.html" class="mega-card">
       <img src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Tiny House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Tiny House</span>
       </div>
     </a>
+    
     <a href="wooden-house.html" class="mega-card">
       <img src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Wooden House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Wooden House</span>
       </div>
     </a>
+    
     <a href="low-cost-house.html" class="mega-card">
       <img src="images/products/coming-soon-placeholder.png" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Low Cost House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Low Cost House</span>
       </div>
     </a>
+    
     <a href="concrete-building.html" class="mega-card">
       <img src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Concrete Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Concrete Building</span>
       </div>
     </a>
-    </div>
+    
+  </div>
 </div>
-</li> <li class="nav-item" role="none">
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="interactive-tools.html" role="menuitem">Cost Calculator</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
 <a class="nav-link" href="projects.html" role="menuitem">Our Projects</a>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="gallery.html" role="menuitem">Image Gallery</a>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="contact.html" role="menuitem">Contact</a>
+
 </li>
+
 </ul>
 <!-- Desktop CTA -->
 <div class="nav-cta">
@@ -443,46 +495,81 @@
   <!-- Mobile Drawer -->
 <div aria-label="Mobile navigation" class="mobile-drawer" id="mobileDrawer" role="dialog">
 <div>
+
+
 <a class="mobile-nav-link" href="index.html">Home</a>
+
+
+
 <div>
-<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About Us <span>▾</span>
+<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About <span>▾</span>
 </button>
 <div class="mobile-sub-links">
-<a class="mobile-sub-link" href="about.html">Company Profile</a>
-<a class="mobile-sub-link" href="certifications.html">Certifications</a>
-<a class="mobile-sub-link" href="faq.html">FAQ</a>
+
+<a class="mobile-sub-link" href="about.html">ℹ️ Company Profile</a>
+
+<a class="mobile-sub-link" href="certifications.html">📜 Certifications</a>
+
+<a class="mobile-sub-link" href="faq.html">❓ FAQ</a>
+
+<a class="mobile-sub-link" href="/agent/signup.html">🤝 Become an Agent</a>
+
+<a class="mobile-sub-link" href="/agent/login.html">🔑 Agent Login</a>
+
+<a class="mobile-sub-link" href="/my-project/login.html">📊 Track My Project</a>
+
 </div>
 </div>
+
+
+
       <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products &amp; Solutions <span>▾</span>
+        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products <span>▾</span>
         </button>
         <div class="mobile-sub-links">
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
-<a class="mobile-sub-link" href="apartment-building.html">Apartment building</a>
-<a class="mobile-sub-link" href="duplex-steel-building.html">Duplex steel building</a>
-<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex steel building</a>
+
+<a class="mobile-sub-link" href="apartment-building.html">Apartment Building</a>
+
+<a class="mobile-sub-link" href="duplex-steel-building.html">Duplex Steel Building</a>
+
+<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex Prefab Building</a>
+
 <a class="mobile-sub-link" href="cottage-house.html">Cottage House</a>
-<a class="mobile-sub-link" href="container-house.html">Container house</a>
-<a class="mobile-sub-link" href="steel-house.html">Steel house</a>
-<a class="mobile-sub-link" href="tiny-house.html">Tiny house</a>
+
+<a class="mobile-sub-link" href="container-house.html">Container House</a>
+
+<a class="mobile-sub-link" href="steel-house.html">Steel House</a>
+
+<a class="mobile-sub-link" href="tiny-house.html">Tiny House</a>
+
 <a class="mobile-sub-link" href="wooden-house.html">Wooden House</a>
+
 <a class="mobile-sub-link" href="low-cost-house.html">Low Cost House</a>
-<a class="mobile-sub-link" href="concrete-building.html">Concrete building</a>
+
+<a class="mobile-sub-link" href="concrete-building.html">Concrete Building</a>
 
           
         </div>
-      </div>      <a href="projects.html" class="mobile-nav-link">Our Projects</a>
-      <a href="gallery.html" class="mobile-nav-link">Image Gallery</a>
-      <a href="contact.html" class="mobile-nav-link">Contact</a>
-      <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Portals &amp; Tracking <span>▾</span>
-        </button>
-        <div class="mobile-sub-links">
-          <a href="/agent/signup.html" class="mobile-sub-link">🤝 Become an Agent</a>
-          <a href="/agent/login.html" class="mobile-sub-link">Agent Login</a>
-          <a href="/my-project/login.html" class="mobile-sub-link">Track My Project</a>
-        </div>
       </div>
+
+
+
+<a class="mobile-nav-link" href="interactive-tools.html">Cost Calculator</a>
+
+
+
+<a class="mobile-nav-link" href="projects.html">Our Projects</a>
+
+
+
+<a class="mobile-nav-link" href="gallery.html">Image Gallery</a>
+
+
+
+<a class="mobile-nav-link" href="contact.html">Contact</a>
+
+
     </div>
 
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
@@ -547,7 +634,7 @@
 
 <div class="stagger product-grid">
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:0">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-201" loading="eager" fetchpriority="high" src="images/products/dv-101.webp" title="Bongshai Housing Model No-BH-DV-201" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-201" loading="eager" fetchpriority="high" src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-201" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -556,7 +643,7 @@
   <h2 class="property-name" style="font-size: 1.25rem; font-weight: 800; color: var(--grey-900); margin: 0; line-height: 1.2; font-family: var(--font-heading);">Model No-BH-DV-201</h2>
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>1,800 sqft</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>5 Bedrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>6 Bedrooms</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">An elegant duplex steel building offering luxurious two-floor living with a stunning view.</p>
@@ -588,7 +675,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:2">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-203" loading="lazy" src="images/products/villa_1_1782293220395.webp" title="Bongshai Housing Model No-BH-DV-203" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-203" loading="lazy" src="images/products/dv-103.webp" srcset="images/products/dv-103-400w.webp 400w, images/products/dv-103-700w.webp 700w, images/products/dv-103.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-203" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -609,7 +696,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:3">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-204" loading="lazy" src="images/products/dv-104.webp" title="Bongshai Housing Model No-BH-DV-204" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-204" loading="lazy" src="images/products/dv-104.webp" srcset="images/products/dv-104-400w.webp 400w, images/products/dv-104-700w.webp 700w, images/products/dv-104.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-204" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -630,7 +717,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:4">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-205" loading="lazy" src="images/products/dv-105.webp" title="Bongshai Housing Model No-BH-DV-205" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-205" loading="lazy" src="images/products/dv-105.webp" srcset="images/products/dv-105-400w.webp 400w, images/products/dv-105-700w.webp 700w, images/products/dv-105.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-205" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -651,7 +738,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:5">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-206" loading="lazy" src="images/products/dv-106.webp" title="Bongshai Housing Model No-BH-DV-206" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-206" loading="lazy" src="images/products/dv-106.webp" srcset="images/products/dv-106-400w.webp 400w, images/products/dv-106-700w.webp 700w, images/products/dv-106.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-206" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -672,7 +759,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:6">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-207" loading="lazy" src="images/products/cottage_2_1782293207157.webp" title="Bongshai Housing Model No-BH-DV-207" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-207" loading="lazy" src="images/products/dv-107.webp" srcset="images/products/dv-107-400w.webp 400w, images/products/dv-107-700w.webp 700w, images/products/dv-107.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-207" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -693,7 +780,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:7">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-208" loading="lazy" src="images/products/dv-108.webp" title="Bongshai Housing Model No-BH-DV-208" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-208" loading="lazy" src="images/products/dv-108.webp" srcset="images/products/dv-108-400w.webp 400w, images/products/dv-108-700w.webp 700w, images/products/dv-108.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-208" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -714,7 +801,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:8">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-209" loading="lazy" src="images/products/dv-109.webp" title="Bongshai Housing Model No-BH-DV-209" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-209" loading="lazy" src="images/products/dv-109.webp" srcset="images/products/dv-109-400w.webp 400w, images/products/dv-109-700w.webp 700w, images/products/dv-109.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-209" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -735,7 +822,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:9">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-210" loading="lazy" src="images/products/dv-110.webp" title="Bongshai Housing Model No-BH-DV-210" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-210" loading="lazy" src="images/products/dv-110.webp" srcset="images/products/dv-110-400w.webp 400w, images/products/dv-110-700w.webp 700w, images/products/dv-110.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-210" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -756,7 +843,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:10">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-211" loading="lazy" src="images/products/dv-111.webp" title="Bongshai Housing Model No-BH-DV-211" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-211" loading="lazy" src="images/products/dv-111.webp" srcset="images/products/dv-111-400w.webp 400w, images/products/dv-111-700w.webp 700w, images/products/dv-111.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-211" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -777,7 +864,7 @@
 </div></div>
 
 <div class="property-card reveal" data-tilt="" data-aos="fade-up" style="--i:11">
-<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-212" loading="lazy" src="images/products/dv-112.webp" title="Bongshai Housing Model No-BH-DV-212" width="1024" height="1024"></div>
+<div class="property-img-wrap"><img alt="Bongshai Housing Model No-BH-DV-212" loading="lazy" src="images/products/dv-112.webp" srcset="images/products/dv-112-400w.webp 400w, images/products/dv-112-700w.webp 700w, images/products/dv-112.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" title="Bongshai Housing Model No-BH-DV-212" width="1024" height="1024"></div>
 <div class="property-card-body" data-aos="fade-up" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: white;">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <span class="property-type" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Duplex Steel Building</span>
@@ -2056,6 +2143,7 @@
     });
   }
 </script>
+<script src="js/utm-capture.js?v=1" defer></script>
 <script src="js/3d-tilt.js?v=1" defer></script>
 <script src="js/page-transition.js?v=1" defer></script>
 <script src="js/global-upgrades.min.js?v=3.16" defer></script>
