@@ -108,13 +108,15 @@ cPanel → **Cron Jobs** → Add New Cron Job:
     in** - check cPanel's own displayed server time first. The script computes
     its "this week" date window in Asia/Dhaka internally regardless, but the
     time it *fires* depends on the server's cron timezone, not the app's.
-- **Command**:
+- **Command** (verified against this host's actual `nodevenv` layout on
+  2026-09-06 - this is the real path, not a guess):
   ```
-  /usr/local/bin/node /home/<cpanel-user>/bongshai-node-app-prod/scripts/weekly-lead-report.js
+  /home/abongsha/nodevenv/bongshai-node-app-prod/22/bin/node /home/abongsha/bongshai-node-app-prod/scripts/weekly-lead-report.js >> /home/abongsha/bongshai-node-app-prod/_cron/weekly_lead_report.log 2>&1
   ```
-  (adjust the Node binary path and app directory to match this host - check
-  an existing working cron entry or `which node` via a cPanel terminal if
-  unsure)
+  The `>>` redirect matches the pattern the two existing cron jobs on this
+  account already use (`_cron/backup_db.log`, `_cron/cleanup_orphans.log`) -
+  gives a real, checkable artifact after the first Sunday run instead of
+  relying on cPanel's default cron-output email.
 
 ### Additional environment variables (optional)
 
