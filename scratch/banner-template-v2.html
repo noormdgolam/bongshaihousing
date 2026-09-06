@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; font-family: Georgia, 'Times New Roman', serif; }
+
+  .banner {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background: #0f172a;
+  }
+
+  .title-band {
+    height: 280px;
+    background: #0f172a;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 30px;
+    border-bottom: 3px solid #EAB308;
+  }
+
+  .title-band h1 {
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #FDE047;
+    text-transform: uppercase;
+  }
+
+  .photo-row {
+    height: 630px;
+    background: #0f172a;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 0 14px 14px;
+  }
+
+  .photo-row > div {
+    overflow: hidden;
+    border: 6px solid #ffffff;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  }
+
+  .photo-row img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center 15%;
+    display: block;
+  }
+
+  .button-footer {
+    height: 170px;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+  }
+</style>
+</head>
+<body>
+  <div class="banner" style="--band-color: #FFEB3B; --title-color: #111111;">
+    <div class="title-band"><h1>Apartment Building</h1></div>
+    <div class="photo-row">
+      <div><img src="banner-assets/apt-1.jpeg" alt=""></div>
+      <div><img src="banner-assets/apt-2.jpeg" alt=""></div>
+      <div><img src="banner-assets/apt-3.jpeg" alt=""></div>
+    </div>
+    <div class="button-footer"></div>
+  </div>
+</body>
+</html>

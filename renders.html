@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clean Architectural Renders Gallery — Bongshai Housing</title>
+<style>
+  :root {
+    --primary: #1E40AF;
+    --primary-dark: #1e3a8a;
+    --success: #16a34a;
+    --grey-50: #f8fafc;
+    --grey-100: #f1f5f9;
+    --grey-200: #e2e8f0;
+    --grey-800: #1e293b;
+    --grey-900: #0f172a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 30px 20px 60px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  header h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
+  header p { color: #94a3b8; font-size: 1.05rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 26px;
+  }
+  .card {
+    background: #1e293b;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+  }
+  .img-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #0b0f19;
+    overflow: hidden;
+    position: relative;
+  }
+  .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .card:hover .img-wrapper img {
+    transform: scale(1.02);
+  }
+  .body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .body h2 {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+    color: #f1f5f9;
+  }
+  .meta {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 16px;
+  }
+  .actions {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+  }
+  .btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-primary {
+    background: #2563eb;
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #1d4ed8;
+  }
+  .btn-success {
+    background: #16a34a;
+    color: #fff;
+  }
+  .btn-success:hover {
+    background: #15803d;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🏛️ Clean Architectural Renders — High Definition</h1>
+    <p>Direct high-resolution JPEG downloads preserving 100% of the building architecture, materials, and colors.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- 0. Bright Clean Duplex Villa -->
+    <div class="card" style="border: 2px solid #3b82f6;">
+      <div class="img-wrapper">
+        <img src="/images/renders/09_bright_clean_duplex_villa.jpg" alt="Bright Clean Duplex Villa">
+      </div>
+      <div class="body">
+        <h2>Modern Duplex Villa (Bright & Clean Daylight View)</h2>
+        <div class="meta">Format: High-Res JPEG (1024x1024) • 100% Exact Building Architecture</div>
+        <div class="actions">
+          <a href="/images/renders/09_bright_clean_duplex_villa.jpg" download="09_bright_clean_duplex_villa.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/09_bright_clean_duplex_villa.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Double Gable Cottage -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/04_double_gable_cottage_clean.jpg" alt="Double Gable Cottage">
+      </div>
+      <div class="body">
+        <h2>Double-Gable Prefab Cottage (Maroon / White)</h2>
+        <div class="meta">Format: High-Res JPEG • Exact Design Preservation</div>
+        <div class="actions">
+          <a href="/images/renders/04_double_gable_cottage_clean.jpg" download="04_double_gable_cottage_clean.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/04_double_gable_cottage_clean.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Hip Roof Pavilion Bungalow -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/05_hip_roof_pavilion_bungalow_clean.jpg" alt="Hip Roof Pavilion Bungalow">
+      </div>
+      <div class="body">
+        <h2>Contemporary Pavilion Bungalow (Charcoal Hip Roof)</h2>
+        <div class="meta">Format: High-Res JPEG • Corner Bay Window & Steel Pergola</div>
+        <div class="actions">
+          <a href="/images/renders/05_hip_roof_pavilion_bungalow_clean.jpg" download="05_hip_roof_pavilion_bungalow_clean.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/05_hip_roof_pavilion_bungalow_clean.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Curved Roof Villa -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/03_curved_roof_villa_3_walnut.jpg" alt="Curved Roof Villa">
+      </div>
+      <div class="body">
+        <h2>Curved-Roof Luxury Duplex (Walnut Cladding)</h2>
+        <div class="meta">Format: High-Res JPEG • Blue Window Box & Jali Balcony</div>
+        <div class="actions">
+          <a href="/images/renders/03_curved_roof_villa_3_walnut.jpg" download="03_curved_roof_villa_3_walnut.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/03_curved_roof_villa_3_walnut.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Luxury Cantilever Villa -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/02_luxury_villa_2_cantilever.jpg" alt="Luxury Cantilever Villa">
+      </div>
+      <div class="body">
+        <h2>Multi-Level Luxury Villa (Cantilever Box & Sconces)</h2>
+        <div class="meta">Format: High-Res JPEG • Charcoal Portal Frame & Golden Panel</div>
+        <div class="actions">
+          <a href="/images/renders/02_luxury_villa_2_cantilever.jpg" download="02_luxury_villa_2_cantilever.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/02_luxury_villa_2_cantilever.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Duplex Model 1 Tower -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/01_duplex_model_1_tower.jpg" alt="Duplex Model 1">
+      </div>
+      <div class="body">
+        <h2>Contemporary Duplex (Vertical Wood & Stone Tower)</h2>
+        <div class="meta">Format: High-Res JPEG • Double Balcony & Yellow Wing Wall</div>
+        <div class="actions">
+          <a href="/images/renders/01_duplex_model_1_tower.jpg" download="01_duplex_model_1_tower.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/01_duplex_model_1_tower.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Modern Duplex Villa -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/08_modern_duplex_villa_clean.jpg" alt="Modern Duplex Villa">
+      </div>
+      <div class="body">
+        <h2>Modern Contemporary Duplex (Terracotta Roof)</h2>
+        <div class="meta">Format: High-Res JPEG • Wood Slat Balcony & Stone Wall</div>
+        <div class="actions">
+          <a href="/images/renders/08_modern_duplex_villa_clean.jpg" download="08_modern_duplex_villa_clean.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/08_modern_duplex_villa_clean.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Compact Cottage -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/07_cottage_veranda_exact_clean.jpg" alt="Compact Cottage">
+      </div>
+      <div class="body">
+        <h2>Modern Compact Cottage (Louver Screen Veranda)</h2>
+        <div class="meta">Format: High-Res JPEG • Burnt-Orange Accent & Sconces</div>
+        <div class="actions">
+          <a href="/images/renders/07_cottage_veranda_exact_clean.jpg" download="07_cottage_veranda_exact_clean.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/07_cottage_veranda_exact_clean.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Simplex Bungalow -->
+    <div class="card">
+      <div class="img-wrapper">
+        <img src="/images/renders/06_simplex_bungalow_exact_clean.jpg" alt="Simplex Bungalow">
+      </div>
+      <div class="body">
+        <h2>Simplex Bungalow (Double Arch & Striped Pillars)</h2>
+        <div class="meta">Format: High-Res JPEG • Parapet Cutouts & Indigo Plinth</div>
+        <div class="actions">
+          <a href="/images/renders/06_simplex_bungalow_exact_clean.jpg" download="06_simplex_bungalow_exact_clean.jpg" class="btn btn-success">⬇️ Download JPG</a>
+          <a href="/images/renders/06_simplex_bungalow_exact_clean.jpg" target="_blank" class="btn btn-primary">🔍 View Full</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
