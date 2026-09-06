@@ -128,6 +128,10 @@
       "to": "/bh-dv-206.html",
       "permanent": true
     },
+    "/dv-102.html": {
+      "to": "/bh-dv-202.html",
+      "permanent": true
+    },
     "/career-apply-now": {
       "to": "/",
       "permanent": true
@@ -170,7 +174,11 @@
     },
     "/agents": {
       "to": "/agent/signup.html",
-      "permanent": false
+      "permanent": true
+    },
+    "/agent-form": {
+      "to": "/agent/signup.html",
+      "permanent": true
     },
     "/bh-m-01": {
       "to": "/products-and-solutions.html",
