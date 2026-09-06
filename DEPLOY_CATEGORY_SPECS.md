@@ -1,9 +1,7 @@
-# Category Specifications Deployment Guide for Claude Code
+# Category Specifications Deployment Guide
 
 ## Overview
 All technical and building specifications for the **9 product categories** have been extracted from the client `.docx` files, validated, and generated into an idempotent SQL script ready for database execution.
-
-Per user instruction: **Do not deploy now — saved locally for Claude to deploy.**
 
 ---
 
