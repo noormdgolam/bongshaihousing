@@ -200,7 +200,7 @@ for (const pageFile of CATEGORY_LANDING_PAGES) {
           if (dbCategory) {
             const products = await db('products')
               .where({ category_id: dbCategory.id, published: true })
-              .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'main_image')
+              .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'bedrooms', 'main_image')
               .orderBy('sort_order', 'asc');
             
             const productIds = products.map(p => p.id);
@@ -288,6 +288,7 @@ for (const [urlPath, meta] of Object.entries(registry)) {
       let specs = [];
       let dbProductsByModel = {};
       let dedicatedProduct = null;
+      let dedicatedVariants = [];
       if (db) {
         try {
           const row = await db('page_content').where({ url_path: urlPath }).first();
@@ -315,6 +316,19 @@ for (const [urlPath, meta] of Object.entries(registry)) {
               specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
               dbProductsByModel[product.model_number] = product;
               dedicatedProduct = product;
+              if (product.fixed_price) {
+                const { formatTaka } = require('../lib/format');
+                product.fixedPriceFormatted = formatTaka(product.fixed_price);
+              }
+              const vRows = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
+              if (vRows.length) {
+                const { decorateVariants } = require('../lib/roomLayout');
+                const { formatTaka } = require('../lib/format');
+                const rRows = await db('product_rooms').whereIn('product_variant_id', vRows.map((v) => v.id)).orderBy('sort_order');
+                decorateVariants(vRows, rRows, product);
+                for (const v of vRows) { if (v.estimatedPrice) v.estimatedPriceFormatted = formatTaka(v.estimatedPrice); }
+                dedicatedVariants = vRows;
+              }
             }
           } catch (specErr) {
             // Ignore - falls back to an empty specs table/stock image, not a crash
@@ -325,7 +339,7 @@ for (const [urlPath, meta] of Object.entries(registry)) {
       const ogImageOverride = dedicatedProduct && dedicatedProduct.main_image
         ? `https://bongshaihousing.com/${dedicatedProduct.main_image}`
         : undefined;
-      const vars = renderVars({ ...meta, title: pageTitle, pc, specs, dbProductsByModel, product: dedicatedProduct, ...(ogImageOverride ? { ogImage: ogImageOverride } : {}) });
+      const vars = renderVars({ ...meta, title: pageTitle, pc, specs, dbProductsByModel, product: dedicatedProduct, variants: dedicatedVariants, ...(ogImageOverride ? { ogImage: ogImageOverride } : {}) });
 
       res.render(meta.template, vars, (err, html) => {
         if (err) {

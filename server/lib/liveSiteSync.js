@@ -26,6 +26,23 @@ try {
 const { formatTaka, formatTakaAscii } = require('./format');
 const { getThemeSettings, generateCssVariables } = require('./theme');
 const { getNavTree } = require('./nav');
+const { decorateVariants } = require('./roomLayout');
+
+// Fetch a product's variants + all their rooms and decorate them (roomGroups,
+// auto-summed totals) so both the dedicated-template and generic render paths
+// hand templates the exact same `variants` shape.
+async function loadDecoratedVariants(product) {
+  const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
+  if (!variants.length) return [];
+  const rooms = await db('product_rooms')
+    .whereIn('product_variant_id', variants.map((v) => v.id))
+    .orderBy('sort_order');
+  decorateVariants(variants, rooms, product);
+  for (const v of variants) {
+    if (v.estimatedPrice) v.estimatedPriceFormatted = formatTaka(v.estimatedPrice);
+  }
+  return variants;
+}
 
 // partials/nav.njk renders from navItems/navCategories, which the live app
 // injects via res.locals middleware (server.js). This module renders offline
@@ -219,16 +236,20 @@ async function renderProductToHtml(slug) {
     let dedicatedSpecs = [];
     let dedicatedProductsByModel = {};
     let dedicatedProduct = null;
+    let dedicatedVariants = [];
     try {
       dedicatedProduct = await db('products').where({ slug: file }).first();
       if (dedicatedProduct) {
         dedicatedSpecs = await db('product_specs').where({ product_id: dedicatedProduct.id }).orderBy('sort_order');
         dedicatedProductsByModel[dedicatedProduct.model_number] = dedicatedProduct;
+        if (dedicatedProduct.fixed_price) dedicatedProduct.fixedPriceFormatted = formatTaka(dedicatedProduct.fixed_price);
+        dedicatedVariants = await loadDecoratedVariants(dedicatedProduct);
       }
     } catch (e) {
       dedicatedSpecs = [];
       dedicatedProductsByModel = {};
       dedicatedProduct = null;
+      dedicatedVariants = [];
     }
 
     // Category landing pages (apartment-building.html etc.) ALSO have a
@@ -261,6 +282,7 @@ async function renderProductToHtml(slug) {
       materialSpecs: dedicatedBuildingSpecs,
       dbProductsByModel: dedicatedProductsByModel,
       product: dedicatedProduct,
+      variants: dedicatedVariants,
       theme: dedicatedTheme,
       themeCssVars: dedicatedThemeCssVars,
       ...(await navLocals()),
@@ -394,7 +416,7 @@ async function renderCategoryToHtml(pageFile) {
 
   const products = await db('products')
     .where({ category_id: dbCategory.id, published: true })
-    .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'main_image')
+    .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'bedrooms', 'main_image')
     .orderBy('sort_order', 'asc');
 
   const productIds = products.map((p) => p.id);
