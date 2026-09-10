@@ -290,7 +290,7 @@
         <div style="font-size: 1.1rem; font-weight: 600;">Full Building Structure</div>
       </div>
       <div style="font-size: 1.8rem; font-weight: 800; color: #fde68a;">
-        {{ product.total_floor_area or variants[0].roomGroupsBuildingTotal or variants[0].totalArea or variants[0].area_sqft }} sqft
+        {{ variants[0].roomGroupsBuildingTotal or product.total_floor_area or variants[0].totalArea or variants[0].area_sqft }} sqft
       </div>
     </div>
   </div>
