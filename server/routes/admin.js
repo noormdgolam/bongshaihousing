@@ -1563,8 +1563,34 @@ async function ensureProductColumns() {
     if (!hasMainImageAlt) {
       await db.schema.alterTable('products', (t) => t.string('main_image_alt', 255).nullable()).catch(() => {});
     }
+    const hasBedrooms = await db.schema.hasColumn('products', 'bedrooms').catch(() => true);
+    if (!hasBedrooms) {
+      await db.schema.alterTable('products', (t) => t.integer('bedrooms').nullable()).catch(() => {});
+    }
   } catch (err) {
     // Ignore schema check error
+  }
+}
+
+// Regenerate a product's live static page AND its category landing page after
+// any edit - the main product save has always done this, but the spec /
+// variant / room sub-routes did not, so an admin edit to a room area, bed
+// count or spec row updated the DB and nothing else (the live .html kept the
+// old numbers until some unrelated main-form save happened to re-sync). One
+// helper, called from every product-mutating route.
+async function resyncProductPages(productId) {
+  try {
+    invalidatePageCache();
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    const p = await db('products').where({ id: productId }).first();
+    if (!p) return;
+    if (p.slug) await syncPageToLive(p.slug);
+    if (p.category_id) {
+      const cat = await db('categories').where({ id: p.category_id }).first();
+      if (cat && cat.landing_page_slug) await syncPageToLive(cat.landing_page_slug);
+    }
+  } catch (e) {
+    console.error('resyncProductPages error:', e.message);
   }
 }
 
@@ -1886,6 +1912,7 @@ router.post('/admin/products/:id/specs', async (req, res) => {
     const [{ maxSort }] = await db('product_specs').where({ product_id: req.params.id }).max('sort_order as maxSort');
     await db('product_specs').insert({ product_id: req.params.id, spec_type: cleanType, spec_key, spec_value, sort_order: (maxSort ?? -1) + 1 });
   }
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
@@ -1894,11 +1921,13 @@ router.post('/admin/products/:id/specs/:specId', async (req, res) => {
   const updateData = { spec_key, spec_value };
   if (spec_type) updateData.spec_type = spec_type === 'technical' ? 'technical' : 'building';
   await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).update(updateData);
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
 router.post('/admin/products/:id/specs/:specId/delete', async (req, res) => {
   await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).del();
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
@@ -1915,6 +1944,7 @@ router.post('/admin/products/:id/variants', async (req, res) => {
     drawing: drawing || null, dining: dining || null,
     sort_order: (maxSort ?? -1) + 1,
   });
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
@@ -1925,11 +1955,13 @@ router.post('/admin/products/:id/variants/:variantId', async (req, res) => {
     bed: bed || null, bath: bath || null, kitchen: kitchen || null, living: living || null,
     drawing: drawing || null, dining: dining || null,
   });
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
 router.post('/admin/products/:id/variants/:variantId/delete', async (req, res) => {
   await db('product_variants').where({ id: req.params.variantId, product_id: req.params.id }).del();
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
@@ -1945,6 +1977,7 @@ router.post('/admin/products/:id/variants/:variantId/rooms', async (req, res) =>
       sort_order: (maxSort ?? -1) + 1,
     });
   }
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
@@ -1955,11 +1988,13 @@ router.post('/admin/products/:id/variants/:variantId/rooms/:roomId', async (req,
     area_sqft: area_sqft || null, length_ft: length_ft || null, width_ft: width_ft || null,
     is_total_row: /total/i.test(section || ''),
   });
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
 router.post('/admin/products/:id/variants/:variantId/rooms/:roomId/delete', async (req, res) => {
   await db('product_rooms').where({ id: req.params.roomId, product_variant_id: req.params.variantId }).del();
+  setImmediate(() => resyncProductPages(req.params.id));
   res.redirect(`/admin/products/${req.params.id}/edit`);
 });
 
