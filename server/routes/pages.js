@@ -339,7 +339,17 @@ for (const [urlPath, meta] of Object.entries(registry)) {
       const ogImageOverride = dedicatedProduct && dedicatedProduct.main_image
         ? `https://bongshaihousing.com/${dedicatedProduct.main_image}`
         : undefined;
-      const vars = renderVars({ ...meta, title: pageTitle, pc, specs, dbProductsByModel, product: dedicatedProduct, variants: dedicatedVariants, ...(ogImageOverride ? { ogImage: ogImageOverride } : {}) });
+      // Overlay the product's own DB SEO fields on the registry meta (same as
+      // liveSiteSync.metaWithProduct) so admin Title / SEO Title / SEO Meta
+      // Description / Description edits reach this dynamically-rendered page too.
+      let effMeta = { ...meta, title: pageTitle };
+      if (dedicatedProduct) {
+        const t = (dedicatedProduct.meta_title && dedicatedProduct.meta_title.trim()) || (dedicatedProduct.title && dedicatedProduct.title.trim());
+        if (t) { effMeta.title = t; effMeta.ogTitle = t; effMeta.twitterTitle = t; }
+        const d = (dedicatedProduct.meta_description && dedicatedProduct.meta_description.trim()) || (dedicatedProduct.description && dedicatedProduct.description.trim());
+        if (d) { effMeta.description = d; effMeta.ogDescription = d; effMeta.twitterDescription = d; }
+      }
+      const vars = renderVars({ ...effMeta, pc, specs, dbProductsByModel, product: dedicatedProduct, variants: dedicatedVariants, ...(ogImageOverride ? { ogImage: ogImageOverride } : {}) });
 
       res.render(meta.template, vars, (err, html) => {
         if (err) {

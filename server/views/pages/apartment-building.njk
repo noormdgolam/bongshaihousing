@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "partials/product-card-image.njk" import cardImage %}
-{% from "partials/product-card-facts.njk" import cardArea, cardBeds %}
+{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice %}
 {% block head_extra %}
 <script type="application/ld+json">
 
@@ -336,7 +336,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳96,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-101', '৳96,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -376,7 +376,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳72,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-102', '৳72,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -418,7 +418,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳65,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-103', '৳65,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -460,7 +460,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳96,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-104', '৳96,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -502,7 +502,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳72,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-105', '৳72,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -544,7 +544,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳65,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-106', '৳65,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -586,7 +586,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳96,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-107', '৳96,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -628,7 +628,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳72,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-108', '৳72,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -670,7 +670,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳65,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-109', '৳65,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -712,7 +712,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳96,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-110', '৳96,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -754,7 +754,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳72,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-111', '৳72,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 
@@ -796,7 +796,7 @@
 
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
 
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳65,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-TSB-112', '৳65,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
 
   </div>
 

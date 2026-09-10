@@ -72,6 +72,22 @@ const VIEWS_DIR = path.join(__dirname, '..', 'views');
 const registryPath = path.join(__dirname, '..', 'page-registry.json');
 const registry = fs.existsSync(registryPath) ? JSON.parse(fs.readFileSync(registryPath, 'utf8')) : {};
 
+// Overlay a product's own DB SEO fields on top of its page-registry.json meta.
+// The ~128 dedicated bh-*.njk pages take title/description/OG tags from the
+// registry (authoring-time snapshot); this lets the admin "Title" / "SEO Title"
+// / "SEO Meta Description" / "Description" fields actually reach the live page.
+// meta_title/meta_description win; then the plain title/description; then the
+// registry value stays.
+function metaWithProduct(regMeta, product) {
+  if (!product) return regMeta;
+  const m = { ...regMeta };
+  const t = (product.meta_title && product.meta_title.trim()) || (product.title && product.title.trim());
+  if (t) { m.title = t; m.ogTitle = t; m.twitterTitle = t; }
+  const d = (product.meta_description && product.meta_description.trim()) || (product.description && product.description.trim());
+  if (d) { m.description = d; m.ogDescription = d; m.twitterDescription = d; }
+  return m;
+}
+
 function renderVars(meta, extra) {
   return {
     title: meta.title,
@@ -236,7 +252,7 @@ async function renderProductToHtml(slug) {
       : undefined;
     const dedicatedTechSpecs = dedicatedSpecs.filter((s) => s.spec_type === 'technical');
     const dedicatedBuildingSpecs = dedicatedSpecs.filter((s) => s.spec_type === 'building');
-    return nunjucksEnv.render(regMeta.template, renderVars(regMeta, {
+    return nunjucksEnv.render(regMeta.template, renderVars(metaWithProduct(regMeta, dedicatedProduct), {
       specs: dedicatedSpecs,
       techSpecs: dedicatedTechSpecs,
       buildingSpecs: dedicatedBuildingSpecs,

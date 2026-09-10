@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "partials/product-card-image.njk" import cardImage %}
-{% from "partials/product-card-facts.njk" import cardArea, cardBeds %}
+{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -172,7 +172,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A premium cottage house blending natural charm with modern elegance.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳16,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-401', '৳16,50,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-401.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -192,7 +192,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A cozy cottage design ideal for peaceful, low-density living.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-402', '৳12,50,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-402.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -213,7 +213,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage-style architecture built for comfort in rural and semi-urban settings.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳11,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-403', '৳11,50,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-403.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -234,7 +234,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A charming cottage home with a warm, inviting facade.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳18,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-404', '৳18,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-404.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -255,7 +255,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage construction engineered for durability with a rustic aesthetic.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳21,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-405', '৳21,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-405.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -276,7 +276,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A compact cottage design suited to smaller families or weekend homes.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳15,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-406', '৳15,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-406.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -297,7 +297,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage living that combines traditional charm with modern building techniques.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳13,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-407', '৳13,50,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-407.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -318,7 +318,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A well-ventilated cottage home designed for Bangladesh's countryside.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-408', '৳12,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-408.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -339,7 +339,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage architecture built for quick assembly without losing character.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,50,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-409', '৳12,50,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-409.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -360,7 +360,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A budget-friendly cottage home with premium structural quality.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳12,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-410', '৳12,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-410.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -381,7 +381,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage design featuring a welcoming veranda and efficient layout.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳21,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-411', '৳21,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-411.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>
@@ -402,7 +402,7 @@
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A cottage home built to feel spacious despite its modest footprint.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
     <span class="property-price-label" style="font-size: 0.68rem; color: var(--grey-500); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Fixed Package Price</span>
-    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">৳24,00,000 <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
+    <span class="property-price-value" style="font-size: 1.25rem; color: var(--primary); font-weight: 800; display: flex; align-items: baseline; gap: 4px;">{{ cardPrice(dbProductsByModel, 'BH-CH-412', '৳24,00,000') }} <span style="font-size: 0.75rem; color: var(--grey-500); font-weight: 600;">BDT</span></span>
   </div>
   <a class="btn btn-primary" href="bh-ch-412.html" style="width: 100%; justify-content: center; padding: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">View Details →</a>
 </div></div>

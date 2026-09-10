@@ -249,7 +249,7 @@
         <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:12px;">
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Area (sqft)</label><input type="number" name="variants[{{ vIdx }}][area_sqft]" value="{{ v.area_sqft or '' }}" style="width:85px; padding:4px 6px;"></div>
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Label</label><input type="text" name="variants[{{ vIdx }}][area_label]" value="{{ v.area_label or '' }}" placeholder="e.g. Standard" style="width:110px; padding:4px 6px;"></div>
-          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" name="variants[{{ vIdx }}][bed]" value="{{ v.bed or '' }}" style="width:60px; padding:4px 6px;"></div>
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" value="{{ product.bedrooms or '' }}" style="width:60px; padding:4px 6px; background:#eee;" disabled title="Set via the Bedrooms field above"></div>
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bath</label><input type="number" name="variants[{{ vIdx }}][bath]" value="{{ v.bath or '' }}" style="width:60px; padding:4px 6px;"></div>
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Kitchen</label><input type="number" name="variants[{{ vIdx }}][kitchen]" value="{{ v.kitchen or '' }}" style="width:60px; padding:4px 6px;"></div>
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Living</label><input type="number" name="variants[{{ vIdx }}][living]" value="{{ v.living or '' }}" style="width:60px; padding:4px 6px;"></div>
@@ -389,7 +389,7 @@ function addVariantCard() {
     <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:12px;">
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Area (sqft)</label><input type="number" name="variants[${vIdx}][area_sqft]" required style="width:85px; padding:4px 6px;"></div>
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Label</label><input type="text" name="variants[${vIdx}][area_label]" placeholder="e.g. Standard" style="width:110px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" name="variants[${vIdx}][bed]" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" value="${document.querySelector('input[name=bedrooms]') ? document.querySelector('input[name=bedrooms]').value : ''}" style="width:60px; padding:4px 6px; background:#eee;" disabled title="Set via the Bedrooms field above"></div>
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bath</label><input type="number" name="variants[${vIdx}][bath]" style="width:60px; padding:4px 6px;"></div>
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Kitchen</label><input type="number" name="variants[${vIdx}][kitchen]" style="width:60px; padding:4px 6px;"></div>
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Living</label><input type="number" name="variants[${vIdx}][living]" style="width:60px; padding:4px 6px;"></div>

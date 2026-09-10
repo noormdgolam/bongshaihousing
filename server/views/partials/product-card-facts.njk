@@ -20,3 +20,14 @@
 {{ fallback }}
 {%- endif -%}
 {%- endmacro %}
+
+{# Card "Fixed Package Price" - DB fixed_price (formatted ৳XX,XX,XXX) or the
+   hardcoded fallback. #}
+{% macro cardPrice(dbProductsByModel, modelNumber, fallback) -%}
+{% set dbp = dbProductsByModel[modelNumber] if dbProductsByModel else none -%}
+{% if dbp and dbp.fixed_price -%}
+{{ dbp.fixed_price | formatTaka }}
+{%- else -%}
+{{ fallback }}
+{%- endif -%}
+{%- endmacro %}

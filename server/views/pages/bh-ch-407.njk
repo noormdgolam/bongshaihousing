@@ -43,7 +43,7 @@
   "offers": {
     "@type": "Offer",
     "priceCurrency": "BDT",
-    "price": "1350000",
+    "price": "{{ (product.fixed_price | int) if product.fixed_price else 0 }}",
     "availability": "https://schema.org/InStock",
     "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
   },
@@ -142,7 +142,7 @@
 <div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
 <!-- Left: Large Image -->
 <div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex; flex-direction: column;">
-{% set dbp = dbProductsByModel['BH-CH-407'] %}<img alt="Model No-BH-CH-407 Exterior View" loading="eager" fetchpriority="high" src="{{ dbp.main_image if (dbp and dbp.main_image) else 'images/products/Model No-BH-CH-407.webp' }}"{% if dbp and dbp.main_image and dbp.main_image != 'images/products/Model No-BH-CH-407.webp' %}{% else %} srcset="images/products/Model%20No-BH-CH-407-400w.webp 400w, images/products/Model%20No-BH-CH-407-700w.webp 700w, images/products/Model%20No-BH-CH-407.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} style="width: 100%; object-fit: cover; display: block;" title="Model No-BH-CH-407 Exterior View" width="1024" height="1024">
+{% set dbp = dbProductsByModel['BH-CH-407'] %}<img alt="{{ product.main_image_alt or 'Model No-BH-CH-407 Exterior View' }}" loading="eager" fetchpriority="high" src="{{ dbp.main_image if (dbp and dbp.main_image) else 'images/products/Model No-BH-CH-407.webp' }}"{% if dbp and dbp.main_image and dbp.main_image != 'images/products/Model No-BH-CH-407.webp' %}{% else %} srcset="images/products/Model%20No-BH-CH-407-400w.webp 400w, images/products/Model%20No-BH-CH-407-700w.webp 700w, images/products/Model%20No-BH-CH-407.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} style="width: 100%; object-fit: cover; display: block;" title="{{ product.main_image_alt or 'Model No-BH-CH-407 Exterior View' }}" width="1024" height="1024">
 {% set g2 = product.image_2 if (product and product.image_2) else (dbp.image_2 if (dbp and dbp.image_2) else null) %}
 {% set g3 = product.image_3 if (product and product.image_3) else (dbp.image_3 if (dbp and dbp.image_3) else null) %}
 {% if g2 or g3 %}

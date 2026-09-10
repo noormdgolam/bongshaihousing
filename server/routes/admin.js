@@ -1862,7 +1862,11 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       for (let i = 0; i < parsedVariants.length; i++) {
         const v = parsedVariants[i];
         const area_sqft = v.area_sqft ? parseInt(v.area_sqft, 10) : null;
-        const bed = v.bed ? parseInt(v.bed, 10) : null;
+        // Bedroom count is owned by products.bedrooms (single source, edited via
+        // the main form + shown on the hero chip / category card). The per-variant
+        // "Bed" input was removed from the form; keep the column in sync so
+        // anything still reading product_variants.bed matches the page.
+        const bed = cleanBedrooms;
         const bath = v.bath ? parseInt(v.bath, 10) : null;
         const kitchen = v.kitchen ? parseInt(v.kitchen, 10) : null;
         const living = v.living ? parseInt(v.living, 10) : null;
