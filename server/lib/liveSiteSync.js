@@ -135,54 +135,15 @@ nunjucksEnv.addFilter('formatTakaAscii', (value) => {
 });
 
 nunjucksEnv.addFilter('filterSpecs', (specs, type) => (specs || []).filter((s) => s.spec_type === type));
+nunjucksEnv.addFilter('comma', (value) => {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? n.toLocaleString('en-US') : String(value);
+});
 
 nunjucksEnv.addGlobal('currentYear', new Date().getFullYear());
 
-function groupRoomsByFloor(rooms) {
-  const groups = [];
-  let current = { label: null, rows: [], total: null };
-  let explicitBuildingTotal = null;
-  for (const r of rooms) {
-    const text = (r.section || '').trim();
-    const hasArea = r.area_sqft !== null && r.area_sqft !== undefined && r.area_sqft !== '';
-    if (r.is_total_row && !hasArea) {
-      if (current.label !== null || current.rows.length) groups.push(current);
-      current = { label: text, rows: [], total: null };
-    } else if (r.is_total_row && hasArea && /building/i.test(text)) {
-      explicitBuildingTotal = r.area_sqft;
-    } else if (r.is_total_row && hasArea) {
-      current.total = r.area_sqft;
-    } else {
-      current.rows.push(r);
-    }
-  }
-  groups.push(current);
-  for (const g of groups) {
-    if (g.total == null) {
-      const sum = g.rows.reduce((s, r) => s + (Number(r.area_sqft) || 0), 0);
-      g.total = sum || null;
-    }
-  }
-  const buildingTotal = explicitBuildingTotal != null
-    ? explicitBuildingTotal
-    : groups.length > 1
-      ? groups.reduce((s, g) => s + (Number(g.total) || 0), 0)
-      : (groups[0] && groups[0].total) || null;
-  return { groups, buildingTotal };
-}
 
-function roomIcon(section) {
-  const s = (section || '').toLowerCase();
-  if (/wall|stair/.test(s)) return '';
-  if (/bath|toilet|washroom/.test(s)) return '🚿';
-  if (/kitchen/.test(s)) return '🍳';
-  if (/bed/.test(s)) return '🛏️';
-  if (/living|drawing|dining|family/.test(s)) return '🛋️';
-  if (/veranda|varanda|porch|balcony/.test(s)) return '🌤️';
-  if (/store|storage/.test(s)) return '📦';
-  if (/garage|parking/.test(s)) return '🚗';
-  return '🏠';
-}
 
 function formatProductTitle(product, category) {
   const model = product.model_number || '';
@@ -295,36 +256,7 @@ async function renderProductToHtml(slug) {
 
   const category = await db('categories').where({ id: product.category_id }).first();
   const specs = await db('product_specs').where({ product_id: product.id }).orderBy('sort_order');
-  const variants = await db('product_variants').where({ product_id: product.id }).orderBy('sort_order');
-
-  if (variants.length) {
-    const allRooms = await db('product_rooms')
-      .whereIn('product_variant_id', variants.map((v) => v.id))
-      .orderBy('sort_order');
-    const roomsByVariant = new Map();
-    for (const room of allRooms) {
-      if (!roomsByVariant.has(room.product_variant_id)) roomsByVariant.set(room.product_variant_id, []);
-      roomsByVariant.get(room.product_variant_id).push(room);
-    }
-    for (const v of variants) {
-      v.rooms = roomsByVariant.get(v.id) || [];
-      const { groups, buildingTotal } = groupRoomsByFloor(v.rooms);
-      v.roomGroups = groups.map((g) => ({
-        label: g.label,
-        total: g.total,
-        rows: g.rows.map((r) => ({
-          ...r,
-          icon: roomIcon(r.section),
-          barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
-        })),
-      }));
-      v.roomGroupsBuildingTotal = buildingTotal;
-      const totalRow = v.rooms.find((r) => r.section && /total building area/i.test(r.section));
-      v.totalArea = (totalRow && totalRow.area_sqft) || v.area_sqft;
-      v.estimatedPrice = product.fixed_price || (product.price_per_sqft ? Math.round(v.totalArea * product.price_per_sqft) : null);
-      v.estimatedPriceFormatted = v.estimatedPrice ? formatTaka(v.estimatedPrice) : null;
-    }
-  }
+  const variants = await loadDecoratedVariants(product);
 
   if (product.fixed_price) {
     product.fixedPriceFormatted = formatTaka(product.fixed_price);

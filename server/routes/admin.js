@@ -1727,13 +1727,57 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, buildingSpecs, technicalSpecs, variants, error: null, seoGenerated: req.query.seo_generated === '1', history }));
 });
 
+function parseFormNested(body, prefix) {
+  if (Array.isArray(body[prefix])) return body[prefix].filter(Boolean);
+  if (body[prefix] && typeof body[prefix] === 'object') {
+    return Object.values(body[prefix]).filter(Boolean).map((item) => {
+      if (item && item.rooms && typeof item.rooms === 'object' && !Array.isArray(item.rooms)) {
+        item.rooms = Object.values(item.rooms).filter(Boolean);
+      }
+      return item;
+    });
+  }
+
+  const result = [];
+  const regex = new RegExp(`^${prefix}\\[(\\d+)\\](?:\\[([^\\]]+)\\])(?:\\[(\\d+)\\])?(?:\\[([^\\]]+)\\])?$`);
+
+  for (const [key, value] of Object.entries(body)) {
+    const match = key.match(regex);
+    if (!match) continue;
+    const i = parseInt(match[1], 10);
+    if (!result[i]) result[i] = {};
+
+    const field1 = match[2];
+    const subIndex = match[3];
+    const field2 = match[4];
+
+    if (field1 && subIndex !== undefined && field2) {
+      if (!result[i][field1]) result[i][field1] = [];
+      const j = parseInt(subIndex, 10);
+      if (!result[i][field1][j]) result[i][field1][j] = {};
+      result[i][field1][j][field2] = value;
+    } else if (field1) {
+      result[i][field1] = value;
+    }
+  }
+
+  return result.filter(Boolean).map((item) => {
+    if (item && item.rooms && Array.isArray(item.rooms)) {
+      item.rooms = item.rooms.filter(Boolean);
+    } else if (item && item.rooms && typeof item.rooms === 'object') {
+      item.rooms = Object.values(item.rooms).filter(Boolean);
+    }
+    return item;
+  });
+}
+
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
   const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
   if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
 
   try {
     await ensureProductColumns();
-    const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
+    const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, bedrooms, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
     const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
@@ -1741,19 +1785,11 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     const existingProduct = await db('products').where({ id: req.params.id }).first();
     const isPublished = published === 'on' || published === true || published === 'true';
 
-    // price_per_sqft has no input on this form (by design - see the
-    // 2026-09-04 category-copy commit), so req.body.price_per_sqft is always
-    // undefined here, on every save, for every product. Treating "absent"
-    // the same as "explicitly cleared" would null out an existing value on
-    // the next unrelated edit (a photo swap, a floor-area fix) - 103 of 134
-    // live products carry a real price_per_sqft today, none of it set
-    // through this form. So: undefined preserves whatever is already on the
-    // row; an actual empty string (the field re-appearing on a future form)
-    // is still a real intentional clear.
     const cleanPriceSqft = price_per_sqft === undefined
       ? (existingProduct ? existingProduct.price_per_sqft : null)
       : (price_per_sqft !== '' && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null);
     const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
+    const cleanBedrooms = bedrooms !== '' && bedrooms !== undefined && bedrooms !== null && !isNaN(Number(bedrooms)) ? parseInt(bedrooms, 10) : null;
     let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
     if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
       cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
@@ -1765,6 +1801,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       price_currency: price_currency || 'BDT',
       fixed_price: cleanFixedPrice,
       total_floor_area: cleanFloorArea,
+      bedrooms: cleanBedrooms,
       main_image: finalImage,
       image_2: finalImage2,
       image_3: finalImage3,
@@ -1774,8 +1811,151 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       published: isPublished,
       updated_at: db.fn.now(),
     };
-    await db('products').where({ id: req.params.id }).update(productFields);
-    await recordHistory(req, 'product', req.params.id, existingProduct, { ...existingProduct, ...productFields });
+    await db.transaction(async (trx) => {
+      await trx('products').where({ id: req.params.id }).update(productFields);
+      await recordHistory(req, 'product', req.params.id, existingProduct, { ...existingProduct, ...productFields });
+
+      // Reconcile Technical and Material Specs
+      const parsedSpecs = parseFormNested(req.body, 'specs');
+      const existingSpecs = await trx('product_specs').where({ product_id: req.params.id });
+      const existingSpecIds = new Set(existingSpecs.map((s) => String(s.id)));
+      const retainedSpecIds = new Set();
+
+      for (let i = 0; i < parsedSpecs.length; i++) {
+        const s = parsedSpecs[i];
+        const spec_key = (s.spec_key || '').trim();
+        const spec_value = (s.spec_value || '').trim();
+        if (!spec_key && !spec_value) continue;
+        const spec_type = s.spec_type === 'technical' ? 'technical' : 'building';
+
+        if (s.id && existingSpecIds.has(String(s.id))) {
+          await trx('product_specs').where({ id: s.id, product_id: req.params.id }).update({
+            spec_key,
+            spec_value,
+            spec_type,
+            sort_order: i,
+          });
+          retainedSpecIds.add(String(s.id));
+        } else {
+          const [newSpecId] = await trx('product_specs').insert({
+            product_id: req.params.id,
+            spec_key,
+            spec_value,
+            spec_type,
+            sort_order: i,
+          });
+          if (newSpecId) retainedSpecIds.add(String(newSpecId));
+        }
+      }
+
+      const specsToDelete = [...existingSpecIds].filter((id) => !retainedSpecIds.has(id));
+      if (specsToDelete.length > 0) {
+        await trx('product_specs').whereIn('id', specsToDelete).del();
+      }
+
+      // Reconcile Variants and their nested Rooms
+      const parsedVariants = parseFormNested(req.body, 'variants');
+      const existingVariants = await trx('product_variants').where({ product_id: req.params.id });
+      const existingVariantIds = new Set(existingVariants.map((v) => String(v.id)));
+      const retainedVariantIds = new Set();
+
+      for (let i = 0; i < parsedVariants.length; i++) {
+        const v = parsedVariants[i];
+        const area_sqft = v.area_sqft ? parseInt(v.area_sqft, 10) : null;
+        const bed = v.bed ? parseInt(v.bed, 10) : null;
+        const bath = v.bath ? parseInt(v.bath, 10) : null;
+        const kitchen = v.kitchen ? parseInt(v.kitchen, 10) : null;
+        const living = v.living ? parseInt(v.living, 10) : null;
+        const drawing = v.drawing ? parseInt(v.drawing, 10) : null;
+        const dining = v.dining ? parseInt(v.dining, 10) : null;
+        const area_label = (v.area_label || '').trim() || (area_sqft ? `${area_sqft} sqft` : null);
+
+        let variantId = v.id && existingVariantIds.has(String(v.id)) ? v.id : null;
+        if (variantId) {
+          await trx('product_variants').where({ id: variantId, product_id: req.params.id }).update({
+            area_sqft,
+            area_label,
+            bed,
+            bath,
+            kitchen,
+            living,
+            drawing,
+            dining,
+            sort_order: i,
+          });
+          retainedVariantIds.add(String(variantId));
+        } else {
+          const [insertedVariantId] = await trx('product_variants').insert({
+            product_id: req.params.id,
+            area_sqft,
+            area_label,
+            bed,
+            bath,
+            kitchen,
+            living,
+            drawing,
+            dining,
+            sort_order: i,
+          });
+          variantId = insertedVariantId;
+          if (variantId) retainedVariantIds.add(String(variantId));
+        }
+
+        // Reconcile nested rooms for this variant
+        if (variantId) {
+          const rooms = v.rooms || [];
+          const existingRooms = await trx('product_rooms').where({ product_variant_id: variantId });
+          const existingRoomIds = new Set(existingRooms.map((r) => String(r.id)));
+          const retainedRoomIds = new Set();
+
+          for (let j = 0; j < rooms.length; j++) {
+            const r = rooms[j];
+            const section = (r.section || '').trim();
+            if (!section && !r.area_sqft) continue;
+            const floor_label = (r.floor_label || '').trim() || 'Ground Floor Layout';
+            const area_sqft_room = r.area_sqft ? parseInt(r.area_sqft, 10) : null;
+            const length_ft = (r.length_ft || '').trim() || null;
+            const width_ft = (r.width_ft || '').trim() || null;
+
+            if (r.id && existingRoomIds.has(String(r.id))) {
+              await trx('product_rooms').where({ id: r.id, product_variant_id: variantId }).update({
+                floor_label,
+                section,
+                area_sqft: area_sqft_room,
+                length_ft,
+                width_ft,
+                is_total_row: 0,
+                sort_order: j,
+              });
+              retainedRoomIds.add(String(r.id));
+            } else {
+              const [newRoomId] = await trx('product_rooms').insert({
+                product_variant_id: variantId,
+                floor_label,
+                section,
+                area_sqft: area_sqft_room,
+                length_ft,
+                width_ft,
+                is_total_row: 0,
+                sort_order: j,
+              });
+              if (newRoomId) retainedRoomIds.add(String(newRoomId));
+            }
+          }
+
+          const roomsToDelete = [...existingRoomIds].filter((id) => !retainedRoomIds.has(id));
+          if (roomsToDelete.length > 0) {
+            await trx('product_rooms').whereIn('id', roomsToDelete).del();
+          }
+        }
+      }
+
+      const variantsToDelete = [...existingVariantIds].filter((id) => !retainedVariantIds.has(id));
+      if (variantsToDelete.length > 0) {
+        await trx('product_rooms').whereIn('product_variant_id', variantsToDelete).del();
+        await trx('product_variants').whereIn('id', variantsToDelete).del();
+      }
+    });
 
     let seoMsg = '';
     if (isPublished && existingProduct && !existingProduct.published && auto_seo === 'on') {
@@ -1785,16 +1965,8 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       seoMsg = '?seo_generated=1';
     }
 
-    // Deploy the single product page to the live site in the background
-    setImmediate(async () => {
-      invalidatePageCache(); // Clear the stale HTML so the self-fetch sees fresh DB data
-      const { syncPageToLive } = require('../lib/liveSiteSync');
-      syncPageToLive(slug);
-      try {
-        const cat = await db('categories').where({ id: req.body.category_id }).first();
-        if (cat && cat.landing_page_slug) syncPageToLive(cat.landing_page_slug);
-      } catch (e) { console.error('Category sync error:', e.message); }
-    });
+    // Deploy the single product page + category landing page immediately
+    setImmediate(() => resyncProductPages(req.params.id));
 
     res.redirect(`/admin/products/${req.params.id}/edit${seoMsg}`);
   } catch (err) {
@@ -1806,6 +1978,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     res.status(400).render('admin/products/form.njk', adminVars(req, { product: { ...(product || {}), ...req.body, id: req.params.id }, categories, specs, variants, error: "An unexpected error occurred." }));
   }
 });
+
 
 router.post('/admin/products/:id/delete', async (req, res) => {
   const p = await db('products').where({ id: req.params.id }).first();
@@ -1903,100 +2076,6 @@ router.post('/admin/products/:id/duplicate', async (req, res) => {
   }
 });
 
-// ---- Product Specs (Building Specifications key/value rows) ----
-
-router.post('/admin/products/:id/specs', async (req, res) => {
-  const { spec_key, spec_value, spec_type } = req.body;
-  const cleanType = spec_type === 'technical' ? 'technical' : 'building';
-  if (spec_key && spec_value) {
-    const [{ maxSort }] = await db('product_specs').where({ product_id: req.params.id }).max('sort_order as maxSort');
-    await db('product_specs').insert({ product_id: req.params.id, spec_type: cleanType, spec_key, spec_value, sort_order: (maxSort ?? -1) + 1 });
-  }
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/specs/:specId', async (req, res) => {
-  const { spec_key, spec_value, spec_type } = req.body;
-  const updateData = { spec_key, spec_value };
-  if (spec_type) updateData.spec_type = spec_type === 'technical' ? 'technical' : 'building';
-  await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).update(updateData);
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/specs/:specId/delete', async (req, res) => {
-  await db('product_specs').where({ id: req.params.specId, product_id: req.params.id }).del();
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-// ---- Product Variants (floor-area tiers) + their room breakdowns ----
-
-router.post('/admin/products/:id/variants', async (req, res) => {
-  const { area_sqft, area_label, bed, bath, kitchen, living, drawing, dining } = req.body;
-  const [{ maxSort }] = await db('product_variants').where({ product_id: req.params.id }).max('sort_order as maxSort');
-  await db('product_variants').insert({
-    product_id: req.params.id,
-    area_sqft: area_sqft || null,
-    area_label: area_label || area_sqft || null,
-    bed: bed || null, bath: bath || null, kitchen: kitchen || null, living: living || null,
-    drawing: drawing || null, dining: dining || null,
-    sort_order: (maxSort ?? -1) + 1,
-  });
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/variants/:variantId', async (req, res) => {
-  const { area_sqft, area_label, bed, bath, kitchen, living, drawing, dining } = req.body;
-  await db('product_variants').where({ id: req.params.variantId, product_id: req.params.id }).update({
-    area_sqft: area_sqft || null, area_label: area_label || area_sqft || null,
-    bed: bed || null, bath: bath || null, kitchen: kitchen || null, living: living || null,
-    drawing: drawing || null, dining: dining || null,
-  });
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/variants/:variantId/delete', async (req, res) => {
-  await db('product_variants').where({ id: req.params.variantId, product_id: req.params.id }).del();
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/variants/:variantId/rooms', async (req, res) => {
-  const { floor_label, section, area_sqft, length_ft, width_ft } = req.body;
-  if (section) {
-    const [{ maxSort }] = await db('product_rooms').where({ product_variant_id: req.params.variantId }).max('sort_order as maxSort');
-    await db('product_rooms').insert({
-      product_variant_id: req.params.variantId,
-      floor_label: floor_label || null, section,
-      area_sqft: area_sqft || null, length_ft: length_ft || null, width_ft: width_ft || null,
-      is_total_row: /total/i.test(section),
-      sort_order: (maxSort ?? -1) + 1,
-    });
-  }
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/variants/:variantId/rooms/:roomId', async (req, res) => {
-  const { floor_label, section, area_sqft, length_ft, width_ft } = req.body;
-  await db('product_rooms').where({ id: req.params.roomId, product_variant_id: req.params.variantId }).update({
-    floor_label: floor_label || null, section,
-    area_sqft: area_sqft || null, length_ft: length_ft || null, width_ft: width_ft || null,
-    is_total_row: /total/i.test(section || ''),
-  });
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
-
-router.post('/admin/products/:id/variants/:variantId/rooms/:roomId/delete', async (req, res) => {
-  await db('product_rooms').where({ id: req.params.roomId, product_variant_id: req.params.variantId }).del();
-  setImmediate(() => resyncProductPages(req.params.id));
-  res.redirect(`/admin/products/${req.params.id}/edit`);
-});
 
 // ---- Nav Menu ----
 // Admin-editable site navigation (server/lib/nav.js builds the parent->child

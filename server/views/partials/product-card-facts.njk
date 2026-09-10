@@ -1,0 +1,22 @@
+{#
+  Renders property-card facts (area, bedroom count), preferring the DB
+  product values over the static fallbacks baked into the page.
+#}
+{% macro cardArea(dbProductsByModel, modelNumber, fallback) -%}
+{% set dbp = dbProductsByModel[modelNumber] if dbProductsByModel else none -%}
+{% if dbp and dbp.total_floor_area -%}
+{% set numStr = (dbp.total_floor_area | comma) if (fallback and ',' in fallback) else dbp.total_floor_area -%}
+{{ numStr }} sqft
+{%- else -%}
+{{ fallback }}
+{%- endif -%}
+{%- endmacro %}
+
+{% macro cardBeds(dbProductsByModel, modelNumber, fallback) -%}
+{% set dbp = dbProductsByModel[modelNumber] if dbProductsByModel else none -%}
+{% if dbp and dbp.bedrooms -%}
+{{ dbp.bedrooms }} Bedroom{{ 's' if (dbp.bedrooms != 1 or (fallback and 'Bedrooms' in fallback)) else '' }}
+{%- else -%}
+{{ fallback }}
+{%- endif -%}
+{%- endmacro %}

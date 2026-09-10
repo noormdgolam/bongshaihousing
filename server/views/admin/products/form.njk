@@ -174,6 +174,11 @@
         <label for="total_floor_area">Total Floor Area (sq.ft)</label>
         <input type="number" step="1" min="0" id="total_floor_area" name="total_floor_area" value="{{ product.total_floor_area or '' }}" placeholder="e.g. 1200">
       </div>
+
+      <div class="form-row" style="margin:0;">
+        <label for="bedrooms">Bedrooms</label>
+        <input type="number" step="1" min="0" id="bedrooms" name="bedrooms" value="{{ product.bedrooms or '' }}" placeholder="e.g. 4">
+      </div>
     </div>
   </div>
 
@@ -181,111 +186,118 @@
     <label><input type="checkbox" name="published" {% if product.published or not product.id %}checked{% endif %} style="width:auto; display:inline-block; margin-right:6px;"> Published</label>
     <label><input type="checkbox" id="auto_seo" name="auto_seo" checked style="width:auto; display:inline-block; margin-right:6px;"> 🤖 Auto-generate SEO suggestions when publishing</label>
   </div>
-  <div class="form-actions">
-    <button type="submit" class="btn btn-primary">{% if product.id %}Save Changes{% else %}Create Product{% endif %}</button>
+
+  {% if product.id %}
+  <!-- Technical Specifications -->
+  <div class="card" style="margin-top:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h2 style="font-size:1rem; margin:0;">Technical Specifications ({{ technicalSpecs.length }})</h2>
+      <button type="button" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="addSpecRow('tech-specs-tbody', 'technical', 'Steel Grade', 'ASTM A572 Grade 50')">+ Add Technical Spec</button>
+    </div>
+    <table>
+      <thead><tr><th>Item</th><th>Description</th><th style="width:60px;"></th></tr></thead>
+      <tbody id="tech-specs-tbody">
+        {% for s in technicalSpecs %}
+        <tr>
+          <input type="hidden" name="specs[{{ loop.index0 }}][id]" value="{{ s.id }}">
+          <input type="hidden" name="specs[{{ loop.index0 }}][spec_type]" value="technical">
+          <td><input type="text" name="specs[{{ loop.index0 }}][spec_key]" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="specs[{{ loop.index0 }}][spec_value]" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="this.closest('tr').remove();">Del</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Material Specifications -->
+  {% set matOffset = technicalSpecs.length %}
+  <div class="card" style="margin-top:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h2 style="font-size:1rem; margin:0;">Material Specifications ({{ buildingSpecs.length }})</h2>
+      <button type="button" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="addSpecRow('mat-specs-tbody', 'building', 'WALL', '2.5\'\' RC precast concrete panel')">+ Add Material Spec</button>
+    </div>
+    <table>
+      <thead><tr><th>Item</th><th>Materials</th><th style="width:60px;"></th></tr></thead>
+      <tbody id="mat-specs-tbody">
+        {% for s in buildingSpecs %}
+        {% set sIdx = matOffset + loop.index0 %}
+        <tr>
+          <input type="hidden" name="specs[{{ sIdx }}][id]" value="{{ s.id }}">
+          <input type="hidden" name="specs[{{ sIdx }}][spec_type]" value="building">
+          <td><input type="text" name="specs[{{ sIdx }}][spec_key]" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td><input type="text" name="specs[{{ sIdx }}][spec_value]" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+          <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="this.closest('tr').remove();">Del</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Floor-Area Variants & Room Layouts -->
+  <div class="card" style="margin-top:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h2 style="font-size:1rem; margin:0;">Floor-Area Variants &amp; Room Layouts ({{ variants.length }})</h2>
+      <button type="button" class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;" onclick="addVariantCard()">+ Add New Variant</button>
+    </div>
+
+    <div id="variants-container">
+      {% for v in variants %}
+      {% set vIdx = loop.index0 %}
+      <div class="variant-card" data-vidx="{{ vIdx }}" style="border:1px solid var(--grey-200); border-radius:8px; padding:14px; margin-bottom:16px; background:#fafafa;">
+        <input type="hidden" name="variants[{{ vIdx }}][id]" value="{{ v.id }}">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:12px;">
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Area (sqft)</label><input type="number" name="variants[{{ vIdx }}][area_sqft]" value="{{ v.area_sqft or '' }}" style="width:85px; padding:4px 6px;"></div>
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Label</label><input type="text" name="variants[{{ vIdx }}][area_label]" value="{{ v.area_label or '' }}" placeholder="e.g. Standard" style="width:110px; padding:4px 6px;"></div>
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" name="variants[{{ vIdx }}][bed]" value="{{ v.bed or '' }}" style="width:60px; padding:4px 6px;"></div>
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bath</label><input type="number" name="variants[{{ vIdx }}][bath]" value="{{ v.bath or '' }}" style="width:60px; padding:4px 6px;"></div>
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Kitchen</label><input type="number" name="variants[{{ vIdx }}][kitchen]" value="{{ v.kitchen or '' }}" style="width:60px; padding:4px 6px;"></div>
+          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Living</label><input type="number" name="variants[{{ vIdx }}][living]" value="{{ v.living or '' }}" style="width:60px; padding:4px 6px;"></div>
+          <button type="button" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-left:auto;" onclick="if(confirm('Delete this variant and all its rooms?')) this.closest('.variant-card').remove();">Delete Variant</button>
+        </div>
+
+        <div style="background:white; border:1px solid var(--grey-200); border-radius:6px; padding:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:0.85rem; font-weight:700; color:var(--grey-700);">Room Layout Breakdown</span>
+            <button type="button" class="btn" style="padding:3px 10px; font-size:0.75rem; background:var(--grey-100);" onclick="addRoomRow(this, {{ vIdx }})">+ Add Room</button>
+          </div>
+          <table style="width:100%; margin:0;">
+            <thead><tr><th>Floor Label</th><th>Section / Room</th><th>Area (sqft)</th><th>Length (ft)</th><th>Width (ft)</th><th style="width:50px;"></th></tr></thead>
+            <tbody class="rooms-tbody">
+              {% for r in v.rooms %}
+              {% set rIdx = loop.index0 %}
+              <tr>
+                <input type="hidden" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][id]" value="{{ r.id }}">
+                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][floor_label]" value="{{ r.floor_label or '' }}" placeholder="e.g. Ground Floor Layout" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
+                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][section]" value="{{ r.section }}" placeholder="e.g. Master bed" required style="width:100%; padding:3px 5px;"></td>
+                <td><input type="number" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][area_sqft]" value="{{ r.area_sqft or '' }}" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
+                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][length_ft]" value="{{ r.length_ft or '' }}" style="width:100%; padding:3px 5px;"></td>
+                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][width_ft]" value="{{ r.width_ft or '' }}" style="width:100%; padding:3px 5px;"></td>
+                <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:0.75rem;" onclick="const c = this.closest('.variant-card'); this.closest('tr').remove(); updateVariantTotals(c);">Del</button></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="variant-totals-summary" style="margin-top:10px; padding:8px 12px; background:var(--off-white); border-radius:6px; font-size:0.85rem; color:var(--grey-800); display:flex; gap:16px; flex-wrap:wrap;">
+            <span class="subtotals-text"></span>
+            <span class="building-total-text" style="font-weight:700; color:var(--primary); margin-left:auto;"></span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="form-actions" style="margin-top:24px; position:sticky; bottom:0; background:white; padding:16px; border-top:2px solid var(--grey-200); box-shadow:0 -4px 12px rgba(0,0,0,0.05); z-index:10; display:flex; gap:12px; align-items:center;">
+    <button type="submit" class="btn btn-primary" style="padding:10px 24px; font-size:1rem; font-weight:700;">Save Changes</button>
     <a href="/admin/products" class="btn">Cancel</a>
   </div>
 </form>
 </div>
 
 {% if product.id %}
-{% macro productSpecTable(title, type, rows, placeholderKey, placeholderValue, col2Header) %}
-<div class="card">
-  <h2 style="font-size:1rem;">{{ title }} ({{ (rows or []).length }})</h2>
-  <table>
-    <thead><tr><th>Item</th><th>{{ col2Header }}</th><th></th></tr></thead>
-    <tbody>
-      {% for s in (rows or []) %}
-      <tr>
-        <form method="post" action="/admin/products/{{ product.id }}/specs/{{ s.id }}" style="display:contents;">
-          <input type="hidden" name="spec_type" value="{{ type }}">
-          <td><input type="text" name="spec_key" value="{{ s.spec_key }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
-          <td><input type="text" name="spec_value" value="{{ s.spec_value }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
-          <td style="white-space:nowrap;">
-            <button type="submit" class="btn" style="padding:4px 10px; font-size:0.8rem;">Save</button>
-            <button type="submit" formaction="/admin/products/{{ product.id }}/specs/{{ s.id }}/delete" formnovalidate class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;" onclick="return confirm('Delete this spec row?');">Del</button>
-          </td>
-        </form>
-      </tr>
-      {% endfor %}
-      <tr>
-        <form method="post" action="/admin/products/{{ product.id }}/specs" style="display:contents;">
-          <input type="hidden" name="spec_type" value="{{ type }}">
-          <td><input type="text" name="spec_key" placeholder="e.g. {{ placeholderKey }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
-          <td><input type="text" name="spec_value" placeholder="e.g. {{ placeholderValue }}" style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
-          <td><button type="submit" class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;">+ Add</button></td>
-        </form>
-      </tr>
-    </tbody>
-  </table>
-</div>
-{% endmacro %}
-
-{{ productSpecTable('Technical Specifications', 'technical', technicalSpecs, 'Steel Grade', 'ASTM A572 Grade 50', 'Description') }}
-{{ productSpecTable('Material Specifications', 'building', buildingSpecs, 'WALL', "2.5'' RC precast concrete panel", 'Materials') }}
-
-
-<div class="card">
-  <h2 style="font-size:1rem;">Floor-Area Variants ({{ variants.length }})</h2>
-  {% for v in variants %}
-  <div style="border:1px solid var(--grey-200); border-radius:8px; padding:14px; margin-bottom:14px;">
-    <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}" style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:10px;">
-      <div><label style="font-size:0.75rem; display:block;">Area (sqft)</label><input type="text" name="area_sqft" value="{{ v.area_sqft or '' }}" style="width:80px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block;">Label</label><input type="text" name="area_label" value="{{ v.area_label or '' }}" style="width:100px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block;">Bed</label><input type="number" name="bed" value="{{ v.bed or '' }}" style="width:60px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block;">Bath</label><input type="number" name="bath" value="{{ v.bath or '' }}" style="width:60px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block;">Kitchen</label><input type="number" name="kitchen" value="{{ v.kitchen or '' }}" style="width:60px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block;">Living</label><input type="number" name="living" value="{{ v.living or '' }}" style="width:60px; padding:4px 6px;"></div>
-      <button type="submit" class="btn" style="padding:5px 12px; font-size:0.8rem;">Save</button>
-    </form>
-    <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/delete" style="display:inline;" onsubmit="return confirm('Delete this variant and all its rooms?');">
-      <button type="submit" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-bottom:10px;">Delete Variant</button>
-    </form>
-
-    <table style="margin-top:8px;">
-      <thead><tr><th>Floor</th><th>Section</th><th>Area</th><th>Length</th><th>Width</th><th></th></tr></thead>
-      <tbody>
-        {% for r in v.rooms %}
-        <tr>
-          <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms/{{ r.id }}" style="display:contents;">
-            <td><input type="text" name="floor_label" value="{{ r.floor_label or '' }}" style="width:80px; padding:3px 5px;"></td>
-            <td><input type="text" name="section" value="{{ r.section }}" style="width:140px; padding:3px 5px;"></td>
-            <td><input type="text" name="area_sqft" value="{{ r.area_sqft or '' }}" style="width:60px; padding:3px 5px;"></td>
-            <td><input type="text" name="length_ft" value="{{ r.length_ft or '' }}" style="width:50px; padding:3px 5px;"></td>
-            <td><input type="text" name="width_ft" value="{{ r.width_ft or '' }}" style="width:50px; padding:3px 5px;"></td>
-            <td style="white-space:nowrap;">
-              <button type="submit" class="btn" style="padding:3px 8px; font-size:0.75rem;">Save</button>
-              <button type="submit" formaction="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms/{{ r.id }}/delete" formnovalidate class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;">Del</button>
-            </td>
-          </form>
-        </tr>
-        {% endfor %}
-        <tr>
-          <form method="post" action="/admin/products/{{ product.id }}/variants/{{ v.id }}/rooms" style="display:contents;">
-            <td><input type="text" name="floor_label" placeholder="optional" style="width:80px; padding:3px 5px;"></td>
-            <td><input type="text" name="section" placeholder="e.g. Master bed" style="width:140px; padding:3px 5px;"></td>
-            <td><input type="text" name="area_sqft" style="width:60px; padding:3px 5px;"></td>
-            <td><input type="text" name="length_ft" style="width:50px; padding:3px 5px;"></td>
-            <td><input type="text" name="width_ft" style="width:50px; padding:3px 5px;"></td>
-            <td><button type="submit" class="btn btn-primary" style="padding:3px 8px; font-size:0.75rem;">+ Add</button></td>
-          </form>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  {% endfor %}
-
-  <form method="post" action="/admin/products/{{ product.id }}/variants" style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; padding-top:8px; border-top:1px dashed var(--grey-200);">
-    <div><label style="font-size:0.75rem; display:block;">Area (sqft)</label><input type="text" name="area_sqft" required style="width:80px; padding:4px 6px;"></div>
-    <div><label style="font-size:0.75rem; display:block;">Bed</label><input type="number" name="bed" style="width:60px; padding:4px 6px;"></div>
-    <div><label style="font-size:0.75rem; display:block;">Bath</label><input type="number" name="bath" style="width:60px; padding:4px 6px;"></div>
-    <div><label style="font-size:0.75rem; display:block;">Kitchen</label><input type="number" name="kitchen" style="width:60px; padding:4px 6px;"></div>
-    <div><label style="font-size:0.75rem; display:block;">Living</label><input type="number" name="living" style="width:60px; padding:4px 6px;"></div>
-    <button type="submit" class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;">+ Add New Variant</button>
-  </form>
-</div>
-
-<div style="display:flex; gap:10px;">
+<div style="display:flex; gap:10px; margin-top:20px;">
   <form method="post" action="/admin/products/{{ product.id }}/duplicate" onsubmit="return confirm('Duplicate this product? This will create an unpublished copy with all specs, variants, and rooms.');">
     <button type="submit" class="btn" style="background:var(--grey-100); border-color:var(--grey-200);">Duplicate Product</button>
   </form>
@@ -299,7 +311,112 @@
 {% include "admin/partials/history-panel.njk" %}
 {% endif %}
 
+
 <script>
+let dynamicCounter = Date.now();
+
+function updateVariantTotals(card) {
+  if (!card) return;
+  const rows = card.querySelectorAll('.rooms-tbody tr');
+  const floorTotals = new Map();
+  let grandTotal = 0;
+
+  rows.forEach(tr => {
+    const floorInput = tr.querySelector('input[name*="[floor_label]"]');
+    const areaInput = tr.querySelector('input[name*="[area_sqft]"]');
+    const floor = (floorInput && floorInput.value.trim()) || 'Ground Floor Layout';
+    const area = (areaInput && parseInt(areaInput.value, 10)) || 0;
+    if (!floorTotals.has(floor)) floorTotals.set(floor, 0);
+    floorTotals.set(floor, floorTotals.get(floor) + area);
+    grandTotal += area;
+  });
+
+  const subtotalsText = [...floorTotals.entries()].map(([f, tot]) => `${f.replace(/\s+Layout$/i, '')}: ${tot.toLocaleString()} sqft`).join(' | ');
+  const subEl = card.querySelector('.subtotals-text');
+  const bldgEl = card.querySelector('.building-total-text');
+  if (subEl) subEl.textContent = subtotalsText ? `Subtotals: ${subtotalsText}` : '';
+  if (bldgEl) bldgEl.textContent = grandTotal ? `Total: ${grandTotal.toLocaleString()} sqft` : '';
+}
+
+function addSpecRow(tbodyId, type, defaultKey, defaultValue) {
+  const tbody = document.getElementById(tbodyId);
+  const idx = dynamicCounter++;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <input type="hidden" name="specs[${idx}][spec_type]" value="${type}">
+    <td><input type="text" name="specs[${idx}][spec_key]" placeholder="e.g. ${defaultKey || 'Item'}" required style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+    <td><input type="text" name="specs[${idx}][spec_value]" placeholder="e.g. ${defaultValue || 'Description'}" required style="width:100%; border:1px solid var(--grey-200); border-radius:4px; padding:4px 6px;"></td>
+    <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="this.closest('tr').remove();">Del</button></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function addRoomRow(btn, variantIdx) {
+  const card = btn.closest('.variant-card');
+  const tbody = card.querySelector('.rooms-tbody');
+  const vIdx = variantIdx !== undefined ? variantIdx : (card.dataset.vidx || dynamicCounter++);
+  const rIdx = dynamicCounter++;
+
+  // Seed floor_label from previous row
+  const lastRow = tbody.querySelector('tr:last-child');
+  let prevFloor = 'Ground Floor Layout';
+  if (lastRow) {
+    const input = lastRow.querySelector('input[name*="[floor_label]"]');
+    if (input && input.value.trim()) prevFloor = input.value.trim();
+  }
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][floor_label]" value="${prevFloor}" placeholder="e.g. Ground Floor Layout" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
+    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][section]" placeholder="e.g. Bed room" required style="width:100%; padding:3px 5px;"></td>
+    <td><input type="number" name="variants[${vIdx}][rooms][${rIdx}][area_sqft]" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
+    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][length_ft]" style="width:100%; padding:3px 5px;"></td>
+    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][width_ft]" style="width:100%; padding:3px 5px;"></td>
+    <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:0.75rem;" onclick="const c = this.closest('.variant-card'); this.closest('tr').remove(); updateVariantTotals(c);">Del</button></td>
+  `;
+  tbody.appendChild(tr);
+  updateVariantTotals(card);
+}
+
+function addVariantCard() {
+  const container = document.getElementById('variants-container');
+  const vIdx = dynamicCounter++;
+  const div = document.createElement('div');
+  div.className = 'variant-card';
+  div.dataset.vidx = vIdx;
+  div.style = 'border:1px solid var(--grey-200); border-radius:8px; padding:14px; margin-bottom:16px; background:#fafafa;';
+  div.innerHTML = `
+    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:12px;">
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Area (sqft)</label><input type="number" name="variants[${vIdx}][area_sqft]" required style="width:85px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Label</label><input type="text" name="variants[${vIdx}][area_label]" placeholder="e.g. Standard" style="width:110px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" name="variants[${vIdx}][bed]" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bath</label><input type="number" name="variants[${vIdx}][bath]" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Kitchen</label><input type="number" name="variants[${vIdx}][kitchen]" style="width:60px; padding:4px 6px;"></div>
+      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Living</label><input type="number" name="variants[${vIdx}][living]" style="width:60px; padding:4px 6px;"></div>
+      <button type="button" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-left:auto;" onclick="if(confirm('Delete this variant?')) this.closest('.variant-card').remove();">Delete Variant</button>
+    </div>
+    <div style="background:white; border:1px solid var(--grey-200); border-radius:6px; padding:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.85rem; font-weight:700; color:var(--grey-700);">Room Layout Breakdown</span>
+        <button type="button" class="btn" style="padding:3px 10px; font-size:0.75rem; background:var(--grey-100);" onclick="addRoomRow(this, ${vIdx})">+ Add Room</button>
+      </div>
+      <table style="width:100%; margin:0;">
+        <thead><tr><th>Floor Label</th><th>Section / Room</th><th>Area (sqft)</th><th>Length (ft)</th><th>Width (ft)</th><th style="width:50px;"></th></tr></thead>
+        <tbody class="rooms-tbody"></tbody>
+      </table>
+      <div class="variant-totals-summary" style="margin-top:10px; padding:8px 12px; background:var(--off-white); border-radius:6px; font-size:0.85rem; color:var(--grey-800); display:flex; gap:16px; flex-wrap:wrap;">
+        <span class="subtotals-text"></span>
+        <span class="building-total-text" style="font-weight:700; color:var(--primary); margin-left:auto;"></span>
+      </div>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.variant-card').forEach(card => updateVariantTotals(card));
+});
+
 function previewFile(input, imgId, placeholderId) {
   const file = input.files && input.files[0];
   const img = document.getElementById(imgId);

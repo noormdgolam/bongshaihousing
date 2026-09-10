@@ -180,6 +180,11 @@ nunjucksEnv.addFilter('formatTakaAscii', (value) => {
 });
 
 nunjucksEnv.addFilter('filterSpecs', (specs, type) => (specs || []).filter((s) => s.spec_type === type));
+nunjucksEnv.addFilter('comma', (value) => {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? n.toLocaleString('en-US') : String(value);
+});
 
 // Footer copyright year - was a client-side <span id="year"> filled by JS
 // after page load; server-rendering it removes the dependency on that

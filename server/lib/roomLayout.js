@@ -19,34 +19,28 @@
 
 function groupRoomsByFloor(rooms) {
   const groups = [];
-  let current = { label: null, rows: [], total: null };
-  let explicitBuildingTotal = null;
-  for (const r of rooms) {
-    const text = (r.section || '').trim();
-    const hasArea = r.area_sqft !== null && r.area_sqft !== undefined && r.area_sqft !== '';
-    if (r.is_total_row && !hasArea) {
-      if (current.label !== null || current.rows.length) groups.push(current);
-      current = { label: text, rows: [], total: null };
-    } else if (r.is_total_row && hasArea && /building/i.test(text)) {
-      explicitBuildingTotal = r.area_sqft;
-    } else if (r.is_total_row && hasArea) {
-      current.total = r.area_sqft;
-    } else {
-      current.rows.push(r);
+  let current = null;
+
+  for (const r of rooms || []) {
+    // Ignore any legacy marker rows if present
+    if (r.is_total_row) continue;
+
+    const floorLabel = (r.floor_label || '').trim() || 'Ground Floor Layout';
+    if (!current || current.label !== floorLabel) {
+      if (current) groups.push(current);
+      current = { label: floorLabel, rows: [], total: 0 };
     }
+    current.rows.push(r);
+    current.total += (Number(r.area_sqft) || 0);
   }
-  groups.push(current);
-  for (const g of groups) {
-    if (g.total == null) {
-      const sum = g.rows.reduce((s, r) => s + (Number(r.area_sqft) || 0), 0);
-      g.total = sum || null;
-    }
+  if (current) {
+    groups.push(current);
   }
-  const buildingTotal = explicitBuildingTotal != null
-    ? explicitBuildingTotal
-    : groups.length > 1
-      ? groups.reduce((s, g) => s + (Number(g.total) || 0), 0)
-      : (groups[0] && groups[0].total) || null;
+
+  const buildingTotal = groups.length > 0
+    ? groups.reduce((sum, g) => sum + (Number(g.total) || 0), 0)
+    : null;
+
   return { groups, buildingTotal };
 }
 
@@ -87,8 +81,7 @@ function decorateVariants(variants, rooms, product) {
       })),
     }));
     v.roomGroupsBuildingTotal = buildingTotal;
-    const totalRow = v.rooms.find((r) => r.section && /total building area/i.test(r.section));
-    v.totalArea = (totalRow && totalRow.area_sqft) || v.area_sqft;
+    v.totalArea = buildingTotal || v.area_sqft;
     if (product) {
       v.estimatedPrice = product.fixed_price || (product.price_per_sqft ? Math.round(v.totalArea * product.price_per_sqft) : null);
     }

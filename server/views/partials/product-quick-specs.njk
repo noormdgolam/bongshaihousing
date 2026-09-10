@@ -1,0 +1,34 @@
+{#
+  Quick Specs Chips for product hero sections.
+  Inputs: `product` (for total_floor_area, bedrooms), `variants` (decorated by decorateVariants).
+#}
+{% set v0 = variants[0] if (variants and variants.length) else none %}
+{% set _area = product.total_floor_area or (v0 and v0.area_sqft) %}
+{% set _bed = product.bedrooms or (v0 and v0.bed) %}
+{% set _bath = v0.bath if v0 else none %}
+{% set _kitchen = v0.kitchen if v0 else none %}
+
+{% if _area or _bed or _bath or _kitchen %}
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-4);">
+  {% if _area %}
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary);">
+    <span>📐</span> {{ _area }} sqft
+  </div>
+  {% endif %}
+  {% if _bed %}
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+    <span>🛏️</span> {{ _bed }} Bedroom{% if _bed != 1 %}s{% endif %}
+  </div>
+  {% endif %}
+  {% if _bath %}
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+    <span>🚿</span> {{ _bath }} Bathroom{% if _bath != 1 %}s{% endif %}
+  </div>
+  {% endif %}
+  {% if _kitchen %}
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+    <span>🍳</span> {{ _kitchen }} Kitchen{% if _kitchen != 1 %}s{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}
