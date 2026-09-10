@@ -74,11 +74,19 @@ function decorateVariants(variants, rooms, product) {
     v.roomGroups = groups.map((g) => ({
       label: g.label,
       total: g.total,
-      rows: g.rows.map((r) => ({
-        ...r,
-        icon: roomIcon(r.section),
-        barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
-      })),
+      rows: g.rows.map((r) => {
+        const areaVal = (r.area_sqft != null && r.area_sqft !== '') ? (isNaN(Number(r.area_sqft)) ? r.area_sqft : Number(r.area_sqft)) : null;
+        const lenVal = (r.length_ft != null && r.length_ft !== '') ? (isNaN(Number(r.length_ft)) ? String(r.length_ft).trim() : String(Number(r.length_ft))) : null;
+        const widVal = (r.width_ft != null && r.width_ft !== '') ? (isNaN(Number(r.width_ft)) ? String(r.width_ft).trim() : String(Number(r.width_ft))) : null;
+        return {
+          ...r,
+          area_sqft: areaVal,
+          length_ft: lenVal,
+          width_ft: widVal,
+          icon: roomIcon(r.section),
+          barPct: g.total ? Math.min(100, Math.round(((Number(r.area_sqft) || 0) / g.total) * 100)) : 0,
+        };
+      }),
     }));
     v.roomGroupsBuildingTotal = buildingTotal;
     v.totalArea = buildingTotal || v.area_sqft;

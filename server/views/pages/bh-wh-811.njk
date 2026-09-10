@@ -158,8 +158,7 @@
 <div class="reveal-right" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
 <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 12px;">MOST POPULAR</div>
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: 12px; line-height: 1.1;">Model No-BH-WH-811</h2>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-4);">
-  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary);"><span>📐</span> 600 sqft</div>
+{% include "partials/product-quick-specs.njk" %}
   <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);"><span>🛏️</span> 1 Bedroom</div>
   <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);"><span>🚿</span> 1 Bathroom</div>
   <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);"><span>🍳</span> 1 Kitchen</div>
@@ -174,125 +173,9 @@
 </div>
 </div>
 </div>
-<!-- Overview (Area Details) Section -->
-<div class="reveal-up" style="margin-bottom: var(--space-8);">
-  <div style="margin-bottom: var(--space-4);">
-    <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--primary); margin-bottom: 6px;">Overview (Area Details)</h3>
-    <p style="color: var(--grey-600); font-size: 0.95rem; margin: 0;">Official floor-wise layout dimensions and area specifications for Model No-BH-WH-811.</p>
-  </div>
-  
-  <div style="display: flex; flex-direction: column; gap: var(--space-5);">
-    <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
-  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--grey-100); padding-bottom: 12px; margin-bottom: 16px;">
-    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 8px;">
-      <span>🏢</span> Ground Floor Layout
-    </h4>
-    <span style="background: #eef4ff; color: var(--primary); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">600 sqft</span>
-  </div>
-  <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
-    <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
-      <thead>
-        <tr style="background: var(--off-white);">
-          <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
-          <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
-          <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Dimensions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛏️</span>Bed room 1</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">144</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">12' × 12'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛋️</span>Living room</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">220</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">22' × 10'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🍳</span>Kitchen</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">80</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">10' × 8'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🚿</span>Bath 1</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">36</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">6' × 6'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🌤️</span>Veranda</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">72</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">24' × 3'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🌤️</span>Porch</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">48</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">8' × 6'</td>
-</tr>
-      </tbody>
-      <tfoot>
-  <tr style="background: #f8fafc; font-weight: 700;">
-    <td style="padding: 12px 16px; color: var(--grey-900);">Ground Floor Subtotal</td>
-    <td style="padding: 12px 16px; color: var(--primary); text-align: center;">600 sqft</td>
-    <td></td>
-  </tr>
-</tfoot>
-    </table>
-  </div>
-</div>
-    
-    <!-- Total Building Area Card -->
-    <div class="card reveal" style="background: linear-gradient(135deg, #21409a 0%, #172c68 100%); color: white; border-radius: 16px; padding: 18px var(--space-6); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md);">
-      <div>
-        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Total Covered Area</div>
-        <div style="font-size: 1.1rem; font-weight: 600;">Full Building Structure (1 Floor)</div>
-      </div>
-      <div style="font-size: 1.8rem; font-weight: 800; color: #fde68a;">
-        600 sqft
-      </div>
-    </div>
-  </div>
-</div>
+{% include "partials/product-floor-plan.njk" %}
 {% include "partials/product-specs-tables.njk" %}
-<script>
-    const floorData811 = {
-      "400": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":400,"length":"-","width":"-"},{"section":"Master bed","area":120,"length":12,"width":10},{"section":"Child bed","area":100,"length":10,"width":10},{"section":"Living/Dining","area":70,"length":10,"width":7},{"section":"Kitchen","area":40,"length":8,"width":5},{"section":"Bath room","area":30,"length":6,"width":5},{"section":"Wall & Stairs area","area":40,"length":"-","width":"-"}] },
-      "600": { bed: "2 Bedrooms", bath: "1 Bathroom", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":600,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed","area":120,"length":12,"width":10},{"section":"Living room","area":100,"length":10,"width":10},{"section":"Kitchen","area":60,"length":10,"width":6},{"section":"Bath room","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":32,"length":8,"width":4},{"section":"Wall & Stairs area","area":80,"length":"-","width":"-"}] },
-      "750": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":750,"length":"-","width":"-"},{"section":"Master bed","area":156,"length":13,"width":12},{"section":"Child bed 1","area":120,"length":12,"width":10},{"section":"Child bed 2","area":120,"length":12,"width":10},{"section":"Living room","area":100,"length":10,"width":10},{"section":"Kitchen","area":60,"length":10,"width":6},{"section":"Bath room 1","area":40,"length":8,"width":5},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":40,"length":10,"width":4},{"section":"Wall & Stairs area","area":74,"length":"-","width":"-"}] },
-      "900": { bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":900,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":120,"length":12,"width":10},{"section":"Living room","area":150,"length":15,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":50,"length":10,"width":5},{"section":"Wall & Stairs area","area":100,"length":"-","width":"-"}] },
-      "1050": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":1050,"length":"-","width":"-"},{"section":"Master bed","area":168,"length":14,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":130,"length":13,"width":10},{"section":"Child bed 3","area":120,"length":12,"width":10},{"section":"Living room","area":150,"length":15,"width":10},{"section":"Kitchen","area":80,"length":10,"width":8},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":70,"length":"-","width":"-"}] },
-      "1200": { bed: "4 Bedrooms", bath: "3 Bathrooms", living: "1 Living Room" , rooms: [{"section":"Total Floor Area","area":1200,"length":"-","width":"-"},{"section":"Master bed","area":180,"length":15,"width":12},{"section":"Child bed 1","area":144,"length":12,"width":12},{"section":"Child bed 2","area":144,"length":12,"width":12},{"section":"Child bed 3","area":130,"length":13,"width":10},{"section":"Living room","area":200,"length":20,"width":10},{"section":"Kitchen","area":90,"length":10,"width":9},{"section":"Bath room 1","area":48,"length":8,"width":6},{"section":"Bath room 2","area":40,"length":8,"width":5},{"section":"Bath room 3","area":40,"length":8,"width":5},{"section":"Porch / Balcony","area":60,"length":15,"width":4},{"section":"Wall & Stairs area","area":124,"length":"-","width":"-"}] }
-    };
 
-    function updateSpecs811(sqft) {
-      const data = floorData811[sqft];
-      if(!data) return;
-
-      var specBedEl811 = document.getElementById("spec-bed-811"); if (specBedEl811) { specBedEl811.innerText = data.bed; }
-      var specBathEl811 = document.getElementById("spec-bath-811"); if (specBathEl811) { specBathEl811.innerText = data.bath; }
-        const priceEl811 = document.getElementById("spec-price-811"); if (priceEl811) { priceEl811.innerText = "Contact Sales"; }
-
-      const tbody = document.getElementById("room-sizes-table-body-811");
-      if (tbody && data.rooms) {
-        let html = "";
-        data.rooms.forEach((room, index) => {
-          html += `<tr>
-            <td>${room.section}</td>
-            <td>${room.area || ''}</td>
-            <td>${room.length || ''}</td>
-            <td>${room.width || ''}</td>
-          </tr>`;
-        });
-        tbody.innerHTML = html;
-      }
-
-
-      var spaceAllocEl811 = document.getElementById("space-allocation-811"); if (spaceAllocEl811) { spaceAllocEl811.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>
-        <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">1 Kitchen</span></div>
-      `; }
-    }
-  </script>
-  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs811 === "function") { updateSpecs811("400"); } });</script>
-
-  
 </div><!-- End of page-sidebar-content -->
 
 <!-- /page-sidebar-content -->

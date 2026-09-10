@@ -5,7 +5,7 @@
 
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="preload" href="css/style.min.css?v=4.20" as="style">
+  <link rel="preload" href="css/style.min.css?v=4.21" as="style">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -39,7 +39,7 @@
   <meta name="twitter:title" content="BH-LCH-1002 | Low Cost House | Bongshai Housing" />
   <meta name="twitter:description" content="BH-LCH-1002 — Low Cost House design by Bongshai Housing. Call +880 1781-636613." />
   <meta name="twitter:image" content="https://bongshaihousing.com/images/products/bh-cb-901.webp" />
-  <link rel="stylesheet" href="css/style.min.css?v=4.20" />
+  <link rel="stylesheet" href="css/style.min.css?v=4.21" />
   
 <script type="application/ld+json">
 {
@@ -80,13 +80,6 @@
     "name": "Bongshai Housing Ltd.",
     "@id": "https://bongshaihousing.com/#organization",
     "foundingDate": "2008"
-  },
-  "offers": {
-    "@type": "Offer",
-    "priceCurrency": "BDT",
-    "price": "3000",
-    "availability": "https://schema.org/InStock",
-    "seller": {"@type": "Organization", "name": "Bongshai Housing Ltd."}
   },
   "isVariantOf": {
     "@type": "ProductGroup",
@@ -159,6 +152,8 @@
     --radius-xl: 16px;
     --container-max: 1280px;
     --nav-height: 80px;
+    --nav-bg-start: #FFFBF5;
+    --nav-bg-end: #FEE7DE;
     --space-24: 6rem;
     --transition-base: all 0.25s ease;
 
@@ -312,6 +307,162 @@
 <!-- Desktop Menu -->
 <ul class="nav-menu" role="menubar">
 
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="index.html" role="menuitem">Home</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="about.html" role="menuitem">
+            About
+            <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</a>
+<div class="dropdown" role="menu">
+
+<a class="dropdown-item" href="about.html" role="menuitem">
+<div class="dropdown-icon">ℹ️</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Company Profile</strong></div>
+</a>
+
+<a class="dropdown-item" href="certifications.html" role="menuitem">
+<div class="dropdown-icon">📜</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Certifications</strong></div>
+</a>
+
+<a class="dropdown-item" href="faq.html" role="menuitem">
+<div class="dropdown-icon">❓</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">FAQ</strong></div>
+</a>
+
+<a class="dropdown-item" href="/agent/signup.html" role="menuitem">
+<div class="dropdown-icon">🤝</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Become an Agent</strong></div>
+</a>
+
+<a class="dropdown-item" href="/agent/login.html" role="menuitem">
+<div class="dropdown-icon">🔑</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Agent Login</strong></div>
+</a>
+
+<a class="dropdown-item" href="/my-project/login.html" role="menuitem">
+<div class="dropdown-icon">📊</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Track My Project</strong></div>
+</a>
+
+</div>
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="products-and-solutions.html" role="menuitem">
+            Products
+            <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</a>
+<div class="dropdown image-mega-dropdown" role="menu">
+  <div class="mega-image-grid">
+    
+    <a href="apartment-building.html" class="mega-card">
+      <img src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Apartment Building" loading="lazy" width="675" height="720">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Apartment Building</span>
+      </div>
+    </a>
+    
+    <a href="duplex-steel-building.html" class="mega-card">
+      <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Duplex Steel Building" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Duplex Steel Building</span>
+      </div>
+    </a>
+    
+    <a href="simplex-steel-building.html" class="mega-card">
+      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Prefab Building" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Simplex Prefab Building</span>
+      </div>
+    </a>
+    
+    <a href="cottage-house.html" class="mega-card">
+      <img src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Cottage House" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Cottage House</span>
+      </div>
+    </a>
+    
+    <a href="container-house.html" class="mega-card">
+      <img src="images/products/bh-ct-501.webp" srcset="images/products/bh-ct-501-400w.webp 400w, images/products/bh-ct-501-700w.webp 700w, images/products/bh-ct-501.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Container House" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Container House</span>
+      </div>
+    </a>
+    
+    <a href="steel-house.html" class="mega-card">
+      <img src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Steel House" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Steel House</span>
+      </div>
+    </a>
+    
+    <a href="tiny-house.html" class="mega-card">
+      <img src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Tiny House" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Tiny House</span>
+      </div>
+    </a>
+    
+    <a href="wooden-house.html" class="mega-card">
+      <img src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Wooden House" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Wooden House</span>
+      </div>
+    </a>
+    
+    <a href="low-cost-house.html" class="mega-card">
+      <img src="images/products/coming-soon-placeholder.png" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Low Cost House" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Low Cost House</span>
+      </div>
+    </a>
+    
+    <a href="concrete-building.html" class="mega-card">
+      <img src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Concrete Building" loading="lazy" width="1024" height="1024">
+      <div class="mega-card-overlay">
+        <span class="mega-card-title">Concrete Building</span>
+      </div>
+    </a>
+    
+  </div>
+</div>
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="interactive-tools.html" role="menuitem">Cost Calculator</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="projects.html" role="menuitem">Our Projects</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="gallery.html" role="menuitem">Image Gallery</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="contact.html" role="menuitem">Contact</a>
+
+</li>
+
 </ul>
 <!-- Desktop CTA -->
 <div class="nav-cta">
@@ -332,6 +483,80 @@
   <!-- Mobile Drawer -->
 <div aria-label="Mobile navigation" class="mobile-drawer" id="mobileDrawer" role="dialog">
 <div>
+
+
+<a class="mobile-nav-link" href="index.html">Home</a>
+
+
+
+<div>
+<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About <span>▾</span>
+</button>
+<div class="mobile-sub-links">
+
+<a class="mobile-sub-link" href="about.html">ℹ️ Company Profile</a>
+
+<a class="mobile-sub-link" href="certifications.html">📜 Certifications</a>
+
+<a class="mobile-sub-link" href="faq.html">❓ FAQ</a>
+
+<a class="mobile-sub-link" href="/agent/signup.html">🤝 Become an Agent</a>
+
+<a class="mobile-sub-link" href="/agent/login.html">🔑 Agent Login</a>
+
+<a class="mobile-sub-link" href="/my-project/login.html">📊 Track My Project</a>
+
+</div>
+</div>
+
+
+
+      <div>
+        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products <span>▾</span>
+        </button>
+        <div class="mobile-sub-links">
+          <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
+
+<a class="mobile-sub-link" href="apartment-building.html">Apartment Building</a>
+
+<a class="mobile-sub-link" href="duplex-steel-building.html">Duplex Steel Building</a>
+
+<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex Prefab Building</a>
+
+<a class="mobile-sub-link" href="cottage-house.html">Cottage House</a>
+
+<a class="mobile-sub-link" href="container-house.html">Container House</a>
+
+<a class="mobile-sub-link" href="steel-house.html">Steel House</a>
+
+<a class="mobile-sub-link" href="tiny-house.html">Tiny House</a>
+
+<a class="mobile-sub-link" href="wooden-house.html">Wooden House</a>
+
+<a class="mobile-sub-link" href="low-cost-house.html">Low Cost House</a>
+
+<a class="mobile-sub-link" href="concrete-building.html">Concrete Building</a>
+
+          
+        </div>
+      </div>
+
+
+
+<a class="mobile-nav-link" href="interactive-tools.html">Cost Calculator</a>
+
+
+
+<a class="mobile-nav-link" href="projects.html">Our Projects</a>
+
+
+
+<a class="mobile-nav-link" href="gallery.html">Image Gallery</a>
+
+
+
+<a class="mobile-nav-link" href="contact.html">Contact</a>
+
 
     </div>
 
@@ -400,8 +625,38 @@
 <div class="reveal-right" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-xl); border: 1px solid var(--primary-light); display: flex; flex-direction: column; justify-content: center;">
 <div style="display: inline-block; align-self: flex-start; background: rgba(212, 175, 55, 0.15); color: var(--accent-dark); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; margin-bottom: 12px;">MOST POPULAR</div>
 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--primary); margin-bottom: 12px; line-height: 1.1;">Model No-BH-LCH-1002</h2>
+
+
+
+
+
+
+
+
 <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-4);">
-  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary);"><span>📐</span> 400 sqft</div>
+  
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; color: var(--primary);">
+    <span>📐</span> 400 sqft
+  </div>
+  
+  
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+    <span>🛏️</span> 2 Bedrooms
+  </div>
+  
+  
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+    <span>🚿</span> 1 Bathroom
+  </div>
+  
+  
+  <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);">
+    <span>🍳</span> 1 Kitchen
+  </div>
+  
+</div>
+
+
   <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);"><span>🛏️</span> 2 Bedrooms</div>
   <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);"><span>🚿</span> 1 Bathroom</div>
   <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--off-white); border: 1px solid var(--grey-200); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; color: var(--grey-800);"><span>🍳</span> 1 Kitchen</div>
@@ -416,69 +671,91 @@
 </div>
 </div>
 </div>
-<!-- Overview (Area Details) Section -->
+
+
+
+
 <div class="reveal-up" style="margin-bottom: var(--space-8);">
   <div style="margin-bottom: var(--space-4);">
     <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--primary); margin-bottom: 6px;">Overview (Area Details)</h3>
     <p style="color: var(--grey-600); font-size: 0.95rem; margin: 0;">Official floor-wise layout dimensions and area specifications for Model No-BH-LCH-1002.</p>
   </div>
-  
+
   <div style="display: flex; flex-direction: column; gap: var(--space-5);">
-    <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
-  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--grey-100); padding-bottom: 12px; margin-bottom: 16px;">
-    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 8px;">
-      <span>🏢</span> Ground Floor Layout
-    </h4>
-    <span style="background: #eef4ff; color: var(--primary); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">400 sqft</span>
-  </div>
-  <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
-    <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
-      <thead>
-        <tr style="background: var(--off-white);">
-          <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
-          <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
-          <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Dimensions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛏️</span>Bed room 1</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">100</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">10' × 10'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛏️</span>Bed room 2</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">100</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">10' × 10'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛋️</span>Living room</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">120</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">12' × 10'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🍳</span>Kitchen</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">30</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">6' × 5'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🚿</span>Bath 1</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">20</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">5' × 4'</td>
-</tr><tr style="border-bottom: 1px solid var(--grey-100);">
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);">Walls &amp; Circulation</td>
-  <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">30</td>
-  <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">—</td>
-</tr>
-      </tbody>
-      <tfoot>
-  <tr style="background: #f8fafc; font-weight: 700;">
-    <td style="padding: 12px 16px; color: var(--grey-900);">Ground Floor Subtotal</td>
-    <td style="padding: 12px 16px; color: var(--primary); text-align: center;">400 sqft</td>
-    <td></td>
-  </tr>
-</tfoot>
-    </table>
-  </div>
-</div>
     
-    <!-- Total Building Area Card -->
+    <div class="card reveal" style="background: white; border-radius: 16px; padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100);">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--grey-100); padding-bottom: 12px; margin-bottom: 16px;">
+        <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>🏢</span> Ground Floor Layout
+        </h4>
+        
+        <span style="background: #eef4ff; color: var(--primary); font-weight: 700; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">400 sqft</span>
+        
+      </div>
+      
+      <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+        <table class="modern-table" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+          <thead>
+            <tr style="background: var(--off-white);">
+              <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: left;">Section</th>
+              <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Area (sqft)</th>
+              <th scope="col" style="padding: 12px 16px; font-weight: 700; color: var(--grey-900); border-bottom: 2px solid var(--grey-200); text-align: center;">Dimensions</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr style="border-bottom: 1px solid var(--grey-100);">
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛏️</span>Bed room 1</td>
+              <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">100</td>
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">10' × 10'</td>
+            </tr>
+            
+            <tr style="border-bottom: 1px solid var(--grey-100);">
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛏️</span>Bed room 2</td>
+              <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">100</td>
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">10' × 10'</td>
+            </tr>
+            
+            <tr style="border-bottom: 1px solid var(--grey-100);">
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🛋️</span>Living room</td>
+              <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">120</td>
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">12' × 10'</td>
+            </tr>
+            
+            <tr style="border-bottom: 1px solid var(--grey-100);">
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🍳</span>Kitchen</td>
+              <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">30</td>
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">6' × 5'</td>
+            </tr>
+            
+            <tr style="border-bottom: 1px solid var(--grey-100);">
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);"><span style="margin-right: 6px;">🚿</span>Bath 1</td>
+              <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">20</td>
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">5' × 4'</td>
+            </tr>
+            
+            <tr style="border-bottom: 1px solid var(--grey-100);">
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-700);">Walls &amp; Circulation</td>
+              <td style="padding: 12px 16px; font-weight: 600; color: var(--grey-900); text-align: center;">30</td>
+              <td style="padding: 12px 16px; font-weight: 500; color: var(--grey-600); text-align: center;">—</td>
+            </tr>
+            
+          </tbody>
+          
+          <tfoot>
+            <tr style="background: #f8fafc; font-weight: 700;">
+              <td style="padding: 12px 16px; color: var(--grey-900);">Ground Floor Subtotal</td>
+              <td style="padding: 12px 16px; color: var(--primary); text-align: center;">400 sqft</td>
+              <td></td>
+            </tr>
+          </tfoot>
+          
+        </table>
+      </div>
+    </div>
+    
+
     <div class="card reveal" style="background: linear-gradient(135deg, #21409a 0%, #172c68 100%); color: white; border-radius: 16px; padding: 18px var(--space-6); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md);">
       <div>
         <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Total Covered Area</div>
@@ -497,110 +774,139 @@
 
 
 
-<script>
-    const floorData901 = {
-      "600": { 
-        bed: "3 Bedrooms", bath: "2 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: "N/A", kitchen: "1 Kitchen",
-        rooms: [
-          { section: "<b>Ground Floor</b>", area: "", length: "", width: "" },
-          { section: "Floor area", area: 600, length: 30, width: 20 },
-          { section: "Living room", area: 180, length: 15, width: 12 },
-          { section: "Child bed 1", area: 130, length: 13, width: 10 },
-          { section: "Kitchen", area: 80, length: 10, width: 8 },
-          { section: "Bath 1", area: 40, length: 8, width: 5 },
-          { section: "Veranda & Porch", area: 26, length: 13, width: 2 },
-          { section: "Wall & Stairs", area: 144, length: "-", width: "-" },
-          { section: "<span style='font-weight:700; color:var(--primary);'>Total (Ground Floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>600</span>", length: "", width: "" },
-          { section: "<b>First floor</b>", area: "", length: "", width: "" },
-          { section: "Floor area", area: 600, length: 30, width: 20 },
-          { section: "Master bed", area: 168, length: 14, width: 12 },
-          { section: "Drawing room", area: 130, length: 13, width: 10 },
-          { section: "Child bed 2", area: 130, length: 13, width: 10 },
-          { section: "Bath 2", area: 40, length: 8, width: 5 },
-          { section: "Veranda", area: 26, length: 13, width: 2 },
-          { section: "Wall & Stairs", area: 106, length: "-", width: "-" },
-          { section: "<span style='font-weight:700; color:var(--primary);'>Total (First floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>600</span>", length: "", width: "" },
-          { section: "<b>Total Building Area</b>", area: "<b>1200</b>", length: "", width: "" }
-        ]
-      },
-      "1612": { 
-        bed: "5 Bedrooms", bath: "4 Bathrooms", living: "1 Living Room", drawing: "1 Drawing Room", dining: "N/A", kitchen: "2 Kitchens",
-        rooms: [
-          { section: "<b>Ground Floor</b>", area: "", length: "", width: "" },
-          { section: "Floor area", area: 806, length: 31, width: 26 },
-          { section: "Guest bed", area: 130, length: 13, width: 10 },
-          { section: "Living room", area: 221, length: 17, width: 13 },
-          { section: "Kitchen 1", area: 72, length: 9, width: 8 },
-          { section: "Bath 1", area: 40, length: 8, width: 5 },
-          { section: "Bath 2", area: 40, length: 8, width: 5 },
-          { section: "Veranda & Porch", area: 36, length: 12, width: 3 },
-          { section: "Wall & stairs area", area: 267, length: "-", width: "-" },
-          { section: "<span style='font-weight:700; color:var(--primary);'>Total (Ground Floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>806</span>", length: "", width: "" },
-          { section: "<b>First floor</b>", area: "", length: "", width: "" },
-          { section: "Floor area", area: 806, length: 31, width: 26 },
-          { section: "Master bed", area: 182, length: 14, width: 13 },
-          { section: "Child bed 1", area: 130, length: 13, width: 10 },
-          { section: "Child bed 2", area: 130, length: 13, width: 10 },
-          { section: "Child bed 3", area: 120, length: 12, width: 10 },
-          { section: "Kitchen 2 / Store", area: 72, length: 9, width: 8 },
-          { section: "Bath 3", area: 40, length: 8, width: 5 },
-          { section: "Bath 4", area: 40, length: 8, width: 5 },
-          { section: "Veranda", area: 12, length: 12, width: 1 },
-          { section: "Wall & stairs area", area: 80, length: "-", width: "-" },
-          { section: "<span style='font-weight:700; color:var(--primary);'>Total (First floor)</span>", area: "<span style='font-weight:700; color:var(--primary);'>806</span>", length: "", width: "" },
-          { section: "<b>Total Building Area</b>", area: "<b>1612</b>", length: "", width: "" }
-        ]
-      }
-    };
-
-    function updateSpecs901(sqft) {
-      const data = floorData901[sqft];
-      if(!data) return;
-
-      var specBedEl901 = document.getElementById("spec-bed-901"); if (specBedEl901) { specBedEl901.innerText = data.bed; }
-      var specBathEl901 = document.getElementById("spec-bath-901"); if (specBathEl901) { specBathEl901.innerText = data.bath; }
-      const priceEl = document.getElementById("spec-price-901"); 
-      if (priceEl) { priceEl.innerText = "Coming Soon"; }
+<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
+<h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Technical Specification</h3>
+<div style="overflow-x: auto;">
+  <table class="modern-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody style="color: var(--grey-800);">
       
-      const tbody = document.getElementById("room-sizes-table-body-901");
-      if (tbody && data.rooms) {
-        let html = "";
-        data.rooms.forEach((room, index) => {
-          // special styling for floor headers and totals
-          let isHeader = room.section.includes("<b>");
-          let isTotal = room.area.toString().includes("font-weight:700; color:var(--primary)");
-          let trStyle = isTotal ? "border-bottom: 2px solid var(--grey-200); background: var(--total-row-bg);" : (isHeader ? "background: var(--off-white);" : "");
-          html += `<tr style="${trStyle}">
-            <td>${room.section}</td>
-            <td>${room.area || ''}</td>
-            <td>${room.length || ''}</td>
-            <td>${room.width || ''}</td>
-          </tr>`;
-        });
-        tbody.innerHTML = html;
-      }
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">CODES AND STANDARD</td>
+        <td style="padding: 12px 16px;">Comply with Bangladesh Nation Building Code (BNBC)</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">EARTHQUAKE CONDITIONS</td>
+        <td style="padding: 12px 16px;">Earthquake resistant to magnitude 7.5</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">WIND SPEED VALUE</td>
+        <td style="padding: 12px 16px;">Cyclone resistant 250 km/h (Must be fixed to the ground)</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">CEMENT</td>
+        <td style="padding: 12px 16px;">Ordinary Portland Cement (OPC / CEM-I): Contains 95-100% clinker and 0-5% gypsum; graded by compressive strength (52.5 MPa). Brand SHAH CEMENT, AKIJ, CROWN, COSTAL PLAZ.</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">MILD STEEL RODS</td>
+        <td style="padding: 12px 16px;">ASTM A36 grade Tensile Strength: 410 to 510 MPa. Brand BSRM/AKS/KSRM.</td>
+      </tr>
+      
+      <tr style="background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%; border-bottom-left-radius: 8px;">STRUCTURAL STEEL</td>
+        <td style="padding: 12px 16px; border-bottom-right-radius: 8px;">ASTM A36/SS400 grade Tensile Strength: 250 to 345 MPa.</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+</div>
 
-      const spaceAlloc = document.getElementById("space-allocation-901");
-      if (spaceAlloc) {
-        let drawingHtml = (data.drawing && data.drawing !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Drawing Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.drawing}</span></div>` : "";
-        let diningHtml = (data.dining && data.dining !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Dining Space</span><span style="font-weight: 700; color: var(--grey-900);">${data.dining}</span></div>` : "";
-        let livingHtml = (data.living && data.living !== "N/A") ? `<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Living Room</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.living}</span></div>` : "";
 
-        spaceAlloc.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bedrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bed}</span></div>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Bathrooms</span><span style="font-weight: 700; color: var(--primary); background: var(--off-white); padding: 4px 12px; border-radius: 20px;">${data.bath}</span></div>
-          ${livingHtml}
-          ${diningHtml}
-          ${drawingHtml}
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--grey-200); padding-bottom: 8px;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Kitchen</span><span style="font-weight: 700; color: var(--grey-900);">${data.kitchen || "1 Kitchen"}</span></div>
-          <div style="display: flex; justify-content: space-between; align-items: center;"><span style="color: var(--grey-700);"><span style="color:var(--accent);margin-right:8px;font-size:1.2rem;">▪</span>Veranda &amp; Porch</span><span style="font-weight: 700; color: var(--grey-900);">Included</span></div>
-        `;
-      }
-    }
-  </script>
-  <script>document.addEventListener("DOMContentLoaded", () => { if (typeof updateSpecs901 === "function") { updateSpecs901("600"); } });</script>
 
-  
+<div class="reveal-up" style="background: var(--white); padding: var(--space-6); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--grey-100); margin-bottom: var(--space-8);">
+<h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 24px; border-bottom: 2px solid var(--off-white); padding-bottom: 12px;">Material Specification</h3>
+<div style="overflow-x: auto;">
+  <table class="modern-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Materials</th>
+      </tr>
+    </thead>
+    <tbody style="color: var(--grey-800);">
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">FOOTING &amp; SHORT COLUMN</td>
+        <td style="padding: 12px 16px;">Pre-cast footing is made of reinforced concrete; spreads the weight of a structure over a larger area on ground.</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">GROUND FLOOR</td>
+        <td style="padding: 12px 16px;">3 inch pre-cast cement concrete block strength (1:3:6) is to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">OUTER WALL</td>
+        <td style="padding: 12px 16px;">3 inch concrete solid block is to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">INNER WALL</td>
+        <td style="padding: 12px 16px;">3 inch concrete solid block is to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">ROOF CLADDING</td>
+        <td style="padding: 12px 16px;">High strength colour coated 0.4mm profile sheet to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">MAIN DOOR</td>
+        <td style="padding: 12px 16px;">Chowkat Mehagoni wood and Mehagoni palla is to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">BEDROOM DOOR</td>
+        <td style="padding: 12px 16px;">Chowkat: Mehagoni and Palla: ply wood flashdoor is to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">SECURITY GRILL</td>
+        <td style="padding: 12px 16px;">10mm square bar used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">WINDOW</td>
+        <td style="padding: 12px 16px;">Standard size Thai Aluminum glass to be used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">FLOOR TILES</td>
+        <td style="padding: 12px 16px;">24 x 24 inch homogenous tiles on floor is used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); ">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">BATHROOM TILES</td>
+        <td style="padding: 12px 16px;">12 x 12 inch on floor and 12 x 10 inch on wall is used</td>
+      </tr>
+      
+      <tr style="border-bottom: 1px solid var(--grey-100); background: var(--off-white);">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%;">BATHROOM FITTINGS</td>
+        <td style="padding: 12px 16px;">Standard metal fittings is to be used</td>
+      </tr>
+      
+      <tr style="">
+        <td style="padding: 12px 16px; font-weight: 600; color: var(--primary-dark); width: 30%; border-bottom-left-radius: 8px;">ELECTRICAL WIRING</td>
+        <td style="padding: 12px 16px; border-bottom-right-radius: 8px;">Standard wiring is to be used.</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+</div>
+
+
+
 </div><!-- End of page-sidebar-content -->
 
 <!-- /page-sidebar-content -->
@@ -2268,6 +2574,8 @@
             --radius-xl: ${theme.radius_xl};
             --container-max: ${theme.container_width || '1280px'};
             --nav-height: ${theme.navbar_height || '80px'};
+            --nav-bg-start: ${theme.nav_bg_start || '#FFFBF5'};
+            --nav-bg-end: ${theme.nav_bg_end || '#FEE7DE'};
             --space-24: ${sectionPad};
             --transition-base: all ${theme.transition_speed || '0.25s'} ease;
 

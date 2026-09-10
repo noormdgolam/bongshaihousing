@@ -76,7 +76,7 @@
         <div style="font-size: 1.1rem; font-weight: 600;">Full Building Structure ({{ v0.roomGroups.length }} Floor{{ 's' if v0.roomGroups.length != 1 else '' }})</div>
       </div>
       <div style="font-size: 1.8rem; font-weight: 800; color: #fde68a;">
-        {{ product.total_floor_area or v0.roomGroupsBuildingTotal or v0.totalArea or v0.area_sqft }} sqft
+        {{ v0.roomGroupsBuildingTotal or product.total_floor_area or v0.totalArea or v0.area_sqft }} sqft
       </div>
     </div>
   </div>
