@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "partials/product-card-image.njk" import cardImage %}
-{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice %}
+{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice, cardBath %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -167,7 +167,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-801', '500 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-801', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-801', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A beautifully crafted wooden house offering sustainable and cozy living.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -187,7 +187,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-802', '600 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-802', '1 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-802', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Wooden house architecture combining natural warmth with modern comfort.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -208,7 +208,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-803', '750 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-803', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-803', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A timber-framed home built for a cozy, eco-conscious lifestyle.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -229,7 +229,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-804', '900 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-804', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-804', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Wooden house design ideal for resorts, cottages, or countryside homes.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -250,7 +250,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-805', '500 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-805', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-805', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A sustainable wooden build offering natural insulation and charm.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -271,7 +271,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-806', '600 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-806', '1 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-806', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Wooden house construction engineered for a warm, inviting atmosphere.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -292,7 +292,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-807', '750 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-807', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-807', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A wood-framed home combining classic aesthetics with modern durability.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -313,7 +313,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-808', '900 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-808', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-808', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Wooden house living designed for scenic or eco-tourism settings.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -334,7 +334,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-809', '500 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-809', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-809', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A naturally insulated wooden home suited to Bangladesh's climate.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -355,7 +355,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-810', '600 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-810', '1 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-810', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Wooden architecture offering a distinctive, nature-inspired living space.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -376,7 +376,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-811', '750 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-811', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-811', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A cozy wooden house build ideal for retreats or vacation homes.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -397,7 +397,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-WH-812', '900 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-WH-812', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-WH-812', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Wooden house design blending traditional craft with efficient construction.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">

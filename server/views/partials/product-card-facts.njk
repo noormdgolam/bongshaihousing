@@ -21,6 +21,15 @@
 {%- endif -%}
 {%- endmacro %}
 
+{% macro cardBath(dbProductsByModel, modelNumber, fallback) -%}
+{% set dbp = dbProductsByModel[modelNumber] if dbProductsByModel else none -%}
+{% if dbp and dbp.bathrooms -%}
+{{ dbp.bathrooms }} Bathroom{{ 's' if (dbp.bathrooms != 1 or (fallback and 'Bathrooms' in fallback)) else '' }}
+{%- else -%}
+{{ fallback }}
+{%- endif -%}
+{%- endmacro %}
+
 {# Card "Fixed Package Price" - DB fixed_price (formatted ৳XX,XX,XXX) or the
    hardcoded fallback. #}
 {% macro cardPrice(dbProductsByModel, modelNumber, fallback) -%}

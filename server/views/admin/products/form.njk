@@ -166,18 +166,25 @@
         <input type="text" id="price_currency" name="price_currency" value="{{ product.price_currency or 'BDT' }}">
       </div>
 
-      {# total_floor_area already has a live product-detail.njk display, powers
-         the agent dashboard's deal-value line, and feeds the AI assistant's
-         area answers - the column and every reader were already there, only
-         this input was missing, so nothing outside the form needed to change. #}
+      {# total_floor_area is auto-calculated from the Room Layout areas below on
+         every save, so the hero chip, the category card and the "Total Covered
+         Area" card can never disagree. Read-only here. #}
       <div class="form-row" style="margin:0;">
-        <label for="total_floor_area">Total Floor Area (sq.ft)</label>
-        <input type="number" step="1" min="0" id="total_floor_area" name="total_floor_area" value="{{ product.total_floor_area or '' }}" placeholder="e.g. 1200">
+        <label for="total_floor_area">Total Floor Area (sq.ft) <span style="font-weight:400; color:var(--grey-500);">— auto from Room Layout</span></label>
+        <input type="number" id="total_floor_area_display" value="{{ product.total_floor_area or '' }}" style="background:#eee;" disabled>
       </div>
 
       <div class="form-row" style="margin:0;">
         <label for="bedrooms">Bedrooms</label>
         <input type="number" step="1" min="0" id="bedrooms" name="bedrooms" value="{{ product.bedrooms or '' }}" placeholder="e.g. 4">
+      </div>
+      <div class="form-row" style="margin:0;">
+        <label for="bathrooms">Bathrooms</label>
+        <input type="number" step="1" min="0" id="bathrooms" name="bathrooms" value="{{ product.bathrooms or '' }}" placeholder="e.g. 3">
+      </div>
+      <div class="form-row" style="margin:0;">
+        <label for="kitchens">Kitchens</label>
+        <input type="number" step="1" min="0" id="kitchens" name="kitchens" value="{{ product.kitchens or '' }}" placeholder="e.g. 1">
       </div>
     </div>
   </div>
@@ -249,10 +256,7 @@
         <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:12px;">
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Area (sqft)</label><input type="number" name="variants[{{ vIdx }}][area_sqft]" value="{{ v.area_sqft or '' }}" style="width:85px; padding:4px 6px;"></div>
           <div><label style="font-size:0.75rem; display:block; font-weight:600;">Label</label><input type="text" name="variants[{{ vIdx }}][area_label]" value="{{ v.area_label or '' }}" placeholder="e.g. Standard" style="width:110px; padding:4px 6px;"></div>
-          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" value="{{ product.bedrooms or '' }}" style="width:60px; padding:4px 6px; background:#eee;" disabled title="Set via the Bedrooms field above"></div>
-          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bath</label><input type="number" name="variants[{{ vIdx }}][bath]" value="{{ v.bath or '' }}" style="width:60px; padding:4px 6px;"></div>
-          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Kitchen</label><input type="number" name="variants[{{ vIdx }}][kitchen]" value="{{ v.kitchen or '' }}" style="width:60px; padding:4px 6px;"></div>
-          <div><label style="font-size:0.75rem; display:block; font-weight:600;">Living</label><input type="number" name="variants[{{ vIdx }}][living]" value="{{ v.living or '' }}" style="width:60px; padding:4px 6px;"></div>
+          <div style="font-size:0.72rem; color:var(--grey-500); align-self:center; max-width:220px;">Bed / Bath / Kitchen counts and the total floor area come from the fields at the top of the form &amp; the room list below.</div>
           <button type="button" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-left:auto;" onclick="if(confirm('Delete this variant and all its rooms?')) this.closest('.variant-card').remove();">Delete Variant</button>
         </div>
 
@@ -389,10 +393,7 @@ function addVariantCard() {
     <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:end; margin-bottom:12px;">
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Area (sqft)</label><input type="number" name="variants[${vIdx}][area_sqft]" required style="width:85px; padding:4px 6px;"></div>
       <div><label style="font-size:0.75rem; display:block; font-weight:600;">Label</label><input type="text" name="variants[${vIdx}][area_label]" placeholder="e.g. Standard" style="width:110px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bed</label><input type="number" value="${document.querySelector('input[name=bedrooms]') ? document.querySelector('input[name=bedrooms]').value : ''}" style="width:60px; padding:4px 6px; background:#eee;" disabled title="Set via the Bedrooms field above"></div>
-      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Bath</label><input type="number" name="variants[${vIdx}][bath]" style="width:60px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Kitchen</label><input type="number" name="variants[${vIdx}][kitchen]" style="width:60px; padding:4px 6px;"></div>
-      <div><label style="font-size:0.75rem; display:block; font-weight:600;">Living</label><input type="number" name="variants[${vIdx}][living]" style="width:60px; padding:4px 6px;"></div>
+      <div style="font-size:0.72rem; color:var(--grey-500); align-self:center; max-width:220px;">Bed / Bath / Kitchen counts and total floor area come from the fields at the top of the form &amp; the room list.</div>
       <button type="button" class="btn btn-danger" style="padding:5px 12px; font-size:0.8rem; margin-left:auto;" onclick="if(confirm('Delete this variant?')) this.closest('.variant-card').remove();">Delete Variant</button>
     </div>
     <div style="background:white; border:1px solid var(--grey-200); border-radius:6px; padding:10px;">

@@ -1567,6 +1567,10 @@ async function ensureProductColumns() {
     if (!hasBedrooms) {
       await db.schema.alterTable('products', (t) => t.integer('bedrooms').nullable()).catch(() => {});
     }
+    const hasBathrooms = await db.schema.hasColumn('products', 'bathrooms').catch(() => true);
+    if (!hasBathrooms) {
+      await db.schema.alterTable('products', (t) => { t.integer('bathrooms').nullable(); t.integer('kitchens').nullable(); }).catch(() => {});
+    }
   } catch (err) {
     // Ignore schema check error
   }
@@ -1777,7 +1781,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
 
   try {
     await ensureProductColumns();
-    const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, bedrooms, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
+    const { category_id, model_number, slug, title, description, price_per_sqft, price_currency, fixed_price, total_floor_area, bedrooms, bathrooms, kitchens, main_image, image_2, image_3, published, meta_title, meta_description, main_image_alt, auto_seo } = req.body;
     const finalImage = await resolveImage(req.files, 'main_image_file', main_image);
     const finalImage2 = await resolveImage(req.files, 'image_2_file', image_2);
     const finalImage3 = await resolveImage(req.files, 'image_3_file', image_3);
@@ -1790,6 +1794,14 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       : (price_per_sqft !== '' && price_per_sqft !== null && !isNaN(Number(price_per_sqft)) ? Number(price_per_sqft) : null);
     const cleanFloorArea = total_floor_area !== '' && total_floor_area !== undefined && total_floor_area !== null && !isNaN(Number(total_floor_area)) ? parseInt(total_floor_area, 10) : null;
     const cleanBedrooms = bedrooms !== '' && bedrooms !== undefined && bedrooms !== null && !isNaN(Number(bedrooms)) ? parseInt(bedrooms, 10) : null;
+    const cleanBathrooms = bathrooms !== '' && bathrooms !== undefined && bathrooms !== null && !isNaN(Number(bathrooms)) ? parseInt(bathrooms, 10) : null;
+    const cleanKitchens = kitchens !== '' && kitchens !== undefined && kitchens !== null && !isNaN(Number(kitchens)) ? parseInt(kitchens, 10) : null;
+    // The rooms just submitted are the source of truth for floor area - keep
+    // products.total_floor_area equal to their sum so the hero chip, the
+    // category card and the "Total Covered Area" card can never disagree.
+    const submittedRooms = parseFormNested(req.body, 'variants').flatMap((v) => v.rooms || []);
+    const roomAreaSum = submittedRooms.reduce((s, r) => s + (parseInt(r.area_sqft, 10) || 0), 0);
+    const effectiveFloorArea = roomAreaSum > 0 ? roomAreaSum : cleanFloorArea;
     let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
     if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
       cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
@@ -1800,8 +1812,10 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       price_per_sqft: cleanPriceSqft,
       price_currency: price_currency || 'BDT',
       fixed_price: cleanFixedPrice,
-      total_floor_area: cleanFloorArea,
+      total_floor_area: effectiveFloorArea,
       bedrooms: cleanBedrooms,
+      bathrooms: cleanBathrooms,
+      kitchens: cleanKitchens,
       main_image: finalImage,
       image_2: finalImage2,
       image_3: finalImage3,
@@ -1862,13 +1876,14 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
       for (let i = 0; i < parsedVariants.length; i++) {
         const v = parsedVariants[i];
         const area_sqft = v.area_sqft ? parseInt(v.area_sqft, 10) : null;
-        // Bedroom count is owned by products.bedrooms (single source, edited via
-        // the main form + shown on the hero chip / category card). The per-variant
-        // "Bed" input was removed from the form; keep the column in sync so
-        // anything still reading product_variants.bed matches the page.
+        // bed/bath/kitchen counts are owned by products.bedrooms/bathrooms/
+        // kitchens (single source, edited on the main form, shown on the hero
+        // chip AND the category card). The per-variant inputs were removed;
+        // keep these columns mirrored so anything still reading the variant
+        // row matches the page.
         const bed = cleanBedrooms;
-        const bath = v.bath ? parseInt(v.bath, 10) : null;
-        const kitchen = v.kitchen ? parseInt(v.kitchen, 10) : null;
+        const bath = cleanBathrooms;
+        const kitchen = cleanKitchens;
         const living = v.living ? parseInt(v.living, 10) : null;
         const drawing = v.drawing ? parseInt(v.drawing, 10) : null;
         const dining = v.dining ? parseInt(v.dining, 10) : null;

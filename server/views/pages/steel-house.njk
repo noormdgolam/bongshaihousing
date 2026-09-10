@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "partials/product-card-image.njk" import cardImage %}
-{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice %}
+{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice, cardBath %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -167,7 +167,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-601', '2,100 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-601', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-601', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A durable steel house engineered for quick assembly and structural resilience.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -187,7 +187,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-602', '1,700 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-602', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-602', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Steel house construction built to withstand cyclones and heavy monsoon rain.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -208,7 +208,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-603', '1,300 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-603', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>3 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-603', '3 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A modern steel home combining strength with a sleek architectural finish.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -229,7 +229,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-604', '2,100 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-604', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-604', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Steel-framed housing engineered for long-term structural integrity.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -250,7 +250,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-605', '1,700 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-605', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-605', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A steel house solution ideal for fast-growing residential plots.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -271,7 +271,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-606', '1,300 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-606', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>3 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-606', '3 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Lightweight steel construction offering house-level durability at lower cost.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -292,7 +292,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-607', '2,100 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-607', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-607', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A steel home built for low maintenance and decades of reliable use.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -313,7 +313,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-608', '1,700 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-608', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-608', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Steel house architecture designed for both urban and rural Bangladesh.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -334,7 +334,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-609', '1,300 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-609', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>3 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-609', '3 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A resilient steel-framed home engineered against seismic activity.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -355,7 +355,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-610', '2,100 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-610', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-610', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Steel construction offering faster build times than traditional masonry.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -376,7 +376,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-611', '1,700 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-611', '5 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-611', '4 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A steel house solution balancing affordability with structural strength.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -397,7 +397,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-SH-612', '1,300 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-SH-612', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>3 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-SH-612', '3 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Steel-framed living designed for families who want a fast, durable build.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">

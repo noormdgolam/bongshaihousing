@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "partials/product-card-image.njk" import cardImage %}
-{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice %}
+{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice, cardBath %}
 {% block head_extra %}
 <script type="application/ld+json">
   {
@@ -167,7 +167,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-401', '800 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-401', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-401', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A premium cottage house blending natural charm with modern elegance.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -187,7 +187,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-402', '600 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-402', '1 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-402', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A cozy cottage design ideal for peaceful, low-density living.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -208,7 +208,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-403', '500 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-403', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-403', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage-style architecture built for comfort in rural and semi-urban settings.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -229,7 +229,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-404', '850 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-404', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-404', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A charming cottage home with a warm, inviting facade.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -250,7 +250,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-405', '1,050 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-405', '4 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-405', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage construction engineered for durability with a rustic aesthetic.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -271,7 +271,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-406', '900 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-406', '3 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-406', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A compact cottage design suited to smaller families or weekend homes.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -292,7 +292,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-407', '700 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-407', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-407', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage living that combines traditional charm with modern building techniques.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -313,7 +313,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-408', '550 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-408', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-408', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A well-ventilated cottage home designed for Bangladesh's countryside.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -334,7 +334,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-409', '600 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-409', '1 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-409', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage architecture built for quick assembly without losing character.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -355,7 +355,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-410', '550 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-410', '2 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>1 Bathroom</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-410', '1 Bathroom') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A budget-friendly cottage home with premium structural quality.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -376,7 +376,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-411', '1,050 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-411', '4 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-411', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">Cottage design featuring a welcoming veranda and efficient layout.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">
@@ -397,7 +397,7 @@
   <div class="property-specs" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; color: var(--grey-700); margin: 2px 0;">
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">📐 <strong>{{ cardArea(dbProductsByModel, 'BH-CH-412', '1,200 sqft') }}</strong></span>
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-CH-412', '4 Bedrooms') }}</strong></span>
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>2 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-CH-412', '2 Bathrooms') }}</strong></span>
   </div>
   <p class="property-desc" style="font-size: 0.84rem; color: var(--grey-600); line-height: 1.4; margin: 0;">A cottage home built to feel spacious despite its modest footprint.</p>
   <div class="property-price" style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: auto;">

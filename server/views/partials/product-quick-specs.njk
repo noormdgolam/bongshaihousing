@@ -3,10 +3,10 @@
   Inputs: `product` (for total_floor_area, bedrooms), `variants` (decorated by decorateVariants).
 #}
 {% set v0 = variants[0] if (variants and variants.length) else none %}
-{% set _area = product.total_floor_area or (v0 and v0.area_sqft) %}
+{% set _area = product.total_floor_area or (v0 and v0.roomGroupsBuildingTotal) or (v0 and v0.area_sqft) %}
 {% set _bed = product.bedrooms or (v0 and v0.bed) %}
-{% set _bath = v0.bath if v0 else none %}
-{% set _kitchen = v0.kitchen if v0 else none %}
+{% set _bath = product.bathrooms or (v0.bath if v0 else none) %}
+{% set _kitchen = product.kitchens or (v0.kitchen if v0 else none) %}
 
 {% if _area or _bed or _bath or _kitchen %}
 <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--space-4);">

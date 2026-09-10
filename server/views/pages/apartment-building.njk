@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "partials/product-card-image.njk" import cardImage %}
-{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice %}
+{% from "partials/product-card-facts.njk" import cardArea, cardBeds, cardPrice, cardBath %}
 {% block head_extra %}
 <script type="application/ld+json">
 
@@ -326,7 +326,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-101', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-101', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -366,7 +366,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-102', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-102', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -408,7 +408,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-103', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-103', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -450,7 +450,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-104', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-104', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -492,7 +492,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-105', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-105', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -534,7 +534,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-106', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-106', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -576,7 +576,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-107', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-107', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -618,7 +618,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-108', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-108', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -660,7 +660,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-109', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-109', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -702,7 +702,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-110', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-110', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -744,7 +744,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-111', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-111', '4 Bathrooms') }}</strong></span>
 
   </div>
 
@@ -786,7 +786,7 @@
 
     <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🛏️ <strong>{{ cardBeds(dbProductsByModel, 'BH-TSB-112', '5 Bedrooms') }}</strong></span>
 
-    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>4 Bathrooms</strong></span>
+    <span style="background: var(--off-white); padding: 4px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">🚿 <strong>{{ cardBath(dbProductsByModel, 'BH-TSB-112', '4 Bathrooms') }}</strong></span>
 
   </div>
 

@@ -200,7 +200,7 @@ for (const pageFile of CATEGORY_LANDING_PAGES) {
           if (dbCategory) {
             const products = await db('products')
               .where({ category_id: dbCategory.id, published: true })
-              .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'bedrooms', 'main_image')
+              .select('id', 'model_number', 'title', 'slug', 'fixed_price', 'price_per_sqft', 'total_floor_area', 'bedrooms', 'bathrooms', 'main_image')
               .orderBy('sort_order', 'asc');
             
             const productIds = products.map(p => p.id);
