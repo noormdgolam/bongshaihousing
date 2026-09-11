@@ -1581,6 +1581,32 @@ async function ensureProductColumns() {
 // variant / room sub-routes did not, so an admin edit to a room area, bed
 // count or spec row updated the DB and nothing else (the live .html kept the
 // old numbers until some unrelated main-form save happened to re-sync). One
+// Regenerate the static .html for "content" pages (FAQ, team departments,
+// service areas, projects index, homepage testimonials) after an admin edit.
+// Those pages are served from the docroot, so without this a saved row never
+// reaches the live site. Best-effort and fire-and-forget: a sync failure must
+// never fail the admin save itself.
+const CONTENT_PAGES = {
+  faq: ['faq.html'],
+  team: ['team-senior-management.html', 'team-engineering.html', 'team-marketing-sales.html',
+    'team-quality-control.html', 'team-skilled-workers.html', 'team-client-service.html'],
+  testimonials: ['index.html'],
+  serviceAreas: ['service-areas.html'],
+  projects: ['projects.html'],
+};
+
+async function resyncContentPages(key) {
+  try {
+    invalidatePageCache();
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    for (const slug of CONTENT_PAGES[key] || []) {
+      try { await syncPageToLive(slug); } catch (e) { console.error(`resyncContentPages ${slug}:`, e.message); }
+    }
+  } catch (e) {
+    console.error('resyncContentPages error:', e.message);
+  }
+}
+
 // helper, called from every product-mutating route.
 async function resyncProductPages(productId) {
   try {
@@ -2473,6 +2499,7 @@ router.post('/admin/projects', upload.single('image_file'), async (req, res) => 
       published: published === 'on' || published === true || published === 'true',
       sort_order: sort_order || 0,
     });
+    setImmediate(() => resyncContentPages('projects'));
     res.redirect(`/admin/projects/${id}/edit`);
   } catch (err) {
     res.status(400).render('admin/projects/form.njk', adminVars(req, { project: req.body, error: "An unexpected error occurred." }));
@@ -2510,6 +2537,7 @@ router.post('/admin/projects/:id', upload.single('image_file'), async (req, res)
     if (slug) syncPageToLive(slug);
   });
 
+  setImmediate(() => resyncContentPages('projects'));
   res.redirect(`/admin/projects/${req.params.id}/edit`);
 });
 
@@ -2538,6 +2566,7 @@ router.post('/admin/projects/:id/delete', async (req, res) => {
   const p = await db('projects').where({ id: req.params.id }).first();
   await db('projects').where({ id: req.params.id }).del();
   await logActivity(req, { action: 'delete', entityType: 'project', entityId: req.params.id, summary: `Deleted project ${p ? p.title : req.params.id}` });
+  setImmediate(() => resyncContentPages('projects'));
   res.redirect('/admin/projects');
 });
 
@@ -2608,6 +2637,7 @@ router.post('/admin/service-areas', async (req, res) => {
       has_dedicated_page: hasDedicated,
       page_slug: cleanSlug,
     });
+    setImmediate(() => resyncContentPages('serviceAreas'));
     res.redirect('/admin/service-areas');
   } catch (e) {
     res.render('admin/service-areas/form.njk', adminVars(req, {
@@ -2648,6 +2678,7 @@ router.post('/admin/service-areas/:id', async (req, res) => {
     };
     await db('service_areas').where({ id: req.params.id }).update(serviceAreaFields);
     await recordHistory(req, 'service_area', req.params.id, existingServiceArea, { ...existingServiceArea, ...serviceAreaFields });
+    setImmediate(() => resyncContentPages('serviceAreas'));
     res.redirect('/admin/service-areas');
   } catch (e) {
     res.render('admin/service-areas/form.njk', adminVars(req, {
@@ -2664,6 +2695,7 @@ router.post('/admin/service-areas/:id/delete', async (req, res) => {
     const sa = await db('service_areas').where({ id: req.params.id }).first();
     await db('service_areas').where({ id: req.params.id }).del();
     await logActivity(req, { action: 'delete', entityType: 'service_area', entityId: req.params.id, summary: `Deleted service area ${sa ? sa.district : req.params.id}` });
+    setImmediate(() => resyncContentPages('serviceAreas'));
     res.redirect('/admin/service-areas');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
@@ -2765,6 +2797,7 @@ router.post('/admin/faqs', async (req, res) => {
       published: published === 'on' || published === true || published === 'true',
       sort_order: finalSort,
     });
+    setImmediate(() => resyncContentPages('faq'));
     res.redirect('/admin/faqs');
   } catch (e) {
     let categories = [...DEFAULT_FAQ_CATEGORIES];
@@ -2818,6 +2851,7 @@ router.post('/admin/faqs/:id', async (req, res) => {
     };
     await db('faqs').where({ id: req.params.id }).update(faqFields);
     await recordHistory(req, 'faq', req.params.id, existingFaq, { ...existingFaq, ...faqFields });
+    setImmediate(() => resyncContentPages('faq'));
     res.redirect('/admin/faqs');
   } catch (e) {
     let categories = [...DEFAULT_FAQ_CATEGORIES];
@@ -2837,6 +2871,7 @@ router.post('/admin/faqs/:id/delete', async (req, res) => {
   if (!db) return res.status(500).send('Database unavailable');
   try {
     await db('faqs').where({ id: req.params.id }).del();
+    setImmediate(() => resyncContentPages('faq'));
     res.redirect('/admin/faqs');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
@@ -2936,6 +2971,7 @@ router.post('/admin/team-members', upload.single('photo_file'), async (req, res)
     });
 
     logActivity(req, 'create', 'team_member', null, `Added team member: ${name.trim()} (${role.trim()})`);
+    setImmediate(() => resyncContentPages('team'));
     res.redirect('/admin/team-members');
   } catch (e) {
     res.render('admin/team-members/form.njk', adminVars(req, {
@@ -2996,6 +3032,7 @@ router.post('/admin/team-members/:id', upload.single('photo_file'), async (req, 
     await recordHistory(req, 'team_member', req.params.id, existingMember, { ...existingMember, ...memberFields });
 
     logActivity(req, 'update', 'team_member', req.params.id, `Updated team member: ${name.trim()}`);
+    setImmediate(() => resyncContentPages('team'));
     res.redirect('/admin/team-members');
   } catch (e) {
     res.render('admin/team-members/form.njk', adminVars(req, {
@@ -3012,6 +3049,7 @@ router.post('/admin/team-members/:id/delete', async (req, res) => {
     const member = await db('team_members').where({ id: req.params.id }).first();
     await db('team_members').where({ id: req.params.id }).del();
     logActivity(req, 'delete', 'team_member', req.params.id, `Deleted team member: ${member ? member.name : req.params.id}`);
+    setImmediate(() => resyncContentPages('team'));
     res.redirect('/admin/team-members');
   } catch (e) {
     res.status(400).send('Delete error: ' + e.message);
@@ -3329,6 +3367,7 @@ router.post('/admin/testimonials', async (req, res) => {
       published: published === 'on', sort_order: sort_order || 0,
     });
     await logActivity(req, { action: 'create', entityType: 'testimonial', entityId: id, summary: `Added testimonial from ${author_name}` });
+    setImmediate(() => resyncContentPages('testimonials'));
     res.redirect(`/admin/testimonials/${id}/edit`);
   } catch (err) {
     res.status(400).render('admin/testimonials/form.njk', adminVars(req, { testimonial: req.body, error: "An unexpected error occurred." }));
@@ -3351,6 +3390,7 @@ router.post('/admin/testimonials/:id', async (req, res) => {
   };
   await db('testimonials').where({ id: req.params.id }).update(testimonialFields);
   await recordHistory(req, 'testimonial', req.params.id, existingTestimonial, { ...existingTestimonial, ...testimonialFields });
+  setImmediate(() => resyncContentPages('testimonials'));
   res.redirect(`/admin/testimonials/${req.params.id}/edit`);
 });
 
@@ -3358,6 +3398,7 @@ router.post('/admin/testimonials/:id/delete', async (req, res) => {
   const t = await db('testimonials').where({ id: req.params.id }).first();
   await db('testimonials').where({ id: req.params.id }).del();
   await logActivity(req, { action: 'delete', entityType: 'testimonial', entityId: req.params.id, summary: `Deleted testimonial from ${t ? t.author_name : req.params.id}` });
+  setImmediate(() => resyncContentPages('testimonials'));
   res.redirect('/admin/testimonials');
 });
 

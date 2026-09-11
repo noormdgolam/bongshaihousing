@@ -91,25 +91,34 @@ document.addEventListener('DOMContentLoaded', function() {
             grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; color: var(--grey-500);">No locations found.</p>';
             return;
         }
+        // District -> dedicated landing page. Driven by the DB so
+        // /admin/service-areas edits take effect; the hardcoded map below is
+        // the fallback when the DB is empty or offline.
         const districtPages = {
-            "Dhaka": "steel-building-dhaka.html",
-            "Chattogram": "steel-building-chotrogram.html",
-            "Gazipur": "steel-building-gazipur.html",
-            "Comilla": "prefab-housing-cumilla.html",
-            "Bogura": "prefab-cottage-bogra-rangpur.html",
-            "Rangpur": "prefab-cottage-bogra-rangpur.html",
-            "Faridpur": "steel-building-faridpur.html",
-            "Sylhet": "steel-building-sylhet.html",
-            "Khulna": "steel-building-khulna.html",
-            "Rajshahi": "steel-building-rajshahi.html",
-            "Barisal": "steel-building-barisal.html",
-            "Mymensingh": "steel-building-mymensingh.html",
-            "Narayanganj": "steel-building-narayanganj.html",
-            "Coxsbazar": "steel-building-coxsbazar.html",
-            "Jashore": "steel-building-jashore.html",
-            "Narsingdi": "steel-building-narsingdi.html",
-            "Tangail": "steel-building-tangail.html",
-            "Manikganj": "steel-building-manikganj.html"
+{%- if dbServiceAreas and dbServiceAreas.length %}
+{%- for a in dbServiceAreas %}{% if a.has_dedicated_page and a.page_slug %}
+            {{ a.district | dump | safe }}: {{ a.page_slug | dump | safe }},
+{%- endif %}{% endfor %}
+{%- else %}
+        "Dhaka": "steel-building-dhaka.html",
+        "Chattogram": "steel-building-chotrogram.html",
+        "Gazipur": "steel-building-gazipur.html",
+        "Comilla": "prefab-housing-cumilla.html",
+        "Bogura": "prefab-cottage-bogra-rangpur.html",
+        "Rangpur": "prefab-cottage-bogra-rangpur.html",
+        "Faridpur": "steel-building-faridpur.html",
+        "Sylhet": "steel-building-sylhet.html",
+        "Khulna": "steel-building-khulna.html",
+        "Rajshahi": "steel-building-rajshahi.html",
+        "Barisal": "steel-building-barisal.html",
+        "Mymensingh": "steel-building-mymensingh.html",
+        "Narayanganj": "steel-building-narayanganj.html",
+        "Coxsbazar": "steel-building-coxsbazar.html",
+        "Jashore": "steel-building-jashore.html",
+        "Narsingdi": "steel-building-narsingdi.html",
+        "Tangail": "steel-building-tangail.html",
+        "Manikganj": "steel-building-manikganj.html"
+{%- endif %}
         };
 
         data.forEach(d => {

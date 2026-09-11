@@ -5,7 +5,7 @@
 
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="preload" href="css/style.min.css?v=4.20" as="style">
+  <link rel="preload" href="css/style.min.css?v=4.21" as="style">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -19,6 +19,7 @@
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="revisit-after" content="7 days" />
   <meta name="language" content="English" />
+  
   <meta name="category" content="Steel Building Company, Real Estate, EPC Contractor Bangladesh" />
   <meta name="geo.region" content="BD-C" />
   <meta name="geo.placename" content="Uttara, Dhaka, Bangladesh" />
@@ -27,7 +28,7 @@
   <link rel="canonical" href="https://bongshaihousing.com/team-senior-management.html" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh" />
-  <meta property="og:description" content="Engineering excellence since 2008 in pre-engineered steel buildings, industrial sheds, and EPC projects across Bangladesh. Expert team, international standards." />
+  <meta property="og:description" content="engineering excellence since 2008 in pre-engineered steel buildings, industrial sheds, and EPC projects across Bangladesh. Expert team, international standards." />
   <meta property="og:image" content="https://bongshaihousing.com/images/logo-icon-512.webp" />
   <meta property="og:image:width" content="512" />
   <meta property="og:image:height" content="512" />
@@ -36,9 +37,9 @@
   <meta property="og:locale" content="en_BD" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="About Bongshai Housing | Pre-Engineered Steel Building Company Bangladesh" />
-  <meta name="twitter:description" content="Bangladesh&#39;s premier steel building company &amp; EPC developer. experience since 2008 in pre-engineered buildings &amp; prefab housing. Uttara, Dhaka." />
+  <meta name="twitter:description" content="Bangladesh&#39;s premier steel building company &amp; EPC developer. since 2008 experience in pre-engineered buildings &amp; prefab housing. Uttara, Dhaka." />
   <meta name="twitter:image" content="https://bongshaihousing.com/images/logo-icon-512.webp" />
-  <link rel="stylesheet" href="css/style.min.css?v=4.20" />
+  <link rel="stylesheet" href="css/style.min.css?v=4.21" />
   
 <script type="application/ld+json">
   {
@@ -123,6 +124,8 @@
     --radius-xl: 16px;
     --container-max: 1280px;
     --nav-height: 80px;
+    --nav-bg-start: #FFFBF5;
+    --nav-bg-end: #FEE7DE;
     --space-24: 6rem;
     --transition-base: all 0.25s ease;
 
@@ -254,7 +257,10 @@
 </div>
 
 <!-- ======================================================
-       NAVIGATION
+       NAVIGATION — rendered from nav_items / categories (server/lib/nav.js),
+       admin-editable at /admin/nav-menu. A 'category_grid' item's dropdown
+       renders navCategories instead of its own children (no nav_items rows
+       duplicate what the categories table already has).
   ====================================================== -->
 <nav aria-label="Main navigation" class="navbar" id="mainNav" role="navigation">
 <div class="navbar-inner">
@@ -272,115 +278,163 @@
 </a>
 <!-- Desktop Menu -->
 <ul class="nav-menu" role="menubar">
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="index.html" role="menuitem">Home</a>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="about.html" role="menuitem">
             About
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </a>
 <div class="dropdown" role="menu">
+
 <a class="dropdown-item" href="about.html" role="menuitem">
 <div class="dropdown-icon">ℹ️</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Company Profile</strong></div>
 </a>
+
 <a class="dropdown-item" href="certifications.html" role="menuitem">
 <div class="dropdown-icon">📜</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Certifications</strong></div>
 </a>
+
 <a class="dropdown-item" href="faq.html" role="menuitem">
 <div class="dropdown-icon">❓</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">FAQ</strong></div>
 </a>
+
 <a class="dropdown-item" href="/agent/signup.html" role="menuitem">
 <div class="dropdown-icon">🤝</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Become an Agent</strong></div>
 </a>
+
+<a class="dropdown-item" href="/agent/login.html" role="menuitem">
+<div class="dropdown-icon">🔑</div>
+<div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Agent Login</strong></div>
+</a>
+
 <a class="dropdown-item" href="/my-project/login.html" role="menuitem">
 <div class="dropdown-icon">📊</div>
 <div><strong style="display:block;font-size:0.8rem;color:var(--primary)">Track My Project</strong></div>
 </a>
+
 </div>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="products-and-solutions.html" role="menuitem">
-            Products &amp; Solutions
+            Products
             <svg aria-hidden="true" class="arrow-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </a>
 <div class="dropdown image-mega-dropdown" role="menu">
   <div class="mega-image-grid">
+    
     <a href="apartment-building.html" class="mega-card">
       <img src="images/products/Model No-BH-TB-101.webp" srcset="images/products/Model%20No-BH-TB-101-400w.webp 400w, images/products/Model%20No-BH-TB-101.webp 675w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Apartment Building" loading="lazy" width="675" height="720">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Apartment Building</span>
       </div>
     </a>
+    
     <a href="duplex-steel-building.html" class="mega-card">
       <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Duplex Steel Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Duplex Steel Building</span>
       </div>
     </a>
+    
     <a href="simplex-steel-building.html" class="mega-card">
-      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Steel Building" loading="lazy" width="1024" height="1024">
+      <img src="images/products/bh-sb-301.webp" srcset="images/products/bh-sb-301-400w.webp 400w, images/products/bh-sb-301-700w.webp 700w, images/products/bh-sb-301.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Simplex Prefab Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Simplex Steel Building</span>
+        <span class="mega-card-title">Simplex Prefab Building</span>
       </div>
     </a>
+    
     <a href="cottage-house.html" class="mega-card">
-      <img src="images/products/Model No-BH-CH-401.webp" srcset="images/products/Model%20No-BH-CH-401-400w.webp 400w, images/products/Model%20No-BH-CH-401-700w.webp 700w, images/products/Model%20No-BH-CH-401.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Cottage House" loading="lazy" width="1024" height="1024">
+      <img src="images/uploads/Model-No-BH-CH-409-1789050403828-802969.webp" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Luxury Cottage House" loading="lazy">
       <div class="mega-card-overlay">
-        <span class="mega-card-title">Cottage House</span>
+        <span class="mega-card-title">Luxury Cottage House</span>
       </div>
     </a>
+    
     <a href="container-house.html" class="mega-card">
       <img src="images/products/bh-ct-501.webp" srcset="images/products/bh-ct-501-400w.webp 400w, images/products/bh-ct-501-700w.webp 700w, images/products/bh-ct-501.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Container House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Container House</span>
       </div>
     </a>
+    
     <a href="steel-house.html" class="mega-card">
       <img src="images/products/Model No-BH-SH-601.webp" srcset="images/products/Model%20No-BH-SH-601-400w.webp 400w, images/products/Model%20No-BH-SH-601-700w.webp 700w, images/products/Model%20No-BH-SH-601.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Steel House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Steel House</span>
       </div>
     </a>
+    
     <a href="tiny-house.html" class="mega-card">
       <img src="images/products/Model No-BH-TH-701.webp" srcset="images/products/Model%20No-BH-TH-701-400w.webp 400w, images/products/Model%20No-BH-TH-701-700w.webp 700w, images/products/Model%20No-BH-TH-701.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Tiny House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Tiny House</span>
       </div>
     </a>
+    
     <a href="wooden-house.html" class="mega-card">
       <img src="images/products/Model No-BH-WH-801.webp" srcset="images/products/Model%20No-BH-WH-801-400w.webp 400w, images/products/Model%20No-BH-WH-801-700w.webp 700w, images/products/Model%20No-BH-WH-801.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Wooden House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Wooden House</span>
       </div>
     </a>
+    
     <a href="low-cost-house.html" class="mega-card">
       <img src="images/products/coming-soon-placeholder.png" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Low Cost House" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Low Cost House</span>
       </div>
     </a>
+    
     <a href="concrete-building.html" class="mega-card">
       <img src="images/products/bh-cb-901.webp" srcset="images/products/bh-cb-901-400w.webp 400w, images/products/bh-cb-901-700w.webp 700w, images/products/bh-cb-901.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Concrete Building" loading="lazy" width="1024" height="1024">
       <div class="mega-card-overlay">
         <span class="mega-card-title">Concrete Building</span>
       </div>
     </a>
-    </div>
+    
+  </div>
 </div>
-</li> <li class="nav-item" role="none">
+
+</li>
+
+<li class="nav-item" role="none">
+
+<a class="nav-link" href="interactive-tools.html" role="menuitem">Cost Calculator</a>
+
+</li>
+
+<li class="nav-item" role="none">
+
 <a class="nav-link" href="projects.html" role="menuitem">Our Projects</a>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="gallery.html" role="menuitem">Image Gallery</a>
+
 </li>
+
 <li class="nav-item" role="none">
+
 <a class="nav-link" href="contact.html" role="menuitem">Contact</a>
+
 </li>
+
 </ul>
 <!-- Desktop CTA -->
 <div class="nav-cta">
@@ -401,47 +455,82 @@
   <!-- Mobile Drawer -->
 <div aria-label="Mobile navigation" class="mobile-drawer" id="mobileDrawer" role="dialog">
 <div>
+
+
 <a class="mobile-nav-link" href="index.html">Home</a>
+
+
+
 <div>
-<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About Us <span>▾</span>
+<button class="mobile-nav-link" onclick="this.nextElementSibling.classList.toggle('open')" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);">About <span>▾</span>
 </button>
 <div class="mobile-sub-links">
-<a class="mobile-sub-link" href="about.html">Company Profile</a>
-<a class="mobile-sub-link" href="certifications.html">Certifications</a>
-<a class="mobile-sub-link" href="faq.html">FAQ</a>
+
+<a class="mobile-sub-link" href="about.html">ℹ️ Company Profile</a>
+
+<a class="mobile-sub-link" href="certifications.html">📜 Certifications</a>
+
+<a class="mobile-sub-link" href="faq.html">❓ FAQ</a>
+
+<a class="mobile-sub-link" href="/agent/signup.html">🤝 Become an Agent</a>
+
+<a class="mobile-sub-link" href="/agent/login.html">🔑 Agent Login</a>
+
+<a class="mobile-sub-link" href="/my-project/login.html">📊 Track My Project</a>
+
 </div>
 </div>
+
+
+
       <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products &amp; Solutions <span>▾</span>
+        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Products <span>▾</span>
         </button>
         <div class="mobile-sub-links">
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Residential</div>
-<a class="mobile-sub-link" href="apartment-building.html">Apartment building</a>
-<a class="mobile-sub-link" href="duplex-steel-building.html">Duplex steel building</a>
-<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex steel building</a>
-<a class="mobile-sub-link" href="cottage-house.html">Cottage House</a>
-<a class="mobile-sub-link" href="container-house.html">Container house</a>
-<a class="mobile-sub-link" href="steel-house.html">Steel house</a>
-<a class="mobile-sub-link" href="tiny-house.html">Tiny house</a>
+
+<a class="mobile-sub-link" href="apartment-building.html">Apartment Building</a>
+
+<a class="mobile-sub-link" href="duplex-steel-building.html">Duplex Steel Building</a>
+
+<a class="mobile-sub-link" href="simplex-steel-building.html">Simplex Prefab Building</a>
+
+<a class="mobile-sub-link" href="cottage-house.html">Luxury Cottage House</a>
+
+<a class="mobile-sub-link" href="container-house.html">Container House</a>
+
+<a class="mobile-sub-link" href="steel-house.html">Steel House</a>
+
+<a class="mobile-sub-link" href="tiny-house.html">Tiny House</a>
+
 <a class="mobile-sub-link" href="wooden-house.html">Wooden House</a>
+
 <a class="mobile-sub-link" href="low-cost-house.html">Low Cost House</a>
-<a class="mobile-sub-link" href="concrete-building.html">Concrete building</a>
+
+<a class="mobile-sub-link" href="concrete-building.html">Concrete Building</a>
 
           <div style="padding:var(--space-2) 0 0;font-size:0.7rem;font-weight:700;color:var(--grey-500);text-transform:uppercase;">Interactive Tools</div>
           <a href="solutions.html" class="mobile-sub-link">Contact Sales</a>
         </div>
-      </div>      <a href="projects.html" class="mobile-nav-link">Our Projects</a>
-      <a href="gallery.html" class="mobile-nav-link">Image Gallery</a>
-      <a href="contact.html" class="mobile-nav-link">Contact</a>
-      <div>
-        <button class="mobile-nav-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;font-size:var(--fs-base);font-weight:500;color:var(--grey-800);display:flex;justify-content:space-between;padding:var(--space-4) 0;border-bottom:1px solid var(--grey-100);" onclick="this.nextElementSibling.classList.toggle('open')">Portals &amp; Tracking <span>▾</span>
-        </button>
-        <div class="mobile-sub-links">
-          <a href="/agent/signup.html" class="mobile-sub-link">🤝 Become an Agent</a>
-          <a href="/agent/login.html" class="mobile-sub-link">Agent Login</a>
-          <a href="/my-project/login.html" class="mobile-sub-link">Track My Project</a>
-        </div>
       </div>
+
+
+
+<a class="mobile-nav-link" href="interactive-tools.html">Cost Calculator</a>
+
+
+
+<a class="mobile-nav-link" href="projects.html">Our Projects</a>
+
+
+
+<a class="mobile-nav-link" href="gallery.html">Image Gallery</a>
+
+
+
+<a class="mobile-nav-link" href="contact.html">Contact</a>
+
+
     </div>
 
     <div style="margin-top:var(--space-8);display:flex;flex-direction:column;gap:var(--space-3);">
@@ -477,6 +566,52 @@
             <p style="margin-bottom:var(--space-4)">Our Senior Management team at Bongshai Housing consists of seasoned professionals including the Deputy General Manager (DGM), Senior Project Managers, and Principal Architects.</p>
             <p style="margin-bottom:var(--space-4)">With decades of combined experience in both international and domestic markets, they provide strategic direction and strong leadership for all our Engineering, Procurement, Construction, and Commissioning (EPC&amp;C) projects.</p>
             <p style="margin-bottom:var(--space-4)">They are committed to maintaining international standards of quality, safety, and reliability across every project we undertake.</p>
+
+            
+            
+            <div class="stagger product-grid" style="margin-top:var(--space-8)">
+              
+              <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:0;text-align:left">
+                <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)">
+                  
+                  <div aria-hidden="true" style="width:64px;height:64px;border-radius:50%;flex-shrink:0;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:var(--font-heading);font-size:1.1rem">SA</div>
+                  
+                  <div style="min-width:0">
+                    <h3 class="why-title" style="margin:0 0 2px">SMA AWAL</h3>
+                    <p style="color:var(--primary);font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;margin:0">Chief Engineer &amp; Project Director</p>
+                  </div>
+                </div>
+                <p class="why-text" style="margin:0">20+ years of EPC construction leadership in Bangladesh, heading pre-engineered building (PEB) design, structural safety, and high-precision execution.</p>
+              </div>
+              
+              <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:1;text-align:left">
+                <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)">
+                  
+                  <div aria-hidden="true" style="width:64px;height:64px;border-radius:50%;flex-shrink:0;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:var(--font-heading);font-size:1.1rem">FM</div>
+                  
+                  <div style="min-width:0">
+                    <h3 class="why-title" style="margin:0 0 2px">Farjana Maria</h3>
+                    <p style="color:var(--primary);font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;margin:0">Principal Architect</p>
+                  </div>
+                </div>
+                <p class="why-text" style="margin:0">Specializes in modern steel-composite residential designs, eco-resort villas, and high-efficiency industrial floor layouts.</p>
+              </div>
+              
+              <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:2;text-align:left">
+                <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)">
+                  
+                  <div aria-hidden="true" style="width:64px;height:64px;border-radius:50%;flex-shrink:0;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:var(--font-heading);font-size:1.1rem">MG</div>
+                  
+                  <div style="min-width:0">
+                    <h3 class="why-title" style="margin:0 0 2px">MD Golam Noor</h3>
+                    <p style="color:var(--primary);font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;margin:0">IT Lead &amp; Automation Director</p>
+                  </div>
+                </div>
+                <p class="why-text" style="margin:0">Drives digital transformation, BIM workflow integrations, and automated project tracking across all nationwide construction sites.</p>
+              </div>
+              
+            </div>
+            
 
             <div style="margin-top:var(--space-8)">
               <a href="about.html" class="btn btn-outline">← Back to About Us</a>
@@ -652,7 +787,7 @@
     <div class="bh-ai-quick-prompts" id="bhAiQuickPrompts" lang="bn">
       <button class="bh-ai-chip bh-ai-chip-estimate" data-flow="estimate">🧮 তাৎক্ষণিক খরচ হিসাব করুন</button>
       <button class="bh-ai-chip" data-prompt="স্টিল বিল্ডিং তৈরি করতে কত দিন সময় লাগে?">⚡ কত দিনে তৈরি হয়?</button>
-      <button class="bh-ai-chip" data-prompt="ফ্যাক্টরি বা ইন্ডাস্ট্রিয়াল শেডের রেট কত?">🏭 ফ্যাক্টরি শেড রেট</button>
+      <button class="bh-ai-chip" data-prompt="ফ্যাক্টরি বা ইন্ডাস্ট্রিয়াল শেডের রেট কত?">📦 কনটেইনার হাউজ রেট</button>
       <button class="bh-ai-chip" data-prompt="BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান">📐 BH-SB-302 মডেল</button>
     </div>
 
@@ -1511,7 +1646,7 @@
   // ── Flow A: Instant Cost Estimate (deterministic, code-computed - never
   // routed through the LLM, since a hallucinated price is worse than none) ──
 
-  const ESTIMATE_TYPES = [{"id":"apartment","label":"🏬 Apartment বিল্ডিং","rate":3200,"tiers":[{"min":1050,"max":1500,"label":"১০৫০–১৫০০ বর্গফুট"}]},{"id":"duplex","label":"🏢 ডুপ্লেক্স Steel বিল্ডিং","rate":2250,"tiers":[{"min":600,"max":600,"label":"৬০০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৪ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"simplex","label":"🏠 সিমপ্লেক্স Steel হাউজ","rate":2500,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"cottage","label":"🏘️ Cottage হাউজ","rate":1900,"tiers":[{"min":320,"max":320,"label":"৩২০ বর্গফুট (১ বেডরুম)"},{"min":440,"max":440,"label":"৪৪০ বর্গফুট (২ বেডরুম)"},{"min":560,"max":560,"label":"৫৬০ বর্গফুট (২ বেডরুম)"},{"min":600,"max":600,"label":"৬০০ বর্গফুট (২ বেডরুম)"},{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"container","label":"📦 কনটেইনার হাউজ","rate":2500,"tiers":[{"min":300,"max":300,"label":"৩০০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":400,"label":"৪০০ বর্গফুট (২ বেডরুম)"}]},{"id":"steelhouse","label":"🏗️ Steel হাউজ","rate":2000,"tiers":[{"min":600,"max":600,"label":"৬০০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৪ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"tiny","label":"🏡 Tiny হাউজ","rate":2500,"tiers":[{"min":300,"max":300,"label":"৩০০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":400,"label":"৪০০ বর্গফুট (২ বেডরুম)"}]},{"id":"wooden","label":"🪵 Wooden হাউজ","rate":2500,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"concrete","label":"🧱 Concrete বিল্ডিং","rate":2750,"tiers":[{"min":750,"max":750,"label":"৭৫০ ��র্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]}];
+  const ESTIMATE_TYPES = [{"id":"apartment","label":"🏬 Apartment বিল্ডিং","rate":3200,"tiers":[{"min":1050,"max":1500,"label":"১০৫০–১৫০০ বর্গফুট"}]},{"id":"duplex","label":"🏢 ডুপ্লেক্স Steel বিল্ডিং","rate":2250,"tiers":[{"min":600,"max":600,"label":"৬০০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৪ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"simplex","label":"🏠 সিমপ্লেক্স Steel হাউজ","rate":2500,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"cottage","label":"🏘️ Cottage হাউজ","rate":1900,"tiers":[{"min":320,"max":320,"label":"৩২০ বর্গফুট (১ বেডরুম)"},{"min":440,"max":440,"label":"৪৪০ বর্গফুট (২ বেডরুম)"},{"min":560,"max":560,"label":"৫৬০ বর্গফুট (২ বেডরুম)"},{"min":600,"max":600,"label":"৬০০ বর্গফুট (২ বেডরুম)"},{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"container","label":"📦 কনটেইনার হাউজ","rate":2500,"tiers":[{"min":300,"max":300,"label":"৩০০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":400,"label":"৪০০ বর্গফুট (২ বেডরুম)"}]},{"id":"steelhouse","label":"🏗️ Steel হাউজ","rate":2000,"tiers":[{"min":600,"max":600,"label":"৬০০ বর্গফুট (৩ বেডরুম)"},{"min":850,"max":850,"label":"৮৫০ বর্গফুট (৪ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"tiny","label":"🏡 Tiny হাউজ","rate":2500,"tiers":[{"min":300,"max":300,"label":"৩০০ বর্গফুট (১ বেডরুম)"},{"min":400,"max":400,"label":"৪০০ বর্গফুট (২ বেডরুম)"}]},{"id":"wooden","label":"🪵 Wooden হাউজ","rate":2500,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]},{"id":"concrete","label":"🧱 Concrete বিল্ডিং","rate":2750,"tiers":[{"min":750,"max":750,"label":"৭৫০ বর্গফুট (৩ বেডরুম)"},{"min":1050,"max":1050,"label":"১০৫০ বর্গফুট (৪ বেডরুম)"},{"min":1250,"max":1250,"label":"১২৫০ বর্গফুট (৫ বেডরুম)"}]}];
 
   let estimateState = null;
 
@@ -1697,6 +1832,7 @@
     });
   }
 </script>
+<script src="js/utm-capture.js?v=1" defer></script>
 <script src="js/3d-tilt.js?v=1" defer></script>
 <script src="js/page-transition.js?v=1" defer></script>
 <script src="js/global-upgrades.min.js?v=3.16" defer></script>
@@ -2042,6 +2178,8 @@
             --radius-xl: ${theme.radius_xl};
             --container-max: ${theme.container_width || '1280px'};
             --nav-height: ${theme.navbar_height || '80px'};
+            --nav-bg-start: ${theme.nav_bg_start || '#FFFBF5'};
+            --nav-bg-end: ${theme.nav_bg_end || '#FEE7DE'};
             --space-24: ${sectionPad};
             --transition-base: all ${theme.transition_speed || '0.25s'} ease;
 
@@ -2158,6 +2296,7 @@
   });
 })();
 </script>
+
 
 </body>
 </html>

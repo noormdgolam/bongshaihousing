@@ -94,6 +94,23 @@
         </div>
 
 <div class="properties-grid stagger">
+          {# DB-driven: /admin/projects edits render here. Hardcoded cards kept
+             as the {% else %} fallback for an empty/offline DB. #}
+          {% if dbProjects and dbProjects.length %}
+          {% for p in dbProjects %}
+          <article class="property-card filter-item reveal visible" data-tilt="" data-aos="fade-up" style="--i:{{ loop.index0 }}">
+            <div class="property-img-wrap">
+              <img src="{{ p.image }}" alt="{{ p.title }}" title="{{ p.title }}" style="width:100%; height:auto; display:block;" loading="lazy" width="1024" height="1024">
+            </div>
+            <div class="property-card-body filter-item-body" data-aos="fade-up">
+              <span class="property-type">{{ p.status_label or "Completed Project" }}</span>
+              <h2 class="property-name">{{ p.title }}</h2>
+              <p class="property-desc">{{ p.description | safe }}</p>
+              <a href="{{ p.slug }}" class="btn-card-link">View Details</a>
+            </div>
+          </article>
+          {% endfor %}
+          {% else %}
           <article class="property-card filter-item reveal visible" data-tilt="" data-aos="fade-up" style="--i:0">
             <div class="property-img-wrap">
               <img src="images/projects/completed/asulia-dhaka.jpg" alt="Completed exterior of prefab steel building in Asulia, Dhaka" title="Prefab building exterior in Asulia, Dhaka" style="width:100%; height:auto; display:block;" loading="lazy" width="1024" height="1024">
@@ -314,6 +331,7 @@
               <a href="kaliganj-dhaka.html" class="btn-card-link">View Details</a>
             </div>
           </article>
+          {% endif %}
         </div>
         
       </div>

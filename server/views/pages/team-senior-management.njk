@@ -85,6 +85,30 @@
             <p style="margin-bottom:var(--space-4)">With decades of combined experience in both international and domestic markets, they provide strategic direction and strong leadership for all our Engineering, Procurement, Construction, and Commissioning (EPC&amp;C) projects.</p>
             <p style="margin-bottom:var(--space-4)">They are committed to maintaining international standards of quality, safety, and reliability across every project we undertake.</p>
 
+            {# DB-driven roster: /admin/team-members rows whose department matches
+               this page. Renders nothing when the table has none, so the prose
+               above still stands on its own. #}
+            {% if dbTeamMembers and dbTeamMembers.length %}
+            <div class="stagger product-grid" style="margin-top:var(--space-8)">
+              {% for m in dbTeamMembers %}
+              <div class="why-card reveal glass-card" data-aos="fade-up" style="--i:{{ loop.index0 }};text-align:left">
+                <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)">
+                  {% if m.photo %}
+                  <img src="{{ m.photo }}" alt="{{ m.name }}" loading="lazy" width="64" height="64" style="width:64px;height:64px;border-radius:50%;object-fit:cover;flex-shrink:0">
+                  {% else %}
+                  <div aria-hidden="true" style="width:64px;height:64px;border-radius:50%;flex-shrink:0;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:var(--font-heading);font-size:1.1rem">{{ m.initials }}</div>
+                  {% endif %}
+                  <div style="min-width:0">
+                    <h3 class="why-title" style="margin:0 0 2px">{{ m.name }}</h3>
+                    {% if m.role %}<p style="color:var(--primary);font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.04em;margin:0">{{ m.role }}</p>{% endif %}
+                  </div>
+                </div>
+                {% if m.bio %}<p class="why-text" style="margin:0">{{ m.bio }}</p>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
             <div style="margin-top:var(--space-8)">
               <a href="about.html" class="btn btn-outline">← Back to About Us</a>
               <a href="contact.html" class="btn btn-primary" style="margin-left:var(--space-3)">Contact Sales</a>

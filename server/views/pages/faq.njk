@@ -12,7 +12,14 @@
       "jobTitle": "Chief Engineer",
       "worksFor": {"@type": "Organization", "name": "Bongshai Housing Ltd.", "foundingDate": "2008", "url": "https://bongshaihousing.com"}
     },
+    {# FAQ schema is generated from the same DB rows the page renders, so the
+       structured data can never drift from the visible answers. #}
     "mainEntity": [
+{%- if dbFaqs and dbFaqs.length -%}
+{%- for f in dbFaqs %}
+      {"@type": "Question", "name": {{ f.question | dump | safe }}, "acceptedAnswer": {"@type": "Answer", "text": {{ f.answer | striptags | dump | safe }}}}{{ "," if not loop.last }}
+{%- endfor %}
+{%- else -%}
       {
         "@type": "Question",
         "name": "What is Bongshai Housing?",
@@ -113,6 +120,7 @@
         "name": "Can I customize a model to fit my land size?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes. The floor-area tiers on each model page are starting points - share your land dimensions and requirements with our team, and we'll adapt the layout to fit." }
       }
+{%- endif -%}
     ]
   }
   </script>
@@ -165,6 +173,23 @@
       <div class="container" style="max-width: 900px;">
         <h2 id="content-title" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Frequently Asked Questions</h2>
 
+        {# DB-driven: admin FAQ edits (/admin/faqs) render here. The original
+           hardcoded list is kept as the {% else %} fallback so the page still
+           renders if the DB is empty or offline. #}
+        {% if faqCategories and faqCategories.length %}
+        {% for cat in faqCategories %}
+        <div class="faq-category reveal visible">
+          <h2 class="faq-category-title">{{ cat.name }}</h2>
+
+          {% for f in cat.items %}
+          <details class="faq-item">
+            <summary>{{ f.question }}</summary>
+            <div class="faq-answer">{{ f.answer | safe }}</div>
+          </details>
+          {% endfor %}
+        </div>
+        {% endfor %}
+        {% else %}
         <div class="faq-category reveal visible">
           <h2 class="faq-category-title">General Questions</h2>
 
@@ -285,6 +310,7 @@
             <div class="faq-answer">Yes. The floor-area tiers on each model page are starting points - share your land dimensions and requirements with our team, and we'll adapt the layout to fit.</div>
           </details>
         </div>
+        {% endif %}
 
         <div class="reveal" style="text-align:center; margin-top: var(--space-10); padding: var(--space-8); background: var(--off-white); border-radius: 16px;">
           <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--primary-dark); margin-bottom: var(--space-3);">Get Your Questions Answered</h2>

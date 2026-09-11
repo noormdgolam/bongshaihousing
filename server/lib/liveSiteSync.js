@@ -397,6 +397,72 @@ async function renderCategoryToHtml(pageFile) {
 }
 
 /**
+ * Renders one of the "content" registry pages (FAQ, service areas, projects
+ * index, the six team department pages, homepage) from the DB, mirroring the
+ * exact data each one's route in server/routes/pages.js fetches.
+ *
+ * These pages are served from static .html in the docroot, so without this an
+ * admin edit to a FAQ / team member / project / testimonial saved to the DB
+ * and never appeared on the site. Returns null for any other slug so
+ * syncPageToLive() falls through to its other renderers.
+ */
+const TEAM_DEPTS = {
+  'team-senior-management.html': 'senior-management',
+  'team-engineering.html': 'engineering',
+  'team-marketing-sales.html': 'marketing-sales',
+  'team-quality-control.html': 'quality-control',
+  'team-skilled-workers.html': 'skilled-workers',
+  'team-client-service.html': 'client-service',
+};
+
+async function renderContentPageToHtml(pageFile) {
+  if (!db) throw new Error('Database connection not available');
+  const file = pageFile.endsWith('.html') ? pageFile : `${pageFile}.html`;
+  const meta = registry['/' + file];
+  if (!meta || !meta.template) return null;
+
+  const extra = {};
+  if (file === 'faq.html') {
+    const dbFaqs = await db('faqs').where({ published: true }).orderBy('category', 'asc').orderBy('sort_order', 'asc');
+    const groupMap = new Map();
+    for (const f of dbFaqs) {
+      const cat = f.category || 'General';
+      if (!groupMap.has(cat)) groupMap.set(cat, []);
+      groupMap.get(cat).push(f);
+    }
+    extra.dbFaqs = dbFaqs;
+    extra.faqCategories = Array.from(groupMap.entries()).map(([name, items]) => ({ name, items }));
+  } else if (file === 'service-areas.html') {
+    extra.dbServiceAreas = await db('service_areas').orderBy('division', 'asc').orderBy('district', 'asc');
+  } else if (file === 'projects.html') {
+    extra.dbProjects = await db('projects').where({ published: true }).orderBy('sort_order')
+      .select('id', 'slug', 'title', 'location', 'description', 'image', 'status_label');
+  } else if (TEAM_DEPTS[file]) {
+    const rows = await db('team_members').where({ department: TEAM_DEPTS[file], published: true }).orderBy('sort_order', 'asc');
+    extra.dbTeamMembers = rows.map((m) => ({
+      ...m,
+      initials: String(m.name || '').split(' ').filter(Boolean).map((w) => w[0]).join('').slice(0, 2).toUpperCase(),
+    }));
+    extra.teamDepartment = TEAM_DEPTS[file];
+  } else if (file === 'index.html') {
+    extra.dbTestimonials = await db('testimonials').where({ published: true }).orderBy('sort_order');
+  } else {
+    return null; // not a content page this renderer knows about
+  }
+
+  let theme = {};
+  let themeCssVars = '';
+  try {
+    theme = await getThemeSettings();
+    themeCssVars = generateCssVariables(theme);
+  } catch (e) { theme = {}; themeCssVars = ''; }
+
+  return nunjucksEnv.render(meta.template, renderVars(meta, {
+    ...extra, theme, themeCssVars, ...(await navLocals()),
+  }));
+}
+
+/**
  * Directly renders a project detail page (project-bodorgonj-rangpur.html
  * etc.) to HTML string using Nunjucks & DB. Same shape as renderProductToHtml's
  * dedicated-template branch: each project has its own hand-authored .njk
@@ -483,6 +549,13 @@ async function syncPageToLive(slug) {
         console.warn(`[liveSiteSync] In-process project render missed for ${file}:`, renderErr.message);
       }
     }
+    if (!html) {
+      try {
+        html = await renderContentPageToHtml(file);
+      } catch (renderErr) {
+        console.warn(`[liveSiteSync] In-process content render missed for ${file}:`, renderErr.message);
+      }
+    }
 
     // 2. If neither in-process render matched, attempt loopback self-fetch
     if (!html) {
@@ -522,4 +595,4 @@ async function syncPageToLive(slug) {
   }
 }
 
-module.exports = { syncPageToLive, renderProductToHtml, renderCategoryToHtml, renderProjectToHtml };
+module.exports = { syncPageToLive, renderProductToHtml, renderCategoryToHtml, renderProjectToHtml, renderContentPageToHtml };
