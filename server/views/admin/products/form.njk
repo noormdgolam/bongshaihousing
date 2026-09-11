@@ -275,8 +275,8 @@
                 <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][floor_label]" value="{{ r.floor_label or '' }}" placeholder="e.g. Ground Floor Layout" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
                 <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][section]" value="{{ r.section }}" placeholder="e.g. Master bed" required style="width:100%; padding:3px 5px;"></td>
                 <td><input type="number" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][area_sqft]" value="{{ r.area_sqft or '' }}" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
-                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][length_ft]" value="{{ r.length_ft or '' }}" style="width:100%; padding:3px 5px;"></td>
-                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][width_ft]" value="{{ r.width_ft or '' }}" style="width:100%; padding:3px 5px;"></td>
+                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][length_ft]" value="{{ r.length_ft or '' }}" style="width:100%; padding:3px 5px;" oninput="recalcRoomArea(this)"></td>
+                <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][width_ft]" value="{{ r.width_ft or '' }}" style="width:100%; padding:3px 5px;" oninput="recalcRoomArea(this)"></td>
                 <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:0.75rem;" onclick="const c = this.closest('.variant-card'); this.closest('tr').remove(); updateVariantTotals(c);">Del</button></td>
               </tr>
               {% endfor %}
@@ -319,6 +319,17 @@
 <script>
 let dynamicCounter = Date.now();
 
+function recalcRoomArea(input) {
+  const tr = input.closest('tr');
+  if (!tr) return;
+  const len = parseFloat(tr.querySelector('input[name*="[length_ft]"]')?.value);
+  const wid = parseFloat(tr.querySelector('input[name*="[width_ft]"]')?.value);
+  const areaInput = tr.querySelector('input[name*="[area_sqft]"]');
+  if (!areaInput || !isFinite(len) || !isFinite(wid) || len <= 0 || wid <= 0) return;
+  areaInput.value = Math.round(len * wid);
+  updateVariantTotals(input.closest('.variant-card'));
+}
+
 function updateVariantTotals(card) {
   if (!card) return;
   const rows = card.querySelectorAll('.rooms-tbody tr');
@@ -340,6 +351,23 @@ function updateVariantTotals(card) {
   const bldgEl = card.querySelector('.building-total-text');
   if (subEl) subEl.textContent = subtotalsText ? `Subtotals: ${subtotalsText}` : '';
   if (bldgEl) bldgEl.textContent = grandTotal ? `Total: ${grandTotal.toLocaleString()} sqft` : '';
+
+  refreshTotalFloorArea();
+}
+
+// products.total_floor_area is saved as the sum of every room across every
+// variant, so the disabled display on the form has to follow the same sum -
+// otherwise it keeps showing a stale number after a dimension edit.
+function refreshTotalFloorArea() {
+  const display = document.getElementById('total_floor_area_display');
+  if (!display) return;
+  const firstCard = document.querySelector('.variant-card');
+  if (!firstCard) return;
+  let total = 0;
+  firstCard.querySelectorAll('.rooms-tbody tr input[name*="[area_sqft]"]').forEach((el) => {
+    total += parseInt(el.value, 10) || 0;
+  });
+  if (total > 0) display.value = total;
 }
 
 function addSpecRow(tbodyId, type, defaultKey, defaultValue) {
@@ -374,8 +402,8 @@ function addRoomRow(btn, variantIdx) {
     <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][floor_label]" value="${prevFloor}" placeholder="e.g. Ground Floor Layout" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
     <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][section]" placeholder="e.g. Bed room" required style="width:100%; padding:3px 5px;"></td>
     <td><input type="number" name="variants[${vIdx}][rooms][${rIdx}][area_sqft]" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
-    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][length_ft]" style="width:100%; padding:3px 5px;"></td>
-    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][width_ft]" style="width:100%; padding:3px 5px;"></td>
+    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][length_ft]" style="width:100%; padding:3px 5px;" oninput="recalcRoomArea(this)"></td>
+    <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][width_ft]" style="width:100%; padding:3px 5px;" oninput="recalcRoomArea(this)"></td>
     <td style="text-align:center;"><button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:0.75rem;" onclick="const c = this.closest('.variant-card'); this.closest('tr').remove(); updateVariantTotals(c);">Del</button></td>
   `;
   tbody.appendChild(tr);

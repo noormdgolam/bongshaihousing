@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Theme Studio Pro — Elementor-Grade Visual Builder</title>
 <meta name="robots" content="noindex, nofollow">
+{# This page is standalone (it does not extend admin-layout.njk), so the
+   layout's auto-inject script never ran here and every fetch below was
+   sending an empty _csrf. #}
+<meta name="csrf-token" content="{{ csrfToken }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -457,6 +461,12 @@
     <a href="/admin/theme-editor/export" class="btn btn-outline" title="Export Theme JSON">📤 Export</a>
     <button type="button" class="btn btn-outline" id="resetBtn" title="Reset Defaults">🔄 Reset</button>
     <button type="button" class="btn btn-success" id="saveBtn" style="font-weight:700;">💾 Save &amp; Publish</button>
+    {# Saving writes the theme to the DB, which only changes dynamically
+       rendered pages. Every static .html carries a baked-in theme variable
+       block from when it was rendered, so it needs a re-render to pick up new
+       colours/fonts. #}
+    <button type="button" class="btn btn-tool" id="applyLiveBtn" title="Re-render every static page so this theme shows on the live site">🚀 Apply to Live Site</button>
+    <span id="applyLiveStatus" style="font-size:0.8rem; color:var(--grey-500); align-self:center;"></span>
   </div>
 </header>
 
@@ -1272,6 +1282,42 @@ const presetsData = {{ presets | dump | safe }};
       sec.setAttribute('data-collapsed', sec.getAttribute('data-collapsed') === 'true' ? 'false' : 'true');
     });
   });
+
+  // ── Apply theme to the live site ────────────────────────────────────────
+  // Saving stores the theme; the ~280 static pages each need re-rendering to
+  // pick it up. Kicks off a server-side rebuild and polls until it finishes.
+  const applyLiveBtn = document.getElementById('applyLiveBtn');
+  const applyLiveStatus = document.getElementById('applyLiveStatus');
+  if (applyLiveBtn) {
+    applyLiveBtn.addEventListener('click', async () => {
+      if (!confirm('Re-render every static page so this theme shows on the live site?
+
+Takes a few minutes. You can keep working.')) return;
+      applyLiveBtn.disabled = true;
+      applyLiveStatus.textContent = 'starting…';
+      const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+      try {
+        await fetch('/admin/theme-editor/apply-to-live', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ _csrf: csrfMeta ? csrfMeta.content : '' }),
+          redirect: 'manual',
+        });
+      } catch (e) { /* redirect response is expected */ }
+      const poll = setInterval(async () => {
+        try {
+          const st = await (await fetch('/admin/theme-editor/rebuild-status')).json();
+          if (st.running) {
+            applyLiveStatus.textContent = `rebuilding ${st.done}/${st.total}…`;
+          } else if (st.finishedAt) {
+            clearInterval(poll);
+            applyLiveStatus.textContent = `✅ ${st.done}/${st.total} pages rebuilt` + (st.failed ? ` (${st.failed} failed)` : '');
+            applyLiveBtn.disabled = false;
+          }
+        } catch (e) { /* keep polling */ }
+      }, 3000);
+    });
+  }
 
   // Save & Publish
   saveBtn.addEventListener('click', async () => {

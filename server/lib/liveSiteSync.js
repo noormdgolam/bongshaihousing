@@ -447,7 +447,30 @@ async function renderContentPageToHtml(pageFile) {
   } else if (file === 'index.html') {
     extra.dbTestimonials = await db('testimonials').where({ published: true }).orderBy('sort_order');
   } else {
-    return null; // not a content page this renderer knows about
+    // Any other registry page (about, contact, terms, calculators, the
+    // district landing pages...). These carry no extra DB data - they still
+    // need re-rendering so a Theme Editor change reaches their baked-in
+    // <style id="bh-theme-custom-vars"> block. page_content supplies optional
+    // per-URL overrides when a row exists.
+    // Guard: a category landing page or a project page must be rendered by its
+    // own renderer (which supplies dbProductsByModel / project). If one of those
+    // threw, falling through to here would render the template's hardcoded
+    // fallbacks and silently overwrite live DB-driven values - fail loudly instead.
+    const ownedByCategory = await db('categories').where({ landing_page_slug: file }).first();
+    if (ownedByCategory) throw new Error(`${file} is a category landing page; category render must succeed first`);
+    const ownedByProject = await db('projects').where({ slug: file }).first();
+    if (ownedByProject) throw new Error(`${file} is a project page; project render must succeed first`);
+
+    try {
+      const row = await db('page_content').where({ url_path: '/' + file }).first();
+      if (row) {
+        if (row.title) extra.title = row.title;
+        if (row.content_json) {
+          extra.pc = typeof row.content_json === 'string' ? JSON.parse(row.content_json) : row.content_json;
+        }
+      }
+    } catch (e) { /* table may not exist; meta + theme is enough */ }
+    if (!extra.pc) extra.pc = {};
   }
 
   let theme = {};

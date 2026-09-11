@@ -1823,9 +1823,16 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     // The rooms just submitted are the source of truth for floor area - keep
     // products.total_floor_area equal to their sum so the hero chip, the
     // category card and the "Total Covered Area" card can never disagree.
-    const submittedRooms = parseFormNested(req.body, 'variants').flatMap((v) => (v && v.rooms) || []).filter(Boolean);
+    const primaryVariant = parseFormNested(req.body, 'variants').filter(Boolean)[0];
+    const submittedRooms = ((primaryVariant && primaryVariant.rooms) || []).filter(Boolean);
     const roomAreaSum = submittedRooms.reduce((s, r) => s + (parseInt(r.area_sqft, 10) || 0), 0);
-    const effectiveFloorArea = roomAreaSum > 0 ? roomAreaSum : cleanFloorArea;
+    // The Total Floor Area input is disabled on the form (it is derived, not
+    // typed), so it is never posted - falling straight through to null would
+    // wipe the stored value on every save of a product that has no room rows
+    // to sum. Keep what is already there in that case.
+    const effectiveFloorArea = roomAreaSum > 0
+      ? roomAreaSum
+      : (cleanFloorArea !== null ? cleanFloorArea : (existingProduct ? existingProduct.total_floor_area : null));
     let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
     if (cleanFixedPrice === null && cleanPriceSqft && cleanFloorArea) {
       cleanFixedPrice = Math.round(cleanPriceSqft * cleanFloorArea);
@@ -3168,6 +3175,54 @@ router.post('/admin/theme-editor', requireRole('admin', 'superadmin', 'editor'),
     res.redirect('/admin/theme-editor?error=1');
   }
 });
+
+// Re-render every static page from the current templates + DB. This is what
+// makes a Theme Editor change actually reach the live site: each static .html
+// carries a baked-in <style id="bh-theme-custom-vars"> block written at render
+// time, so a theme save alone only affects dynamically-rendered pages. Runs on
+// the server, writing straight to the docroot - no FTP involved. Fire-and-
+// forget because a full pass is ~280 pages and would outlive the request.
+let rebuildState = { running: false, done: 0, total: 0, failed: 0, finishedAt: null };
+
+router.post('/admin/theme-editor/apply-to-live', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  if (rebuildState.running) return res.redirect('/admin/theme-editor?rebuild=already');
+
+  const fsMod = require('fs');
+  const pathMod = require('path');
+  const registryPath = pathMod.join(__dirname, '..', 'page-registry.json');
+  const registry = fsMod.existsSync(registryPath) ? JSON.parse(fsMod.readFileSync(registryPath, 'utf8')) : {};
+  const slugs = new Set(Object.keys(registry).map((u) => u.replace(/^\//, '')).filter((f) => f.endsWith('.html')));
+  try {
+    const prods = await db('products').whereNotNull('slug').select('slug');
+    prods.forEach((p) => p.slug && slugs.add(p.slug));
+    const cats = await db('categories').whereNotNull('landing_page_slug').select('landing_page_slug');
+    cats.forEach((c) => c.landing_page_slug && slugs.add(c.landing_page_slug));
+  } catch (e) {
+    console.error('apply-to-live: slug collection failed:', e.message);
+  }
+
+  const list = [...slugs];
+  rebuildState = { running: true, done: 0, total: list.length, failed: 0, finishedAt: null };
+  await logActivity(req, { action: 'update', entityType: 'theme', entityId: null, summary: `Started live rebuild of ${list.length} page(s)` });
+
+  setImmediate(async () => {
+    invalidatePageCache();
+    const { syncPageToLive } = require('../lib/liveSiteSync');
+    for (const slug of list) {
+      try { (await syncPageToLive(slug)) ? rebuildState.done++ : rebuildState.failed++; }
+      catch (e) { rebuildState.failed++; }
+    }
+    rebuildState.running = false;
+    rebuildState.finishedAt = new Date().toISOString();
+    console.log(`[apply-to-live] rebuilt ${rebuildState.done}/${rebuildState.total}, ${rebuildState.failed} failed`);
+  });
+
+  res.redirect(`/admin/theme-editor?rebuild=started&total=${list.length}`);
+});
+
+router.get('/admin/theme-editor/rebuild-status', (req, res) => res.json(rebuildState));
 
 router.post('/admin/theme-editor/reset', requireRole('admin', 'superadmin', 'editor'), async (req, res) => {
   try {
