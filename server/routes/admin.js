@@ -1732,14 +1732,19 @@ router.get('/admin/products/:id/edit', async (req, res) => {
 });
 
 function parseFormNested(body, prefix) {
-  if (Array.isArray(body[prefix])) return body[prefix].filter(Boolean);
+  // Deleting a row in the middle of the form leaves a gap in the submitted
+  // indices (rooms[0], rooms[2], ...), which body-parser turns into a SPARSE
+  // array. Every branch below must compact both levels or the reconcile loop
+  // dereferences a hole and the whole save 500s.
+  const compact = (item) => {
+    if (item && item.rooms) {
+      item.rooms = (Array.isArray(item.rooms) ? item.rooms : Object.values(item.rooms)).filter(Boolean);
+    }
+    return item;
+  };
+  if (Array.isArray(body[prefix])) return body[prefix].filter(Boolean).map(compact);
   if (body[prefix] && typeof body[prefix] === 'object') {
-    return Object.values(body[prefix]).filter(Boolean).map((item) => {
-      if (item && item.rooms && typeof item.rooms === 'object' && !Array.isArray(item.rooms)) {
-        item.rooms = Object.values(item.rooms).filter(Boolean);
-      }
-      return item;
-    });
+    return Object.values(body[prefix]).filter(Boolean).map(compact);
   }
 
   const result = [];
@@ -1765,14 +1770,7 @@ function parseFormNested(body, prefix) {
     }
   }
 
-  return result.filter(Boolean).map((item) => {
-    if (item && item.rooms && Array.isArray(item.rooms)) {
-      item.rooms = item.rooms.filter(Boolean);
-    } else if (item && item.rooms && typeof item.rooms === 'object') {
-      item.rooms = Object.values(item.rooms).filter(Boolean);
-    }
-    return item;
-  });
+  return result.filter(Boolean).map(compact);
 }
 
 router.post('/admin/products/:id', galleryUpload, async (req, res) => {
@@ -1799,7 +1797,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     // The rooms just submitted are the source of truth for floor area - keep
     // products.total_floor_area equal to their sum so the hero chip, the
     // category card and the "Total Covered Area" card can never disagree.
-    const submittedRooms = parseFormNested(req.body, 'variants').flatMap((v) => v.rooms || []);
+    const submittedRooms = parseFormNested(req.body, 'variants').flatMap((v) => (v && v.rooms) || []).filter(Boolean);
     const roomAreaSum = submittedRooms.reduce((s, r) => s + (parseInt(r.area_sqft, 10) || 0), 0);
     const effectiveFloorArea = roomAreaSum > 0 ? roomAreaSum : cleanFloorArea;
     let cleanFixedPrice = fixed_price !== '' && fixed_price !== undefined && fixed_price !== null && !isNaN(Number(fixed_price)) ? Number(fixed_price) : null;
@@ -1837,6 +1835,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
 
       for (let i = 0; i < parsedSpecs.length; i++) {
         const s = parsedSpecs[i];
+        if (!s) continue; // row removed in the form -> index gap
         const spec_key = (s.spec_key || '').trim();
         const spec_value = (s.spec_value || '').trim();
         if (!spec_key && !spec_value) continue;
@@ -1875,6 +1874,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
 
       for (let i = 0; i < parsedVariants.length; i++) {
         const v = parsedVariants[i];
+        if (!v) continue; // row removed in the form -> index gap
         const area_sqft = v.area_sqft ? parseInt(v.area_sqft, 10) : null;
         // bed/bath/kitchen counts are owned by products.bedrooms/bathrooms/
         // kitchens (single source, edited on the main form, shown on the hero
@@ -1929,6 +1929,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
 
           for (let j = 0; j < rooms.length; j++) {
             const r = rooms[j];
+            if (!r) continue; // row removed in the form -> index gap
             const section = (r.section || '').trim();
             if (!section && !r.area_sqft) continue;
             const floor_label = (r.floor_label || '').trim() || 'Ground Floor Layout';
