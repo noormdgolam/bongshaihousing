@@ -272,6 +272,7 @@
               {% set rIdx = loop.index0 %}
               <tr>
                 <input type="hidden" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][id]" value="{{ r.id }}">
+                <input type="hidden" class="is-total-row" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][is_total_row]" value="{{ 1 if r.is_total_row else 0 }}">
                 <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][floor_label]" value="{{ r.floor_label or '' }}" placeholder="e.g. Ground Floor Layout" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
                 <td><input type="text" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][section]" value="{{ r.section }}" placeholder="e.g. Master bed" required style="width:100%; padding:3px 5px;"></td>
                 <td><input type="number" name="variants[{{ vIdx }}][rooms][{{ rIdx }}][area_sqft]" value="{{ r.area_sqft or '' }}" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
@@ -337,6 +338,8 @@ function updateVariantTotals(card) {
   let grandTotal = 0;
 
   rows.forEach(tr => {
+    const marker = tr.querySelector('.is-total-row');
+    if (marker && marker.value === '1') return; // a total line, not a room
     const floorInput = tr.querySelector('input[name*="[floor_label]"]');
     const areaInput = tr.querySelector('input[name*="[area_sqft]"]');
     const floor = (floorInput && floorInput.value.trim()) || 'Ground Floor Layout';
@@ -364,8 +367,11 @@ function refreshTotalFloorArea() {
   const firstCard = document.querySelector('.variant-card');
   if (!firstCard) return;
   let total = 0;
-  firstCard.querySelectorAll('.rooms-tbody tr input[name*="[area_sqft]"]').forEach((el) => {
-    total += parseInt(el.value, 10) || 0;
+  firstCard.querySelectorAll('.rooms-tbody tr').forEach((tr) => {
+    const marker = tr.querySelector('.is-total-row');
+    if (marker && marker.value === '1') return; // a total line, not a room
+    const el = tr.querySelector('input[name*="[area_sqft]"]');
+    if (el) total += parseInt(el.value, 10) || 0;
   });
   if (total > 0) display.value = total;
 }
@@ -401,6 +407,7 @@ function addRoomRow(btn, variantIdx) {
   tr.innerHTML = `
     <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][floor_label]" value="${prevFloor}" placeholder="e.g. Ground Floor Layout" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
     <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][section]" placeholder="e.g. Bed room" required style="width:100%; padding:3px 5px;"></td>
+    <input type="hidden" class="is-total-row" name="variants[${vIdx}][rooms][${rIdx}][is_total_row]" value="0">
     <td><input type="number" name="variants[${vIdx}][rooms][${rIdx}][area_sqft]" style="width:100%; padding:3px 5px;" oninput="updateVariantTotals(this.closest('.variant-card'))"></td>
     <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][length_ft]" style="width:100%; padding:3px 5px;" oninput="recalcRoomArea(this)"></td>
     <td><input type="text" name="variants[${vIdx}][rooms][${rIdx}][width_ft]" style="width:100%; padding:3px 5px;" oninput="recalcRoomArea(this)"></td>

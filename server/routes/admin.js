@@ -1757,6 +1757,20 @@ router.get('/admin/products/:id/edit', async (req, res) => {
   res.render('admin/products/form.njk', adminVars(req, { product, categories, specs, buildingSpecs, technicalSpecs, variants, error: null, seoGenerated: req.query.seo_generated === '1', history }));
 });
 
+// A room-layout row can be a marker rather than a room: an explicit
+// "Total Floor Area" line, or a floor header. groupRoomsByFloor() skips these
+// when it renders, so they must not be summed into the building total and must
+// not be demoted to ordinary rooms on save. The form round-trips the flag in a
+// hidden field; the section-text check is the fallback for rows submitted
+// before that field existed.
+function isTotalRow(r) {
+  if (!r) return false;
+  const f = r.is_total_row;
+  if (f === 1 || f === '1' || f === true || f === 'true' || f === 'on') return true;
+  if (f === 0 || f === '0' || f === false || f === 'false') return false;
+  return /^\s*total/i.test(String(r.section || ''));
+}
+
 function parseFormNested(body, prefix) {
   // Deleting a row in the middle of the form leaves a gap in the submitted
   // indices (rooms[0], rooms[2], ...), which body-parser turns into a SPARSE
@@ -1824,7 +1838,9 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
     // products.total_floor_area equal to their sum so the hero chip, the
     // category card and the "Total Covered Area" card can never disagree.
     const primaryVariant = parseFormNested(req.body, 'variants').filter(Boolean)[0];
-    const submittedRooms = ((primaryVariant && primaryVariant.rooms) || []).filter(Boolean);
+    const submittedRooms = ((primaryVariant && primaryVariant.rooms) || [])
+      .filter(Boolean)
+      .filter((r) => !isTotalRow(r));
     const roomAreaSum = submittedRooms.reduce((s, r) => s + (parseInt(r.area_sqft, 10) || 0), 0);
     // The Total Floor Area input is disabled on the form (it is derived, not
     // typed), so it is never posted - falling straight through to null would
@@ -1977,7 +1993,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
                 area_sqft: area_sqft_room,
                 length_ft,
                 width_ft,
-                is_total_row: 0,
+                is_total_row: isTotalRow(r) ? 1 : 0,
                 sort_order: j,
               });
               retainedRoomIds.add(String(r.id));
@@ -1989,7 +2005,7 @@ router.post('/admin/products/:id', galleryUpload, async (req, res) => {
                 area_sqft: area_sqft_room,
                 length_ft,
                 width_ft,
-                is_total_row: 0,
+                is_total_row: isTotalRow(r) ? 1 : 0,
                 sort_order: j,
               });
               if (newRoomId) retainedRoomIds.add(String(newRoomId));
