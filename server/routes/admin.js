@@ -2334,8 +2334,20 @@ router.post('/admin/categories/:id', upload.single('hero_image_file'), async (re
   } = req.body;
   const finalImage = req.file ? await processAndSaveImage(req.file.buffer, req.file.originalname) : (hero_image || null);
   const existingCategory = await db('categories').where({ id: req.params.id }).first();
+  // landing_page_slug is a real filename that resyncProductPages() feeds
+  // straight to syncPageToLive() - a human-readable name landing here silently
+  // stops every product save from regenerating this category's page (that is
+  // exactly how "Duplex Prefab Building" got in and broke the Duplex landing
+  // page). Normalise anything that is not already a .html filename, and never
+  // let it be blanked while a working one exists.
+  const cleanLandingSlug = (() => {
+    const raw = (landing_page_slug || '').trim();
+    if (!raw) return existingCategory ? existingCategory.landing_page_slug : null;
+    if (/^[a-z0-9][a-z0-9-]*\.html$/.test(raw)) return raw;
+    return raw.toLowerCase().replace(/\.html$/, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') + '.html';
+  })();
   const categoryFields = {
-    slug, name, landing_page_slug: landing_page_slug || null, description: description || null,
+    slug, name, landing_page_slug: cleanLandingSlug, description: description || null,
     // Blank means "use the template's built-in wording", so store NULL rather
     // than an empty string - the templates' `default(..., true)` fallback keys
     // off falsy, and NULL keeps that intent obvious in the data.
