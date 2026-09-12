@@ -362,9 +362,12 @@
 </div>
 </footer>
 
-  <a href="{{ whatsappHref or 'https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20have%20a%20question.' }}" class="whatsapp-float" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
-    <div class="whatsapp-float-pulse" aria-hidden="true"></div>💬
-  </a>
+  {# Floating WhatsApp button removed deliberately. Two competing chat bubbles
+     put the customer in front of a choice before they have a question, and the
+     WhatsApp route skipped the support widget entirely - so the enquiry was
+     never recorded and nobody could follow it up. WhatsApp is now offered from
+     inside Customer Support, at the moment it actually helps: when the
+     assistant cannot answer. See partials/ai-chat-widget.njk. #}
 
   {% include "partials/ai-chat-widget.njk" %}
 

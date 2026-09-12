@@ -111,9 +111,12 @@ router.post('/api/ai-chat', async (req, res) => {
     });
   } catch (err) {
     console.error('AI chat endpoint error:', err.message);
-    const fallback = sanitizedContext.language === 'en'
-      ? 'Welcome to Bongshai Housing! For instant pricing and technical consultations on steel structures and prefab villas, reach our engineers on WhatsApp: +880 1781-636613.'
-      : 'বঙ্গশাই হাউজিং-এ আপনাকে স্বাগতম! আমাদের স্টিল বিল্ডিং, ডুপ্লেক্স ও প্রিফ্যাব হাউজিং সংক্রান্ত যেকোনো তথ্যের জন্য সরাসরি আমাদের ইঞ্জিনিয়ারদের সাথে হোয়াটসঅ্যাপে কথা বলুন (+8801781636613) অথবা একটি কোটেশন রিকোয়েস্ট পাঠান।';
+    // If support is unreachable, hand over in both languages - this is exactly
+    // the moment a customer must not be left with nothing.
+    const waBn = 'দুঃখিত, এই মুহূর্তে উত্তর দিতে পারছি না। সরাসরি আমাদের টিমের সাথে হোয়াটসঅ্যাপে কথা বলুন: wa.me/8801781636613 (+880 1781-636613)';
+    const waEn = 'Sorry, I could not answer just now. Message our team directly on WhatsApp: wa.me/8801781636613 (+880 1781-636613)';
+    const nl2 = String.fromCharCode(10) + String.fromCharCode(10);
+    const fallback = sanitizedContext.language === 'en' ? (waEn + nl2 + waBn) : (waBn + nl2 + waEn);
     return res.status(200).json({
       success: true,
       message: fallback,
