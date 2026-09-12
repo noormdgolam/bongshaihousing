@@ -31,6 +31,17 @@ const taka = (n) => {
   return `${rest},${last3}`;
 };
 
+
+// A model's real per-square-foot rate is its committed package price over its
+// floor area. products.price_per_sqft is not that number - it disagrees with
+// the package price on 106 of 113 published models - so it is not used here.
+const derivedRate = (p) => {
+  const price = Number(p.fixed_price);
+  const area = Number(p.total_floor_area);
+  if (!Number.isFinite(price) || !Number.isFinite(area) || price <= 0 || area <= 0) return null;
+  return price / area;
+};
+
 // One absent table must not blank the whole page.
 const optional = async (table, build, fallback = []) => {
   try {
@@ -75,27 +86,29 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
       beds: p.bedrooms || null,
       baths: p.bathrooms || null,
       price: taka(p.fixed_price),
-      rate: p.price_per_sqft ? taka(p.price_per_sqft) : null,
+      rate: derivedRate(p) ? taka(derivedRate(p)) : null,
     }));
 
-  // Rate range read off the catalogue instead of asserted. The mock-up quoted
-  // 1,500-2,500 while real models run to 3,000+, which is exactly the kind of
-  // number that goes stale the moment someone edits a product.
-  const rates = products.map((p) => Number(p.price_per_sqft)).filter((n) => Number.isFinite(n) && n > 0);
+  // Rate range read off the catalogue instead of asserted, and derived rather
+  // than taken from products.price_per_sqft: 106 of 113 models disagree with
+  // their own package price there (BH-CB-902 states 2,750 while its fixed price
+  // over its floor area is 938). The package price and the area are the numbers
+  // the business actually commits to, so the rate is computed from them.
+  const rates = products.map(derivedRate).filter(Boolean);
   const rateRange = rates.length
     ? { min: taka(Math.min(...rates)), max: taka(Math.max(...rates)) }
     : null;
 
-  // Calculator rates, per category, from the same column.
+  // Estimator rates per category, from the same derivation. Every model has its
+  // own rate, so a category carries a range rather than one figure.
   const calcRates = categories.map((c) => {
-    const inCat = products.filter((p) => p.category_id === c.id && Number(p.price_per_sqft) > 0);
-    if (!inCat.length) return null;
-    const vals = inCat.map((p) => Number(p.price_per_sqft));
+    const vals = products.filter((p) => p.category_id === c.id).map(derivedRate).filter(Boolean);
+    if (!vals.length) return null;
     return {
       id: c.id,
       name: c.name,
-      min: Math.min(...vals),
-      max: Math.max(...vals),
+      min: Math.round(Math.min(...vals)),
+      max: Math.round(Math.max(...vals)),
     };
   }).filter(Boolean);
 

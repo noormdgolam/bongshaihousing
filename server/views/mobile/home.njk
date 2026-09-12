@@ -206,6 +206,63 @@
   }
   @media (min-width:480px){ .call-fab{ right:calc(50% - 224px); } }
 
+
+  .hero-cta{
+    display:inline-block; margin-top:9px; background:var(--m-accent); color:#1a1400;
+    font-weight:700; font-size:12.5px; padding:8px 13px; border-radius:9px;
+  }
+  .calc-go{
+    width:100%; margin-top:12px; padding:12px; border:none; border-radius:10px;
+    background:var(--m-primary); color:#fff; font-weight:700; font-size:14px;
+    font-family:inherit; cursor:pointer;
+  }
+  .calc-go:active{ transform:translateY(1px); }
+  .calc-derived{ font-size:11.5px; color:var(--m-muted); margin-top:8px; }
+
+  /* Support sheet */
+  .sheet-backdrop{
+    position:fixed; inset:0; background:rgba(6,9,13,.55); z-index:60;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .sheet-backdrop.open{ opacity:1; pointer-events:auto; }
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:61; max-width:480px; margin:0 auto;
+    background:var(--m-card); border-top:1px solid var(--m-line);
+    border-radius:20px 20px 0 0; transform:translateY(100%);
+    transition:transform .28s cubic-bezier(.32,.72,0,1);
+    max-height:82vh; display:flex; flex-direction:column;
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  .sheet.open{ transform:translateY(0); }
+  .sheet-grip{ width:36px; height:4px; background:var(--m-line); border-radius:3px; margin:10px auto 0; }
+  .sheet-head{ display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--m-line); }
+  .sheet-head .t1{ font-size:14px; font-weight:700; }
+  .sheet-head .t2{ font-size:11.5px; color:#16a34a; display:flex; align-items:center; gap:5px; }
+  .sheet-head .t2::before{ content:""; width:6px; height:6px; border-radius:50%; background:#16a34a; }
+  .sheet-x{ margin-left:auto; background:none; border:none; font-size:19px; color:var(--m-muted); cursor:pointer; }
+  .sheet-body{ padding:14px 16px; overflow-y:auto; }
+  .sheet-body p{ margin:0 0 10px; font-size:13.5px; line-height:1.55; }
+  .sheet-form{ display:flex; flex-direction:column; gap:8px; }
+  .sheet-form input{
+    padding:11px 13px; border:1px solid var(--m-line); border-radius:10px;
+    background:var(--m-bg); color:var(--m-text); font:inherit; font-size:15px;
+  }
+  .sheet-form button{
+    padding:12px; border:none; border-radius:10px; background:var(--m-primary);
+    color:#fff; font-weight:700; font-size:14px; font-family:inherit; cursor:pointer;
+  }
+  .sheet-err{ font-size:12.5px; color:#b91c1c; margin:0; }
+  .sheet-ok{ font-size:13.5px; color:#166534; font-weight:600; line-height:1.5; }
+  .support-fab{
+    position:fixed; z-index:45; right:16px;
+    bottom:calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 14px);
+    background:var(--m-primary); color:#fff; border:none;
+    display:flex; align-items:center; gap:7px; padding:11px 15px; border-radius:100px;
+    font-weight:700; font-size:12.5px; font-family:inherit; cursor:pointer;
+    box-shadow:0 8px 20px rgba(30,64,175,.35);
+  }
+  @media (min-width:480px){ .support-fab{ right:calc(50% - 224px); } }
+
   @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
 </style>
 </head>
@@ -219,6 +276,7 @@
       <b>Bongshai <i>Housing</i></b>
     </div>
     <div class="bar-actions">
+      <a class="ibtn" href="/products-and-solutions.html" aria-label="Search models">⌕</a>
       <button class="ibtn" id="themeBtn" type="button" aria-label="Switch between light and dark theme">◐</button>
       <a class="ibtn" href="tel:{{ (theme.hotline_phone or '+8801781636613') | replace(' ', '') | replace('-', '') }}" aria-label="Call Bongshai Housing">✆</a>
     </div>
@@ -242,7 +300,8 @@
         <span class="hero-tag">{{ c.name }}</span>
         <div class="hero-body">
           <h2>{{ c.name }}</h2>
-          <p>Browse models, sizes and package prices →</p>
+          <p>Browse models, sizes and package prices.</p>
+          <span class="hero-cta">Explore {{ c.name }} →</span>
         </div>
       </a>
       {% endif %}{% endfor %}
@@ -264,8 +323,8 @@
             {%- if p.beds %} · {{ p.beds }} bed{% endif %}
             {%- if p.baths %} · {{ p.baths }} bath{% endif %}
           </div>
-          {% if p.price %}<div class="price">৳{{ p.price }} <small>package</small></div>
-          {% elif p.rate %}<div class="price">৳{{ p.rate }} <small>/sqft</small></div>{% endif %}
+          {% if p.rate %}<div class="price">৳{{ p.rate }} <small>/sqft from</small></div>
+          {% elif p.price %}<div class="price">৳{{ p.price }} <small>package</small></div>{% endif %}
         </div>
       </a>
       {% endfor %}
@@ -277,16 +336,38 @@
     <p class="sub">Uses the real per-sqft range of our built models.</p>
     <div class="row">
       <div class="fld">
-        <label for="calcArea">Total area (sqft)</label>
-        <input id="calcArea" type="number" inputmode="numeric" min="200" max="20000" step="50" value="1500">
+        <label for="calcKatha">জমি / Land (katha)</label>
+        <input id="calcKatha" type="number" inputmode="decimal" min="0.5" max="100" step="0.5" value="3">
       </div>
       <div class="fld">
-        <label for="calcType">Building type</label>
+        <label for="calcFloors">তলা / Floors</label>
+        <select id="calcFloors">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="fld">
+        <label for="calcFinish">ফিনিশিং / Finishing</label>
+        <select id="calcFinish">
+          <option value="0.9">Basic</option>
+          <option value="1" selected>Standard</option>
+          <option value="1.18">Premium</option>
+        </select>
+      </div>
+      <div class="fld">
+        <label for="calcType">ধরন / Building type</label>
         <select id="calcType">
           {% for r in calcRates %}<option value="{{ r.min }}|{{ r.max }}">{{ r.name }}</option>{% endfor %}
         </select>
       </div>
     </div>
+    <button type="button" class="calc-go" id="calcGo">Calculate Estimate</button>
     <div class="calc-out" aria-live="polite">
       <div class="lbl">Estimated package range</div>
       <div class="amt" id="calcOut">—</div>
@@ -328,12 +409,39 @@
    so the enquiry was never recorded. Support is in the bar below, and
    WhatsApp is offered from inside a conversation when it actually helps. #}
 
+
+<button class="support-fab" id="supportFab" type="button">💬 Chat with Support</button>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="supportSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-grip"></div>
+  <div class="sheet-head">
+    <div>
+      <div class="t1" id="sheetTitle">Customer Support</div>
+      <div class="t2">Online</div>
+    </div>
+    <button class="sheet-x" id="sheetClose" type="button" aria-label="Close">✕</button>
+  </div>
+  <div class="sheet-body">
+    <p>আপনার নাম ও মোবাইল নম্বর দিন — আমাদের টিম সরাসরি যোগাযোগ করবে।<br>
+      <span style="font-size:12px;opacity:.75">Leave your name and number and our team will get back to you.</span></p>
+    <form class="sheet-form" id="sheetForm" novalidate>
+      <input type="text" id="sheetName" placeholder="আপনার নাম / Your name" autocomplete="name" maxlength="60" required>
+      <input type="tel" id="sheetPhone" placeholder="০১৭xxxxxxxx" autocomplete="tel" inputmode="tel" maxlength="20" required>
+      <p class="sheet-err" id="sheetErr" hidden role="alert"></p>
+      <button type="submit" id="sheetSubmit">পাঠান / Send</button>
+    </form>
+    <p class="sheet-ok" id="sheetOk" hidden>ধন্যবাদ! আমাদের টিম শীঘ্রই যোগাযোগ করবে।<br>
+      <span style="font-size:12px;font-weight:400">Thank you — our team will contact you shortly.</span></p>
+  </div>
+</div>
+
 <nav class="bnav" aria-label="Primary">
   <a href="/m" aria-current="page"><span class="ic" aria-hidden="true">🏠</span>Home</a>
   <a href="/products-and-solutions.html"><span class="ic" aria-hidden="true">📦</span>Models</a>
-  <a href="#calcTitle"><span class="ic" aria-hidden="true">🧮</span>Estimate</a>
+  <a href="#calcTitle"><span class="ic" aria-hidden="true">🧮</span>Calculator</a>
   <a href="/projects.html"><span class="ic" aria-hidden="true">📍</span>Projects</a>
-  <a href="/contact.html"><span class="ic" aria-hidden="true">💬</span>Support</a>
+  <a href="#support"><span class="ic" aria-hidden="true">💬</span>Support</a>
 </nav>
 
 <script>
@@ -374,34 +482,107 @@
     }, { passive: true });
   }
 
-  // ---- estimator ----
-  var area = document.getElementById('calcArea');
+  // ---- estimator ----------------------------------------------------------
+  // Bangladeshi customers describe a plot in katha and storeys, not square
+  // feet, so that is what the form asks for and the derived area is shown back
+  // to them rather than hidden inside the sum.
+  var SQFT_PER_KATHA = 720;   // standard conversion
+  var COVERAGE = 0.62;        // typical built footprint after setbacks
+
+  var katha = document.getElementById('calcKatha');
+  var floors = document.getElementById('calcFloors');
+  var finish = document.getElementById('calcFinish');
   var type = document.getElementById('calcType');
   var out = document.getElementById('calcOut');
   var basis = document.getElementById('calcBasis');
+  var go = document.getElementById('calcGo');
 
   function taka(n){
     var s = Math.round(n).toString();
     if (s.length <= 3) return s;
     return s.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + s.slice(-3);
   }
+
   function recalc(){
     if (!type || !type.value) { out.textContent = 'Rates unavailable'; return; }
-    var sqft = parseFloat(area.value);
-    if (!isFinite(sqft) || sqft <= 0) { out.textContent = '—'; return; }
+    var k = parseFloat(katha.value);
+    var f = parseInt(floors.value, 10);
+    var mult = parseFloat(finish.value) || 1;
+    if (!isFinite(k) || k <= 0 || !isFinite(f) || f <= 0) { out.textContent = '—'; return; }
+
+    var sqft = Math.round(k * SQFT_PER_KATHA * COVERAGE * f);
     var parts = type.value.split('|');
-    var lo = parseFloat(parts[0]) * sqft;
-    var hi = parseFloat(parts[1]) * sqft;
+    var lo = parseFloat(parts[0]) * sqft * mult;
+    var hi = parseFloat(parts[1]) * sqft * mult;
+
     out.textContent = lo === hi ? '৳' + taka(lo) : '৳' + taka(lo) + ' – ৳' + taka(hi);
     if (basis) {
-      basis.textContent = 'Based on ' + taka(parseFloat(parts[0])) + '–' + taka(parseFloat(parts[1]))
-        + ' ৳/sqft for ' + type.options[type.selectedIndex].text + '. ';
+      basis.textContent = '≈ ' + taka(sqft) + ' sqft (' + k + ' katha, ' + f + ' floor'
+        + (f === 1 ? '' : 's') + ', ~' + Math.round(COVERAGE * 100) + '% coverage) at '
+        + taka(parseFloat(parts[0])) + '–' + taka(parseFloat(parts[1])) + ' ৳/sqft. ';
     }
   }
-  if (area && type && out) {
-    area.addEventListener('input', recalc);
-    type.addEventListener('change', recalc);
-    recalc();
+
+  if (go) go.addEventListener('click', recalc);
+  [katha, floors, finish, type].forEach(function(el){
+    if (el) el.addEventListener('change', recalc);
+  });
+  if (katha) katha.addEventListener('input', recalc);
+  recalc();
+
+  // ---- support sheet ------------------------------------------------------
+  var fab = document.getElementById('supportFab');
+  var sheet = document.getElementById('supportSheet');
+  var backdrop = document.getElementById('sheetBackdrop');
+
+  function openSheet(){
+    sheet.classList.add('open'); backdrop.classList.add('open');
+    setTimeout(function(){ var n = document.getElementById('sheetName'); if (n) n.focus(); }, 150);
+  }
+  function closeSheet(){ sheet.classList.remove('open'); backdrop.classList.remove('open'); }
+
+  if (fab) fab.addEventListener('click', openSheet);
+  if (backdrop) backdrop.addEventListener('click', closeSheet);
+  var sx = document.getElementById('sheetClose');
+  if (sx) sx.addEventListener('click', closeSheet);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && sheet && sheet.classList.contains('open')) closeSheet();
+  });
+  var navSupport = document.querySelector('.bnav a[href="#support"]');
+  if (navSupport) navSupport.addEventListener('click', function(e){ e.preventDefault(); openSheet(); });
+
+  // Same number rule as lib/leads.js, so a wrong one is caught before a round trip.
+  function normalisePhone(raw){
+    var d = String(raw || '').replace(/\D/g, '');
+    if (d.indexOf('880') === 0) d = '0' + d.slice(3);
+    else if (d.length === 10 && d.charAt(0) !== '0') d = '0' + d;
+    return /^01[3-9]\d{8}$/.test(d) ? d : null;
+  }
+
+  var sform = document.getElementById('sheetForm');
+  if (sform) {
+    sform.addEventListener('submit', async function(e){
+      e.preventDefault();
+      var name = (document.getElementById('sheetName').value || '').trim();
+      var phone = (document.getElementById('sheetPhone').value || '').trim();
+      var err = document.getElementById('sheetErr');
+      var fail = function(m){ err.textContent = m; err.hidden = false; };
+      if (name.length < 2) return fail('আপনার নাম লিখুন / Please enter your name.');
+      if (!normalisePhone(phone)) return fail('সঠিক মোবাইল নম্বর দিন / Enter a valid mobile number.');
+      err.hidden = true;
+      var btn = document.getElementById('sheetSubmit');
+      btn.disabled = true; btn.textContent = 'পাঠানো হচ্ছে… / Sending…';
+      try {
+        await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, phone: phone, source: 'mobile_support', site: location.hostname.replace(/^www\./, '') })
+        });
+      } catch (e2) { /* the server keeps a fallback log; do not alarm the customer */ }
+      sform.hidden = true;
+      document.getElementById('sheetOk').hidden = false;
+      setTimeout(closeSheet, 2600);
+    });
   }
 })();
 </script>
