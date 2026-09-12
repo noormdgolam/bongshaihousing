@@ -1,4 +1,8 @@
 #!/bin/bash
+# A pipeline reports the LAST command's status, so `mysqldump | gzip` returned
+# gzip's 0 even when mysqldump failed outright - which is how this script wrote
+# 20-byte empty archives every night for a week and logged "OK" each time.
+set -o pipefail
 # Nightly mysqldump of the app's MySQL database, gzipped and rotated.
 # Nothing backed this DB up before - the account's only backup cron
 # (Softaculous, --insid=26_95639) covers a different, unrelated
@@ -64,16 +68,39 @@ host=${DB_HOST:-localhost}
 port=${DB_PORT:-3306}
 EOF
 
+MYSQLDUMP_BIN="$(command -v mysqldump || true)"
+for candidate in /usr/bin/mysqldump /usr/local/bin/mysqldump /usr/local/mysql/bin/mysqldump; do
+  [ -n "$MYSQLDUMP_BIN" ] && break
+  [ -x "$candidate" ] && MYSQLDUMP_BIN="$candidate"
+done
+if [ -z "$MYSQLDUMP_BIN" ]; then
+  log "ERROR: mysqldump not found on PATH or in the usual locations, aborting."
+  rm -f "$DEFAULTS_FILE"
+  exit 1
+fi
+
 TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
 OUT_FILE="$BACKUP_DIR/db_${TIMESTAMP}.sql.gz"
 
-if mysqldump --defaults-extra-file="$DEFAULTS_FILE" "$DB_NAME" | gzip > "$OUT_FILE"; then
-  SIZE=$(du -h "$OUT_FILE" 2>/dev/null | cut -f1)
-  log "OK: backed up to $OUT_FILE ($SIZE)"
+ERR_FILE=$(mktemp)
+if "$MYSQLDUMP_BIN" --defaults-extra-file="$DEFAULTS_FILE" "$DB_NAME" 2>"$ERR_FILE" | gzip > "$OUT_FILE"; then
+  BYTES=$(stat -c %s "$OUT_FILE" 2>/dev/null || wc -c < "$OUT_FILE")
+  # An empty gzip stream is 20 bytes. Anything near that is a failed dump that
+  # happened to exit 0, so treat size as part of the success condition.
+  if [ "${BYTES:-0}" -lt 1024 ]; then
+    log "ERROR: dump succeeded but produced only ${BYTES} bytes - treating as failure, removing."
+    head -c 500 "$ERR_FILE" | while IFS= read -r l; do log "  mysqldump: $l"; done
+    rm -f "$OUT_FILE"
+  else
+    SIZE=$(du -h "$OUT_FILE" 2>/dev/null | cut -f1)
+    log "OK: backed up to $OUT_FILE ($SIZE, ${BYTES} bytes)"
+  fi
 else
   log "ERROR: mysqldump failed, removing partial output"
+  head -c 500 "$ERR_FILE" | while IFS= read -r l; do log "  mysqldump: $l"; done
   rm -f "$OUT_FILE"
 fi
+rm -f "$ERR_FILE"
 
 rm -f "$DEFAULTS_FILE"
 
