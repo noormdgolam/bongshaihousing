@@ -8,9 +8,9 @@
 
   .cg-stage {
     position: relative; background: #0d1220; border: 1px solid #1e2a44; border-radius: 14px;
-    overflow: hidden; min-height: 560px;
+    overflow: hidden; min-height: 640px;
   }
-  .cg-stage canvas { display: block; width: 100%; height: 560px; cursor: grab; }
+  .cg-stage canvas { display: block; width: 100%; height: 640px; cursor: grab; }
   .cg-stage canvas.dragging { cursor: grabbing; }
 
   .cg-toolbar {
@@ -67,7 +67,7 @@
   #cgDetail li .rel { color: var(--grey-500, #64748b); flex-shrink: 0; }
 </style>
 
-<p style="margin:0 0 14px; color:var(--grey-500,#64748b); font-size:0.9rem;">
+<p style="margin:0 0 14px; color:#9fb3d4; font-size:0.9rem; max-width:80ch;">
   Every published record and the links between them. Node size is how connected a record is, so the hubs surface themselves.
   Dashed links are inferred by matching text; solid links are stored in the database.
 </p>
@@ -148,8 +148,8 @@
     return {
       id: n.id, type: n.type, label: n.label, href: n.href, page: n.page,
       meta: n.meta, degree: n.degree || 0,
-      x: Math.cos(a) * 240 + (Math.random() - 0.5) * 40,
-      y: Math.sin(a) * 240 + (Math.random() - 0.5) * 40,
+      x: Math.cos(a) * 150 + (Math.random() - 0.5) * 40,
+      y: Math.sin(a) * 150 + (Math.random() - 0.5) * 40,
       vx: 0, vy: 0,
       // Nodes fade and drift in rather than appearing all at once, so the
       // eye can follow the structure assembling itself.
@@ -169,7 +169,7 @@
     (neighbours[l.t.id] = neighbours[l.t.id] || []).push({ node: l.s, rel: l.rel, dir: 'in' });
   });
 
-  var radius = function (n) { return 4 + Math.min(14, Math.sqrt(n.degree) * 3.2); };
+  var radius = function (n) { return 5.5 + Math.min(15, Math.sqrt(n.degree) * 3.4); };
 
   // ---- view transform -----------------------------------------------------
   var view = { x: 0, y: 0, k: 1 };
@@ -213,8 +213,8 @@
       a = nodes[i];
       if (a.born < 1) a.born = Math.min(1, a.born + 0.02);
       // pull to centre
-      a.vx -= a.x * 0.0016;
-      a.vy -= a.y * 0.0016;
+      a.vx -= a.x * 0.0042;
+      a.vy -= a.y * 0.0042;
     }
 
     // repulsion
@@ -225,8 +225,8 @@
         dx = b.x - a.x; dy = b.y - a.y;
         d2 = dx * dx + dy * dy;
         if (d2 < 1) { d2 = 1; dx = Math.random() - 0.5; dy = Math.random() - 0.5; }
-        if (d2 > 90000) continue;
-        f = 260 / d2;
+        if (d2 > 32000) continue;
+        f = 200 / d2;
         dx *= f; dy *= f;
         a.vx -= dx; a.vy -= dy;
         b.vx += dx; b.vy += dy;
@@ -238,7 +238,7 @@
       a = links[i].s; b = links[i].t;
       dx = b.x - a.x; dy = b.y - a.y;
       d = Math.sqrt(dx * dx + dy * dy) || 1;
-      f = (d - 62) * 0.014;
+      f = (d - 46) * 0.020;
       dx = (dx / d) * f; dy = (dy / d) * f;
       a.vx += dx; a.vy += dy;
       b.vx -= dx; b.vy -= dy;
@@ -251,7 +251,7 @@
       a.x += a.vx * alpha * 3;
       a.y += a.vy * alpha * 3;
     }
-    alpha *= 0.994;
+    alpha *= 0.985;
   }
 
   // ---- drawing ------------------------------------------------------------
@@ -312,7 +312,7 @@
 
       // Only label what the reader can actually act on: hubs, the hovered or
       // selected node, and search hits. Labelling 190 nodes is noise.
-      if (!dim && (n.degree >= 6 || n === hover || n === selected || isHit) && view.k > 0.55) {
+      if (!dim && (n.degree >= 6 || n === hover || n === selected || isHit) && view.k > 0.38) {
         ctx.globalAlpha = n.born;
         ctx.fillStyle = '#dce6fa';
         ctx.font = '600 ' + (n === hover || n === selected ? 12 : 10.5) + 'px Inter, system-ui, sans-serif';
@@ -325,11 +325,118 @@
     ctx.globalAlpha = 1;
   }
 
+  // Framing, done once and made to stick.
+  //
+  // Two earlier attempts failed for the same underlying reason: the layout was
+  // still moving. Easing the camera toward a target went stale as the
+  // simulation kept spreading, and rescaling the coordinates fought the
+  // springs - they target a fixed rest length, so the graph simply sprang back
+  // out of frame. So: let it settle, stop it, then frame it. Nothing moves
+  // afterwards, so nothing can drift back out.
+  var fitted = false, fitTarget = null, userMovedView = false;
+
+  function frameGraph() {
+    var padX = 96, padTop = 96, padBottom = 46; // clear the toolbar, the hint, and hub labels
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity, any = false;
+    // Unconnected records have no springs and settle on the rim; framing to
+    // them would zoom the real structure into illegibility.
+    var anyConnected = nodes.some(function (n) { return visible(n) && n.degree > 0; });
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      if (!visible(n)) continue;
+      if (anyConnected && n.degree === 0) continue;
+      any = true;
+      if (n.x < minX) minX = n.x;
+      if (n.y < minY) minY = n.y;
+      if (n.x > maxX) maxX = n.x;
+      if (n.y > maxY) maxY = n.y;
+    }
+    if (!any) return;
+
+    // Rescale the coordinates rather than the camera. Zooming out far enough to
+    // contain a warmed-up 261-node layout would shrink the nodes to specks, and
+    // clamping the zoom instead just let the graph overflow. Scaling positions
+    // is a similarity transform - every cluster, angle and relative distance is
+    // preserved - and because the layout is frozen immediately afterwards, the
+    // springs never get a chance to pull it back out of frame.
+    var k = Math.min(
+      Math.max(1, W - padX * 2) / Math.max(1, maxX - minX),
+      Math.max(1, H - padTop - padBottom) / Math.max(1, maxY - minY)
+    );
+    k *= 0.86; // leave a margin for the unconnected ring placed below
+    var cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+    var yShift = (padTop - padBottom) / 2;
+    for (var j = 0; j < nodes.length; j++) {
+      var m = nodes[j];
+      if (anyConnected && m.degree === 0) continue;
+      m.x = (m.x - cx) * k;
+      m.y = (m.y - cy) * k + yShift;
+      m.vx = 0; m.vy = 0;
+    }
+
+    // Unconnected records were measured out of the frame above, so scaling them
+    // by the same factor drops them outside it - which is what kept clipping
+    // nodes at the edges. They have no structural position to preserve, so give
+    // them one: a ring just inside the margin, which also reads correctly as
+    // "attached to nothing".
+    if (anyConnected) {
+      var loose = nodes.filter(function (n) { return visible(n) && n.degree === 0; });
+      var rx = Math.max(1, (W - padX * 2) / 2) * 0.99;
+      var ry = Math.max(1, (H - padTop - padBottom) / 2) * 0.99;
+      for (var q = 0; q < loose.length; q++) {
+        var ang = (q / Math.max(1, loose.length)) * Math.PI * 2 - Math.PI / 2;
+        loose[q].x = Math.cos(ang) * rx;
+        loose[q].y = Math.sin(ang) * ry + yShift;
+        loose[q].vx = 0; loose[q].vy = 0;
+      }
+    }
+
+    view.k = 1; view.x = 0; view.y = 0;
+    fitTarget = null;
+  }
+
   function frame() {
     step();
+    // Re-frame while the layout is still moving - a single fit goes stale the
+    // moment the simulation keeps spreading, which is what pushed hub labels
+    // off the edges.
+    if (!fitted && alpha < 0.03) {
+      fitted = true;
+      alpha = 0; // stop the layout so the framing below cannot go stale
+      if (!userMovedView) frameGraph();
+    }
+    if (fitTarget) {
+      // ease toward the framed view rather than snapping
+      view.k += (fitTarget.k - view.k) * 0.08;
+      view.x += (fitTarget.x - view.x) * 0.08;
+      view.y += (fitTarget.y - view.y) * 0.08;
+      // Every axis has to arrive, not just the zoom. When the graph's centre
+      // is already near the current zoom level, |dk| falls under the threshold
+      // on the first frame and the pan stops 8% of the way there - which is
+      // what kept leaving hub labels hanging off the edges.
+      if (Math.abs(fitTarget.k - view.k) < 0.002
+        && Math.abs(fitTarget.x - view.x) < 0.5
+        && Math.abs(fitTarget.y - view.y) < 0.5) {
+        view.k = fitTarget.k; view.x = fitTarget.x; view.y = fitTarget.y;
+        fitTarget = null;
+      }
+    }
     if (!reduced) dash += 0.6;
     draw();
-    requestAnimationFrame(frame);
+    // Warm the layout up before the first paint. Letting the visible animation do
+  // all the convergence means either a long drift before it settles, or - if it
+  // is frozen early enough to be usable - a cloud that never resolved into
+  // clusters at all. Running the solver to a good arrangement first costs about
+  // a tenth of a second and makes the entrance a reveal of real structure.
+  (function warmUp() {
+    var savedAlpha = alpha;
+    alpha = 1;
+    for (var i = 0; i < 320; i++) step();
+    alpha = 0.28; // enough visible settle to feel alive, not enough to wander
+    void savedAlpha;
+  })();
+
+  requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 
@@ -356,6 +463,7 @@
       return;
     }
     if (panning) {
+      fitTarget = null; userMovedView = true;
       view.x += px - panning.px; view.y += py - panning.py;
       panning.px = px; panning.py = py;
       return;
@@ -385,6 +493,7 @@
 
   canvas.addEventListener('wheel', function (e) {
     e.preventDefault();
+    fitTarget = null; userMovedView = true;
     var f = e.deltaY < 0 ? 1.12 : 1 / 1.12;
     view.k = Math.max(0.3, Math.min(3.5, view.k * f));
   }, { passive: false });
@@ -439,12 +548,11 @@
   });
 
   document.getElementById('cgReset').addEventListener('click', function () {
-    view = { x: 0, y: 0, k: 1 };
     hidden = {}; query = ''; selected = null; hover = null;
     document.getElementById('cgSearch').value = '';
     legend.querySelectorAll('.cg-chip').forEach(function (c) { c.setAttribute('aria-pressed', 'true'); });
     showDetail(null);
-    alpha = 1;
+    alpha = 1; fitted = false; fitTarget = null; userMovedView = false;
   });
 })();
 </script>
