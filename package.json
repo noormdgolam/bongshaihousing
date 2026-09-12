@@ -4,8 +4,7 @@
     "dev": "node --watch server/server.js",
     "verify-redirects": "node server/scripts/verify-redirects.js",
     "check-templates": "node server/scripts/check-template-integrity.js",
-    "smoke-test": "node server/scripts/smoke-test.js",
-    "smoke-test:staging": "node server/scripts/smoke-test.js https://test.bongshaihousing.com"
+    "smoke-test": "node server/scripts/smoke-test.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
