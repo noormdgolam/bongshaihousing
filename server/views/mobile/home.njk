@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- viewport-fit=cover is what lets the bottom bar sit above the iOS home
+     indicator via env(safe-area-inset-*) below. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1E40AF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+<title>Bongshai Housing — Prefab Steel Homes in Bangladesh</title>
+<meta name="description" content="Pre-engineered steel homes built across Bangladesh. Browse models, estimate your cost, and talk to us.">
+<link rel="manifest" href="/manifest.json">
+<!-- Deliberately NOT linking css/style.min.css. This shell is self-styled, and
+     the site sheet both collides on generic class names (.hero, .app) and sets
+     body{opacity:0} for a fade-in this page never triggers. Skipping it also
+     spares a mobile-data visitor a large desktop stylesheet they never use. -->
+<style>
+  /* The site's own tokens, mirrored here so the app shell can never drift from
+     the theme the admin sets. Dark is a real palette, not an inversion. */
+  :root{
+    --m-primary:{{ theme.primary or '#1E40AF' }};
+    --m-primary-dark:{{ theme.primary_dark or '#1E3A8A' }};
+    --m-primary-light:{{ theme.primary_light or '#3B82F6' }};
+    --m-accent:{{ theme.accent or '#EAB308' }};
+    --m-accent-dark:{{ theme.accent_dark or '#CA8A04' }};
+
+    --m-bg:{{ theme.bg_color or '#ffffff' }};
+    --m-surface:{{ theme.surface_color or '#f8fafc' }};
+    --m-card:#ffffff;
+    --m-text:{{ theme.text_color or '#0f172a' }};
+    --m-muted:{{ theme.text_muted or '#64748b' }};
+    --m-line:#e2e8f0;
+    --m-shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px rgba(15,23,42,.06);
+
+    --m-radius:{{ theme.radius_lg or '12px' }};
+    --m-radius-xl:{{ theme.radius_xl or '16px' }};
+    --nav-h:60px;
+  }
+  /* System preference, unless the reader has explicitly chosen light. */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --m-bg:#0B1220;
+      --m-surface:#121C2B;
+      --m-card:#16212F;
+      --m-text:#E8EEF6;
+      --m-muted:#93A4B8;
+      --m-line:#24334A;
+      --m-primary-light:#60A5FA;
+      --m-shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  /* Explicit choice wins in both directions. */
+  :root[data-theme="dark"]{
+    --m-bg:#0B1220; --m-surface:#121C2B; --m-card:#16212F;
+    --m-text:#E8EEF6; --m-muted:#93A4B8; --m-line:#24334A;
+    --m-primary-light:#60A5FA;
+    --m-shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--m-bg); color:var(--m-text);
+    font-family:{{ (theme.font_body or "'Inter', system-ui, sans-serif") | safe }}, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .app{
+    max-width:480px; margin:0 auto; min-height:100vh; position:relative;
+    padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 16px);
+  }
+  h1,h2,h3{ font-family:{{ (theme.font_heading or "'Inter', sans-serif") | safe }}, system-ui, sans-serif; margin:0; letter-spacing:-.01em; }
+  a{ color:inherit; text-decoration:none; }
+  :focus-visible{ outline:3px solid var(--m-primary-light); outline-offset:2px; border-radius:6px; }
+
+  .skip{ position:absolute; left:-9999px; }
+  .skip:focus{ left:12px; top:12px; z-index:99; background:var(--m-primary); color:#fff; padding:10px 14px; border-radius:8px; }
+
+  /* top bar */
+  .topbar{
+    position:sticky; top:0; z-index:30; height:56px;
+    display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    background:color-mix(in srgb, var(--m-bg) 88%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--m-line);
+    padding-top:env(safe-area-inset-top, 0px);
+  }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .brand .mark{
+    width:28px;height:28px;border-radius:7px; background:var(--m-primary);
+    display:grid;place-items:center; color:#fff; font-weight:800; font-size:12px;
+  }
+  .brand b{ font-size:15px; font-weight:700; }
+  .brand b i{ color:var(--m-primary); font-style:normal; }
+  :root[data-theme="dark"] .brand b i{ color:var(--m-primary-light); }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .brand b i{ color:var(--m-primary-light); }
+  }
+  .bar-actions{ display:flex; gap:8px; }
+  .ibtn{
+    width:36px;height:36px;border-radius:9px; display:grid;place-items:center;
+    background:var(--m-surface); border:1px solid var(--m-line); color:var(--m-text);
+    font-size:15px; cursor:pointer;
+  }
+
+  /* facts strip - every number here is read from the database */
+  .facts{ display:flex; overflow-x:auto; border-bottom:1px solid var(--m-line); scrollbar-width:none; }
+  .facts::-webkit-scrollbar{display:none;}
+  .fact{ flex:0 0 auto; padding:10px 16px; border-right:1px solid var(--m-line); font-size:11.5px; color:var(--m-muted); white-space:nowrap; }
+  .fact b{ color:var(--m-text); font-weight:700; font-variant-numeric:tabular-nums; }
+
+  /* hero */
+  .hero-wrap{ padding:14px 14px 2px; }
+  .hero-scroll{ display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+  .hero-scroll::-webkit-scrollbar{display:none;}
+  .hero{
+    position:relative; flex:0 0 88%; scroll-snap-align:start; height:220px;
+    border-radius:var(--m-radius-xl); overflow:hidden; border:1px solid var(--m-line);
+    background:var(--m-surface);
+  }
+  .hero img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hero::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(8,13,23,0) 35%,rgba(8,13,23,.88) 100%); }
+  .hero-tag{
+    position:absolute; top:12px; left:12px; z-index:2; font-size:11px; font-weight:700;
+    background:var(--m-accent); color:#1a1400; padding:4px 10px; border-radius:100px;
+  }
+  .hero-body{ position:absolute; left:14px; right:14px; bottom:12px; z-index:2; color:#fff; }
+  .hero-body h2{ font-size:18px; font-weight:700; }
+  .hero-body p{ margin:4px 0 0; font-size:12px; opacity:.85; }
+  .dots{ display:flex; gap:5px; justify-content:center; margin-top:10px; }
+  .dot{ width:6px;height:6px;border-radius:50%; background:var(--m-line); transition:width .2s,background .2s; }
+  .dot.on{ background:var(--m-primary); width:16px; border-radius:3px; }
+
+  /* sections */
+  .sec{ padding:20px 16px 0; }
+  .sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+  .sec-head h3{ font-size:16px; font-weight:700; }
+  .sec-head a{ font-size:12.5px; color:var(--m-primary); font-weight:600; }
+  :root[data-theme="dark"] .sec-head a{ color:var(--m-primary-light); }
+
+  .pkgs{ display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .pkgs::-webkit-scrollbar{display:none;}
+  .pkg{ flex:0 0 170px; background:var(--m-card); border:1px solid var(--m-line); border-radius:var(--m-radius); overflow:hidden; box-shadow:var(--m-shadow); }
+  .pkg img{ width:100%; height:100px; object-fit:cover; display:block; background:var(--m-surface); }
+  .pkg .in{ padding:10px 11px 12px; }
+  .pkg .cat{ font-size:10.5px; color:var(--m-muted); }
+  .pkg .mdl{ font-size:13px; font-weight:700; margin-top:2px; }
+  .pkg .specs{ font-size:11px; color:var(--m-muted); margin-top:5px; }
+  .pkg .price{ margin-top:7px; font-size:13.5px; font-weight:800; color:var(--m-primary); font-variant-numeric:tabular-nums; }
+  :root[data-theme="dark"] .pkg .price{ color:var(--m-primary-light); }
+  .pkg .price small{ font-weight:500; font-size:10.5px; color:var(--m-muted); }
+
+  /* calculator */
+  .calc{ margin:20px 16px 0; background:var(--m-card); border:1px solid var(--m-line); border-radius:var(--m-radius-xl); padding:16px; box-shadow:var(--m-shadow); }
+  .calc h3{ font-size:15px; font-weight:700; }
+  .calc p.sub{ margin:2px 0 0; font-size:11.5px; color:var(--m-muted); }
+  .row{ display:flex; gap:10px; margin-top:12px; }
+  .fld{ flex:1; }
+  .fld label{ font-size:11px; color:var(--m-muted); display:block; margin-bottom:5px; }
+  .fld select, .fld input{
+    width:100%; background:var(--m-bg); border:1px solid var(--m-line); border-radius:9px;
+    padding:10px; font-size:13.5px; color:var(--m-text); font-family:inherit;
+  }
+  .calc-out{
+    margin-top:14px; background:var(--m-surface); border:1px solid var(--m-line);
+    border-radius:var(--m-radius); padding:12px 13px;
+  }
+  .calc-out .lbl{ font-size:11px; color:var(--m-muted); }
+  .calc-out .amt{ font-size:19px; font-weight:800; color:var(--m-primary); margin-top:2px; font-variant-numeric:tabular-nums; }
+  :root[data-theme="dark"] .calc-out .amt{ color:var(--m-primary-light); }
+  .calc-out .note{ font-size:10.5px; color:var(--m-muted); margin-top:6px; line-height:1.45; }
+
+  /* projects */
+  .proj{ display:flex; gap:11px; align-items:center; padding:11px 0; border-bottom:1px solid var(--m-line); }
+  .proj:last-child{ border-bottom:none; }
+  .proj img{ width:58px;height:58px;border-radius:10px;object-fit:cover; background:var(--m-surface); flex:0 0 auto; }
+  .proj .t{ font-size:13.5px; font-weight:600; }
+  .proj .s{ font-size:11.5px; color:var(--m-muted); margin-top:2px; }
+  .tag{ margin-left:auto; font-size:10px; font-weight:600; color:var(--m-primary); border:1px solid var(--m-line); background:var(--m-surface); padding:3px 9px; border-radius:100px; white-space:nowrap; }
+
+  /* trust */
+  .trust{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .tc{ background:var(--m-card); border:1px solid var(--m-line); border-radius:var(--m-radius); padding:12px; box-shadow:var(--m-shadow); }
+  .tc .n{ font-size:17px; font-weight:800; color:var(--m-primary); }
+  :root[data-theme="dark"] .tc .n{ color:var(--m-primary-light); }
+  .tc .l{ font-size:11px; color:var(--m-muted); margin-top:3px; line-height:1.35; }
+
+  /* bottom nav */
+  .bnav{
+    position:fixed; left:0; right:0; bottom:0; z-index:40; max-width:480px; margin:0 auto;
+    background:color-mix(in srgb, var(--m-bg) 92%, transparent); backdrop-filter:blur(12px);
+    border-top:1px solid var(--m-line);
+    height:calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+    display:flex; align-items:center; justify-content:space-around;
+  }
+  .bnav a{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--m-muted); font-size:10px; font-weight:600; padding:6px 10px; }
+  .bnav a .ic{ font-size:17px; }
+  .bnav a[aria-current="page"]{ color:var(--m-primary); }
+  :root[data-theme="dark"] .bnav a[aria-current="page"]{ color:var(--m-primary-light); }
+
+  .call-fab{
+    position:fixed; z-index:45; right:16px;
+    bottom:calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 14px);
+    background:#25D366; color:#08240f; display:flex; align-items:center; gap:7px;
+    padding:9px 13px; border-radius:100px; font-weight:700; font-size:12px;
+    box-shadow:0 6px 16px rgba(37,211,102,.32);
+  }
+  @media (min-width:480px){ .call-fab{ right:calc(50% - 224px); } }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">BH</div>
+      <b>Bongshai <i>Housing</i></b>
+    </div>
+    <div class="bar-actions">
+      <button class="ibtn" id="themeBtn" type="button" aria-label="Switch between light and dark theme">◐</button>
+      <a class="ibtn" href="tel:{{ (theme.hotline_phone or '+8801781636613') | replace(' ', '') | replace('-', '') }}" aria-label="Call Bongshai Housing">✆</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+  <section class="facts" aria-label="Key figures">
+    {% if rateRange %}<div class="fact">Rate <b>{{ rateRange.min }}–{{ rateRange.max }}</b> ৳/sqft</div>{% endif %}
+    <div class="fact">Build time <b>45–60</b> days</div>
+    <div class="fact">Frame <b>Grade 50</b> steel, BNBC 2020</div>
+    {% if modelCount %}<div class="fact">Models <b>{{ modelCount }}</b></div>{% endif %}
+    <div class="fact">Since <b>2008</b></div>
+  </section>
+
+  <div class="hero-wrap">
+    <div class="hero-scroll" id="heroScroll">
+      {% for c in categories %}{% if loop.index0 < 4 %}
+      <a class="hero" href="/{{ c.landing_page_slug }}">
+        {% if c.hero_image %}<img src="/{{ c.hero_image }}" alt="" loading="{{ 'eager' if loop.first else 'lazy' }}" decoding="async">{% endif %}
+        <span class="hero-tag">{{ c.name }}</span>
+        <div class="hero-body">
+          <h2>{{ c.name }}</h2>
+          <p>Browse models, sizes and package prices →</p>
+        </div>
+      </a>
+      {% endif %}{% endfor %}
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-head"><h3>Popular models</h3><a href="/products-and-solutions.html">View all</a></div>
+    <div class="pkgs">
+      {% for p in featured %}
+      <a class="pkg" href="/{{ p.slug }}">
+        <img src="/{{ p.image }}" alt="{{ p.alt }}" loading="lazy" decoding="async" width="170" height="100">
+        <div class="in">
+          <div class="cat">{{ p.category }}</div>
+          <div class="mdl">{{ p.model }}</div>
+          <div class="specs">
+            {% if p.area %}{{ p.area }} sqft{% endif %}
+            {%- if p.beds %} · {{ p.beds }} bed{% endif %}
+            {%- if p.baths %} · {{ p.baths }} bath{% endif %}
+          </div>
+          {% if p.price %}<div class="price">৳{{ p.price }} <small>package</small></div>
+          {% elif p.rate %}<div class="price">৳{{ p.rate }} <small>/sqft</small></div>{% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="calc" aria-labelledby="calcTitle">
+    <h3 id="calcTitle">Estimate your cost</h3>
+    <p class="sub">Uses the real per-sqft range of our built models.</p>
+    <div class="row">
+      <div class="fld">
+        <label for="calcArea">Total area (sqft)</label>
+        <input id="calcArea" type="number" inputmode="numeric" min="200" max="20000" step="50" value="1500">
+      </div>
+      <div class="fld">
+        <label for="calcType">Building type</label>
+        <select id="calcType">
+          {% for r in calcRates %}<option value="{{ r.min }}|{{ r.max }}">{{ r.name }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="calc-out" aria-live="polite">
+      <div class="lbl">Estimated package range</div>
+      <div class="amt" id="calcOut">—</div>
+      <p class="note"><span id="calcBasis"></span>An indicative range from published model rates, not a quotation. Final cost depends on site conditions, finish level and structural design.</p>
+    </div>
+  </section>
+
+  {% if projects.length %}
+  <section class="sec">
+    <div class="sec-head"><h3>Delivered projects</h3><a href="/projects.html">See all</a></div>
+    {% for pr in projects %}
+    <a class="proj" href="/{{ pr.slug }}">
+      {% if pr.image %}<img src="/{{ pr.image }}" alt="" loading="lazy" decoding="async">{% endif %}
+      <div>
+        <div class="t">{{ pr.title }}</div>
+        {% if pr.location %}<div class="s">{{ pr.location }}</div>{% endif %}
+      </div>
+      {% if pr.status_label %}<span class="tag">{{ pr.status_label }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <section class="sec">
+    <div class="sec-head"><h3>Why Bongshai</h3></div>
+    <div class="trust">
+      <div class="tc"><div class="n">up to 3×</div><div class="l">faster than traditional brick-and-concrete construction</div></div>
+      <div class="tc"><div class="n">Grade 50</div><div class="l">high-tensile structural steel, engineered to BNBC 2020 seismic</div></div>
+      <div class="tc"><div class="n">2008</div><div class="l">building across Bangladesh since</div></div>
+      <div class="tc"><div class="n">45–60</div><div class="l">days to a completed earthquake-resistant home</div></div>
+    </div>
+  </section>
+
+  </main>
+  <div style="height:10px"></div>
+</div>
+
+<a class="call-fab" href="https://wa.me/8801781636613" target="_blank" rel="noopener">💬 Support</a>
+
+<nav class="bnav" aria-label="Primary">
+  <a href="/m" aria-current="page"><span class="ic" aria-hidden="true">🏠</span>Home</a>
+  <a href="/products-and-solutions.html"><span class="ic" aria-hidden="true">📦</span>Models</a>
+  <a href="#calcTitle"><span class="ic" aria-hidden="true">🧮</span>Estimate</a>
+  <a href="/projects.html"><span class="ic" aria-hidden="true">📍</span>Projects</a>
+  <a href="/contact.html"><span class="ic" aria-hidden="true">💬</span>Support</a>
+</nav>
+
+<script>
+(function(){
+  // ---- theme toggle: remembers the reader's choice, defaults to the OS ----
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem('bh-m-theme');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) { /* private mode - fall through to the OS preference */ }
+
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var isDark = root.getAttribute('data-theme') === 'dark'
+      || (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = isDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('bh-m-theme', next); } catch (e) { /* not fatal */ }
+  });
+
+  // ---- hero dots: derived from real scroll position, not a magic multiplier ----
+  var scroller = document.getElementById('heroScroll');
+  var dotWrap = document.getElementById('dots');
+  var slides = scroller ? scroller.children.length : 0;
+  if (scroller && slides > 1) {
+    for (var i = 0; i < slides; i++) {
+      var d = document.createElement('span');
+      d.className = 'dot' + (i === 0 ? ' on' : '');
+      dotWrap.appendChild(d);
+    }
+    var dots = dotWrap.children;
+    scroller.addEventListener('scroll', function(){
+      // Measure the actual slide pitch rather than assuming it equals the
+      // viewport width - the cards are 88% wide with a gap.
+      var first = scroller.children[0];
+      var pitch = first ? first.getBoundingClientRect().width + 10 : scroller.clientWidth;
+      var idx = Math.max(0, Math.min(slides - 1, Math.round(scroller.scrollLeft / pitch)));
+      for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('on', j === idx);
+    }, { passive: true });
+  }
+
+  // ---- estimator ----
+  var area = document.getElementById('calcArea');
+  var type = document.getElementById('calcType');
+  var out = document.getElementById('calcOut');
+  var basis = document.getElementById('calcBasis');
+
+  function taka(n){
+    var s = Math.round(n).toString();
+    if (s.length <= 3) return s;
+    return s.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + s.slice(-3);
+  }
+  function recalc(){
+    if (!type || !type.value) { out.textContent = 'Rates unavailable'; return; }
+    var sqft = parseFloat(area.value);
+    if (!isFinite(sqft) || sqft <= 0) { out.textContent = '—'; return; }
+    var parts = type.value.split('|');
+    var lo = parseFloat(parts[0]) * sqft;
+    var hi = parseFloat(parts[1]) * sqft;
+    out.textContent = lo === hi ? '৳' + taka(lo) : '৳' + taka(lo) + ' – ৳' + taka(hi);
+    if (basis) {
+      basis.textContent = 'Based on ' + taka(parseFloat(parts[0])) + '–' + taka(parseFloat(parts[1]))
+        + ' ৳/sqft for ' + type.options[type.selectedIndex].text + '. ';
+    }
+  }
+  if (area && type && out) {
+    area.addEventListener('input', recalc);
+    type.addEventListener('change', recalc);
+    recalc();
+  }
+})();
+</script>
+</body>
+</html>

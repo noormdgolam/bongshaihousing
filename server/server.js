@@ -16,6 +16,7 @@ const pagesRouter = require('./routes/pages');
 const productsRouter = require('./routes/products');
 const projectsRouter = require('./routes/projects');
 const aiChatRouter = require('./routes/ai-chat');
+const mobileRouter = require('./routes/mobile');
 const sitemapRouter = require('./routes/sitemap');
 const searchIndexRouter = require('./routes/search-index');
 const adminAuthRouter = require('./routes/admin-auth');
@@ -322,6 +323,7 @@ app.use((req, res, next) => {
 app.use('/', productsRouter); // DB-driven product slug pages (bh-*, dv-*, lcv-*) — must precede pagesRouter
 app.use('/', projectsRouter); // DB-driven project pages with no dedicated template yet — must precede pagesRouter
 app.use('/', aiChatRouter);   // AI Sales Assistant API endpoint (/api/ai-chat)
+app.use('/', mobileRouter);  // phone-first app shell (/m)
 app.use('/', pagesRouter);
 app.use('/', contactRouter);
 app.use('/', counterRouter);
