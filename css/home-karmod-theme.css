@@ -405,6 +405,67 @@ body.home-karmod .pkg-thumb {
 }
 
 /* Mobile: single-column links, tighter tabs so nothing overflows */
+/* ---------------------------------------------------------------------------
+   Phone: card sections become side-scrolling rails.
+
+   Measured on the live homepage at 390px, the page ran 13,023px - 15.4 screens
+   - because every card section stacked one card per row. Completed Projects
+   alone was 1,400px of vertical wall. A rail keeps every card reachable with a
+   thumb, shows the next one part-visible so people know to swipe, and gives
+   each section a predictable height instead of one proportional to how much
+   content was added.
+
+   One shared rule rather than four bespoke ones: the sections differ in what
+   they contain, not in how they should behave on a narrow screen.
+--------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  body.home-karmod .completed-projects-grid,
+  body.home-karmod .why-grid,
+  body.home-karmod .process-steps {
+    display: flex !important;
+    grid-template-columns: none !important;
+    flex-wrap: nowrap;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Bleed to the screen edge so the rail reads as continuing past it, while
+       the first card still lines up with the section's text above. */
+    padding: 2px 16px 8px;
+    margin-inline: -16px;
+  }
+  body.home-karmod .completed-projects-grid::-webkit-scrollbar,
+  body.home-karmod .why-grid::-webkit-scrollbar,
+  body.home-karmod .process-steps::-webkit-scrollbar { display: none; }
+
+  body.home-karmod .completed-projects-grid > *,
+  body.home-karmod .why-grid > *,
+  body.home-karmod .process-steps > * {
+    flex: 0 0 82%;
+    max-width: 82%;
+    scroll-snap-align: start;
+    margin: 0;
+  }
+
+  /* A project card leads with its photograph, so it can afford to be wider and
+     shorter than a text card. */
+  body.home-karmod .completed-projects-grid > * {
+    flex-basis: 76%;
+    max-width: 76%;
+  }
+
+  /* Staggered reveal animations assume a vertical list; inside a horizontal
+     scroller they leave cards invisible until scrolled past, which on a rail
+     means never. */
+  body.home-karmod .why-grid.stagger > *,
+  body.home-karmod .process-steps.stagger > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
 @media (max-width: 640px) {
   body.home-karmod .pkg-tabs {
     gap: var(--space-2);
