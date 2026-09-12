@@ -1,3 +1,15 @@
+
+<style>
+  .bh-support-gate{ display:none; flex-direction:column; gap:8px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.08); }
+  .bh-support-gate.show{ display:flex; }
+  .bh-support-gate-msg{ margin:0 0 2px; font-size:13px; line-height:1.5; }
+  .bh-support-gate-msg span{ font-size:11.5px; opacity:.7; }
+  .bh-support-gate input{ padding:10px 12px; border:1px solid rgba(0,0,0,.18); border-radius:9px; font:inherit; font-size:14px; }
+  .bh-support-gate input:focus-visible{ outline:2px solid #1E40AF; outline-offset:1px; }
+  .bh-support-gate-btn{ padding:11px; border:none; border-radius:9px; background:#1E40AF; color:#fff; font-weight:700; font-size:14px; cursor:pointer; }
+  .bh-support-gate-err{ font-size:12px; color:#b91c1c; }
+  .bh-ai-form.locked{ display:none !important; }
+</style>
 <!-- Customer Support chat widget. Branded as support rather than "AI" -
      customers are contacting Bongshai, not a product. -->
 <div id="bhAiChatWidget" class="bh-ai-widget" data-mcp-action="ai-consultation">
@@ -59,6 +71,18 @@
       <span class="bh-ai-typing-text">AI is typing...</span>
     </div>
 
+
+    <!-- Identity gate. Name and number are taken before the first message so
+         every conversation is contactable; location is asked later, in the
+         conversation itself, only when it matters. -->
+    <form id="bhSupportGate" class="bh-support-gate" onsubmit="return false;">
+      <p class="bh-support-gate-msg">আপনার নাম ও মোবাইল নম্বর দিন, আমরা কথা শুরু করি।<br>
+        <span>Your name and mobile number, so our team can get back to you.</span></p>
+      <input type="text" id="bhGateName" placeholder="আপনার নাম / Your name" autocomplete="name" maxlength="60" aria-label="Your name">
+      <input type="tel" id="bhGatePhone" placeholder="০১৭xxxxxxxx" autocomplete="tel" inputmode="tel" maxlength="20" aria-label="Your mobile number">
+      <div class="bh-support-gate-err" id="bhGateErr" role="alert" hidden></div>
+      <button type="button" id="bhGateGo" class="bh-support-gate-btn">চ্যাট শুরু করুন / Start chat</button>
+    </form>
     <!-- Input Form -->
     <form id="bhAiForm" class="bh-ai-form" onsubmit="return false;">
       <input 
@@ -858,6 +882,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: conversation,
+          identity: bhSupportIdentity(),
           context: {
             pageUrl: window.location.pathname,
             pageTitle: document.title,
@@ -1033,6 +1058,62 @@
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     sendMessage();
+  });
+})();
+</script>
+
+<script>
+/* Identity gate for Customer Support. Stored on the device so a returning
+   customer is not asked twice, and sent with every message so the server can
+   keep the transcript against a name and a number. */
+(function(){
+  var KEY = 'bh-support-identity';
+  function load(){
+    try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; }
+  }
+  function token(){
+    return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  }
+  window.bhSupportIdentity = function(){ return load() || {}; };
+
+  // Mirrors lib/leads.js isValidBdPhone so the customer is told immediately
+  // rather than after a round trip.
+  function normalisePhone(raw){
+    var d = String(raw || '').replace(/\D/g, '');
+    if (d.indexOf('880') === 0) d = '0' + d.slice(3);
+    else if (d.length === 10 && d.charAt(0) !== '0') d = '0' + d;
+    return /^01[3-9]\d{8}$/.test(d) ? d : null;
+  }
+
+  function apply(){
+    var gate = document.getElementById('bhSupportGate');
+    var form = document.getElementById('bhAiForm');
+    if (!gate || !form) return;
+    if (load()) { gate.classList.remove('show'); form.classList.remove('locked'); }
+    else { gate.classList.add('show'); form.classList.add('locked'); }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    apply();
+    var go = document.getElementById('bhGateGo');
+    if (!go) return;
+    go.addEventListener('click', function(){
+      var name = (document.getElementById('bhGateName').value || '').trim();
+      var phone = (document.getElementById('bhGatePhone').value || '').trim();
+      var err = document.getElementById('bhGateErr');
+      var show = function(m){ err.textContent = m; err.hidden = false; };
+      if (name.length < 2) return show('আপনার নাম লিখুন / Please enter your name.');
+      if (!normalisePhone(phone)) return show('সঠিক মোবাইল নম্বর দিন / Enter a valid mobile number.');
+      err.hidden = true;
+      try {
+        localStorage.setItem(KEY, JSON.stringify({ name: name, phone: phone, sessionToken: token() }));
+      } catch (e) { /* private mode: the identity still travels with this page's requests */
+        window.bhSupportIdentity = function(){ return { name: name, phone: phone, sessionToken: token() }; };
+      }
+      apply();
+      var input = document.getElementById('bhAiInput');
+      if (input) input.focus();
+    });
   });
 })();
 </script>

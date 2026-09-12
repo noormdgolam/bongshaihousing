@@ -3553,6 +3553,63 @@ router.post('/admin/history/:entityType/:entityId/restore/:historyId', async (re
 //   inferred  - derived by matching text (a lead naming a model number, a
 //               project's location naming a district)
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Support chats: every conversation, whether or not it became a lead.
+// ---------------------------------------------------------------------------
+router.get('/admin/support-chats', async (req, res) => {
+  const empty = { chats: [], chatStats: {}, activeChat: null, chatMessages: [] };
+  if (!db) return res.render('admin/support-chats.njk', adminVars(req, empty));
+  try {
+    if (!(await db.schema.hasTable('support_chats'))) {
+      return res.render('admin/support-chats.njk', adminVars(req, empty));
+    }
+    const status = req.query.status || 'all';
+    let q = db('support_chats').select('*').orderBy('last_message_at', 'desc').limit(200);
+    if (status !== 'all') q = q.where({ status });
+    const chats = await q;
+
+    const [[total], [open], [converted]] = await Promise.all([
+      db('support_chats').count({ c: '*' }),
+      db('support_chats').where({ status: 'open' }).count({ c: '*' }),
+      db('support_chats').whereNotNull('lead_id').count({ c: '*' }),
+    ]);
+
+    let activeChat = null;
+    let chatMessages = [];
+    if (req.query.id) {
+      activeChat = await db('support_chats').where({ id: req.query.id }).first();
+      if (activeChat) {
+        chatMessages = await db('support_chat_messages')
+          .where({ chat_id: activeChat.id }).orderBy('id');
+      }
+    }
+
+    res.render('admin/support-chats.njk', adminVars(req, {
+      chats,
+      activeChat,
+      chatMessages,
+      activeStatus: status,
+      chatStats: { total: total.c, open: open.c, converted: converted.c },
+    }));
+  } catch (err) {
+    console.error('support-chats error:', err.message);
+    res.render('admin/support-chats.njk', adminVars(req, empty));
+  }
+});
+
+router.post('/admin/support-chats/:id/status', async (req, res) => {
+  const { verifyCsrfToken, sendCsrfError } = require('../middleware/csrf');
+  if (!verifyCsrfToken(req)) return sendCsrfError(req, res);
+  const allowed = ['open', 'contacted', 'converted', 'closed'];
+  const status = allowed.includes(req.body.status) ? req.body.status : 'open';
+  try {
+    await db('support_chats').where({ id: req.params.id })
+      .update({ status, admin_notes: (req.body.admin_notes || '').slice(0, 2000), updated_at: db.fn.now() });
+  } catch (e) { console.error('support-chat status update failed:', e.message); }
+  res.redirect(`/admin/support-chats?id=${req.params.id}`);
+});
+
 router.get('/admin/content-graph', async (req, res) => {
   // Serialised here rather than dumped in the template: a record name
   // containing "</script>" would otherwise close the tag it sits in.

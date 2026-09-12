@@ -1,0 +1,120 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Support Chats{% endblock %}
+{% block header %}<h2 style="margin:0;">Support Chats</h2>{% endblock %}
+{% block content %}
+<style>
+  .sc-wrap{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:16px; align-items:start; }
+  @media (max-width:1000px){ .sc-wrap{ grid-template-columns:1fr; } }
+  .sc-panel{ background:var(--white,#fff); border:1px solid var(--grey-200,#e2e8f0); border-radius:12px; }
+  .sc-stats{ display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .sc-stat{ flex:1 1 150px; background:var(--white,#fff); border:1px solid var(--grey-200,#e2e8f0); border-radius:12px; padding:12px 14px; }
+  .sc-stat b{ display:block; font-size:20px; font-variant-numeric:tabular-nums; }
+  .sc-stat span{ font-size:11.5px; color:var(--grey-500,#64748b); text-transform:uppercase; letter-spacing:.5px; }
+  .sc-filters{ display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+  .sc-filters a{ font-size:12px; padding:5px 11px; border-radius:100px; border:1px solid var(--grey-200,#e2e8f0); text-decoration:none; color:var(--grey-700,#334155); }
+  .sc-filters a.on{ background:var(--primary,#1E40AF); color:#fff; border-color:var(--primary,#1E40AF); }
+  .sc-row{ display:block; padding:11px 14px; border-bottom:1px solid var(--grey-100,#eef2f7); text-decoration:none; color:inherit; }
+  .sc-row:last-child{ border-bottom:none; }
+  .sc-row.on{ background:#eef4ff; }
+  .sc-row .who{ display:flex; align-items:baseline; gap:8px; }
+  .sc-row .nm{ font-weight:700; font-size:13.5px; }
+  .sc-row .ph{ font-size:12px; color:var(--grey-500,#64748b); font-variant-numeric:tabular-nums; }
+  .sc-row .meta{ font-size:11.5px; color:var(--grey-500,#64748b); margin-top:3px; }
+  .pill{ font-size:10px; font-weight:700; padding:2px 8px; border-radius:100px; text-transform:uppercase; letter-spacing:.4px; }
+  .pill.open{ background:#fef3c7; color:#92400e; }
+  .pill.contacted{ background:#dbeafe; color:#1e40af; }
+  .pill.converted{ background:#dcfce7; color:#166534; }
+  .pill.closed{ background:#f1f5f9; color:#475569; }
+  .sc-thread{ padding:14px 16px; max-height:560px; overflow-y:auto; }
+  .msg{ max-width:82%; padding:9px 12px; border-radius:12px; font-size:13px; line-height:1.5; margin-bottom:8px; white-space:pre-wrap; word-break:break-word; }
+  .msg.user{ background:var(--off-white,#f1f5f9); }
+  .msg.assistant{ background:var(--primary,#1E40AF); color:#fff; margin-left:auto; }
+  .sc-head{ padding:14px 16px; border-bottom:1px solid var(--grey-200,#e2e8f0); }
+  .sc-head h3{ margin:0; font-size:15px; }
+  .sc-head .sub{ font-size:12px; color:var(--grey-500,#64748b); margin-top:3px; }
+  .sc-actions{ padding:12px 16px; border-top:1px solid var(--grey-200,#e2e8f0); display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .sc-actions select, .sc-actions input{ padding:7px 10px; border:1px solid var(--grey-200,#e2e8f0); border-radius:8px; font:inherit; font-size:13px; }
+  .sc-actions input{ flex:1; min-width:180px; }
+  .sc-empty{ padding:26px 16px; color:var(--grey-500,#64748b); font-size:13.5px; line-height:1.6; }
+</style>
+
+<p style="margin:0 0 14px; color:var(--grey-500,#64748b); font-size:0.9rem; max-width:80ch;">
+  Every support conversation is kept here, whether or not it became a lead. Name and mobile number are
+  collected before the first message, so each one is contactable. Location is asked later in the
+  conversation, only when it is actually needed.
+</p>
+
+<div class="sc-stats">
+  <div class="sc-stat"><b>{{ chatStats.total or 0 }}</b><span>Conversations</span></div>
+  <div class="sc-stat"><b>{{ chatStats.open or 0 }}</b><span>Not yet contacted</span></div>
+  <div class="sc-stat"><b>{{ chatStats.converted or 0 }}</b><span>Became a lead</span></div>
+</div>
+
+<div class="sc-filters">
+  {% for f in ['all','open','contacted','converted','closed'] %}
+  <a href="/admin/support-chats?status={{ f }}" class="{{ 'on' if (activeStatus or 'all') == f }}">{{ f | capitalize }}</a>
+  {% endfor %}
+</div>
+
+<div class="sc-wrap">
+  <div class="sc-panel">
+    {% if chats.length %}
+      {% for c in chats %}
+      <a class="sc-row {{ 'on' if activeChat and activeChat.id == c.id }}" href="/admin/support-chats?id={{ c.id }}{% if activeStatus %}&status={{ activeStatus }}{% endif %}">
+        <div class="who">
+          <span class="nm">{{ c.name }}</span>
+          <span class="ph">{{ c.phone }}</span>
+          <span class="pill {{ c.status }}" style="margin-left:auto;">{{ c.status }}</span>
+        </div>
+        <div class="meta">
+          {{ c.message_count }} message{{ '' if c.message_count == 1 else 's' }}
+          {%- if c.district %} · {{ c.district }}{% endif %}
+          {%- if c.model_interest %} · {{ c.model_interest }}{% endif %}
+          {%- if c.last_message_at %} · {{ c.last_message_at }}{% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    {% else %}
+      <div class="sc-empty">
+        No conversations yet. They appear here as soon as someone starts a chat on the site —
+        the widget asks for a name and mobile number first, so nothing lands here anonymously.
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="sc-panel">
+    {% if activeChat %}
+      <div class="sc-head">
+        <h3>{{ activeChat.name }} — {{ activeChat.phone }}</h3>
+        <div class="sub">
+          {% if activeChat.district %}{{ activeChat.district }}{% if activeChat.upazila %}, {{ activeChat.upazila }}{% endif %} · {% endif %}
+          {% if activeChat.page_url %}from {{ activeChat.page_url }} · {% endif %}
+          {{ activeChat.language | upper }}
+          {% if activeChat.lead_id %} · lead #{{ activeChat.lead_id }}{% endif %}
+        </div>
+      </div>
+      <div class="sc-thread">
+        {% for m in chatMessages %}
+        <div class="msg {{ m.role }}">{{ m.content }}</div>
+        {% else %}
+        <div class="sc-empty">No messages recorded on this conversation.</div>
+        {% endfor %}
+      </div>
+      <form class="sc-actions" method="POST" action="/admin/support-chats/{{ activeChat.id }}/status">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <select name="status">
+          {% for s in ['open','contacted','converted','closed'] %}
+          <option value="{{ s }}" {% if activeChat.status == s %}selected{% endif %}>{{ s | capitalize }}</option>
+          {% endfor %}
+        </select>
+        <input type="text" name="admin_notes" placeholder="Internal note" value="{{ activeChat.admin_notes or '' }}">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn" href="https://wa.me/88{{ activeChat.phone_key }}" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn" href="tel:{{ activeChat.phone_key }}">Call</a>
+      </form>
+    {% else %}
+      <div class="sc-empty">Select a conversation to read it.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
