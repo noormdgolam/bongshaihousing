@@ -1,3 +1,18 @@
+
+<style>
+  .ftue-form{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+  .ftue-form input{
+    padding:11px 13px; border:1px solid var(--grey-200,#e2e8f0); border-radius:10px;
+    font:inherit; font-size:15px; width:100%;
+  }
+  .ftue-form input:focus-visible{ outline:2px solid var(--primary,#1E40AF); outline-offset:1px; }
+  .ftue-form button{ width:100%; }
+  .ftue-err{ margin:0; font-size:12.5px; color:#b91c1c; }
+  .ftue-ok{ margin:10px 0 0; font-size:14px; line-height:1.5; color:#166534; font-weight:600; }
+  .ftue-en{ font-size:12px; opacity:.75; font-weight:400; }
+  .ftue-skip{ margin:10px 0 0; text-align:center; font-size:12.5px; }
+  .ftue-skip a{ color:var(--grey-500,#64748b); text-decoration:underline; }
+</style>
 {% extends "layout.njk" %}
 {% block head_extra %}
   <link rel="preload" href="css/home-karmod-theme.min.css?v=1.10" as="style">
@@ -854,18 +869,24 @@
 {% endblock %}
 
 {% block scripts_extra %}
-<div id="ftue-modal" class="ftue-modal-overlay">
+<div id="ftue-modal" class="ftue-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ftueTitle">
   <div class="ftue-modal-content">
-    <button class="ftue-close-btn" aria-label="Close modal">×</button>
+    <button class="ftue-close-btn" aria-label="বন্ধ করুন / Close">&times;</button>
     <div class="ftue-image">
-      <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px" alt="Welcome to Bongshai Housing" loading="lazy" width="1024" height="1024">
+      <img src="images/products/dv-101.webp" srcset="images/products/dv-101-400w.webp 400w, images/products/dv-101-700w.webp 700w, images/products/dv-101.webp 1024w" sizes="(max-width: 600px) 100vw, 400px" alt="Bongshai Housing prefab steel duplex" width="1024" height="683" loading="lazy" decoding="async">
     </div>
     <div class="ftue-body">
-      <h2>Why Choose Bongshai Housing</h2>
-      <p>Experience Bangladesh's premier prefab and steel building solutions. We build dreams with international quality and unwavering commitment to excellence.</p>
-      <div class="ftue-actions">
-        <a href="products-and-solutions.html" class="btn btn-primary ftue-cta-btn">Explore Packages</a>
-      </div>
+      <h2 id="ftueTitle">ফ্রি খরচের হিসাব নিন</h2>
+      <p>নাম আর মোবাইল নম্বর দিন — আমাদের টিম আপনার জমি ও বাজেট অনুযায়ী আনুমানিক খরচ জানিয়ে দেবে।<br>
+        <span class="ftue-en">Leave your name and mobile number and our team will send you an indicative cost for your plot and budget.</span></p>
+      <form id="ftueForm" class="ftue-form" novalidate>
+        <input type="text" id="ftueName" name="name" placeholder="আপনার নাম / Your name" autocomplete="name" maxlength="60" required>
+        <input type="tel" id="ftuePhone" name="phone" placeholder="০১৭xxxxxxxx" autocomplete="tel" inputmode="tel" maxlength="20" required>
+        <p class="ftue-err" id="ftueErr" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary ftue-cta-btn" id="ftueSubmit">হিসাব পাঠান / Send me an estimate</button>
+      </form>
+      <p class="ftue-ok" id="ftueOk" hidden>ধন্যবাদ! আমাদের টিম শীঘ্রই যোগাযোগ করবে।<br><span class="ftue-en">Thank you — our team will contact you shortly.</span></p>
+      <p class="ftue-skip"><a href="products-and-solutions.html">শুধু মডেলগুলো দেখি / Just browse the models</a></p>
     </div>
   </div>
 </div>

@@ -418,12 +418,73 @@ body.home-karmod .pkg-thumb {
     width: 30px;
     height: 30px;
   }
+  /* Phone: a side-scrolling rail of image cards instead of a vertical wall of
+     text rows. The stacked list pushed every other section below the fold and
+     gave a photographed product the same weight as a bullet point. Both <ul>s
+     sit inside one scroller so the categories read as a single sequence, and
+     the card width leaves the next one part-visible, which is what tells a
+     thumb there is more to the right. */
   body.home-karmod .pkg-panel-links {
-    grid-template-columns: 1fr;
+    display: flex;
+    grid-template-columns: none;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 2px 16px 6px;
+    margin: 0 -16px;
   }
-  /* first list's last item needs a divider once stacked */
+  body.home-karmod .pkg-panel-links::-webkit-scrollbar { display: none; }
+
+  body.home-karmod .pkg-panel-links ul {
+    display: flex;
+    gap: 10px;
+  }
+
+  body.home-karmod .pkg-panel-links li,
   body.home-karmod .pkg-panel-links ul:first-child li:last-child {
-    border-bottom: 1px solid var(--grey-100);
+    border-bottom: none;
+    flex: 0 0 150px;
+    scroll-snap-align: start;
+  }
+
+  body.home-karmod .pkg-panel-links a {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 10px;
+    height: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.10);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    font-size: 0.875rem;
+    line-height: 1.3;
+  }
+
+  /* The row thumbnail becomes the card's photo. */
+  body.home-karmod .pkg-panel-links a img.pkg-thumb {
+    width: 100%;
+    height: 96px;
+    border-radius: 0;
+    object-fit: cover;
+    display: block;
+    margin: 0 0 8px;
+  }
+
+  body.home-karmod .pkg-panel-links a span {
+    padding: 0 11px;
+  }
+
+  /* The hover slide and left bar were built for a list row; on a card they
+     just shift the photo sideways. */
+  body.home-karmod .pkg-panel-links a:hover {
+    padding-left: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
   }
   /* The large panel image is redundant once every row carries its own
      thumbnail, and it costs a lot of vertical space on a phone. */
