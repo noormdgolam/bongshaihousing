@@ -3539,6 +3539,138 @@ router.post('/admin/history/:entityType/:entityId/restore/:historyId', async (re
 
 // ---- Analytics & Visitor Stats ----
 
+// ---------------------------------------------------------------------------
+// Content graph: the site's own records as a live knowledge graph.
+//
+// Analytics answers "how many"; this answers "what is connected to what" -
+// which categories carry the catalogue, which models actually pull inquiries,
+// which districts and departments are thinly covered. Node size is degree, so
+// the hubs surface themselves rather than being hardcoded.
+//
+// Edges are labelled the way a knowledge graph distinguishes them:
+//   extracted - the relationship is stored in the database (a product's
+//               category_id, a team member's department)
+//   inferred  - derived by matching text (a lead naming a model number, a
+//               project's location naming a district)
+// ---------------------------------------------------------------------------
+router.get('/admin/content-graph', async (req, res) => {
+  // Serialised here rather than dumped in the template: a record name
+  // containing "</script>" would otherwise close the tag it sits in.
+  const LT = String.fromCharCode(92) + 'u003c'; // a literal < escape
+  const toJson = (v) => JSON.stringify(v).split('<').join(LT);
+  const empty = { graphJson: toJson({ nodes: [], links: [] }), graphStats: {} };
+  if (!db) return res.render('admin/content-graph.njk', adminVars(req, empty));
+
+  try {
+    const nodes = [];
+    const links = [];
+    const add = (n) => { nodes.push(n); return n.id; };
+    const norm = (s) => String(s || '').trim().toUpperCase().replace(/\s+/g, '');
+
+    const [categories, products, projects, areas, team, faqs] = await Promise.all([
+      db('categories').select('id', 'name', 'landing_page_slug'),
+      db('products').select('id', 'model_number', 'slug', 'category_id', 'total_floor_area', 'fixed_price', 'published'),
+      db('projects').where({ published: true }).select('id', 'title', 'slug', 'location'),
+      db('service_areas').select('id', 'district', 'division', 'has_dedicated_page'),
+      db('team_members').where({ published: true }).select('id', 'name', 'role', 'department'),
+      db('faqs').where({ published: true }).select('id', 'category'),
+    ]);
+
+    for (const c of categories) {
+      add({ id: `cat:${c.id}`, type: 'category', label: c.name, href: `/admin/categories/${c.id}/edit`, page: c.landing_page_slug });
+    }
+    for (const p of products) {
+      add({
+        id: `prod:${p.id}`, type: 'product', label: p.model_number, href: `/admin/products/${p.id}/edit`,
+        page: p.slug, meta: [p.total_floor_area ? `${p.total_floor_area} sqft` : null, p.published ? null : 'unpublished'].filter(Boolean).join(' · '),
+      });
+      if (p.category_id) links.push({ source: `prod:${p.id}`, target: `cat:${p.category_id}`, kind: 'extracted', rel: 'in category' });
+    }
+
+    const divisions = new Set();
+    for (const a of areas) {
+      if (a.division && !divisions.has(a.division)) {
+        divisions.add(a.division);
+        add({ id: `div:${a.division}`, type: 'division', label: a.division });
+      }
+      add({ id: `area:${a.id}`, type: 'area', label: a.district, href: '/admin/service-areas', meta: a.has_dedicated_page ? 'has landing page' : 'no landing page' });
+      if (a.division) links.push({ source: `area:${a.id}`, target: `div:${a.division}`, kind: 'extracted', rel: 'in division' });
+    }
+
+    for (const pr of projects) {
+      add({ id: `proj:${pr.id}`, type: 'project', label: pr.title, href: `/admin/projects/${pr.id}/edit`, page: pr.slug, meta: pr.location || '' });
+      // A project's location is free text - match it to a district by name.
+      const loc = String(pr.location || '').toLowerCase();
+      const hit = areas.find((a) => a.district && loc.includes(String(a.district).toLowerCase()));
+      if (hit) links.push({ source: `proj:${pr.id}`, target: `area:${hit.id}`, kind: 'inferred', rel: 'built in' });
+    }
+
+    const depts = new Set();
+    for (const m of team) {
+      const d = m.department || 'unassigned';
+      if (!depts.has(d)) { depts.add(d); add({ id: `dept:${d}`, type: 'department', label: d.replace(/-/g, ' ') }); }
+      add({ id: `member:${m.id}`, type: 'member', label: m.name, href: '/admin/team-members', meta: m.role || '' });
+      links.push({ source: `member:${m.id}`, target: `dept:${d}`, kind: 'extracted', rel: 'works in' });
+    }
+
+    const faqTopics = new Map();
+    for (const f of faqs) {
+      const t = f.category || 'General';
+      faqTopics.set(t, (faqTopics.get(t) || 0) + 1);
+    }
+    for (const [topic, count] of faqTopics) {
+      add({ id: `faq:${topic}`, type: 'faq', label: topic, href: '/admin/faqs', meta: `${count} question${count === 1 ? '' : 's'}` });
+    }
+
+    // Inquiry interest: a lead names a model number in free text. This is the
+    // edge that shows which models the catalogue is actually selling.
+    const byModel = new Map(products.map((p) => [norm(p.model_number), p.id]));
+    const interest = new Map();
+    const bump = (raw) => {
+      const pid = byModel.get(norm(raw));
+      if (pid) interest.set(pid, (interest.get(pid) || 0) + 1);
+    };
+    if (await db.schema.hasTable('leads')) {
+      (await db('leads').whereNotNull('model').select('model')).forEach((l) => bump(l.model));
+    }
+    if (await db.schema.hasTable('agent_leads')) {
+      (await db('agent_leads').whereNotNull('product_interest').select('product_interest')).forEach((l) => bump(l.product_interest));
+    }
+    if (interest.size) {
+      add({ id: 'hub:inquiries', type: 'inquiry', label: 'Inquiries', href: '/admin/leads', meta: `${[...interest.values()].reduce((a, b) => a + b, 0)} matched to a model` });
+      for (const [pid, count] of interest) {
+        links.push({ source: 'hub:inquiries', target: `prod:${pid}`, kind: 'inferred', rel: 'asked about', weight: count });
+      }
+    }
+
+    // Degree drives node size, so the hubs emerge from the data.
+    const degree = new Map();
+    for (const l of links) {
+      degree.set(l.source, (degree.get(l.source) || 0) + 1);
+      degree.set(l.target, (degree.get(l.target) || 0) + 1);
+    }
+    const present = new Set(nodes.map((n) => n.id));
+    const validLinks = links.filter((l) => present.has(l.source) && present.has(l.target));
+    for (const n of nodes) n.degree = degree.get(n.id) || 0;
+
+    const topHubs = [...nodes].sort((a, b) => b.degree - a.degree).slice(0, 5)
+      .map((n) => ({ label: n.label, type: n.type, degree: n.degree }));
+
+    res.render('admin/content-graph.njk', adminVars(req, {
+      graphJson: toJson({ nodes, links: validLinks }),
+      graphStats: {
+        nodeCount: nodes.length,
+        linkCount: validLinks.length,
+        isolated: nodes.filter((n) => n.degree === 0).length,
+        topHubs,
+      },
+    }));
+  } catch (err) {
+    console.error('content-graph error:', err.message);
+    res.render('admin/content-graph.njk', adminVars(req, empty));
+  }
+});
+
 router.get('/admin/analytics', async (req, res) => {
   const empty = {
     leadFunnel: [], leadTrend: [], topModels: [], leadSources: [],

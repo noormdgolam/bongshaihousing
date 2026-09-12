@@ -1,0 +1,451 @@
+{% extends "admin-layout.njk" %}
+{% block title %}Content Graph{% endblock %}
+{% block header %}<h2 style="margin:0;">Content Graph</h2>{% endblock %}
+{% block content %}
+<style>
+  .cg-wrap { display: grid; grid-template-columns: 1fr 300px; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .cg-wrap { grid-template-columns: 1fr; } }
+
+  .cg-stage {
+    position: relative; background: #0d1220; border: 1px solid #1e2a44; border-radius: 14px;
+    overflow: hidden; min-height: 560px;
+  }
+  .cg-stage canvas { display: block; width: 100%; height: 560px; cursor: grab; }
+  .cg-stage canvas.dragging { cursor: grabbing; }
+
+  .cg-toolbar {
+    position: absolute; top: 12px; left: 12px; right: 12px; display: flex; flex-wrap: wrap;
+    gap: 8px; align-items: center; pointer-events: none; z-index: 2;
+  }
+  .cg-toolbar > * { pointer-events: auto; }
+  .cg-search {
+    background: rgba(13,18,32,0.9); border: 1px solid #2b3a5c; color: #e8eefc; border-radius: 8px;
+    padding: 7px 11px; font-size: 0.85rem; width: 210px; font-family: inherit;
+  }
+  .cg-search::placeholder { color: #6b7ea3; }
+  .cg-search:focus { outline: 2px solid #3b82f6; outline-offset: 1px; }
+
+  .cg-chip {
+    display: inline-flex; align-items: center; gap: 6px; background: rgba(13,18,32,0.9);
+    border: 1px solid #2b3a5c; color: #b9c8e6; border-radius: 999px; padding: 5px 11px;
+    font-size: 0.76rem; font-weight: 600; cursor: pointer; user-select: none;
+    transition: border-color .15s, color .15s, opacity .15s;
+  }
+  .cg-chip .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .cg-chip[aria-pressed="false"] { opacity: 0.4; }
+  .cg-chip:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+  .cg-btn {
+    background: rgba(13,18,32,0.9); border: 1px solid #2b3a5c; color: #b9c8e6; border-radius: 8px;
+    padding: 6px 11px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .cg-btn:hover { border-color: #3b82f6; color: #e8eefc; }
+
+  .cg-hint {
+    position: absolute; bottom: 10px; left: 14px; color: #5f7398; font-size: 0.72rem; z-index: 2;
+    pointer-events: none;
+  }
+
+  .cg-side .panel {
+    background: var(--white, #fff); border: 1px solid var(--grey-200, #e2e8f0);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+  }
+  .cg-side h3 { margin: 0 0 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .6px; color: var(--grey-500, #64748b); }
+  .cg-stat-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.88rem; }
+  .cg-stat-row + .cg-stat-row { border-top: 1px solid var(--grey-100, #eef2f7); }
+  .cg-stat-row b { font-variant-numeric: tabular-nums; }
+
+  .cg-hub { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 0.86rem; }
+  .cg-hub .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .cg-hub .n { margin-left: auto; color: var(--grey-500, #64748b); font-variant-numeric: tabular-nums; }
+
+  #cgDetail .empty { color: var(--grey-500, #64748b); font-size: 0.85rem; }
+  #cgDetail .title { font-weight: 700; font-size: 1rem; margin-bottom: 2px; word-break: break-word; }
+  #cgDetail .kind { font-size: 0.74rem; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  #cgDetail ul { list-style: none; margin: 8px 0 0; padding: 0; max-height: 190px; overflow-y: auto; }
+  #cgDetail li { font-size: 0.82rem; padding: 3px 0; color: var(--grey-700, #334155); display: flex; gap: 6px; }
+  #cgDetail li .rel { color: var(--grey-500, #64748b); flex-shrink: 0; }
+</style>
+
+<p style="margin:0 0 14px; color:var(--grey-500,#64748b); font-size:0.9rem;">
+  Every published record and the links between them. Node size is how connected a record is, so the hubs surface themselves.
+  Dashed links are inferred by matching text; solid links are stored in the database.
+</p>
+
+<div class="cg-wrap">
+  <div class="cg-stage">
+    <div class="cg-toolbar">
+      <input id="cgSearch" class="cg-search" type="search" placeholder="Find a model, district, project…" aria-label="Search the graph">
+      <span id="cgLegend" style="display:contents;"></span>
+      <button type="button" id="cgReset" class="cg-btn">Reset</button>
+    </div>
+    <canvas id="cgCanvas" aria-label="Force-directed graph of site content"></canvas>
+    <div class="cg-hint">Drag a node to pull it · scroll to zoom · click to inspect</div>
+  </div>
+
+  <div class="cg-side">
+    <div class="panel">
+      <h3>Shape of the site</h3>
+      <div class="cg-stat-row"><span>Records</span><b>{{ graphStats.nodeCount or 0 }}</b></div>
+      <div class="cg-stat-row"><span>Connections</span><b>{{ graphStats.linkCount or 0 }}</b></div>
+      <div class="cg-stat-row"><span>Unconnected</span><b>{{ graphStats.isolated or 0 }}</b></div>
+    </div>
+
+    {% if graphStats.topHubs and graphStats.topHubs.length %}
+    <div class="panel">
+      <h3>Most connected</h3>
+      {% for h in graphStats.topHubs %}
+      <div class="cg-hub"><span class="dot" data-type="{{ h.type }}"></span>{{ h.label }}<span class="n">{{ h.degree }}</span></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="panel" id="cgDetail">
+      <h3>Selected</h3>
+      <p class="empty">Click any node to see what it connects to.</p>
+    </div>
+  </div>
+</div>
+
+<script id="cgData" type="application/json">{{ graphJson | safe }}</script>
+<script>
+(function () {
+  var raw = document.getElementById('cgData').textContent;
+  var data;
+  try { data = JSON.parse(raw); } catch (e) { data = { nodes: [], links: [] }; }
+  if (!data.nodes || !data.nodes.length) {
+    document.querySelector('.cg-stage').innerHTML =
+      '<p style="color:#7e91b5; padding:40px; text-align:center;">No content to graph yet.</p>';
+    return;
+  }
+
+  // One colour per record type. These double as the community colours: a
+  // cluster reads as "this is the catalogue" or "this is the country" at a
+  // glance, without needing to read a single label.
+  var TYPES = {
+    category:   { color: '#38bdf8', label: 'Categories' },
+    product:    { color: '#818cf8', label: 'Products' },
+    project:    { color: '#fb923c', label: 'Projects' },
+    area:       { color: '#34d399', label: 'Districts' },
+    division:   { color: '#10b981', label: 'Divisions' },
+    department: { color: '#f472b6', label: 'Departments' },
+    member:     { color: '#f9a8d4', label: 'Team' },
+    faq:        { color: '#fbbf24', label: 'FAQ topics' },
+    inquiry:    { color: '#ef4444', label: 'Inquiries' }
+  };
+
+  document.querySelectorAll('[data-type]').forEach(function (el) {
+    var t = TYPES[el.getAttribute('data-type')];
+    if (t) el.style.background = t.color;
+  });
+
+  var canvas = document.getElementById('cgCanvas');
+  var ctx = canvas.getContext('2d');
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var nodes = data.nodes.map(function (n, i) {
+    var a = (i / data.nodes.length) * Math.PI * 2;
+    return {
+      id: n.id, type: n.type, label: n.label, href: n.href, page: n.page,
+      meta: n.meta, degree: n.degree || 0,
+      x: Math.cos(a) * 240 + (Math.random() - 0.5) * 40,
+      y: Math.sin(a) * 240 + (Math.random() - 0.5) * 40,
+      vx: 0, vy: 0,
+      // Nodes fade and drift in rather than appearing all at once, so the
+      // eye can follow the structure assembling itself.
+      born: reduced ? 1 : -(i / data.nodes.length) * 0.9
+    };
+  });
+  var byId = {};
+  nodes.forEach(function (n) { byId[n.id] = n; });
+
+  var links = data.links.map(function (l) {
+    return { s: byId[l.source], t: byId[l.target], kind: l.kind, rel: l.rel, weight: l.weight || 1 };
+  }).filter(function (l) { return l.s && l.t; });
+
+  var neighbours = {};
+  links.forEach(function (l) {
+    (neighbours[l.s.id] = neighbours[l.s.id] || []).push({ node: l.t, rel: l.rel, dir: 'out' });
+    (neighbours[l.t.id] = neighbours[l.t.id] || []).push({ node: l.s, rel: l.rel, dir: 'in' });
+  });
+
+  var radius = function (n) { return 4 + Math.min(14, Math.sqrt(n.degree) * 3.2); };
+
+  // ---- view transform -----------------------------------------------------
+  var view = { x: 0, y: 0, k: 1 };
+  var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  function resize() {
+    var r = canvas.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var toWorld = function (px, py) {
+    return { x: (px - W / 2 - view.x) / view.k, y: (py - H / 2 - view.y) / view.k };
+  };
+
+  // ---- interaction state --------------------------------------------------
+  var hidden = {};
+  var hover = null, selected = null, dragging = null, panning = null, query = '';
+
+  function visible(n) { return !hidden[n.type]; }
+  function matches(n) { return query && n.label && n.label.toLowerCase().indexOf(query) !== -1; }
+
+  function related(n) {
+    if (!n) return null;
+    var set = {};
+    set[n.id] = true;
+    (neighbours[n.id] || []).forEach(function (e) { set[e.node.id] = true; });
+    return set;
+  }
+
+  // ---- simulation ---------------------------------------------------------
+  var alpha = 1;
+  function step() {
+    if (alpha < 0.005) return;
+    var i, j, a, b, dx, dy, d2, d, f;
+
+    for (i = 0; i < nodes.length; i++) {
+      a = nodes[i];
+      if (a.born < 1) a.born = Math.min(1, a.born + 0.02);
+      // pull to centre
+      a.vx -= a.x * 0.0016;
+      a.vy -= a.y * 0.0016;
+    }
+
+    // repulsion
+    for (i = 0; i < nodes.length; i++) {
+      a = nodes[i];
+      for (j = i + 1; j < nodes.length; j++) {
+        b = nodes[j];
+        dx = b.x - a.x; dy = b.y - a.y;
+        d2 = dx * dx + dy * dy;
+        if (d2 < 1) { d2 = 1; dx = Math.random() - 0.5; dy = Math.random() - 0.5; }
+        if (d2 > 90000) continue;
+        f = 260 / d2;
+        dx *= f; dy *= f;
+        a.vx -= dx; a.vy -= dy;
+        b.vx += dx; b.vy += dy;
+      }
+    }
+
+    // springs
+    for (i = 0; i < links.length; i++) {
+      a = links[i].s; b = links[i].t;
+      dx = b.x - a.x; dy = b.y - a.y;
+      d = Math.sqrt(dx * dx + dy * dy) || 1;
+      f = (d - 62) * 0.014;
+      dx = (dx / d) * f; dy = (dy / d) * f;
+      a.vx += dx; a.vy += dy;
+      b.vx -= dx; b.vy -= dy;
+    }
+
+    for (i = 0; i < nodes.length; i++) {
+      a = nodes[i];
+      if (a === dragging) { a.vx = 0; a.vy = 0; continue; }
+      a.vx *= 0.86; a.vy *= 0.86;
+      a.x += a.vx * alpha * 3;
+      a.y += a.vy * alpha * 3;
+    }
+    alpha *= 0.994;
+  }
+
+  // ---- drawing ------------------------------------------------------------
+  var dash = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(W / 2 + view.x, H / 2 + view.y);
+    ctx.scale(view.k, view.k);
+
+    var focus = related(hover || selected);
+    var searching = query.length > 0;
+
+    // links
+    for (var i = 0; i < links.length; i++) {
+      var l = links[i];
+      if (!visible(l.s) || !visible(l.t)) continue;
+      var lit = focus ? (focus[l.s.id] && focus[l.t.id]) : false;
+      var alphaL = focus ? (lit ? 0.85 : 0.06) : (searching ? 0.08 : 0.22);
+      ctx.globalAlpha = alphaL * Math.min(l.s.born, l.t.born);
+      ctx.strokeStyle = lit ? '#93c5fd' : '#3b5583';
+      ctx.lineWidth = lit ? 1.6 : (l.weight > 1 ? 1.2 : 0.7);
+      if (l.kind === 'inferred') { ctx.setLineDash([4, 4]); ctx.lineDashOffset = -dash; }
+      else ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(l.s.x, l.s.y);
+      ctx.lineTo(l.t.x, l.t.y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // nodes
+    for (var n2 = 0; n2 < nodes.length; n2++) {
+      var n = nodes[n2];
+      if (!visible(n)) continue;
+      var t = TYPES[n.type] || { color: '#94a3b8' };
+      var r = radius(n);
+      var isHit = searching && matches(n);
+      var dim = (focus && !focus[n.id]) || (searching && !isHit);
+
+      ctx.globalAlpha = (dim ? 0.12 : 1) * n.born;
+
+      if (isHit || n === selected) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r + 6 + Math.sin(dash / 9) * 1.6, 0, Math.PI * 2);
+        ctx.fillStyle = t.color + '33';
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r * (0.55 + 0.45 * n.born), 0, Math.PI * 2);
+      ctx.fillStyle = t.color;
+      ctx.fill();
+      if (n === hover || n === selected) {
+        ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+      }
+
+      // Only label what the reader can actually act on: hubs, the hovered or
+      // selected node, and search hits. Labelling 190 nodes is noise.
+      if (!dim && (n.degree >= 6 || n === hover || n === selected || isHit) && view.k > 0.55) {
+        ctx.globalAlpha = n.born;
+        ctx.fillStyle = '#dce6fa';
+        ctx.font = '600 ' + (n === hover || n === selected ? 12 : 10.5) + 'px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(n.label, n.x, n.y - r - 5);
+      }
+    }
+
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  function frame() {
+    step();
+    if (!reduced) dash += 0.6;
+    draw();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ---- picking ------------------------------------------------------------
+  function pick(px, py) {
+    var w = toWorld(px, py), best = null, bestD = Infinity;
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      if (!visible(n)) continue;
+      var dx = n.x - w.x, dy = n.y - w.y, d = dx * dx + dy * dy;
+      var rr = radius(n) + 6;
+      if (d < rr * rr && d < bestD) { best = n; bestD = d; }
+    }
+    return best;
+  }
+
+  canvas.addEventListener('mousemove', function (e) {
+    var r = canvas.getBoundingClientRect();
+    var px = e.clientX - r.left, py = e.clientY - r.top;
+    if (dragging) {
+      var w = toWorld(px, py);
+      dragging.x = w.x; dragging.y = w.y;
+      alpha = Math.max(alpha, 0.3);
+      return;
+    }
+    if (panning) {
+      view.x += px - panning.px; view.y += py - panning.py;
+      panning.px = px; panning.py = py;
+      return;
+    }
+    hover = pick(px, py);
+    canvas.style.cursor = hover ? 'pointer' : 'grab';
+  });
+
+  canvas.addEventListener('mousedown', function (e) {
+    var r = canvas.getBoundingClientRect();
+    var px = e.clientX - r.left, py = e.clientY - r.top;
+    var n = pick(px, py);
+    if (n) { dragging = n; alpha = Math.max(alpha, 0.35); }
+    else { panning = { px: px, py: py }; canvas.classList.add('dragging'); }
+  });
+
+  window.addEventListener('mouseup', function () {
+    dragging = null; panning = null; canvas.classList.remove('dragging');
+  });
+
+  canvas.addEventListener('click', function (e) {
+    var r = canvas.getBoundingClientRect();
+    var n = pick(e.clientX - r.left, e.clientY - r.top);
+    selected = n;
+    showDetail(n);
+  });
+
+  canvas.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    var f = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+    view.k = Math.max(0.3, Math.min(3.5, view.k * f));
+  }, { passive: false });
+
+  // ---- detail panel -------------------------------------------------------
+  var detail = document.getElementById('cgDetail');
+  function showDetail(n) {
+    if (!n) {
+      detail.innerHTML = '<h3>Selected</h3><p class="empty">Click any node to see what it connects to.</p>';
+      return;
+    }
+    var t = TYPES[n.type] || { color: '#94a3b8', label: n.type };
+    var rows = (neighbours[n.id] || []).slice(0, 60).map(function (e) {
+      return '<li><span class="rel">' + esc(e.rel || 'linked') + '</span> ' + esc(e.node.label) + '</li>';
+    }).join('');
+    detail.innerHTML =
+      '<h3>Selected</h3>' +
+      '<div class="title">' + esc(n.label) + '</div>' +
+      '<div class="kind" style="color:' + t.color + '">' + esc(t.label || n.type) + (n.meta ? ' · ' + esc(n.meta) : '') + '</div>' +
+      '<div style="font-size:0.82rem; color:var(--grey-600,#475569);">' + n.degree + ' connection' + (n.degree === 1 ? '' : 's') + '</div>' +
+      (n.href ? '<a class="btn" style="margin-top:10px; display:inline-block; padding:5px 12px; font-size:0.8rem;" href="' + esc(n.href) + '">Edit record</a>' : '') +
+      (n.page ? ' <a class="btn" style="margin-top:10px; display:inline-block; padding:5px 12px; font-size:0.8rem;" target="_blank" rel="noopener" href="/' + esc(n.page) + '">View page</a>' : '') +
+      (rows ? '<ul>' + rows + '</ul>' : '');
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // ---- legend / filters ---------------------------------------------------
+  var present = {};
+  nodes.forEach(function (n) { present[n.type] = true; });
+  var legend = document.getElementById('cgLegend');
+  Object.keys(TYPES).forEach(function (key) {
+    if (!present[key]) return;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cg-chip';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<span class="dot" style="background:' + TYPES[key].color + '"></span>' + TYPES[key].label;
+    b.addEventListener('click', function () {
+      hidden[key] = !hidden[key];
+      b.setAttribute('aria-pressed', hidden[key] ? 'false' : 'true');
+      alpha = Math.max(alpha, 0.25);
+    });
+    legend.appendChild(b);
+  });
+
+  document.getElementById('cgSearch').addEventListener('input', function (e) {
+    query = e.target.value.trim().toLowerCase();
+  });
+
+  document.getElementById('cgReset').addEventListener('click', function () {
+    view = { x: 0, y: 0, k: 1 };
+    hidden = {}; query = ''; selected = null; hover = null;
+    document.getElementById('cgSearch').value = '';
+    legend.querySelectorAll('.cg-chip').forEach(function (c) { c.setAttribute('aria-pressed', 'true'); });
+    showDetail(null);
+    alpha = 1;
+  });
+})();
+</script>
+{% endblock %}
