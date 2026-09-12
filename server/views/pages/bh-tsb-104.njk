@@ -139,7 +139,7 @@
 
 <div class="page-sidebar-content">
 <!-- 1. Hero Product Showcase (Horizontal Split) -->
-<div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: stretch;">
+<div style="display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-8); align-items: flex-start;">
 <!-- Left: Large Image -->
 <div class="reveal-left" style="flex: 1 1 400px; min-width: 0; max-width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--grey-100); display: flex; flex-direction: column;">
 {% set dbp = dbProductsByModel['BH-TSB-104'] %}<img alt="{{ product.main_image_alt or 'Model No-BH-TSB-104 Exterior View' }}" loading="eager" fetchpriority="high" src="{{ dbp.main_image if (dbp and dbp.main_image) else 'images/products/Model No-BH-TB-104.webp' }}"{% if dbp and dbp.main_image and dbp.main_image != 'images/products/Model No-BH-TB-104.webp' %}{% else %} srcset="images/products/Model%20No-BH-TB-104-400w.webp 400w, images/products/Model%20No-BH-TB-104-700w.webp 700w, images/products/Model%20No-BH-TB-104.webp 785w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 500px"{% endif %} style="width: 100%; object-fit: cover; display: block;" title="{{ product.main_image_alt or 'Model No-BH-TSB-104 Exterior View' }}" width="1024" height="1024">
