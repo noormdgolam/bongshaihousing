@@ -3567,13 +3567,25 @@ router.get('/admin/content-graph', async (req, res) => {
     const add = (n) => { nodes.push(n); return n.id; };
     const norm = (s) => String(s || '').trim().toUpperCase().replace(/\s+/g, '');
 
+    // One absent table must cost its own layer of the graph, not the whole
+    // page - staging and a fresh install do not always carry every one.
+    const optional = async (table, build) => {
+      try {
+        if (!(await db.schema.hasTable(table))) return [];
+        return await build();
+      } catch (e) {
+        console.warn(`content-graph: skipping ${table}:`, e.message);
+        return [];
+      }
+    };
+
     const [categories, products, projects, areas, team, faqs] = await Promise.all([
-      db('categories').select('id', 'name', 'landing_page_slug'),
-      db('products').select('id', 'model_number', 'slug', 'category_id', 'total_floor_area', 'fixed_price', 'published'),
-      db('projects').where({ published: true }).select('id', 'title', 'slug', 'location'),
-      db('service_areas').select('id', 'district', 'division', 'has_dedicated_page'),
-      db('team_members').where({ published: true }).select('id', 'name', 'role', 'department'),
-      db('faqs').where({ published: true }).select('id', 'category'),
+      optional('categories', () => db('categories').select('id', 'name', 'landing_page_slug')),
+      optional('products', () => db('products').select('id', 'model_number', 'slug', 'category_id', 'total_floor_area', 'fixed_price', 'published')),
+      optional('projects', () => db('projects').where({ published: true }).select('id', 'title', 'slug', 'location')),
+      optional('service_areas', () => db('service_areas').select('id', 'district', 'division', 'has_dedicated_page')),
+      optional('team_members', () => db('team_members').where({ published: true }).select('id', 'name', 'role', 'department')),
+      optional('faqs', () => db('faqs').where({ published: true }).select('id', 'category')),
     ]);
 
     for (const c of categories) {
@@ -3643,14 +3655,16 @@ router.get('/admin/content-graph', async (req, res) => {
       }
     }
 
-    // Degree drives node size, so the hubs emerge from the data.
+    // Degree drives node size, so the hubs emerge from the data. Count it from
+    // the links that actually survive - a product whose category_id points at a
+    // deleted row draws no edge, and must not be sized or ranked as if it did.
+    const present = new Set(nodes.map((n) => n.id));
+    const validLinks = links.filter((l) => present.has(l.source) && present.has(l.target));
     const degree = new Map();
-    for (const l of links) {
+    for (const l of validLinks) {
       degree.set(l.source, (degree.get(l.source) || 0) + 1);
       degree.set(l.target, (degree.get(l.target) || 0) + 1);
     }
-    const present = new Set(nodes.map((n) => n.id));
-    const validLinks = links.filter((l) => present.has(l.source) && present.has(l.target));
     for (const n of nodes) n.degree = degree.get(n.id) || 0;
 
     const topHubs = [...nodes].sort((a, b) => b.degree - a.degree).slice(0, 5)
