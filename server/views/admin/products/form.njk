@@ -161,6 +161,18 @@
         <input type="number" step="1" id="fixed_price" name="fixed_price" value="{{ product.fixed_price or '' }}" placeholder="e.g. 9000000">
       </div>
 
+      {# The per-square-foot rate is derived, never stored: the fixed price and
+         the floor area are the two numbers that are set, so raising the price
+         without changing the area IS a higher rate. Shown read-only so that
+         relationship is visible while editing. (products.price_per_sqft is
+         stale legacy data - it disagrees with the package price on 106 of 113
+         published models - and is only ever used as a fallback for models that
+         have no fixed price at all.) #}
+      <div class="form-row" style="margin:0;">
+        <label>Rate per sq.ft <span style="font-weight:400; color:var(--grey-500);">— derived from price ÷ area</span></label>
+        <input type="text" id="derived_rate_display" value="—" style="background:#eee;" disabled>
+      </div>
+
       <div class="form-row" style="margin:0;">
         <label for="price_currency">Currency</label>
         <input type="text" id="price_currency" name="price_currency" value="{{ product.price_currency or 'BDT' }}">
@@ -320,6 +332,12 @@
 <script>
 let dynamicCounter = Date.now();
 
+document.addEventListener('DOMContentLoaded', function () {
+  var fp = document.getElementById('fixed_price');
+  if (fp) fp.addEventListener('input', refreshDerivedRate);
+  refreshDerivedRate();
+});
+
 function recalcRoomArea(input) {
   const tr = input.closest('tr');
   if (!tr) return;
@@ -361,6 +379,20 @@ function updateVariantTotals(card) {
 // products.total_floor_area is saved as the sum of every room across every
 // variant, so the disabled display on the form has to follow the same sum -
 // otherwise it keeps showing a stale number after a dimension edit.
+// Rate per sq.ft is price / area. Both inputs can change while editing - the
+// price by typing, the area by editing the room layout - so it is recomputed
+// from whatever both currently say rather than read from the database.
+function refreshDerivedRate() {
+  var out = document.getElementById('derived_rate_display');
+  if (!out) return;
+  var price = parseFloat((document.getElementById('fixed_price') || {}).value);
+  var areaEl = document.getElementById('total_floor_area_display');
+  var area = parseFloat(areaEl ? areaEl.value : '');
+  if (!isFinite(price) || !isFinite(area) || price <= 0 || area <= 0) { out.value = '—'; return; }
+  var rate = Math.round(price / area);
+  out.value = '৳' + rate.toLocaleString('en-IN') + ' / sq.ft';
+}
+
 function refreshTotalFloorArea() {
   const display = document.getElementById('total_floor_area_display');
   if (!display) return;
@@ -374,6 +406,7 @@ function refreshTotalFloorArea() {
     if (el) total += parseInt(el.value, 10) || 0;
   });
   if (total > 0) display.value = total;
+  refreshDerivedRate();
 }
 
 function addSpecRow(tbodyId, type, defaultKey, defaultValue) {
