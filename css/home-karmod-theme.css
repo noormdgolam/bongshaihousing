@@ -406,6 +406,47 @@ body.home-karmod .pkg-thumb {
 
 /* Mobile: single-column links, tighter tabs so nothing overflows */
 /* ---------------------------------------------------------------------------
+   Phone: the hero shows one image and stays on it.
+
+   The hero is a five-slide Swiper. On a phone that means five full-screen
+   images rotating under the reader while they are still deciding what the site
+   is - and five banner downloads on a mobile connection for four images nobody
+   asked to see.
+
+   Breakpoint is 767px rather than the 640px used by the rails, to line up with
+   the hero's own <source media="(max-width: 767px)"> mobile banner: the slide
+   that stays is the one already serving a mobile-sized image.
+
+   Done in CSS rather than by reconfiguring Swiper so it cannot drift out of
+   sync with the markup. Swiper still initialises and still writes an inline
+   transform on the wrapper; a stylesheet !important outranks an inline style,
+   so the track cannot move.
+--------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  body.home-karmod .category-swiper .swiper-wrapper {
+    transform: none !important;
+    display: block;
+  }
+
+  body.home-karmod .category-swiper .swiper-slide:not(:first-child) {
+    display: none !important;
+  }
+
+  body.home-karmod .category-swiper .swiper-slide:first-child {
+    width: 100% !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+  }
+
+  /* Nothing left to page through. */
+  body.home-karmod .category-swiper .swiper-pagination,
+  body.home-karmod .category-swiper .swiper-button-prev,
+  body.home-karmod .category-swiper .swiper-button-next {
+    display: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Phone: card sections become side-scrolling rails.
 
    Measured on the live homepage at 390px, the page ran 13,023px - 15.4 screens
