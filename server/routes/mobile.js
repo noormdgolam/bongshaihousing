@@ -267,46 +267,65 @@ const PAGES = {
 // items, and for the gallery its images and captions. Chrome (header, nav,
 // footer, scripts, the chat widget) is dropped.
 function extractContent(html, wantImages) {
-  const { JSDOM } = require('jsdom');
-  const doc = new JSDOM(html).window.document;
+  // No DOM parser here on purpose: jsdom is a devDependency and the host
+  // installs production dependencies only. This scans markup we author
+  // ourselves, and its output is checked against jsdom page by page in
+  // scratch/test_extract_parity.js.
+  const decode = (t) => t
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&#(\d+);/g, (m, n) => String.fromCharCode(Number(n)));
+  // An inline tag sits inside a sentence and adds no whitespace; a block tag
+  // does. Treating them alike put a space before the comma in
+  // "...bongshaihousing.com/ , one of our main priorities".
+  const INLINE = /<\/?(?:a|b|strong|em|i|u|span|small|sup|sub|code|abbr|mark|time|label)\b[^>]*>/gi;
+  const strip = (t) => decode(t.replace(INLINE, '').replace(/<[^>]*>/g, ' '))
+    .replace(/\s+/g, ' ').replace(/\s+([,.;:!?)])/g, '$1').trim();
 
-  doc.querySelectorAll('header, nav, footer, script, style, noscript, .bh-ai-widget, [id^="bhAi"], .breadcrumb, .skip-link')
-    .forEach((el) => el.remove());
+  // Drop anything that is not readable content, and the page chrome.
+  let body = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
+    .replace(/<svg[\s\S]*?<\/svg>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<header[\s\S]*?<\/header>/gi, '')
+    .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+    .replace(/<footer[\s\S]*?<\/footer>/gi, '');
+
+  const mainMatch = /<main[^>]*>([\s\S]*?)<\/main>/i.exec(body);
+  if (mainMatch) body = mainMatch[1];
 
   const blocks = [];
-  const seen = new Set();
-  const push = (type, text) => {
-    const t = (text || '').replace(/\s+/g, ' ').trim();
-    if (!t || t.length < 2) return;
-    const key = type + '|' + t;
-    if (seen.has(key)) return;          // the same heading often repeats in hero + section
-    seen.add(key);
-    blocks.push({ type, text: t });
-  };
-
-  const main = doc.querySelector('main') || doc.body;
 
   if (wantImages) {
-    main.querySelectorAll('.gallery-item').forEach((item) => {
-      const img = item.querySelector('img');
-      const cap = item.querySelector('.gallery-caption');
-      if (img) {
-        blocks.push({
-          type: 'image',
-          src: (img.getAttribute('src') || '').replace(/^\//, ''),
-          text: (cap ? cap.textContent : img.getAttribute('alt') || '').replace(/\s+/g, ' ').trim(),
-        });
-      }
-    });
+    const itemRe = /<(div|figure|a)[^>]*class="[^"]*gallery-item[^"]*"[^>]*>([\s\S]*?)<\/\1>/gi;
+    let it;
+    while ((it = itemRe.exec(body)) !== null) {
+      const chunk = it[2];
+      const img = /<img[^>]*>/i.exec(chunk);
+      if (!img) continue;
+      const src = (/\ssrc="([^"]+)"/i.exec(img[0]) || [])[1] || '';
+      const alt = (/\salt="([^"]*)"/i.exec(img[0]) || [])[1] || '';
+      const cap = /class="[^"]*gallery-caption[^"]*"[^>]*>([\s\S]*?)<\//i.exec(chunk);
+      blocks.push({ type: 'image', src: src.replace(/^\//, ''), text: strip(cap ? cap[1] : alt) });
+    }
     if (blocks.length) return blocks;
   }
 
-  main.querySelectorAll('h1, h2, h3, p, li').forEach((el) => {
-    // A heading inside a card is a card title, not a section heading.
-    const tag = el.tagName.toLowerCase();
-    if (tag === 'li' && el.closest('nav')) return;
-    push(tag === 'li' ? 'li' : (tag === 'p' ? 'p' : 'h'), el.textContent);
-  });
+  const seen = new Set();
+  const tagRe = /<(h1|h2|h3|p|li)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+  let m;
+  while ((m = tagRe.exec(body)) !== null) {
+    const tag = m[1].toLowerCase();
+    const text = strip(m[2]);
+    if (!text || text.length < 2) continue;
+    const type = tag === 'li' ? 'li' : (tag === 'p' ? 'p' : 'h');
+    const key = type + '|' + text;
+    if (seen.has(key)) continue;   // the same heading often repeats in hero + section
+    seen.add(key);
+    blocks.push({ type, text });
+  }
   return blocks;
 }
 
