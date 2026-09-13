@@ -501,8 +501,10 @@
             {%- if p.beds %} · {{ p.beds }} bed{% endif -%}
             {%- if p.baths %} · {{ p.baths }} bath{% endif -%}
           </div>
-          {% if p.rate %}<div class="price">{{ p.rate }} <span>/sqft from</span></div>
-          {% elif p.price %}<div class="price">{{ p.price }}</div>
+          {# taka() only groups the digits; the sign is added here, as in the
+             featured strip above. #}
+          {% if p.rate %}<div class="price">৳{{ p.rate }} <span>/sqft from</span></div>
+          {% elif p.price %}<div class="price">৳{{ p.price }} <span>package</span></div>
           {% else %}<div class="price muted">Contact Sales</div>{% endif %}
         </div>
       </a>
