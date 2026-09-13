@@ -174,4 +174,81 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
   });
 });
 
+// Everything the desktop product page shows, for one model, so the app never
+// has to send the customer out to a full-width page. Read-only, published
+// products only.
+router.get('/api/m/model/:slug', async (req, res) => {
+  const slug = String(req.params.slug || '').replace(/[^a-z0-9.-]/gi, '').slice(0, 80);
+  if (!slug) return res.status(400).json({ error: 'bad slug' });
+
+  try {
+    if (!db) return res.status(503).json({ error: 'no database' });
+
+    const product = await db('products').where({ slug, published: true }).first();
+    if (!product) return res.status(404).json({ error: 'not found' });
+
+    const [category, variants, specs] = await Promise.all([
+      product.category_id
+        ? db('categories').where({ id: product.category_id }).first()
+        : Promise.resolve(null),
+      optional('product_variants', () => db('product_variants')
+        .where({ product_id: product.id })
+        .select('id', 'area_sqft', 'area_label', 'bed', 'bath', 'kitchen', 'living', 'drawing', 'dining')
+        .orderBy('sort_order')),
+      optional('product_specs', () => db('product_specs')
+        .where({ product_id: product.id })
+        .select('spec_type', 'spec_key', 'spec_value')
+        .orderBy('sort_order')),
+    ]);
+
+    // Room layouts hang off a variant, not the product. is_total_row marks a
+    // summary line the admin table renders separately - it is not a room, so
+    // it must not be listed as one.
+    const variantIds = variants.map((v) => v.id);
+    const rooms = variantIds.length
+      ? await optional('product_rooms', () => db('product_rooms')
+        .whereIn('product_variant_id', variantIds)
+        .select('product_variant_id', 'floor_label', 'section', 'area_sqft', 'length_ft', 'width_ft', 'is_total_row')
+        .orderBy('sort_order'))
+      : [];
+
+    const byVariant = new Map(variantIds.map((id) => [id, []]));
+    rooms.filter((r) => !r.is_total_row).forEach((r) => {
+      (byVariant.get(r.product_variant_id) || []).push({
+        floor: r.floor_label || '',
+        name: r.section || '',
+        area: r.area_sqft != null ? Number(r.area_sqft) : null,
+        length: r.length_ft != null ? Number(r.length_ft) : null,
+        width: r.width_ft != null ? Number(r.width_ft) : null,
+      });
+    });
+
+    res.json({
+      model: product.model_number,
+      slug: product.slug,
+      category: category ? category.name : null,
+      description: product.description || null,
+      images: [product.main_image, product.image_2, product.image_3].filter(Boolean),
+      alt: product.main_image_alt || null,
+      price: taka(product.fixed_price),
+      area: product.total_floor_area || null,
+      bedrooms: product.bedrooms || null,
+      bathrooms: product.bathrooms || null,
+      kitchens: product.kitchens || null,
+      variants: variants.map((v) => ({
+        id: v.id,
+        label: v.area_label || (v.area_sqft ? v.area_sqft + ' sq.ft' : ''),
+        area: v.area_sqft != null ? Number(v.area_sqft) : null,
+        bed: v.bed, bath: v.bath, kitchen: v.kitchen,
+        living: v.living, drawing: v.drawing, dining: v.dining,
+        rooms: byVariant.get(v.id) || [],
+      })),
+      specs: specs.map((x) => ({ group: x.spec_type, key: x.spec_key, value: x.spec_value })),
+    });
+  } catch (err) {
+    console.error('[mobile] model detail failed:', err.message);
+    res.status(500).json({ error: 'failed' });
+  }
+});
+
 module.exports = router;

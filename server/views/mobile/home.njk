@@ -163,6 +163,23 @@
   .dt-primary{ background:var(--m-primary); color:#fff; border-color:var(--m-primary) !important; }
   .dt-plain{ background:var(--m-card); color:var(--m-text); }
 
+  .dt-shots{ display:flex; gap:6px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+  .dt-shots::-webkit-scrollbar{ display:none; }
+  .dt-shots .dt-img{ flex:0 0 100%; scroll-snap-align:start; }
+  .dt-desc{ font-size:13.5px; line-height:1.6; color:var(--m-text); margin:14px 0 0; }
+  .dt-sec{ margin-top:22px; }
+  .dt-sec h3{ font-size:15px; font-weight:700; margin:0 0 9px; }
+  .dt-sec h4{ font-size:12.5px; font-weight:600; color:var(--m-muted); margin:14px 0 6px; }
+  .dt-rows{ border:1px solid var(--m-line); border-radius:11px; overflow:hidden; }
+  .dt-row{ display:flex; gap:12px; justify-content:space-between; padding:9px 12px; font-size:12.5px; border-bottom:1px solid var(--m-line); }
+  .dt-row:last-child{ border-bottom:none; }
+  .dt-row span{ color:var(--m-muted); flex:1 1 45%; }
+  .dt-row b{ flex:1 1 55%; text-align:right; font-weight:600; }
+  .dt-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  .dt-table th{ text-align:left; font-size:11px; color:var(--m-muted); font-weight:600; padding:6px 8px; border-bottom:1px solid var(--m-line); }
+  .dt-table td{ padding:8px; border-bottom:1px solid var(--m-line); font-variant-numeric:tabular-nums; }
+  .dt-table tr:last-child td{ border-bottom:none; }
+
   /* support conversation */
   .chat{ display:flex; flex-direction:column; gap:8px; padding:4px 0 2px; overflow-y:auto; max-height:46vh; }
   .msg{ max-width:82%; padding:9px 12px; border-radius:14px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; word-wrap:break-word; }
@@ -922,7 +939,89 @@
   var backBtn = document.getElementById('modelBack');
   var cameFrom = 'models';
 
-  function openModel(model, from){
+  var detailCache = {};
+
+  function row(label, value){
+    return '<div class="dt-row"><span>' + esc(label) + '</span><b>' + esc(value) + '</b></div>';
+  }
+
+  function renderDetail(d){
+    var html = '';
+
+    // Photos: however many the record actually has.
+    if (d.images && d.images.length) {
+      html += '<div class="dt-shots">';
+      d.images.forEach(function(src){
+        html += '<img class="dt-img" src="/' + esc(src) + '" alt="' + esc(d.alt || d.model) + '" decoding="async">';
+      });
+      html += '</div>';
+    } else {
+      html += '<div class="dt-ph">no photo yet</div>';
+    }
+
+    html += '<div class="dt-body">';
+    if (d.category) html += '<div class="dt-cat">' + esc(d.category) + '</div>';
+    html += '<div class="dt-mdl">' + esc(d.model) + '</div>';
+    html += d.price
+      ? '<div class="dt-price">৳' + esc(d.price) + '<small>fixed package price</small></div>'
+      : '<div class="dt-price" style="color:var(--m-muted)">Contact Sales<small>price not published yet</small></div>';
+
+    var chips = '';
+    if (d.area) chips += '<div class="dt-spec"><b>' + esc(d.area) + '</b>sq.ft</div>';
+    if (d.bedrooms) chips += '<div class="dt-spec"><b>' + esc(d.bedrooms) + '</b>bedrooms</div>';
+    if (d.bathrooms) chips += '<div class="dt-spec"><b>' + esc(d.bathrooms) + '</b>bathrooms</div>';
+    if (d.kitchens) chips += '<div class="dt-spec"><b>' + esc(d.kitchens) + '</b>kitchen</div>';
+    if (chips) html += '<div class="dt-specs">' + chips + '</div>';
+
+    if (d.description) html += '<p class="dt-desc">' + esc(d.description) + '</p>';
+
+    html += '<div class="dt-acts">'
+      + '<button type="button" class="dt-primary" data-ask="' + esc(d.model) + '">Ask about this model</button>'
+      + '</div>';
+
+    // Every size option, each with its own room layout.
+    (d.variants || []).forEach(function(v){
+      html += '<section class="dt-sec"><h3>' + esc(v.label || 'Layout') + '</h3>';
+      var counts = '';
+      [['bed', 'Bedrooms'], ['bath', 'Bathrooms'], ['kitchen', 'Kitchen'],
+       ['living', 'Living'], ['drawing', 'Drawing'], ['dining', 'Dining']].forEach(function(pair){
+        if (v[pair[0]]) counts += row(pair[1], v[pair[0]]);
+      });
+      if (counts) html += '<div class="dt-rows">' + counts + '</div>';
+
+      if (v.rooms && v.rooms.length) {
+        var floors = {};
+        v.rooms.forEach(function(r){ (floors[r.floor] = floors[r.floor] || []).push(r); });
+        Object.keys(floors).forEach(function(f){
+          if (f) html += '<h4>' + esc(f) + '</h4>';
+          html += '<table class="dt-table"><thead><tr><th>Room</th><th>Size</th><th>Area</th></tr></thead><tbody>';
+          floors[f].forEach(function(r){
+            var size = (r.length && r.width) ? r.length + ' × ' + r.width + ' ft' : '';
+            html += '<tr><td>' + esc(r.name) + '</td><td>' + esc(size) + '</td><td>'
+              + esc(r.area != null ? r.area + ' sq.ft' : '') + '</td></tr>';
+          });
+          html += '</tbody></table>';
+        });
+      }
+      html += '</section>';
+    });
+
+    // Specifications, grouped as the database groups them.
+    if (d.specs && d.specs.length) {
+      var groups = {};
+      d.specs.forEach(function(sp){ (groups[sp.group] = groups[sp.group] || []).push(sp); });
+      Object.keys(groups).forEach(function(g){
+        html += '<section class="dt-sec"><h3>' + esc(g.charAt(0).toUpperCase() + g.slice(1)) + ' specification</h3><div class="dt-rows">';
+        groups[g].forEach(function(sp){ html += row(sp.key, sp.value); });
+        html += '</div></section>';
+      });
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  async function openModel(model, from){
     var p = null;
     for (var i = 0; i < CATALOGUE.length; i++) {
       if (CATALOGUE[i].model === model) { p = CATALOGUE[i]; break; }
@@ -930,31 +1029,24 @@
     if (!p) return false;
     cameFrom = from || 'models';
 
-    var media = p.image
-      ? '<img class="dt-img" src="/' + esc(p.image) + '" alt="' + esc(p.alt) + '" decoding="async">'
-      : '<div class="dt-ph">no photo yet</div>';
-    var specs = '';
-    if (p.area) specs += '<div class="dt-spec"><b>' + esc(p.area) + '</b>sq.ft</div>';
-    if (p.beds) specs += '<div class="dt-spec"><b>' + esc(p.beds) + '</b>bedrooms</div>';
-    if (p.baths) specs += '<div class="dt-spec"><b>' + esc(p.baths) + '</b>bathrooms</div>';
-
-    var price = p.price
-      ? '<div class="dt-price">৳' + esc(p.price) + '<small>fixed package price</small></div>'
-      : '<div class="dt-price" style="color:var(--m-muted)">Contact Sales<small>price not published yet</small></div>';
-
-    detail.innerHTML = media
-      + '<div class="dt-body">'
-      + '<div class="dt-cat">' + esc(p.category) + '</div>'
-      + '<div class="dt-mdl">' + esc(p.model) + '</div>'
-      + price
-      + '<div class="dt-specs">' + specs + '</div>'
-      + '<div class="dt-acts">'
-      + '<button type="button" class="dt-primary" data-ask="' + esc(p.model) + '">Ask about this model</button>'
-      + '<a class="dt-plain" href="/' + esc(p.slug) + '">Full specification →</a>'
-      + '</div></div>';
-
+    // Show what the card already knows immediately, then fill in the rest.
+    detail.innerHTML = '<div class="dt-body"><div class="dt-mdl">' + esc(p.model) + '</div>'
+      + '<p class="dt-desc">লোড হচ্ছে…</p></div>';
     showView('model', true);
     window.scrollTo(0, 0);
+
+    if (detailCache[p.slug]) { detail.innerHTML = renderDetail(detailCache[p.slug]); return true; }
+    try {
+      var res = await fetch('/api/m/model/' + encodeURIComponent(p.slug));
+      if (!res.ok) throw new Error('http ' + res.status);
+      var d = await res.json();
+      detailCache[p.slug] = d;
+      detail.innerHTML = renderDetail(d);
+    } catch (e) {
+      detail.innerHTML = '<div class="dt-body"><div class="dt-mdl">' + esc(p.model) + '</div>'
+        + '<p class="dt-desc">এই মুহূর্তে বিস্তারিত আনা যাচ্ছে না।</p>'
+        + '<div class="dt-acts"><button type="button" class="dt-primary" data-ask="' + esc(p.model) + '">Ask about this model</button></div></div>';
+    }
     return true;
   }
 
@@ -962,7 +1054,8 @@
   document.addEventListener('click', function(e){
     var card = e.target.closest ? e.target.closest('.card[data-model]') : null;
     if (card) {
-      if (openModel(card.getAttribute('data-model'), 'models')) e.preventDefault();
+      e.preventDefault();
+      openModel(card.getAttribute('data-model'), 'models');
       return;
     }
     var ask = e.target.closest ? e.target.closest('[data-ask]') : null;
