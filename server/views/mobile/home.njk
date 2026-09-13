@@ -138,6 +138,24 @@
   .dot{ width:6px;height:6px;border-radius:50%; background:var(--m-line); transition:width .2s,background .2s; }
   .dot.on{ background:var(--m-primary); width:16px; border-radius:3px; }
 
+  /* support conversation */
+  .chat{ display:flex; flex-direction:column; gap:8px; padding:4px 0 2px; overflow-y:auto; max-height:46vh; }
+  .msg{ max-width:82%; padding:9px 12px; border-radius:14px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; word-wrap:break-word; }
+  .msg.them{ align-self:flex-start; background:var(--m-surface); border:1px solid var(--m-line); border-bottom-left-radius:5px; }
+  .msg.you{ align-self:flex-end; background:var(--m-primary); color:#fff; border-bottom-right-radius:5px; }
+  .msg a{ color:inherit; text-decoration:underline; font-weight:600; }
+  .msg.them a{ color:var(--m-primary); }
+  :root[data-theme="dark"] .msg.them a{ color:var(--m-primary-light); }
+  .msg.typing{ color:var(--m-muted); font-style:italic; }
+  .composer{ display:flex; gap:8px; padding:10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); border-top:1px solid var(--m-line); }
+  .composer input{ flex:1; min-width:0; padding:11px 13px; border:1px solid var(--m-line); border-radius:11px;
+    background:var(--m-surface); color:var(--m-text); font-family:inherit; font-size:14px; outline:none; }
+  .composer input:focus{ border-color:var(--m-primary); }
+  .composer button{ flex:0 0 auto; width:42px; border:none; border-radius:11px; background:var(--m-primary); color:#fff;
+    display:grid; place-items:center; cursor:pointer; transition:transform .12s; }
+  .composer button:active{ transform:scale(.93); }
+  .composer button:disabled{ opacity:.5; cursor:default; }
+
   /* tab views */
   .view[hidden]{ display:none; }
   .view-head{ padding:18px 16px 4px; }
@@ -575,7 +593,14 @@
     </form>
     <p class="sheet-ok" id="sheetOk" hidden>ধন্যবাদ! আমাদের টিম শীঘ্রই যোগাযোগ করবে।<br>
       <span style="font-size:12px;font-weight:400">Thank you — our team will contact you shortly.</span></p>
+    <div class="chat" id="chatThread" hidden role="log" aria-live="polite" aria-label="Conversation"></div>
   </div>
+
+  <form class="composer" id="chatForm" hidden>
+    <input type="text" id="chatInput" autocomplete="off"
+           placeholder="আপনার প্রশ্ন লিখুন / Type your question" maxlength="500" aria-label="Your question">
+    <button type="submit" id="chatSend" aria-label="Send">{{ icons.icon('send', 18) }}</button>
+  </form>
 </div>
 
 {# Buttons, not links: every tab acts inside the shell. Models and Projects
@@ -856,6 +881,116 @@
     return /^01[3-9]\d{8}$/.test(d) ? d : null;
   }
 
+  // ---- support conversation ----------------------------------------------
+  // The name+number gate stays: an enquiry the business cannot ring back is
+  // worth very little, and it is what turns a chat into a contactable record.
+  // Passing it now opens a conversation instead of ending one, and every turn
+  // is stored server-side so the Support Chats dashboard sees mobile too.
+  var identity = null;
+  var history = [];
+  var thread = document.getElementById('chatThread');
+  var cform = document.getElementById('chatForm');
+  var cinput = document.getElementById('chatInput');
+  var csend = document.getElementById('chatSend');
+
+  // One session token per device, so a returning customer continues the same
+  // chat rather than starting a new record every time.
+  var sessionToken = '';
+  try {
+    sessionToken = localStorage.getItem('bh-m-session') || '';
+    if (!sessionToken) {
+      sessionToken = 'm-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem('bh-m-session', sessionToken);
+    }
+  } catch (e) { sessionToken = 'm-' + Date.now().toString(36); }
+
+  function escapeHtml(t){
+    return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Apply a rule only OUTSIDE anchors an earlier rule already built. Without
+  // this, the phone pattern matches the digits inside a wa.me URL and rewrites
+  // the href of the link just created - the exact bug that spilled raw tag
+  // attributes into the website chat.
+  function outsideAnchors(str, fn){
+    return String(str).split(/(<a\s[^>]*>[\s\S]*?<\/a>)/g)
+      .map(function(part){ return part.indexOf('<a') === 0 ? part : fn(part); })
+      .join('');
+  }
+
+  function render(text){
+    var safe = escapeHtml(text);
+    safe = safe.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+    safe = safe.replace(/(^|[\s(])wa\.me\/(\d{8,15})/g, '$1https://wa.me/$2');
+    safe = outsideAnchors(safe, function(t){
+      return t.replace(/(https?:\/\/[^\s<>"']+)/g, function(m){
+        var url = m.replace(/[.,;:!?)\]]+$/, '');
+        return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>'
+          + m.slice(url.length);
+      });
+    });
+    safe = outsideAnchors(safe, function(t){
+      return t.replace(/(\+?880\s?1[3-9]\d{2}-?\d{6})/g, function(m){
+        return '<a href="https://wa.me/' + m.replace(/[^0-9]/g, '') + '" target="_blank" rel="noopener noreferrer">' + m + '</a>';
+      });
+    });
+    return safe;
+  }
+
+  function bubble(who, text, cls){
+    var d = document.createElement('div');
+    d.className = 'msg ' + who + (cls ? ' ' + cls : '');
+    if (who === 'you') d.textContent = text; else d.innerHTML = render(text);
+    thread.appendChild(d);
+    thread.scrollTop = thread.scrollHeight;
+    return d;
+  }
+
+  async function send(text){
+    history.push({ role: 'user', content: text });
+    bubble('you', text);
+    cinput.value = '';
+    csend.disabled = true;
+    var typing = bubble('them', 'লিখছে…', 'typing');
+    try {
+      var res = await fetch('/api/ai-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history,
+          context: { pageUrl: location.pathname, pageTitle: document.title, language: 'bn' },
+          identity: { name: identity.name, phone: identity.phone, sessionToken: sessionToken }
+        })
+      });
+      var data = await res.json();
+      typing.remove();
+      var reply = (data && data.message) || 'দুঃখিত, এই মুহূর্তে উত্তর দিতে পারছি না। হোয়াটসঅ্যাপে কথা বলুন: wa.me/8801781636613';
+      bubble('them', reply);
+      if (data && data.success) history.push({ role: 'assistant', content: reply });
+    } catch (e) {
+      typing.remove();
+      bubble('them', 'সংযোগে সমস্যা হচ্ছে। হোয়াটসঅ্যাপে কথা বলুন: wa.me/8801781636613');
+    }
+    csend.disabled = false;
+    cinput.focus();
+  }
+
+  if (cform) {
+    cform.addEventListener('submit', function(e){
+      e.preventDefault();
+      var t = (cinput.value || '').trim();
+      if (t) send(t);
+    });
+  }
+
+  // Same number rule as lib/leads.js, so a wrong one is caught before a round trip.
+  function normalisePhone(raw){
+    var d = String(raw || '').replace(/\D/g, '');
+    if (d.indexOf('880') === 0) d = '0' + d.slice(3);
+    else if (d.length === 10 && d.charAt(0) !== '0') d = '0' + d;
+    return /^01[3-9]\d{8}$/.test(d) ? d : null;
+  }
+
   var sform = document.getElementById('sheetForm');
   if (sform) {
     sform.addEventListener('submit', async function(e){
@@ -869,6 +1004,9 @@
       err.hidden = true;
       var btn = document.getElementById('sheetSubmit');
       btn.disabled = true; btn.textContent = 'পাঠানো হচ্ছে… / Sending…';
+
+      // Record the enquiry even if they never type a word - that is the whole
+      // point of asking for a number up front.
       try {
         await fetch('/api/leads', {
           method: 'POST',
@@ -876,9 +1014,13 @@
           body: JSON.stringify({ name: name, phone: phone, source: 'mobile_support', site: location.hostname.replace(/^www\./, '') })
         });
       } catch (e2) { /* the server keeps a fallback log; do not alarm the customer */ }
+
+      identity = { name: name, phone: phone };
       sform.hidden = true;
-      document.getElementById('sheetOk').hidden = false;
-      setTimeout(closeSheet, 2600);
+      thread.hidden = false;
+      cform.hidden = false;
+      bubble('them', 'আসসালামু আলাইকুম ' + name + '। বংশাই হাউজিং কাস্টমার সাপোর্টে স্বাগতম — কী জানতে চান বলুন।');
+      setTimeout(function(){ cinput.focus(); }, 150);
     });
   }
 })();
