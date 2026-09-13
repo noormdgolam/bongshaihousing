@@ -142,6 +142,27 @@
   .dot{ width:6px;height:6px;border-radius:50%; background:var(--m-line); transition:width .2s,background .2s; }
   .dot.on{ background:var(--m-primary); width:16px; border-radius:3px; }
 
+  /* model detail */
+  .backbtn{ background:none; border:none; font-family:inherit; font-size:13px; font-weight:600;
+    color:var(--m-primary); padding:14px 16px 4px; cursor:pointer; }
+  :root[data-theme="dark"] .backbtn{ color:var(--m-primary-light); }
+  .dt-img{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; background:var(--m-surface); }
+  .dt-ph{ width:100%; aspect-ratio:16/10; display:grid; place-items:center; background:var(--m-surface); color:var(--m-muted); }
+  .dt-body{ padding:16px; }
+  .dt-cat{ font-size:11.5px; color:var(--m-muted); }
+  .dt-mdl{ font-size:21px; font-weight:700; margin-top:3px; }
+  .dt-price{ font-size:23px; font-weight:800; color:var(--m-primary); margin-top:10px; font-variant-numeric:tabular-nums; }
+  .dt-price small{ display:block; font-size:11.5px; font-weight:600; color:var(--m-muted); margin-top:2px; }
+  :root[data-theme="dark"] .dt-price{ color:var(--m-primary-light); }
+  .dt-specs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  .dt-spec{ background:var(--m-surface); border:1px solid var(--m-line); border-radius:9px; padding:8px 12px; font-size:12px; }
+  .dt-spec b{ display:block; font-size:14px; margin-bottom:1px; }
+  .dt-acts{ display:flex; flex-direction:column; gap:9px; margin-top:18px; }
+  .dt-acts button, .dt-acts a{ display:block; text-align:center; padding:13px; border-radius:11px;
+    font-family:inherit; font-size:14px; font-weight:700; border:1px solid var(--m-line); cursor:pointer; }
+  .dt-primary{ background:var(--m-primary); color:#fff; border-color:var(--m-primary) !important; }
+  .dt-plain{ background:var(--m-card); color:var(--m-text); }
+
   /* support conversation */
   .chat{ display:flex; flex-direction:column; gap:8px; padding:4px 0 2px; overflow-y:auto; max-height:46vh; }
   .msg{ max-width:82%; padding:9px 12px; border-radius:14px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; word-wrap:break-word; }
@@ -519,37 +540,20 @@
       {% endfor %}
     </div>
 
-    <div class="grid" id="modelGrid">
-      {% for p in catalogue %}
-      <a class="card" href="/{{ p.slug }}" data-cat="{{ p.categoryId }}"
-         data-q="{{ (p.model ~ ' ' ~ p.category ~ ' ' ~ (p.area or '') ~ ' sqft ' ~ (p.beds or '') ~ ' bed') | lower }}">
-        {% if p.image %}
-          <img src="/{{ p.image }}" alt="{{ p.alt }}" loading="lazy" decoding="async" width="168" height="104">
-        {% else %}
-          <span class="card-ph" aria-hidden="true">{{ icons.icon('home', 20) }}</span>
-        {% endif %}
-        <div class="in">
-          <div class="cat">{{ p.category }}</div>
-          <div class="mdl">{{ p.model }}</div>
-          <div class="specs">
-            {%- if p.area %}{{ p.area }} sqft{% endif -%}
-            {%- if p.beds %} · {{ p.beds }} bed{% endif -%}
-            {%- if p.baths %} · {{ p.baths }} bath{% endif -%}
-          </div>
-          {# taka() only groups the digits; the sign is added here, as in the
-             featured strip above. #}
-          {% if p.price %}<div class="price">৳{{ p.price }}</div>
-          {% else %}<div class="price muted">Contact Sales</div>{% endif %}
-        </div>
-      </a>
-      {% endfor %}
-    </div>
+    {# Rendered on demand from the JSON below. Server-rendering all 133 cards
+       put 162 <img> tags in the first paint and cost 12.8s on a phone. #}
+    <div class="grid" id="modelGrid"></div>
     <p class="empty" id="modelEmpty" hidden>No models in this category.</p>
 
     {# Real link, so the full catalogue stays reachable without JS. #}
     <p class="view-foot"><a href="/products-and-solutions.html">Open the full catalogue →</a></p>
   </section>
 
+  {# A model opens here rather than on the desktop product page. #}
+  <section class="view" id="view-model" hidden>
+    <button class="backbtn" type="button" id="modelBack">← Models</button>
+    <div id="modelDetail"></div>
+  </section>
   <section class="view" id="view-projects" hidden>
     <div class="view-head">
       <h2>Projects</h2>
@@ -616,6 +620,8 @@
   <button type="button" data-view="projects"><span class="ic">{{ icons.icon('map-pin', 20) }}</span>Projects</button>
   <button type="button" data-act="support"><span class="ic">{{ icons.icon('chat', 20) }}</span>Support</button>
 </nav>
+
+<script type="application/json" id="catalogueData">{{ catalogue | dump | safe }}</script>
 
 <script>
 (function(){
@@ -760,6 +766,7 @@
       if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
     });
 
+    if (name === 'models' && typeof ensureGrid === 'function') ensureGrid();
     window.scrollTo(0, scrollMemory[name] || 0);
     // The hash is what Android's back button walks, so a tab change is a
     // history entry rather than an exit from the app.
@@ -799,28 +806,64 @@
     if (calcEl) setTimeout(function(){ calcEl.scrollIntoView({ block: 'start' }); }, 60);
   }
 
-  // ---- model search and category filter -----------------------------------
-  // One apply() so the chip and the search box narrow the same list together
-  // rather than fighting each other.
+  // ---- model grid, built on demand ----------------------------------------
+  // Server-rendering all 133 cards cost 143KB of HTML, 162 image tags and
+  // 12.8s to load on a phone. The catalogue arrives as JSON and the cards are
+  // built the first time the Models tab opens.
+  var CATALOGUE = [];
+  try {
+    CATALOGUE = JSON.parse(document.getElementById('catalogueData').textContent || '[]');
+  } catch (e) { CATALOGUE = []; }
+
   var chips = [].slice.call(document.querySelectorAll('.chip'));
-  var cards = [].slice.call(document.querySelectorAll('#modelGrid .card'));
+  var grid = document.getElementById('modelGrid');
   var empty = document.getElementById('modelEmpty');
   var searchIn = document.getElementById('modelSearch');
   var searchClear = document.getElementById('searchClear');
-  var cat = 'all', term = '';
+  var cat = 'all', term = '', built = false;
+
+  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, function(c){
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  }); }
+
+  function cardHtml(p, i){
+    var media = p.image
+      ? '<img src="/' + esc(p.image) + '" alt="' + esc(p.alt) + '" width="168" height="104" decoding="async"'
+        + (i < 6 ? '' : ' loading="lazy"') + '>'
+      : '<span class="card-ph" aria-hidden="true"></span>';
+    var specs = [];
+    if (p.area) specs.push(p.area + ' sqft');
+    if (p.beds) specs.push(p.beds + ' bed');
+    if (p.baths) specs.push(p.baths + ' bath');
+    var price = p.price
+      ? '<div class="price">৳' + esc(p.price) + '</div>'
+      : '<div class="price muted">Contact Sales</div>';
+    return '<a class="card" href="/' + esc(p.slug) + '" data-model="' + esc(p.model) + '">'
+      + media + '<div class="in"><div class="cat">' + esc(p.category) + '</div>'
+      + '<div class="mdl">' + esc(p.model) + '</div>'
+      + '<div class="specs">' + esc(specs.join(' · ')) + '</div>' + price + '</div></a>';
+  }
+
+  function matches(p){
+    if (cat !== 'all' && String(p.categoryId) !== cat) return false;
+    if (!term) return true;
+    return (p.model + ' ' + p.category + ' ' + (p.area || '') + ' sqft ' + (p.beds || '') + ' bed')
+      .toLowerCase().indexOf(term) !== -1;
+  }
 
   function apply(){
-    var shown = 0;
-    for (var i = 0; i < cards.length; i++) {
-      var c = cards[i];
-      var hit = (cat === 'all' || c.getAttribute('data-cat') === cat)
-        && (!term || (c.getAttribute('data-q') || '').indexOf(term) !== -1);
-      c.hidden = !hit;
-      if (hit) shown++;
-    }
-    if (empty) empty.hidden = shown > 0;
+    if (!CATALOGUE || !CATALOGUE.length) return;   // not parsed yet
+    var list = CATALOGUE.filter(matches);
+    grid.innerHTML = list.map(cardHtml).join('');
+    if (empty) empty.hidden = list.length > 0;
     if (searchClear) searchClear.hidden = !term;
+    built = true;
   }
+
+  function ensureGrid(){ if (!built) apply(); }
+
+  // A deep link may have switched to Models before this ran.
+  if (current === 'models') apply();
 
   chips.forEach(function(ch){
     ch.addEventListener('click', function(){
@@ -855,8 +898,6 @@
     });
   }
 
-  // The magnifier in the top bar opens the Models tab on the search field
-  // instead of loading the desktop catalogue.
   var searchBtn = document.getElementById('searchBtn');
   if (searchBtn) {
     searchBtn.addEventListener('click', function(){
@@ -865,7 +906,6 @@
     });
   }
 
-  // A hero card opens the Models tab already filtered to its category.
   [].forEach.call(document.querySelectorAll('[data-cat-open]'), function(a){
     a.addEventListener('click', function(e){
       var id = a.getAttribute('data-cat-open');
@@ -877,13 +917,63 @@
     });
   });
 
-  // Same number rule as lib/leads.js, so a wrong one is caught before a round trip.
-  function normalisePhone(raw){
-    var d = String(raw || '').replace(/\D/g, '');
-    if (d.indexOf('880') === 0) d = '0' + d.slice(3);
-    else if (d.length === 10 && d.charAt(0) !== '0') d = '0' + d;
-    return /^01[3-9]\d{8}$/.test(d) ? d : null;
+  // ---- a model opens inside the app ---------------------------------------
+  var detail = document.getElementById('modelDetail');
+  var backBtn = document.getElementById('modelBack');
+  var cameFrom = 'models';
+
+  function openModel(model, from){
+    var p = null;
+    for (var i = 0; i < CATALOGUE.length; i++) {
+      if (CATALOGUE[i].model === model) { p = CATALOGUE[i]; break; }
+    }
+    if (!p) return false;
+    cameFrom = from || 'models';
+
+    var media = p.image
+      ? '<img class="dt-img" src="/' + esc(p.image) + '" alt="' + esc(p.alt) + '" decoding="async">'
+      : '<div class="dt-ph">no photo yet</div>';
+    var specs = '';
+    if (p.area) specs += '<div class="dt-spec"><b>' + esc(p.area) + '</b>sq.ft</div>';
+    if (p.beds) specs += '<div class="dt-spec"><b>' + esc(p.beds) + '</b>bedrooms</div>';
+    if (p.baths) specs += '<div class="dt-spec"><b>' + esc(p.baths) + '</b>bathrooms</div>';
+
+    var price = p.price
+      ? '<div class="dt-price">৳' + esc(p.price) + '<small>fixed package price</small></div>'
+      : '<div class="dt-price" style="color:var(--m-muted)">Contact Sales<small>price not published yet</small></div>';
+
+    detail.innerHTML = media
+      + '<div class="dt-body">'
+      + '<div class="dt-cat">' + esc(p.category) + '</div>'
+      + '<div class="dt-mdl">' + esc(p.model) + '</div>'
+      + price
+      + '<div class="dt-specs">' + specs + '</div>'
+      + '<div class="dt-acts">'
+      + '<button type="button" class="dt-primary" data-ask="' + esc(p.model) + '">Ask about this model</button>'
+      + '<a class="dt-plain" href="/' + esc(p.slug) + '">Full specification →</a>'
+      + '</div></div>';
+
+    showView('model', true);
+    window.scrollTo(0, 0);
+    return true;
   }
+
+  // Delegated, because the cards are built after this runs.
+  document.addEventListener('click', function(e){
+    var card = e.target.closest ? e.target.closest('.card[data-model]') : null;
+    if (card) {
+      if (openModel(card.getAttribute('data-model'), 'models')) e.preventDefault();
+      return;
+    }
+    var ask = e.target.closest ? e.target.closest('[data-ask]') : null;
+    if (ask) {
+      openSheet();
+      var inp = document.getElementById('chatInput');
+      if (inp) setTimeout(function(){ inp.value = ask.getAttribute('data-ask') + ' সম্পর্কে জানতে চাই'; }, 200);
+    }
+  });
+
+  if (backBtn) backBtn.addEventListener('click', function(){ showView(cameFrom, true); });
 
   // ---- support conversation ----------------------------------------------
   // The name+number gate stays: an enquiry the business cannot ring back is
