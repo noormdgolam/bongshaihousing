@@ -389,7 +389,7 @@
   <section class="view active" id="view-home">
 
   <section class="facts" aria-label="Key figures">
-    {% if rateRange %}<div class="fact">Rate <b>{{ rateRange.min }}–{{ rateRange.max }}</b> ৳/sqft</div>{% endif %}
+    {% if priceRange %}<div class="fact">Packages <b>৳{{ priceRange.min }}–৳{{ priceRange.max }}</b></div>{% endif %}
     <div class="fact">Build time <b>45–60</b> days</div>
     <div class="fact">Frame <b>Grade 50</b> steel, BNBC 2020</div>
     {% if modelCount %}<div class="fact">Models <b>{{ modelCount }}</b></div>{% endif %}
@@ -427,8 +427,8 @@
             {%- if p.beds %} · {{ p.beds }} bed{% endif %}
             {%- if p.baths %} · {{ p.baths }} bath{% endif %}
           </div>
-          {% if p.rate %}<div class="price">৳{{ p.rate }} <small>/sqft from</small></div>
-          {% elif p.price %}<div class="price">৳{{ p.price }} <small>package</small></div>{% endif %}
+          {% if p.price %}<div class="price">৳{{ p.price }} <small>package price</small></div>
+          {% else %}<div class="price muted">Contact Sales</div>{% endif %}
         </div>
       </a>
       {% endfor %}
@@ -437,7 +437,7 @@
 
   <section class="calc" aria-labelledby="calcTitle">
     <h3 id="calcTitle">Estimate your cost</h3>
-    <p class="sub">Uses the real per-sqft range of our built models.</p>
+    <p class="sub">An indicative range for a size we have not built yet. Every model above has a fixed package price.</p>
     <div class="row">
       <div class="fld">
         <label for="calcKatha">জমি / Land (katha)</label>
@@ -538,8 +538,7 @@
           </div>
           {# taka() only groups the digits; the sign is added here, as in the
              featured strip above. #}
-          {% if p.rate %}<div class="price">৳{{ p.rate }} <span>/sqft from</span></div>
-          {% elif p.price %}<div class="price">৳{{ p.price }} <span>package</span></div>
+          {% if p.price %}<div class="price">৳{{ p.price }}</div>
           {% else %}<div class="price muted">Contact Sales</div>{% endif %}
         </div>
       </a>
@@ -705,9 +704,10 @@
 
     out.textContent = lo === hi ? '৳' + taka(lo) : '৳' + taka(lo) + ' – ৳' + taka(hi);
     if (basis) {
+      // The rate behind this is internal arithmetic; show the assumption the
+      // customer can check (the size), not the number we divided by.
       basis.textContent = '≈ ' + taka(sqft) + ' sqft (' + k + ' katha, ' + f + ' floor'
-        + (f === 1 ? '' : 's') + ', ~' + Math.round(COVERAGE * 100) + '% coverage) at '
-        + taka(parseFloat(parts[0])) + '–' + taka(parseFloat(parts[1])) + ' ৳/sqft. ';
+        + (f === 1 ? '' : 's') + ', ~' + Math.round(COVERAGE * 100) + '% coverage). ';
     }
   }
 

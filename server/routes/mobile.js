@@ -101,6 +101,14 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
     ? { min: taka(Math.min(...rates)), max: taka(Math.max(...rates)) }
     : null;
 
+  // What a customer actually pays: the fixed package prices, low to high.
+  // This replaces the per-sqft range that used to head the page - that
+  // number is how we estimate an unbuilt size, not something we charge.
+  const fixed = products.map((p) => Number(p.fixed_price)).filter((v) => v > 0);
+  const priceRange = fixed.length
+    ? { min: taka(Math.min(...fixed)), max: taka(Math.max(...fixed)) }
+    : null;
+
   // Estimator rates per category, from the same derivation. Every model has its
   // own rate, so a category carries a range rather than one figure.
   const calcRates = categories.map((c) => {
@@ -157,6 +165,7 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
     categories: categories.filter((c) => c.landing_page_slug),
     projects: projectRows,
     rateRange,
+    priceRange,
     calcRates,
     catalogue,
     filters,
