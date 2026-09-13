@@ -591,6 +591,20 @@
 
 <script>
 (function(){
+  // The app shell is the manifest's start_url, so it has to register the
+  // worker itself - a visitor who opens the installed icon never passes
+  // through the pages that used to do it. Registered after load so it never
+  // competes with first paint on a slow mobile connection.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/sw.js').catch(function(){ /* offline is not an error */ });
+    });
+  }
+})();
+</script>
+
+<script>
+(function(){
   // ---- theme toggle: remembers the reader's choice, defaults to the OS ----
   var root = document.documentElement;
   try {
@@ -745,9 +759,16 @@
   window.addEventListener('popstate', function(e){
     showView((e.state && e.state.view) || (location.hash || '#').slice(1) || 'home', false);
   });
-  // Deep link: /m#models opens on that tab.
+  // Deep link: /m#models opens on that tab, and the manifest's shortcuts use
+  // exactly these hashes. #calculator is a section of the home view rather than
+  // a view of its own, so it scrolls instead of switching.
   var initial = (location.hash || '').slice(1);
-  if (views[initial]) showView(initial, false);
+  if (views[initial]) {
+    showView(initial, false);
+  } else if (initial === 'calculator') {
+    var calcEl = document.getElementById('calcTitle');
+    if (calcEl) setTimeout(function(){ calcEl.scrollIntoView({ block: 'start' }); }, 60);
+  }
 
   // ---- model search and category filter -----------------------------------
   // One apply() so the chip and the search box narrow the same list together

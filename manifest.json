@@ -1,22 +1,58 @@
 {
+  "id": "/m",
   "name": "Bongshai Housing",
   "short_name": "Bongshai",
-  "description": "Premium Pre-Engineered Steel Buildings and Real Estate Solutions in Dhaka",
-  "start_url": "/index.html",
+  "description": "Pre-engineered steel homes built across Bangladesh. Browse models, estimate your cost, and talk to our team.",
+  "start_url": "/m",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1E40AF",
   "orientation": "portrait-primary",
+  "lang": "bn",
+  "dir": "ltr",
+  "categories": ["business", "shopping"],
   "icons": [
     {
       "src": "/images/logo-icon-192.webp",
       "sizes": "192x192",
-      "type": "image/webp"
+      "type": "image/webp",
+      "purpose": "any"
     },
     {
       "src": "/images/logo-icon-512.webp",
       "sizes": "512x512",
-      "type": "image/webp"
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo-icon-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Models",
+      "short_name": "Models",
+      "description": "Browse all steel and prefab models",
+      "url": "/m#models",
+      "icons": [{ "src": "/images/logo-icon-192.webp", "sizes": "192x192", "type": "image/webp" }]
+    },
+    {
+      "name": "Cost estimate",
+      "short_name": "Estimate",
+      "description": "Estimate the cost of your build",
+      "url": "/m#calculator",
+      "icons": [{ "src": "/images/logo-icon-192.webp", "sizes": "192x192", "type": "image/webp" }]
+    },
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "description": "See delivered projects across Bangladesh",
+      "url": "/m#projects",
+      "icons": [{ "src": "/images/logo-icon-192.webp", "sizes": "192x192", "type": "image/webp" }]
     }
   ]
 }

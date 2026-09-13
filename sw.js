@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bongshai-cache-v38';
+const CACHE_NAME = 'bongshai-cache-v39';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -6,7 +6,14 @@ const STATIC_ASSETS = [
   '/css/style.min.css?v=4.20',
   '/js/global-upgrades.min.js?v=3.16',
   '/js/bd-geo-data.js',
-  '/manifest.json'
+  '/manifest.json',
+  // The app shell. /m is the manifest start_url, so it has to survive an
+  // offline cold start. The fetch handler below already treats HTML as
+  // network-first, so this cached copy is only ever a fallback - it can
+  // never pin a stale price on a phone.
+  '/m',
+  '/images/logo-icon-192.webp',
+  '/images/logo-icon-512.webp'
 ];
 
 self.addEventListener('install', event => {
