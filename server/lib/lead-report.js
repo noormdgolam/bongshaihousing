@@ -4,7 +4,7 @@
 const db = require('./db');
 const { applyOverdueFilter } = require('./leads');
 
-const STATUSES = ['নতুন', 'যোগাযোগ হয়েছে', 'কোটেশন দেওয়া', 'সাইট ভিজিট', 'আলোচনায়', 'বিক্রি', 'হারানো'];
+const { LEAD_STATUSES: STATUSES } = require('./leads');
 const MAX_CHARS = 1500;
 const MAX_OVERDUE_LISTED = 8;
 

@@ -30,7 +30,7 @@ function asyncHandler(fn) {
   };
 }
 
-const STATUSES = ['নতুন', 'যোগাযোগ হয়েছে', 'কোটেশন দেওয়া', 'সাইট ভিজিট', 'আলোচনায়', 'বিক্রি', 'হারানো'];
+const { LEAD_STATUSES: STATUSES } = require('../lib/leads');
 const TERMINAL_STATUSES = ['বিক্রি', 'হারানো'];
 const LOST_REASONS = ['দাম', 'প্রস্তুত না', 'সন্দেহ', 'প্রতিযোগী', 'অন্যান্য'];
 const SETTINGS_KEY = 'lead_dashboard_settings';

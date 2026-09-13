@@ -11,6 +11,7 @@ const requireRole = require('../middleware/requireRole');
 const { processAndSaveImage, UPLOADS_DIR } = require('../lib/image-processor');
 const { getThemeSettings, saveThemeSettings, resetThemeSettings, PRESETS, DEFAULT_THEME, isThemeDark, ARCHETYPES } = require('../lib/theme');
 const { seedDefaultMilestones } = require('../lib/order-milestones');
+const { LEAD_STATUS } = require('../lib/leads');
 const { normalizePhone } = require('../lib/customer-identity');
 const { getSeoSettings, saveSeoSettings, maskKey } = require('../lib/seo/settings');
 const { recordHistory, getHistory, restoreVersion } = require('../lib/history');
@@ -317,13 +318,13 @@ router.get(['/admin', '/admin/dashboard', '/admin/dashboard.html'], async (req, 
 
       if (hasLeads) {
         [leadCount] = await db('leads').count({ count: '*' });
-        [newLeadCount] = await db('leads').where({ status: 'new' }).count({ count: '*' });
-        [overdueLeadCount] = await db('leads').where({ status: 'new' }).where('created_at', '<', oneDayAgo).count({ count: '*' });
-        [contactedLeadCount] = await db('leads').where({ status: 'contacted' }).count({ count: '*' });
+        [newLeadCount] = await db('leads').where({ status: LEAD_STATUS.NEW }).count({ count: '*' });
+        [overdueLeadCount] = await db('leads').where({ status: LEAD_STATUS.NEW }).where('created_at', '<', oneDayAgo).count({ count: '*' });
+        [contactedLeadCount] = await db('leads').where({ status: LEAD_STATUS.CONTACTED }).count({ count: '*' });
         [convertedLeadCount] = await db('leads').where({ status: 'converted' }).count({ count: '*' });
         recentLeads = await db('leads').orderBy('created_at', 'desc').limit(8);
         for (const l of recentLeads) {
-          l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+          l.is_overdue = (l.status === LEAD_STATUS.NEW || l.status === 'new') && new Date(l.created_at) < oneDayAgo;
           const calc = calculateLeadPrice(l, pricingMap);
           l.estimated_price = calc.price;
           l.estimated_price_formatted = calc.formatted;
@@ -463,7 +464,7 @@ router.post('/admin/leads/:id/quick-status', async (req, res) => {
   const { status } = req.body;
   try {
     await db('leads').where({ id: req.params.id }).update({
-      status: status || 'new',
+      status: status || LEAD_STATUS.NEW,
       updated_at: db.fn.now(),
     });
     await logActivity(req, {
@@ -787,7 +788,7 @@ router.get('/admin/agent-leads', async (req, res) => {
   const now = new Date();
 
   for (const l of leads) {
-    l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+    l.is_overdue = (l.status === LEAD_STATUS.NEW || l.status === 'new') && new Date(l.created_at) < oneDayAgo;
     if (l.protection_expires_at) {
       const expDate = new Date(l.protection_expires_at);
       l.is_protected = expDate >= now;
@@ -1097,7 +1098,7 @@ router.get('/admin/leads', async (req, res) => {
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const pricingMap = await getProductPricingMap(db);
         for (const l of leads) {
-          l.is_overdue = l.status === 'new' && new Date(l.created_at) < oneDayAgo;
+          l.is_overdue = (l.status === LEAD_STATUS.NEW || l.status === 'new') && new Date(l.created_at) < oneDayAgo;
           const calc = calculateLeadPrice(l, pricingMap);
           l.estimated_price = calc.price;
           l.estimated_price_formatted = calc.formatted;
@@ -1195,7 +1196,7 @@ router.post('/admin/leads', async (req, res) => {
     
     await db('leads').insert({
       name, email, phone, district, upazila, model, floor_area, bedrooms, message,
-      status: status || 'new',
+      status: status || LEAD_STATUS.NEW,
       source: 'manual_entry',
       created_at: db.fn.now(),
       updated_at: db.fn.now()
@@ -1229,7 +1230,7 @@ router.post('/admin/leads/:id', async (req, res) => {
   const { status, admin_notes } = req.body;
   try {
     await db('leads').where({ id: req.params.id }).update({
-      status: status || 'new',
+      status: status || LEAD_STATUS.NEW,
       admin_notes: admin_notes || null,
       updated_at: db.fn.now(),
     });

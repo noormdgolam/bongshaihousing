@@ -17,6 +17,15 @@ const { sendMail } = require('./mailer');
 const BD_PHONE_RE = /^01[3-9]\d{8}$/;
 const FALLBACK_LOG = path.join(__dirname, '..', 'data', 'leads-fallback.jsonl');
 const KNOWN_SITES = ['bongshaihousing.com', 'bongshaisteel.com', 'bongshaiengineering.com', 'bongshai.com'];
+// The `leads` table speaks Bangla - lib/leads.js writes নতুন and the agent
+// dashboard reads it. `agent_leads` is a separate table with an English enum
+// the database enforces; do not use these values there.
+const LEAD_STATUSES = ['নতুন', 'যোগাযোগ হয়েছে', 'কোটেশন দেওয়া', 'সাইট ভিজিট', 'আলোচনায়', 'বিক্রি', 'হারানো'];
+const LEAD_STATUS = {
+  NEW: 'নতুন',
+  CONTACTED: 'যোগাযোগ হয়েছে',
+};
+
 const TERMINAL_STATUSES = ['বিক্রি', 'হারানো'];
 
 // A lead is "overdue" when a followup date has passed with no touch logged
@@ -211,5 +220,5 @@ function leadDefaults(phoneKey, site) {
 
 module.exports = {
   recordLead, isValidBdPhone, checkDuplicate, leadDefaults, notifyOwner, appendFallbackLog,
-  applyOverdueFilter, KNOWN_SITES, TERMINAL_STATUSES,
+  applyOverdueFilter, KNOWN_SITES, TERMINAL_STATUSES, LEAD_STATUSES, LEAD_STATUS,
 };
