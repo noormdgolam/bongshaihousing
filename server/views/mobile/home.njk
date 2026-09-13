@@ -452,7 +452,7 @@
      17 of the 18 project rows store the same string in title and location, so
      the second line is printed only when it actually says something new. #}
   {% macro projectRow(pr) %}
-  <a class="proj" href="/{{ pr.slug }}">
+  <a class="proj" href="/{{ pr.slug }}" data-doc="{{ pr.slug }}">
     {% if pr.image and 'unavailable' not in pr.image %}
       <img src="/{{ pr.image }}" alt="" loading="lazy" decoding="async">
     {% else %}
@@ -948,6 +948,9 @@
     var p = /^page\/([a-z-]+)$/.exec(h);
     if (p) { openPage(p[1]); return true; }
 
+    var dd = /^doc\/([a-z0-9.-]+)$/i.exec(h);
+    if (dd) { openDoc(dd[1]); return true; }
+
     return false;
   }
 
@@ -1240,6 +1243,54 @@
     }
     return html + '</div>';
   }
+
+  // Any page in the registry - a project, a city, a team page - rendered in the
+  // app rather than handed to the desktop layout. Shares the content view.
+  var docCache = {};
+
+  function renderDoc(d){
+    var html = '<div class="pg"><h1>' + esc(d.title) + '</h1>';
+    (d.images || []).forEach(function(im){
+      html += '<figure><img src="/' + esc(im.src) + '" alt="' + esc(im.alt || d.title) + '" loading="lazy" decoding="async">'
+        + (im.alt ? '<figcaption>' + esc(im.alt) + '</figcaption>' : '') + '</figure>';
+    });
+    (d.blocks || []).forEach(function(bk){
+      if (bk.type === 'h') html += '<h2>' + esc(bk.text) + '</h2>';
+      else if (bk.type === 'li') html += '<li>' + esc(bk.text) + '</li>';
+      else html += '<p>' + esc(bk.text) + '</p>';
+    });
+    // A page with almost no prose (project pages are led by photographs) should
+    // still say something rather than look empty.
+    if (!(d.blocks || []).length && d.description) html += '<p>' + esc(d.description) + '</p>';
+    return html + '</div>';
+  }
+
+  async function openDoc(slug){
+    pageBox.innerHTML = '<div class="pg"><p>\u09b2\u09cb\u09a1 \u09b9\u099a\u09cd\u099b\u09c7\u2026</p></div>';
+    showView('page', true);
+    window.scrollTo(0, 0);
+    if (docCache[slug]) { pageBox.innerHTML = renderDoc(docCache[slug]); return true; }
+    try {
+      var res = await fetch('/api/m/doc/' + encodeURIComponent(slug));
+      if (!res.ok) throw new Error('http ' + res.status);
+      var d = await res.json();
+      docCache[slug] = d;
+      pageBox.innerHTML = renderDoc(d);
+      return true;
+    } catch (e) {
+      pageBox.innerHTML = '<div class="pg"><p>\u098f\u0987 \u09aa\u09c7\u099c\u099f\u09bf \u0986\u09a8\u09be \u09af\u09be\u099a\u09cd\u099b\u09c7 \u09a8\u09be\u0964</p>'
+        + '<p><a href="/' + esc(slug) + '">\u09ac\u09cd\u09b0\u09be\u0989\u099c\u09be\u09b0\u09c7 \u0996\u09c1\u09b2\u09c1\u09a8 \u2192</a></p></div>';
+      return false;
+    }
+  }
+
+  // Delegated: project rows are rendered by a macro and by the Projects tab.
+  document.addEventListener('click', function(e){
+    var row = e.target.closest ? e.target.closest('[data-doc]') : null;
+    if (!row) return;
+    e.preventDefault();
+    openDoc(row.getAttribute('data-doc'));
+  });
 
   async function openPage(name){
     pageBox.innerHTML = '<div class="pg"><p>লোড হচ্ছে…</p></div>';

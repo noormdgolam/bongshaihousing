@@ -9,6 +9,8 @@
 // It is deliberately a web page rather than a native shell. The stated goal is
 // Android and iOS later; a PWA reaches phones today and is what Capacitor
 // wraps when that time comes, so this is the same codebase either way.
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 
 const router = express.Router();
@@ -405,6 +407,61 @@ router.get('/api/m/page/:name', async (req, res) => {
     return res.json({ title: page.title, blocks: extractContent(html, name === 'gallery') });
   } catch (err) {
     console.error('[mobile] page ' + name + ' failed:', err.message);
+    return res.status(500).json({ error: 'failed' });
+  }
+});
+
+// Any page in the registry, rendered inside the app. Projects, city pages, team
+// pages - everything that has no view of its own but is still real content.
+let REGISTRY = null;
+function registry() {
+  if (REGISTRY) return REGISTRY;
+  try {
+    REGISTRY = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'page-registry.json'), 'utf8'));
+  } catch (e) {
+    console.warn('[mobile] page registry unreadable:', e.message);
+    REGISTRY = {};
+  }
+  return REGISTRY;
+}
+
+router.get('/api/m/doc/:slug', async (req, res) => {
+  const slug = String(req.params.slug || '').replace(/[^a-z0-9.-]/gi, '').slice(0, 90);
+  const entry = registry()['/' + slug];
+  if (!entry) return res.status(404).json({ error: 'unknown page' });
+
+  try {
+    const html = await new Promise((resolve, reject) => {
+      req.app.render('pages/' + slug.replace(/\.html$/, '') + '.njk',
+        { ...(res.locals || {}) }, (err, out) => (err ? reject(err) : resolve(out)));
+    });
+
+    // A project page is carried by its photographs; a city page by its text.
+    // Return both and let the view decide what to lead with.
+    const blocks = extractContent(html, false);
+    const images = [];
+    const seenImg = new Set();
+    const re = /<img[^>]*>/gi;
+    let m;
+    while ((m = re.exec(html)) !== null) {
+      const src = (/\ssrc="([^"]+)"/i.exec(m[0]) || [])[1] || '';
+      const alt = (/\salt="([^"]*)"/i.exec(m[0]) || [])[1] || '';
+      if (!src || /logo|icon|placeholder|unavailable|data:/i.test(src)) continue;
+      const clean = src.replace(/^\//, '');
+      if (seenImg.has(clean)) continue;
+      seenImg.add(clean);
+      images.push({ src: clean, alt });
+      if (images.length >= 8) break;
+    }
+
+    return res.json({
+      title: (entry.title || slug).split(' | ')[0],
+      description: entry.description || null,
+      blocks,
+      images,
+    });
+  } catch (err) {
+    console.error('[mobile] doc ' + slug + ' failed:', err.message);
     return res.status(500).json({ error: 'failed' });
   }
 });
