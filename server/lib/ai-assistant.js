@@ -171,6 +171,25 @@ async function getDynamicCatalogContext(recentText = '') {
 // Keys are read fresh each call rather than cached at require time: the .env is
 // edited on the host and the app is restarted, and a stale module-level copy
 // would quietly keep using the old set.
+// seo_settings.groq_api_key is a second, different key the SEO tooling already
+// uses. Cached briefly - groqKeys() runs on every message.
+let dbKeyCache = { value: null, at: 0 };
+const DB_KEY_TTL = 5 * 60 * 1000;
+
+async function groqKeyFromDb() {
+  if (Date.now() - dbKeyCache.at < DB_KEY_TTL) return dbKeyCache.value;
+  dbKeyCache.at = Date.now();
+  try {
+    if (!db || !(await db.schema.hasTable('seo_settings'))) { dbKeyCache.value = null; return null; }
+    const row = await db('seo_settings').where({ setting_key: 'groq_api_key' }).first();
+    const v = row && typeof row.setting_value === 'string' ? row.setting_value.trim() : '';
+    dbKeyCache.value = v && v.startsWith('gsk_') ? v : null;
+  } catch (e) {
+    dbKeyCache.value = null;
+  }
+  return dbKeyCache.value;
+}
+
 function groqKeys() {
   const many = String(process.env.GROQ_API_KEYS || '')
     .split(',').map((k) => k.trim()).filter(Boolean);
@@ -195,6 +214,8 @@ function shouldTryNextKey(status) {
  */
 async function callGroqAPI(messages, userContext = {}) {
   const keys = groqKeys();
+  const fromDb = await groqKeyFromDb();
+  if (fromDb && keys.indexOf(fromDb) === -1) keys.push(fromDb);
   if (!keys.length) {
     throw new Error('No Groq API key configured (set GROQ_API_KEYS or GROQ_API_KEY).');
   }
