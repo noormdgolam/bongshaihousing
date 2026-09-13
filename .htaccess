@@ -19,6 +19,85 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
+# =====================================================================
+# 2b. Phones get the app at /m, not the desktop page.
+#
+# Every condition below is load-bearing:
+#  - Crawlers are NEVER redirected. Google indexes this site with a mobile
+#    user agent; telling it that 211 pages are all one page is how a site
+#    loses its rankings. Link-preview bots are excluded for the same reason.
+#  - bh_desktop=1 is the cookie the app sets from "Desktop site", so a
+#    visitor who wants the full site is not trapped.
+#  - /m, the portals, the APIs and every asset are left alone.
+#  - 302, never 301: this is a device preference, not a moved page.
+#  - A URL with no in-app equivalent is NOT redirected. Better the desktop
+#    page than the wrong one.
+# =====================================================================
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteCond %{REQUEST_URI} !^/m
+RewriteCond %{REQUEST_URI} !^/(admin|agent|my-project|api|images|css|js|font|fonts|quotes|scratch)/ [NC]
+RewriteCond %{REQUEST_URI} !\.(webp|png|jpe?g|gif|svg|ico|css|js|json|xml|txt|map|woff2?|ttf|pdf|zip)$ [NC]
+RewriteRule ^(index\.html)?$ /m [R=302,L]
+
+# A model keeps its model: /bh-ct-501.html -> the app, open on that model.
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^((?:bh|dv)-[a-z]+-\d+\.html)$ /m#model/$1 [R=302,L,NE]
+
+# Category pages have no separate view - they are the Models tab.
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^(apartment-building|duplex-steel-building|simplex-steel-building|cottage-house|container-house|steel-house|tiny-house|wooden-house|low-cost-house|concrete-building|products-and-solutions)\.html$ /m#models [R=302,L,NE]
+
+# Projects.
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^projects\.html$ /m#projects [R=302,L,NE]
+
+# Content pages that exist inside the app.
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^about\.html$ /m#page/about [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^faq\.html$ /m#page/faq [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^certifications\.html$ /m#page/certifications [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^gallery\.html$ /m#page/gallery [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^contact\.html$ /m#page/contact [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^privacy\-policy\.html$ /m#page/privacy [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^terms\.html$ /m#page/terms [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^solutions\.html$ /m#page/solutions [R=302,L,NE]
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteRule ^interactive\-tools\.html$ /m#page/tools [R=302,L,NE]
+
+
 # 3. Redirect index.html to the root directory
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
@@ -170,3 +249,10 @@ ErrorDocument 404 /404.html
   ExpiresByType application/javascript "access plus 1 month"
   ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “alt-php74” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-alt-php74 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

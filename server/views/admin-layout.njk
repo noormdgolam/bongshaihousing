@@ -141,8 +141,18 @@
     .admin-scrim.open { opacity: 1; pointer-events: auto; }
 
     /* Header actions wrapped off the right edge; let them wrap. */
+    /* The right-hand group carries an inline display:flex, so a plain
+       flex-wrap on the parent cannot reach it - hence the override. Without
+       it the "Live Website" button hung 5px past the edge and dragged the
+       whole document (and the scrim) wider than the viewport. */
     .admin-topbar { padding: 12px 14px; flex-wrap: wrap; gap: 8px; }
-    .admin-topbar > * { min-width: 0; }
+    .admin-topbar > * { min-width: 0; max-width: 100%; }
+    .admin-topbar > div { display: flex !important; flex-wrap: wrap !important; row-gap: 8px; }
+    /* The page-supplied header block nests its own inline flex rows, so the
+       rule has to reach every level, not just direct children. */
+    .admin-topbar div { max-width: 100%; flex-wrap: wrap !important; }
+    .admin-main { min-width: 0; max-width: 100%; }
+    .admin-content { max-width: 100%; }
     .admin-content { padding: 14px; }
     .admin-grid-2col { grid-template-columns: 1fr !important; }
 

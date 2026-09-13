@@ -665,6 +665,7 @@
     <div class="menu" style="margin-top:22px">
       <button type="button" data-page="privacy">Privacy policy</button>
       <button type="button" data-page="terms">Terms &amp; conditions</button>
+      <button type="button" id="desktopSite">Desktop site <span>&#8599;</span></button>
     </div>
   </section>
 
@@ -911,18 +912,47 @@
   });
 
   window.addEventListener('popstate', function(e){
-    showView((e.state && e.state.view) || (location.hash || '#').slice(1) || 'home', false);
+    if (e.state && e.state.view) { showView(e.state.view, false); return; }
+    openHash(location.hash, false);
   });
   // Deep link: /m#models opens on that tab, and the manifest's shortcuts use
   // exactly these hashes. #calculator is a section of the home view rather than
   // a view of its own, so it scrolls instead of switching.
-  var initial = (location.hash || '').slice(1);
-  if (views[initial]) {
-    showView(initial, false);
-  } else if (initial === 'calculator') {
-    var calcEl = document.getElementById('calcTitle');
-    if (calcEl) setTimeout(function(){ calcEl.scrollIntoView({ block: 'start' }); }, 60);
+  // One router for every hash the app answers to, so a deep link behaves the
+  // same on a cold start, on back/forward, and when .htaccess sends a phone
+  // here from the page it actually asked for.
+  function openHash(hash, push){
+    var h = String(hash || '').replace(/^#/, '');
+    if (!h) { showView('home', push); return true; }
+
+    if (views[h]) { showView(h, push); return true; }
+
+    if (h === 'calculator') {
+      showView('home', push);
+      var calcEl = document.getElementById('calcTitle');
+      if (calcEl) setTimeout(function(){ calcEl.scrollIntoView({ block: 'start' }); }, 60);
+      return true;
+    }
+
+    var m = /^model\/(.+)$/.exec(h);
+    if (m) {
+      var slug = decodeURIComponent(m[1]);
+      // The catalogue keys on model number, the URL on slug.
+      for (var i = 0; i < CATALOGUE.length; i++) {
+        if (CATALOGUE[i].slug === slug) { openModel(CATALOGUE[i].model, 'models'); return true; }
+      }
+      showView('models', push);
+      return false;
+    }
+
+    var p = /^page\/([a-z-]+)$/.exec(h);
+    if (p) { openPage(p[1]); return true; }
+
+    return false;
   }
+
+  // The initial hash is routed AFTER the catalogue is parsed - see below.
+  // A #model/... deep link needs it, and a hoisted var is undefined until then.
 
   // ---- model grid, built on demand ----------------------------------------
   // Server-rendering all 133 cards cost 143KB of HTML, 162 image tags and
@@ -932,6 +962,7 @@
   try {
     CATALOGUE = JSON.parse(document.getElementById('catalogueData').textContent || '[]');
   } catch (e) { CATALOGUE = []; }
+
 
   var chips = [].slice.call(document.querySelectorAll('.chip'));
   var grid = document.getElementById('modelGrid');
@@ -1232,6 +1263,17 @@
   var pageBack = document.getElementById('pageBack');
   if (pageBack) pageBack.addEventListener('click', function(){ showView('more', true); });
 
+  // .htaccess sends phones here. Without a way back the desktop site would be
+  // unreachable on a phone, so this sets the cookie that rule checks.
+  var deskBtn = document.getElementById("desktopSite");
+  if (deskBtn) {
+    deskBtn.addEventListener("click", function(){
+      var exp = new Date(Date.now() + 30*24*60*60*1000).toUTCString();
+      document.cookie = "bh_desktop=1; path=/; expires=" + exp + "; SameSite=Lax";
+      location.href = "/?desktop=1";
+    });
+  }
+
   // ---- support conversation ----------------------------------------------
   // The name+number gate stays: an enquiry the business cannot ring back is
   // worth very little, and it is what turns a chat into a contactable record.
@@ -1374,6 +1416,13 @@
       setTimeout(function(){ cinput.focus(); }, 150);
     });
   }
+
+  // ---- opening deep link --------------------------------------------------
+  // Last, deliberately: a #model/<slug> link needs the catalogue AND the
+  // detail container AND openModel, and each is set up at a different point
+  // above. Routing it from here means it can never outrun its dependencies.
+  var initialHash = (location.hash || '').slice(1);
+  if (initialHash) openHash(initialHash, false);
 })();
 </script>
 </body>
