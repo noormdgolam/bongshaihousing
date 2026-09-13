@@ -63,49 +63,105 @@ const path = require('path');
 /**
  * Fetch dynamic product and project highlights from the database or seed JSON
  */
-async function getDynamicCatalogContext() {
+// The catalogue the assistant is allowed to quote from.
+//
+// Every published model is summarised by category, always - a truncated list is
+// how the assistant ended up telling a customer that Container House prices did
+// not exist when all twelve of them have one. Full per-model lines are included
+// only for what the conversation is actually about, which keeps the request
+// well inside the free tier's tokens-per-minute while never being wrong about
+// what is on offer.
+async function getDynamicCatalogContext(recentText = '') {
   let products = [];
   if (db) {
     try {
       products = await db('products')
         .where({ published: true })
-        .select('model_number', 'title', 'fixed_price', 'total_floor_area', 'price_per_sqft', 'price_currency', 'slug')
-        .limit(12);
+        .select('model_number', 'title', 'fixed_price', 'total_floor_area', 'slug', 'category_id');
     } catch (err) {
-      console.warn('Dynamic catalog query failed, using products.json:', err.message);
+      console.warn('Dynamic catalog query failed:', err.message);
       products = [];
     }
   }
+  if (!products.length) return '';
 
-  if (!products || products.length === 0) {
+  let categories = [];
+  if (db) {
     try {
-      const pPath = path.join(__dirname, '..', 'db', 'seeds', 'data', 'products.json');
-      if (fs.existsSync(pPath)) {
-        const allJson = JSON.parse(fs.readFileSync(pPath, 'utf8'));
-        products = allJson.slice(0, 12).map(p => ({
-          model_number: p.modelNumber,
-          title: p.title,
-          fixed_price: p.fixedPrice,
-          total_floor_area: p.totalFloorArea,
-          price_per_sqft: p.pricePerSqft,
-          price_currency: p.priceCurrency || 'BDT',
-          slug: p.filename
-        }));
-      }
-    } catch (e) {
-      // ignore
+      categories = await db('categories').select('id', 'name');
+    } catch (err) { categories = []; }
+  }
+  const catName = new Map(categories.map((c) => [c.id, c.name]));
+
+  const groups = new Map();
+  for (const p of products) {
+    const name = catName.get(p.category_id) || 'Other';
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name).push(p);
+  }
+
+  const priced = (list) => list.filter((p) => Number(p.fixed_price) > 0);
+  const line = (p) => `${p.model_number} | ${p.total_floor_area || '?'} sq.ft | ${
+    Number(p.fixed_price) > 0 ? formatTaka(p.fixed_price) : 'price not set yet'} | /${p.slug}`;
+
+  // What is the customer actually asking about?
+  const hay = String(recentText || '').toLowerCase();
+  const wanted = new Set();
+  for (const [name] of groups) {
+    const words = name.toLowerCase().split(/\s+/).filter((w) => w.length > 3);
+    if (words.some((w) => hay.includes(w))) wanted.add(name);
+  }
+  // Bengali names for the same categories.
+  const BN = {
+    'কনটেইনার': 'Container House', 'container': 'Container House',
+    'কটেজ': 'Luxury Cottage House', 'cottage': 'Luxury Cottage House',
+    'ডুপ্লেক্স': 'Duplex Prefab Building', 'duplex': 'Duplex Prefab Building',
+    'সিমপ্লেক্স': 'Simplex Prefab Building', 'simplex': 'Simplex Prefab Building',
+    'টাইনি': 'Tiny House', 'tiny': 'Tiny House',
+    'কাঠ': 'Wooden House', 'wooden': 'Wooden House',
+    'স্টিল': 'Steel House', 'steel house': 'Steel House',
+    'অ্যাপার্টমেন্ট': 'Apartment Building', 'apartment': 'Apartment Building',
+    'কংক্রিট': 'Concrete Building', 'concrete': 'Concrete Building',
+    'লো কস্ট': 'Low Cost House', 'low cost': 'Low Cost House',
+  };
+  for (const key of Object.keys(BN)) {
+    if (hay.includes(key) && groups.has(BN[key])) wanted.add(BN[key]);
+  }
+  // An explicit model number always wins.
+  const asked = (hay.match(/bh-[a-z]+-\d+/gi) || []).map((m) => m.toUpperCase());
+
+  let out = '\nLIVE OFFICIAL CATALOGUE. Every price below is a fixed package price '
+    + 'set by the business. Quote these; never say a price is unavailable for a '
+    + 'model that has one.\n\nWHAT WE OFFER (all of it):\n';
+
+  for (const [name, list] of groups) {
+    const withPrice = priced(list);
+    const areas = list.map((p) => Number(p.total_floor_area)).filter(Boolean);
+    if (withPrice.length) {
+      const prices = withPrice.map((p) => Number(p.fixed_price));
+      out += `- ${name}: ${list.length} models, ${
+        areas.length ? Math.min(...areas) + '-' + Math.max(...areas) + ' sq.ft, ' : ''}${
+        formatTaka(Math.min(...prices))} to ${formatTaka(Math.max(...prices))}\n`;
+    } else {
+      out += `- ${name}: ${list.length} models, prices not published yet - take their number and have the team call back\n`;
     }
   }
 
-  if (!products || products.length === 0) return '';
-
-  let catalogText = '\nLIVE OFFICIAL PRODUCT CATALOG (Fixed Prices & Floor Areas from Official Spec Sheet):\n';
-  products.forEach(p => {
-    const priceStr = p.fixed_price ? formatTaka(p.fixed_price) : (p.price_per_sqft ? p.price_per_sqft + ' ' + p.price_currency + '/sq.ft.' : 'Contact for Quote');
-    const areaStr = p.total_floor_area ? `${p.total_floor_area} sq.ft` : 'Custom size';
-    catalogText += `- Model ${p.model_number}: "${p.title}" | Floor Area: ${areaStr} | Fixed Price: ${priceStr} | Page: /${p.slug}\n`;
-  });
-  return catalogText;
+  const detail = products.filter((p) => asked.includes(p.model_number)
+    || wanted.has(catName.get(p.category_id) || 'Other'));
+  if (detail.length && detail.length <= 40) {
+    out += '\nDETAIL FOR WHAT THEY ASKED ABOUT:\n';
+    detail.forEach((p) => { out += '- ' + line(p) + '\n'; });
+  } else {
+    // Nothing specific yet: one cheapest example per category, so an opening
+    // answer can still be concrete.
+    out += '\nEXAMPLES (cheapest in each category):\n';
+    for (const [, list] of groups) {
+      const withPrice = priced(list).sort((a, b) => a.fixed_price - b.fixed_price);
+      if (withPrice.length) out += '- ' + line(withPrice[0]) + '\n';
+    }
+  }
+  return out;
 }
 
 /**
@@ -117,7 +173,10 @@ async function callGroqAPI(messages, userContext = {}) {
     throw new Error('GROQ_API_KEY is not configured in server environment.');
   }
 
-  const dynamicCatalog = await getDynamicCatalogContext();
+  // The catalogue narrows to what they are asking about, so it needs the text.
+  const recentText = messages.filter((m) => m.role === 'user').slice(-3)
+    .map((m) => m.content || '').join(' ');
+  const dynamicCatalog = await getDynamicCatalogContext(recentText);
 
   // Language is an explicit user choice from the widget's EN/BN toggle, not
   // auto-detected from the message text - auto-detection was producing
@@ -198,8 +257,10 @@ your job, not a button's. Hand over when - and only when - one of these is true:
 
 Do NOT hand over just because a question is slightly unusual - try first.
 
-When you do hand over, say plainly that you are passing them to the team, and
-give the number in BOTH languages in the same message, like this:
+When you do hand over, say plainly that you are passing them to the team and
+give the number ONCE, in the language the customer is reading. Never print it
+twice, and never repeat the same message in the other language - they chose a
+language with the EN/BN toggle. Like this:
 
   বাংলা: এই প্রশ্নটার সঠিক উত্তর আমাদের ইঞ্জিনিয়ার ভাই দিতে পারবেন। সরাসরি
   হোয়াটসঅ্যাপে কথা বলুন: wa.me/8801781636613 (+880 1781-636613)
@@ -207,9 +268,12 @@ give the number in BOTH languages in the same message, like this:
   English: Our engineer can answer this one properly. Message the team directly
   on WhatsApp: wa.me/8801781636613 (+880 1781-636613)
 
-Keep whichever language the customer is using first, then the other one below
-it. Never apologise at length, never say you are "unable to" - just point them
-at the person who can help.
+Use only the customer's own language. Never apologise at length, never say you
+are "unable to" - just point them at the person who can help.
+
+NEVER hand over for a price that is in the catalogue above. If a model has a
+fixed price, give it. Handing over instead of answering a question you can
+answer is the single worst thing you can do here.
 
 Worked example of the right register:
   Customer: ভাই, ৩ কাঠা জমিতে দুই তলা বাড়ি করতে কত টাকা লাগতে পারে?
