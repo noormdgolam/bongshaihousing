@@ -164,13 +164,39 @@ async function getDynamicCatalogContext(recentText = '') {
   return out;
 }
 
+// Several keys, so one key's tokens-per-minute ceiling is not the whole
+// service's ceiling. GROQ_API_KEYS is comma-separated; GROQ_API_KEY still works
+// on its own, so a host with one key configured needs no change.
+//
+// Keys are read fresh each call rather than cached at require time: the .env is
+// edited on the host and the app is restarted, and a stale module-level copy
+// would quietly keep using the old set.
+function groqKeys() {
+  const many = String(process.env.GROQ_API_KEYS || '')
+    .split(',').map((k) => k.trim()).filter(Boolean);
+  if (many.length) return many;
+  const one = String(process.env.GROQ_API_KEY || '').trim();
+  return one ? [one] : [];
+}
+
+// Where the next request starts. Round-robin rather than always-first, so load
+// is spread instead of hammering key 1 until it 429s.
+let keyCursor = 0;
+
+// A failure worth retrying on a different key: rate limit, or a key that is
+// rejected outright. Anything else (a bad request, a dead model) would fail
+// identically on every key, so it is raised immediately.
+function shouldTryNextKey(status) {
+  return status === 429 || status === 401 || status === 403;
+}
+
 /**
  * Call Groq Cloud API with OpenAI-compatible payload
  */
 async function callGroqAPI(messages, userContext = {}) {
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    throw new Error('GROQ_API_KEY is not configured in server environment.');
+  const keys = groqKeys();
+  if (!keys.length) {
+    throw new Error('No Groq API key configured (set GROQ_API_KEYS or GROQ_API_KEY).');
   }
 
   // The catalogue narrows to what they are asking about, so it needs the text.
@@ -290,6 +316,31 @@ Worked example of the right register:
     max_tokens: 600,   // replies are meant to be 2-3 sentences; Groq reserves this against TPM
   });
 
+  // One attempt per key. A rate-limited or rejected key is the next key's
+  // problem, not the customer's.
+  const errors = [];
+  for (let attempt = 0; attempt < keys.length; attempt++) {
+    const idx = (keyCursor + attempt) % keys.length;
+    try {
+      const out = await sendWithKey(keys[idx], payload);
+      keyCursor = (idx + 1) % keys.length;   // next request starts on the next key
+      return out;
+    } catch (err) {
+      // Never log the key itself - stderr.log is readable over FTP.
+      const label = `key ${idx + 1}/${keys.length}`;
+      errors.push(`${label}: ${err.message}`);
+      if (!err.groqStatus || !shouldTryNextKey(err.groqStatus)) {
+        throw err;
+      }
+      console.warn(`[groq] ${label} unusable (${err.groqStatus}), trying the next key`);
+    }
+  }
+  throw new Error(`All ${keys.length} Groq key(s) failed. ${errors.join(' | ')}`);
+}
+
+// A single request on one key. Rejections carry groqStatus so the caller can
+// tell "this key is exhausted" from "this request is wrong".
+function sendWithKey(apiKey, payload) {
   return new Promise((resolve, reject) => {
     const req = https.request(
       GROQ_API_URL,
@@ -304,10 +355,8 @@ Worked example of the right register:
       },
       (res) => {
         // Collect raw Buffer chunks and decode once at the end. Bengali is
-        // almost entirely multi-byte UTF-8 sequences; decoding each TCP
-        // chunk separately (e.g. `body += chunk`) corrupts any character
-        // whose bytes happen to straddle a chunk boundary, producing
-        // scattered U+FFFD replacement characters mid-word.
+        // almost entirely multi-byte UTF-8 sequences; decoding each TCP chunk
+        // separately corrupts any character whose bytes straddle a boundary.
         const chunks = [];
         res.on('data', (chunk) => chunks.push(chunk));
         res.on('end', () => {
@@ -315,13 +364,16 @@ Worked example of the right register:
           if (res.statusCode >= 200 && res.statusCode < 300) {
             try {
               const data = JSON.parse(body);
-              const message = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : '';
+              const message = data.choices && data.choices[0] && data.choices[0].message
+                ? data.choices[0].message.content : '';
               resolve(message);
             } catch (e) {
               reject(new Error('Failed to parse Groq response: ' + e.message));
             }
           } else {
-            reject(new Error(`Groq API returned status ${res.statusCode}: ${body}`));
+            const err = new Error(`Groq API returned status ${res.statusCode}: ${body}`);
+            err.groqStatus = res.statusCode;
+            reject(err);
           }
         });
       }

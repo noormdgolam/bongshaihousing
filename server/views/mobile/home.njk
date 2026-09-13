@@ -244,9 +244,6 @@
   .view-head{ padding:18px 16px 4px; }
   .view-head h2{ font-size:20px; font-weight:700; }
   .view-head p{ margin:5px 0 0; font-size:12.5px; color:var(--m-muted); }
-  .view-foot{ padding:18px 16px 4px; margin:0; }
-  .view-foot a{ font-size:12.5px; font-weight:600; color:var(--m-primary); }
-  :root[data-theme="dark"] .view-foot a{ color:var(--m-primary-light); }
   .lnk{ background:none; border:none; font-family:inherit; cursor:pointer; font-size:12.5px; font-weight:600; color:var(--m-primary); padding:0; }
   :root[data-theme="dark"] .lnk{ color:var(--m-primary-light); }
   .empty{ padding:28px 16px; text-align:center; color:var(--m-muted); font-size:13px; }
@@ -630,7 +627,7 @@
     <p class="empty" id="modelEmpty" hidden>No models in this category.</p>
 
     {# Real link, so the full catalogue stays reachable without JS. #}
-    <p class="view-foot"><a href="/products-and-solutions.html">Open the full catalogue →</a></p>
+
   </section>
 
   {# A model opens here rather than on the desktop product page. #}
@@ -676,7 +673,7 @@
       {{ projectRow(pr) }}
       {% endfor %}
     </section>
-    <p class="view-foot"><a href="/projects.html">Open the full project list →</a></p>
+
   </section>
 
   </main>
