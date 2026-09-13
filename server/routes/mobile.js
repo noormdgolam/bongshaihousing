@@ -63,9 +63,11 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
       .select('id', 'model_number', 'slug', 'title', 'main_image', 'main_image_alt',
         'fixed_price', 'price_per_sqft', 'total_floor_area', 'bedrooms', 'bathrooms', 'category_id')
       .orderBy('sort_order')),
+    // All of them: the Projects tab is a view inside the shell now, not a
+    // 4-item teaser that sent the reader off to /projects.html.
     optional('projects', () => db('projects').where({ published: true })
       .select('title', 'location', 'image', 'slug', 'status_label')
-      .orderBy('sort_order').limit(4)),
+      .orderBy('sort_order')),
   ]);
 
   const catById = new Map(categories.map((c) => [c.id, c]));
@@ -112,12 +114,42 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
     };
   }).filter(Boolean);
 
+  // The whole catalogue for the Models tab. These rows are already in hand -
+  // the featured strip above filters this same array down to one per category -
+  // so the in-shell Models view costs no extra query. All 133 models come to
+  // ~15KB of list fields, small enough to ship in the document and switch to
+  // instantly, which is what makes the tab feel like an app rather than a link.
+  const catalogue = products
+    .filter((p) => p.slug)
+    .map((p) => ({
+      model: p.model_number,
+      slug: p.slug,
+      image: p.main_image,
+      alt: p.main_image_alt || `${p.model_number} - ${p.title || ''}`.trim(),
+      categoryId: p.category_id || 0,
+      category: (catById.get(p.category_id) || {}).name || 'Other',
+      area: p.total_floor_area || null,
+      beds: p.bedrooms || null,
+      baths: p.bathrooms || null,
+      price: taka(p.fixed_price),
+      rate: derivedRate(p) ? taka(derivedRate(p)) : null,
+    }));
+
+  // Only categories that actually have a model, so no filter chip leads to an
+  // empty list.
+  const withModels = new Set(catalogue.map((p) => p.categoryId));
+  const filters = categories
+    .filter((c) => withModels.has(c.id))
+    .map((c) => ({ id: c.id, name: c.name, n: catalogue.filter((p) => p.categoryId === c.id).length }));
+
   res.render('mobile/home.njk', {
     featured,
     categories: categories.filter((c) => c.landing_page_slug),
     projects,
     rateRange,
     calcRates,
+    catalogue,
+    filters,
     modelCount: products.length,
     projectCount: projects.length,
   });

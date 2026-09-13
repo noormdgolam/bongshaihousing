@@ -63,6 +63,15 @@
     background:var(--m-bg); color:var(--m-text);
     font-family:{{ (theme.font_body or "'Inter', system-ui, sans-serif") | safe }}, system-ui, sans-serif;
     -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    /* The three things that most make a web page feel like a web page on a
+       phone: the blue tap flash, the 300ms click delay, and the whole shell
+       rubber-banding on an overscroll. */
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    overscroll-behavior-y:none;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{ animation-duration:.001ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
   }
   .app{
     max-width:480px; margin:0 auto; min-height:100vh; position:relative;
@@ -129,6 +138,51 @@
   .dot{ width:6px;height:6px;border-radius:50%; background:var(--m-line); transition:width .2s,background .2s; }
   .dot.on{ background:var(--m-primary); width:16px; border-radius:3px; }
 
+  /* tab views */
+  .view[hidden]{ display:none; }
+  .view-head{ padding:18px 16px 4px; }
+  .view-head h2{ font-size:20px; font-weight:700; }
+  .view-head p{ margin:5px 0 0; font-size:12.5px; color:var(--m-muted); }
+  .view-foot{ padding:18px 16px 4px; margin:0; }
+  .view-foot a{ font-size:12.5px; font-weight:600; color:var(--m-primary); }
+  :root[data-theme="dark"] .view-foot a{ color:var(--m-primary-light); }
+  .lnk{ background:none; border:none; font-family:inherit; cursor:pointer; font-size:12.5px; font-weight:600; color:var(--m-primary); padding:0; }
+  :root[data-theme="dark"] .lnk{ color:var(--m-primary-light); }
+  .empty{ padding:28px 16px; text-align:center; color:var(--m-muted); font-size:13px; }
+
+  /* category filter chips */
+  .chips{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding:12px 16px 4px; position:sticky; top:56px; z-index:20; background:var(--m-bg); }
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto; background:var(--m-surface); border:1px solid var(--m-line);
+    color:var(--m-text); font-family:inherit; font-size:12px; font-weight:600;
+    padding:7px 13px; border-radius:100px; cursor:pointer; white-space:nowrap;
+    transition:background .15s, color .15s, transform .12s;
+  }
+  .chip i{ font-style:normal; opacity:.55; font-variant-numeric:tabular-nums; }
+  .chip.on{ background:var(--m-primary); border-color:var(--m-primary); color:#fff; }
+  .chip.on i{ opacity:.75; }
+  .chip:active{ transform:scale(.95); }
+
+  /* model grid */
+  .grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; padding:12px 16px 0; }
+  .card{ background:var(--m-card); border:1px solid var(--m-line); border-radius:var(--m-radius); overflow:hidden; box-shadow:var(--m-shadow); transition:transform .12s; }
+  .card[hidden]{ display:none; }
+  .card:active{ transform:scale(.97); }
+  .card img{ width:100%; height:104px; object-fit:cover; display:block; background:var(--m-surface); }
+  .card-ph{ display:grid; place-items:center; height:104px; background:var(--m-surface); color:var(--m-muted); }
+  .card .in{ padding:9px 10px 11px; }
+  .card .cat{ font-size:10px; color:var(--m-muted); }
+  .card .mdl{ font-size:12.5px; font-weight:700; margin-top:2px; }
+  .card .specs{ font-size:10.5px; color:var(--m-muted); margin-top:4px; }
+  .card .price{ margin-top:6px; font-size:12.5px; font-weight:800; color:var(--m-primary); font-variant-numeric:tabular-nums; }
+  .card .price span{ font-size:10px; font-weight:600; color:var(--m-muted); }
+  .card .price.muted{ color:var(--m-muted); font-weight:700; }
+  :root[data-theme="dark"] .card .price{ color:var(--m-primary-light); }
+
+  /* project rows without a usable photo get a tile, not an empty box */
+  .proj-ph{ width:58px;height:58px;border-radius:10px; background:var(--m-surface); color:var(--m-muted); display:grid; place-items:center; flex:0 0 auto; }
+
   /* sections */
   .sec{ padding:20px 16px 0; }
   .sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
@@ -192,10 +246,16 @@
     padding-bottom:env(safe-area-inset-bottom, 0px);
     display:flex; align-items:center; justify-content:space-around;
   }
-  .bnav a{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--m-muted); font-size:10px; font-weight:600; padding:6px 10px; }
-  .bnav a .ic{ display:flex; align-items:center; justify-content:center; height:20px; }
-  .bnav a[aria-current="page"]{ color:var(--m-primary); }
-  :root[data-theme="dark"] .bnav a[aria-current="page"]{ color:var(--m-primary-light); }
+  .bnav button{
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:none; border:none; font-family:inherit; cursor:pointer;
+    color:var(--m-muted); font-size:10px; font-weight:600; padding:6px 10px;
+    transition:color .15s, transform .12s;
+  }
+  .bnav button .ic{ display:flex; align-items:center; justify-content:center; height:20px; }
+  .bnav button.on{ color:var(--m-primary); }
+  .bnav button:active{ transform:scale(.92); }
+  :root[data-theme="dark"] .bnav button.on{ color:var(--m-primary-light); }
 
   .call-fab{
     position:fixed; z-index:45; right:16px;
@@ -253,15 +313,6 @@
   }
   .sheet-err{ font-size:12.5px; color:#b91c1c; margin:0; }
   .sheet-ok{ font-size:13.5px; color:#166534; font-weight:600; line-height:1.5; }
-  .support-fab{
-    position:fixed; z-index:45; right:16px;
-    bottom:calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 14px);
-    background:var(--m-primary); color:#fff; border:none;
-    display:flex; align-items:center; gap:7px; padding:11px 15px; border-radius:100px;
-    font-weight:700; font-size:12.5px; font-family:inherit; cursor:pointer;
-    box-shadow:0 8px 20px rgba(30,64,175,.35);
-  }
-  @media (min-width:480px){ .support-fab{ right:calc(50% - 224px); } }
 
   @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
 </style>
@@ -283,6 +334,31 @@
   </header>
 
   <main id="main">
+
+  {# One row definition for both the Home teaser and the Projects tab.
+     17 of the 18 project rows store the same string in title and location, so
+     the second line is printed only when it actually says something new. #}
+  {% macro projectRow(pr) %}
+  <a class="proj" href="/{{ pr.slug }}">
+    {% if pr.image and 'unavailable' not in pr.image %}
+      <img src="/{{ pr.image }}" alt="" loading="lazy" decoding="async">
+    {% else %}
+      <span class="proj-ph" aria-hidden="true">{{ icons.icon('map-pin', 18) }}</span>
+    {% endif %}
+    <div>
+      <div class="t">{{ pr.title }}</div>
+      {% if pr.location and pr.location | trim != pr.title | trim %}
+        <div class="s">{{ pr.location }}</div>
+      {% endif %}
+    </div>
+    {% if pr.status_label %}<span class="tag">{{ pr.status_label }}</span>{% endif %}
+  </a>
+  {% endmacro %}
+
+  {# Three sibling views in one document. The bottom bar swaps them without a
+     navigation, so a tab change costs nothing and the shell never unloads -
+     which is both what makes this read as an app and what Capacitor needs. #}
+  <section class="view active" id="view-home">
 
   <section class="facts" aria-label="Key figures">
     {% if rateRange %}<div class="fact">Rate <b>{{ rateRange.min }}–{{ rateRange.max }}</b> ৳/sqft</div>{% endif %}
@@ -377,16 +453,9 @@
 
   {% if projects.length %}
   <section class="sec">
-    <div class="sec-head"><h3>Delivered projects</h3><a href="/projects.html">See all</a></div>
-    {% for pr in projects %}
-    <a class="proj" href="/{{ pr.slug }}">
-      {% if pr.image %}<img src="/{{ pr.image }}" alt="" loading="lazy" decoding="async">{% endif %}
-      <div>
-        <div class="t">{{ pr.title }}</div>
-        {% if pr.location %}<div class="s">{{ pr.location }}</div>{% endif %}
-      </div>
-      {% if pr.status_label %}<span class="tag">{{ pr.status_label }}</span>{% endif %}
-    </a>
+    <div class="sec-head"><h3>Delivered projects</h3><button class="lnk" type="button" data-goto="projects">See all</button></div>
+    {% for pr in projects.slice(0, 4) %}
+    {{ projectRow(pr) }}
     {% endfor %}
   </section>
   {% endif %}
@@ -401,6 +470,63 @@
     </div>
   </section>
 
+  </section>{# /view-home #}
+
+  <section class="view" id="view-models" hidden>
+    <div class="view-head">
+      <h2>Models</h2>
+      <p>{{ modelCount }} models across {{ filters.length }} categories. Prices are package prices.</p>
+    </div>
+
+    <div class="chips" id="chips" role="tablist" aria-label="Filter by category">
+      <button class="chip on" type="button" data-cat="all" role="tab" aria-selected="true">All <i>{{ catalogue.length }}</i></button>
+      {% for f in filters %}
+      <button class="chip" type="button" data-cat="{{ f.id }}" role="tab" aria-selected="false">{{ f.name }} <i>{{ f.n }}</i></button>
+      {% endfor %}
+    </div>
+
+    <div class="grid" id="modelGrid">
+      {% for p in catalogue %}
+      <a class="card" href="/{{ p.slug }}" data-cat="{{ p.categoryId }}">
+        {% if p.image %}
+          <img src="/{{ p.image }}" alt="{{ p.alt }}" loading="lazy" decoding="async" width="168" height="104">
+        {% else %}
+          <span class="card-ph" aria-hidden="true">{{ icons.icon('home', 20) }}</span>
+        {% endif %}
+        <div class="in">
+          <div class="cat">{{ p.category }}</div>
+          <div class="mdl">{{ p.model }}</div>
+          <div class="specs">
+            {%- if p.area %}{{ p.area }} sqft{% endif -%}
+            {%- if p.beds %} · {{ p.beds }} bed{% endif -%}
+            {%- if p.baths %} · {{ p.baths }} bath{% endif -%}
+          </div>
+          {% if p.rate %}<div class="price">{{ p.rate }} <span>/sqft from</span></div>
+          {% elif p.price %}<div class="price">{{ p.price }}</div>
+          {% else %}<div class="price muted">Contact Sales</div>{% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="empty" id="modelEmpty" hidden>No models in this category.</p>
+
+    {# Real link, so the full catalogue stays reachable without JS. #}
+    <p class="view-foot"><a href="/products-and-solutions.html">Open the full catalogue →</a></p>
+  </section>
+
+  <section class="view" id="view-projects" hidden>
+    <div class="view-head">
+      <h2>Projects</h2>
+      <p>{{ projectCount }} delivered across Bangladesh.</p>
+    </div>
+    <section class="sec">
+      {% for pr in projects %}
+      {{ projectRow(pr) }}
+      {% endfor %}
+    </section>
+    <p class="view-foot"><a href="/projects.html">Open the full project list →</a></p>
+  </section>
+
   </main>
   <div style="height:10px"></div>
 </div>
@@ -410,7 +536,8 @@
    WhatsApp is offered from inside a conversation when it actually helps. #}
 
 
-<button class="support-fab" id="supportFab" type="button">{{ icons.icon('chat', 17) }} Chat with Support</button>
+{# The floating support pill is gone: Support is a tab now, and the pill sat
+   on top of the estimator's own inputs. #}
 
 <div class="sheet-backdrop" id="sheetBackdrop"></div>
 <div class="sheet" id="supportSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
@@ -436,12 +563,15 @@
   </div>
 </div>
 
+{# Buttons, not links: every tab acts inside the shell. Models and Projects
+   used to load the full desktop pages, and Support pointed at #support, an id
+   that was never in the document. #}
 <nav class="bnav" aria-label="Primary">
-  <a href="/m" aria-current="page"><span class="ic">{{ icons.icon('home', 20) }}</span>Home</a>
-  <a href="/products-and-solutions.html"><span class="ic">{{ icons.icon('folder', 20) }}</span>Models</a>
-  <a href="#calcTitle"><span class="ic">{{ icons.icon('calculator', 20) }}</span>Calculator</a>
-  <a href="/projects.html"><span class="ic">{{ icons.icon('map-pin', 20) }}</span>Projects</a>
-  <a href="#support"><span class="ic">{{ icons.icon('chat', 20) }}</span>Support</a>
+  <button type="button" data-view="home" class="on" aria-current="page"><span class="ic">{{ icons.icon('home', 20) }}</span>Home</button>
+  <button type="button" data-view="models"><span class="ic">{{ icons.icon('folder', 20) }}</span>Models</button>
+  <button type="button" data-act="calc"><span class="ic">{{ icons.icon('calculator', 20) }}</span>Calculator</button>
+  <button type="button" data-view="projects"><span class="ic">{{ icons.icon('map-pin', 20) }}</span>Projects</button>
+  <button type="button" data-act="support"><span class="ic">{{ icons.icon('chat', 20) }}</span>Support</button>
 </nav>
 
 <script>
@@ -531,7 +661,6 @@
   recalc();
 
   // ---- support sheet ------------------------------------------------------
-  var fab = document.getElementById('supportFab');
   var sheet = document.getElementById('supportSheet');
   var backdrop = document.getElementById('sheetBackdrop');
 
@@ -541,15 +670,92 @@
   }
   function closeSheet(){ sheet.classList.remove('open'); backdrop.classList.remove('open'); }
 
-  if (fab) fab.addEventListener('click', openSheet);
   if (backdrop) backdrop.addEventListener('click', closeSheet);
   var sx = document.getElementById('sheetClose');
   if (sx) sx.addEventListener('click', closeSheet);
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape' && sheet && sheet.classList.contains('open')) closeSheet();
   });
-  var navSupport = document.querySelector('.bnav a[href="#support"]');
-  if (navSupport) navSupport.addEventListener('click', function(e){ e.preventDefault(); openSheet(); });
+
+  // ---- tab views ----------------------------------------------------------
+  // Switching is local: no request, no reload, and each tab keeps its own
+  // scroll position the way a native tab bar does.
+  var views = {}, tabs = [].slice.call(document.querySelectorAll('.bnav button'));
+  [].forEach.call(document.querySelectorAll('.view'), function(v){
+    views[v.id.replace('view-', '')] = v;
+  });
+  var current = 'home';
+  var scrollMemory = { home: 0, models: 0, projects: 0 };
+
+  function showView(name, push){
+    if (!views[name] || name === current) return;
+    scrollMemory[current] = window.scrollY;
+    views[current].hidden = true;
+    views[current].classList.remove('active');
+    views[name].hidden = false;
+    views[name].classList.add('active');
+    current = name;
+
+    tabs.forEach(function(t){
+      var on = t.getAttribute('data-view') === name;
+      t.classList.toggle('on', on);
+      if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+    });
+
+    window.scrollTo(0, scrollMemory[name] || 0);
+    // The hash is what Android's back button walks, so a tab change is a
+    // history entry rather than an exit from the app.
+    if (push) history.pushState({ view: name }, '', name === 'home' ? '#' : '#' + name);
+  }
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      var v = t.getAttribute('data-view');
+      var a = t.getAttribute('data-act');
+      if (v) { showView(v, true); return; }
+      if (a === 'support') { openSheet(); return; }
+      if (a === 'calc') {
+        showView('home', true);
+        var c = document.getElementById('calcTitle');
+        if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // "See all" on the home teaser jumps to the Projects tab, not away.
+  [].forEach.call(document.querySelectorAll('[data-goto]'), function(b){
+    b.addEventListener('click', function(){ showView(b.getAttribute('data-goto'), true); });
+  });
+
+  window.addEventListener('popstate', function(e){
+    showView((e.state && e.state.view) || (location.hash || '#').slice(1) || 'home', false);
+  });
+  // Deep link: /m#models opens on that tab.
+  var initial = (location.hash || '').slice(1);
+  if (views[initial]) showView(initial, false);
+
+  // ---- model category filter ---------------------------------------------
+  var chips = [].slice.call(document.querySelectorAll('.chip'));
+  var cards = [].slice.call(document.querySelectorAll('#modelGrid .card'));
+  var empty = document.getElementById('modelEmpty');
+  chips.forEach(function(ch){
+    ch.addEventListener('click', function(){
+      var want = ch.getAttribute('data-cat');
+      chips.forEach(function(c){
+        var on = c === ch;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      var shown = 0;
+      cards.forEach(function(card){
+        var hit = want === 'all' || card.getAttribute('data-cat') === want;
+        card.hidden = !hit;
+        if (hit) shown++;
+      });
+      if (empty) empty.hidden = shown > 0;
+      window.scrollTo(0, 0);
+    });
+  });
 
   // Same number rule as lib/leads.js, so a wrong one is caught before a round trip.
   function normalisePhone(raw){
