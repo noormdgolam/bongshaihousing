@@ -247,6 +247,28 @@
   .msg .bh-ai-table th, .msg .bh-ai-table td{ border:1px solid var(--m-line); padding:6px 8px; text-align:left; }
   .msg .bh-ai-table th{ background:var(--m-surface); font-weight:700; }
 
+  /* support invitation */
+  .ask-card{ background:var(--m-card); border:1px solid var(--m-line); border-radius:var(--m-radius-xl);
+    padding:16px; box-shadow:var(--m-shadow); }
+  .ask-top{ display:flex; gap:11px; align-items:flex-start; }
+  .ask-ic{ flex:0 0 auto; width:38px; height:38px; border-radius:10px; display:grid; place-items:center;
+    background:color-mix(in srgb, var(--m-primary) 12%, transparent); color:var(--m-primary); }
+  :root[data-theme="dark"] .ask-ic{ color:var(--m-primary-light); }
+  .ask-top b{ font-size:15px; display:block; }
+  .ask-top small{ font-size:12px; color:var(--m-muted); }
+  .ask-list{ margin:12px 0 0; padding-left:0; list-style:none; }
+  .ask-list li{ font-size:12.5px; color:var(--m-text); padding:5px 0 5px 20px; position:relative; }
+  .ask-list li::before{ content:"✓"; position:absolute; left:0; color:var(--m-primary); font-weight:700; }
+  :root[data-theme="dark"] .ask-list li::before{ color:var(--m-primary-light); }
+  .ask-note{ margin:10px 0 0; font-size:11.5px; color:var(--m-muted); line-height:1.5; }
+  .ask-go{ display:block; width:100%; margin-top:13px; padding:13px; border:none; border-radius:11px;
+    background:var(--m-primary); color:#fff; font-family:inherit; font-size:14px; font-weight:700;
+    cursor:pointer; transition:transform .12s; }
+  .ask-go:active{ transform:scale(.97); }
+  .ask-go-sm{ margin-top:10px; padding:11px; font-size:13px; }
+  .ask-call{ display:block; text-align:center; margin-top:9px; font-size:12.5px; font-weight:600;
+    color:var(--m-muted); }
+
   /* support conversation */
   .chat{ display:flex; flex-direction:column; gap:8px; padding:4px 0 2px; overflow-y:auto; max-height:46vh; }
   .msg{ max-width:82%; padding:9px 12px; border-radius:14px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; word-wrap:break-word; }
@@ -544,6 +566,28 @@
     </div>
   </section>
 
+  {# Support, before the phone. Says what it answers, in specifics the
+     assistant can actually deliver from the catalogue. #}
+  <section class="sec">
+    <div class="ask-card">
+      <div class="ask-top">
+        <span class="ask-ic">{{ icons.icon('chat', 20) }}</span>
+        <div>
+          <b>কিছু জানার আছে?</b>
+          <small>উত্তর সাথে সাথে, ফোন করার আগেই</small>
+        </div>
+      </div>
+      <ul class="ask-list">
+        <li>যেকোনো মডেলের প্যাকেজ দাম</li>
+        <li>সাইজ, রুম লেআউট, কত তলা</li>
+        <li>কত দিনে তৈরি, কী কী থাকবে</li>
+      </ul>
+      <p class="ask-note">উত্তর না পেলে আমাদের টিম সরাসরি ধরবে।</p>
+      <button type="button" class="ask-go" data-act="support-open">লিখে জিজ্ঞাসা করুন</button>
+      <a class="ask-call" href="tel:{{ (theme.hotline_phone or '+8801781636613') | replace(' ', '') | replace('-', '') }}">অথবা ফোন করুন</a>
+    </div>
+  </section>
+
   <section class="calc" aria-labelledby="calcTitle">
     <h3 id="calcTitle">Estimate your cost</h3>
     <p class="sub">An indicative range for a size we have not built yet. Every model above has a fixed package price.</p>
@@ -585,6 +629,9 @@
       <div class="lbl">Estimated package range</div>
       <div class="amt" id="calcOut">—</div>
       <p class="note"><span id="calcBasis"></span>An indicative range from published model rates, not a quotation. Final cost depends on site conditions, finish level and structural design.</p>
+      {# The highest-intent moment on the page: they have a number and are
+         least sure of it. Ask here, not on the phone. #}
+      <button type="button" class="ask-go ask-go-sm" id="askEstimate" hidden>এই হিসাব নিয়ে জিজ্ঞাসা করুন</button>
     </div>
   </section>
 
@@ -858,6 +905,8 @@
     var hi = parseFloat(parts[1]) * sqft * mult;
 
     out.textContent = lo === hi ? '৳' + taka(lo) : '৳' + taka(lo) + ' – ৳' + taka(hi);
+    var askBtn = document.getElementById('askEstimate');
+    if (askBtn) askBtn.hidden = false;   // there is now something to ask about
     if (basis) {
       // The rate behind this is internal arithmetic; show the assumption the
       // customer can check (the size), not the number we divided by.
@@ -1377,6 +1426,30 @@
       location.href = "/?desktop=1";
     });
   }
+
+  // Carries what they just entered into the conversation, so the team reads
+  // the actual question instead of "hello".
+  var askEstimateBtn = document.getElementById('askEstimate');
+  if (askEstimateBtn) {
+    askEstimateBtn.addEventListener('click', function(){
+      var k = (katha && katha.value) || '';
+      var f = (floors && floors.options[floors.selectedIndex] || {}).text || '';
+      var fin = (finish && finish.options[finish.selectedIndex] || {}).text || '';
+      var ty = (type && type.options[type.selectedIndex] || {}).text || '';
+      var estimate = (document.getElementById('calcOut') || {}).textContent || '';
+      var msg = k + '\u0995\u09be\u09a0\u09be \u099c\u09ae\u09bf, ' + f + ' \u09a4\u09b2\u09be, ' + fin + ', ' + ty
+        + '\u0964 \u0986\u09a8\u09c1\u09ae\u09be\u09a8\u09bf\u0995 ' + estimate + '\u0964 \u098f\u0987 \u09b9\u09bf\u09b8\u09be\u09ac\u099f\u09be \u09a8\u09bf\u09df\u09c7 \u099c\u09be\u09a8\u09a4\u09c7 \u099a\u09be\u0987\u0964';
+      openSheet();
+      var inp = document.getElementById('chatInput');
+      if (inp) setTimeout(function(){ inp.value = msg; }, 200);
+    });
+  }
+
+  // Both invitations open the same sheet the Support tab does.
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-act="support-open"]') : null;
+    if (b) openSheet();
+  });
 
   // ---- support conversation ----------------------------------------------
   // The name+number gate stays: an enquiry the business cannot ring back is
