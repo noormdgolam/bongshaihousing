@@ -2,6 +2,7 @@ const express = require('express');
 const { callGroqAPI } = require('../lib/ai-assistant');
 const { stripTags } = require('../lib/sanitize');
 const supportChats = require('../lib/support-chats');
+const { sendTelegramAlert } = require('../lib/telegram');
 
 const router = express.Router();
 
@@ -30,6 +31,37 @@ function checkRateLimit(ip) {
   }
 
   return record.count <= maxRequests;
+}
+
+// One Telegram alert per conversation. A five-message chat should buzz the
+// phone once, with who it is and how to ring them back - not five times.
+// Bounded so a long-running process cannot grow this forever.
+const notifiedChats = new Set();
+
+function alertNewChat(chat, id, context, firstMessage) {
+  if (!chat || notifiedChats.has(chat.id)) return;
+  notifiedChats.add(chat.id);
+  if (notifiedChats.size > 500) {
+    // Oldest first; Set preserves insertion order.
+    const drop = notifiedChats.values().next().value;
+    notifiedChats.delete(drop);
+  }
+
+  const where = context.pageUrl === '/m' ? 'Mobile app' : (context.pageUrl || 'website');
+  const lines = [
+    '\u{1F4AC} New Customer Support chat',
+    '',
+    'Name : ' + (id.name || '-'),
+    'Phone: ' + (id.phone || '-'),
+    'From : ' + where,
+    '',
+    'First message:',
+    String(firstMessage || '').slice(0, 300),
+    '',
+    'Read the full chat: https://bongshaihousing.com/admin/support-chats',
+  ];
+  // Fire and forget: an alert must never delay or fail the customer's reply.
+  sendTelegramAlert(lines.join('\n')).catch(() => {});
 }
 
 router.post('/api/ai-chat', async (req, res) => {
@@ -92,6 +124,7 @@ router.post('/api/ai-chat', async (req, res) => {
     });
     const latest = sanitizedMessages[sanitizedMessages.length - 1];
     if (chat && latest && latest.role === 'user') await supportChats.addMessage(chat.id, 'user', latest.content);
+    alertNewChat(chat, id, sanitizedContext, latest && latest.content);
   } catch (e) {
     // Never let logging failures break the customer's conversation.
     console.error('support chat capture failed:', e.message);
