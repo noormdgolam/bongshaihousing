@@ -257,7 +257,14 @@
   .msearch button{ background:none; border:none; color:var(--m-muted); font-size:14px; cursor:pointer; padding:0 2px; }
 
   /* category filter chips */
-  .chips{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding:12px 16px 4px; position:sticky; top:56px; z-index:20; background:var(--m-bg); }
+  /* The row scrolls, and the last chip clipped at the edge read as broken
+     rather than scrollable. A fade says there is more to the right. */
+  .chips-wrap{ position:sticky; top:56px; z-index:20; background:var(--m-bg); }
+  .chips-wrap::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:28px;
+    pointer-events:none; opacity:0; transition:opacity .18s;
+    background:linear-gradient(90deg, transparent, var(--m-bg)); }
+  .chips-wrap.more::after{ opacity:1; }
+  .chips{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding:12px 16px 4px; }
   .chips::-webkit-scrollbar{display:none;}
   .chip{
     flex:0 0 auto; background:var(--m-surface); border:1px solid var(--m-line);
@@ -614,11 +621,13 @@
       <button type="button" id="searchClear" aria-label="Clear search" hidden>✕</button>
     </div>
 
+    <div class="chips-wrap" id="chipsWrap">
     <div class="chips" id="chips" role="tablist" aria-label="Filter by category">
       <button class="chip on" type="button" data-cat="all" role="tab" aria-selected="true">All <i>{{ catalogue.length }}</i></button>
       {% for f in filters %}
       <button class="chip" type="button" data-cat="{{ f.id }}" role="tab" aria-selected="false">{{ f.name }} <i>{{ f.n }}</i></button>
       {% endfor %}
+    </div>
     </div>
 
     {# Rendered on demand from the JSON below. Server-rendering all 133 cards
@@ -986,6 +995,20 @@
       window.scrollTo(0, 0);
     });
   });
+
+  // Show the fade only while there is more row to scroll to.
+  var chipsWrap = document.getElementById("chipsWrap");
+  var chipsRow = document.getElementById("chips");
+  function updateChipFade(){
+    if (!chipsWrap || !chipsRow) return;
+    var more = chipsRow.scrollWidth - chipsRow.clientWidth - chipsRow.scrollLeft > 8;
+    chipsWrap.classList.toggle("more", more);
+  }
+  if (chipsRow) {
+    chipsRow.addEventListener("scroll", updateChipFade, { passive: true });
+    window.addEventListener("resize", updateChipFade, { passive: true });
+    updateChipFade();
+  }
 
   function selectChip(id){
     var want = String(id);
