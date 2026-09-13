@@ -891,7 +891,7 @@
   // Passing it now opens a conversation instead of ending one, and every turn
   // is stored server-side so the Support Chats dashboard sees mobile too.
   var identity = null;
-  var history = [];
+  var chatLog = [];   // NOT `history` - that shadows window.history
   var thread = document.getElementById('chatThread');
   var cform = document.getElementById('chatForm');
   var cinput = document.getElementById('chatInput');
@@ -951,7 +951,7 @@
   }
 
   async function send(text){
-    history.push({ role: 'user', content: text });
+    chatLog.push({ role: 'user', content: text });
     bubble('you', text);
     cinput.value = '';
     csend.disabled = true;
@@ -961,7 +961,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: history,
+          messages: chatLog,
           context: { pageUrl: location.pathname, pageTitle: document.title, language: 'bn' },
           identity: { name: identity.name, phone: identity.phone, sessionToken: sessionToken }
         })
@@ -970,7 +970,7 @@
       typing.remove();
       var reply = (data && data.message) || 'দুঃখিত, এই মুহূর্তে উত্তর দিতে পারছি না। হোয়াটসঅ্যাপে কথা বলুন: wa.me/8801781636613';
       bubble('them', reply);
-      if (data && data.success) history.push({ role: 'assistant', content: reply });
+      if (data && data.success) chatLog.push({ role: 'assistant', content: reply });
     } catch (e) {
       typing.remove();
       bubble('them', 'সংযোগে সমস্যা হচ্ছে। হোয়াটসঅ্যাপে কথা বলুন: wa.me/8801781636613');
