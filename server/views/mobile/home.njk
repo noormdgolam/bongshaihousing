@@ -221,6 +221,32 @@
   .dt-table td{ padding:8px; border-bottom:1px solid var(--m-line); font-variant-numeric:tabular-nums; }
   .dt-table tr:last-child td{ border-bottom:none; }
 
+  /* chat: starting prompts, language, and the shared formatter’s link boxes */
+  .sheet-lang{ margin-left:auto; background:var(--m-surface); border:1px solid var(--m-line);
+    color:var(--m-text); font-family:inherit; font-size:11px; font-weight:700;
+    padding:5px 9px; border-radius:7px; cursor:pointer; }
+  .chat-chips{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding:2px 0 8px; }
+  .chat-chips::-webkit-scrollbar{ display:none; }
+  .chat-chips button{ flex:0 0 auto; background:var(--m-surface); border:1px solid var(--m-line);
+    color:var(--m-text); font-family:inherit; font-size:12px; font-weight:600;
+    padding:8px 13px; border-radius:100px; cursor:pointer; white-space:nowrap; }
+  .chat-chips button:active{ transform:scale(.95); }
+
+  /* the formatter emits these; without styles they were bare underlined text */
+  .msg .bh-ai-link-box{ display:flex; align-items:center; gap:9px; margin:8px 0 2px;
+    padding:9px 11px; border-radius:11px; text-decoration:none;
+    background:var(--m-surface); border:1px solid var(--m-line); }
+  .msg .bh-ai-link-wa{ background:rgba(37,211,102,.12); border-color:rgba(37,211,102,.45); }
+  .msg .bh-ai-link-ic{ display:flex; flex:0 0 auto; color:var(--m-primary); }
+  .msg .bh-ai-link-wa .bh-ai-link-ic{ color:#0f9d58; }
+  .msg .bh-ai-link-tx{ display:flex; flex-direction:column; min-width:0; }
+  .msg .bh-ai-link-tx b{ font-size:12.5px; }
+  .msg .bh-ai-link-tx small{ font-size:11px; color:var(--m-muted); }
+  .msg .bh-ai-table-wrap{ overflow-x:auto; margin:8px 0; }
+  .msg .bh-ai-table{ border-collapse:collapse; font-size:12px; width:100%; }
+  .msg .bh-ai-table th, .msg .bh-ai-table td{ border:1px solid var(--m-line); padding:6px 8px; text-align:left; }
+  .msg .bh-ai-table th{ background:var(--m-surface); font-weight:700; }
+
   /* support conversation */
   .chat{ display:flex; flex-direction:column; gap:8px; padding:4px 0 2px; overflow-y:auto; max-height:46vh; }
   .msg{ max-width:82%; padding:9px 12px; border-radius:14px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; word-wrap:break-word; }
@@ -706,6 +732,7 @@
       <div class="t1" id="sheetTitle">Customer Support</div>
       <div class="t2">Online</div>
     </div>
+    <button class="sheet-lang" id="chatLang" type="button" aria-label="Switch language">EN</button>
     <button class="sheet-x" id="sheetClose" type="button" aria-label="Close">✕</button>
   </div>
   <div class="sheet-body">
@@ -719,6 +746,7 @@
     </form>
     <p class="sheet-ok" id="sheetOk" hidden>ধন্যবাদ! আমাদের টিম শীঘ্রই যোগাযোগ করবে।<br>
       <span style="font-size:12px;font-weight:400">Thank you — our team will contact you shortly.</span></p>
+    <div class="chat-chips" id="chatChips" hidden></div>
     <div class="chat" id="chatThread" hidden role="log" aria-live="polite" aria-label="Conversation"></div>
   </div>
 
@@ -1128,6 +1156,8 @@
 
     html += '<div class="dt-acts">'
       + '<button type="button" class="dt-primary" data-ask="' + esc(d.model) + '">Ask about this model</button>'
+      + '<button type="button" class="dt-plain" data-share="' + esc(d.slug) + '" data-share-title="'
+      + esc(d.model + ' - ' + (d.category || 'Bongshai Housing')) + '">Share this model</button>'
       + '</div>';
 
     // Every size option, each with its own room layout.
@@ -1214,6 +1244,27 @@
       openSheet();
       var inp = document.getElementById('chatInput');
       if (inp) setTimeout(function(){ inp.value = ask.getAttribute('data-ask') + ' সম্পর্কে জানতে চাই'; }, 200);
+    }
+  });
+
+  // Share a model. Web Share opens the device's own sheet - WhatsApp and
+  // Messenger are in it, which is where this audience actually shares.
+  document.addEventListener('click', async function(e){
+    var btn = e.target.closest ? e.target.closest('[data-share]') : null;
+    if (!btn) return;
+    var url = location.origin + '/' + btn.getAttribute('data-share');
+    var title = btn.getAttribute('data-share-title') || document.title;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: title, url: url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      var was = btn.textContent;
+      btn.textContent = '\u09b2\u09bf\u0982\u0995 \u0995\u09aa\u09bf \u09b9\u09df\u09c7\u099b\u09c7';
+      setTimeout(function(){ btn.textContent = was; }, 1800);
+    } catch (err) {
+      // A cancelled share is not a failure and must not look like one.
     }
   });
 
@@ -1364,7 +1415,51 @@
     return d;
   }
 
+  // Starting prompts, in whichever language is showing. Same idea as the
+  // website widget's chips - a customer who does not know what to ask still has
+  // a way in.
+  var chatLangCode = 'bn';
+  var CHAT_CHIPS = {
+    bn: [
+      ['\u0996\u09b0\u099a \u09b9\u09bf\u09b8\u09be\u09ac \u0995\u09b0\u09c1\u09a8', '\u09e9 \u0995\u09be\u09a0\u09be \u099c\u09ae\u09bf\u09a4\u09c7 \u09a6\u09c1\u0987 \u09a4\u09b2\u09be \u09ac\u09be\u09a1\u09bc\u09bf\u09a4\u09c7 \u0995\u09a4 \u0996\u09b0\u099a?'],
+      ['\u0995\u09a4 \u09a6\u09bf\u09a8\u09c7 \u09a4\u09c8\u09b0\u09bf?', '\u098f\u0995\u099f\u09be \u09ac\u09be\u09a1\u09bc\u09bf \u09a4\u09c8\u09b0\u09bf \u09b9\u09a4\u09c7 \u0995\u09a4 \u09a6\u09bf\u09a8 \u09b2\u09be\u0997\u09c7?'],
+      ['\u0995\u09a8\u099f\u09c7\u0987\u09a8\u09be\u09b0 \u09b9\u09be\u0989\u099c', '\u0995\u09a8\u099f\u09c7\u0987\u09a8\u09be\u09b0 \u09b9\u09be\u0989\u099c\u09c7\u09b0 \u09b0\u09c7\u099f \u0995\u09a4?'],
+      ['\u09b8\u09ac \u09ae\u09a1\u09c7\u09b2', '\u0986\u09aa\u09a8\u09be\u09a6\u09c7\u09b0 \u0995\u09bf \u0995\u09bf \u09ae\u09a1\u09c7\u09b2 \u0986\u099b\u09c7?']
+    ],
+    en: [
+      ['Cost estimate', 'What would a two-storey house on 3 katha cost?'],
+      ['How long?', 'How long does it take to build a house?'],
+      ['Container house', 'What are the rates for a Container House?'],
+      ['All models', 'What models do you offer?']
+    ]
+  };
+
+  var chipsBox = document.getElementById('chatChips');
+  var langBtn = document.getElementById('chatLang');
+
+  function paintChips(){
+    if (!chipsBox) return;
+    chipsBox.innerHTML = '';
+    CHAT_CHIPS[chatLangCode].forEach(function(pair){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = pair[0];
+      btn.addEventListener('click', function(){ send(pair[1]); });
+      chipsBox.appendChild(btn);
+    });
+  }
+
+  if (langBtn) {
+    langBtn.addEventListener('click', function(){
+      chatLangCode = chatLangCode === 'bn' ? 'en' : 'bn';
+      // The button shows the language you would switch TO.
+      langBtn.textContent = chatLangCode === 'bn' ? 'EN' : '\u09ac\u09be\u0982';
+      paintChips();
+    });
+  }
+
   async function send(text){
+    if (chipsBox) chipsBox.hidden = true;   // they were a way in, not a menu
     chatLog.push({ role: 'user', content: text });
     bubble('you', text);
     cinput.value = '';
@@ -1376,7 +1471,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: chatLog,
-          context: { pageUrl: location.pathname, pageTitle: document.title, language: 'bn' },
+          context: { pageUrl: location.pathname, pageTitle: document.title, language: chatLangCode },
           identity: { name: identity.name, phone: identity.phone, sessionToken: sessionToken }
         })
       });

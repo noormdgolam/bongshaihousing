@@ -888,5 +888,33 @@
   });
 })();
 </script>
+<script>
+(function(){
+  // Share lives on model pages only - one handler here rather than 132 copies.
+  var btns = document.querySelectorAll('.bh-share-btn');
+  if (!btns.length) return;
+
+  Array.prototype.forEach.call(btns, function(btn){
+    btn.addEventListener('click', async function(){
+      var url = location.origin + location.pathname;
+      var title = (document.title || 'Bongshai Housing').split(' | ')[0];
+      try {
+        if (navigator.share) {
+          // The device's own sheet - WhatsApp and Messenger are in it, which is
+          // where this audience actually shares.
+          await navigator.share({ title: title, url: url });
+          return;
+        }
+        await navigator.clipboard.writeText(url);
+        var was = btn.textContent;
+        btn.textContent = 'Link copied';
+        setTimeout(function(){ btn.textContent = was; }, 1800);
+      } catch (e) {
+        // A cancelled share is not a failure and must not be shown as one.
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>
