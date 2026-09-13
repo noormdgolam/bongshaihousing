@@ -150,6 +150,14 @@
   :root[data-theme="dark"] .lnk{ color:var(--m-primary-light); }
   .empty{ padding:28px 16px; text-align:center; color:var(--m-muted); font-size:13px; }
 
+  /* model search */
+  .msearch{ display:flex; align-items:center; gap:8px; margin:12px 16px 0; padding:9px 12px;
+    background:var(--m-surface); border:1px solid var(--m-line); border-radius:11px; color:var(--m-muted); }
+  .msearch input{ flex:1; min-width:0; border:none; background:none; outline:none; font-family:inherit;
+    font-size:13.5px; color:var(--m-text); }
+  .msearch input::-webkit-search-cancel-button{ display:none; }
+  .msearch button{ background:none; border:none; color:var(--m-muted); font-size:14px; cursor:pointer; padding:0 2px; }
+
   /* category filter chips */
   .chips{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding:12px 16px 4px; position:sticky; top:56px; z-index:20; background:var(--m-bg); }
   .chips::-webkit-scrollbar{display:none;}
@@ -327,9 +335,9 @@
       <b>Bongshai <i>Housing</i></b>
     </div>
     <div class="bar-actions">
-      <a class="ibtn" href="/products-and-solutions.html" aria-label="Search models">⌕</a>
+      <button class="ibtn" id="searchBtn" type="button" aria-label="Search models">{{ icons.icon('search', 17) }}</button>
       <button class="ibtn" id="themeBtn" type="button" aria-label="Switch between light and dark theme">◐</button>
-      <a class="ibtn" href="tel:{{ (theme.hotline_phone or '+8801781636613') | replace(' ', '') | replace('-', '') }}" aria-label="Call Bongshai Housing">✆</a>
+      <a class="ibtn" href="tel:{{ (theme.hotline_phone or '+8801781636613') | replace(' ', '') | replace('-', '') }}" aria-label="Call Bongshai Housing">{{ icons.icon('phone', 17) }}</a>
     </div>
   </header>
 
@@ -369,7 +377,7 @@
   <div class="hero-wrap">
     <div class="hero-scroll" id="heroScroll">
       {% for c in categories %}{% if loop.index0 < 4 %}
-      <a class="hero" href="/{{ c.landing_page_slug }}">
+      <a class="hero" href="/{{ c.landing_page_slug }}" data-cat-open="{{ c.id }}">
         {% if c.hero_image %}<img src="/{{ c.hero_image }}" alt="" loading="{{ 'eager' if loop.first else 'lazy' }}" decoding="async">{% endif %}
         <span class="hero-tag">{{ c.name }}</span>
         <div class="hero-body">
@@ -384,7 +392,7 @@
   </div>
 
   <section class="sec">
-    <div class="sec-head"><h3>Popular models</h3><a href="/products-and-solutions.html">View all</a></div>
+    <div class="sec-head"><h3>Popular models</h3><button class="lnk" type="button" data-goto="models">View all</button></div>
     <div class="pkgs">
       {% for p in featured %}
       <a class="pkg" href="/{{ p.slug }}">
@@ -476,6 +484,12 @@
       <p>{{ modelCount }} models across {{ filters.length }} categories. Prices are package prices.</p>
     </div>
 
+    <div class="msearch">
+      <span aria-hidden="true">{{ icons.icon('search', 16) }}</span>
+      <input type="search" id="modelSearch" placeholder="Search model, size or category" autocomplete="off" aria-label="Search models">
+      <button type="button" id="searchClear" aria-label="Clear search" hidden>✕</button>
+    </div>
+
     <div class="chips" id="chips" role="tablist" aria-label="Filter by category">
       <button class="chip on" type="button" data-cat="all" role="tab" aria-selected="true">All <i>{{ catalogue.length }}</i></button>
       {% for f in filters %}
@@ -485,7 +499,8 @@
 
     <div class="grid" id="modelGrid">
       {% for p in catalogue %}
-      <a class="card" href="/{{ p.slug }}" data-cat="{{ p.categoryId }}">
+      <a class="card" href="/{{ p.slug }}" data-cat="{{ p.categoryId }}"
+         data-q="{{ (p.model ~ ' ' ~ p.category ~ ' ' ~ (p.area or '') ~ ' sqft ' ~ (p.beds or '') ~ ' bed') | lower }}">
         {% if p.image %}
           <img src="/{{ p.image }}" alt="{{ p.alt }}" loading="lazy" decoding="async" width="168" height="104">
         {% else %}
@@ -734,25 +749,80 @@
   var initial = (location.hash || '').slice(1);
   if (views[initial]) showView(initial, false);
 
-  // ---- model category filter ---------------------------------------------
+  // ---- model search and category filter -----------------------------------
+  // One apply() so the chip and the search box narrow the same list together
+  // rather than fighting each other.
   var chips = [].slice.call(document.querySelectorAll('.chip'));
   var cards = [].slice.call(document.querySelectorAll('#modelGrid .card'));
   var empty = document.getElementById('modelEmpty');
+  var searchIn = document.getElementById('modelSearch');
+  var searchClear = document.getElementById('searchClear');
+  var cat = 'all', term = '';
+
+  function apply(){
+    var shown = 0;
+    for (var i = 0; i < cards.length; i++) {
+      var c = cards[i];
+      var hit = (cat === 'all' || c.getAttribute('data-cat') === cat)
+        && (!term || (c.getAttribute('data-q') || '').indexOf(term) !== -1);
+      c.hidden = !hit;
+      if (hit) shown++;
+    }
+    if (empty) empty.hidden = shown > 0;
+    if (searchClear) searchClear.hidden = !term;
+  }
+
   chips.forEach(function(ch){
     ch.addEventListener('click', function(){
-      var want = ch.getAttribute('data-cat');
+      cat = ch.getAttribute('data-cat');
       chips.forEach(function(c){
         var on = c === ch;
         c.classList.toggle('on', on);
         c.setAttribute('aria-selected', on ? 'true' : 'false');
       });
-      var shown = 0;
-      cards.forEach(function(card){
-        var hit = want === 'all' || card.getAttribute('data-cat') === want;
-        card.hidden = !hit;
-        if (hit) shown++;
-      });
-      if (empty) empty.hidden = shown > 0;
+      apply();
+      window.scrollTo(0, 0);
+    });
+  });
+
+  function selectChip(id){
+    var want = String(id);
+    for (var i = 0; i < chips.length; i++) {
+      if (chips[i].getAttribute('data-cat') === want) { chips[i].click(); return true; }
+    }
+    return false;
+  }
+
+  if (searchIn) {
+    searchIn.addEventListener('input', function(){
+      term = searchIn.value.trim().toLowerCase();
+      apply();
+    });
+  }
+  if (searchClear) {
+    searchClear.addEventListener('click', function(){
+      searchIn.value = ''; term = ''; apply(); searchIn.focus();
+    });
+  }
+
+  // The magnifier in the top bar opens the Models tab on the search field
+  // instead of loading the desktop catalogue.
+  var searchBtn = document.getElementById('searchBtn');
+  if (searchBtn) {
+    searchBtn.addEventListener('click', function(){
+      showView('models', true);
+      if (searchIn) setTimeout(function(){ searchIn.focus(); }, 120);
+    });
+  }
+
+  // A hero card opens the Models tab already filtered to its category.
+  [].forEach.call(document.querySelectorAll('[data-cat-open]'), function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('data-cat-open');
+      if (!id) return;
+      e.preventDefault();              // the href stays as the no-JS fallback
+      showView('models', true);
+      if (!selectChip(id)) { cat = 'all'; apply(); }
       window.scrollTo(0, 0);
     });
   });
