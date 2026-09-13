@@ -213,7 +213,7 @@ const bdGeoData = [
     "division": "Rajshahi Division"
   },
   {
-    "district": "Bogura",
+    "district": "Bogra",
     "coordinates": "24.8465228, 89.377755",
     "upazillas": [
       "Kahaloo",
