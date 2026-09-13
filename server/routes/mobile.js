@@ -53,6 +53,33 @@ const optional = async (table, build, fallback = []) => {
   }
 };
 
+// The homepage's own 4-step process, parsed out of index.njk once and kept.
+// Restating the copy here would mean an edit to the page no longer reaches the
+// app, which is exactly the drift this project keeps finding.
+let processStepsCache = null;
+async function readProcessSteps(req) {
+  if (processStepsCache) return processStepsCache;
+  try {
+    const html = await new Promise((resolve, reject) => {
+      req.app.render('pages/index.njk', { ...(req.res ? req.res.locals : {}) },
+        (err, out) => (err ? reject(err) : resolve(out)));
+    });
+    const out = [];
+    const re = /<div class="process-step[^"]*"[\s\S]*?<div class="step-num">(\d+)[\s\S]*?<h3 class="step-title">([\s\S]*?)<\/h3>[\s\S]*?<p class="step-text">([\s\S]*?)<\/p>/gi;
+    const clean = (t) => t.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&')
+      .replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+    let m;
+    while ((m = re.exec(html)) !== null) {
+      out.push({ n: m[1], title: clean(m[2]), text: clean(m[3]) });
+    }
+    if (out.length) processStepsCache = out;
+    return out;
+  } catch (e) {
+    console.warn('[mobile] process steps unavailable:', e.message);
+    return [];
+  }
+}
+
 router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
   const [categories, products, projects] = await Promise.all([
     optional('categories', () => db('categories')
@@ -160,12 +187,24 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
     subtitle: flat(pr.location) && flat(pr.location) !== flat(pr.title) ? pr.location : null,
   }));
 
+  // What clients said, straight from the table the desktop page reads.
+  const testimonials = await optional('testimonials', () => db('testimonials')
+    .where({ published: true })
+    .select('author_name', 'author_title', 'rating', 'review_text')
+    .orderBy('sort_order'));
+
+  // The 4-step process is authored in index.njk. Read it from there rather
+  // than restating it here, so editing the page still edits the app.
+  const steps = await readProcessSteps(req);
+
   res.render('mobile/home.njk', {
     featured,
     categories: categories.filter((c) => c.landing_page_slug),
     projects: projectRows,
     rateRange,
     priceRange,
+    testimonials,
+    steps,
     calcRates,
     catalogue,
     filters,
@@ -258,6 +297,8 @@ const PAGES = {
   about: { file: 'about.njk', title: 'About Bongshai Housing' },
   certifications: { file: 'certifications.njk', title: 'Certifications' },
   contact: { file: 'contact.njk', title: 'Contact' },
+  tools: { file: 'interactive-tools.njk', title: 'Cost Calculators' },
+  solutions: { file: 'solutions.njk', title: 'Contact Sales' },
   gallery: { file: 'gallery.njk', title: 'Gallery' },
   privacy: { file: 'privacy-policy.njk', title: 'Privacy Policy' },
   terms: { file: 'terms.njk', title: 'Terms & Conditions' },
