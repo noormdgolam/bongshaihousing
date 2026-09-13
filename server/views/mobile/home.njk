@@ -347,9 +347,7 @@
     {% endif %}
     <div>
       <div class="t">{{ pr.title }}</div>
-      {% if pr.location and pr.location | trim != pr.title | trim %}
-        <div class="s">{{ pr.location }}</div>
-      {% endif %}
+      {% if pr.subtitle %}<div class="s">{{ pr.subtitle }}</div>{% endif %}
     </div>
     {% if pr.status_label %}<span class="tag">{{ pr.status_label }}</span>{% endif %}
   </a>

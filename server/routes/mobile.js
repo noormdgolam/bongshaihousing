@@ -142,10 +142,20 @@ router.get(['/m', '/m.html', '/mobile', '/mobile.html'], async (req, res) => {
     .filter((c) => withModels.has(c.id))
     .map((c) => ({ id: c.id, name: c.name, n: catalogue.filter((p) => p.categoryId === c.id).length }));
 
+  // 17 of the 18 project rows store the same string in title and location, so
+  // the card would print its own name twice. Row 19 differs only by a double
+  // space inside the string, which a trim does not catch - hence collapsing
+  // whitespace before deciding whether the second line says anything new.
+  const flat = (v) => String(v || '').replace(/\s+/g, ' ').trim().toLowerCase();
+  const projectRows = projects.map((pr) => ({
+    ...pr,
+    subtitle: flat(pr.location) && flat(pr.location) !== flat(pr.title) ? pr.location : null,
+  }));
+
   res.render('mobile/home.njk', {
     featured,
     categories: categories.filter((c) => c.landing_page_slug),
-    projects,
+    projects: projectRows,
     rateRange,
     calcRates,
     catalogue,
