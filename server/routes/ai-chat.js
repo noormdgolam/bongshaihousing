@@ -67,7 +67,7 @@ router.post('/api/ai-chat', async (req, res) => {
   }
 
   // Keep only the latest 6-8 messages to keep prompt fast and compact
-  const sanitizedMessages = messages.slice(-8).map((msg) => ({
+  const sanitizedMessages = messages.slice(-6).map((msg) => ({
     role: msg.role === 'assistant' ? 'assistant' : 'user',
     content: stripTags(String(msg.content || '')).substring(0, 1000),
   }));
@@ -110,6 +110,8 @@ router.post('/api/ai-chat', async (req, res) => {
       message: aiResponse,
     });
   } catch (err) {
+    // err.message carries the Groq status and response body verbatim - a 429
+    // here means tokens-per-minute, not a malformed request.
     console.error('AI chat endpoint error:', err.message);
     // If support is unreachable, hand over in both languages - this is exactly
     // the moment a customer must not be left with nothing.

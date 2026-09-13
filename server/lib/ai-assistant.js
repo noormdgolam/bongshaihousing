@@ -14,7 +14,7 @@ const MODEL_NAME = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
  */
 const BONGSHAI_KNOWLEDGE = `
 COMPANY PROFILE:
-- Name: Bongshai Housing (বঙ্গশাই হাউজিং)
+- Name: Bongshai Housing (বংশাই হাউজিং)
 - Industry: Pre-Engineered Steel Buildings (PEB), Steel Composite Buildings, Modular Prefab Housing, Container Homes, and EPC Turnkey Real Estate.
 - Headquarters: House #18, Road #18, Sector #10, Uttara, Dhaka-1230, Bangladesh.
 - Hotlines / WhatsApp: +880 1781-636613, +880 1714-104940
@@ -51,7 +51,9 @@ SALES GUIDANCE & TONE:
 - When replying in Bengali (বাংলা), use standard grammatical Bengali (বাংলা ব্যাকরণ) with proper civil engineering context (e.g., floor is 'তলা', manufacturing/framing is 'ফেব্রিকেশন', 'প্রি-ইঞ্জিনিয়ার্ড স্টিল বিল্ডিং', 'ভূমিকম্প সহনশীল').
 - Always provide clear, direct answers first (under 45 words), followed by the specific matching model(s) and their real fixed prices from the catalog.
 - For an exact quote or a model outside the catalog, direct them to submit an inquiry at bongshaihousing.com/solutions.html or connect on WhatsApp (+8801781636613) - don't imply there's an instant calculator on that page, it's a sales inquiry form.
-- End recommendations by encouraging the user to request a detailed free architectural consultation or connect on WhatsApp (+8801781636613).
+- Do NOT end every reply with a WhatsApp or consultation line. Offer it once, and
+  only when the customer is ready for real numbers or you genuinely cannot help
+  (see WHEN YOU CANNOT HELP). Repeating it in every message reads as spam.
 `;
 
 const { formatTaka } = require('./format');
@@ -68,7 +70,7 @@ async function getDynamicCatalogContext() {
       products = await db('products')
         .where({ published: true })
         .select('model_number', 'title', 'fixed_price', 'total_floor_area', 'price_per_sqft', 'price_currency', 'slug')
-        .limit(30);
+        .limit(12);
     } catch (err) {
       console.warn('Dynamic catalog query failed, using products.json:', err.message);
       products = [];
@@ -80,7 +82,7 @@ async function getDynamicCatalogContext() {
       const pPath = path.join(__dirname, '..', 'db', 'seeds', 'data', 'products.json');
       if (fs.existsSync(pPath)) {
         const allJson = JSON.parse(fs.readFileSync(pPath, 'utf8'));
-        products = allJson.slice(0, 30).map(p => ({
+        products = allJson.slice(0, 12).map(p => ({
           model_number: p.modelNumber,
           title: p.title,
           fixed_price: p.fixedPrice,
@@ -221,7 +223,7 @@ Worked example of the right register:
     model: MODEL_NAME,
     messages: [systemPrompt, ...messages],
     temperature: 0.6,
-    max_tokens: 1024,
+    max_tokens: 600,   // replies are meant to be 2-3 sentences; Groq reserves this against TPM
   });
 
   return new Promise((resolve, reject) => {

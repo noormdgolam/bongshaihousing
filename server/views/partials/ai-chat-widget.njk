@@ -80,10 +80,10 @@
 
     <!-- Quick Prompts Pill Row -->
     <div class="bh-ai-quick-prompts" id="bhAiQuickPrompts" lang="bn">
-      <button class="bh-ai-chip bh-ai-chip-estimate" data-flow="estimate">🧮 তাৎক্ষণিক খরচ হিসাব করুন</button>
+      <button class="bh-ai-chip bh-ai-chip-estimate" data-flow="estimate">খরচ হিসাব করুন</button>
       <button class="bh-ai-chip" data-prompt="স্টিল বিল্ডিং তৈরি করতে কত দিন সময় লাগে?">⚡ কত দিনে তৈরি হয়?</button>
-      <button class="bh-ai-chip" data-prompt="ফ্যাক্টরি বা ইন্ডাস্ট্রিয়াল শেডের রেট কত?">📦 কনটেইনার হাউজ রেট</button>
-      <button class="bh-ai-chip" data-prompt="BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান">📐 BH-SB-302 মডেল</button>
+      <button class="bh-ai-chip" data-prompt="ফ্যাক্টরি বা ইন্ডাস্ট্রিয়াল শেডের রেট কত?">কনটেইনার হাউজের রেট</button>
+      <button class="bh-ai-chip" data-prompt="BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান">BH-SB-302 মডেল</button>
     </div>
 
     <!-- Messages Container -->
@@ -91,11 +91,11 @@
       <!-- Default Welcome Message -->
       <div class="bh-ai-msg bh-ai-msg-bot">
         <div class="bh-ai-bubble" lang="bn">
-          <p><strong id="bhAiWelcomeTitle">স্বাগতম বঙ্গশাই হাউজিং-এ!</strong> 👋</p>
+          <p><strong id="bhAiWelcomeTitle">স্বাগতম বংশাই হাউজিং-এ!</strong></p>
           <p id="bhAiWelcomeBody">আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা কটেজ হাউজ নিয়ে যেকোনো প্রশ্ন করতে পারেন।</p>
           <div class="bh-ai-bubble-actions">
             <a href="https://wa.me/8801781636613?text=Hello%20Bongshai%20Housing%2C%20I%20want%20to%20contact%20sales" target="_blank" rel="noopener noreferrer" class="bh-ai-cta-btn">
-              <span id="bhAiWelcomeCta">💬 WhatsApp-এ কথা বলুন</span>
+              <span id="bhAiWelcomeCta">WhatsApp-এ কথা বলুন</span>
             </a>
           </div>
         </div>
@@ -666,7 +666,7 @@
 
   const STORAGE_KEY = 'bh_ai_chat_history_v1';
 
-  const UI_STRINGS = {"bn":{"chip1Label":"🧮 তাৎক্ষণিক খরচ হিসাব করুন","chip2Prompt":"স্টিল বিল্ডিং তৈরি করতে কত দিন সময় লাগে?","chip2Label":"⚡ কত দিনে তৈরি হয়?","chip3Prompt":"কনটেইনার হাউজের রেট কত?","chip3Label":"📦 কনটেইনার হাউজ রেট","chip4Prompt":"BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান","chip4Label":"📐 BH-SB-302 মডেল","placeholder":"আপনার প্রশ্ন লিখুন (e.g. ২ তলা বাড়ির খরচ)...","welcomeBody":"আমি আপনার এআই সেলস ও ইঞ্জিনিয়ারিং সহকারী। আপনার জমির সাইজ, ডুপ্লেক্স/সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম বা কটেজ হাউজ নিয়ে যেকোনো প্রশ্ন করতে পারেন।","errFallback1":"আমাদের সার্ভারের সাথে সংযোগে সাময়িক ত্রুটি হয়েছে। অনুগ্রহ করে সরাসরি আমাদের হোয়াটসঅ্যাপে নক দিন: +880 1781-636613.","errFallback2":"সংযোগ বিচ্ছিন্ন হয়েছে। আমাদের হটলাইন +8801781636613-এ যোগাযোগ করুন।","welcomeTitle":"স্বাগতম বঙ্গশাই হাউজিং-এ!","cta":"💬 WhatsApp-এ কথা বলুন"},"en":{"chip1Label":"🧮 Instant Cost Estimate","chip2Prompt":"How long does it take to build a steel building?","chip2Label":"⚡ How long does it take?","chip3Prompt":"What are the rates for a Container House?","chip3Label":"📦 Container house rates","chip4Prompt":"Tell me details about the BH-SB-302 model","chip4Label":"📐 BH-SB-302 model","placeholder":"Type your question (e.g. cost of a 2-story house)...","welcomeBody":"I'm your AI sales and engineering assistant. Ask me about your land size, duplex/simplex house costs, container homes, or cottage houses.","errFallback1":"We're having a temporary issue connecting to our server. Please reach us directly on WhatsApp: +880 1781-636613.","errFallback2":"Connection lost. Please contact our hotline: +8801781636613.","welcomeTitle":"Welcome to Bongshai Housing!","cta":"Chat on WhatsApp"}};
+  const UI_STRINGS = {"bn":{"chip1Label":"খরচ হিসাব করুন","chip2Prompt":"স্টিল বিল্ডিং তৈরি করতে কত দিন সময় লাগে?","chip2Label":"কত দিনে তৈরি হয়?","chip3Prompt":"কনটেইনার হাউজের রেট কত?","chip3Label":"কনটেইনার হাউজের রেট","chip4Prompt":"BH-SB-302 মডেল সম্পর্কে বিস্তারিত জানান","chip4Label":"BH-SB-302 মডেল","placeholder":"আপনার প্রশ্ন লিখুন (e.g. ২ তলা বাড়ির খরচ)...","welcomeBody":"জমির সাইজ, ডুপ্লেক্স বা সিমপ্লেক্স বাড়ির খরচ, কনটেইনার হোম, কটেজ হাউজ — যা জানতে চান বলুন।","errFallback1":"আমাদের সার্ভারের সাথে সংযোগে সাময়িক ত্রুটি হয়েছে। অনুগ্রহ করে সরাসরি আমাদের হোয়াটসঅ্যাপে নক দিন: +880 1781-636613.","errFallback2":"সংযোগ বিচ্ছিন্ন হয়েছে। আমাদের হটলাইন +8801781636613-এ যোগাযোগ করুন।","welcomeTitle":"স্বাগতম বংশাই হাউজিং-এ!","cta":"WhatsApp-এ কথা বলুন"},"en":{"chip1Label":"Cost estimate","chip2Prompt":"How long does it take to build a steel building?","chip2Label":"How long does it take?","chip3Prompt":"What are the rates for a Container House?","chip3Label":"Container house rates","chip4Prompt":"Tell me details about the BH-SB-302 model","chip4Label":"BH-SB-302 model","placeholder":"Type your question (e.g. cost of a 2-story house)...","welcomeBody":"Ask about your land size, duplex or simplex house costs, container homes, or cottage houses.","errFallback1":"We're having a temporary issue connecting to our server. Please reach us directly on WhatsApp: +880 1781-636613.","errFallback2":"Connection lost. Please contact our hotline: +8801781636613.","welcomeTitle":"Welcome to Bongshai Housing!","cta":"Chat on WhatsApp"}};
   const langToggleBtn = document.getElementById('bhAiLangToggle');
   let currentLang = localStorage.getItem('bh_ai_lang') === 'en' ? 'en' : 'bn';
 
@@ -750,7 +750,7 @@
       messagesContainer.innerHTML = `
         <div class="bh-ai-msg bh-ai-msg-bot">
           <div class="bh-ai-bubble">
-            <p><strong>স্বাগতম বঙ্গশাই হাউজিং-এ!</strong> 👋</p>
+            <p><strong>স্বাগতম বংশাই হাউজিং-এ!</strong></p>
             <p>আমি আপনার এআই সহকারী। বাড়ি নির্মাণ বা ইস্পাত কাঠামো সংক্রান্ত যেকোনো প্রশ্ন করুন।</p>
           </div>
           <span class="bh-ai-time">Just now</span>
@@ -774,13 +774,46 @@
 
   // Shared inline formatting (bold/links/phone) used both for plain text
   // and for individual markdown-table cells.
+  // Shared by formatInline and formatText: apply a rule only to the text
+  // OUTSIDE anchors an earlier rule already built. The phone pattern also
+  // matches the digits inside a wa.me URL, so running it over the whole string
+  // rewrote the href of the link just created.
+  // Shared by formatInline and formatText: apply a rule only to the text
+  // OUTSIDE anchors an earlier rule already built.
+  //
+  // This is not fussiness. The phone pattern (880 1[3-9]xx-xxxxxx) also matches
+  // the digits inside a wa.me URL, so running it across the whole string
+  // rewrote the href of the link the previous rule had just created, and spilled
+  // the tag's own attributes into the chat as visible text. Lookbehinds could
+  // not prevent it, because those digits do not directly follow href=".
+  function outsideAnchors(str, fn) {
+    return String(str).split(/(<a\s[^>]*>[\s\S]*?<\/a>)/g)
+      .map((part) => (part.startsWith('<a') ? part : fn(part)))
+      .join('');
+  }
+
+  // Trailing punctuation is sentence, not address. A quote especially, which
+  // used to be swallowed into the href and break the tag.
+  function linkUrls(t) {
+    return t.replace(/(https?:\/\/[^\s<>"']+)/g, (m) => {
+      const url = m.replace(/[.,;:!?)\]]+$/, '');
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>${m.slice(url.length)}`;
+    });
+  }
+
+  // Link whichever number actually appears in the text, never a hardcoded one:
+  // a wrong number here would silently send a customer to the wrong contact.
+  function linkPhones(t) {
+    return t.replace(/(\+?880\s?1[3-9]\d{2}-?\d{6})/g, (match) => {
+      const digits = match.replace(/[^0-9]/g, '');
+      return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">${match}</a>`;
+    });
+  }
+
   function formatInline(str) {
     str = str.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    str = str.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-    str = str.replace(/(?<!href=")(?<!">)(\+?880\s?1[3-9]\d{2}-?\d{6})/g, (match, num) => {
-      const digits = num.replace(/[^0-9]/g, '');
-      return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">📞 ${match}</a>`;
-    });
+    str = outsideAnchors(str, linkUrls);
+    str = outsideAnchors(str, linkPhones);
     return str;
   }
 
@@ -835,6 +868,14 @@
   }
 
   function formatText(text) {
+    // The model sometimes writes an HTML anchor instead of a plain URL. Escaping
+    // alone left the customer reading an escaped tag around a link box, so
+    // reduce any anchor the model emits to its bare URL first and let the rules
+    // below turn that into a proper box. Then drop any other stray tag.
+    text = String(text == null ? '' : text)
+      .replace(/<a\s[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>/gi, ' $1 ')
+      .replace(/<\/?[a-z][a-z0-9]*[^>]*>/gi, '');
+
     // Simple sanitizing & markdown-like parsing for bold, links and tables
     let safe = text
       .replace(/&/g, '&amp;')
@@ -856,21 +897,15 @@
     // customer should be able to tap, not a filename to read out.
     safe = safe.replace(/(^|[\s(])\/?((?:bh|dv)-[a-z]+-\d+\.html)/gi, '$1/$2');
 
-    // URLs first (before adding internal <a> tags)
-    safe = safe.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    safe = outsideAnchors(safe, linkUrls);
 
     // Internal product pages, same treatment.
-    safe = safe.replace(/(^|[\s(>])(\/(?:bh|dv)-[a-z]+-\d+\.html)/gi,
-      '$1<a class="bh-ai-link-box bh-ai-link-model" href="$2">$2</a>');
+    safe = outsideAnchors(safe, (t) => t.replace(
+      /(^|[\s(>])(\/(?:bh|dv)-[a-z]+-\d+\.html)/gi,
+      '$1<a class="bh-ai-link-box bh-ai-link-model" href="$2">$2</a>'
+    ));
 
-    // Phone numbers (if not already inside an anchor tag) - link to whichever
-    // number actually appears in the text, not a hardcoded one (a wrong
-    // number here would silently send a customer's WhatsApp message to the
-    // wrong contact regardless of what number the AI actually mentioned).
-    safe = safe.replace(/(?<!href=")(?<!">)(\+?880\s?1[3-9]\d{2}-?\d{6})/g, (match, num) => {
-      const digits = num.replace(/[^0-9]/g, '');
-      return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener noreferrer" style="font-weight:600; color:#10B981;">📞 ${match}</a>`;
-    });
+    safe = outsideAnchors(safe, linkPhones);
 
     // Every link reads as an action box rather than raw underlined text.
     safe = safe.replace(
@@ -886,6 +921,20 @@
       + '<span class="bh-ai-link-ic" aria-hidden="true">\u{1F3E0}</span>'
       + '<span class="bh-ai-link-tx"><b>$2</b><small>মডেল দেখুন / View this model</small></span></a>'
     );
+    // The handover usually writes the number twice - once as wa.me/NNN and
+    // once as (+880 ...) - which produced two identical boxes with an orphaned
+    // "(" and ")" left between them. Keep the first, drop the repeats.
+    const waBox = /<a class="bh-ai-link-box bh-ai-link-wa"[\s\S]*?<\/a>/g;
+    const seenWa = new Set();
+    safe = safe.replace(waBox, (m) => {
+      const key = (m.match(/wa\.me\/(\d+)/) || [])[1] || m;
+      if (seenWa.has(key)) return '';
+      seenWa.add(key);
+      return m;
+    });
+    // Brackets emptied by that removal are just punctuation debris now.
+    safe = safe.replace(/\(\s*\)/g, '').replace(/[ 	]{2,}/g, ' ');
+
     // Anything still a plain anchor becomes a neutral box.
     safe = safe.replace(
       /<a (?![^>]*bh-ai-link-box)href="([^"]+)"([^>]*)>((?:(?!<\/a>).)*)<\/a>/g,
