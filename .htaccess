@@ -45,7 +45,7 @@ RewriteRule ^(index\.html)?$ /m [R=302,L]
 RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
 RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
 RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
-RewriteRule ^((?:bh|dv)-[a-z]+-\d+\.html)$ /m#model/$1 [R=302,L,NE]
+RewriteRule ^((?:bh|dv)-[a-z0-9-]*\d+\.html)$ /m#model/$1 [R=302,L,NE]
 
 # Category pages have no separate view - they are the Models tab.
 RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
@@ -103,6 +103,18 @@ RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/
 RewriteRule ^index\.html$ https://bongshaihousing.com/ [R=301,L]
 
 
+
+
+# 2c. Anything else that is a real page opens inside the app as a document.
+# Last, so the specific rules above still win. Assets, portals and APIs are
+# excluded exactly as before; a URL that is not a .html page is untouched.
+RewriteCond %{HTTP_USER_AGENT} (Android|iPhone|iPod|Windows\ Phone|BlackBerry|Opera\ Mini|IEMobile) [NC]
+RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|Googlebot|Bingbot|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Applebot|AhrefsBot|SemrushBot|Lighthouse|GTmetrix|PageSpeed|Pingdom|HeadlessChrome) [NC]
+RewriteCond %{HTTP_COOKIE} !bh_desktop=1 [NC]
+RewriteCond %{REQUEST_URI} !^/m
+RewriteCond %{REQUEST_URI} !^/(admin|agent|my-project|api|images|css|js|font|fonts|quotes|scratch)/ [NC]
+RewriteCond %{DOCUMENT_ROOT}/$1 -f
+RewriteRule ^([a-z0-9][a-z0-9-]*\.html)$ /m#doc/$1 [R=302,L,NE]
 
 # 4. Redirect specific old or broken URLs to homepage
 RewriteRule ^u8-2/?$ https://bongshaihousing.com/ [R=301,L]
