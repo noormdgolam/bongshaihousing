@@ -5,8 +5,10 @@ re-deriving anything. Everything below is verified against the live site, not
 assumed.
 
 **Branch:** `v0/security-fixes` · **Live:** https://bongshaihousing.com
-**Unpushed commits:** ~54. The GitHub remote is **PUBLIC** — pickaxe for
-credentials before any push, and only push when the user asks.
+**Pushed through `17c5814d` (2026-09-14).** The GitHub remote is **PUBLIC** —
+pickaxe for credentials before any push (`scratch/_pickaxe.js` checks the known
+values from the memory notes plus the general key shapes), and only push when
+the user asks.
 
 ---
 
@@ -144,7 +146,6 @@ at a different point above. Moving that call earlier has broken it twice.
    `project-photo-unavailable.png`).
 4. Prices for the **20 Low Cost House** models (`BH-LCH-1001`–`1020`) — the
    only 20 of 133 without a `fixed_price`.
-5. **Push the ~54 commits** — public remote, needs the user's word.
 
 ## Known-open, technical
 
