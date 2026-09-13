@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% import "partials/icons.njk" as icons %}<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -193,7 +193,7 @@
     display:flex; align-items:center; justify-content:space-around;
   }
   .bnav a{ display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--m-muted); font-size:10px; font-weight:600; padding:6px 10px; }
-  .bnav a .ic{ font-size:17px; }
+  .bnav a .ic{ display:flex; align-items:center; justify-content:center; height:20px; }
   .bnav a[aria-current="page"]{ color:var(--m-primary); }
   :root[data-theme="dark"] .bnav a[aria-current="page"]{ color:var(--m-primary-light); }
 
@@ -410,7 +410,7 @@
    WhatsApp is offered from inside a conversation when it actually helps. #}
 
 
-<button class="support-fab" id="supportFab" type="button">💬 Chat with Support</button>
+<button class="support-fab" id="supportFab" type="button">{{ icons.icon('chat', 17) }} Chat with Support</button>
 
 <div class="sheet-backdrop" id="sheetBackdrop"></div>
 <div class="sheet" id="supportSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
@@ -437,11 +437,11 @@
 </div>
 
 <nav class="bnav" aria-label="Primary">
-  <a href="/m" aria-current="page"><span class="ic" aria-hidden="true">🏠</span>Home</a>
-  <a href="/products-and-solutions.html"><span class="ic" aria-hidden="true">📦</span>Models</a>
-  <a href="#calcTitle"><span class="ic" aria-hidden="true">🧮</span>Calculator</a>
-  <a href="/projects.html"><span class="ic" aria-hidden="true">📍</span>Projects</a>
-  <a href="#support"><span class="ic" aria-hidden="true">💬</span>Support</a>
+  <a href="/m" aria-current="page"><span class="ic">{{ icons.icon('home', 20) }}</span>Home</a>
+  <a href="/products-and-solutions.html"><span class="ic">{{ icons.icon('folder', 20) }}</span>Models</a>
+  <a href="#calcTitle"><span class="ic">{{ icons.icon('calculator', 20) }}</span>Calculator</a>
+  <a href="/projects.html"><span class="ic">{{ icons.icon('map-pin', 20) }}</span>Projects</a>
+  <a href="#support"><span class="ic">{{ icons.icon('chat', 20) }}</span>Support</a>
 </nav>
 
 <script>
