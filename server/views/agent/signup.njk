@@ -2,6 +2,30 @@
 {% import "partials/icons.njk" as icons %}
 {% block title %}Agent Application{% endblock %}
 {% block body %}
+<style>
+  /* bh-tap-target: the business-type checkboxes were a 13px control inside a
+     20px label. A thumb needs about 44px, and this is the form the business
+     most wants a stranger to finish. The labels carry inline styles, so these
+     rules use !important to reach past them - not for lack of trying a
+     cleaner selector. */
+  .business-type-cb {
+    width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--primary, #1E40AF);
+  }
+  .business-type-cb + span { line-height: 1.35; }
+  label:has(> .business-type-cb) {
+    min-height: 44px !important;
+    padding: 6px 8px !important;
+    border-radius: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  label:has(> .business-type-cb):active { background: rgba(15,23,42,0.06); }
+
+  /* :has() is widely supported now, but a browser without it must not be left
+     with the old 20px target - this reaches the same labels structurally. */
+  @supports not selector(:has(*)) {
+    .business-type-cb { margin: 12px 0; }
+  }
+</style>
 <div style="min-height:100vh; padding:32px 16px;">
   <div style="max-width: 640px; margin: 0 auto;">
 
