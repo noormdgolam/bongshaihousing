@@ -81,7 +81,8 @@ Run individually. Each prints `N/N পাস`.
 | `scratch/test_extract_parity.js` | 19/19 |
 | `scratch/test_catalog_context.js` | 14/14 |
 | `scratch/test_lead_counts.js` | 4/4 |
-| `scratch/test_inline_scripts.js` | 798 scripts, 0 broken |
+| `scratch/verify_support_invite.js` | 13/13 |
+| `scratch/test_inline_scripts.js` | 963 scripts, 0 broken |
 | `node server/scripts/check-template-integrity.js` | 0 structural, 129 render errors (129 is normal) |
 | `node "$TEMP/run_price_check.js"` | **changed: 0** — no fixed price may ever move |
 
@@ -160,11 +161,24 @@ at a different point above. Moving that call earlier has broken it twice.
 - Groq free tier still 429s on tokens-per-minute under load. Rotation across
   two keys (`.env` + `seo_settings`) softens it; a paid tier is the real fix.
 
+## Telegram alerts
+
+A chat fires one Telegram alert per conversation - name, number, whether it
+came from the app or the website, the opening question, and a link to the
+transcript. **Confirmed delivered by the user.** Wired in
+`server/routes/ai-chat.js` via the existing `lib/telegram.js`;
+`TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` are already in the host .env.
+Fire-and-forget by design - an alert must never delay or fail a reply.
+
 ## Recently finished (do not redo)
 
 Sitewide professionalism pass (ISO claim, SKUs, spellings, WhatsApp prefills,
 titles) · `/m` rebuilt as a real app with in-shell tabs, search, full model
 detail and the whole site's content · PWA installable at `/m` with offline
 shell · Customer Support chat in the app, transcripts to the dashboard ·
-chat markup and handover bugs · admin usable on a phone (27/27) · mobile
+chat markup and handover bugs · admin usable on a phone (27/27) · one shared
+chat formatter for website and app (partials/chat-format.njk) · app chat
+brought level: chips, EN/BN toggle, tables, link boxes · share button on
+models only, both surfaces · Telegram alert per conversation · support
+invitation on the Home tab and at the estimate result · mobile
 redirect with crawlers excluded · lead counters counting the right language.
