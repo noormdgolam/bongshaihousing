@@ -153,6 +153,15 @@
     .admin-topbar div { max-width: 100%; flex-wrap: wrap !important; }
     .admin-main { min-width: 0; max-width: 100%; }
     .admin-content { max-width: 100%; }
+    /* Admin pages set their own grids inline, and some ask for a column
+       wider than a phone - agent settings uses minmax(460px, 1fr) on a 390px
+       screen. One column on a phone, and no inline min-width may exceed it. */
+    .admin-content [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    .admin-content [style*="min-width"] { min-width: 0 !important; }
+    .admin-content .card, .admin-content > * { max-width: 100%; }
+    /* A 2FA secret, an API token, a long URL: one unbreakable string will
+       push the page sideways unless it is allowed to break. */
+    .admin-content { overflow-wrap: anywhere; }
     .admin-content { padding: 14px; }
     .admin-grid-2col { grid-template-columns: 1fr !important; }
 

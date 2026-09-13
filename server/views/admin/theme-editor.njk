@@ -416,8 +416,37 @@
   }
   @keyframes toastSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
+<style>
+  /* Theme Studio Pro is a drag-and-drop builder with its own canvas; it needs
+     a real screen. Rather than let a phone user fight a 1049px layout, say so
+     and offer the way back. */
+  .bh-needs-desktop { display: none; }
+  @media (max-width: 900px) {
+    .bh-needs-desktop {
+      display: block; position: fixed; inset: 0; z-index: 9999;
+      background: #0b1f4d; color: #fff; padding: 28px 22px;
+      font-family: system-ui, sans-serif; overflow-y: auto;
+    }
+    .bh-needs-desktop h2 { font-size: 1.15rem; margin: 0 0 10px; }
+    .bh-needs-desktop p { font-size: 0.92rem; line-height: 1.6; opacity: 0.88; margin: 0 0 14px; }
+    .bh-needs-desktop a {
+      display: inline-block; padding: 11px 16px; border-radius: 9px;
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.28);
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 0.92rem;
+    }
+  }
+</style>
 </head>
 <body>
+<div class="bh-needs-desktop">
+  <h2>Theme Studio Pro needs a larger screen</h2>
+  <p>This is a drag-and-drop visual builder. It is built for a desktop or a
+     tablet in landscape, and will not behave on a phone.</p>
+  <p>Everything else in the CMS works here - themes can also be switched from
+     Themes Directory, which does work on a phone.</p>
+  <a href="/admin">&larr; Back to the dashboard</a>
+</div>
+
 
 <!-- ─── 1. TOPBAR HEADER ─────────────────────────────────────────── -->
 <header class="te-topbar">
@@ -1290,9 +1319,7 @@ const presetsData = {{ presets | dump | safe }};
   const applyLiveStatus = document.getElementById('applyLiveStatus');
   if (applyLiveBtn) {
     applyLiveBtn.addEventListener('click', async () => {
-      if (!confirm('Re-render every static page so this theme shows on the live site?
-
-Takes a few minutes. You can keep working.')) return;
+      if (!confirm('Re-render every static page so this theme shows on the live site?\n\nTakes a few minutes. You can keep working.')) return;
       applyLiveBtn.disabled = true;
       applyLiveStatus.textContent = 'starting…';
       const csrfMeta = document.querySelector('meta[name="csrf-token"]');
