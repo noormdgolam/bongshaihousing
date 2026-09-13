@@ -357,6 +357,7 @@
 <a href="privacy-policy.html">Privacy Policy</a>
 <a href="terms.html">Terms &amp; Conditions</a>
 <a href="sitemap.xml">Sitemap</a>
+<a href="/m" id="bhMobileSite" hidden>Mobile site</a>
 </nav>
 </div>
 </div>
@@ -873,5 +874,19 @@
 })();
 </script>
 {% block scripts_extra %}{% endblock %}
+<script>
+(function(){
+  // Shown only where it means something: a phone that opted out of the app.
+  var link = document.getElementById('bhMobileSite');
+  if (!link) return;
+  var phone = /Android|iPhone|iPod|Windows Phone|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+  if (!phone) return;
+  link.hidden = false;
+  link.addEventListener('click', function(){
+    // Clear the opt-out, or .htaccess would send them straight back here.
+    document.cookie = 'bh_desktop=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+  });
+})();
+</script>
 </body>
 </html>
