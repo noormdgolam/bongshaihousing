@@ -251,4 +251,102 @@ router.get('/api/m/model/:slug', async (req, res) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// Content pages, rendered inside the app instead of sending the customer out
+// to a desktop page.
+const PAGES = {
+  about: { file: 'about.njk', title: 'About Bongshai Housing' },
+  certifications: { file: 'certifications.njk', title: 'Certifications' },
+  contact: { file: 'contact.njk', title: 'Contact' },
+  gallery: { file: 'gallery.njk', title: 'Gallery' },
+  privacy: { file: 'privacy-policy.njk', title: 'Privacy Policy' },
+  terms: { file: 'terms.njk', title: 'Terms & Conditions' },
+};
+
+// Lift the readable content out of a rendered page: headings, paragraphs, list
+// items, and for the gallery its images and captions. Chrome (header, nav,
+// footer, scripts, the chat widget) is dropped.
+function extractContent(html, wantImages) {
+  const { JSDOM } = require('jsdom');
+  const doc = new JSDOM(html).window.document;
+
+  doc.querySelectorAll('header, nav, footer, script, style, noscript, .bh-ai-widget, [id^="bhAi"], .breadcrumb, .skip-link')
+    .forEach((el) => el.remove());
+
+  const blocks = [];
+  const seen = new Set();
+  const push = (type, text) => {
+    const t = (text || '').replace(/\s+/g, ' ').trim();
+    if (!t || t.length < 2) return;
+    const key = type + '|' + t;
+    if (seen.has(key)) return;          // the same heading often repeats in hero + section
+    seen.add(key);
+    blocks.push({ type, text: t });
+  };
+
+  const main = doc.querySelector('main') || doc.body;
+
+  if (wantImages) {
+    main.querySelectorAll('.gallery-item').forEach((item) => {
+      const img = item.querySelector('img');
+      const cap = item.querySelector('.gallery-caption');
+      if (img) {
+        blocks.push({
+          type: 'image',
+          src: (img.getAttribute('src') || '').replace(/^\//, ''),
+          text: (cap ? cap.textContent : img.getAttribute('alt') || '').replace(/\s+/g, ' ').trim(),
+        });
+      }
+    });
+    if (blocks.length) return blocks;
+  }
+
+  main.querySelectorAll('h1, h2, h3, p, li').forEach((el) => {
+    // A heading inside a card is a card title, not a section heading.
+    const tag = el.tagName.toLowerCase();
+    if (tag === 'li' && el.closest('nav')) return;
+    push(tag === 'li' ? 'li' : (tag === 'p' ? 'p' : 'h'), el.textContent);
+  });
+  return blocks;
+}
+
+router.get('/api/m/page/:name', async (req, res) => {
+  const name = String(req.params.name || '').replace(/[^a-z-]/g, '');
+
+  // FAQ has its own table - use the record, not the rendered page.
+  if (name === 'faq') {
+    try {
+      const rows = await optional('faqs', () => db('faqs')
+        .select('question', 'answer', 'category').orderBy('id'));
+      return res.json({
+        title: 'Frequently Asked Questions',
+        faqs: rows.map((f) => ({
+          q: f.question,
+          a: String(f.answer || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim(),
+          group: f.category || null,
+        })),
+      });
+    } catch (err) {
+      console.error('[mobile] faq failed:', err.message);
+      return res.status(500).json({ error: 'failed' });
+    }
+  }
+
+  const page = PAGES[name];
+  if (!page) return res.status(404).json({ error: 'unknown page' });
+
+  try {
+    const html = req.app.render
+      ? await new Promise((resolve, reject) => {
+        req.app.render('pages/' + page.file, { ...(res.locals || {}) }, (err, out) => (err ? reject(err) : resolve(out)));
+      })
+      : null;
+    if (!html) return res.status(503).json({ error: 'cannot render' });
+    return res.json({ title: page.title, blocks: extractContent(html, name === 'gallery') });
+  } catch (err) {
+    console.error('[mobile] page ' + name + ' failed:', err.message);
+    return res.status(500).json({ error: 'failed' });
+  }
+});
+
 module.exports = router;

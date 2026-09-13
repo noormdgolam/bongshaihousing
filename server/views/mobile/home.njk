@@ -142,6 +142,29 @@
   .dot{ width:6px;height:6px;border-radius:50%; background:var(--m-line); transition:width .2s,background .2s; }
   .dot.on{ background:var(--m-primary); width:16px; border-radius:3px; }
 
+  /* more menu */
+  .menu{ margin:12px 16px 0; border:1px solid var(--m-line); border-radius:12px; overflow:hidden; background:var(--m-card); }
+  .menu button, .menu a{ display:flex; width:100%; align-items:center; justify-content:space-between;
+    gap:10px; padding:14px 15px; background:none; border:none; border-bottom:1px solid var(--m-line);
+    font-family:inherit; font-size:14px; font-weight:600; color:var(--m-text); text-align:left; cursor:pointer; }
+  .menu button:last-child, .menu a:last-child{ border-bottom:none; }
+  .menu button:active, .menu a:active{ background:var(--m-surface); }
+  .menu span{ color:var(--m-muted); font-weight:400; font-size:12px; }
+
+  /* content pages */
+  .pg{ padding:4px 16px 8px; }
+  .pg h1{ font-size:21px; font-weight:700; margin:14px 0 10px; }
+  .pg h2{ font-size:15.5px; font-weight:700; margin:22px 0 8px; }
+  .pg p{ font-size:13.5px; line-height:1.65; margin:0 0 11px; color:var(--m-text); }
+  .pg li{ font-size:13.5px; line-height:1.6; margin:0 0 7px 18px; }
+  .pg figure{ margin:0 0 14px; }
+  .pg figure img{ width:100%; border-radius:11px; display:block; background:var(--m-surface); }
+  .pg figcaption{ font-size:11.5px; color:var(--m-muted); margin-top:5px; }
+  .pg .qa{ border:1px solid var(--m-line); border-radius:11px; margin-bottom:9px; overflow:hidden; }
+  .pg .qa summary{ padding:12px 14px; font-size:13.5px; font-weight:600; cursor:pointer; list-style:none; }
+  .pg .qa summary::-webkit-details-marker{ display:none; }
+  .pg .qa p{ padding:0 14px 12px; margin:0; color:var(--m-muted); }
+
   /* model detail */
   .backbtn{ background:none; border:none; font-family:inherit; font-size:13px; font-weight:600;
     color:var(--m-primary); padding:14px 16px 4px; cursor:pointer; }
@@ -571,6 +594,32 @@
     <button class="backbtn" type="button" id="modelBack">← Models</button>
     <div id="modelDetail"></div>
   </section>
+  <section class="view" id="view-more" hidden>
+    <div class="view-head"><h2>More</h2><p>Everything else about Bongshai Housing.</p></div>
+    <div class="menu">
+      <button type="button" data-page="about">About Bongshai Housing</button>
+      <button type="button" data-page="faq">Frequently asked questions</button>
+      <button type="button" data-page="certifications">Certifications</button>
+      <button type="button" data-page="gallery">Gallery</button>
+      <button type="button" data-page="contact">Contact</button>
+    </div>
+    <div class="view-head" style="padding-top:22px"><h2>Your account</h2>
+      <p>These open the secure portal, which signs you in separately.</p></div>
+    <div class="menu">
+      <a href="/agent/signup.html">Become an agent <span>↗</span></a>
+      <a href="/agent/login.html">Agent login <span>↗</span></a>
+      <a href="/my-project/login.html">Track my project <span>↗</span></a>
+    </div>
+    <div class="menu" style="margin-top:22px">
+      <button type="button" data-page="privacy">Privacy policy</button>
+      <button type="button" data-page="terms">Terms &amp; conditions</button>
+    </div>
+  </section>
+
+  <section class="view" id="view-page" hidden>
+    <button class="backbtn" type="button" id="pageBack">← More</button>
+    <div id="pageContent"></div>
+  </section>
   <section class="view" id="view-projects" hidden>
     <div class="view-head">
       <h2>Projects</h2>
@@ -633,7 +682,7 @@
 <nav class="bnav" aria-label="Primary">
   <button type="button" data-view="home" class="on" aria-current="page"><span class="ic">{{ icons.icon('home', 20) }}</span>Home</button>
   <button type="button" data-view="models"><span class="ic">{{ icons.icon('folder', 20) }}</span>Models</button>
-  <button type="button" data-act="calc"><span class="ic">{{ icons.icon('calculator', 20) }}</span>Calculator</button>
+  <button type="button" data-view="more"><span class="ic">{{ icons.icon('menu', 20) }}</span>More</button>
   <button type="button" data-view="projects"><span class="ic">{{ icons.icon('map-pin', 20) }}</span>Projects</button>
   <button type="button" data-act="support"><span class="ic">{{ icons.icon('chat', 20) }}</span>Support</button>
 </nav>
@@ -1067,6 +1116,55 @@
   });
 
   if (backBtn) backBtn.addEventListener('click', function(){ showView(cameFrom, true); });
+
+  // ---- content pages, inside the app --------------------------------------
+  var pageBox = document.getElementById('pageContent');
+  var pageCache = {};
+
+  function renderPage(d){
+    var html = '<div class="pg"><h1>' + esc(d.title) + '</h1>';
+    if (d.faqs) {
+      d.faqs.forEach(function(f){
+        html += '<details class="qa"><summary>' + esc(f.q) + '</summary><p>' + esc(f.a) + '</p></details>';
+      });
+    } else {
+      (d.blocks || []).forEach(function(bk){
+        if (bk.type === 'image') {
+          html += '<figure><img src="/' + esc(bk.src) + '" alt="' + esc(bk.text) + '" loading="lazy" decoding="async">'
+            + (bk.text ? '<figcaption>' + esc(bk.text) + '</figcaption>' : '') + '</figure>';
+        } else if (bk.type === 'h') {
+          html += '<h2>' + esc(bk.text) + '</h2>';
+        } else if (bk.type === 'li') {
+          html += '<li>' + esc(bk.text) + '</li>';
+        } else {
+          html += '<p>' + esc(bk.text) + '</p>';
+        }
+      });
+    }
+    return html + '</div>';
+  }
+
+  async function openPage(name){
+    pageBox.innerHTML = '<div class="pg"><p>লোড হচ্ছে…</p></div>';
+    showView('page', true);
+    window.scrollTo(0, 0);
+    if (pageCache[name]) { pageBox.innerHTML = renderPage(pageCache[name]); return; }
+    try {
+      var res = await fetch('/api/m/page/' + encodeURIComponent(name));
+      if (!res.ok) throw new Error('http ' + res.status);
+      var d = await res.json();
+      pageCache[name] = d;
+      pageBox.innerHTML = renderPage(d);
+    } catch (e) {
+      pageBox.innerHTML = '<div class="pg"><p>এই মুহূর্তে পেজটি আনা যাচ্ছে না।</p></div>';
+    }
+  }
+
+  [].forEach.call(document.querySelectorAll('[data-page]'), function(btn){
+    btn.addEventListener('click', function(){ openPage(btn.getAttribute('data-page')); });
+  });
+  var pageBack = document.getElementById('pageBack');
+  if (pageBack) pageBack.addEventListener('click', function(){ showView('more', true); });
 
   // ---- support conversation ----------------------------------------------
   // The name+number gate stays: an enquiry the business cannot ring back is
